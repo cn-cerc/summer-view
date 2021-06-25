@@ -10,7 +10,7 @@ import cn.cerc.core.Record;
 import cn.cerc.core.TDate;
 import cn.cerc.core.TDateTime;
 import cn.cerc.core.Utils;
-import cn.cerc.db.cache.Buffer;
+import cn.cerc.db.redis.RedisRecord;
 import cn.cerc.mis.SummerMIS;
 import cn.cerc.mis.cdn.CDN;
 import cn.cerc.mis.core.Application;
@@ -80,7 +80,7 @@ public abstract class AbstractPage extends UIComponent implements IPage, IUserLa
     }
 
     // 从请求或缓存读取数据
-    public final String getValue(Buffer buff, String reqKey) {
+    public final String getValue(RedisRecord buff, String reqKey) {
         String result = getRequest().getParameter(reqKey);
         if (result == null) {
             String val = buff.getString(reqKey).replace("{}", "");
