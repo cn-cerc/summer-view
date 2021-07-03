@@ -10,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cn.cerc.core.DataSet;
-import cn.cerc.core.ISession;
 import cn.cerc.mis.core.Application;
 import cn.cerc.mis.core.BasicHandle;
 import cn.cerc.mis.core.IService;
@@ -48,7 +47,7 @@ public class StartServices extends HttpServlet {
 		log.debug(param.getService());
 		try (BasicHandle handle = new BasicHandle()) {
 			handle.getSession().setProperty(Application.SessionId, sid);
-			handle.getSession().setProperty(ISession.TOKEN, token);
+			handle.getSession().loadToken(token);
 			IService bean = Application.getService(handle, param.getService());
 			if (bean == null) {
 				dataOut.setMessage(String.format("service(%s) is null.", param.getService()));
