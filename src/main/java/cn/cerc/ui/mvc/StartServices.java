@@ -54,7 +54,7 @@ public class StartServices extends HttpServlet {
 				resp.getWriter().write(dataOut.toString());
 				return;
 			}
-			if (!bean.checkSecurity(handle)) {
+			if (!bean.allowGuestUser(handle)) {
 				dataOut.setState(ServiceState.ACCESS_DISABLED);
 				dataOut.setMessage("请您先登入系统");
 				resp.getWriter().write(dataOut.toString());
