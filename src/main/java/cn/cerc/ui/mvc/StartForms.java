@@ -77,6 +77,10 @@ public class StartForms implements Filter {
             chain.doFilter(req, resp);
             return;
         }
+        if (uri.contains("services/")) {
+            chain.doFilter(req, resp);
+            return;
+        }
         if (uri.contains("task/")) {
             chain.doFilter(req, resp);
             return;
