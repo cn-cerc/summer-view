@@ -1,5 +1,10 @@
 package cn.cerc.ui.vcl;
 
+/**
+ * 阿里云文档说明
+ * 
+ * https://help.aliyun.com/document_detail/44688.html?spm=a2c4g.11186623.6.739.792f58cdOR7634
+ */
 public final class AliyunOssProcess {
     private int height = 0;
     private int width = 0;

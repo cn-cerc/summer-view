@@ -1,11 +1,11 @@
 package cn.cerc.ui.phone;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.parts.UIComponent;
 import cn.cerc.ui.vcl.UIImage;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author 张弓
@@ -35,6 +35,20 @@ public class Block602 extends UIComponent {
     public UIImage addImage(String imgUrl) {
         UIImage image = new UIImage();
         image.setSrc(imgUrl);
+        items.add(image);
+        return image;
+    }
+
+    /**
+     * 针对图片进行阿里云OSS压缩
+     * 
+     * @param imgUrl 图片地址
+     * @param width  图片宽度
+     * @return 压缩后的图片
+     */
+    public UIImage addImage(String imgUrl, int width) {
+        UIImage image = new UIImage();
+        image.setSrc(imgUrl, width);
         items.add(image);
         return image;
     }
