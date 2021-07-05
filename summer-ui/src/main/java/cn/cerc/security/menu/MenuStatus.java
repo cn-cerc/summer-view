@@ -1,4 +1,4 @@
-package security.menu;
+package cn.cerc.security.menu;
 
 public enum MenuStatus {
     

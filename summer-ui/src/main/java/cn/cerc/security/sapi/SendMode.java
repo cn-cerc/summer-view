@@ -1,4 +1,4 @@
-package security.sapi;
+package cn.cerc.security.sapi;
 
 public enum SendMode {
     /**

@@ -4,7 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.junit.Test;
 
-import security.sapi.JayunVerify;
+import cn.cerc.security.sapi.JayunVerify;
 
 public class JayunVerifyTest {
 

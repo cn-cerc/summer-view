@@ -5,7 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import security.sapi.JayunSecurity;
+import cn.cerc.security.sapi.JayunSecurity;
 
 public class JayunSecurityTest {
     private JayunSecurity api = new JayunSecurity(null);

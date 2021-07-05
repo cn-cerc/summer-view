@@ -1,4 +1,4 @@
-package security.menu;
+package cn.cerc.security.menu;
 
 import cn.cerc.ui.core.HtmlWriter;
 
