@@ -7,9 +7,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import cn.cerc.security.sapi.JayunMessage;
-import cn.cerc.security.sapi.SendMode;
-
 public class JayunMessageTest {
     private JayunMessage api = new JayunMessage(null);
     private HttpServletRequest request;
