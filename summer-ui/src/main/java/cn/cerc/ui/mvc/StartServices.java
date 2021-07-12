@@ -1,8 +1,6 @@
 package cn.cerc.ui.mvc;
 
 import java.io.IOException;
-import java.lang.annotation.Annotation;
-import java.util.Set;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -17,13 +15,13 @@ import cn.cerc.mis.core.Application;
 import cn.cerc.mis.core.BasicHandle;
 import cn.cerc.mis.core.DataValidateException;
 import cn.cerc.mis.core.IService;
-import cn.cerc.mis.core.Permission;
 import cn.cerc.mis.core.RequestData;
 import cn.cerc.mis.core.ServiceState;
 
 public class StartServices extends HttpServlet {
     private static final Logger log = LoggerFactory.getLogger(StartServices.class);
     private static final long serialVersionUID = 1L;
+    private static final PermissionPolice police = new PermissionPolice();
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -67,27 +65,18 @@ public class StartServices extends HttpServlet {
                 resp.getWriter().write(dataOut.toString());
                 return;
             }
-            String permission = Permission.USERS;
-            for (Annotation item : bean.getClass().getDeclaredAnnotations()) {
-                if (item instanceof Permission)
-                    permission = ((Permission) item).value();
-            }
-            if (!Permission.GUEST.equals(permission)) {
+            String permission = police.getPermission(bean.getClass());
+            if (!police.allowGuestUser(permission)) {
                 ISession sess = handle.getSession();
-                if (!(sess != null && sess.logon())) {
+                if ((sess == null) || (!sess.logon())) {
                     dataOut.setMessage("请您先登入系统").setState(ServiceState.ACCESS_DISABLED);
                     resp.getWriter().write(dataOut.toString());
                     return;
                 }
-                if (!Permission.USERS.equals(permission)) {
-                    Set<String> permissions = handle.getSession().getPermissions();
-                    if ((permissions != null) && (!permissions.contains(Permission.ADMIN))) {
-                        if (!permissions.contains(permission)) {
-                            dataOut.setMessage("您的无权执行当前服务").setState(ServiceState.ACCESS_DISABLED);
-                            resp.getWriter().write(dataOut.toString());
-                            return;
-                        }
-                    }
+                if (!police.checkPassed(handle.getSession().getPermissions(), permission)) {
+                    dataOut.setMessage("您的执行权限不足").setState(ServiceState.ACCESS_DISABLED);
+                    resp.getWriter().write(dataOut.toString());
+                    return;
                 }
             }
             DataSet dataIn = new DataSet(param.getParam());
@@ -106,4 +95,5 @@ public class StartServices extends HttpServlet {
             resp.getWriter().write(dataOut.toString());
         }
     }
+
 }
