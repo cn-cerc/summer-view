@@ -8,14 +8,14 @@ import cn.cerc.mis.core.Permission;
 
 public class PermissionPolice {
 
-    public boolean allowGuestUser(String permission) {
+    public final boolean allowGuestUser(String permission) {
         if (Permission.GUEST.length() > permission.length())
             return false;
 
         return permission.startsWith(Permission.GUEST);
     }
 
-    public boolean checkPassed(String permissions, String request) {
+    public final boolean checkPassed(String permissions, String request) {
         if (Utils.isEmpty(permissions) || Utils.isEmpty(request))
             return true;
 
