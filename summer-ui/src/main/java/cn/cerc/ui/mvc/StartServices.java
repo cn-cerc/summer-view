@@ -49,6 +49,7 @@ public class StartServices extends HttpServlet {
         // 执行指定函数
         log.debug(param.getService());
         try (BasicHandle handle = new BasicHandle()) {
+            handle.getSession().setProperty(ISession.REQUEST, req);
             handle.getSession().setProperty(Application.SessionId, sid);
             handle.getSession().loadToken(token);
             IService bean = null;
