@@ -15,7 +15,6 @@ import cn.cerc.mis.core.Application;
 import cn.cerc.mis.core.BasicHandle;
 import cn.cerc.mis.core.DataValidateException;
 import cn.cerc.mis.core.IService;
-import cn.cerc.mis.core.RequestData;
 import cn.cerc.mis.core.ServiceState;
 
 public class StartServices extends HttpServlet {
@@ -33,30 +32,28 @@ public class StartServices extends HttpServlet {
         String uri = req.getRequestURI();
         log.debug(uri);
         req.setCharacterEncoding("UTF-8");
-        RequestData param = new RequestData(req);
 
-        String token = param.getToken();
-        log.debug("DataIn Param==={}", param.getParam());
+        String token = req.getParameter(ISession.TOKEN);
+        DataSet dataIn = new DataSet(req.getParameter("dataIn"));
+        String service = req.getPathInfo().substring(1);
         resp.setContentType("text/html;charset=UTF-8");
-
         DataSet dataOut = new DataSet();
         String sid = req.getSession().getId();
-        if (param.getService() == null) {
-            dataOut.setMessage("class is null.");
+        if (service == null) {
+            dataOut.setMessage("service is null.");
             resp.getWriter().write(dataOut.toString());
             return;
         }
         // 执行指定函数
-        log.debug(param.getService());
         try (BasicHandle handle = new BasicHandle()) {
             handle.getSession().setProperty(ISession.REQUEST, req);
             handle.getSession().setProperty(Application.SessionId, sid);
             handle.getSession().loadToken(token);
             IService bean = null;
             try {
-                bean = Application.getService(handle, param.getService());
+                bean = Application.getService(handle, service);
                 if (bean == null) {
-                    dataOut.setMessage(String.format("service(%s) is null.", param.getService()))
+                    dataOut.setMessage(String.format("service(%s) is null.", service))
                             .setState(ServiceState.NOT_FIND_SERVICE);
                     resp.getWriter().write(dataOut.toString());
                     return;
@@ -80,7 +77,6 @@ public class StartServices extends HttpServlet {
                     return;
                 }
             }
-            DataSet dataIn = new DataSet(param.getParam());
             try {
                 dataOut = bean.execute(handle, dataIn);
             } catch (DataValidateException e) {
