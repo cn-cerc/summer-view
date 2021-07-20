@@ -21,6 +21,7 @@ import cn.cerc.core.ISession;
 import cn.cerc.mis.config.AppStaticFileDefault;
 import cn.cerc.mis.config.ApplicationConfig;
 import cn.cerc.mis.core.Application;
+import cn.cerc.mis.core.BasicHandle;
 import cn.cerc.mis.core.FormFactory;
 
 public class StartForms implements Filter {
@@ -105,8 +106,10 @@ public class StartForms implements Filter {
         String formId = params[0];
         String funcCode = params.length == 1 ? "execute" : params[1];
 
-        String viewId = factory.getFormView(req, resp, formId, funcCode);
-        factory.outputView(req, resp, viewId);
+        try (BasicHandle handle = new BasicHandle()) {
+            String viewId = factory.getFormView(handle, req, resp, formId, funcCode);
+            factory.outputView(req, resp, viewId);
+        }
     }
 
     public static String getRequestCode(HttpServletRequest req) {
