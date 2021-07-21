@@ -30,7 +30,7 @@ public class DataGrid extends UIComponent implements DataSource {
     private List<AbstractGridLine> lines = new ArrayList<>();
     // 扩展行
     private ExpenderGridLine expender;
-    //手机行
+    // 手机行
     protected List<PhoneLine> phoneLines = new ArrayList<>();
     // 表单，后不得再使用
     private UIForm uiform;
@@ -272,19 +272,19 @@ public class DataGrid extends UIComponent implements DataSource {
 
     public void setCSSStyle(String cSSStyle) {
         if (form.getClient().isPhone())
-            log.warn("only support web device");
+            log.info("only support web device");
         CssStyle = cSSStyle;
     }
 
     public OutputEvent getBeforeOutput() {
         if (form.getClient().isPhone())
-            log.warn("only support web device");
+            log.info("only support web device");
         return beforeOutput;
     }
 
     public void setBeforeOutput(OutputEvent beforeOutput) {
         if (form.getClient().isPhone())
-            log.warn("only support web device");
+            log.info("only support web device");
         this.beforeOutput = beforeOutput;
     }
 
@@ -297,7 +297,7 @@ public class DataGrid extends UIComponent implements DataSource {
 
     public DataGrid setPrimaryKey(String primaryKey) {
         if (form.getClient().isPhone()) {
-            log.debug("only support web device");
+            log.info("only support web device");
         } else {
             this.getMasterLine().setPrimaryKey(primaryKey);
         }
@@ -306,7 +306,7 @@ public class DataGrid extends UIComponent implements DataSource {
 
     public PhoneLine addLine() {
         if (!form.getClient().isPhone())
-            log.warn("only support phone device");
+            log.info("only support phone device");
         PhoneLine line = new PhoneLine(this);
         phoneLines.add(line);
         return line;
