@@ -2,8 +2,6 @@ package cn.cerc.ui.mvc;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -11,8 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.google.gson.Gson;
 
 import cn.cerc.core.DataSet;
 import cn.cerc.core.ISession;
@@ -37,28 +33,18 @@ public class StartServices extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         request.setCharacterEncoding(StandardCharsets.UTF_8.name());
-
-        // 读取post的form表单参数
-        Map<String, String[]> params = request.getParameterMap();
-        Map<String, String> items = new HashMap<>();
-        for (String key : params.keySet()) {
-            String[] values = params.get(key);
-            String valueStr = "";
-            for (int i = 0; i < values.length; i++) {
-                valueStr = (i == values.length - 1) ? valueStr + values[i] : valueStr + values[i] + ",";
-            }
-            items.put(key, valueStr);
-        }
-        log.debug("request {}", new Gson().toJson(items));
-
-        String token = items.get(ISession.TOKEN);
-        log.debug("token {}", token);
-        String text = items.get("dataIn");
-        log.debug("dataIn {}", text);
-
+        String uri = request.getRequestURI();
+        log.debug(uri);
+        request.setCharacterEncoding("UTF-8");
+        String token = request.getParameter(ISession.TOKEN);
+        String text = request.getParameter("dataIn");
         DataSet dataIn = new DataSet(text);
         String service = request.getPathInfo().substring(1);
         response.setContentType("text/html;charset=UTF-8");
+        
+        log.debug("token {}", token);
+        log.debug("dataIn {}", text);
+
         DataSet dataOut = new DataSet();
         if (service == null) {
             dataOut.setMessage("service is null.");
