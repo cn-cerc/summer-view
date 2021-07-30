@@ -12,6 +12,11 @@ import cn.cerc.ui.vcl.ext.UISpan;
  * @author 张弓
  */
 public class UITextBox extends UICssComponent {
+    /**
+     * 输入框只能输入纯数字，在iOS和Android上默认调用9宫格数字键，建议搭配 number 或者 tel 类型使用
+     */
+    public static final String INTEGER_PATTERN = "[0-9]*";
+
     // 正则过滤
     protected String pattern;
     private UISpan caption;
