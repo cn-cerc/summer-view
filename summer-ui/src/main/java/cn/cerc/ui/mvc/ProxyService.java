@@ -1,6 +1,5 @@
 package cn.cerc.ui.mvc;
 
-import cn.cerc.core.DataSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -60,7 +59,7 @@ public class ProxyService extends AbstractForm {
                 BookHandle bHandle = new BookHandle(this, curBookNo);
                 svr = new LocalService(bHandle, service);
             }
-            svr.setDataIn(DataSet.fromJson(dataIn));
+            svr.getDataIn().fromJson(dataIn);
             jsonPage.put("result", svr.exec());
             jsonPage.put("message", svr.getMessage());
             jsonPage.put("data", svr.getDataOut().toString());

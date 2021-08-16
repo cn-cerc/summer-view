@@ -38,7 +38,7 @@ public class StartServices extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         String token = request.getParameter(ISession.TOKEN);
         String text = request.getParameter("dataIn");
-        DataSet dataIn = DataSet.fromJson(text);
+        DataSet dataIn = new DataSet().fromJson(text);
         String service = request.getPathInfo().substring(1);
         response.setContentType("text/html;charset=UTF-8");
 
