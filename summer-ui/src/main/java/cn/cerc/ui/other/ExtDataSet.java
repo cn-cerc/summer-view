@@ -14,14 +14,14 @@ public class ExtDataSet extends DataSet {
 
     @Override
     public String toJson() {
-        return new DataSetGson<ExtDataSet>(this).encode();
+        return new DataSetGson<>(this).encode();
     }
 
     @Override
     public ExtDataSet fromJson(String json) {
         this.close();
         if (!Utils.isEmpty(json))
-            new DataSetGson<ExtDataSet>(this).decode(json);
+            new DataSetGson<>(this).decode(json);
         return this;
     }
 

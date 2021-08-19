@@ -50,7 +50,7 @@ public class JayunSecurity {
     /**
      * 向聚安云平台注册用户资料，以及所关联手机号讯息，后续会增加更多的讯息用于登记
      *
-     * @param user   应用的用户账号，并非聚安云的帐号
+     * @param user   应用的用户帐号，并非聚安云的帐号
      * @param mobile 手机号
      * @return true:成功，若失败可用getMessage取得错误信息
      */
@@ -67,7 +67,7 @@ public class JayunSecurity {
     /**
      * 检测用户当前使用的IP以及设备是否是安全，不安全的原因可能有：未认证的IP、设备，或未许可的时间段
      *
-     * @param user 应用的用户账号，并非聚安云的帐号r
+     * @param user 应用的用户帐号，并非聚安云的帐号r
      * @return true:成功，若失败可用getMessage取得错误信息
      */
     public boolean isSecurity(String user) {
@@ -83,7 +83,7 @@ public class JayunSecurity {
     /**
      * 发送验证码
      *
-     * @param user      应用的用户账号，并非聚安云的帐号
+     * @param user      应用的用户帐号，并非聚安云的帐号
      * @param sendVoice true: 发送语音验证码;false:发送普通短信验证码
      * @return true 成功，若失败可用getMessage取得错误信息
      */
@@ -97,7 +97,7 @@ public class JayunSecurity {
     /**
      * 发送验证码
      *
-     * @param user 应用的用户账号，并非聚安云的帐号
+     * @param user 应用的用户帐号，并非聚安云的帐号
      * @return true 成功，若失败可用getMessage取得错误信息
      */
     public boolean requestVerify(String user) {
@@ -116,7 +116,7 @@ public class JayunSecurity {
     /**
      * 检测验证码
      *
-     * @param user       应用的用户账号，并非聚安云的帐号
+     * @param user       应用的用户帐号，并非聚安云的帐号
      * @param verifyCode 验证码
      * @return true:成功，若失败可用getMessage取得错误信息
      */
@@ -144,7 +144,7 @@ public class JayunSecurity {
     /**
      * 环境安全检测及校验安全码，一般配合 jsp 使用文件
      *
-     * @param user 用户账号
+     * @param user 用户帐号
      * @return true:成功，若失败可用getMessage取得错误信息
      */
     public boolean checkEnvironment(String user) {

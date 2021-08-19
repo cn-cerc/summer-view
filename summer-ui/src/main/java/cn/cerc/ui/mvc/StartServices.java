@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import cn.cerc.core.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,7 +47,7 @@ public class StartServices extends HttpServlet {
         log.debug("dataIn {}", text);
 
         DataSet dataOut = new DataSet();
-        if (service == null) {
+        if (Utils.isEmpty(service)) {
             dataOut.setMessage("service is null.");
             response.getWriter().write(dataOut.toString());
             return;
