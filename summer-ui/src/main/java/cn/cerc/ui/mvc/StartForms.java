@@ -1,6 +1,7 @@
 package cn.cerc.ui.mvc;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -11,6 +12,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import cn.cerc.core.Utils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,12 +61,12 @@ public class StartForms implements Filter {
              * /forms/images/systeminstall-pc.png
              */
             log.debug("before {}", uri);
-
             int index = uri.indexOf("/", 2);
             if (index < 0) {
                 request.getServletContext().getRequestDispatcher(uri).forward(request, response);
             } else {
                 String source = "/" + Application.getConfig().getFormsPath() + uri.substring(index);
+                source = Utils.decode(source, StandardCharsets.UTF_8.name());
                 request.getServletContext().getRequestDispatcher(source).forward(request, response);
                 log.debug("after  {}", source);
             }
