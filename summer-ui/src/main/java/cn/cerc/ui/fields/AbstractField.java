@@ -587,7 +587,7 @@ public abstract class AbstractField extends UICssComponent implements IField, IN
         if (obj == null) {
             return null;
         }
-        return new TDate(obj.getData());
+        return new TDate(obj.asBaseDate());
     }
 
     public String getString(String def) {

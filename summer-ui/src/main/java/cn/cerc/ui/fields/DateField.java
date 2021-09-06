@@ -44,7 +44,7 @@ public class DateField extends AbstractField {
             return html.toString();
         }
         if (record.hasValue(getField())) {
-            return record.getDate(getField()).getDate();
+            return record.getDatetime(getField()).getDate();
         } else {
             return "";
         }
