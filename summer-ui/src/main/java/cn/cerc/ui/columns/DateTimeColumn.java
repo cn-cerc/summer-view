@@ -41,7 +41,7 @@ public class DateTimeColumn extends AbstractColumn implements IDataColumn {
     }
 
     private void outputCellPhone(HtmlWriter html) {
-        String value = getRecord().getDateTime(this.getCode()).toString();
+        String value = getRecord().getDatetime(this.getCode()).toString();
         if (this.readonly) {
             html.print(getName() + "：");
             html.print(value);
@@ -60,7 +60,7 @@ public class DateTimeColumn extends AbstractColumn implements IDataColumn {
     }
 
     private void outputCellWeb(HtmlWriter html) {
-        String value = getRecord().getDateTime(this.getCode()).toString();
+        String value = getRecord().getDatetime(this.getCode()).toString();
         if (this.readonly) {
             html.print(value);
         } else {

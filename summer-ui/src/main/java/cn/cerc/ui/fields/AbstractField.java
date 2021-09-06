@@ -4,9 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import cn.cerc.core.ClassConfig;
+import cn.cerc.core.Datetime;
+import cn.cerc.core.FastDate;
 import cn.cerc.core.Record;
-import cn.cerc.core.TDate;
-import cn.cerc.core.TDateTime;
 import cn.cerc.mis.cdn.CDN;
 import cn.cerc.ui.SummerUI;
 import cn.cerc.ui.core.DataSource;
@@ -570,24 +570,18 @@ public abstract class AbstractField extends UICssComponent implements IField, IN
         }
     }
 
-    public TDateTime getDateTime() {
-        String val = this.getString();
-        if (val == null) {
-            return null;
-        }
-        return TDateTime.fromDate(val);
+    public Datetime getDatetime() {
+        return new Datetime(this.getString());
     }
 
-    public TDate getDate() {
-        String val = this.getString();
-        if (val == null) {
-            return null;
-        }
-        TDateTime obj = TDateTime.fromDate(val);
-        if (obj == null) {
-            return null;
-        }
-        return new TDate(obj.asBaseDate());
+    @Deprecated
+    public Datetime getDateTime() {
+        return new Datetime(this.getString());
+    }
+
+    @Deprecated
+    public FastDate getDate() {
+        return new FastDate(this.getString());
     }
 
     public String getString(String def) {
@@ -595,14 +589,21 @@ public abstract class AbstractField extends UICssComponent implements IField, IN
         return result != null ? result : def;
     }
 
-    public TDate getDate(TDate def) {
-        TDate result = this.getDate();
-        return result != null ? result : def;
+    @Deprecated
+    public FastDate getDate(Datetime def) {
+        FastDate result = this.getDate();
+        return result.isEmpty() ? def.toFastDate() : result;
     }
 
-    public TDateTime getDateTime(TDateTime def) {
-        TDateTime result = this.getDateTime();
-        return result != null ? result : def;
+    public Datetime getDatetime(Datetime def) {
+        Datetime result = this.getDatetime();
+        return result.isEmpty() ? def : result;
+    }
+
+    @Deprecated
+    public Datetime getDateTime(Datetime def) {
+        Datetime result = this.getDateTime();
+        return result.isEmpty() ? def : result;
     }
 
     public String getIcon() {

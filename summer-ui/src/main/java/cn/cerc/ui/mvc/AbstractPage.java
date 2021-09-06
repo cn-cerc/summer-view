@@ -5,10 +5,9 @@ import java.util.Map;
 
 import cn.cerc.core.ClassConfig;
 import cn.cerc.core.DataSet;
+import cn.cerc.core.Datetime;
 import cn.cerc.core.IUserLanguage;
 import cn.cerc.core.Record;
-import cn.cerc.core.TDate;
-import cn.cerc.core.TDateTime;
 import cn.cerc.core.Utils;
 import cn.cerc.db.redis.RedisRecord;
 import cn.cerc.mis.SummerMIS;
@@ -129,11 +128,7 @@ public abstract class AbstractPage extends UIComponent implements IPage, IUserLa
         put(id, value);
     }
 
-    public void add(String id, TDate value) {
-        put(id, value);
-    }
-
-    public void add(String id, TDateTime value) {
+    public void add(String id, Datetime value) {
         put(id, value);
     }
 
