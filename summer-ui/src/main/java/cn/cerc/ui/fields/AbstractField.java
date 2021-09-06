@@ -579,7 +579,6 @@ public abstract class AbstractField extends UICssComponent implements IField, IN
         return new Datetime(this.getString());
     }
 
-    @Deprecated
     public FastDate getDate() {
         return new FastDate(this.getString());
     }
@@ -589,7 +588,6 @@ public abstract class AbstractField extends UICssComponent implements IField, IN
         return result != null ? result : def;
     }
 
-    @Deprecated
     public FastDate getDate(Datetime def) {
         FastDate result = this.getDate();
         return result.isEmpty() ? def.toFastDate() : result;
