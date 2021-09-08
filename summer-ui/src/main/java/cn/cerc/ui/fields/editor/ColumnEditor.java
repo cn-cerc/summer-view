@@ -12,7 +12,6 @@ import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.core.IField;
 import cn.cerc.ui.core.IFormatColumn;
 import cn.cerc.ui.fields.AbstractField;
-import cn.cerc.ui.grid.DataGrid;
 import cn.cerc.ui.grid.lines.AbstractGridLine;
 import cn.cerc.ui.grid.lines.MasterGridLine;
 
@@ -66,12 +65,6 @@ public class ColumnEditor {
                         continue;
                     }
                     columns.add(field);
-                }
-            }
-            if (gridLine.getOwner() instanceof DataGrid) {
-                DataGrid grid = (DataGrid) gridLine.getOwner();
-                if (columns.size() > 0 && grid.getPrimaryKey() == null) {
-                    throw new RuntimeException("BaseGrid.primaryKey is null");
                 }
             }
             this.init = true;
