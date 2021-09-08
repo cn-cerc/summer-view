@@ -16,8 +16,7 @@ public class UITable extends UIBaseHtml {
     @Override
     public void output(HtmlWriter html) {
         html.print("<table");
-        if (this.getCssClass() != null)
-            html.print(" class=\"%s\"", this.getCssClass());
+        super.appendPropertys(html);
         html.print(">");
         for (UIComponent item : this)
             item.output(html);
