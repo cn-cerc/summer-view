@@ -22,7 +22,7 @@ public class UIDiv extends UIBaseHtml {
     @Override
     public void output(HtmlWriter html) {
         html.print("<div");
-        super.outputCss(html);
+        super.appendPropertys(html);
         html.print(">");
 
         super.output(html);

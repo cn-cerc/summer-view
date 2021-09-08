@@ -13,7 +13,7 @@ public class UIMessage extends UIComponent {
     @Override
     public void output(HtmlWriter html) {
         html.print("<section role='message'");
-        super.outputCss(html);
+        super.appendPropertys(html);
         html.print(">");
         if (!"".equals(text)) {
             html.print(text);

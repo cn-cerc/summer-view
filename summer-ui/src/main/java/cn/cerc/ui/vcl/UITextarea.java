@@ -36,9 +36,7 @@ public class UITextarea extends UIBaseHtml implements INameOwner {
         }
 
         html.print("<textarea ");
-        if (this.getId() != null) {
-            html.print("id='%s' ", this.getId());
-        }
+        super.appendPropertys(html);
         if (getName() != null) {
             html.print("name='%s' ", name);
         } else if (this.getId() != null) {
@@ -62,7 +60,6 @@ public class UITextarea extends UIBaseHtml implements INameOwner {
         if (isAutofocus()) {
             html.print("autofocus ");
         }
-        super.outputCss(html);
         html.print(">");
 
         if (getText() != null) {

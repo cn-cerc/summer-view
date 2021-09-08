@@ -47,9 +47,7 @@ public class UITextBox extends UIComponent {
             caption.output(html);
         }
         html.print("<input");
-        if (this.getId() != null) {
-            html.print(" id='%s'", this.getId());
-        }
+        super.appendPropertys(html);
         if (this.name != null) {
             html.print(" name='%s'", this.getName());
         }
@@ -94,7 +92,6 @@ public class UITextBox extends UIComponent {
         if (this.readonly) {
             html.print(" readonly='readonly'");
         }
-        super.outputCss(html);
         html.println("/>");
     }
 

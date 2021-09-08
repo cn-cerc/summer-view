@@ -2,16 +2,16 @@ package cn.cerc.ui.core;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 public class UIComponent implements IOriginOwner, Iterable<UIComponent> {
     private List<UIComponent> components = new ArrayList<>();
+    private Map<String, String> propertys = new HashMap<>();
     private UIComponent owner;
     private Object origin;
-    private String cssClass;
-    private String cssStyle;
-    private String id;
 
     public UIComponent() {
         super();
@@ -27,16 +27,12 @@ public class UIComponent implements IOriginOwner, Iterable<UIComponent> {
     @Deprecated
     public UIComponent(UIComponent owner, String id) {
         this(owner);
-        this.id = id;
+        setId(id);
     }
 
     public void addComponent(UIComponent component) {
         if (!components.contains(component))
             components.add(component);
-    }
-
-    private void removeComponent(UIComponent compoent) {
-        components.remove(compoent);
     }
 
     public final UIComponent getOwner() {
@@ -47,21 +43,6 @@ public class UIComponent implements IOriginOwner, Iterable<UIComponent> {
         this.owner = owner;
         if (owner != null)
             owner.addComponent(this);
-        return this;
-    }
-
-    public final String getId() {
-        return id;
-    }
-
-    public final UIComponent setId(String id) {
-        this.id = id;
-        if (owner != null) {
-            if (id != null)
-                owner.addComponent(this);
-            else
-                owner.removeComponent(this);
-        }
         return this;
     }
 
@@ -85,29 +66,35 @@ public class UIComponent implements IOriginOwner, Iterable<UIComponent> {
         this.forEach(item -> item.output(html));
     }
 
+    public final String getId() {
+        return propertys.get("id");
+    }
+
+    public final UIComponent setId(String id) {
+        propertys.put("id", id);
+        return this;
+    }
+
     public final String getCssClass() {
-        return cssClass;
+        return propertys.get("class");
     }
 
     public UIComponent setCssClass(String cssClass) {
-        this.cssClass = cssClass;
+        propertys.put("class", cssClass);
         return this;
     }
 
     public final String getCssStyle() {
-        return cssStyle;
+        return propertys.get("style");
     }
 
     public UIComponent setCssStyle(String cssStyle) {
-        this.cssStyle = cssStyle;
+        propertys.put("style", cssStyle);
         return this;
     }
 
-    protected void outputCss(HtmlWriter html) {
-        if (this.cssClass != null)
-            html.print(" class='%s'", cssClass);
-        if (this.cssStyle != null)
-            html.print(" style='%s'", cssStyle);
+    protected final void appendPropertys(HtmlWriter html) {
+        propertys.forEach((k, v) -> html.print(" %s='%s'", k, v));
     }
 
     @Override

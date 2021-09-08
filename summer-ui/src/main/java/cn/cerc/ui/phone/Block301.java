@@ -23,6 +23,7 @@ public class Block301 extends UIComponent {
 
     public Block301(UIComponent owner) {
         super(owner);
+        this.setCssClass("block301");
         operator = new UrlRecord();
         leftIcon.setSrc("images/ditenglogo.png");
         leftIcon.setRole("icon");
@@ -34,8 +35,8 @@ public class Block301 extends UIComponent {
     @Override
     public void output(HtmlWriter html) {
         html.println("<!-- %s -->", this.getClass().getName());
-        html.print("<div class='block301");
-        outputCss(html);
+        html.print("<div");
+        appendPropertys(html);
         html.print("'>");
         leftIcon.output(html);
         html.print("<a href='%s'>", operator.getUrl());

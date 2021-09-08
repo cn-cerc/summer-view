@@ -16,7 +16,7 @@ public class UIUl extends UIComponent {
     @Override
     public void output(HtmlWriter html) {
         html.print("<ul");
-        super.outputCss(html);
+        super.appendPropertys(html);
         html.print(">");
         for (UIComponent item : this) {
             html.print("<li>");

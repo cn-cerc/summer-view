@@ -32,9 +32,7 @@ public class UIImage extends UIBaseHtml {
             html.print("?x-oss-process=image%s", process.getCommand());
         }
         html.print("'");
-        if (getId() != null) {
-            html.print(" id='%s'", getId());
-        }
+        super.appendPropertys(html);
         if (role != null) {
             html.print(" role='%s'", this.role);
         }
@@ -50,7 +48,6 @@ public class UIImage extends UIBaseHtml {
         if (onclick != null) {
             html.print(" onclick='%s'", this.onclick);
         }
-        super.outputCss(html);
         html.print("/>");
     }
 

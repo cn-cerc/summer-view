@@ -28,9 +28,7 @@ public class UICheckBox extends UIComponent {
     @Override
     public void output(HtmlWriter html) {
         html.print("<input");
-        if (this.getId() != null) {
-            html.print(" id='%s'", this.getId());
-        }
+        super.appendPropertys(html);
         if (this.name != null) {
             html.print(" name='%s'", this.getName());
         }
@@ -46,7 +44,6 @@ public class UICheckBox extends UIComponent {
         if (checked) {
             html.print(" checked='checked'");
         }
-        super.outputCss(html);
         html.println("/>");
     }
 

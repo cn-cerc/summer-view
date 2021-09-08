@@ -43,16 +43,10 @@ public class UIBottom extends UIComponent {
     @Override
     public void output(HtmlWriter html) {
         html.print("<a href=\"%s\"", this.url);
-        if (this.getId() != null) {
-            html.print(" id=\"%s\"", this.getId());
-        }
         if (!Utils.isEmpty(this.getTarget())) {
             html.print(" target=\"%s\"", this.target);
         }
-        if (this.getCssClass() != null) {
-            html.print(" class=\"%s\"", this.getCssClass());
-        }
-        super.outputCss(html);
+        super.appendPropertys(html);
         html.println(">%s</a>", this.caption);
     }
 }

@@ -42,7 +42,7 @@ public class UILabel extends UIBaseHtml {
             if (focusTarget != null) {
                 html.print(" for='%s'", focusTarget);
             }
-            super.outputCss(html);
+            super.appendPropertys(html);
             if (this.url != null)
                 html.print(" href='%s'");
             html.print(">");
@@ -53,7 +53,7 @@ public class UILabel extends UIBaseHtml {
             html.print("</label>");
         } else {
             html.print("<a");
-            super.outputCss(html);
+            super.appendPropertys(html);
             if (this.url != null)
                 html.print(" href='%s'", this.url);
             html.print(">");

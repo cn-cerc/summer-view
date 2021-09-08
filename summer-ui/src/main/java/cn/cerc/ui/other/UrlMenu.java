@@ -38,10 +38,7 @@ public class UrlMenu extends UIComponent {
     @Override
     public void output(HtmlWriter html) {
         html.print("<a href=\"%s\"", this.url);
-        if (this.getId() != null) {
-            html.print(" id=\"%s\"", this.getId());
-        }
-        super.outputCss(html);
+        super.appendPropertys(html);
         html.println(">%s</a>", this.name);
     }
 
