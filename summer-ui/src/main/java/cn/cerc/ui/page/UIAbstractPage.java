@@ -158,15 +158,6 @@ public abstract class UIAbstractPage extends UIComponent implements IPage {
         this.defineHead = defineHead;
     }
 
-    private boolean isPhone() {
-        if (this.getOrigin() instanceof IForm) {
-            IForm form = (IForm) this.getOrigin();
-            return form.getClient().isPhone();
-        } else {
-            return false;
-        }
-    }
-
     @Override
     public void output(HtmlWriter html) {
         for (UIComponent component : this.getComponents()) {

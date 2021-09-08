@@ -7,6 +7,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import cn.cerc.mis.core.IForm;
+
 public class UIComponent implements IOriginOwner, Iterable<UIComponent> {
     private List<UIComponent> components = new ArrayList<>();
     private Map<String, String> propertys = new HashMap<>();
@@ -106,6 +108,14 @@ public class UIComponent implements IOriginOwner, Iterable<UIComponent> {
     @Override
     public final Object getOrigin() {
         return origin;
+    }
+
+    protected final Map<String, String> getPropertys() {
+        return propertys;
+    }
+
+    protected final boolean isPhone() {
+        return origin instanceof IForm ? ((IForm) origin).getClient().isPhone() : false;
     }
 
     @Deprecated
