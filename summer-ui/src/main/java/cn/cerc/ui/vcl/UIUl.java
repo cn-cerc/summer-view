@@ -16,8 +16,7 @@ public class UIUl extends UIComponent {
     @Override
     public void output(HtmlWriter html) {
         html.print("<ul");
-        if (this.cssClass != null)
-            html.print(" class=\"%s\"", this.cssClass);
+        super.outputCss(html);
         html.print(">");
         for (UIComponent item : this) {
             html.print("<li>");

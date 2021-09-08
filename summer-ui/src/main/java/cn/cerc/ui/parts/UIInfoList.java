@@ -18,6 +18,7 @@ public class UIInfoList extends UIComponent {
 
     public UIInfoList(UIComponent owner) {
         super(owner);
+        this.setCssClass("infoList");
     }
 
     public Line setTitle(String title) {
@@ -92,11 +93,8 @@ public class UIInfoList extends UIComponent {
     @Override
     public void output(HtmlWriter html) {
         html.println("<!-- %s -->", this.getClass().getName());
-        html.print("<div class='infoList");
-        if (this.cssClass != null) {
-            html.print(" %s", this.cssClass);
-        }
-        html.print("'");
+        html.print("<div");
+        super.outputCss(html);
         if (this.onClick != null) {
             html.print(" onclick='%s'", this.onClick);
         }

@@ -7,18 +7,18 @@ import java.util.List;
 
 public class UIComponent implements IOriginOwner, Iterable<UIComponent> {
     private List<UIComponent> components = new ArrayList<>();
-    private Object origin;
     private UIComponent owner;
+    private Object origin;
+    private String cssClass;
+    private String cssStyle;
     private String id;
-
-    protected String cssClass;
-    protected String cssStyle;
 
     public UIComponent() {
         super();
     }
 
     public UIComponent(UIComponent owner) {
+        super();
         setOwner(owner);
         if (owner instanceof IOriginOwner)
             this.origin = ((IOriginOwner) owner).getOrigin();
@@ -26,25 +26,28 @@ public class UIComponent implements IOriginOwner, Iterable<UIComponent> {
 
     @Deprecated
     public UIComponent(UIComponent owner, String id) {
+        this(owner);
         this.id = id;
-        setOwner(owner);
     }
 
     public void addComponent(UIComponent component) {
-        if (!components.contains(component)) {
+        if (!components.contains(component))
             components.add(component);
-        }
+    }
+
+    private void removeComponent(UIComponent compoent) {
+        components.remove(compoent);
     }
 
     public final UIComponent getOwner() {
         return owner;
     }
 
-    public void setOwner(UIComponent owner) {
+    public final UIComponent setOwner(UIComponent owner) {
         this.owner = owner;
-        if (owner != null) {
+        if (owner != null)
             owner.addComponent(this);
-        }
+        return this;
     }
 
     public final String getId() {
@@ -53,8 +56,12 @@ public class UIComponent implements IOriginOwner, Iterable<UIComponent> {
 
     public final UIComponent setId(String id) {
         this.id = id;
-        if (owner != null && id != null)
-            owner.addComponent(this);
+        if (owner != null) {
+            if (id != null)
+                owner.addComponent(this);
+            else
+                owner.removeComponent(this);
+        }
         return this;
     }
 
@@ -75,8 +82,7 @@ public class UIComponent implements IOriginOwner, Iterable<UIComponent> {
     }
 
     public void output(HtmlWriter html) {
-        for (UIComponent component : this.getComponents())
-            component.output(html);
+        this.forEach(item -> item.output(html));
     }
 
     public final String getCssClass() {
@@ -98,31 +104,29 @@ public class UIComponent implements IOriginOwner, Iterable<UIComponent> {
     }
 
     protected void outputCss(HtmlWriter html) {
-        if (this.cssClass != null) {
+        if (this.cssClass != null)
             html.print(" class='%s'", cssClass);
-        }
-        if (this.cssStyle != null) {
+        if (this.cssStyle != null)
             html.print(" style='%s'", cssStyle);
-        }
     }
 
     @Override
-    public final void setOrigin(Object parent) {
+    public UIComponent setOrigin(Object parent) {
         this.origin = parent;
+        return this;
     }
 
     @Override
-    public Object getOrigin() {
+    public final Object getOrigin() {
         return origin;
     }
 
     @Deprecated
-    public <T> T create(Class<T> clazz) throws InstantiationException, IllegalAccessException, IllegalArgumentException,
-            InvocationTargetException, NoSuchMethodException, SecurityException {
+    public final <T> T create(Class<T> clazz) throws InstantiationException, IllegalAccessException,
+            IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
         T obj = clazz.getDeclaredConstructor().newInstance();
-        if (!(obj instanceof UIComponent)) {
+        if (!(obj instanceof UIComponent))
             throw new RuntimeException("仅支持UIComponent及其子类，不支持创建类型: " + clazz.getName());
-        }
         UIComponent item = (UIComponent) obj;
         item.setOwner(this);
         return obj;

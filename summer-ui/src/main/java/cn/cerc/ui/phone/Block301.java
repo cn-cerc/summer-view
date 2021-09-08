@@ -104,14 +104,4 @@ public class Block301 extends UIComponent {
         return this;
     }
 
-    @Override
-    protected void outputCss(HtmlWriter html) {
-        if (this.cssClass != null) {
-            html.print(" %s", cssClass);
-        }
-        if (this.cssStyle != null) {
-            html.print(" style='%s'", cssStyle);
-        }
-    }
-
 }

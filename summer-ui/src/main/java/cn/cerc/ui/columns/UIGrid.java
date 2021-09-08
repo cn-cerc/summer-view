@@ -84,7 +84,9 @@ public class UIGrid extends UIComponent implements IReadonlyOwner {
     }
 
     private void outputPhone(HtmlWriter html) {
-        html.print("<div class='%s'>", this.cssClass);
+        html.print("<div");
+        super.outputCss(html);
+        html.print(">");
         DataSet dataSet = this.getDataSet();
         dataSet.first();
         while (dataSet.fetch()) {
@@ -111,7 +113,9 @@ public class UIGrid extends UIComponent implements IReadonlyOwner {
 
     private void outputPc(HtmlWriter html) {
         // 默认输出普通表格
-        html.print("<div class='%s'>", this.cssClass);
+        html.print("<div");
+        super.outputCss(html);
+        html.print(">");
         DataSet dataSet = this.getDataSet();
         MutiPage pages = this.getPages();
 

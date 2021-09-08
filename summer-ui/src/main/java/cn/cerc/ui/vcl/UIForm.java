@@ -28,12 +28,6 @@ public class UIForm extends UIBaseHtml {
         this.setId(id);
     }
 
-    @Override
-    @Deprecated
-    public void setOwner(UIComponent owner) {
-        super.setOwner(owner);
-    }
-
     public String getAction() {
         return action;
     }
