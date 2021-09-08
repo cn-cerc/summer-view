@@ -1,7 +1,7 @@
-package cn.cerc.ui.vcl;
+package cn.cerc.ui.vcl.ext;
 
 import cn.cerc.ui.core.HtmlWriter;
-import cn.cerc.ui.parts.UIComponent;
+import cn.cerc.ui.core.UIComponent;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

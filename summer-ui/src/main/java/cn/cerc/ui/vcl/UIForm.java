@@ -3,12 +3,10 @@ package cn.cerc.ui.vcl;
 import java.util.HashMap;
 import java.util.Map;
 
-import cn.cerc.ui.core.Component;
 import cn.cerc.ui.core.HtmlWriter;
-import cn.cerc.ui.core.UIOriginComponent;
-import cn.cerc.ui.parts.UIComponent;
+import cn.cerc.ui.core.UIComponent;
 
-public class UIForm extends UIOriginComponent {
+public class UIForm extends UIBaseHtml {
     private String action;
     private String method = "post";
     private Map<String, String> items = new HashMap<>();
@@ -32,7 +30,7 @@ public class UIForm extends UIOriginComponent {
 
     @Override
     @Deprecated
-    public void setOwner(Component owner) {
+    public void setOwner(UIComponent owner) {
         super.setOwner(owner);
     }
 
@@ -56,11 +54,9 @@ public class UIForm extends UIOriginComponent {
     public void output(HtmlWriter html) {
         outHead(html);
 
-        for (Component component : this.getComponents()) {
-            if (component instanceof UIComponent) {
-                if (component != top && component != bottom) {
-                    ((UIComponent) component).output(html);
-                }
+        for (UIComponent component : this.getComponents()) {
+            if (component != top && component != bottom) {
+                component.output(html);
             }
         }
 
@@ -140,7 +136,7 @@ public class UIForm extends UIOriginComponent {
 
     public UIComponent getTop() {
         if (top == null)
-            top = new UIOriginComponent(this);
+            top = new UIComponent(this);
         return top;
     }
 
@@ -150,7 +146,7 @@ public class UIForm extends UIOriginComponent {
 
     public UIComponent getBottom() {
         if (bottom == null)
-            bottom = new UIOriginComponent(this);
+            bottom = new UIComponent(this);
         return bottom;
     }
 

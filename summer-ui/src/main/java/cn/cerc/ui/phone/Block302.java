@@ -1,14 +1,14 @@
 package cn.cerc.ui.phone;
 
 import cn.cerc.ui.core.HtmlWriter;
+import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.core.UrlRecord;
-import cn.cerc.ui.parts.UIComponent;
 import cn.cerc.ui.vcl.UIImage;
 
 /**
  * @author 张弓
  */
-public class Block302 extends UIComponent {
+public class Block302 extends UICustomPhone {
     private String title = "(title)";
     private String describe = "(describe)";
     private UIImage rightIcon = new UIImage();

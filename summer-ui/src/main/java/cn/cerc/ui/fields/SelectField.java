@@ -8,7 +8,7 @@ import cn.cerc.core.Record;
 import cn.cerc.ui.SummerUI;
 import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.core.IFormatColumn;
-import cn.cerc.ui.parts.UIComponent;
+import cn.cerc.ui.core.UIComponent;
 
 /**
  * 列表下拉框组件（不适用搜索查询表单）

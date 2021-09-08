@@ -1,15 +1,15 @@
 package cn.cerc.ui.phone;
 
 import cn.cerc.ui.core.HtmlWriter;
-import cn.cerc.ui.parts.UIComponent;
+import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.vcl.UIImage;
-import cn.cerc.ui.vcl.UITextBox;
-import cn.cerc.ui.vcl.ext.UISpan;
+import cn.cerc.ui.vcl.UISpan;
+import cn.cerc.ui.vcl.ext.UITextBox;
 
 /**
  * @author 张弓
  */
-public class Block402 extends UIComponent {
+public class Block402 extends UICustomPhone {
     private String title = "(title)";
     private UIImage product = new UIImage();
     private UIImage add = new UIImage();

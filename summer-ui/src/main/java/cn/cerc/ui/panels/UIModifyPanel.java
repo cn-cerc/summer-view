@@ -8,16 +8,14 @@ import cn.cerc.mis.core.IForm;
 import cn.cerc.ui.columns.IArrayColumn;
 import cn.cerc.ui.columns.IColumn;
 import cn.cerc.ui.columns.IDataColumn;
-import cn.cerc.ui.core.Component;
 import cn.cerc.ui.core.HtmlWriter;
-import cn.cerc.ui.core.UIOriginComponent;
-import cn.cerc.ui.parts.UIComponent;
+import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.vcl.UIButton;
-import cn.cerc.ui.vcl.UIButtonSubmit;
 import cn.cerc.ui.vcl.UIDiv;
 import cn.cerc.ui.vcl.UIForm;
+import cn.cerc.ui.vcl.ext.UIButtonSubmit;
 
-public class UIModifyPanel extends UIOriginComponent {
+public class UIModifyPanel extends UIComponent {
     private UIForm uiform;
     private UIButton submit;
     private HttpServletRequest request;
@@ -35,7 +33,7 @@ public class UIModifyPanel extends UIOriginComponent {
         }
         uiform = new UIForm(this);
         uiform.setCssClass("modifyPanel");
-        this.inputPanel = new UIOriginComponent(uiform);
+        this.inputPanel = new UIComponent(uiform);
         submit = new UIButtonSubmit(uiform.getBottom());
         submit.setText("保存");
         this.title = "修改";
@@ -117,7 +115,7 @@ public class UIModifyPanel extends UIOriginComponent {
     }
 
     @Override
-    public void addComponent(Component component) {
+    public void addComponent(UIComponent component) {
         if (component instanceof IColumn) {
             this.inputPanel.addComponent(component);
         } else {

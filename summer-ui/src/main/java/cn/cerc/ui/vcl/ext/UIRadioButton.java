@@ -1,10 +1,10 @@
-package cn.cerc.ui.vcl;
+package cn.cerc.ui.vcl.ext;
 
 import cn.cerc.ui.core.HtmlWriter;
-import cn.cerc.ui.parts.UIComponent;
-import cn.cerc.ui.parts.UICssComponent;
+import cn.cerc.ui.core.UIComponent;
+import cn.cerc.ui.vcl.UILabel;
 
-public class UIRadioButton extends UICssComponent {
+public class UIRadioButton extends UIComponent {
     private String name = "";
     private String value = "";
     private boolean isSelected = false;

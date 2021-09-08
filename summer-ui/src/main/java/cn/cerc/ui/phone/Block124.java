@@ -3,15 +3,15 @@ package cn.cerc.ui.phone;
 import cn.cerc.core.ClassResource;
 import cn.cerc.ui.SummerUI;
 import cn.cerc.ui.core.HtmlWriter;
-import cn.cerc.ui.parts.UIComponent;
-import cn.cerc.ui.vcl.ext.UISpan;
+import cn.cerc.ui.core.UIComponent;
+import cn.cerc.ui.vcl.UISpan;
 
 /**
  * 提示块
  *
  * @author 郭向军
  */
-public class Block124 extends UIComponent {
+public class Block124 extends UICustomPhone {
     private static final ClassResource res = new ClassResource(Block124.class, SummerUI.ID);
 
     private UISpan title = new UISpan();

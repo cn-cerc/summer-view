@@ -1,15 +1,15 @@
 package cn.cerc.ui.phone;
 
-import cn.cerc.ui.core.HtmlWriter;
-import cn.cerc.ui.parts.UIComponent;
-import cn.cerc.ui.vcl.UIButton;
-import cn.cerc.ui.vcl.UIImage;
-import cn.cerc.ui.vcl.ext.UISpan;
-
 import java.util.ArrayList;
 import java.util.List;
 
-public class Block401 extends UIComponent {
+import cn.cerc.ui.core.HtmlWriter;
+import cn.cerc.ui.core.UIComponent;
+import cn.cerc.ui.vcl.UIButton;
+import cn.cerc.ui.vcl.UIImage;
+import cn.cerc.ui.vcl.UISpan;
+
+public class Block401 extends UICustomPhone {
     private String title = "(title)";
     private UIImage product = new UIImage();
     private List<UIImage> images = new ArrayList<>();

@@ -1,10 +1,9 @@
 package cn.cerc.ui.columns;
 
 import cn.cerc.core.Record;
-import cn.cerc.ui.core.Component;
 import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.core.IReadonlyOwner;
-import cn.cerc.ui.parts.UIComponent;
+import cn.cerc.ui.core.UIComponent;
 
 public class CustomColumn extends AbstractColumn implements IDataColumn {
     private boolean readonly;
@@ -42,7 +41,7 @@ public class CustomColumn extends AbstractColumn implements IDataColumn {
             this.getComponents().clear();
             defineLine.execute(this, getRecord());
         }
-        for (Component item : this.getComponents()) {
+        for (UIComponent item : this.getComponents()) {
             html.print(item.toString());
         }
     }
@@ -56,7 +55,7 @@ public class CustomColumn extends AbstractColumn implements IDataColumn {
             this.getComponents().clear();
             defineCell.execute(this, getRecord());
         }
-        for (Component item : this.getComponents()) {
+        for (UIComponent item : this.getComponents()) {
             html.print(item.toString());
         }
     }

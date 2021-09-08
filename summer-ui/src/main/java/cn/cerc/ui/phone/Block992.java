@@ -1,16 +1,16 @@
 package cn.cerc.ui.phone;
 
-import cn.cerc.ui.core.HtmlWriter;
-import cn.cerc.ui.parts.UIComponent;
-import cn.cerc.ui.vcl.UIButton;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import cn.cerc.ui.core.HtmlWriter;
+import cn.cerc.ui.core.UIComponent;
+import cn.cerc.ui.vcl.UIButton;
 
 /**
  * @author 张弓
  */
-public class Block992 extends UIComponent {
+public class Block992 extends UICustomPhone {
     private List<UIButton> items = new ArrayList<>();
 
     /**

@@ -8,19 +8,16 @@ import cn.cerc.core.DataSet;
 import cn.cerc.core.Utils;
 import cn.cerc.mis.core.IForm;
 import cn.cerc.ui.SummerUI;
-import cn.cerc.ui.core.Component;
 import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.core.IOriginOwner;
 import cn.cerc.ui.core.IReadonlyOwner;
-import cn.cerc.ui.core.UICustomComponent;
-import cn.cerc.ui.core.UIOriginComponent;
+import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.grid.DataGrid;
 import cn.cerc.ui.grid.MutiPage;
-import cn.cerc.ui.parts.UIComponent;
-import cn.cerc.ui.vcl.table.UITd;
-import cn.cerc.ui.vcl.table.UITr;
+import cn.cerc.ui.vcl.UITd;
+import cn.cerc.ui.vcl.UITr;
 
-public class UIGrid extends UIOriginComponent implements IReadonlyOwner {
+public class UIGrid extends UIComponent implements IReadonlyOwner {
     private static final ClassResource res = new ClassResource(DataGrid.class, SummerUI.ID);
     private static final double MaxWidth = 600;
     // 专用于电脑
@@ -96,8 +93,8 @@ public class UIGrid extends UIOriginComponent implements IReadonlyOwner {
             for (UIPhoneLine block : this.phoneLines) {
                 block.setRecord(dataSet.getCurrent());
                 html.print("<li");
-                if (block instanceof UICustomComponent) {
-                    UICustomComponent item = block;
+                if (block instanceof UIComponent) {
+                    UIComponent item = block;
                     if (item.getCssClass() != null) {
                         html.print(" class=\"%s\"", item.getCssClass());
                     }
@@ -203,13 +200,9 @@ public class UIGrid extends UIOriginComponent implements IReadonlyOwner {
     }
 
     @Override
-    public String getCssClass() {
-        return cssClass;
-    }
-
-    @Override
-    public void setCssClass(String cssClass) {
-        this.cssClass = cssClass;
+    public UIGrid setCssClass(String cssClass) {
+        super.setCssClass(cssClass);
+        return this;
     }
 
     public UIPhoneLine addPhoneLine(int... percents) {
@@ -240,7 +233,7 @@ public class UIGrid extends UIOriginComponent implements IReadonlyOwner {
     }
 
     @Override
-    public void addComponent(Component component) {
+    public void addComponent(UIComponent component) {
         if (component instanceof IColumn) {
             IColumn column = (IColumn) component;
             if (component instanceof IDataColumn) {

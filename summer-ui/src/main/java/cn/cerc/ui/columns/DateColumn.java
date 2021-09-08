@@ -4,8 +4,7 @@ import cn.cerc.core.Utils;
 import cn.cerc.mis.core.IForm;
 import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.core.IReadonlyOwner;
-import cn.cerc.ui.core.UIOriginComponent;
-import cn.cerc.ui.parts.UIComponent;
+import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.vcl.UIInput;
 import cn.cerc.ui.vcl.UILabel;
 
@@ -107,7 +106,7 @@ public class DateColumn extends AbstractColumn implements IDataColumn {
 
     public UIComponent getHelper() {
         if (helper != null)
-            helper = new UIOriginComponent(this);
+            helper = new UIComponent(this);
         return helper;
     }
 

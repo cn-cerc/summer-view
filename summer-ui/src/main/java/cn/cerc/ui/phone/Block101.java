@@ -1,12 +1,12 @@
 package cn.cerc.ui.phone;
 
 import cn.cerc.ui.core.HtmlWriter;
+import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.core.UrlRecord;
-import cn.cerc.ui.parts.UIComponent;
 import cn.cerc.ui.vcl.UIImage;
-import cn.cerc.ui.vcl.ext.UISpan;
+import cn.cerc.ui.vcl.UISpan;
 
-public class Block101 extends UIComponent {
+public class Block101 extends UICustomPhone {
     private UISpan title = new UISpan();
     private UIImage image = new UIImage();
     private UrlRecord url = new UrlRecord();

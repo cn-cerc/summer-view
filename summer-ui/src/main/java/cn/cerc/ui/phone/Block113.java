@@ -1,13 +1,13 @@
 package cn.cerc.ui.phone;
 
 import cn.cerc.ui.core.HtmlWriter;
-import cn.cerc.ui.parts.UIComponent;
-import cn.cerc.ui.vcl.UITextArea;
-import cn.cerc.ui.vcl.ext.UISpan;
+import cn.cerc.ui.core.UIComponent;
+import cn.cerc.ui.vcl.UISpan;
+import cn.cerc.ui.vcl.UITextarea;
 
-public class Block113 extends UIComponent {
+public class Block113 extends UICustomPhone {
     private UISpan label = new UISpan();
-    private UITextArea input = new UITextArea();
+    private UITextarea input = new UITextarea();
 
     /**
      * 文本 + 长文本消息
@@ -34,7 +34,7 @@ public class Block113 extends UIComponent {
         return label;
     }
 
-    public UITextArea getInput() {
+    public UITextarea getInput() {
         return input;
     }
 

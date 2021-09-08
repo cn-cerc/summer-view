@@ -1,7 +1,7 @@
 package cn.cerc.ui.phone;
 
 import cn.cerc.ui.core.HtmlWriter;
-import cn.cerc.ui.parts.UIComponent;
+import cn.cerc.ui.core.UIComponent;
 
 /**
  * 用于消息明细显示
@@ -10,7 +10,7 @@ import cn.cerc.ui.parts.UIComponent;
  *
  * @author HuangRongjun
  */
-public class Block902 extends UIComponent {
+public class Block902 extends UICustomPhone {
     private String title = "(title)";
     private String content = "(content)";
 

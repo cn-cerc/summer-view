@@ -1,7 +1,7 @@
 package cn.cerc.ui.phone;
 
 import cn.cerc.ui.core.HtmlWriter;
-import cn.cerc.ui.parts.UIComponent;
+import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.vcl.UIImage;
 
 /**
@@ -13,7 +13,7 @@ import cn.cerc.ui.vcl.UIImage;
  *
  * @author HuangRongjun
  */
-public class Block305 extends UIComponent {
+public class Block305 extends UICustomPhone {
     private String title = "(title)";
     private UIImage icon;
     private String describe = "(describe)";

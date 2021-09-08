@@ -4,13 +4,14 @@ import cn.cerc.ui.core.DataSource;
 import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.core.IField;
 import cn.cerc.ui.core.IFormatColumn;
+import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.fields.AbstractField;
 import cn.cerc.ui.grid.RowCell;
 
 public class ChildGridLine extends AbstractGridLine {
 
-    public ChildGridLine(DataSource dataSource) {
-        super(dataSource);
+    public ChildGridLine(UIComponent owner, DataSource dataSource) {
+        super(owner, dataSource);
     }
 
     @Override
@@ -69,7 +70,7 @@ public class ChildGridLine extends AbstractGridLine {
     public void addField(IField field) {
         getFields().add(field);
         RowCell col;
-        col = new RowCell();
+        col = new RowCell(null);
         col.setAlign(field.getAlign());
         col.setRole(field.getField());
         getCells().add(col);

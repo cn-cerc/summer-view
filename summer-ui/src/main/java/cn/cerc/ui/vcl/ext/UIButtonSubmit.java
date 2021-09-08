@@ -1,6 +1,7 @@
-package cn.cerc.ui.vcl;
+package cn.cerc.ui.vcl.ext;
 
-import cn.cerc.ui.parts.UIComponent;
+import cn.cerc.ui.core.UIComponent;
+import cn.cerc.ui.vcl.UIButton;
 
 public class UIButtonSubmit extends UIButton {
 

@@ -4,14 +4,18 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import cn.cerc.ui.core.HtmlWriter;
-import cn.cerc.ui.parts.UIComponent;
+import cn.cerc.ui.core.UIComponent;
 
-public class UISelect extends UIComponent {
+public class UISelect extends UIBaseHtml {
     private int size;
     private String name;
     private boolean readonly;
     private Map<String, String> options = new LinkedHashMap<>();
     private String selected;
+    
+    public UISelect(UIComponent owner) {
+        super(owner);
+    }
 
     @Override
     public void output(HtmlWriter html) {

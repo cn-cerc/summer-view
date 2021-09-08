@@ -5,13 +5,11 @@ import java.util.List;
 
 import cn.cerc.core.Record;
 import cn.cerc.mis.core.IForm;
-import cn.cerc.ui.core.Component;
 import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.core.IReadonlyOwner;
-import cn.cerc.ui.core.UIOriginComponent;
-import cn.cerc.ui.parts.UIComponent;
+import cn.cerc.ui.core.UIComponent;
 
-public class UIPhoneLine extends UIOriginComponent implements IReadonlyOwner {
+public class UIPhoneLine extends UIComponent implements IReadonlyOwner {
     private List<UIPhoneLineCell> cells = new ArrayList<>();
     private UIComponent attachLine;
     private boolean readonly;
@@ -38,7 +36,7 @@ public class UIPhoneLine extends UIOriginComponent implements IReadonlyOwner {
             if (form.getClient().isPhone()) {
                 return cells.get(index);
             } else {
-                return (UIComponent) this.getOwner();
+                return this.getOwner();
             }
         } else {
             return cells.get(index);
@@ -68,7 +66,7 @@ public class UIPhoneLine extends UIOriginComponent implements IReadonlyOwner {
         }
     }
 
-    private class UIPhoneLineCell extends UIOriginComponent implements IReadonlyOwner {
+    private class UIPhoneLineCell extends UIComponent implements IReadonlyOwner {
         // 在UIBlock中，宽度所占百分比
         private int percent;
         private Record record;
@@ -85,7 +83,7 @@ public class UIPhoneLine extends UIOriginComponent implements IReadonlyOwner {
         @Override
         public void output(HtmlWriter html) {
             html.print("<span class=\"field\"  style='width:%d%%'>", this.percent);
-            for (Component item : this.getComponents()) {
+            for (UIComponent item : this.getComponents()) {
                 if (item instanceof IColumn) {
                     IColumn column = (IColumn) item;
                     if (item instanceof IDataColumn)
@@ -97,7 +95,7 @@ public class UIPhoneLine extends UIOriginComponent implements IReadonlyOwner {
         }
 
         @Override
-        public void addComponent(Component owner) {
+        public void addComponent(UIComponent owner) {
             super.addComponent(owner);
 
             if (attachLine != null) {

@@ -8,11 +8,11 @@ import cn.cerc.core.Record;
 import cn.cerc.ui.core.DataSource;
 import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.core.IField;
+import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.core.UrlRecord;
 import cn.cerc.ui.fields.AbstractField;
 import cn.cerc.ui.fields.ExpendField;
 import cn.cerc.ui.other.BuildUrl;
-import cn.cerc.ui.parts.UIComponent;
 
 public class PhoneLine extends UIComponent implements DataSource {
     private DataSource dataSource;

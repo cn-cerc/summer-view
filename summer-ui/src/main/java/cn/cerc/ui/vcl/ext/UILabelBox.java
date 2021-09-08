@@ -1,16 +1,15 @@
 package cn.cerc.ui.vcl.ext;
 
 import cn.cerc.ui.core.HtmlWriter;
-import cn.cerc.ui.parts.UIComponent;
-import cn.cerc.ui.parts.UICssComponent;
+import cn.cerc.ui.core.UIComponent;
 
-public class UILabelBox extends UICssComponent {
+public class UILabelBox extends UIComponent {
     private String text;
     private String role;
     private String forid;
 
     public UILabelBox() {
-        super();
+        this(null);
     }
 
     public UILabelBox(UIComponent owner) {

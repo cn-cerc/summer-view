@@ -1,10 +1,10 @@
 package cn.cerc.ui.phone;
 
 import cn.cerc.ui.core.HtmlWriter;
-import cn.cerc.ui.parts.UIComponent;
-import cn.cerc.ui.vcl.ext.UISpan;
+import cn.cerc.ui.core.UIComponent;
+import cn.cerc.ui.vcl.UISpan;
 
-public class Block106 extends UIComponent {
+public class Block106 extends UICustomPhone {
     private UISpan content = new UISpan();
 
     /**

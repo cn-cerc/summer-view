@@ -3,11 +3,10 @@ package cn.cerc.ui.other;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.cerc.ui.core.UICustomComponent;
+import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.core.UrlRecord;
-import cn.cerc.ui.parts.UIComponent;
 
-public class OperaPanel extends UICustomComponent {
+public class OperaPanel extends UIComponent {
     // 操作提示
     private String readme;
     // 基本资料

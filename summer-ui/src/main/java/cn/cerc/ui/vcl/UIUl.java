@@ -1,16 +1,15 @@
 package cn.cerc.ui.vcl;
 
 import cn.cerc.ui.core.HtmlWriter;
-import cn.cerc.ui.parts.UIComponent;
+import cn.cerc.ui.core.UIComponent;
 
-public class UIList extends UIComponent {
-    private String cssClass;
+public class UIUl extends UIComponent {
 
-    public UIList() {
+    public UIUl() {
         super();
     }
 
-    public UIList(UIComponent owner) {
+    public UIUl(UIComponent owner) {
         super(owner);
     }
 
@@ -26,14 +25,6 @@ public class UIList extends UIComponent {
             html.print("</li>");
         }
         html.println("</ul>");
-    }
-
-    public String getCssClass() {
-        return cssClass;
-    }
-
-    public void setCssClass(String cssClass) {
-        this.cssClass = cssClass;
     }
 
 }

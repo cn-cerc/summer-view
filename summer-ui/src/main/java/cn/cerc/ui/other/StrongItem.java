@@ -2,7 +2,7 @@ package cn.cerc.ui.other;
 
 import cn.cerc.mis.config.ApplicationConfig;
 import cn.cerc.ui.core.HtmlWriter;
-import cn.cerc.ui.parts.UIComponent;
+import cn.cerc.ui.core.UIComponent;
 
 import java.text.DecimalFormat;
 

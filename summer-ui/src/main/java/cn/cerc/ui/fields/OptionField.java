@@ -5,7 +5,7 @@ import java.util.Map;
 
 import cn.cerc.core.Record;
 import cn.cerc.ui.core.HtmlWriter;
-import cn.cerc.ui.parts.UIComponent;
+import cn.cerc.ui.core.UIComponent;
 
 public class OptionField extends AbstractField {
     private String defaultValue;

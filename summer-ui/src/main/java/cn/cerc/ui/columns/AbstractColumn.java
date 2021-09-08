@@ -3,15 +3,13 @@ package cn.cerc.ui.columns;
 import cn.cerc.core.Record;
 import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.core.IOriginOwner;
-import cn.cerc.ui.core.UIOriginComponent;
-import cn.cerc.ui.parts.UIComponent;
+import cn.cerc.ui.core.UIComponent;
 
-public class AbstractColumn extends UIOriginComponent implements IOriginOwner {
+public class AbstractColumn extends UIComponent {
     private String code;
     private String name;
     private int spaceWidth = 1;
     private Record record;
-    private Object origin;
 
     public AbstractColumn(UIComponent owner) {
         super(owner);
@@ -58,16 +56,6 @@ public class AbstractColumn extends UIOriginComponent implements IOriginOwner {
 
     public void setRecord(Record record) {
         this.record = record;
-    }
-
-    @Override
-    public void setOrigin(Object origin) {
-        this.origin = origin;
-    }
-
-    @Override
-    public Object getOrigin() {
-        return origin;
     }
 
 }

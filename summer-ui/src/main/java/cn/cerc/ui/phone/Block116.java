@@ -1,15 +1,15 @@
 package cn.cerc.ui.phone;
 
 import cn.cerc.ui.core.HtmlWriter;
-import cn.cerc.ui.parts.UIComponent;
+import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.vcl.UIButton;
 import cn.cerc.ui.vcl.UIImage;
-import cn.cerc.ui.vcl.ext.UISpan;
+import cn.cerc.ui.vcl.UISpan;
 
 /**
  * @author 善贵
  */
-public class Block116 extends UIComponent {
+public class Block116 extends UICustomPhone {
     private UISpan title = new UISpan();
     private UIImage image = new UIImage();
     private UIButton button = new UIButton();

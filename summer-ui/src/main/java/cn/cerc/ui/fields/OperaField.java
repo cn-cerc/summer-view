@@ -4,7 +4,7 @@ import cn.cerc.core.ClassResource;
 import cn.cerc.core.Record;
 import cn.cerc.ui.SummerUI;
 import cn.cerc.ui.core.HtmlWriter;
-import cn.cerc.ui.parts.UIComponent;
+import cn.cerc.ui.core.UIComponent;
 
 public class OperaField extends AbstractField {
     private static final ClassResource res = new ClassResource(OperaField.class, SummerUI.ID);

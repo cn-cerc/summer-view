@@ -1,19 +1,19 @@
 package cn.cerc.ui.phone;
 
-import cn.cerc.ui.core.HtmlWriter;
-import cn.cerc.ui.core.UrlRecord;
-import cn.cerc.ui.parts.UIComponent;
-import cn.cerc.ui.vcl.ext.UISpan;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import cn.cerc.ui.core.HtmlWriter;
+import cn.cerc.ui.core.UIComponent;
+import cn.cerc.ui.core.UrlRecord;
+import cn.cerc.ui.vcl.UISpan;
 
 /**
  * 提示块
  *
  * @author 郭向军
  */
-public class Block125 extends UIComponent {
+public class Block125 extends UICustomPhone {
     private List<UISpan> items = new ArrayList<>();
     private List<UrlRecord> urlRecords = new ArrayList<>();
 

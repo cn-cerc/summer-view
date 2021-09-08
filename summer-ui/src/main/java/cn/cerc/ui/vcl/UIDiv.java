@@ -5,15 +5,14 @@ import java.util.List;
 
 import cn.cerc.ui.core.HtmlContent;
 import cn.cerc.ui.core.HtmlWriter;
-import cn.cerc.ui.core.UICustomComponent;
-import cn.cerc.ui.parts.UIComponent;
+import cn.cerc.ui.core.UIComponent;
 
-public class UIDiv extends UICustomComponent {
+public class UIDiv extends UIBaseHtml {
     private List<HtmlContent> contents = new ArrayList<>();
     private String text = null;
 
     public UIDiv() {
-        super();
+        this(null);
     }
 
     public UIDiv(UIComponent owner) {

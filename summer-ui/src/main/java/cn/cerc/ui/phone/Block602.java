@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.cerc.ui.core.HtmlWriter;
-import cn.cerc.ui.parts.UIComponent;
+import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.vcl.UIImage;
 
 /**
  * @author 张弓
  */
-public class Block602 extends UIComponent {
+public class Block602 extends UICustomPhone {
     private List<UIImage> items = new ArrayList<>();
 
     /**

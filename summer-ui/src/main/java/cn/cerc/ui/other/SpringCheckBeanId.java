@@ -11,7 +11,7 @@ import org.springframework.context.ApplicationContext;
 
 import cn.cerc.mis.core.Application;
 import cn.cerc.mis.core.CustomService;
-import cn.cerc.ui.parts.UIComponent;
+import cn.cerc.ui.core.UIComponent;
 
 public class SpringCheckBeanId {
     private static final Logger log = LoggerFactory.getLogger(SpringCheckBeanId.class);

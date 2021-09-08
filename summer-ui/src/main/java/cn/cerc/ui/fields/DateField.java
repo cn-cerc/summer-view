@@ -5,7 +5,7 @@ import cn.cerc.core.Record;
 import cn.cerc.mis.core.Application;
 import cn.cerc.ui.SummerUI;
 import cn.cerc.ui.core.HtmlWriter;
-import cn.cerc.ui.parts.UIComponent;
+import cn.cerc.ui.core.UIComponent;
 
 public class DateField extends AbstractField {
     private static final ClassConfig config = new ClassConfig(DateField.class, SummerUI.ID);

@@ -1,14 +1,14 @@
 package cn.cerc.ui.phone;
 
-import cn.cerc.ui.core.HtmlWriter;
-import cn.cerc.ui.core.UrlRecord;
-import cn.cerc.ui.parts.UIComponent;
-import cn.cerc.ui.vcl.ext.UISpan;
-
 import java.util.ArrayList;
 import java.util.List;
 
-public class Block118 extends UIComponent {
+import cn.cerc.ui.core.HtmlWriter;
+import cn.cerc.ui.core.UIComponent;
+import cn.cerc.ui.core.UrlRecord;
+import cn.cerc.ui.vcl.UISpan;
+
+public class Block118 extends UICustomPhone {
     private UISpan left = new UISpan();
     private List<UrlRecord> urls = new ArrayList<>();
 

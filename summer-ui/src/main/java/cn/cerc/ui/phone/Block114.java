@@ -1,12 +1,12 @@
 package cn.cerc.ui.phone;
 
 import cn.cerc.ui.core.HtmlWriter;
-import cn.cerc.ui.parts.UIComponent;
-import cn.cerc.ui.vcl.UICheckBox;
+import cn.cerc.ui.core.UIComponent;
+import cn.cerc.ui.vcl.UISpan;
+import cn.cerc.ui.vcl.ext.UICheckBox;
 import cn.cerc.ui.vcl.ext.UILabelBox;
-import cn.cerc.ui.vcl.ext.UISpan;
 
-public class Block114 extends UIComponent {
+public class Block114 extends UICustomPhone {
     private UISpan label = new UISpan();
     private UICheckBox checkBox = new UICheckBox();
     private UILabelBox labelBox = new UILabelBox();

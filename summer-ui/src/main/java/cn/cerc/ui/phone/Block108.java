@@ -1,11 +1,11 @@
 package cn.cerc.ui.phone;
 
 import cn.cerc.ui.core.HtmlWriter;
-import cn.cerc.ui.parts.UIComponent;
-import cn.cerc.ui.vcl.UITextBox;
-import cn.cerc.ui.vcl.ext.UISpan;
+import cn.cerc.ui.core.UIComponent;
+import cn.cerc.ui.vcl.UISpan;
+import cn.cerc.ui.vcl.ext.UITextBox;
 
-public class Block108 extends UIComponent {
+public class Block108 extends UICustomPhone {
     private UISpan label = new UISpan();
     private UITextBox input = new UITextBox();
 

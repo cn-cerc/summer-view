@@ -1,15 +1,15 @@
 package cn.cerc.ui.phone;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import cn.cerc.core.ClassResource;
 import cn.cerc.ui.SummerUI;
 import cn.cerc.ui.core.HtmlWriter;
+import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.core.UrlRecord;
-import cn.cerc.ui.parts.UIComponent;
 import cn.cerc.ui.vcl.UIImage;
-import cn.cerc.ui.vcl.ext.UISpan;
-
-import java.util.ArrayList;
-import java.util.List;
+import cn.cerc.ui.vcl.UISpan;
 
 /**
  * 三行文字列表显示，右侧带导航栏箭头
@@ -18,7 +18,7 @@ import java.util.List;
  *
  * @author HuangRongjun
  */
-public class Block307 extends UIComponent {
+public class Block307 extends UICustomPhone {
     private static final ClassResource res = new ClassResource(Block307.class, SummerUI.ID);
 
     private UISpan title;

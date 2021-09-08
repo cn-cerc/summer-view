@@ -1,16 +1,18 @@
 package cn.cerc.ui.parts;
 
-import cn.cerc.ui.core.HtmlWriter;
-import cn.cerc.ui.vcl.UIImage;
-import cn.cerc.ui.vcl.ext.UISpan;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import cn.cerc.ui.core.HtmlWriter;
+import cn.cerc.ui.core.UIComponent;
+import cn.cerc.ui.vcl.UIImage;
+import cn.cerc.ui.vcl.UISpan;
+import cn.cerc.ui.vcl.ext.UIBottom;
 
 /**
  * ·提示信息列表
  */
-public class UIInfoList extends UICssComponent {
+public class UIInfoList extends UIComponent {
     private List<Line> items = new ArrayList<>();
     private String onClick;
 

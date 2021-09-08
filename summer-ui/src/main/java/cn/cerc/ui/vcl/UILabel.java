@@ -1,10 +1,9 @@
 package cn.cerc.ui.vcl;
 
 import cn.cerc.ui.core.HtmlWriter;
-import cn.cerc.ui.parts.UIComponent;
-import cn.cerc.ui.parts.UICssComponent;
+import cn.cerc.ui.core.UIComponent;
 
-public class UILabel extends UICssComponent {
+public class UILabel extends UIBaseHtml {
     private String text;
     private String url;
     private String focusTarget;
@@ -14,16 +13,16 @@ public class UILabel extends UICssComponent {
     }
 
     public UILabel() {
-        super();
+        super(null);
     }
 
     public UILabel(String text) {
-        super();
+        super(null);
         this.text = text;
     }
 
     public UILabel(String text, String url) {
-        super();
+        super(null);
         this.text = text;
         this.url = url;
     }

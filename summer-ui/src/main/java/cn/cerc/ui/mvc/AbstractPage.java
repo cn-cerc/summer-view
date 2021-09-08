@@ -16,9 +16,8 @@ import cn.cerc.mis.core.Application;
 import cn.cerc.mis.core.IForm;
 import cn.cerc.mis.core.IPage;
 import cn.cerc.mis.language.R;
-import cn.cerc.ui.core.Component;
 import cn.cerc.ui.core.HtmlWriter;
-import cn.cerc.ui.parts.UIComponent;
+import cn.cerc.ui.core.UIComponent;
 
 //@Component
 //@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -50,7 +49,7 @@ public abstract class AbstractPage extends UIComponent implements IPage, IUserLa
     }
 
     @Override
-    public void addComponent(Component component) {
+    public void addComponent(UIComponent component) {
         if (component.getId() != null) {
             this.put(component.getId(), component);
         }
@@ -71,10 +70,8 @@ public abstract class AbstractPage extends UIComponent implements IPage, IUserLa
 
     @Override
     public void output(HtmlWriter html) {
-        for (Component component : this.getComponents()) {
-            if (component instanceof UIComponent) {
-                ((UIComponent) component).output(html);
-            }
+        for (UIComponent component : this.getComponents()) {
+            component.output(html);
         }
     }
 

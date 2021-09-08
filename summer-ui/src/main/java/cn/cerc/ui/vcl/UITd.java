@@ -1,16 +1,15 @@
-package cn.cerc.ui.vcl.table;
+package cn.cerc.ui.vcl;
 
 import cn.cerc.ui.core.HtmlWriter;
-import cn.cerc.ui.parts.UIComponent;
-import cn.cerc.ui.parts.UICssComponent;
+import cn.cerc.ui.core.UIComponent;
 
-public class UITd extends UICssComponent {
+public class UITd extends UIBaseHtml {
     private int colspan;
     private int rowspan;
     private String text;
 
     public UITd() {
-        super();
+        this(null);
     }
 
     public UITd(UIComponent component) {

@@ -1,12 +1,17 @@
 package cn.cerc.ui.grid;
 
-import cn.cerc.ui.core.UICustomComponent;
-import cn.cerc.ui.core.IField;
-
 import java.util.ArrayList;
 import java.util.List;
 
-public class RowCell extends UICustomComponent {
+import cn.cerc.ui.core.IField;
+import cn.cerc.ui.core.UIComponent;
+
+public class RowCell extends UIComponent {
+    
+    public RowCell(UIComponent owner) {
+        super(owner);
+    }
+
     private List<IField> fields = new ArrayList<>();
     private int colSpan = 1;
     private String align;

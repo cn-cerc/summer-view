@@ -1,7 +1,7 @@
 package cn.cerc.ui.columns;
 
 import cn.cerc.ui.core.HtmlWriter;
-import cn.cerc.ui.parts.UIComponent;
+import cn.cerc.ui.core.UIComponent;
 
 public class UISimpleGrid extends UIGrid {
 

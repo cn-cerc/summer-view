@@ -1,12 +1,12 @@
 package cn.cerc.ui.phone;
 
 import cn.cerc.ui.core.HtmlWriter;
-import cn.cerc.ui.parts.UIComponent;
+import cn.cerc.ui.core.UIComponent;
 
 /**
  * @author 张弓
  */
-public class Block103 extends UIComponent {
+public class Block103 extends UICustomPhone {
     /**
      * 显示商品详情，方便加入购物车
      *

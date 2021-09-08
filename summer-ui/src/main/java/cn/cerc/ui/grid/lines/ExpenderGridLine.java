@@ -7,14 +7,15 @@ import cn.cerc.ui.core.DataSource;
 import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.core.IField;
 import cn.cerc.ui.core.IFormatColumn;
+import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.fields.AbstractField;
 import cn.cerc.ui.grid.RowCell;
 
 public class ExpenderGridLine extends AbstractGridLine {
     private static final ClassResource res = new ClassResource(ExpenderGridLine.class, SummerUI.ID);
 
-    public ExpenderGridLine(DataSource dataSource) {
-        super(dataSource);
+    public ExpenderGridLine(UIComponent owner, DataSource dataSource) {
+        super(owner, dataSource);
         this.setVisible(false);
     }
 
@@ -24,7 +25,7 @@ public class ExpenderGridLine extends AbstractGridLine {
 
         RowCell col;
         if (getCells().size() == 0) {
-            col = new RowCell();
+            col = new RowCell(null);
             getCells().add(col);
         } else {
             col = getCells().get(0);

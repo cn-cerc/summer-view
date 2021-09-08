@@ -4,11 +4,10 @@ import cn.cerc.core.ClassResource;
 import cn.cerc.core.DataSet;
 import cn.cerc.core.Record;
 import cn.cerc.ui.SummerUI;
-import cn.cerc.ui.core.Component;
 import cn.cerc.ui.core.DataSource;
 import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.core.IField;
-import cn.cerc.ui.parts.UIComponent;
+import cn.cerc.ui.core.UIComponent;
 
 public class RangeField extends AbstractField implements DataSource {
     private static final ClassResource res = new ClassResource(RangeField.class, SummerUI.ID);
@@ -38,7 +37,7 @@ public class RangeField extends AbstractField implements DataSource {
         } else {
             html.println("<label for=\"%s\">%s</label>", this.getId(), this.getName() + "：");
             AbstractField child = null;
-            for (Component component : this.getComponents()) {
+            for (UIComponent component : this.getComponents()) {
                 if (component instanceof AbstractField) {
                     if (child != null) {
                         html.print("-");
@@ -64,8 +63,8 @@ public class RangeField extends AbstractField implements DataSource {
 
     @Override
     public void addField(IField field) {
-        if (field instanceof Component) {
-            this.addComponent((Component) field);
+        if (field instanceof UIComponent) {
+            this.addComponent((UIComponent) field);
         } else {
             throw new RuntimeException(String.format(res.getString(1, "不支持的数据类型：%s"), field.getClass().getName()));
         }
@@ -79,7 +78,7 @@ public class RangeField extends AbstractField implements DataSource {
     @Override
     public void updateField() {
         AbstractField child = null;
-        for (Component component : this.getComponents()) {
+        for (UIComponent component : this.getComponents()) {
             if (component instanceof AbstractField) {
                 child = (AbstractField) component;
                 child.updateField();

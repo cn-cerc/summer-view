@@ -1,18 +1,18 @@
 package cn.cerc.ui.phone;
 
-import cn.cerc.ui.core.HtmlWriter;
-import cn.cerc.ui.parts.UIComponent;
-import cn.cerc.ui.vcl.UIImage;
-import cn.cerc.ui.vcl.UITextBox;
-import cn.cerc.ui.vcl.ext.UISpan;
-
 import java.util.LinkedHashMap;
 import java.util.Map;
+
+import cn.cerc.ui.core.HtmlWriter;
+import cn.cerc.ui.core.UIComponent;
+import cn.cerc.ui.vcl.UIImage;
+import cn.cerc.ui.vcl.UISpan;
+import cn.cerc.ui.vcl.ext.UITextBox;
 
 /**
  * 用户下拉选择框，选中立即提交参数
  */
-public class Block129 extends UIComponent {
+public class Block129 extends UICustomPhone {
     private UITextBox input = new UITextBox();
     private UIImage image = new UIImage();
     private String content = "";

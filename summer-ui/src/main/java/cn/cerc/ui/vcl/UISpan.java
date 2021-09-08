@@ -1,22 +1,21 @@
-package cn.cerc.ui.vcl.ext;
+package cn.cerc.ui.vcl;
 
 import cn.cerc.ui.core.HtmlWriter;
-import cn.cerc.ui.parts.UIComponent;
-import cn.cerc.ui.parts.UICssComponent;
+import cn.cerc.ui.core.UIComponent;
 
-public class UISpan extends UICssComponent {
+public class UISpan extends UIBaseHtml {
     private String text;
     private String role;
     private String onclick;
     private String url;
     private String target = "_blank";
 
-    public UISpan() {
-        super();
-    }
-
     public UISpan(UIComponent owner) {
         super(owner);
+    }
+
+    public UISpan() {
+        this(null);
     }
 
     @Override

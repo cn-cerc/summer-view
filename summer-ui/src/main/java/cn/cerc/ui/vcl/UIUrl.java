@@ -1,18 +1,17 @@
 package cn.cerc.ui.vcl;
 
 import cn.cerc.ui.core.HtmlWriter;
+import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.core.UrlRecord;
-import cn.cerc.ui.parts.UIComponent;
-import cn.cerc.ui.parts.UICssComponent;
 
-public class UIUrl extends UICssComponent {
+public class UIUrl extends UIBaseHtml {
     private String text;
     private String href;
     private String onclick;
     private UrlRecord url;
 
     public UIUrl() {
-        super();
+        this(null);
     }
 
     public UIUrl(UIComponent owner) {

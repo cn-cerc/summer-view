@@ -1,9 +1,10 @@
-package cn.cerc.ui.parts;
+package cn.cerc.ui.vcl.ext;
 
 import cn.cerc.core.Utils;
 import cn.cerc.ui.core.HtmlWriter;
+import cn.cerc.ui.core.UIComponent;
 
-public class UIBottom extends UICssComponent {
+public class UIBottom extends UIComponent {
     private String caption;
     private String url;
     private String target;

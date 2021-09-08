@@ -1,14 +1,13 @@
-package cn.cerc.ui.vcl.table;
+package cn.cerc.ui.vcl;
 
 import cn.cerc.ui.core.HtmlWriter;
-import cn.cerc.ui.parts.UIComponent;
-import cn.cerc.ui.parts.UICssComponent;
+import cn.cerc.ui.core.UIComponent;
 
-public class UITh extends UICssComponent {
+public class UITh extends UIBaseHtml {
     private String text;
 
     public UITh() {
-        super();
+        this(null);
     }
 
     public UITh(UIComponent component) {

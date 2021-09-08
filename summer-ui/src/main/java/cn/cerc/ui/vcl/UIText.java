@@ -1,24 +1,24 @@
 package cn.cerc.ui.vcl;
 
-import cn.cerc.ui.core.HtmlWriter;
-import cn.cerc.ui.parts.UIComponent;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import cn.cerc.ui.core.HtmlWriter;
+import cn.cerc.ui.core.UIComponent;
 
 /*
  * 专用于简单或原始文字输出
  */
-public class UIText extends UIComponent {
+public class UIText extends UIBaseHtml {
     private String content;
     private List<String> lines;
 
-    public UIText() {
-        super();
-    }
-
     public UIText(UIComponent owner) {
         super(owner);
+    }
+
+    public UIText() {
+        super(null);
     }
 
     @Override

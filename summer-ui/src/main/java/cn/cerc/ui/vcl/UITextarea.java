@@ -2,9 +2,7 @@ package cn.cerc.ui.vcl;
 
 import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.core.INameOwner;
-import cn.cerc.ui.parts.UIComponent;
-import cn.cerc.ui.parts.UICssComponent;
-import cn.cerc.ui.vcl.ext.UISpan;
+import cn.cerc.ui.core.UIComponent;
 
 /**
  * 多行文本输入框
@@ -12,7 +10,7 @@ import cn.cerc.ui.vcl.ext.UISpan;
  * @author 黄荣君
  */
 //FIXME 应改为 UITextarea，ZhangGong 2021/3/19
-public class UITextArea extends UICssComponent implements INameOwner {
+public class UITextarea extends UIBaseHtml implements INameOwner {
     private UISpan caption;
     private String name;
     private StringBuffer lines = new StringBuffer();
@@ -23,11 +21,12 @@ public class UITextArea extends UICssComponent implements INameOwner {
     private boolean autofocus;
     private boolean readonly;
 
-    public UITextArea() {
+    public UITextarea(UIComponent owner) {
+        super(owner);
     }
 
-    public UITextArea(UIComponent owner) {
-        super(owner);
+    public UITextarea() {
+        this(null);
     }
 
     @Override
@@ -79,18 +78,19 @@ public class UITextArea extends UICssComponent implements INameOwner {
         return caption;
     }
 
-    public UITextArea setCaption(UISpan caption) {
+    public UITextarea setCaption(UISpan caption) {
         this.caption = caption;
         return this;
     }
 
+    @Override
     public String getName() {
         if(name == null)
             name = getId();
         return name;
     }
 
-    public UITextArea setName(String name) {
+    public UITextarea setName(String name) {
         this.name = name;
         return this;
     }
@@ -99,17 +99,17 @@ public class UITextArea extends UICssComponent implements INameOwner {
         return lines.toString();
     }
 
-    public UITextArea setText(String text) {
+    public UITextarea setText(String text) {
         this.lines = new StringBuffer(text);
         return this;
     }
     
-    public UITextArea append(String text) {
+    public UITextarea append(String text) {
         this.lines = lines.append(text).append("\n");
         return this;
     }
     
-    public UITextArea append(String format, Object... args) {
+    public UITextarea append(String format, Object... args) {
         return this.append(String.format(format, args));
     }
 
@@ -117,7 +117,7 @@ public class UITextArea extends UICssComponent implements INameOwner {
         return placeholder;
     }
 
-    public UITextArea setPlaceholder(String placeholder) {
+    public UITextarea setPlaceholder(String placeholder) {
         this.placeholder = placeholder;
         return this;
     }
@@ -126,7 +126,7 @@ public class UITextArea extends UICssComponent implements INameOwner {
         return cols;
     }
 
-    public UITextArea setCols(int cols) {
+    public UITextarea setCols(int cols) {
         this.cols = cols;
         return this;
     }
@@ -135,7 +135,7 @@ public class UITextArea extends UICssComponent implements INameOwner {
         return rows;
     }
 
-    public UITextArea setRows(int rows) {
+    public UITextarea setRows(int rows) {
         this.rows = rows;
         return this;
     }
@@ -144,7 +144,7 @@ public class UITextArea extends UICssComponent implements INameOwner {
         return readonly;
     }
 
-    public UITextArea setReadonly(boolean readonly) {
+    public UITextarea setReadonly(boolean readonly) {
         this.readonly = readonly;
         return this;
     }

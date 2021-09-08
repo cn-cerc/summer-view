@@ -3,10 +3,10 @@ package cn.cerc.ui.vcl;
 import cn.cerc.core.Utils;
 import cn.cerc.mis.core.Application;
 import cn.cerc.ui.core.HtmlWriter;
-import cn.cerc.ui.parts.UIComponent;
-import cn.cerc.ui.parts.UICssComponent;
+import cn.cerc.ui.core.UIComponent;
+import cn.cerc.ui.other.AliyunOssProcess;
 
-public class UIImage extends UICssComponent {
+public class UIImage extends UIBaseHtml {
     private String width;
     private String height;
     private String src;
@@ -16,14 +16,13 @@ public class UIImage extends UICssComponent {
     private AliyunOssProcess process;
     private String staticPath;
 
-    public UIImage() {
-        super();
-        this.staticPath = Application.getStaticPath();
-    }
-
     public UIImage(UIComponent owner) {
         super(owner);
         this.staticPath = Application.getStaticPath();
+    }
+
+    public UIImage() {
+        this(null);
     }
 
     @Override

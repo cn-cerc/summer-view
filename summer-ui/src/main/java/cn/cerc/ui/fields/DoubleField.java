@@ -5,10 +5,10 @@ import java.text.DecimalFormat;
 import cn.cerc.core.Record;
 import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.core.IFormatColumn;
+import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.core.UrlRecord;
 import cn.cerc.ui.fields.editor.ColumnEditor;
 import cn.cerc.ui.grid.lines.AbstractGridLine;
-import cn.cerc.ui.parts.UIComponent;
 
 public class DoubleField extends AbstractField implements IFormatColumn {
     private ColumnEditor editor;

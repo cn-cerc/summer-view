@@ -4,6 +4,7 @@ import cn.cerc.core.ClassConfig;
 import cn.cerc.mis.cdn.CDN;
 import cn.cerc.ui.SummerUI;
 import cn.cerc.ui.core.HtmlWriter;
+import cn.cerc.ui.core.UIComponent;
 
 public class UIAdvertisement extends UIComponent {
     private static final ClassConfig config = new ClassConfig(UIAdvertisement.class, SummerUI.ID);

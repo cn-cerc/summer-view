@@ -1,13 +1,12 @@
-package cn.cerc.ui.vcl.table;
+package cn.cerc.ui.vcl;
 
 import cn.cerc.ui.core.HtmlWriter;
-import cn.cerc.ui.parts.UIComponent;
-import cn.cerc.ui.parts.UICssComponent;
+import cn.cerc.ui.core.UIComponent;
 
-public class UITable extends UICssComponent {
+public class UITable extends UIBaseHtml {
 
     public UITable() {
-        super();
+        this(null);
     }
 
     public UITable(UIComponent component) {

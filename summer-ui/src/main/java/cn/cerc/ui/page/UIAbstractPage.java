@@ -14,14 +14,10 @@ import cn.cerc.mis.core.Application;
 import cn.cerc.mis.core.IClient;
 import cn.cerc.mis.core.IForm;
 import cn.cerc.mis.core.IPage;
-import cn.cerc.ui.core.Component;
 import cn.cerc.ui.core.HtmlWriter;
-import cn.cerc.ui.core.IOriginOwner;
-import cn.cerc.ui.core.UICustomComponent;
-import cn.cerc.ui.core.UIOriginComponent;
-import cn.cerc.ui.parts.UIComponent;
+import cn.cerc.ui.core.UIComponent;
 
-public abstract class UIAbstractPage extends UIComponent implements IPage, IOriginOwner {
+public abstract class UIAbstractPage extends UIComponent implements IPage {
     protected static final ClassConfig config = new ClassConfig(UIAbstractPage.class, SummerMIS.ID);
 
     private List<String> cssFiles = new ArrayList<>();
@@ -89,7 +85,7 @@ public abstract class UIAbstractPage extends UIComponent implements IPage, IOrig
         }
 
         if (defineHead != null) {
-            UIComponent content = new UICustomComponent();
+            UIComponent content = new UIComponent();
             defineHead.execute(this, content);
             out.print(content.toString());
         }
@@ -173,10 +169,8 @@ public abstract class UIAbstractPage extends UIComponent implements IPage, IOrig
 
     @Override
     public void output(HtmlWriter html) {
-        for (Component component : this.getComponents()) {
-            if (component instanceof UIComponent) {
-                ((UIComponent) component).output(html);
-            }
+        for (UIComponent component : this.getComponents()) {
+            component.output(html);
         }
     }
 
@@ -208,13 +202,13 @@ public abstract class UIAbstractPage extends UIComponent implements IPage, IOrig
 
     public UIComponent getHeader() {
         if (header == null)
-            header = new UIOriginComponent(this);
+            header = new UIComponent(this);
         return header;
     }
 
     public UIComponent getAside() {
         if (aside == null) {
-            aside = new UIOriginComponent(this);
+            aside = new UIComponent(this);
         }
         return aside;
     }
@@ -223,7 +217,7 @@ public abstract class UIAbstractPage extends UIComponent implements IPage, IOrig
     // 请改使用 getControls
     public UIComponent getMenuPath() {
         if (menuPath == null)
-            menuPath = new UIOriginComponent(this.getFrontPanel());
+            menuPath = new UIComponent(this.getFrontPanel());
         return menuPath;
     }
 
@@ -231,19 +225,19 @@ public abstract class UIAbstractPage extends UIComponent implements IPage, IOrig
     // 请改使用 getControls
     public UIComponent getNotice() {
         if (notice == null)
-            notice = new UIOriginComponent(this.getFrontPanel());
+            notice = new UIComponent(this.getFrontPanel());
         return notice;
     }
 
     public UIComponent getContent() {
         if (content == null)
-            content = new UIOriginComponent(this);
+            content = new UIComponent(this);
         return content;
     }
 
     public UIComponent getFrontPanel() {
         if (frontPanel == null)
-            frontPanel = new UIOriginComponent(this);
+            frontPanel = new UIComponent(this);
         return frontPanel;
     }
 
@@ -251,30 +245,20 @@ public abstract class UIAbstractPage extends UIComponent implements IPage, IOrig
     // 请改使用 getFooter
     public UIComponent getStatusBar() {
         if (statusBar == null)
-            statusBar = new UIOriginComponent(this);
+            statusBar = new UIComponent(this);
         return statusBar;
     }
 
     public UIComponent getFooter() {
         if (footer == null)
-            footer = new UIOriginComponent(this);
+            footer = new UIComponent(this);
         return footer;
     }
 
     public UIComponent getAddress() {
         if (address == null)
-            address = new UIOriginComponent(this);
+            address = new UIComponent(this);
         return address;
-    }
-
-    @Override
-    public final void setOrigin(Object orgin) {
-        this.origin = orgin;
-    }
-
-    @Override
-    public final Object getOrigin() {
-        return origin;
     }
 
 }

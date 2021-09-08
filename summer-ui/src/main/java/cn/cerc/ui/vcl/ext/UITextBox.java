@@ -1,17 +1,16 @@
-package cn.cerc.ui.vcl;
+package cn.cerc.ui.vcl.ext;
 
 import cn.cerc.core.Utils;
 import cn.cerc.ui.core.HtmlWriter;
-import cn.cerc.ui.parts.UIComponent;
-import cn.cerc.ui.parts.UICssComponent;
-import cn.cerc.ui.vcl.ext.UISpan;
+import cn.cerc.ui.core.UIComponent;
+import cn.cerc.ui.vcl.UISpan;
 
 /**
  * 单行文本输入框
  *
  * @author 张弓
  */
-public class UITextBox extends UICssComponent {
+public class UITextBox extends UIComponent {
     /**
      * 输入框只能输入纯数字，在iOS和Android上默认调用9宫格数字键，建议搭配 number 或者 tel 类型使用
      */
@@ -34,12 +33,12 @@ public class UITextBox extends UICssComponent {
     private String oninput;
     private String accept;
 
-    public UITextBox() {
-        super();
-    }
-
     public UITextBox(UIComponent owner) {
         super(owner);
+    }
+
+    public UITextBox() {
+        this(null);
     }
 
     @Override

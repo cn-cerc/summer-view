@@ -1,4 +1,4 @@
-package cn.cerc.ui.vcl;
+package cn.cerc.ui.vcl.ext;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import cn.cerc.ui.core.HtmlWriter;
-import cn.cerc.ui.parts.UIComponent;
+import cn.cerc.ui.core.UIComponent;
 
 public class UIHtmlFile extends UIComponent {
     private String fileName;

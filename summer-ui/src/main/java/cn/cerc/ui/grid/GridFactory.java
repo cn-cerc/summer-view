@@ -1,7 +1,7 @@
 package cn.cerc.ui.grid;
 
 import cn.cerc.mis.core.IForm;
-import cn.cerc.ui.parts.UIComponent;
+import cn.cerc.ui.core.UIComponent;
 
 @Deprecated
 public class GridFactory {

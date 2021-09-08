@@ -2,7 +2,7 @@ package cn.cerc.ui.columns;
 
 import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.core.IReadonlyOwner;
-import cn.cerc.ui.parts.UIComponent;
+import cn.cerc.ui.core.UIComponent;
 
 public class RadioColumn extends AbstractColumn implements IDataColumn {
 

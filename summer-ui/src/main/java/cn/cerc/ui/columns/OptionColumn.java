@@ -5,7 +5,7 @@ import java.util.Map;
 import cn.cerc.mis.core.IForm;
 import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.core.IReadonlyOwner;
-import cn.cerc.ui.parts.UIComponent;
+import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.vcl.UILabel;
 import cn.cerc.ui.vcl.UISelect;
 
@@ -17,7 +17,7 @@ public class OptionColumn extends AbstractColumn implements IDataColumn {
 
     public OptionColumn(UIComponent owner) {
         super(owner);
-        this.select = new UISelect();
+        this.select = new UISelect(null);
         if (owner instanceof IReadonlyOwner) {
             this.setReadonly(((IReadonlyOwner) owner).isReadonly());
         }
@@ -27,7 +27,7 @@ public class OptionColumn extends AbstractColumn implements IDataColumn {
     public OptionColumn(UIComponent owner, String name, String code) {
         super(owner);
         this.setCode(code).setName(name);
-        this.select = new UISelect();
+        this.select = new UISelect(null);
         if (owner instanceof IReadonlyOwner) {
             this.setReadonly(((IReadonlyOwner) owner).isReadonly());
         }
@@ -37,7 +37,7 @@ public class OptionColumn extends AbstractColumn implements IDataColumn {
     public OptionColumn(UIComponent owner, String name, String code, int width) {
         super(owner);
         this.setCode(code).setName(name).setSpaceWidth(width);
-        this.select = new UISelect();
+        this.select = new UISelect(null);
         if (owner instanceof IReadonlyOwner) {
             this.setReadonly(((IReadonlyOwner) owner).isReadonly());
         }

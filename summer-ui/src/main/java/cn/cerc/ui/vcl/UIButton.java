@@ -2,10 +2,9 @@ package cn.cerc.ui.vcl;
 
 import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.core.INameOwner;
-import cn.cerc.ui.parts.UIComponent;
-import cn.cerc.ui.parts.UICssComponent;
+import cn.cerc.ui.core.UIComponent;
 
-public class UIButton extends UICssComponent implements INameOwner {
+public class UIButton extends UIBaseHtml implements INameOwner {
     private String name;
     private String value;
     private String text;
@@ -13,12 +12,12 @@ public class UIButton extends UICssComponent implements INameOwner {
     private String role;
     private String type;
 
-    public UIButton() {
-        super();
-    }
-
     public UIButton(UIComponent owner) {
         super(owner);
+    }
+
+    public UIButton() {
+        this(null);
     }
 
     @Override

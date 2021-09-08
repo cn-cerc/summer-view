@@ -8,14 +8,12 @@ import cn.cerc.mis.core.IForm;
 import cn.cerc.ui.columns.IArrayColumn;
 import cn.cerc.ui.columns.IColumn;
 import cn.cerc.ui.columns.IDataColumn;
-import cn.cerc.ui.core.Component;
 import cn.cerc.ui.core.HtmlWriter;
-import cn.cerc.ui.core.UIOriginComponent;
-import cn.cerc.ui.parts.UIComponent;
-import cn.cerc.ui.vcl.UIButtonSubmit;
+import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.vcl.UIForm;
+import cn.cerc.ui.vcl.ext.UIButtonSubmit;
 
-public class UISearchPanel extends UIOriginComponent {
+public class UISearchPanel extends UIComponent {
     private UIComponent filterPanel;
     private UIComponent controlPanel;
     private UIButtonSubmit submit;
@@ -30,8 +28,8 @@ public class UISearchPanel extends UIOriginComponent {
         }
         this.uiform = new UIForm();
         this.record = new Record();
-        this.filterPanel = new UIOriginComponent(uiform);
-        this.controlPanel = new UIOriginComponent(uiform);
+        this.filterPanel = new UIComponent(uiform);
+        this.controlPanel = new UIComponent(uiform);
         submit = new UIButtonSubmit(uiform.getBottom());
         submit.setText("查询");
     }
@@ -106,7 +104,7 @@ public class UISearchPanel extends UIOriginComponent {
     }
 
     @Override
-    public void addComponent(Component component) {
+    public void addComponent(UIComponent component) {
         if (component instanceof IColumn) {
             this.filterPanel.addComponent(component);
         } else {

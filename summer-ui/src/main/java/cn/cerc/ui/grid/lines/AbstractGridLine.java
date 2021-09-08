@@ -5,28 +5,28 @@ import java.util.List;
 
 import cn.cerc.core.DataSet;
 import cn.cerc.core.Record;
-import cn.cerc.ui.core.Component;
 import cn.cerc.ui.core.DataSource;
 import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.core.IField;
-import cn.cerc.ui.core.UICustomComponent;
+import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.core.UrlRecord;
 import cn.cerc.ui.fields.AbstractField;
 import cn.cerc.ui.grid.RowCell;
 import cn.cerc.ui.other.BuildUrl;
 
-public abstract class AbstractGridLine extends UICustomComponent implements DataSource {
+public abstract class AbstractGridLine extends UIComponent implements DataSource {
     protected DataSource dataSource;
     private List<IField> fields = new ArrayList<>();
     private List<RowCell> cells = new ArrayList<>();
     private boolean visible = true;
 
-    public AbstractGridLine(DataSource dataSource) {
+    public AbstractGridLine(UIComponent owner, DataSource dataSource) {
+        super(owner);
         this.dataSource = dataSource;
     }
 
     @Override
-    public void addComponent(Component component) {
+    public void addComponent(UIComponent component) {
         super.addComponent(component);
         if (component instanceof AbstractField) {
             AbstractField field = (AbstractField) component;

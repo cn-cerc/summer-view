@@ -9,6 +9,7 @@ import cn.cerc.ui.core.DataSource;
 import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.core.IField;
 import cn.cerc.ui.core.IFormatColumn;
+import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.fields.AbstractField;
 import cn.cerc.ui.grid.IColumnsManager;
 import cn.cerc.ui.grid.RowCell;
@@ -20,8 +21,8 @@ public class MasterGridLine extends AbstractGridLine {
     // 列管理器，用于支持自定义栏位
     private IColumnsManager manager;
 
-    public MasterGridLine(DataSource dataSource) {
-        super(dataSource);
+    public MasterGridLine(UIComponent owner, DataSource dataSource) {
+        super(owner, dataSource);
     }
 
     @Override
@@ -85,7 +86,7 @@ public class MasterGridLine extends AbstractGridLine {
     public void addField(IField field) {
         getFields().add(field);
         RowCell col;
-        col = new RowCell();
+        col = new RowCell(null);
         col.setAlign(field.getAlign());
         col.setRole(field.getField());
         getCells().add(col);

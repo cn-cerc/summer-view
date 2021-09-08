@@ -14,12 +14,12 @@ import cn.cerc.ui.SummerUI;
 import cn.cerc.ui.core.DataSource;
 import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.core.IField;
+import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.fields.AbstractField;
 import cn.cerc.ui.grid.lines.AbstractGridLine;
 import cn.cerc.ui.grid.lines.ChildGridLine;
 import cn.cerc.ui.grid.lines.ExpenderGridLine;
 import cn.cerc.ui.grid.lines.MasterGridLine;
-import cn.cerc.ui.parts.UIComponent;
 import cn.cerc.ui.vcl.UIForm;
 
 public class DataGrid extends UIComponent implements DataSource {
@@ -45,12 +45,17 @@ public class DataGrid extends UIComponent implements DataSource {
     // 输出每列时的事件
     private OutputEvent beforeOutput;
 
-    public DataGrid(IForm form, UIComponent owner) {
+    public DataGrid(UIComponent owner, IForm form) {
         super(owner);
         this.setId("grid");
         this.form = form;
-        lines.add(new MasterGridLine(this));
+        lines.add(new MasterGridLine(this, this));
         pages.setRequest(form.getRequest());
+    }
+
+    @Deprecated
+    public DataGrid(IForm form, UIComponent owner) {
+        this(owner, form);
     }
 
     @Override
@@ -101,7 +106,7 @@ public class DataGrid extends UIComponent implements DataSource {
             return this;
         } else {
             if (expender == null) {
-                expender = new ExpenderGridLine(this);
+                expender = new ExpenderGridLine(this, this);
                 this.getLines().add(expender);
             }
             return expender;
@@ -114,7 +119,7 @@ public class DataGrid extends UIComponent implements DataSource {
 
     public AbstractGridLine getLine(int index) {
         if (index == lines.size()) {
-            lines.add(new ChildGridLine(this));
+            lines.add(new ChildGridLine(this, this));
         }
         return lines.get(index);
     }

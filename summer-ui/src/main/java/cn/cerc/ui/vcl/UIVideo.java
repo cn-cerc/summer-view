@@ -1,9 +1,13 @@
 package cn.cerc.ui.vcl;
 
 import cn.cerc.ui.core.HtmlWriter;
-import cn.cerc.ui.parts.UICssComponent;
+import cn.cerc.ui.core.UIComponent;
 
-public class UIVideo extends UICssComponent {
+public class UIVideo extends UIBaseHtml {
+    public UIVideo(UIComponent owner) {
+        super(owner);
+    }
+
     private String src;
     private String width = "190";
     private String height = "90";
