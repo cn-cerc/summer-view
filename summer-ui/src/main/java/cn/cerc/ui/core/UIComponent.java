@@ -96,7 +96,10 @@ public class UIComponent implements IOriginOwner, Iterable<UIComponent> {
     }
 
     protected final void appendPropertys(HtmlWriter html) {
-        propertys.forEach((k, v) -> html.print(" %s='%s'", k, v));
+        propertys.forEach((key, value) -> {
+            if (value != null && !"".equals(value))
+                html.print(" %s='%s'", key, value);
+        });
     }
 
     @Override
@@ -110,11 +113,20 @@ public class UIComponent implements IOriginOwner, Iterable<UIComponent> {
         return origin;
     }
 
-    protected final Map<String, String> getPropertys() {
+    public UIComponent setProperty(String key, String value) {
+        propertys.put(key, value);
+        return this;
+    }
+
+    public final String getProperty(String key) {
+        return propertys.get(key);
+    }
+
+    protected Map<String, String> getPropertys() {
         return propertys;
     }
 
-    protected final boolean isPhone() {
+    public final boolean isPhone() {
         return origin instanceof IForm ? ((IForm) origin).getClient().isPhone() : false;
     }
 
