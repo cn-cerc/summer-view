@@ -48,7 +48,7 @@ public class UIGridBody extends UIComponent {
     public FieldMeta add(String field) {
         FieldMeta meta = dataSet.getFieldDefs().get(field);
         if (meta == null)
-            dataSet.getFieldDefs().add(field, FieldKind.Calculated);
+            meta = dataSet.getFieldDefs().add(field, FieldKind.Calculated);
         addColumn(meta);
         return meta;
     }

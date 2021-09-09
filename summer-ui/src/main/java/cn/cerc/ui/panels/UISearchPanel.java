@@ -37,7 +37,7 @@ public class UISearchPanel extends UIComponent {
     @Override
     public void output(HtmlWriter html) {
         uiform.setCssClass("searchPanel");
-        uiform.outHead(html);
+        uiform.beginOutput(html);
 
         html.print("<ul>");
         for (UIComponent component : filterPanel) {
@@ -61,7 +61,7 @@ public class UISearchPanel extends UIComponent {
             html.print("</div>");
         }
 
-        uiform.outFoot(html);
+        uiform.endOutput(html);
     }
 
     public String readAll() {

@@ -48,7 +48,7 @@ public class UIAppendPanel extends UIComponent {
             div.output(html);
         }
 
-        uiform.outHead(html);
+        uiform.beginOutput(html);
 
         for (UIComponent component : inputPanel) {
             if (component instanceof IDataColumn) {
@@ -81,7 +81,7 @@ public class UIAppendPanel extends UIComponent {
         }
         html.print("</ul>");
 
-        uiform.outFoot(html);
+        uiform.endOutput(html);
     }
 
     public void setAction(String action) {

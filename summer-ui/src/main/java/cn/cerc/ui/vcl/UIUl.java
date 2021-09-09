@@ -11,19 +11,18 @@ public class UIUl extends UIComponent {
 
     public UIUl(UIComponent owner) {
         super(owner);
+        this.setRootLabel("ul");
     }
 
     @Override
     public void output(HtmlWriter html) {
-        html.print("<ul");
-        super.outputPropertys(html);
-        html.print(">");
+        this.beginOutput(html);
         for (UIComponent item : this) {
             html.print("<li>");
             item.output(html);
             html.print("</li>");
         }
-        html.println("</ul>");
+        this.endOutput(html);
     }
 
 }

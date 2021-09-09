@@ -161,13 +161,13 @@ public class DataGrid extends UIComponent implements DataSource {
 
     private void outputGrid(HtmlWriter html) {
         if (getForm() != null)
-            getForm().outHead(html);
+            getForm().beginOutput(html);
         if (form.getClient().isPhone())
             this.outputPhoneGrid(html);
         else
             this.outputWebGrid(html);
         if (getForm() != null)
-            getForm().outFoot(html);
+            getForm().endOutput(html);
     }
 
     private void outputWebGrid(HtmlWriter html) {

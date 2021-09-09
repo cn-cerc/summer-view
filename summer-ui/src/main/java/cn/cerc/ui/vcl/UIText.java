@@ -13,16 +13,17 @@ public class UIText extends UIComponent {
     private String content;
     private List<String> lines;
 
-    public UIText(UIComponent owner) {
-        super(owner);
-    }
-
     public UIText() {
         super(null);
     }
 
+    public UIText(UIComponent owner) {
+        super(owner);
+    }
+
     @Override
-    public void output(HtmlWriter html) {
+    public void beginOutput(HtmlWriter html) {
+        super.beginOutput(html);
         if (content != null) {
             html.print(content);
         }
@@ -42,11 +43,13 @@ public class UIText extends UIComponent {
         return this;
     }
 
+    @Deprecated
     public UIText setContent(String text, Object... args) {
         this.content = String.format(text, args);
         return this;
     }
 
+    @Deprecated
     public List<String> getLines() {
         if (lines == null) {
             lines = new ArrayList<>();
@@ -54,11 +57,7 @@ public class UIText extends UIComponent {
         return lines;
     }
 
-    public UIText setLines(List<String> lines) {
-        this.lines = lines;
-        return this;
-    }
-
+    @Deprecated
     public UIText add(String line) {
         if (lines == null) {
             lines = new ArrayList<>();
