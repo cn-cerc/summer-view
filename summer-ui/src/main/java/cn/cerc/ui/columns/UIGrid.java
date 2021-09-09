@@ -85,7 +85,7 @@ public class UIGrid extends UIComponent implements IReadonlyOwner {
 
     private void outputPhone(HtmlWriter html) {
         html.print("<div");
-        super.appendPropertys(html);
+        super.outputPropertys(html);
         html.print(">");
         DataSet dataSet = this.getDataSet();
         dataSet.first();
@@ -114,7 +114,7 @@ public class UIGrid extends UIComponent implements IReadonlyOwner {
     private void outputPc(HtmlWriter html) {
         // 默认输出普通表格
         html.print("<div");
-        super.appendPropertys(html);
+        super.outputPropertys(html);
         html.print(">");
         DataSet dataSet = this.getDataSet();
         MutiPage pages = this.getPages();
@@ -181,7 +181,8 @@ public class UIGrid extends UIComponent implements IReadonlyOwner {
                 i++;
             }
         } else {
-            UITr tr = new UITr().setCssClass("empty");
+            UITr tr = new UITr();
+            tr.setCssClass("empty");
             UITd td = new UITd(tr).setColspan(this.getMasterLine().getComponents().size());
             if (defineEmptyData != null) {
                 defineEmptyData.execute(this, td);

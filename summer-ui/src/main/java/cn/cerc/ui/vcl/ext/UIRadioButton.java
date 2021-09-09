@@ -24,7 +24,7 @@ public class UIRadioButton extends UIComponent {
             html.print(" checked=checked");
         }
         html.print(" name='%s' value='%s'", name, value);
-        super.appendPropertys(html);
+        super.outputPropertys(html);
         html.println("/>");
     }
 

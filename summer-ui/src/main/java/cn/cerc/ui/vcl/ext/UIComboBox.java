@@ -19,7 +19,7 @@ public class UIComboBox extends UIComponent {
     @Override
     public void output(HtmlWriter html) {
         html.println("<select name='%s'", name);
-        super.appendPropertys(html);
+        super.outputPropertys(html);
         html.println(">");
         for (String key : options.keySet()) {
             if (key.equals(selectId)) {

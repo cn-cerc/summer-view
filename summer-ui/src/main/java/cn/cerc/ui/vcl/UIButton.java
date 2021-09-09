@@ -23,7 +23,7 @@ public class UIButton extends UIBaseHtml implements INameOwner {
     @Override
     public void output(HtmlWriter html) {
         html.print("<button");
-        super.appendPropertys(html);
+        super.outputPropertys(html);
         if (name != null) {
             html.print(String.format(" name=\"%s\"", name));
         } else if (this.getId() != null) {

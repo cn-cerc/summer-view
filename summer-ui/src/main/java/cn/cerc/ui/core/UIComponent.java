@@ -11,9 +11,11 @@ import cn.cerc.mis.core.IForm;
 
 public class UIComponent implements IOriginOwner, Iterable<UIComponent> {
     private List<UIComponent> components = new ArrayList<>();
-    private Map<String, String> propertys = new HashMap<>();
+    private Map<String, Object> propertys = new HashMap<>();
     private UIComponent owner;
     private Object origin;
+    private boolean phone;
+    private String rootLabel;
 
     public UIComponent() {
         super();
@@ -22,8 +24,10 @@ public class UIComponent implements IOriginOwner, Iterable<UIComponent> {
     public UIComponent(UIComponent owner) {
         super();
         setOwner(owner);
-        if (owner instanceof IOriginOwner)
-            this.origin = ((IOriginOwner) owner).getOrigin();
+        if (owner != null) {
+            this.setOrigin(owner.getOrigin());
+            this.setPhone(owner.isPhone());
+        }
     }
 
     @Deprecated
@@ -41,7 +45,7 @@ public class UIComponent implements IOriginOwner, Iterable<UIComponent> {
         return owner;
     }
 
-    public final UIComponent setOwner(UIComponent owner) {
+    public UIComponent setOwner(UIComponent owner) {
         this.owner = owner;
         if (owner != null)
             owner.addComponent(this);
@@ -65,11 +69,13 @@ public class UIComponent implements IOriginOwner, Iterable<UIComponent> {
     }
 
     public void output(HtmlWriter html) {
+        this.beginOutput(html);
         this.forEach(item -> item.output(html));
+        this.endOutput(html);
     }
 
     public final String getId() {
-        return propertys.get("id");
+        return (String) propertys.get("id");
     }
 
     public final UIComponent setId(String id) {
@@ -78,7 +84,7 @@ public class UIComponent implements IOriginOwner, Iterable<UIComponent> {
     }
 
     public final String getCssClass() {
-        return propertys.get("class");
+        return (String) propertys.get("class");
     }
 
     public UIComponent setCssClass(String cssClass) {
@@ -87,7 +93,7 @@ public class UIComponent implements IOriginOwner, Iterable<UIComponent> {
     }
 
     public final String getCssStyle() {
-        return propertys.get("style");
+        return (String) propertys.get("style");
     }
 
     public UIComponent setCssStyle(String cssStyle) {
@@ -95,16 +101,24 @@ public class UIComponent implements IOriginOwner, Iterable<UIComponent> {
         return this;
     }
 
-    protected final void appendPropertys(HtmlWriter html) {
+    protected void outputPropertys(HtmlWriter html) {
         propertys.forEach((key, value) -> {
-            if (value != null && !"".equals(value))
-                html.print(" %s='%s'", key, value);
+            if (value != null && !"".equals(value)) {
+                if (value instanceof Integer)
+                    html.print(" %s=%s", key, value);
+                else
+                    html.print(" %s='%s'", key, value);
+            }
         });
     }
 
     @Override
     public UIComponent setOrigin(Object parent) {
         this.origin = parent;
+        if (origin instanceof UIComponent)
+            this.phone = ((UIComponent) origin).isPhone();
+        else if (origin instanceof IForm)
+            this.phone = ((IForm) origin).getClient().isPhone();
         return this;
     }
 
@@ -113,21 +127,49 @@ public class UIComponent implements IOriginOwner, Iterable<UIComponent> {
         return origin;
     }
 
-    public UIComponent setProperty(String key, String value) {
+    public UIComponent writeProperty(String key, Object value) {
         propertys.put(key, value);
         return this;
     }
 
-    public final String getProperty(String key) {
+    public final Object readProperty(String key) {
         return propertys.get(key);
     }
 
-    protected Map<String, String> getPropertys() {
+    protected Map<String, Object> getPropertys() {
         return propertys;
     }
 
     public final boolean isPhone() {
-        return origin instanceof IForm ? ((IForm) origin).getClient().isPhone() : false;
+        return phone;
+    }
+
+    public UIComponent setPhone(boolean value) {
+        this.phone = value;
+        return this;
+    }
+
+    public String getRootLabel() {
+        return rootLabel;
+    }
+
+    public UIComponent setRootLabel(String rootLabel) {
+        this.rootLabel = rootLabel;
+        return this;
+    }
+
+    protected void beginOutput(HtmlWriter html) {
+        if (this.getRootLabel() == null || "".equals(getRootLabel()))
+            return;
+        html.print("<").print(getRootLabel());
+        this.outputPropertys(html);
+        html.print(">");
+    }
+
+    protected void endOutput(HtmlWriter html) {
+        if (this.getRootLabel() == null || "".equals(getRootLabel()))
+            return;
+        html.print("</%s>", getRootLabel());
     }
 
     @Deprecated

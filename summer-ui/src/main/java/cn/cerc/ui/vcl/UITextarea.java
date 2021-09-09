@@ -36,7 +36,7 @@ public class UITextarea extends UIBaseHtml implements INameOwner {
         }
 
         html.print("<textarea ");
-        super.appendPropertys(html);
+        super.outputPropertys(html);
         if (getName() != null) {
             html.print("name='%s' ", name);
         } else if (this.getId() != null) {

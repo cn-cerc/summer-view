@@ -9,7 +9,7 @@ import cn.cerc.ui.core.UIComponent;
 /*
  * 专用于简单或原始文字输出
  */
-public class UIText extends UIBaseHtml {
+public class UIText extends UIComponent {
     private String content;
     private List<String> lines;
 

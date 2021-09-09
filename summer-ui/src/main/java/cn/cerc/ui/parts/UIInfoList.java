@@ -94,7 +94,7 @@ public class UIInfoList extends UIComponent {
     public void output(HtmlWriter html) {
         html.println("<!-- %s -->", this.getClass().getName());
         html.print("<div");
-        super.appendPropertys(html);
+        super.outputPropertys(html);
         if (this.onClick != null) {
             html.print(" onclick='%s'", this.onClick);
         }

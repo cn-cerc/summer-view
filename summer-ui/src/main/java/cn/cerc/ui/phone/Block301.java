@@ -36,7 +36,7 @@ public class Block301 extends UIComponent {
     public void output(HtmlWriter html) {
         html.println("<!-- %s -->", this.getClass().getName());
         html.print("<div");
-        appendPropertys(html);
+        outputPropertys(html);
         html.print("'>");
         leftIcon.output(html);
         html.print("<a href='%s'>", operator.getUrl());

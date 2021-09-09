@@ -19,7 +19,7 @@ public class UILabelBox extends UIComponent {
     @Override
     public void output(HtmlWriter html) {
         html.print("<label");
-        super.appendPropertys(html);
+        super.outputPropertys(html);
         if (role != null) {
             html.print(" role='%s'", this.role);
         }

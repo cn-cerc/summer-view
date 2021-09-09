@@ -46,7 +46,7 @@ public class UIBottom extends UIComponent {
         if (!Utils.isEmpty(this.getTarget())) {
             html.print(" target=\"%s\"", this.target);
         }
-        super.appendPropertys(html);
+        super.outputPropertys(html);
         html.println(">%s</a>", this.caption);
     }
 }

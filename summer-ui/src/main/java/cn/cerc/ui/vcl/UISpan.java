@@ -21,7 +21,7 @@ public class UISpan extends UIBaseHtml {
     @Override
     public void output(HtmlWriter html) {
         html.print("<span");
-        super.appendPropertys(html);
+        super.outputPropertys(html);
         if (role != null) {
             html.print(" role='%s'", this.role);
         }

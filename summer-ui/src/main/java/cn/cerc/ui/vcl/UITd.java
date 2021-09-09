@@ -1,12 +1,9 @@
 package cn.cerc.ui.vcl;
 
-import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 
 public class UITd extends UIBaseHtml {
-    private int colspan;
-    private int rowspan;
-    private String text;
+    private UIText text;
 
     public UITd() {
         this(null);
@@ -14,50 +11,34 @@ public class UITd extends UIBaseHtml {
 
     public UITd(UIComponent component) {
         super(component);
-    }
-
-    @Override
-    public void output(HtmlWriter html) {
-        html.print("<td");
-        if (this.getCssClass() != null)
-            html.print(" class=\"%s\"", this.getCssClass());
-        if (this.rowspan != 0)
-            html.print(" rowspan=\"%s\"", this.rowspan);
-        if (this.colspan != 0)
-            html.print(" colspan=\"%s\"", this.colspan);
-        html.print(">");
-        if (this.text != null) {
-            html.print(text);
-        }
-        for (UIComponent item : this)
-            item.output(html);
-        html.print("</td>");
+        this.setRootLabel("td");
+        this.text = new UIText(this);
     }
 
     public int getColspan() {
-        return colspan;
+        return (int) this.readProperty("colspan");
     }
 
     public UITd setColspan(int colspan) {
-        this.colspan = colspan;
+        this.writeProperty("colspan", colspan);
         return this;
     }
 
     public int getRowspan() {
-        return rowspan;
+        return (int) this.readProperty("rowspan");
     }
 
     public UITd setRowspan(int rowspan) {
-        this.rowspan = rowspan;
+        this.writeProperty("rowspan", rowspan);
         return this;
     }
 
     public String getText() {
-        return text;
+        return text.getContent();
     }
 
     public UITd setText(String text) {
-        this.text = text;
+        this.text.setContent(text);
         return this;
     }
 

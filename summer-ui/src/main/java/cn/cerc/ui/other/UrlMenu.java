@@ -5,16 +5,16 @@ import cn.cerc.ui.core.UIComponent;
 
 public class UrlMenu extends UIComponent {
     private String name;
-    private String url;
 
     public UrlMenu(UIComponent owner) {
-        super(owner);
+        this(owner, null, null);
     }
 
     public UrlMenu(UIComponent owner, String name, String url) {
         super(owner);
-        this.name = name;
-        this.url = url;
+        this.setRootLabel("a");
+        this.setName(name);
+        this.setUrl(url);
     }
 
     public String getName() {
@@ -27,19 +27,19 @@ public class UrlMenu extends UIComponent {
     }
 
     public String getUrl() {
-        return url;
+        return (String) this.readProperty("href");
     }
 
     public UrlMenu setUrl(String url) {
-        this.url = url;
+        this.writeProperty("href", url);
         return this;
     }
 
     @Override
     public void output(HtmlWriter html) {
-        html.print("<a href=\"%s\"", this.url);
-        super.appendPropertys(html);
-        html.println(">%s</a>", this.name);
+        this.beginOutput(html);
+        html.print(name);
+        this.endOutput(html);
     }
 
 }

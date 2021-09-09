@@ -28,7 +28,7 @@ public class UICheckBox extends UIComponent {
     @Override
     public void output(HtmlWriter html) {
         html.print("<input");
-        super.appendPropertys(html);
+        super.outputPropertys(html);
         if (this.name != null) {
             html.print(" name='%s'", this.getName());
         }

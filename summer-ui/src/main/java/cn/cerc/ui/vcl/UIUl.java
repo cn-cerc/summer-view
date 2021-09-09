@@ -6,7 +6,7 @@ import cn.cerc.ui.core.UIComponent;
 public class UIUl extends UIComponent {
 
     public UIUl() {
-        super();
+        this(null);
     }
 
     public UIUl(UIComponent owner) {
@@ -16,7 +16,7 @@ public class UIUl extends UIComponent {
     @Override
     public void output(HtmlWriter html) {
         html.print("<ul");
-        super.appendPropertys(html);
+        super.outputPropertys(html);
         html.print(">");
         for (UIComponent item : this) {
             html.print("<li>");

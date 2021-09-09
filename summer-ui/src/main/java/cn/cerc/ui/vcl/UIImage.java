@@ -32,7 +32,7 @@ public class UIImage extends UIBaseHtml {
             html.print("?x-oss-process=image%s", process.getCommand());
         }
         html.print("'");
-        super.appendPropertys(html);
+        super.outputPropertys(html);
         if (role != null) {
             html.print(" role='%s'", this.role);
         }
