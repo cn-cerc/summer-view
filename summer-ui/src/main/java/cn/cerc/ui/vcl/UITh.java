@@ -16,11 +16,11 @@ public class UITh extends UIBaseHtml {
     }
 
     public String getText() {
-        return text.getContent();
+        return text.getText();
     }
 
     public UITh setText(String text) {
-        this.text.setContent(text);
+        this.text.setText(text);
         return this;
     }
 

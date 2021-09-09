@@ -43,19 +43,17 @@ public class UIText extends UIComponent {
 
     @Deprecated
     public String getContent() {
-        return text;
+        return getText();
     }
 
     @Deprecated
     public UIText setContent(String text) {
-        this.text = text;
-        return this;
+        return setText(text);
     }
 
     @Deprecated
     public UIText setContent(String text, Object... args) {
-        this.text = String.format(text, args);
-        return this;
+        return setText(String.format(text, args));
     }
 
     public List<String> getLines() {

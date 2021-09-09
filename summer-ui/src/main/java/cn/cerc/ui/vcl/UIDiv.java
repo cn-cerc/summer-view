@@ -16,17 +16,18 @@ public class UIDiv extends UIBaseHtml {
     }
 
     public UIDiv setText(String text) {
-        this.text.setContent(text);
-        return this;
-    }
-
-    public UIDiv setText(String format, Object... args) {
-        this.text.setContent(String.format(format, args));
+        this.text.setText(text);
         return this;
     }
 
     public String getText() {
-        return text.getContent();
+        return text.getText();
+    }
+
+    @Deprecated
+    public UIDiv setText(String format, Object... args) {
+        this.text.setText(String.format(format, args));
+        return this;
     }
 
 }
