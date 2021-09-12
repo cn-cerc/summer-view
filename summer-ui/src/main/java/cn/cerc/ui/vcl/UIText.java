@@ -14,7 +14,7 @@ public class UIText extends UIComponent {
     private List<String> lines;
 
     public UIText() {
-        super(null);
+        this(null);
     }
 
     public UIText(UIComponent owner) {

@@ -9,9 +9,8 @@ import cn.cerc.core.DataSet;
 import cn.cerc.core.Record;
 import cn.cerc.ui.SummerUI;
 import cn.cerc.ui.core.HtmlWriter;
-import cn.cerc.ui.core.IField;
-import cn.cerc.ui.core.IFormatColumn;
 import cn.cerc.ui.fields.AbstractField;
+import cn.cerc.ui.fields.IFormatColumn;
 import cn.cerc.ui.grid.lines.AbstractGridLine;
 import cn.cerc.ui.grid.lines.MasterGridLine;
 
@@ -21,7 +20,7 @@ public class ColumnEditor {
     private AbstractField owner;
     private boolean init = false;
     private DataSet dataSet;
-    private List<IField> columns;
+    private List<AbstractField> columns;
     private String onUpdate;
     private List<String> dataField = new ArrayList<>(); // 设置的字段列表
     private AbstractGridLine gridLine;
@@ -56,9 +55,9 @@ public class ColumnEditor {
         if (!this.init) {
             dataSet = gridLine.getDataSet();
             columns = new ArrayList<>();
-            for (IField field : gridLine.getFields()) {
+            for (AbstractField field : gridLine.getFields()) {
                 if (field instanceof IFormatColumn) {
-                    if (((AbstractField) field).isReadonly()) {
+                    if (field.isReadonly()) {
                         continue;
                     }
                     if (field.getWidth() == 0) {

@@ -2,42 +2,34 @@ package cn.cerc.ui.fields;
 
 import java.text.DecimalFormat;
 
-import cn.cerc.core.Record;
 import cn.cerc.ui.core.HtmlWriter;
-import cn.cerc.ui.core.IFormatColumn;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.core.UrlRecord;
 import cn.cerc.ui.fields.editor.ColumnEditor;
-import cn.cerc.ui.grid.lines.AbstractGridLine;
 
 public class DoubleField extends AbstractField implements IFormatColumn {
     private ColumnEditor editor;
     private String format = "0.####";
 
     public DoubleField(UIComponent owner, String title, String field) {
-        super(owner, title, 4);
-        this.setField(field);
+        super(owner, title, field, 4);
         this.setAlign("right");
     }
 
     public DoubleField(UIComponent owner, String title, String field, int width) {
-        super(owner, title, width);
-        this.setField(field);
+        super(owner, title, field, width);
         this.setAlign("right");
     }
 
     @Override
-    public String getText(Record record) {
-        if (record == null) {
-            return null;
-        }
+    public String getText() {
         if (buildText != null) {
             HtmlWriter html = new HtmlWriter();
-            buildText.outputText(record, html);
+            buildText.outputText(getCurrent(), html);
             return html.toString();
         }
         try {
-            double val = record.getDouble(field);
+            double val = getCurrent().getDouble(this.getField());
             DecimalFormat df = new DecimalFormat(format);
             return df.format(val);
         } catch (NumberFormatException e) {
@@ -53,17 +45,11 @@ public class DoubleField extends AbstractField implements IFormatColumn {
     }
 
     @Override
-    public String format(Object value) {
-        if (!(value instanceof Record)) {
-            return value.toString();
-        }
-
-        Record ds = (Record) value;
+    public void outputOfGridLine(HtmlWriter html) {
         if (this.isReadonly()) {
             if (buildUrl != null) {
-                HtmlWriter html = new HtmlWriter();
                 UrlRecord url = new UrlRecord();
-                buildUrl.buildUrl(ds, url);
+                buildUrl.buildUrl(getCurrent(), url);
                 if (!"".equals(url.getUrl())) {
                     html.print("<a href=\"%s\"", url.getUrl());
                     if (url.getTitle() != null) {
@@ -72,20 +58,16 @@ public class DoubleField extends AbstractField implements IFormatColumn {
                     if (url.getTarget() != null) {
                         html.print(" target=\"%s\"", url.getTarget());
                     }
-                    html.println(">%s</a>", getText(ds));
+                    html.println(">%s</a>", getText());
                 } else {
-                    html.println(getText(ds));
+                    html.println(getText());
                 }
-                return html.toString();
             } else {
-                return getText(ds);
+                html.print(getText());
             }
+        } else {
+            html.print(getEditor().format(getCurrent()));
         }
-        if (!(this.getOwner() instanceof AbstractGridLine)) {
-            return getText(ds);
-        }
-
-        return getEditor().format(ds);
     }
 
     public ColumnEditor getEditor() {

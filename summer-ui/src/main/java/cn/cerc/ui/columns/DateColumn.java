@@ -50,7 +50,7 @@ public class DateColumn extends AbstractColumn implements IDataColumn {
             html.print(value);
         } else {
             UILabel label = new UILabel();
-            label.setFocusTarget(this.getCode());
+            label.setFor(this.getCode());
             label.setText(getName() + "：");
             label.output(html);
 
@@ -81,7 +81,7 @@ public class DateColumn extends AbstractColumn implements IDataColumn {
         String text = getRecord().getString(this.getCode());
         if (!this.isHidden()) {
             UILabel label = new UILabel();
-            label.setFocusTarget(this.getCode());
+            label.setFor(this.getCode());
             label.setText(getName() + "：");
             label.output(html);
         }

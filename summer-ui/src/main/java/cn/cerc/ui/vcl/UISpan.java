@@ -4,93 +4,82 @@ import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 
 public class UISpan extends UIBaseHtml {
-    private String text;
-    private String role;
-    private String onclick;
-    private String url;
-    private String target = "_blank";
-
-    public UISpan(UIComponent owner) {
-        super(owner);
-    }
+    private UIText text;
+    private UIComponent url;
 
     public UISpan() {
         this(null);
     }
 
-    @Override
-    public void output(HtmlWriter html) {
-        html.print("<span");
-        super.outputPropertys(html);
-        if (role != null) {
-            html.print(" role='%s'", this.role);
-        }
-        if (onclick != null) {
-            html.print(" onclick='%s'", this.onclick);
-        }
-        html.print(">");
+    public UISpan(UIComponent owner) {
+        super(owner);
+        this.setRootLabel("span");
+        this.url = new UIComponent(this);
+        this.text = new UIText(url);
+    }
 
-        if (this.url != null) {
-            html.print("<a href='%s'", this.url);
-            if (this.target != null) {
-                html.print(" target='%s'", this.target);
-            }
-            html.print(">");
+    @Override
+    public void beginOutput(HtmlWriter html) {
+        if (this.getUrl() != null) {
+            url.setRootLabel("a");
+            if (this.getTarget() == null)
+                this.setTarget("_blank");
         }
-        html.print(text);
-        if (this.url != null) {
-            html.println("</a>");
-        }
-        html.println("</span>");
+        super.beginOutput(html);
     }
 
     public String getText() {
-        return text;
+        return text.getText();
     }
 
     public UISpan setText(String text) {
-        this.text = text;
+        this.text.setText(text);
         return this;
     }
 
     public UISpan setText(String format, Object... args) {
-        this.text = String.format(format, args);
+        this.text.setText(String.format(format, args));
         return this;
     }
 
     public String getRole() {
-        return role;
+        return (String) this.readProperty("role");
     }
 
     public UISpan setRole(String role) {
-        this.role = role;
+        this.writeProperty("role", role);
         return this;
     }
 
     public String getOnclick() {
-        return onclick;
+        return (String) this.readProperty("onclick");
     }
 
     public UISpan setOnclick(String onclick) {
-        this.onclick = onclick;
+        this.writeProperty("onclick", onclick);
         return this;
     }
 
-    public String getUrl() {
-        return url;
+    @Deprecated
+    private String getUrl() {
+        return (String) this.url.readProperty("href");
     }
 
-    public UISpan setUrl(String url) {
-        this.url = url;
+    @Deprecated
+    public UISpan setUrl(String href) {
+        this.url.writeProperty("href", href);
         return this;
     }
 
-    public String getTarget() {
-        return target;
+    @Deprecated
+    private String getTarget() {
+        return (String) url.readProperty("target");
     }
 
+    @Deprecated
     public UISpan setTarget(String target) {
-        this.target = target;
+        url.writeProperty("target", target);
         return this;
     }
+
 }

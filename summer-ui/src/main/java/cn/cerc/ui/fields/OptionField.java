@@ -3,23 +3,20 @@ package cn.cerc.ui.fields;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import cn.cerc.core.Record;
 import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 
 public class OptionField extends AbstractField {
     private String defaultValue;
     private int size;// 默认显示行数
-    private Map<String, String> items = new LinkedHashMap<>();
+    private final Map<String, String> items = new LinkedHashMap<>();
 
     public OptionField(UIComponent owner, String name, String field) {
-        super(owner, name, 0);
-        this.setField(field);
+        super(owner, name, field, 0);
     }
 
     public OptionField(UIComponent owner, String name, String field, int width) {
-        super(owner, name, width);
-        this.setField(field);
+        super(owner, name, field, width);
     }
 
     @Deprecated
@@ -43,19 +40,6 @@ public class OptionField extends AbstractField {
     }
 
     @Override
-    public String getText(Record record) {
-        if (record == null) {
-            return null;
-        }
-        if (buildText != null) {
-            HtmlWriter html = new HtmlWriter();
-            buildText.outputText(record, html);
-            return html.toString();
-        }
-        return record.getString(getField());
-    }
-
-    @Override
     public String getString() {
         String result = super.getString();
         if (result == null || "".equals(result)) {
@@ -66,8 +50,7 @@ public class OptionField extends AbstractField {
 
     @Override
     public void output(HtmlWriter html) {
-        Record record = dataSource != null ? dataSource.getDataSet().getCurrent() : null;
-        String current = this.getText(record);
+        String current = this.getText();
         html.println("<label for=\"%s\">%s</label>", this.getId(), this.getName() + "：");
         html.print("<select id=\"%s\" name=\"%s\"", this.getId(), this.getId());
         if (this.size > 0) {

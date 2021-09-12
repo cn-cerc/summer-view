@@ -1,12 +1,8 @@
 package cn.cerc.ui.fields;
 
-import cn.cerc.core.DataSet;
-import cn.cerc.core.Record;
 import cn.cerc.ui.core.HtmlWriter;
-import cn.cerc.ui.core.IFormatColumn;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.fields.editor.CheckEditor;
-import cn.cerc.ui.grid.lines.AbstractGridLine;
 import cn.cerc.ui.other.SearchItem;
 
 public class BooleanField extends AbstractField implements SearchItem, IFormatColumn {
@@ -21,22 +17,18 @@ public class BooleanField extends AbstractField implements SearchItem, IFormatCo
     }
 
     public BooleanField(UIComponent owner, String title, String field, int width) {
-        super(owner, title, width);
-        this.setField(field);
+        super(owner, title, field, width);
         this.setAlign("center");
     }
 
     @Override
-    public String getText(Record record) {
-        if (record == null) {
-            return null;
-        }
+    public String getText() {
         if (buildText != null) {
             HtmlWriter html = new HtmlWriter();
-            buildText.outputText(record, html);
+            buildText.outputText(getCurrent(), html);
             return html.toString();
         }
-        return record.getBoolean(field) ? trueText : falseText;
+        return getCurrent().getBoolean(this.getField()) ? trueText : falseText;
     }
 
     public BooleanField setBooleanText(String trueText, String falseText) {
@@ -62,11 +54,7 @@ public class BooleanField extends AbstractField implements SearchItem, IFormatCo
     private void writeInput(HtmlWriter html) {
         html.print(String.format("<input type=\"checkbox\" id=\"%s\" name=\"%s\" value=\"1\"", this.getId(),
                 this.getId()));
-        boolean val = false;
-        DataSet dataSet = dataSource != null ? dataSource.getDataSet() : null;
-        if (dataSet != null) {
-            val = dataSet.getBoolean(field);
-        }
+        boolean val = getCurrent().getBoolean(this.getField());
         if (val) {
             html.print(" checked");
         }
@@ -99,21 +87,12 @@ public class BooleanField extends AbstractField implements SearchItem, IFormatCo
     }
 
     @Override
-    public String format(Object value) {
-        if (!(value instanceof Record)) {
-            return value.toString();
-        }
-
-        Record ds = (Record) value;
+    public void outputOfGridLine(HtmlWriter html) {
         if (this.isReadonly()) {
-            return getText(ds);
+            html.print(getText());
+        } else {
+            html.print(getEditor().format(getCurrent()));
         }
-
-        if (!(this.getOwner() instanceof AbstractGridLine)) {
-            return getText(ds);
-        }
-
-        return getEditor().format(ds);
     }
 
     public CheckEditor getEditor() {

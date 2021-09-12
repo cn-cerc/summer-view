@@ -1,7 +1,6 @@
 package cn.cerc.ui.fields;
 
 import cn.cerc.core.ClassConfig;
-import cn.cerc.core.Record;
 import cn.cerc.mis.core.Application;
 import cn.cerc.ui.SummerUI;
 import cn.cerc.ui.core.HtmlWriter;
@@ -11,16 +10,14 @@ public class DateField extends AbstractField {
     private static final ClassConfig config = new ClassConfig(DateField.class, SummerUI.ID);
 
     public DateField(UIComponent owner, String name, String field) {
-        super(owner, name, 5);
-        this.setField(field);
+        super(owner, name, field, 5);
         this.setDialog("showDateDialog");
         this.setIcon(Application.getStaticPath() + config.getClassProperty("icon", ""));
         this.setAlign("center");
     }
 
     public DateField(UIComponent owner, String name, String field, int width) {
-        super(owner, name, width);
-        this.setField(field);
+        super(owner, name, field, width);
         this.setDialog("showDateDialog");
         this.setIcon(Application.getStaticPath() + config.getClassProperty("icon", ""));
         this.setAlign("center");
@@ -34,17 +31,14 @@ public class DateField extends AbstractField {
     }
 
     @Override
-    public String getText(Record record) {
-        if (record == null) {
-            return null;
-        }
+    public String getText() {
         if (buildText != null) {
             HtmlWriter html = new HtmlWriter();
-            buildText.outputText(record, html);
+            buildText.outputText(getCurrent(), html);
             return html.toString();
         }
-        if (record.hasValue(getField())) {
-            return record.getDatetime(getField()).getDate();
+        if (getCurrent().hasValue(getField())) {
+            return getCurrent().getDatetime(getField()).getDate();
         } else {
             return "";
         }

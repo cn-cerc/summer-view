@@ -19,60 +19,33 @@ public class UIInput extends UIBaseHtml implements INameOwner {
     private String caption;
     private String name;
     private String value;
-    private boolean readonly;
-    private boolean required;
     private boolean hidden;
+    private boolean required;
+    private boolean readonly;
     private boolean checked;
-    private String placeholder;
     private String inputType = TYPE_TEXT;
 
     public UIInput(UIComponent owner) {
         super(owner);
+        this.setRootLabel("input");
     }
 
     @Override
-    public void output(HtmlWriter html) {
-        if (this.caption != null) {
+    public void beginOutput(HtmlWriter html) {
+        if (this.caption != null)
             html.print(this.caption);
+        this.writeProperty("name", this.getName());
+        this.writeProperty("type", this.hidden ? "hidden" : this.inputType);
+        this.writeProperty("value", this.value);
+        if (!this.hidden) {
+            this.writeProperty("readonly", this.readonly ? "readonly" : null);
+            StringBuffer sb = new StringBuffer();
+            sb.append(this.required ? " required" : "");
+            sb.append(this.checked ? " checked" : "");
+            if (sb.length() > 0)
+                this.writeProperty(null, sb.toString().trim());
         }
-        html.print("<input");
-
-        if (getId() != null) {
-            html.print(String.format(" id=\"%s\"", getId()));
-        }
-        if (name != null) {
-            html.print(String.format(" name=\"%s\"", name));
-        } else if (this.getId() != null) {
-            html.print(String.format(" name=\"%s\"", getId()));
-        }
-        if (this.readonly) {
-            html.print(" readonly=\"readonly\"");
-        }
-        if (value != null) {
-            html.print(String.format(" value=\"%s\"", value));
-        }
-        if (this.hidden) {
-            html.println(" type=\"hidden\" />");
-            return;
-        }
-
-        if (this.isChecked()) {
-            html.print(" checked");
-        }
-        // 以下为附加功能
-        if (this.required) {
-            html.print(" required");
-        }
-        if (inputType != null) {
-            html.print(" type=\"%s\"", this.inputType);
-            if (this.isChecked()) {
-                html.print(" checked");
-            }
-        }
-        if (placeholder != null) {
-            html.print(" placeholder=\"%s\"", this.placeholder);
-        }
-        html.println(" />");
+        super.beginOutput(html);
     }
 
     public String getCaption() {
@@ -87,9 +60,7 @@ public class UIInput extends UIBaseHtml implements INameOwner {
 
     @Override
     public String getName() {
-        if (name == null)
-            name = this.getId();
-        return name;
+        return name != null ? this.name : this.getId();
     }
 
     public UIInput setName(String name) {
@@ -115,19 +86,11 @@ public class UIInput extends UIBaseHtml implements INameOwner {
     }
 
     public String getPlaceholder() {
-        return placeholder;
+        return (String) this.readProperty("placeholder");
     }
 
     public void setPlaceholder(String placeholder) {
-        this.placeholder = placeholder;
-    }
-
-    public boolean isHidden() {
-        return hidden;
-    }
-
-    public void setHidden(boolean hidden) {
-        this.hidden = hidden;
+        this.writeProperty("placeholder", placeholder);
     }
 
     public String getInputType() {
@@ -144,6 +107,14 @@ public class UIInput extends UIBaseHtml implements INameOwner {
 
     public void setRequired(boolean required) {
         this.required = required;
+    }
+
+    public boolean isHidden() {
+        return hidden;
+    }
+
+    public void setHidden(boolean hidden) {
+        this.hidden = hidden;
     }
 
     public boolean isChecked() {

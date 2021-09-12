@@ -1,11 +1,12 @@
 package cn.cerc.ui.core;
 
-public interface IField {
-    String getTitle();
+import cn.cerc.ui.fields.AbstractField;
 
-    String getField();
+@Deprecated
+public class IField extends AbstractField {
 
-    int getWidth();
-
-    String getAlign();
+    public IField(UIComponent owner, String name, String field) {
+        super(owner, name, field);
+    }
+    
 }

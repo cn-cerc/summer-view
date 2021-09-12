@@ -1,6 +1,5 @@
 package cn.cerc.ui.fields;
 
-import cn.cerc.core.Record;
 import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 
@@ -9,14 +8,12 @@ public class ButtonField extends AbstractField {
     private String type;
 
     public ButtonField() {
-        super(null, null, 0);
+        super(null, null, null);
     }
 
-    public ButtonField(UIComponent owner, String name, String id, String data) {
-        super(owner, name, 0);
-        this.setField(id);
+    public ButtonField(UIComponent owner, String name, String field, String data) {
+        super(owner, name, field);
         this.data = data;
-        this.setId(id);
     }
 
     public String getData() {
@@ -26,19 +23,6 @@ public class ButtonField extends AbstractField {
     public ButtonField setData(String data) {
         this.data = data;
         return this;
-    }
-
-    @Override
-    public String getText(Record record) {
-        if (record == null) {
-            return null;
-        }
-        if (buildText != null) {
-            HtmlWriter html = new HtmlWriter();
-            buildText.outputText(record, html);
-            return html.toString();
-        }
-        return record.getString(getField());
     }
 
     @Override

@@ -4,10 +4,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import cn.cerc.core.ClassResource;
-import cn.cerc.core.Record;
 import cn.cerc.ui.SummerUI;
 import cn.cerc.ui.core.HtmlWriter;
-import cn.cerc.ui.core.IFormatColumn;
 import cn.cerc.ui.core.UIComponent;
 
 /**
@@ -27,22 +25,18 @@ public class SelectField extends AbstractField implements IFormatColumn {
     }
 
     public SelectField(UIComponent owner, String title, String field, int width) {
-        super(owner, title, width);
-        this.setField(field);
+        super(owner, title, field, width);
         this.setAlign("center");
     }
 
     @Override
-    public String getText(Record record) {
-        if (record == null) {
-            return null;
-        }
+    public String getText() {
         if (buildText != null) {
             HtmlWriter html = new HtmlWriter();
-            buildText.outputText(record, html);
+            buildText.outputText(getCurrent(), html);
             return html.toString();
         }
-        String val = record.getString(field);
+        String val = getCurrent().getString(this.getField());
         if ("true".equalsIgnoreCase(val) || "false".equalsIgnoreCase(val)) {
             return Boolean.valueOf(val) ? trueText : falseText;
         }
@@ -56,10 +50,6 @@ public class SelectField extends AbstractField implements IFormatColumn {
 
     @Override
     public void output(HtmlWriter html) {
-        writeInput(html);
-    }
-
-    private String writeInput(HtmlWriter html) {
         html.print("<select name=\"%s\" role=\"%s\"", this.getId(), this.getField());
         if (!this.isReadonly() && getOnChange() != null) {
             html.print(" onChange=\"%s\"", getOnChange());
@@ -69,8 +59,7 @@ public class SelectField extends AbstractField implements IFormatColumn {
         } else {
             html.print(">");
         }
-        Record record = dataSource != null ? dataSource.getDataSet().getCurrent() : null;
-        String current = record.getString(this.getField());
+        String current = getCurrent().getString(this.getField());
         for (String key : items.keySet()) {
             if (key.equals(current)) {
                 html.print("<option value=\"%s\" selected>%s</option>", key, items.get(key));
@@ -79,7 +68,6 @@ public class SelectField extends AbstractField implements IFormatColumn {
             }
         }
         html.print("</select>");
-        return html.toString();
     }
 
     @Override
@@ -105,8 +93,8 @@ public class SelectField extends AbstractField implements IFormatColumn {
     }
 
     @Override
-    public String format(Object value) {
-        return writeInput(new HtmlWriter());
+    public void outputOfGridLine(HtmlWriter html) {
+        this.output(html);
     }
 
     public String getOnChange() {

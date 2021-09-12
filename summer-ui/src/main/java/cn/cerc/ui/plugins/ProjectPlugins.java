@@ -26,9 +26,10 @@ public class ProjectPlugins {
 
     /**
      * 判断当前项目的当前对象，是否存在插件，如FrmProduct_Diaoyou（必须继承IPlugins）
-     * 
-     * @param owner 插件拥有者，一般为 form
-     * 
+     *
+     * @param owner        插件拥有者，一般为 form
+     * @param requiredType IPlugins 的实现类
+     * @return 是否存在插件
      */
     public static boolean exists(Object owner, Class<? extends IPlugins> requiredType) {
         if (projectId == null || "".equals(projectId))
@@ -50,8 +51,10 @@ public class ProjectPlugins {
 
     /**
      * 返回当前项目的当前对象之插件对象，如FrmProduct_Diaoyou（必须继承IPlugins）
-     * 
-     * @param owner 插件拥有者，一般为 form
+     *
+     * @param owner        插件拥有者，一般为 form
+     * @param requiredType IPlugins 的实现类
+     * @return 插件对象本身
      */
     public static <T> T getBean(Object owner, Class<T> requiredType) {
         if (projectId == null || "".equals(projectId))

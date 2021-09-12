@@ -8,12 +8,12 @@ import org.slf4j.LoggerFactory;
 
 import cn.cerc.core.ClassResource;
 import cn.cerc.core.DataSet;
+import cn.cerc.core.DataSource;
+import cn.cerc.core.Record;
 import cn.cerc.core.Utils;
 import cn.cerc.mis.core.IForm;
 import cn.cerc.ui.SummerUI;
-import cn.cerc.ui.core.DataSource;
 import cn.cerc.ui.core.HtmlWriter;
-import cn.cerc.ui.core.IField;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.fields.AbstractField;
 import cn.cerc.ui.grid.lines.AbstractGridLine;
@@ -40,25 +40,28 @@ public class DataGrid extends UIComponent implements DataSource {
     private MutiPage pages = new MutiPage();
     private IForm form;
     // 以下参数为WEB模式下时专用
-    private String CssClass = "dbgrid";
-    private String CssStyle;
+    private String gridCssClass = "dbgrid";
+    private String gridCssStyle;
     // 输出每列时的事件
     private OutputEvent beforeOutput;
 
-    public DataGrid(UIComponent owner, IForm form) {
+    public DataGrid(UIComponent owner) {
         super(owner);
+        this.setRootLabel("div");
+        this.setCssClass("scrollArea");
         this.setId("grid");
-        this.form = form;
-        lines.add(new MasterGridLine(this, this));
-        pages.setRequest(form.getRequest());
+        lines.add(new MasterGridLine(this));
+        if (this.getOrigin() instanceof IForm) {
+            this.form = (IForm) this.getOrigin();
+            pages.setRequest(this.form.getRequest());
+        }
     }
 
     @Deprecated
     public DataGrid(IForm form, UIComponent owner) {
-        this(owner, form);
+        this(owner);
     }
 
-    @Override
     public DataSet getDataSet() {
         return dataSet;
     }
@@ -68,13 +71,18 @@ public class DataGrid extends UIComponent implements DataSource {
         pages.setDataSet(dataSet);
     }
 
+    @Deprecated
+    public void addField(AbstractField field) {
+        this.addComponent(field);
+    }
+
     @Override
-    public void addField(IField field) {
-        if (field instanceof AbstractField) {
-            AbstractField obj = (AbstractField) field;
-            obj.setOwner(getMasterLine());
+    public void addComponent(UIComponent child) {
+        if (child instanceof AbstractField) {
+            child.setOwner(getMasterLine());
+        } else {
+            super.addComponent(child);
         }
-        getMasterLine().addField(field);
     }
 
     public MutiPage getPages() {
@@ -83,9 +91,9 @@ public class DataGrid extends UIComponent implements DataSource {
 
     public List<AbstractField> getFields() {
         List<AbstractField> items = new ArrayList<>();
-        for (IField obj : lines.get(0).getFields()) {
+        for (AbstractField obj : lines.get(0).getFields()) {
             if (obj instanceof AbstractField) {
-                items.add((AbstractField) obj);
+                items.add(obj);
             }
         }
         return items;
@@ -106,7 +114,7 @@ public class DataGrid extends UIComponent implements DataSource {
             return this;
         } else {
             if (expender == null) {
-                expender = new ExpenderGridLine(this, this);
+                expender = new ExpenderGridLine(this);
                 this.getLines().add(expender);
             }
             return expender;
@@ -119,7 +127,7 @@ public class DataGrid extends UIComponent implements DataSource {
 
     public AbstractGridLine getLine(int index) {
         if (index == lines.size()) {
-            lines.add(new ChildGridLine(this, this));
+            lines.add(new ChildGridLine(this));
         }
         return lines.get(index);
     }
@@ -133,41 +141,28 @@ public class DataGrid extends UIComponent implements DataSource {
         return true;
     }
 
-    @Override
-    public final void updateValue(String id, String code) {
-
-    }
-
     public final String getCSSClass() {
-        return CssClass;
+        return gridCssClass;
     }
 
     public final void setCSSClass(String CSSClass) {
-        this.CssClass = CSSClass;
+        this.gridCssClass = CSSClass;
     }
 
     @Override
     public final void output(HtmlWriter html) {
-        html.print("<div class='scrollArea'>");
-        if (form.getClient().isPhone()) {
-            if (this.getDataSet().size() > 0) {
-                outputGrid(html);
-            }
-        } else {
-            outputGrid(html);
+        this.beginOutput(html);
+        if (!this.isPhone() || this.getDataSet().size() > 0) {
+            if (getForm() != null)
+                getForm().beginOutput(html);
+            if (this.isPhone())
+                this.outputPhoneGrid(html);
+            else
+                this.outputWebGrid(html);
+            if (getForm() != null)
+                getForm().endOutput(html);
         }
-        html.print("</div>");
-    }
-
-    private void outputGrid(HtmlWriter html) {
-        if (getForm() != null)
-            getForm().beginOutput(html);
-        if (form.getClient().isPhone())
-            this.outputPhoneGrid(html);
-        else
-            this.outputWebGrid(html);
-        if (getForm() != null)
-            getForm().endOutput(html);
+        this.endOutput(html);
     }
 
     private void outputWebGrid(HtmlWriter html) {
@@ -186,15 +181,15 @@ public class DataGrid extends UIComponent implements DataSource {
             throw new RuntimeException(String.format(res.getString(2, "总列宽不允许大于%s"), MaxWidth));
         }
 
-        html.print("<table class=\"%s\"", this.CssClass);
-        if (this.CssStyle != null) {
-            html.print(" style=\"%s\"", this.CssStyle);
+        html.print("<table class=\"%s\"", this.gridCssClass);
+        if (this.gridCssStyle != null) {
+            html.print(" style=\"%s\"", this.gridCssStyle);
         }
         html.println(">");
 
         html.println("<tr>");
         for (RowCell cell : this.getMasterLine().getOutputCells()) {
-            IField field = cell.getFields().get(0);
+            AbstractField field = cell.getFields().get(0);
             html.print("<th");
             if (field.getWidth() == 0) {
                 html.print(" style=\"display:none\"");
@@ -205,7 +200,7 @@ public class DataGrid extends UIComponent implements DataSource {
 
             html.print("onclick=\"gridSort(this,'%s')\"", field.getField());
             html.print(">");
-            html.print(field.getTitle());
+            html.print(field.getName());
             html.println("</th>");
         }
         html.println("</tr>");
@@ -272,13 +267,13 @@ public class DataGrid extends UIComponent implements DataSource {
     }
 
     public String getCSSStyle() {
-        return CssStyle;
+        return gridCssStyle;
     }
 
     public void setCSSStyle(String cSSStyle) {
         if (form.getClient().isPhone())
             log.info("only support web device");
-        CssStyle = cSSStyle;
+        gridCssStyle = cSSStyle;
     }
 
     public OutputEvent getBeforeOutput() {
@@ -315,6 +310,11 @@ public class DataGrid extends UIComponent implements DataSource {
         PhoneLine line = new PhoneLine(this);
         phoneLines.add(line);
         return line;
+    }
+
+    @Override
+    public Record getCurrent() {
+        return this.dataSet.getCurrent();
     }
 
 }

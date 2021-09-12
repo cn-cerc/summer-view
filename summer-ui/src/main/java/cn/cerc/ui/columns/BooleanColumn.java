@@ -49,7 +49,7 @@ public class BooleanColumn extends AbstractColumn implements IDataColumn {
             html.print(value ? "是" : "否");
         } else {
             UILabel label = new UILabel();
-            label.setFocusTarget(this.getCode());
+            label.setFor(this.getCode());
             label.setText(getName() + "：");
             label.output(html);
 
@@ -76,7 +76,7 @@ public class BooleanColumn extends AbstractColumn implements IDataColumn {
 
         if (!this.isHidden()) {
             UILabel label = new UILabel();
-            label.setFocusTarget(this.getCode());
+            label.setFor(this.getCode());
             label.setText(getName() + "：");
             label.output(html);
         }

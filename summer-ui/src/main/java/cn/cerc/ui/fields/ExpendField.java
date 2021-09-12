@@ -1,7 +1,6 @@
 package cn.cerc.ui.fields;
 
 import cn.cerc.core.ClassResource;
-import cn.cerc.core.Record;
 import cn.cerc.ui.SummerUI;
 import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
@@ -22,26 +21,22 @@ public class ExpendField extends AbstractField implements SearchItem {
     }
 
     public ExpendField(UIComponent owner, String name, String field, int width) {
-        super(owner, name, width);
-        this.setField(field);
+        super(owner, name, field, width);
         this.setAlign("center");
         this.setCSSClass_phone("right");
     }
 
     @Override
-    public String getText(Record record) {
-        if (record == null) {
-            return null;
-        }
+    public String getText() {
         if (this.search) {
             return this.getName();
         }
         if (buildText != null) {
             HtmlWriter html = new HtmlWriter();
-            buildText.outputText(record, html);
+            buildText.outputText(getCurrent(), html);
             return html.toString();
         }
-        return String.format("<a href=\"javascript:displaySwitch('%d')\">%s</a>", dataSource.getDataSet().getRecNo(), res.getString(1, "展开"));
+        return String.format("<a href=\"javascript:displaySwitch('%d')\">%s</a>", getCurrent().getDataSet().getRecNo(), res.getString(1, "展开"));
     }
 
     @Override
@@ -66,7 +61,7 @@ public class ExpendField extends AbstractField implements SearchItem {
         if (this.search) {
             return hiddenId;
         }
-        return "" + dataSource.getDataSet().getRecNo();
+        return "" + getCurrent().getDataSet().getRecNo();
     }
 
     public void setHiddenId(String hiddenId) {

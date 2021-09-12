@@ -74,7 +74,7 @@ public class VideoColumn extends AbstractColumn implements IDataColumn {
             html.print(text);
         } else {
             UILabel label = new UILabel();
-            label.setFocusTarget(this.getCode());
+            label.setFor(this.getCode());
             label.setText(getName() + "：");
             label.output(html);
             input.setId(getCode());
@@ -90,7 +90,7 @@ public class VideoColumn extends AbstractColumn implements IDataColumn {
 
         if (!this.isHidden()) {
             UILabel label = new UILabel();
-            label.setFocusTarget(this.getCode());
+            label.setFor(this.getCode());
             label.setText(getName() + "：");
             label.output(html);
         }

@@ -1,23 +1,21 @@
 package cn.cerc.ui.fields;
 
-import cn.cerc.core.Record;
 import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 
 public class CustomField extends AbstractField {
 
     public CustomField(UIComponent dataView, String name, int width) {
-        super(dataView, name, width);
-        this.setField("_selectCheckBox_");
+        super(dataView, name, "_selectCheckBox_", width);
     }
 
     @Override
-    public String getText(Record record) {
+    public String getText() {
         if (buildText == null) {
             return "";
         }
         HtmlWriter html = new HtmlWriter();
-        buildText.outputText(record, html);
+        buildText.outputText(getCurrent(), html);
         return html.toString();
     }
 

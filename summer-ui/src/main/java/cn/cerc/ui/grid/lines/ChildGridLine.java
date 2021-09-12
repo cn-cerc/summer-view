@@ -1,29 +1,26 @@
 package cn.cerc.ui.grid.lines;
 
-import cn.cerc.ui.core.DataSource;
 import cn.cerc.ui.core.HtmlWriter;
-import cn.cerc.ui.core.IField;
-import cn.cerc.ui.core.IFormatColumn;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.fields.AbstractField;
 import cn.cerc.ui.grid.RowCell;
 
 public class ChildGridLine extends AbstractGridLine {
 
-    public ChildGridLine(UIComponent owner, DataSource dataSource) {
-        super(owner, dataSource);
+    public ChildGridLine(UIComponent owner) {
+        super(owner);
     }
 
     @Override
     public void output(HtmlWriter html, int lineNo) {
         html.print("<tr");
-        html.print(" id='%s_%s'", "tr" + dataSource.getDataSet().getRecNo(), lineNo);
+        html.print(" id='%s_%s'", "tr" + getCurrent().getDataSet().getRecNo(), lineNo);
         if (!this.isVisible()) {
             html.print(" style=\"display:none\"");
         }
         html.println(">");
         for (RowCell item : this.getCells()) {
-            IField objField = item.getFields().get(0);
+            AbstractField objField = item.getFields().get(0);
             html.print("<td");
             if (item.getColSpan() > 1) {
                 html.print(" colspan=\"%d\"", item.getColSpan());
@@ -44,22 +41,12 @@ public class ChildGridLine extends AbstractGridLine {
             }
 
             html.print(">");
-            for (IField obj : item.getFields()) {
-                if (obj instanceof AbstractField) {
-                    String resultHtml = "";
-                    AbstractField field = (AbstractField) obj;
-                    if (field instanceof IFormatColumn) {
-                        resultHtml = ((IFormatColumn) field).format(dataSource.getDataSet().getCurrent());
-                    } else {
-                        HtmlWriter tempHtml = new HtmlWriter();
-                        outputField(tempHtml, field);
-                        resultHtml = tempHtml.toString();
-                    }
-                    if (field.getTitle() != null && !"".equals(field.getTitle())) {
-                        html.print("<span>%s：</span> ", field.getTitle());
-                    }
-                    html.print(resultHtml);
+            for (AbstractField field : item.getFields()) {
+                if (field.getName() != null && !"".equals(field.getName())) {
+                    html.print("<span>%s：</span> ", field.getName());
                 }
+
+                field.outputOfGridLine(html);
             }
             html.println("</td>");
         }
@@ -67,24 +54,19 @@ public class ChildGridLine extends AbstractGridLine {
     }
 
     @Override
-    public void addField(IField field) {
-        getFields().add(field);
-        RowCell col;
-        col = new RowCell(null);
-        col.setAlign(field.getAlign());
-        col.setRole(field.getField());
-        getCells().add(col);
-        col.addField(field);
-    }
-
-    @Override
-    public boolean isReadonly() {
-        return dataSource.isReadonly();
-    }
-
-    @Override
-    public void updateValue(String id, String code) {
-        dataSource.updateValue(id, code);
+    public void addComponent(UIComponent child) {
+        if (child instanceof AbstractField) {
+            AbstractField field = (AbstractField) child;
+            getFields().add(field);
+            RowCell col;
+            col = new RowCell(null);
+            col.setAlign(field.getAlign());
+            col.setRole(field.getField());
+            getCells().add(col);
+            col.addField(field);
+        } else {
+            super.addComponent(child);
+        }
     }
 
 }

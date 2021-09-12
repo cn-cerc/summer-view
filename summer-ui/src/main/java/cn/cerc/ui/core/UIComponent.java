@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import cn.cerc.mis.core.IForm;
+import cn.cerc.mis.core.IOriginOwner;
 
 public class UIComponent implements IOriginOwner, Iterable<UIComponent> {
     private List<UIComponent> components = new ArrayList<>();
@@ -37,7 +38,7 @@ public class UIComponent implements IOriginOwner, Iterable<UIComponent> {
     }
 
     public void addComponent(UIComponent component) {
-        if (!components.contains(component))
+        if (component != null && !components.contains(component))
             components.add(component);
     }
 
@@ -103,7 +104,9 @@ public class UIComponent implements IOriginOwner, Iterable<UIComponent> {
 
     protected void outputPropertys(HtmlWriter html) {
         propertys.forEach((key, value) -> {
-            if (value != null && !"".equals(value)) {
+            if (key == null) {
+                html.print(" %s", value);
+            } else if (value != null && !"".equals(value)) {
                 if (value instanceof Integer)
                     html.print(" %s=%s", key, value);
                 else

@@ -55,7 +55,7 @@ public class IntColumn extends AbstractColumn implements IDataColumn {
             html.print(getText());
         } else {
             UILabel label = new UILabel();
-            label.setFocusTarget(this.getCode());
+            label.setFor(this.getCode());
             label.setText(getName() + "：");
             label.output(html);
             input.setId(getCode());
@@ -74,7 +74,7 @@ public class IntColumn extends AbstractColumn implements IDataColumn {
     public void outputLine(HtmlWriter html) {
         if (!this.isHidden()) {
             UILabel label = new UILabel();
-            label.setFocusTarget(this.getCode());
+            label.setFor(this.getCode());
             label.setText(getName() + "：");
             label.output(html);
         }

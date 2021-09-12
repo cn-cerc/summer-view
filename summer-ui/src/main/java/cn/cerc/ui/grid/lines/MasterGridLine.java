@@ -2,32 +2,26 @@ package cn.cerc.ui.grid.lines;
 
 import java.util.List;
 
-import cn.cerc.core.ClassResource;
 import cn.cerc.core.DataSet;
-import cn.cerc.ui.SummerUI;
-import cn.cerc.ui.core.DataSource;
 import cn.cerc.ui.core.HtmlWriter;
-import cn.cerc.ui.core.IField;
-import cn.cerc.ui.core.IFormatColumn;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.fields.AbstractField;
 import cn.cerc.ui.grid.IColumnsManager;
 import cn.cerc.ui.grid.RowCell;
 
 public class MasterGridLine extends AbstractGridLine {
-    private static final ClassResource res = new ClassResource(MasterGridLine.class, SummerUI.ID);
-
+    //
     private String primaryKey;
     // 列管理器，用于支持自定义栏位
     private IColumnsManager manager;
 
-    public MasterGridLine(UIComponent owner, DataSource dataSource) {
-        super(owner, dataSource);
+    public MasterGridLine(UIComponent owner) {
+        super(owner);
     }
 
     @Override
     public void output(HtmlWriter html, int lineNo) {
-        DataSet dataSet = dataSource.getDataSet();
+        DataSet dataSet = getCurrent().getDataSet();
         html.print("<tr");
         html.print(" id='%s'", "tr" + dataSet.getRecNo());
         if (this.getPrimaryKey() != null) {
@@ -35,40 +29,31 @@ public class MasterGridLine extends AbstractGridLine {
         }
         html.println(">");
         for (RowCell cell : this.getOutputCells()) {
-            IField obj = cell.getFields().get(0);
+            AbstractField field = cell.getFields().get(0);
             html.print("<td");
             if (cell.getColSpan() > 1) {
                 html.print(" colspan=\"%d\"", cell.getColSpan());
             }
             if (cell.getStyle() != null) {
                 html.print(" style=\"%s\"", cell.getStyle());
-            } else if (obj.getWidth() == 0) {
+            } else if (field.getWidth() == 0) {
                 html.print(" style=\"%s\"", "display:none");
             }
 
             if (cell.getAlign() != null) {
                 html.print(" align=\"%s\"", cell.getAlign());
-            } else if (obj.getAlign() != null) {
-                html.print(" align=\"%s\"", obj.getAlign());
+            } else if (field.getAlign() != null) {
+                html.print(" align=\"%s\"", field.getAlign());
             }
 
             if (cell.getRole() != null) {
                 html.print(" role=\"%s\"", cell.getRole());
-            } else if (obj.getField() != null) {
-                html.print(" role=\"%s\"", obj.getField());
+            } else if (field.getField() != null) {
+                html.print(" role=\"%s\"", field.getField());
             }
-
             html.print(">");
-            if (obj instanceof AbstractField) {
-                AbstractField field = (AbstractField) obj;
-                if (field instanceof IFormatColumn) {
-                    html.print(((IFormatColumn) field).format(dataSource.getDataSet().getCurrent()));
-                } else if (field instanceof AbstractField) {
-                    outputField(html, field);
-                } else {
-                    throw new RuntimeException(String.format(res.getString(1, "暂不支持的数据类型：%s"), field.getClass().getName()));
-                }
-            }
+
+            field.outputOfGridLine(html);
             html.println("</td>");
         }
         html.println("</tr>");
@@ -83,24 +68,20 @@ public class MasterGridLine extends AbstractGridLine {
     }
 
     @Override
-    public void addField(IField field) {
-        getFields().add(field);
-        RowCell col;
-        col = new RowCell(null);
-        col.setAlign(field.getAlign());
-        col.setRole(field.getField());
-        getCells().add(col);
-        col.addField(field);
-    }
+    public void addComponent(UIComponent child) {
+        if (child instanceof AbstractField) {
+            AbstractField field = (AbstractField) child;
+            getFields().add(field);
 
-    @Override
-    public boolean isReadonly() {
-        return dataSource.isReadonly();
-    }
+            RowCell cell = new RowCell(null);
+            getCells().add(cell);
 
-    @Override
-    public void updateValue(String id, String code) {
-        dataSource.updateValue(id, code);
+            cell.setAlign(field.getAlign());
+            cell.setRole(field.getField());
+            cell.addField(field);
+        } else {
+            super.addComponent(child);
+        }
     }
 
     public IColumnsManager getManager() {
@@ -117,4 +98,5 @@ public class MasterGridLine extends AbstractGridLine {
         }
         return manager.Reindex(super.getCells());
     }
+
 }

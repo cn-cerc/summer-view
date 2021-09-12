@@ -80,7 +80,7 @@ public class ImageColumn extends AbstractColumn implements IDataColumn {
             img.output(html);
         } else {
             UILabel label = new UILabel();
-            label.setFocusTarget(this.getCode());
+            label.setFor(this.getCode());
             label.setText(getName() + "：");
             label.output(html);
             input.setId(getCode());
@@ -96,7 +96,7 @@ public class ImageColumn extends AbstractColumn implements IDataColumn {
 
         if (!this.isHidden()) {
             UILabel label = new UILabel();
-            label.setFocusTarget(this.getCode());
+            label.setFor(this.getCode());
             label.setText(getName() + "：");
             label.output(html);
         }

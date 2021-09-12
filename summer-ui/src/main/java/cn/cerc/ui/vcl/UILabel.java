@@ -5,64 +5,35 @@ import cn.cerc.ui.core.UIComponent;
 
 public class UILabel extends UIBaseHtml {
     private String text;
-    private String url;
-    private String focusTarget;
+
+    public UILabel() {
+        this(null);
+    }
 
     public UILabel(UIComponent component) {
         super(component);
+        this.setRootLabel("label");
     }
 
-    public UILabel() {
-        super(null);
+    public String getFor() {
+        return (String) this.readProperty("for");
     }
 
-    public UILabel(String text) {
-        super(null);
-        this.text = text;
+    public UILabel setFor(String focusTarget) {
+        this.writeProperty("for", focusTarget);
+        return this;
     }
 
-    public UILabel(String text, String url) {
-        super(null);
-        this.text = text;
-        this.url = url;
-    }
-
-    public String getFocusTarget() {
-        return focusTarget;
-    }
-
+    @Deprecated
     public void setFocusTarget(String focusTarget) {
-        this.focusTarget = focusTarget;
+        this.setFor(focusTarget);
     }
 
     @Override
-    public void output(HtmlWriter html) {
-        if (url == null) {
-            html.print("<label");
-            if (focusTarget != null) {
-                html.print(" for='%s'", focusTarget);
-            }
-            super.outputPropertys(html);
-            if (this.url != null)
-                html.print(" href='%s'");
-            html.print(">");
-            for (UIComponent item : this)
-                item.output(html);
-            if (this.text != null)
-                html.print(this.text);
-            html.print("</label>");
-        } else {
-            html.print("<a");
-            super.outputPropertys(html);
-            if (this.url != null)
-                html.print(" href='%s'", this.url);
-            html.print(">");
-            for (UIComponent item : this)
-                item.output(html);
-            if (this.text != null)
-                html.print(this.text);
-            html.print("</a>");
-        }
+    public void endOutput(HtmlWriter html) {
+        if (this.text != null)
+            html.print(this.text);
+        super.endOutput(html);
     }
 
     /**
@@ -91,15 +62,6 @@ public class UILabel extends UIBaseHtml {
 
     public UILabel setText(String text) {
         this.text = text;
-        return this;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public UILabel setUrl(String url) {
-        this.url = url;
         return this;
     }
 

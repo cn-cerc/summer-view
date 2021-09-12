@@ -1,46 +1,28 @@
 package cn.cerc.ui.fields;
 
-import cn.cerc.core.Record;
 import cn.cerc.ui.core.HtmlWriter;
-import cn.cerc.ui.core.IFormatColumn;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.core.UrlRecord;
 import cn.cerc.ui.fields.editor.ColumnEditor;
-import cn.cerc.ui.grid.lines.AbstractGridLine;
 
 public class StringField extends AbstractField implements IFormatColumn {
     private ColumnEditor editor;
 
     public StringField(UIComponent owner, String name, String field) {
-        super(owner, name, 0);
-        this.setField(field);
+        super(owner, name, field);
     }
 
     public StringField(UIComponent owner, String name, String field, int width) {
-        super(owner, name, 0);
-        this.setField(field);
+        super(owner, name, field);
         this.setWidth(width);
     }
 
     @Override
-    public String getText(Record record) {
-        return getDefaultText(record);
-    }
-
-    @Override
-    public String format(Object value) {
-        if (!(value instanceof Record)) {
-            return value.toString();
-        }
-
-        Record record = (Record) value;
-        String data = getDefaultText(record);
-
+    public void outputOfGridLine(HtmlWriter html) {
         if (this.isReadonly()) {
             if (buildUrl != null) {
-                HtmlWriter html = new HtmlWriter();
                 UrlRecord url = new UrlRecord();
-                buildUrl.buildUrl(record, url);
+                buildUrl.buildUrl(getCurrent(), url);
                 if (!"".equals(url.getUrl())) {
                     html.print("<a href=\"%s\"", url.getUrl());
                     if (url.getTitle() != null) {
@@ -49,21 +31,16 @@ public class StringField extends AbstractField implements IFormatColumn {
                     if (url.getTarget() != null) {
                         html.print(" target=\"%s\"", url.getTarget());
                     }
-                    html.println(">%s</a>", data);
+                    html.println(">%s</a>", getText());
                 } else {
-                    html.println(data);
+                    html.println(getText());
                 }
-                return html.toString();
             } else {
-                return data;
+                html.print(getText());
             }
+        } else {
+            html.print(getEditor().format(getCurrent()));
         }
-
-        if (!(this.getOwner() instanceof AbstractGridLine)) {
-            return data;
-        }
-
-        return getEditor().format(record);
     }
 
     public ColumnEditor getEditor() {

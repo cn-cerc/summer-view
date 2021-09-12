@@ -34,16 +34,18 @@ public abstract class UIAbstractPage extends UIComponent implements IPage {
     @Deprecated
     private UIComponent statusBar; // （中间右边下方）下方状态条（Web显示固定）
     private UIComponent address; // 底部区域
-    private IForm form;
-    private Object origin;
     private DefineContent defineHead;
 
     public UIAbstractPage(IForm form) {
-        this.setForm(form);
-        if (form != null) {
-            this.origin = form;
-            this.initComponents(form.getClient());
-        }
+        this.setOrigin(form);
+    }
+
+    @Override
+    public UIAbstractPage setOrigin(Object origin) {
+        super.setOrigin(origin);
+        if (getForm() != null)
+            this.initComponents(getForm().getClient());
+        return this;
     }
 
     /**
@@ -167,12 +169,7 @@ public abstract class UIAbstractPage extends UIComponent implements IPage {
 
     @Override
     public IForm getForm() {
-        return form;
-    }
-
-    @Override
-    public void setForm(IForm form) {
-        this.form = form;
+        return (IForm) this.getOrigin();
     }
 
     public final List<String> getJsFiles() {

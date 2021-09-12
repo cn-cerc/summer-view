@@ -3,8 +3,8 @@ package cn.cerc.ui.grid;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.cerc.ui.core.IField;
 import cn.cerc.ui.core.UIComponent;
+import cn.cerc.ui.fields.AbstractField;
 
 public class RowCell extends UIComponent {
     
@@ -12,7 +12,7 @@ public class RowCell extends UIComponent {
         super(owner);
     }
 
-    private List<IField> fields = new ArrayList<>();
+    private final List<AbstractField> fields = new ArrayList<>();
     private int colSpan = 1;
     private String align;
     private String role;
@@ -26,7 +26,7 @@ public class RowCell extends UIComponent {
         this.align = align;
     }
 
-    public void addField(IField field) {
+    public void addField(AbstractField field) {
         fields.add(field);
     }
 
@@ -38,7 +38,7 @@ public class RowCell extends UIComponent {
         this.colSpan = colSpan;
     }
 
-    public List<IField> getFields() {
+    public List<AbstractField> getFields() {
         return fields;
     }
 

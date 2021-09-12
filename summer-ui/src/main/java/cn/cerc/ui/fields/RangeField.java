@@ -1,35 +1,22 @@
 package cn.cerc.ui.fields;
 
-import cn.cerc.core.ClassResource;
-import cn.cerc.core.DataSet;
-import cn.cerc.core.Record;
-import cn.cerc.ui.SummerUI;
-import cn.cerc.ui.core.DataSource;
 import cn.cerc.ui.core.HtmlWriter;
-import cn.cerc.ui.core.IField;
 import cn.cerc.ui.core.UIComponent;
 
-public class RangeField extends AbstractField implements DataSource {
-    private static final ClassResource res = new ClassResource(RangeField.class, SummerUI.ID);
+public class RangeField extends AbstractField {
 
     public RangeField(UIComponent dataView, String name) {
-        super(dataView, name, 0);
-    }
-
-    @Override
-    public String getText(Record record) {
-        return getDefaultText(record);
+        super(dataView, name, "_range_", 0);
     }
 
     @Override
     public void output(HtmlWriter html) {
-        Record record = dataSource != null ? dataSource.getDataSet().getCurrent() : null;
         if (this.hidden) {
             html.print("<input");
             html.print(" type=\"hidden\"");
             html.print(" name=\"%s\"", this.getId());
             html.print(" id=\"%s\"", this.getId());
-            String value = this.getText(record);
+            String value = this.getText();
             if (value != null) {
                 html.print(" value=\"%s\"", value);
             }
@@ -45,7 +32,7 @@ public class RangeField extends AbstractField implements DataSource {
                     child = (AbstractField) component;
                     String val = child.getCSSClass_phone();
                     child.setCSSClass_phone("price");
-                    child.outputInput(html, record);
+                    child.outputInput(html);
                     child.setCSSClass_phone(val);
                 }
             }
@@ -62,20 +49,6 @@ public class RangeField extends AbstractField implements DataSource {
     }
 
     @Override
-    public void addField(IField field) {
-        if (field instanceof UIComponent) {
-            this.addComponent((UIComponent) field);
-        } else {
-            throw new RuntimeException(String.format(res.getString(1, "不支持的数据类型：%s"), field.getClass().getName()));
-        }
-    }
-
-    @Override
-    public boolean isReadonly() {
-        return dataSource.isReadonly();
-    }
-
-    @Override
     public void updateField() {
         AbstractField child = null;
         for (UIComponent component : this.getComponents()) {
@@ -86,13 +59,4 @@ public class RangeField extends AbstractField implements DataSource {
         }
     }
 
-    @Override
-    public DataSet getDataSet() {
-        return dataSource.getDataSet();
-    }
-
-    @Override
-    public void updateValue(String id, String code) {
-        dataSource.updateValue(id, code);
-    }
 }

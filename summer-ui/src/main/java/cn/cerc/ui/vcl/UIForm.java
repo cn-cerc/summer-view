@@ -27,27 +27,27 @@ public class UIForm extends UIBaseHtml {
         this.writeProperty("method", "post");
     }
 
-    public String getAction() {
+    public final String getAction() {
         return (String) this.readProperty("action");
     }
 
-    public void setAction(String action) {
+    public final void setAction(String action) {
         this.writeProperty("action", action);
     }
 
-    public String getMethod() {
+    public final String getMethod() {
         return (String) this.readProperty("method");
     }
 
-    public void setMethod(String method) {
+    public final void setMethod(String method) {
         this.writeProperty("method", method);
     }
 
-    public String getEnctype() {
+    public final String getEnctype() {
         return (String) this.readProperty("enctype");
     }
 
-    public void setEnctype(String enctype) {
+    public final void setEnctype(String enctype) {
         this.writeProperty("enctype", enctype);
     }
 

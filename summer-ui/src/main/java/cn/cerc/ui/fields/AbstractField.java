@@ -4,24 +4,32 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import cn.cerc.core.ClassConfig;
+import cn.cerc.core.DataSource;
 import cn.cerc.core.Datetime;
 import cn.cerc.core.FastDate;
 import cn.cerc.core.Record;
 import cn.cerc.mis.cdn.CDN;
 import cn.cerc.ui.SummerUI;
-import cn.cerc.ui.core.DataSource;
 import cn.cerc.ui.core.HtmlWriter;
-import cn.cerc.ui.core.IField;
 import cn.cerc.ui.core.INameOwner;
+import cn.cerc.ui.core.SearchSource;
 import cn.cerc.ui.core.UIComponent;
+import cn.cerc.ui.core.UrlRecord;
 import cn.cerc.ui.other.BuildText;
 import cn.cerc.ui.other.BuildUrl;
+import cn.cerc.ui.vcl.UIImage;
+import cn.cerc.ui.vcl.UIInput;
+import cn.cerc.ui.vcl.UILabel;
+import cn.cerc.ui.vcl.UILi;
+import cn.cerc.ui.vcl.UISpan;
 import cn.cerc.ui.vcl.UIText;
+import cn.cerc.ui.vcl.UITextarea;
+import cn.cerc.ui.vcl.UIUrl;
 
-public abstract class AbstractField extends UIComponent implements IField, INameOwner {
+public abstract class AbstractField extends UIComponent implements INameOwner, SearchSource {
     private static final ClassConfig config = new ClassConfig(AbstractField.class, SummerUI.ID);
     // 数据库相关
-    protected String field;
+    private String field;
     // 自定义取值
     protected BuildText buildText;
     // 焦点否
@@ -44,12 +52,13 @@ public abstract class AbstractField extends UIComponent implements IField, IName
     protected String icon;
     //
     protected BuildUrl buildUrl;
-    //
-    protected DataSource dataSource;
+    // 数据源
+    private DataSource source;
+
     protected String oninput;
     protected String onclick;
     private String htmlTag = "input";
-    private String htmType;
+    private String htmType = UIInput.TYPE_TEXT;
     private String name;
     private String shortName;
     private String align;
@@ -59,7 +68,7 @@ public abstract class AbstractField extends UIComponent implements IField, IName
     // value
     private String value;
     // 只读否
-    private boolean readonly;
+    private int readonly = -1;
     // 自动完成（默认为 off）
     private boolean autocomplete = false;
     // 栏位说明
@@ -77,17 +86,24 @@ public abstract class AbstractField extends UIComponent implements IField, IName
     // 是否显示*号
     private boolean showStar = false;
 
-    public AbstractField(UIComponent owner, String name, int width) {
+    public AbstractField(UIComponent owner, String name, String field) {
+        this(owner, name, field, 0);
+    }
+
+    public AbstractField(UIComponent owner, String name, String field, int width) {
         super(owner);
-        if (owner != null) {
-            if ((owner instanceof DataSource)) {
-                this.dataSource = (DataSource) owner;
-                dataSource.addField(this);
-                this.setReadonly(dataSource.isReadonly());
-            }
-        }
-        this.name = name;
+        this.setField(field);
+        this.setName(name);
         this.width = width;
+        // 查找最近的数据源
+        UIComponent root = owner;
+        while (root != null) {
+            if (root instanceof DataSource) {
+                this.source = (DataSource) root;
+                break;
+            }
+            root = root.getOwner();
+        }
     }
 
     public UIText getMark() {
@@ -107,7 +123,6 @@ public abstract class AbstractField extends UIComponent implements IField, IName
         this.role = role;
     }
 
-    @Override
     public int getWidth() {
         return width;
     }
@@ -138,7 +153,6 @@ public abstract class AbstractField extends UIComponent implements IField, IName
         return this;
     }
 
-    @Override
     public String getAlign() {
         return align;
     }
@@ -158,7 +172,6 @@ public abstract class AbstractField extends UIComponent implements IField, IName
         return this;
     }
 
-    @Override
     public String getField() {
         return field;
     }
@@ -173,13 +186,15 @@ public abstract class AbstractField extends UIComponent implements IField, IName
         }
     }
 
-    public abstract String getText(Record record);
+    public String getText() {
+        return getDefaultText();
+    }
 
     /**
-     * @param record 当前记录集
      * @return 返回输出文本
      */
-    protected String getDefaultText(Record record) {
+    protected String getDefaultText() {
+        Record record = this.getCurrent();
         if (record != null) {
             if (buildText != null) {
                 HtmlWriter html = new HtmlWriter();
@@ -209,12 +224,20 @@ public abstract class AbstractField extends UIComponent implements IField, IName
         CSSClass_phone = cSSClass_phone;
     }
 
-    public boolean isReadonly() {
-        return readonly;
+    @Override
+    public Record getCurrent() {
+        return source != null ? source.getCurrent() : new Record();
+    }
+
+    @Override
+    public final boolean isReadonly() {
+        if (readonly > -1)
+            return readonly == 1;
+        return source != null ? source.isReadonly() : false;
     }
 
     public AbstractField setReadonly(boolean readonly) {
-        this.readonly = readonly;
+        this.readonly = readonly ? 1 : 0;
         return this;
     }
 
@@ -283,140 +306,71 @@ public abstract class AbstractField extends UIComponent implements IField, IName
 
     @Override
     public void output(HtmlWriter html) {
-        Record record = dataSource != null ? dataSource.getDataSet().getCurrent() : null;
         if (this.hidden) {
-            outputInput(html, record);
+            outputInput(html);
         } else {
-            html.println("<label for=\"%s\">%s</label>", this.getId(), this.getName() + "：");
-            outputInput(html, record);
+            UILabel label = new UILabel().setFor(this.getId()).setText(this.getName() + "：");
+            label.output(html);
+            outputInput(html);
             if (this.showStar) {
                 html.println("<font>*</font>");
             }
+            UISpan span = new UISpan();
             if (this.dialog != null && this.dialog.isOpen()) {
-                html.print("<span>");
-                html.print("<a href=\"%s\">", dialog.getUrl());
-
-                if (this.icon != null) {
-                    html.print("<img src=\"%s\">", this.icon);
-                } else {
-                    html.print("<img src=\"%s\">", CDN.get(config.getClassProperty("icon", "")));
-                }
-
-                html.print("</a>");
-                html.println("</span>");
-            } else {
-                html.println("<span></span>");
+                UIUrl url = new UIUrl(span).setHref(dialog.getUrl());
+                UIImage img = new UIImage(url);
+                img.setSrc(this.icon != null ? this.icon : CDN.get(config.getClassProperty("icon", "")));
             }
+            span.output(html);
         }
     }
 
-    protected void outputInput(HtmlWriter html, Record dataSet) {
+    protected void outputInput(HtmlWriter html) {
         if ("textarea".equals(htmlTag)) {
-            outputTextArea(html, dataSet);
+            UITextarea input = new UITextarea(null);
+            input.setId(this.getId());
+            input.setName(this.getId());
+            input.setReadonly(this.isReadonly());
+            input.setCssStyle(resize ? "resize: none;" : null);
+            StringBuffer sb = new StringBuffer();
+            sb.append(this.required ? " required" : "");
+            sb.append(this.autofocus ? " autofocus" : "");
+            if (sb.length() > 0)
+                input.writeProperty(null, sb.toString().trim());
+            input.writeProperty("placeholder", this.placeholder);
+            input.writeProperty("maxlength", maxlength > 0 ? maxlength : null);
+            input.writeProperty("rows", rows > 0 ? rows : null);
+            input.writeProperty("cols", cols > 0 ? cols : null);
+            String value = this.getValue();
+            input.setText(value != null ? value : this.getText());
+            input.output(html);
             return;
         }
 
+        UIInput input = new UIInput(null);
+        input.setId(this.getId());
+        input.setName(this.getId());
+        input.setInputType(this.hidden ? "hidden" : this.getHtmType());
         if (this.hidden) {
-            html.print("<input");
-            html.print(" type=\"hidden\"");
-            html.print(" name=\"%s\"", this.getId());
-            html.print(" id=\"%s\"", this.getId());
-            String value = this.getText(dataSet);
-            if (value != null) {
-                html.print(" value=\"%s\"", value);
-            }
-            html.println("/>");
+            input.setValue(this.getText());
         } else {
-            html.print("<input");
-            if (htmType != null) {
-                html.print(" type=\"%s\"", this.getHtmType());
-            } else {
-                html.print(" type=\"text\"");
-            }
-            html.print(" name=\"%s\"", this.getId());
-            html.print(" id=\"%s\"", this.getId());
-            String value = this.getText(dataSet);
-            if (value != null) {
-                html.print(" value=\"%s\"", value);
-            }
-            if (this.getValue() != null) {
-                html.print(" value=\"%s\"", this.getValue());
-            }
-            if (this.isReadonly()) {
-                html.print(" readonly=\"readonly\"");
-            }
-            if (this.autocomplete) {
-                html.print(" autocomplete=\"on\"");
-            } else {
-                html.print(" autocomplete=\"off\"");
-            }
-            if (this.autofocus) {
-                html.print(" autofocus");
-            }
-            if (this.required) {
-                html.print(" required");
-            }
-            if (this.multiple) {
-                html.print(" multiple");
-            }
-            if (this.placeholder != null) {
-                html.print(" placeholder=\"%s\"", this.placeholder);
-            }
-            if (this.pattern != null) {
-                html.print(" pattern=\"%s\"", this.pattern);
-            }
-            if (this.CSSClass_phone != null) {
-                html.print(" class=\"%s\"", this.CSSClass_phone);
-            }
-            if (this.oninput != null) {
-                html.print(" oninput=\"%s\"", this.oninput);
-            }
-            if (this.onclick != null) {
-                html.print(" onclick=\"%s\"", this.onclick);
-            }
-            html.println("/>");
+            String value = this.getValue();
+            input.setValue(value != null ? value : this.getText());
+            input.setReadonly(this.isReadonly());
+            StringBuffer sb = new StringBuffer();
+            sb.append(this.required ? " required" : "");
+            sb.append(this.autofocus ? " autofocus" : "");
+            sb.append(this.multiple ? " multiple" : "");
+            if (sb.length() > 0)
+                input.writeProperty(null, sb.toString().trim());
+            input.setCssClass(this.CSSClass_phone);
+            input.setPlaceholder(this.placeholder);
+            input.writeProperty("autocomplete", this.autocomplete ? "on" : "off");
+            input.writeProperty("pattern", this.pattern);
+            input.writeProperty("oninput", this.oninput);
+            input.writeProperty("onclick", this.onclick);
         }
-    }
-
-    private void outputTextArea(HtmlWriter html, Record dataSet) {
-        html.print("<textarea");
-        html.print(" id=\"%s\"", this.getId());
-        html.print(" name=\"%s\"", this.getId());
-        String value = this.getText(dataSet);
-
-        if (readonly) {
-            html.print(" readonly=\"readonly\"");
-        }
-        if (autofocus) {
-            html.print(" autofocus");
-        }
-        if (required) {
-            html.print(" required");
-        }
-        if (placeholder != null) {
-            html.print(" placeholder=\"%s\"", placeholder);
-        }
-        if (maxlength > 0) {
-            html.print(" maxlength=\"%s\"", maxlength);
-        }
-        if (rows > 0) {
-            html.print(" rows=\"%s\"", rows);
-        }
-        if (cols > 0) {
-            html.print(" cols=\"%s\"", cols);
-        }
-        if (resize) {
-            html.println("style=\"resize: none;\"");
-        }
-        html.println(">");
-
-        if (value != null) {
-            html.print("%s", value);
-        }
-        if (this.getValue() != null) {
-            html.print("%s", this.getValue());
-        }
-        html.println("</textarea>");
+        input.output(html);
     }
 
     public DialogField getDialog() {
@@ -453,16 +407,13 @@ public abstract class AbstractField extends UIComponent implements IField, IName
     }
 
     public void updateField() {
-        if (dataSource != null) {
-            String field = this.getId();
-            if (field != null && !"".equals(field)) {
-                dataSource.updateValue(this.getId(), this.getField());
-            }
-        }
+        this.updateValue(this.getId(), this.getField());
     }
 
-    public void setDataView(DataSource dataView) {
-        this.dataSource = dataView;
+    @Override
+    public void updateValue(String id, String code) {
+        if (source instanceof SearchSource)
+            ((SearchSource) source).updateValue(id, code);
     }
 
     public String getOninput() {
@@ -483,7 +434,7 @@ public abstract class AbstractField extends UIComponent implements IField, IName
         return this;
     }
 
-    @Override
+    @Deprecated
     public String getTitle() {
         return this.getName();
     }
@@ -507,13 +458,7 @@ public abstract class AbstractField extends UIComponent implements IField, IName
     }
 
     public String getString() {
-        if (dataSource == null) {
-            throw new RuntimeException("owner is null.");
-        }
-        if (dataSource.getDataSet() == null) {
-            throw new RuntimeException("owner.dataSet is null.");
-        }
-        return dataSource.getDataSet().getString(this.getField());
+        return getCurrent().getString(this.getField());
     }
 
     public boolean getBoolean() {
@@ -713,6 +658,56 @@ public abstract class AbstractField extends UIComponent implements IField, IName
                 json.put("dateFormat", this.dateFormat);
             }
             return json.toString().replace("\"", "'");
+        }
+    }
+
+    public void outputOfFormHorizontal(HtmlWriter html) {
+        if (this.isHidden()) {
+            this.output(html);
+            return;
+        }
+        UIText mark = this.getMark();
+        if (mark != null) {
+            UILi li1 = new UILi(null);
+            li1.writeProperty("role", this.getId());
+            if (this instanceof ExpendField)
+                li1.setCssClass("select");
+            li1.setText(this.toString());
+            UIUrl url = new UIUrl(li1);
+            url.setHref(String.format("javascript:displaySwitch(\"%s\")", this.getId()));
+            new UIImage(url).setSrc(CDN.get(config.getClassProperty("icon", "")));
+            li1.output(html);
+            //
+            UILi li2 = new UILi(null);
+            li2.writeProperty("role", this.getId()).setCssStyle("display: none;");
+            li2.setText(mark.setRootLabel("mark").toString()).output(html);
+        } else {
+            UILi li = new UILi(null);
+            li.writeProperty("role", this.getRole());
+            if (this instanceof ExpendField)
+                li.setCssClass("select");
+            li.setText(this.toString()).output(html);
+        }
+    }
+
+    public void outputOfGridLine(HtmlWriter html) {
+        BuildUrl build = this.getBuildUrl();
+        if (build != null) {
+            UrlRecord url = new UrlRecord();
+            build.buildUrl(this.getCurrent(), url);
+            if (!"".equals(url.getUrl())) {
+                UIUrl item = new UIUrl();
+                item.setHref(url.getUrl());
+                item.writeProperty("title", url.getTitle());
+                item.setTarget(url.getTarget());
+                item.setOnclick(String.format("return confirm(\"%s\");", url.getHintMsg()));
+                item.setText(this.getText());
+                item.output(html);
+            } else {
+                html.print(this.getText());
+            }
+        } else {
+            html.print(this.getText());
         }
     }
 

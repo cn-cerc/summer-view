@@ -7,66 +7,30 @@ import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.other.AliyunOssProcess;
 
 public class UIImage extends UIBaseHtml {
-    private String width;
-    private String height;
     private String src;
-    private String role;
-    private String onclick;
-    private String alt;
     private AliyunOssProcess process;
     private String staticPath;
-
-    public UIImage(UIComponent owner) {
-        super(owner);
-        this.staticPath = Application.getStaticPath();
-    }
 
     public UIImage() {
         this(null);
     }
 
+    public UIImage(UIComponent owner) {
+        super(owner);
+        this.setRootLabel("img");
+        this.staticPath = Application.getStaticPath();
+    }
+
     @Override
     public void output(HtmlWriter html) {
-        html.print("<img src='%s%s", this.staticPath != null ? staticPath : "", this.src);
-        if (this.staticPath != null && this.process != null && !Utils.isEmpty(process.getCommand())) {
-            html.print("?x-oss-process=image%s", process.getCommand());
-        }
-        html.print("'");
-        super.outputPropertys(html);
-        if (role != null) {
-            html.print(" role='%s'", this.role);
-        }
-        if (alt != null) {
-            html.print(" alt='%s'", this.alt);
-        }
-        if (width != null) {
-            html.print(" width='%s'", this.width);
-        }
-        if (height != null) {
-            html.print(" height='%s'", this.height);
-        }
-        if (onclick != null) {
-            html.print(" onclick='%s'", this.onclick);
-        }
+        String url = this.staticPath != null ? staticPath : "";
+        url += this.src;
+        if (this.staticPath != null && this.process != null && !Utils.isEmpty(process.getCommand()))
+            url += String.format("?x-oss-process=image%s", process.getCommand());
+        this.writeProperty("src", url);
+        html.print("<").print(getRootLabel());
+        this.outputPropertys(html);
         html.print("/>");
-    }
-
-    public String getWidth() {
-        return width;
-    }
-
-    public UIImage setWidth(String width) {
-        this.width = width;
-        return this;
-    }
-
-    public String getHeight() {
-        return height;
-    }
-
-    public UIImage setHeight(String height) {
-        this.height = height;
-        return this;
     }
 
     public String getSrc() {
@@ -80,6 +44,9 @@ public class UIImage extends UIBaseHtml {
 
     /**
      * 阿里云OSS图片压缩
+     * 
+     * @param width 阿里云格式化后的图片宽度，宽高比按照原图自动调整
+     * @return 图片对象本身
      */
     public UIImage setSrc(String src, int width) {
         this.src = src;
@@ -87,29 +54,48 @@ public class UIImage extends UIBaseHtml {
         return this;
     }
 
-    public String getRole() {
-        return role;
+    public String getWidth() {
+        return (String) this.readProperty("width");
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public UIImage setWidth(String width) {
+        this.writeProperty("width", width);
+        return this;
+    }
+
+    public String getHeight() {
+        return (String) this.readProperty("height");
+    }
+
+    public UIImage setHeight(String height) {
+        this.writeProperty("height", height);
+        return this;
+    }
+
+    public String getRole() {
+        return (String) this.readProperty("role");
+    }
+
+    public UIImage setRole(String role) {
+        this.writeProperty("role", role);
+        return this;
     }
 
     public String getOnclick() {
-        return onclick;
+        return (String) this.readProperty("onclick");
     }
 
     public UIImage setOnclick(String onclick) {
-        this.onclick = onclick;
+        this.writeProperty("onclick", onclick);
         return this;
     }
 
     public String getAlt() {
-        return alt;
+        return (String) this.readProperty("alt");
     }
 
     public UIImage setAlt(String alt) {
-        this.alt = alt;
+        this.writeProperty("alt", alt);
         return this;
     }
 

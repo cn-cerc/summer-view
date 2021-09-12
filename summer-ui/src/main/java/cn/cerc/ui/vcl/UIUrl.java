@@ -7,7 +7,6 @@ import cn.cerc.ui.core.UrlRecord;
 public class UIUrl extends UIBaseHtml {
     private String text;
     private String href;
-    private String onclick;
     private UrlRecord url;
 
     public UIUrl() {
@@ -16,27 +15,20 @@ public class UIUrl extends UIBaseHtml {
 
     public UIUrl(UIComponent owner) {
         super(owner);
+        this.setRootLabel("a");
     }
 
     @Override
-    public void output(HtmlWriter html) {
-        html.print("<a");
-        if (this.getCssClass() != null)
-            html.print(" class=\"%s\"", this.getCssClass());
-        if (this.getHref() != null)
-            html.print(" href=\"%s\"", this.getHref());
-        if (this.onclick != null)
-            html.print(" onclick=\"%s\"", this.onclick);
-        html.print(">");
+    public void beginOutput(HtmlWriter html) {
+        this.writeProperty("href", this.getHref());
+        super.beginOutput(html);
+    }
 
+    @Override
+    public void endOutput(HtmlWriter html) {
         if (this.text != null)
             html.print(this.text);
-
-        for (UIComponent item : this) {
-            item.output(html);
-        }
-
-        html.print("</a>");
+        super.endOutput(html);
     }
 
     public String getText() {
@@ -49,7 +41,7 @@ public class UIUrl extends UIBaseHtml {
     }
 
     public String getHref() {
-        return url != null ? url.getUrl() : href;
+        return url == null ? href : url.getUrl();
     }
 
     public UIUrl setHref(String href) {
@@ -58,26 +50,36 @@ public class UIUrl extends UIBaseHtml {
     }
 
     // 此函数特别允许与setHref重复，以方便记忆
+    @Deprecated
     public UIUrl setUrl(String href) {
-        this.href = href;
-        return this;
+        return this.setHref(href);
     }
 
     // 此函数特别允许与setHref重复，以方便记忆
+    @Deprecated
     public UIUrl setUrl(String href, Object... args) {
         this.href = String.format(href, args);
         return this;
     }
 
     public String getOnclick() {
-        return onclick;
+        return (String) this.readProperty("onclick");
     }
 
     public UIUrl setOnclick(String onclick) {
-        this.onclick = onclick;
+        this.writeProperty("onclick", onclick);
         return this;
     }
+    
+    public String getTarget() {
+        return (String) this.readProperty("target");
+    }
 
+    public UIUrl setTarget(String target) {
+        this.writeProperty("target", target);
+        return this;
+    }
+   
     public UIUrl setSite(String site) {
         if (url == null)
             url = new UrlRecord();
@@ -92,4 +94,10 @@ public class UIUrl extends UIBaseHtml {
         return this;
     }
 
+    public static void main(String[] args) {
+        UIUrl item = new UIUrl();
+        item.setOnclick(String.format("return confirm(\"%s\");", "abc"));
+        System.out.println(item);
+
+    }
 }

@@ -1,28 +1,23 @@
 package cn.cerc.ui.fields;
 
-import cn.cerc.core.Record;
-import cn.cerc.ui.core.UIComponent;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+
+import cn.cerc.ui.core.UIComponent;
 
 public class RadioField extends AbstractField {
 
     private final List<String> items = new ArrayList<>();
 
     public RadioField(UIComponent owner, String name, String field, int width) {
-        super(owner, name, width);
-        this.setField(field);
+        super(owner, name, field, width);
     }
 
     @Override
-    public String getText(Record record) {
-        if (record == null) {
-            return null;
-        }
-        int val = record.getInt(field);
+    public String getText() {
+        int val = getCurrent().getInt(this.getField());
         if (val < 0 || val > items.size() - 1) {
             return "" + val;
         }

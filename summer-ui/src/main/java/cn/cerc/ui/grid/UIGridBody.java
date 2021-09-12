@@ -61,7 +61,7 @@ public class UIGridBody extends UIComponent {
 
     private void addColumn(FieldMeta meta) {
         columns.add(meta);
-        new DataLink(new UITd(this), dataSet, meta.getCode());
+        new UIDataComponent(new UITd(this), dataSet, meta.getCode());
     }
 
 }

@@ -1,7 +1,6 @@
 package cn.cerc.ui.fields;
 
 import cn.cerc.core.ClassConfig;
-import cn.cerc.core.Record;
 import cn.cerc.mis.cdn.CDN;
 import cn.cerc.ui.SummerUI;
 import cn.cerc.ui.core.HtmlWriter;
@@ -13,40 +12,23 @@ public class CodeNameField extends AbstractField {
     private String nameField;
 
     public CodeNameField(UIComponent owner, String name, String field) {
-        super(owner, name, 0);
-        this.setField(field);
+        super(owner, name, field);
     }
 
     @Override
     public void updateField() {
-        if (dataSource != null) {
-            dataSource.updateValue(this.getId(), this.getField());
-            dataSource.updateValue(getNameField(), getNameField());
-        }
-    }
-
-    @Override
-    public String getText(Record record) {
-        if (record == null) {
-            return null;
-        }
-        if (buildText != null) {
-            HtmlWriter html = new HtmlWriter();
-            buildText.outputText(record, html);
-            return html.toString();
-        }
-        return record.getString(getField());
+        super.updateField();
+        this.updateValue(getNameField(), getNameField());
     }
 
     @Override
     public void output(HtmlWriter html) {
-        Record record = dataSource != null ? dataSource.getDataSet().getCurrent() : null;
         if (this.isHidden()) {
             html.print("<input");
             html.print(" type=\"hidden\"");
             html.print(" name=\"%s\"", this.getId());
             html.print(" id=\"%s\"", this.getId());
-            String value = this.getText(record);
+            String value = this.getText();
             if (value != null) {
                 html.print(" value=\"%s\"", value);
             }
@@ -58,7 +40,7 @@ public class CodeNameField extends AbstractField {
             html.print(" type=\"hidden\"");
             html.print(" name=\"%s\"", this.getId());
             html.print(" id=\"%s\"", this.getId());
-            String codeValue = this.getText(record);
+            String codeValue = this.getText();
             if (codeValue != null) {
                 html.print(" value=\"%s\"", codeValue);
             }
@@ -69,11 +51,9 @@ public class CodeNameField extends AbstractField {
             html.print(" name=\"%s\"", getNameField());
             html.print(" id=\"%s\"", getNameField());
             String nameValue = null;
-            if (record != null) {
-                nameValue = record.getString(getNameField());
-                if (nameValue != null) {
-                    html.print(" value=\"%s\"", nameValue);
-                }
+            nameValue = getCurrent().getString(getNameField());
+            if (nameValue != null) {
+                html.print(" value=\"%s\"", nameValue);
             }
             if (this.isReadonly()) {
                 html.print(" readonly=\"readonly\"");

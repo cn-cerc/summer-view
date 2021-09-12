@@ -24,28 +24,30 @@ import cn.cerc.ui.core.UIComponent;
 public abstract class AbstractPage extends UIComponent implements IPage, IUserLanguage {
     protected static final ClassConfig config = new ClassConfig(AbstractPage.class, SummerMIS.ID);
 
-    private IForm form;
-
-    public AbstractPage() {
+    public AbstractPage(IForm owner) {
         super();
+        this.setOrigin(owner);
     }
 
     @Override
     public final IForm getForm() {
-        return form;
+        return (IForm) this.getOrigin();
     }
 
     @Override
-    public final void setForm(IForm form) {
-        this.form = form;
-        this.add("cdn", Application.getStaticPath());
-        this.add("version", config.getString(CDN.BROWSER_CACHE_VERSION, "1.0.0.0"));
+    public final AbstractPage setOrigin(Object form) {
+        super.setOrigin(form);
         if (form != null) {
-            this.put("jspPage", this);
-            // 为兼容而设计
-            this.add("summer_js", CDN.get(config.getString("summer.js", "js/summer.js")));
-            this.add("myapp_js", CDN.get(config.getString("myapp.js", "js/myapp.js")));
+            this.add("cdn", Application.getStaticPath());
+            this.add("version", config.getString(CDN.BROWSER_CACHE_VERSION, "1.0.0.0"));
+            if (form != null) {
+                this.put("jspPage", this);
+                // 为兼容而设计
+                this.add("summer_js", CDN.get(config.getString("summer.js", "js/summer.js")));
+                this.add("myapp_js", CDN.get(config.getString("myapp.js", "js/myapp.js")));
+            }
         }
+        return this;
     }
 
     @Override
@@ -61,11 +63,11 @@ public abstract class AbstractPage extends UIComponent implements IPage, IUserLa
     }
 
     public final String getMessage() {
-        return form.getParam("message", null);
+        return getForm().getParam("message", null);
     }
 
     public final void setMessage(String message) {
-        form.setParam("message", message);
+        getForm().setParam("message", message);
     }
 
     @Override
@@ -135,7 +137,7 @@ public abstract class AbstractPage extends UIComponent implements IPage, IUserLa
 
     @Override
     public String getLanguageId() {
-        return R.getLanguageId(form);
+        return R.getLanguageId(getForm());
     }
 
 }

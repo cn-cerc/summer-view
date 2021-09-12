@@ -20,9 +20,10 @@ public class CorpPlugins {
 
     /**
      * 判断当前公司别当前对象，是否存在插件，如FrmProduct_131001（必须继承IPlugins）
-     * 
-     * @param owner 插件拥有者，一般为 form
-     * 
+     *
+     * @param owner        插件拥有者，一般为 form
+     * @param requiredType IPlugins 的实现类
+     * @return 帐套是否存在插件客制化
      */
     public static boolean exists(Object owner, Class<? extends IPlugins> requiredType) {
         ApplicationContext context = Application.getContext();
@@ -42,8 +43,10 @@ public class CorpPlugins {
 
     /**
      * 返回当前公司别当前对象之之插件对象，如FrmProduct_131001（必须继承IPlugins）
-     * 
-     * @param owner 插件拥有者，一般为 form
+     *
+     * @param owner        插件拥有者，一般为 form
+     * @param requiredType IPlugins 的实现类
+     * @return 对象本身
      */
     public static <T> T getBean(Object owner, Class<T> requiredType) {
         ApplicationContext context = Application.getContext();
@@ -104,7 +107,8 @@ public class CorpPlugins {
 
     /**
      * 用于自定义 page 场景，或重定向到新的 form
-     * 
+     *
+     * @param form AbstractForm 的实现类
      * @return 如返回 RedirectPage 对象
      */
     public final static IPage getRedirectPage(AbstractForm form) {
@@ -117,7 +121,9 @@ public class CorpPlugins {
 
     /**
      * 用于自定义服务场影
-     * 
+     *
+     * @param form AbstractForm 的实现类
+     * @param defaultService 默认服务名称
      * @return 返回自定义 service 或 defaultService
      */
     public static String getService(AbstractForm form, String defaultService) {

@@ -1,13 +1,8 @@
 package cn.cerc.ui.grid;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import cn.cerc.core.DataSet;
+import cn.cerc.core.DataSource;
 import cn.cerc.core.Record;
-import cn.cerc.ui.core.DataSource;
 import cn.cerc.ui.core.HtmlWriter;
-import cn.cerc.ui.core.IField;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.core.UrlRecord;
 import cn.cerc.ui.fields.AbstractField;
@@ -15,15 +10,14 @@ import cn.cerc.ui.fields.ExpendField;
 import cn.cerc.ui.other.BuildUrl;
 
 public class PhoneLine extends UIComponent implements DataSource {
-    private DataSource dataSource;
-    private boolean Table = false;
+    private DataGrid grid;
+    private boolean table = false;
     private String style;
     private ExpendField expender;
 
-    private List<AbstractField> columns = new ArrayList<>();
-
-    public PhoneLine(DataSource dataSource) {
-        this.dataSource = dataSource;
+    public PhoneLine(DataGrid owner) {
+        super(owner);
+        this.grid = owner;
     }
 
     public String getStyle() {
@@ -35,35 +29,35 @@ public class PhoneLine extends UIComponent implements DataSource {
         return this;
     }
 
-    public List<AbstractField> getColumns() {
-        return columns;
-    }
-
     public boolean isTable() {
-        return Table;
+        return this.table;
     }
 
     public PhoneLine setTable(boolean table) {
-        Table = table;
+        this.table = table;
         return this;
     }
 
+    @Override
+    public void output(HtmlWriter html) {
+        if (this.table) {
+            outputTableString(html);
+        } else {
+            outputListString(html);
+        }
+    }
+
     private void outputTableString(HtmlWriter html) {
-        if (dataSource == null) {
-            throw new RuntimeException("dataView is null");
-        }
-        if (dataSource.getDataSet() == null) {
-            throw new RuntimeException("dataSet is null");
-        }
-        Record record = dataSource.getDataSet().getCurrent();
+        Record record = getCurrent();
         html.print("<tr");
         if (this.expender != null) {
             html.print(String.format(" role=\"%s\" style=\"display: none;\"", expender.getHiddenId()));
         }
         html.print(">");
-        for (AbstractField field : columns) {
+        for (UIComponent child : this) {
+            AbstractField field = (AbstractField) child;
             html.print("<td");
-            if (columns.size() == 1) {
+            if (this.getComponents().size() == 1) {
                 html.print(" colspan=2");
             }
             html.print(">");
@@ -78,10 +72,10 @@ public class PhoneLine extends UIComponent implements DataSource {
                 build.buildUrl(record, url);
                 if (!"".equals(url.getUrl())) {
                     html.println("<a href=\"%s\">", url.getUrl());
-                    html.print(field.getText(record));
+                    html.print(field.getText());
                     html.println("</a>");
                 } else {
-                    html.println(field.getText(record));
+                    html.println(field.getText());
                 }
             } else {
                 outputColumn(field, html);
@@ -94,7 +88,8 @@ public class PhoneLine extends UIComponent implements DataSource {
 
     public void outputListString(HtmlWriter html) {
         html.print("<section>");
-        for (AbstractField field : columns) {
+        for (UIComponent child : this) {
+            AbstractField field = (AbstractField) child;
             html.print("<span");
             if (field.getCSSClass_phone() != null) {
                 html.print(String.format(" class=\"%s\"", field.getCSSClass_phone()));
@@ -102,15 +97,14 @@ public class PhoneLine extends UIComponent implements DataSource {
             html.print(">");
             BuildUrl build = field.getBuildUrl();
             if (build != null) {
-                Record record = dataSource != null ? dataSource.getDataSet().getCurrent() : null;
                 UrlRecord url = new UrlRecord();
-                build.buildUrl(record, url);
+                build.buildUrl(getCurrent(), url);
                 if (!"".equals(url.getUrl())) {
                     html.println("<a href=\"%s\">", url.getUrl());
                     outputColumn(field, html);
                     html.println("</a>");
                 } else {
-                    html.println(field.getText(record));
+                    html.println(field.getText());
                 }
             } else {
                 outputColumn(field, html);
@@ -121,33 +115,16 @@ public class PhoneLine extends UIComponent implements DataSource {
     }
 
     private void outputColumn(AbstractField field, HtmlWriter html) {
-        DataSet dataSet = dataSource != null ? dataSource.getDataSet() : null;
         String name = field.getShortName();
         if (!"".equals(name)) {
             html.print(name + ": ");
         }
-        html.print(field.getText(dataSet.getCurrent()));
-    }
-
-    @Override
-    public void output(HtmlWriter html) {
-        if (this.Table) {
-            outputTableString(html);
-        } else {
-            outputListString(html);
-        }
-    }
-
-    @Override
-    public void addField(IField field) {
-        if (field instanceof AbstractField) {
-            columns.add((AbstractField) field);
-        }
+        html.print(field.getText());
     }
 
     public PhoneLine addItem(AbstractField... fields) {
         for (AbstractField field : fields) {
-            addField(field);
+            addComponent(field);
         }
         return this;
     }
@@ -161,17 +138,17 @@ public class PhoneLine extends UIComponent implements DataSource {
     }
 
     @Override
-    public DataSet getDataSet() {
-        return dataSource.getDataSet();
-    }
-
-    @Override
     public boolean isReadonly() {
-        return dataSource.isReadonly();
+        return grid.isReadonly();
     }
 
     @Override
-    public void updateValue(String id, String code) {
-        dataSource.updateValue(id, code);
+    public Record getCurrent() {
+        return grid.getCurrent();
+    }
+
+    @Deprecated
+    public void addField(AbstractField child) {
+        this.addComponent(child);
     }
 }

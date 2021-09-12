@@ -4,24 +4,18 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
-import cn.cerc.ui.mvc.AbstractPage;
-
 import javax.servlet.ServletException;
 
 import cn.cerc.mis.core.Application;
 import cn.cerc.mis.core.IForm;
 import cn.cerc.mis.language.R;
+import cn.cerc.ui.mvc.AbstractPage;
 
 public class JspFile extends AbstractPage {
     private String jspFile;
-    
-    public JspFile() {
-        super();
-    }
 
-    public JspFile(IForm form) {
-        super();
-        setForm(form);
+    public JspFile(IForm owner) {
+        super(owner);
     }
 
     public final void add(String id, Object value) {

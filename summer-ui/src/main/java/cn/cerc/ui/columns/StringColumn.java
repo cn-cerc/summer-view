@@ -86,7 +86,7 @@ public class StringColumn extends AbstractColumn implements IDataColumn {
             html.print(text);
         } else {
             UILabel label = new UILabel();
-            label.setFocusTarget(this.getCode());
+            label.setFor(this.getCode());
             if (!"".equals(getName())) {
                 label.setText(getName() + "：");
             }
@@ -105,7 +105,7 @@ public class StringColumn extends AbstractColumn implements IDataColumn {
 
         if (!this.isHidden()) {
             UILabel label = new UILabel();
-            label.setFocusTarget(this.getCode());
+            label.setFor(this.getCode());
             if (!"".equals(getName())) {
                 label.setText(getName() + "：");
             }

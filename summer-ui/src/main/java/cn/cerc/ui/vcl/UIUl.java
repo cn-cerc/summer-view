@@ -5,10 +5,6 @@ import cn.cerc.ui.core.UIComponent;
 
 public class UIUl extends UIComponent {
 
-    public UIUl() {
-        this(null);
-    }
-
     public UIUl(UIComponent owner) {
         super(owner);
         this.setRootLabel("ul");

@@ -1,8 +1,8 @@
 package cn.cerc.ui.columns;
 
 import cn.cerc.core.Record;
+import cn.cerc.mis.core.IOriginOwner;
 import cn.cerc.ui.core.HtmlWriter;
-import cn.cerc.ui.core.IOriginOwner;
 import cn.cerc.ui.core.UIComponent;
 
 public class AbstractColumn extends UIComponent {
