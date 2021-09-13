@@ -7,6 +7,7 @@ public class ButtonField extends AbstractField {
     private String data;
     private String type;
 
+    @Deprecated
     public ButtonField() {
         super(null, null, null);
     }

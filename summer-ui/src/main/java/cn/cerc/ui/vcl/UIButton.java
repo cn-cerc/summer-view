@@ -4,7 +4,7 @@ import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.core.INameOwner;
 import cn.cerc.ui.core.UIComponent;
 
-public class UIButton extends UIBaseHtml implements INameOwner {
+public class UIButton extends UIComponent implements IHtml, INameOwner {
     private String name;
     private String value;
     private String text;

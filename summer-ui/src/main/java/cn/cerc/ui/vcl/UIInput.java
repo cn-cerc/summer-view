@@ -4,7 +4,7 @@ import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.core.INameOwner;
 import cn.cerc.ui.core.UIComponent;
 
-public class UIInput extends UIBaseHtml implements INameOwner {
+public class UIInput extends UIComponent implements IHtml, INameOwner {
 
     public static final String TYPE_BUTTON = "button";
     public static final String TYPE_CHECKBOX = "checkbox";

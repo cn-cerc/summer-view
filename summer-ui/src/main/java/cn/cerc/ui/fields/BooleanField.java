@@ -47,15 +47,14 @@ public class BooleanField extends AbstractField implements SearchItem, IFormatCo
             }
         } else {
             writeInput(html);
-            html.println(String.format("<label for=\"%s\">%s</label>", this.getId(), this.getName()));
+            html.println("<label for=\"%s\">%s</label>", this.getId(), this.getName());
         }
     }
 
     private void writeInput(HtmlWriter html) {
         html.print(String.format("<input type=\"checkbox\" id=\"%s\" name=\"%s\" value=\"1\"", this.getId(),
                 this.getId()));
-        boolean val = getCurrent().getBoolean(this.getField());
-        if (val) {
+        if (getCurrent().getBoolean(this.getField())) {
             html.print(" checked");
         }
         if (this.isReadonly()) {

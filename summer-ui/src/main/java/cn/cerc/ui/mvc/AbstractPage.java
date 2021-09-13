@@ -25,7 +25,7 @@ public abstract class AbstractPage extends UIComponent implements IPage, IUserLa
     protected static final ClassConfig config = new ClassConfig(AbstractPage.class, SummerMIS.ID);
 
     public AbstractPage(IForm owner) {
-        super();
+        super(null);
         this.setOrigin(owner);
     }
 

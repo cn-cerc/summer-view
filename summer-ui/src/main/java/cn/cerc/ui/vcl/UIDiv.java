@@ -2,7 +2,7 @@ package cn.cerc.ui.vcl;
 
 import cn.cerc.ui.core.UIComponent;
 
-public class UIDiv extends UIBaseHtml {
+public class UIDiv extends UIComponent implements IHtml {
     private UIText text;
 
     public UIDiv() {

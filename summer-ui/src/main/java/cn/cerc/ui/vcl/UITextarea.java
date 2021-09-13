@@ -10,7 +10,7 @@ import cn.cerc.ui.core.UIComponent;
  * @author 黄荣君
  */
 //FIXME 应改为 UITextarea，ZhangGong 2021/3/19
-public class UITextarea extends UIBaseHtml implements INameOwner {
+public class UITextarea extends UIComponent implements IHtml, INameOwner {
     private UISpan caption;
     private String name;
     private StringBuffer lines = new StringBuffer();

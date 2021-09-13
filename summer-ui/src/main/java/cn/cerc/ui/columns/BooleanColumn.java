@@ -11,7 +11,6 @@ public class BooleanColumn extends AbstractColumn implements IDataColumn {
 
     private UIInput input = new UIInput(this);
     private UIComponent helper;
-    private Object origin;
     private boolean readonly;
 
     public BooleanColumn(UIComponent owner) {

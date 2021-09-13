@@ -6,7 +6,7 @@ import java.util.Map;
 import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 
-public class UIForm extends UIBaseHtml {
+public class UIForm extends UIComponent implements IHtml {
     private Map<String, String> items = new HashMap<>();
     private UIComponent top;
     private UIComponent bottom;

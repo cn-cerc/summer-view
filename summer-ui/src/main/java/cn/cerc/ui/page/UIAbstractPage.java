@@ -37,6 +37,7 @@ public abstract class UIAbstractPage extends UIComponent implements IPage {
     private DefineContent defineHead;
 
     public UIAbstractPage(IForm form) {
+        super(null);
         this.setOrigin(form);
     }
 
@@ -87,7 +88,7 @@ public abstract class UIAbstractPage extends UIComponent implements IPage {
         }
 
         if (defineHead != null) {
-            UIComponent content = new UIComponent();
+            UIComponent content = new UIComponent(null);
             defineHead.execute(this, content);
             out.print(content.toString());
         }

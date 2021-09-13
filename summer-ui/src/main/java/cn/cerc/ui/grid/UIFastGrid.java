@@ -29,7 +29,7 @@ public class UIFastGrid extends UIComponent {
         UIFastGrid grid = new UIFastGrid(null);
         grid.setPhone(false);
         if (grid.isPhone()) {
-            UIGridBody body = new UIGridBody(grid, ds).addAll(ds.getFieldDefs());
+            new UIGridBody(grid, ds).addAll(ds.getFieldDefs());
         } else {
             UIGridHead head = new UIGridHead(grid);
             UIGridBody body = new UIGridBody(grid, ds).addAll(ds.getFieldDefs());

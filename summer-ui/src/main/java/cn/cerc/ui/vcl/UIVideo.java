@@ -3,14 +3,15 @@ package cn.cerc.ui.vcl;
 import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 
-public class UIVideo extends UIBaseHtml {
-    public UIVideo(UIComponent owner) {
-        super(owner);
-    }
+public class UIVideo extends UIComponent implements IHtml {
 
     private String src;
     private String width = "190";
     private String height = "90";
+
+    public UIVideo(UIComponent owner) {
+        super(owner);
+    }
 
     @Override
     public void output(HtmlWriter html) {

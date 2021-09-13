@@ -1,10 +1,10 @@
 package cn.cerc.ui.vcl.ext;
 
-import cn.cerc.ui.core.HtmlWriter;
-import cn.cerc.ui.core.UIComponent;
-
 import java.util.LinkedHashMap;
 import java.util.Map;
+
+import cn.cerc.ui.core.HtmlWriter;
+import cn.cerc.ui.core.UIComponent;
 
 public class UIOption extends UIComponent {
     private String name;
@@ -20,8 +20,9 @@ public class UIOption extends UIComponent {
     private boolean required;
     private int size;
 
+    @Deprecated
     public UIOption() {
-        super();
+        this(null);
     }
 
     public UIOption(UIComponent owner) {

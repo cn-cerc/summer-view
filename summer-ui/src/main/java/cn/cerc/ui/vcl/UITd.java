@@ -2,9 +2,10 @@ package cn.cerc.ui.vcl;
 
 import cn.cerc.ui.core.UIComponent;
 
-public class UITd extends UIBaseHtml {
+public class UITd extends UIComponent implements IHtml {
     private UIText text;
 
+    @Deprecated
     public UITd() {
         this(null);
     }

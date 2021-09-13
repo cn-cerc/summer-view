@@ -6,7 +6,7 @@ import java.util.Map;
 import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 
-public class UISelect extends UIBaseHtml {
+public class UISelect extends UIComponent implements IHtml {
     private int size;
     private String name;
     private boolean readonly;

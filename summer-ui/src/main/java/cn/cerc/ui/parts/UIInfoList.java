@@ -110,6 +110,15 @@ public class UIInfoList extends UIComponent {
     public class Line extends UIComponent {
         private List<UIComponent> items = new ArrayList<>();
 
+        @Deprecated
+        public Line() {
+            this(null);
+        }
+
+        public Line(UIComponent owner) {
+            super(owner);
+        }
+
         @Override
         public void output(HtmlWriter html) {
             html.println("<li>");

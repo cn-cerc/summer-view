@@ -6,11 +6,12 @@ import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.other.AliyunOssProcess;
 
-public class UIImage extends UIBaseHtml {
+public class UIImage extends UIComponent implements IHtml {
     private String src;
     private AliyunOssProcess process;
     private String staticPath;
 
+    @Deprecated
     public UIImage() {
         this(null);
     }

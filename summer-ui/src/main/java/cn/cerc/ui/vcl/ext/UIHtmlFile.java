@@ -16,7 +16,7 @@ public class UIHtmlFile extends UIComponent {
     private Map<String, Object> items = new HashMap<>();
 
     public UIHtmlFile() {
-        super();
+        this(null);
     }
 
     public UIHtmlFile(UIComponent owner) {
