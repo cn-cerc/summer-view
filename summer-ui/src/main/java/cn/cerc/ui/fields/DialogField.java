@@ -32,18 +32,18 @@ public class DialogField {
         build.append(dialogfun);
         build.append("(");
 
-        build.append("'");
+        build.append("\"");
         build.append(inputId);
-        build.append("'");
+        build.append("\"");
         if (params.size() > 0) {
             build.append(",");
         }
 
         int i = 0;
         for (String param : params) {
-            build.append("'");
+            build.append("\"");
             build.append(param);
-            build.append("'");
+            build.append("\"");
             if (i != params.size() - 1) {
                 build.append(",");
             }

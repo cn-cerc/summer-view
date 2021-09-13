@@ -24,6 +24,7 @@ import cn.cerc.ui.vcl.UILi;
 import cn.cerc.ui.vcl.UISpan;
 import cn.cerc.ui.vcl.UIText;
 import cn.cerc.ui.vcl.UITextarea;
+import cn.cerc.ui.vcl.UIUl;
 import cn.cerc.ui.vcl.UIUrl;
 
 public abstract class AbstractField extends UIComponent implements INameOwner, SearchSource {
@@ -661,11 +662,7 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
         }
     }
 
-    public void outputOfFormHorizontal(HtmlWriter html) {
-        if (this.isHidden()) {
-            this.output(html);
-            return;
-        }
+    public void outputOfFormHorizontal(UIUl list) {
         UIText mark = this.getMark();
         if (mark != null) {
             UILi li1 = new UILi(null);
@@ -676,17 +673,19 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
             UIUrl url = new UIUrl(li1);
             url.setHref(String.format("javascript:displaySwitch(\"%s\")", this.getId()));
             new UIImage(url).setSrc(CDN.get(config.getClassProperty("icon", "")));
-            li1.output(html);
+            list.addComponent(li1);
             //
             UILi li2 = new UILi(null);
             li2.writeProperty("role", this.getId()).setCssStyle("display: none;");
-            li2.setText(mark.setRootLabel("mark").toString()).output(html);
+            li2.setText(mark.setRootLabel("mark").toString());
+            list.addComponent(li2);
         } else {
             UILi li = new UILi(null);
             li.writeProperty("role", this.getRole());
             if (this instanceof ExpendField)
                 li.setCssClass("select");
-            li.setText(this.toString()).output(html);
+            li.setText(this.toString());
+            list.addComponent(li);
         }
     }
 

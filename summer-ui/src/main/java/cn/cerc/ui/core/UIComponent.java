@@ -3,7 +3,9 @@ package cn.cerc.ui.core;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -11,7 +13,7 @@ import cn.cerc.mis.core.IForm;
 import cn.cerc.mis.core.IOriginOwner;
 
 public class UIComponent implements IOriginOwner, Iterable<UIComponent> {
-    private List<UIComponent> components = new ArrayList<>();
+    private HashSet<UIComponent> components = new LinkedHashSet<>();
     private Map<String, Object> propertys = new HashMap<>();
     private UIComponent owner;
     private Object origin;
@@ -38,8 +40,17 @@ public class UIComponent implements IOriginOwner, Iterable<UIComponent> {
     }
 
     public void addComponent(UIComponent component) {
-        if (component != null && !components.contains(component))
+        if (component != null && !components.contains(component)) {
+            component.owner = this;
             components.add(component);
+        }
+    }
+
+    public void removeComponent(UIComponent component) {
+        if (component != null) {
+            component.owner = null;
+            components.remove(component);
+        }
     }
 
     public final UIComponent getOwner() {
@@ -47,14 +58,24 @@ public class UIComponent implements IOriginOwner, Iterable<UIComponent> {
     }
 
     public UIComponent setOwner(UIComponent owner) {
-        this.owner = owner;
+        if (this.owner == owner)
+            return this;
+
+        if (this.owner != null)
+            this.owner.removeComponent(this);
+
         if (owner != null)
             owner.addComponent(this);
+
         return this;
     }
 
-    public final List<UIComponent> getComponents() {
+    public final HashSet<UIComponent> getComponents() {
         return components;
+    }
+
+    public int getComponentCount() {
+        return components.size();
     }
 
     @Override
@@ -66,7 +87,9 @@ public class UIComponent implements IOriginOwner, Iterable<UIComponent> {
 
     @Override
     public Iterator<UIComponent> iterator() {
-        return components.iterator();
+        List<UIComponent> items = new ArrayList<>();
+        items.addAll(components);
+        return items.iterator();
     }
 
     public void output(HtmlWriter html) {

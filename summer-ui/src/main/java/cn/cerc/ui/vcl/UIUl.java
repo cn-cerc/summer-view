@@ -1,6 +1,5 @@
 package cn.cerc.ui.vcl;
 
-import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 
 public class UIUl extends UIComponent {
@@ -11,14 +10,18 @@ public class UIUl extends UIComponent {
     }
 
     @Override
-    public void output(HtmlWriter html) {
-        this.beginOutput(html);
-        for (UIComponent item : this) {
-            html.print("<li>");
-            item.output(html);
-            html.print("</li>");
+    public void addComponent(UIComponent child) {
+        if (child instanceof UILi)
+            super.addComponent(child);
+        else {
+            UILi item = this.addItem();
+            item.addComponent(child);
+            super.addComponent(item);
         }
-        this.endOutput(html);
+    }
+
+    public UILi addItem() {
+        return new UILi(this);
     }
 
 }
