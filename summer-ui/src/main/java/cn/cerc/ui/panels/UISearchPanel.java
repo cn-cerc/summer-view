@@ -104,12 +104,13 @@ public class UISearchPanel extends UIComponent {
     }
 
     @Override
-    public void addComponent(UIComponent component) {
+    public UIComponent addComponent(UIComponent component) {
         if (component instanceof IColumn) {
             this.filterPanel.addComponent(component);
         } else {
             super.addComponent(component);
         }
+        return this;
     }
 
     public Record getRecord() {

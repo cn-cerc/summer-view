@@ -45,8 +45,7 @@ public class ChildGridLine extends AbstractGridLine {
                 if (field.getName() != null && !"".equals(field.getName())) {
                     html.print("<span>%s：</span> ", field.getName());
                 }
-
-                field.outputOfGridLine(html);
+                super.outputCell(html, field);
             }
             html.println("</td>");
         }
@@ -54,7 +53,7 @@ public class ChildGridLine extends AbstractGridLine {
     }
 
     @Override
-    public void addComponent(UIComponent child) {
+    public UIComponent addComponent(UIComponent child) {
         if (child instanceof AbstractField) {
             AbstractField field = (AbstractField) child;
             getFields().add(field);
@@ -63,10 +62,11 @@ public class ChildGridLine extends AbstractGridLine {
             col.setAlign(field.getAlign());
             col.setRole(field.getField());
             getCells().add(col);
-            col.addField(field);
+            col.addComponent(field);
         } else {
             super.addComponent(child);
         }
+        return this;
     }
 
 }

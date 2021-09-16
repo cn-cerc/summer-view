@@ -48,8 +48,7 @@ public class ExpenderGridLine extends AbstractGridLine {
                     html.print(field.getName());
                     html.print(": ");
                 }
-
-                field.outputOfGridLine(html);
+                super.outputCell(html, field);
                 html.println("</span>");
             }
             html.println("</td>");
@@ -58,7 +57,7 @@ public class ExpenderGridLine extends AbstractGridLine {
     }
 
     @Override
-    public void addComponent(UIComponent child) {
+    public UIComponent addComponent(UIComponent child) {
         if (child instanceof AbstractField) {
             AbstractField field = (AbstractField) child;
             getFields().add(field);
@@ -70,10 +69,11 @@ public class ExpenderGridLine extends AbstractGridLine {
             } else {
                 col = getCells().get(0);
             }
-            col.addField(field);
+            col.addComponent(field);
         } else {
             super.addComponent(child);
         }
+        return this;
     }
 
 }

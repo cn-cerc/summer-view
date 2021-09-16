@@ -238,7 +238,7 @@ public class UIGrid extends UIComponent implements IReadonlyOwner {
     }
 
     @Override
-    public void addComponent(UIComponent component) {
+    public UIComponent addComponent(UIComponent component) {
         if (component instanceof IColumn) {
             IColumn column = (IColumn) component;
             if (component instanceof IDataColumn) {
@@ -249,6 +249,7 @@ public class UIGrid extends UIComponent implements IReadonlyOwner {
         } else {
             super.addComponent(component);
         }
+        return this;
     }
 
     public List<IColumn> getColumns() {

@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import cn.cerc.mis.core.IForm;
 import cn.cerc.mis.core.IOriginOwner;
@@ -15,18 +16,16 @@ import cn.cerc.mis.core.IOriginOwner;
 public class UIComponent implements IOriginOwner, HtmlContent, Iterable<UIComponent> {
     private HashSet<UIComponent> components = new LinkedHashSet<>();
     private Map<String, Object> propertys = new HashMap<>();
+    private Set<String> signProperty = new HashSet<>();
     private UIComponent owner;
     private Object origin;
-    private int phone = -1;
     private String rootLabel;
+    private int phone = -1;
 
     public UIComponent(UIComponent owner) {
         super();
-        if (owner != null) {
-            this.setOwner(owner);
-            this.setOrigin(owner.getOrigin());
-            this.setPhone(owner.isPhone());
-        }
+        if (owner != null)
+            owner.addComponent(this);
     }
 
     public String getRootLabel() {
@@ -43,16 +42,25 @@ public class UIComponent implements IOriginOwner, HtmlContent, Iterable<UICompon
     }
 
     public UIComponent setOwner(UIComponent owner) {
-        if (this.owner == owner)
-            return this;
-
-        if (this.owner != null)
-            this.owner.removeComponent(this);
-
-        if (owner != null)
-            owner.addComponent(this);
-
+        if (this.owner != owner) {
+            if (this.owner != null)
+                this.owner.removeComponent(this);
+            if (owner != null)
+                owner.addComponent(this);
+            this.owner = owner;
+        }
         return this;
+    }
+
+    @Override
+    public UIComponent setOrigin(Object origin) {
+        this.origin = origin;
+        return this;
+    }
+
+    @Override
+    public final Object getOrigin() {
+        return origin;
     }
 
     public final HashSet<UIComponent> getComponents() {
@@ -63,29 +71,24 @@ public class UIComponent implements IOriginOwner, HtmlContent, Iterable<UICompon
         return components.size();
     }
 
-    public void addComponent(UIComponent component) {
+    public UIComponent addComponent(UIComponent component) {
         if (component != null && !components.contains(component)) {
             component.owner = this;
+            if (component.origin == null)
+                component.origin = this.origin != null ? this.origin : this;
             components.add(component);
         }
-    }
-
-    public void removeComponent(UIComponent component) {
-        if (component != null) {
-            component.owner = null;
-            components.remove(component);
-        }
-    }
-
-    @Override
-    public UIComponent setOrigin(Object parent) {
-        this.origin = parent;
         return this;
     }
 
-    @Override
-    public final Object getOrigin() {
-        return origin;
+    public UIComponent removeComponent(UIComponent component) {
+        if (component != null) {
+            if (component.origin == component.owner)
+                component.origin = null;
+            component.owner = null;
+            components.remove(component);
+        }
+        return this;
     }
 
     @Override
@@ -193,6 +196,19 @@ public class UIComponent implements IOriginOwner, HtmlContent, Iterable<UICompon
                     html.print(" %s='%s'", key, value);
             }
         });
+        for (String sign : this.signProperty) {
+            html.print(" ").print(sign);
+        }
+    }
+
+    public final Set<String> getSignProperty() {
+        return this.signProperty;
+    }
+
+    public final UIComponent addSignProperty(String cssSignValue) {
+        if (cssSignValue != null && !"".equals(cssSignValue))
+            this.signProperty.add(cssSignValue);
+        return this;
     }
 
     @Deprecated

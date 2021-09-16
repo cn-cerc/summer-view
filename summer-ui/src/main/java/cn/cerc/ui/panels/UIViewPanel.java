@@ -95,12 +95,13 @@ public class UIViewPanel extends UIComponent {
     }
 
     @Override
-    public void addComponent(UIComponent component) {
+    public UIComponent addComponent(UIComponent component) {
         if (component instanceof IColumn) {
             this.content.addComponent(component);
         } else {
             super.addComponent(component);
         }
+        return this;
     }
 
     public Record getRecord() {

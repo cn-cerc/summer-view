@@ -9,7 +9,9 @@ import cn.cerc.core.Record;
 import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.fields.AbstractField;
+import cn.cerc.ui.fields.AbstractField.BuildUrl;
 import cn.cerc.ui.grid.RowCell;
+import cn.cerc.ui.vcl.UIUrl;
 
 public abstract class AbstractGridLine extends UIComponent implements DataSource {
     protected DataSource source;
@@ -31,12 +33,13 @@ public abstract class AbstractGridLine extends UIComponent implements DataSource
     }
 
     @Override
-    public void addComponent(UIComponent component) {
+    public UIComponent addComponent(UIComponent component) {
         super.addComponent(component);
         if (component instanceof AbstractField) {
             AbstractField field = (AbstractField) component;
             field.setVisible(false);
         }
+        return this;
     }
 
     public DataSet getDataSet() {
@@ -75,4 +78,22 @@ public abstract class AbstractGridLine extends UIComponent implements DataSource
         return source.isReadonly();
     }
 
+    public interface IOutputOfGridLine {
+        void outputOfGridLine(HtmlWriter html);
+    }
+
+    protected void outputCell(HtmlWriter html, AbstractField field) {
+        if (field instanceof IOutputOfGridLine) {
+            ((IOutputOfGridLine) field).outputOfGridLine(html);
+        } else {
+            BuildUrl build = field.getBuildUrl();
+            if (build != null) {
+                UIUrl url = new UIUrl(null);
+                build.buildUrl(this.getCurrent(), url);
+                url.setText(field.getText()).output(html);
+            } else {
+                html.print(field.getText());
+            }
+        }
+    }
 }

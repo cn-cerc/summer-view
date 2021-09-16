@@ -7,12 +7,11 @@ import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.fields.AbstractField;
 
 public class RowCell extends UIComponent {
-    
+
     public RowCell(UIComponent owner) {
         super(owner);
     }
 
-    private final List<AbstractField> fields = new ArrayList<>();
     private int colSpan = 1;
     private String align;
     private String role;
@@ -27,7 +26,7 @@ public class RowCell extends UIComponent {
     }
 
     public void addField(AbstractField field) {
-        fields.add(field);
+        this.addComponent(field);
     }
 
     public int getColSpan() {
@@ -39,7 +38,12 @@ public class RowCell extends UIComponent {
     }
 
     public List<AbstractField> getFields() {
-        return fields;
+        List<AbstractField> items = new ArrayList<>();
+        for (UIComponent component : this) {
+            if (component instanceof AbstractField)
+                items.add((AbstractField) component);
+        }
+        return items;
     }
 
     public String getRole() {
@@ -58,7 +62,9 @@ public class RowCell extends UIComponent {
         this.style = style;
     }
 
+    @Deprecated
     public String getFirstField() {
-        return this.fields.get(0).getField();
+        return this.getFields().get(0).getField();
     }
+
 }

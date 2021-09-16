@@ -7,11 +7,12 @@ import cn.cerc.core.ClassResource;
 import cn.cerc.ui.SummerUI;
 import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
+import cn.cerc.ui.grid.lines.AbstractGridLine.IOutputOfGridLine;
 
 /**
  * 列表下拉框组件（不适用搜索查询表单）
  */
-public class SelectField extends AbstractField implements IFormatColumn {
+public class SelectField extends AbstractField implements IFormatColumn, IOutputOfGridLine {
     private static final ClassResource res = new ClassResource(SelectField.class, SummerUI.ID);
 
     private String trueText = res.getString(1, "是");
@@ -68,11 +69,6 @@ public class SelectField extends AbstractField implements IFormatColumn {
             }
         }
         html.print("</select>");
-    }
-
-    @Override
-    public String getTitle() {
-        return title == null ? this.getName() : title;
     }
 
     public SelectField setTitle(String title) {

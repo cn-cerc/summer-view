@@ -115,12 +115,13 @@ public class UIAppendPanel extends UIComponent {
     }
 
     @Override
-    public void addComponent(UIComponent component) {
+    public UIComponent addComponent(UIComponent component) {
         if (component instanceof IColumn) {
             this.inputPanel.addComponent(component);
         } else {
             super.addComponent(component);
         }
+        return this;
     }
 
     public UIComponent getInputPanel() {

@@ -51,11 +51,12 @@ public abstract class AbstractPage extends UIComponent implements IPage, IUserLa
     }
 
     @Override
-    public void addComponent(UIComponent component) {
+    public UIComponent addComponent(UIComponent component) {
         if (component.getId() != null) {
             this.put(component.getId(), component);
         }
         super.addComponent(component);
+        return this;
     }
 
     protected void put(String id, Object value) {

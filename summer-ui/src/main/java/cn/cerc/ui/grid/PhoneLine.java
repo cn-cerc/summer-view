@@ -4,10 +4,10 @@ import cn.cerc.core.DataSource;
 import cn.cerc.core.Record;
 import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
-import cn.cerc.ui.core.UrlRecord;
 import cn.cerc.ui.fields.AbstractField;
+import cn.cerc.ui.fields.AbstractField.BuildUrl;
 import cn.cerc.ui.fields.ExpendField;
-import cn.cerc.ui.other.BuildUrl;
+import cn.cerc.ui.vcl.UIUrl;
 
 public class PhoneLine extends UIComponent implements DataSource {
     private DataGrid grid;
@@ -62,23 +62,16 @@ public class PhoneLine extends UIComponent implements DataSource {
             }
             html.print(">");
 
+            String name = field.getShortName();
+            if (!"".equals(name))
+                html.print(name + ": ");
             BuildUrl build = field.getBuildUrl();
             if (build != null) {
-                String name = field.getShortName();
-                if (!"".equals(name)) {
-                    html.print(name + ": ");
-                }
-                UrlRecord url = new UrlRecord();
+                UIUrl url = new UIUrl(null);
                 build.buildUrl(record, url);
-                if (!"".equals(url.getUrl())) {
-                    html.println("<a href=\"%s\">", url.getUrl());
-                    html.print(field.getText());
-                    html.println("</a>");
-                } else {
-                    html.println(field.getText());
-                }
+                url.setText(field.getText()).output(html);
             } else {
-                outputColumn(field, html);
+                html.print(field.getText());
             }
 
             html.print("</td>");
@@ -95,31 +88,20 @@ public class PhoneLine extends UIComponent implements DataSource {
                 html.print(String.format(" class=\"%s\"", field.getCSSClass_phone()));
             }
             html.print(">");
+            String name = field.getShortName();
+            if (!"".equals(name))
+                html.print(name + ": ");
             BuildUrl build = field.getBuildUrl();
             if (build != null) {
-                UrlRecord url = new UrlRecord();
+                UIUrl url = new UIUrl(null);
                 build.buildUrl(getCurrent(), url);
-                if (!"".equals(url.getUrl())) {
-                    html.println("<a href=\"%s\">", url.getUrl());
-                    outputColumn(field, html);
-                    html.println("</a>");
-                } else {
-                    html.println(field.getText());
-                }
+                url.setText(field.getText()).output(html);
             } else {
-                outputColumn(field, html);
+                html.print(field.getText());
             }
             html.print("</span>");
         }
         html.print("</section>");
-    }
-
-    private void outputColumn(AbstractField field, HtmlWriter html) {
-        String name = field.getShortName();
-        if (!"".equals(name)) {
-            html.print(name + ": ");
-        }
-        html.print(field.getText());
     }
 
     public PhoneLine addItem(AbstractField... fields) {

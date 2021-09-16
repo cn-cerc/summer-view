@@ -52,8 +52,7 @@ public class MasterGridLine extends AbstractGridLine {
                 html.print(" role=\"%s\"", field.getField());
             }
             html.print(">");
-
-            field.outputOfGridLine(html);
+            super.outputCell(html, field);
             html.println("</td>");
         }
         html.println("</tr>");
@@ -68,7 +67,7 @@ public class MasterGridLine extends AbstractGridLine {
     }
 
     @Override
-    public void addComponent(UIComponent child) {
+    public UIComponent addComponent(UIComponent child) {
         if (child instanceof AbstractField) {
             AbstractField field = (AbstractField) child;
             getFields().add(field);
@@ -78,10 +77,11 @@ public class MasterGridLine extends AbstractGridLine {
 
             cell.setAlign(field.getAlign());
             cell.setRole(field.getField());
-            cell.addField(field);
+            cell.addComponent(field);
         } else {
             super.addComponent(child);
         }
+        return this;
     }
 
     public IColumnsManager getManager() {

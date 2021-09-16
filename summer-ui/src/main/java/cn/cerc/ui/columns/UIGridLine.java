@@ -9,10 +9,11 @@ public class UIGridLine extends UIComponent {
     }
 
     @Override
-    public void addComponent(UIComponent component) {
+    public UIComponent addComponent(UIComponent component) {
         if (!(component instanceof IColumn)) {
             throw new RuntimeException("component is not IColumn");
         }
         super.addComponent(component);
+        return this;
     }
 }

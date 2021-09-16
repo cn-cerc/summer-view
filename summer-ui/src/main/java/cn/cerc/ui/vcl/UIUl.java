@@ -10,7 +10,7 @@ public class UIUl extends UIComponent {
     }
 
     @Override
-    public void addComponent(UIComponent child) {
+    public UIComponent addComponent(UIComponent child) {
         if (child instanceof UILi)
             super.addComponent(child);
         else {
@@ -18,6 +18,7 @@ public class UIUl extends UIComponent {
             item.addComponent(child);
             super.addComponent(item);
         }
+        return this;
     }
 
     public UILi addItem() {

@@ -2,12 +2,10 @@ package cn.cerc.ui.vcl;
 
 import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
-import cn.cerc.ui.core.UrlRecord;
 
 public class UIA extends UIComponent implements IHtml {
     private String text;
     private String href;
-    private UrlRecord url;
 
     @Deprecated
     public UIA() {
@@ -42,7 +40,7 @@ public class UIA extends UIComponent implements IHtml {
     }
 
     public String getHref() {
-        return url == null ? href : url.getUrl();
+        return this.href;
     }
 
     public UIA setHref(String href) {
@@ -68,18 +66,4 @@ public class UIA extends UIComponent implements IHtml {
         return this;
     }
    
-    public UIA setSite(String site) {
-        if (url == null)
-            url = new UrlRecord();
-        url.setSite(site);
-        return this;
-    }
-
-    public UIA putParam(String key, String value) {
-        if (url == null)
-            url = new UrlRecord();
-        url.putParam(key, value);
-        return this;
-    }
-
 }

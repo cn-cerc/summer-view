@@ -77,12 +77,13 @@ public class DataGrid extends UIComponent implements DataSource {
     }
 
     @Override
-    public void addComponent(UIComponent child) {
+    public UIComponent addComponent(UIComponent child) {
         if (child instanceof AbstractField) {
             child.setOwner(getMasterLine());
         } else {
             super.addComponent(child);
         }
+        return this;
     }
 
     public MutiPage getPages() {

@@ -3,12 +3,13 @@ package cn.cerc.ui.fields;
 import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.fields.editor.CheckEditor;
+import cn.cerc.ui.grid.lines.AbstractGridLine.IOutputOfGridLine;
 import cn.cerc.ui.other.SearchItem;
+import cn.cerc.ui.vcl.UIInput;
 
-public class BooleanField extends AbstractField implements SearchItem, IFormatColumn {
+public class BooleanField extends AbstractField implements SearchItem, IFormatColumn, IOutputOfGridLine {
     private String trueText = "是";
     private String falseText = "否";
-    private String title;
     private boolean search;
     private CheckEditor editor;
 
@@ -39,40 +40,31 @@ public class BooleanField extends AbstractField implements SearchItem, IFormatCo
 
     @Override
     public void output(HtmlWriter html) {
-        if (!this.search) {
-            html.println(String.format("<label for=\"%s\">%s</label>", this.getId(), this.getName() + "："));
-            writeInput(html);
-            if (this.title != null) {
-                html.print("<label for=\"%s\">%s</label>", this.getId(), this.title);
-            }
-        } else {
-            writeInput(html);
-            html.println("<label for=\"%s\">%s</label>", this.getId(), this.getName());
-        }
-    }
-
-    private void writeInput(HtmlWriter html) {
-        html.print(String.format("<input type=\"checkbox\" id=\"%s\" name=\"%s\" value=\"1\"", this.getId(),
-                this.getId()));
-        if (getCurrent().getBoolean(this.getField())) {
-            html.print(" checked");
-        }
-        if (this.isReadonly()) {
-            html.print(" disabled");
-        }
-        if (this.onclick != null) {
-            html.print(" onclick=\"%s\"", this.onclick);
-        }
-        html.print(">");
+        this.beginOutput(html);
+        UIInput input = new UIInput(null);
+        input.setId(this.getId());
+        input.setName(this.getId());
+        input.setValue("1");
+        input.setInputType(UIInput.TYPE_CHECKBOX);
+        if (getCurrent().getBoolean(this.getField()))
+            input.addSignProperty("checked");
+        if (this.isReadonly())
+            input.addSignProperty("disabled");
+        input.writeProperty("onclick", this.getOnclick());
+        input.output(html);
+        this.endOutput(html);
     }
 
     @Override
-    public String getTitle() {
-        return title == null ? this.getName() : title;
+    public void endOutput(HtmlWriter html) {
+        this.getTitle().setText(this.getName());
+        this.getTitle().output(html);
+        super.endOutput(html);
     }
 
+    @Deprecated
     public BooleanField setTitle(String title) {
-        this.title = title;
+        this.setName(title);
         return this;
     }
 

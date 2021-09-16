@@ -14,17 +14,14 @@ import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.core.INameOwner;
 import cn.cerc.ui.core.SearchSource;
 import cn.cerc.ui.core.UIComponent;
-import cn.cerc.ui.core.UrlRecord;
 import cn.cerc.ui.other.BuildText;
-import cn.cerc.ui.other.BuildUrl;
+import cn.cerc.ui.vcl.UIFont;
 import cn.cerc.ui.vcl.UIImage;
 import cn.cerc.ui.vcl.UIInput;
 import cn.cerc.ui.vcl.UILabel;
-import cn.cerc.ui.vcl.UILi;
 import cn.cerc.ui.vcl.UISpan;
 import cn.cerc.ui.vcl.UIText;
 import cn.cerc.ui.vcl.UITextarea;
-import cn.cerc.ui.vcl.UIUl;
 import cn.cerc.ui.vcl.UIUrl;
 
 public abstract class AbstractField extends UIComponent implements INameOwner, SearchSource {
@@ -34,30 +31,30 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
     // 自定义取值
     protected BuildText buildText;
     // 焦点否
-    protected boolean autofocus;
+    private boolean autofocus;
     //
-    protected boolean required;
+    private boolean required;
     // 用于文件上传是否可以选则多个文件
-    protected boolean multiple = false;
+    private boolean multiple = false;
     //
-    protected String placeholder;
+    private String placeholder;
     // 正则过滤
-    protected String pattern;
+    private String pattern;
     //
-    protected boolean hidden;
+    private boolean hidden;
     // 角色
-    protected String role;
+    private String role;
     //
-    protected DialogField dialog;
+    private DialogField dialog;
     // dialog 小图标
-    protected String icon;
+    private String icon;
     //
     protected BuildUrl buildUrl;
     // 数据源
     private DataSource source;
 
-    protected String oninput;
-    protected String onclick;
+    private String oninput;
+    private String onclick;
     private String htmlTag = "input";
     private String htmType = UIInput.TYPE_TEXT;
     private String name;
@@ -86,6 +83,8 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
     private boolean resize = true;
     // 是否显示*号
     private boolean showStar = false;
+    // 字段标题
+    private UILabel title;
 
     public AbstractField(UIComponent owner, String name, String field) {
         this(owner, name, field, 0);
@@ -96,6 +95,7 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
         this.setField(field);
         this.setName(name);
         this.width = width;
+        this.title = new UILabel(this);
         // 查找最近的数据源
         UIComponent root = owner;
         while (root != null) {
@@ -302,42 +302,32 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
 
     public AbstractField setHidden(boolean hidden) {
         this.hidden = hidden;
+        title.setOwner(hidden ? null : this);
         return this;
     }
 
     @Override
-    public void output(HtmlWriter html) {
-        if (this.hidden) {
-            outputInput(html);
-        } else {
-            UILabel label = new UILabel().setFor(this.getId()).setText(this.getName() + "：");
-            label.output(html);
-            outputInput(html);
-            if (this.showStar) {
-                html.println("<font>*</font>");
-            }
-            UISpan span = new UISpan();
-            if (this.dialog != null && this.dialog.isOpen()) {
-                UIUrl url = new UIUrl(span).setHref(dialog.getUrl());
-                UIImage img = new UIImage(url);
-                img.setSrc(this.icon != null ? this.icon : CDN.get(config.getClassProperty("icon", "")));
-            }
-            span.output(html);
-        }
+    public void beginOutput(HtmlWriter html) {
+        super.beginOutput(html);
+        this.title.setFor(this.getId()).setText(this.getName() + "：");
+        this.title.setOwner(visible ? this : null);
     }
 
-    protected void outputInput(HtmlWriter html) {
+    @Override
+    public void output(HtmlWriter html) {
+        this.beginOutput(html);
+        if (!this.hidden)
+            title.output(html);
         if ("textarea".equals(htmlTag)) {
             UITextarea input = new UITextarea(null);
             input.setId(this.getId());
             input.setName(this.getId());
             input.setReadonly(this.isReadonly());
             input.setCssStyle(resize ? "resize: none;" : null);
-            StringBuffer sb = new StringBuffer();
-            sb.append(this.required ? " required" : "");
-            sb.append(this.autofocus ? " autofocus" : "");
-            if (sb.length() > 0)
-                input.writeProperty(null, sb.toString().trim());
+            if (this.required)
+                input.addSignProperty("required");
+            if (this.autofocus)
+                input.addSignProperty("autofocus");
             input.writeProperty("placeholder", this.placeholder);
             input.writeProperty("maxlength", maxlength > 0 ? maxlength : null);
             input.writeProperty("rows", rows > 0 ? rows : null);
@@ -345,33 +335,51 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
             String value = this.getValue();
             input.setText(value != null ? value : this.getText());
             input.output(html);
-            return;
-        }
-
-        UIInput input = new UIInput(null);
-        input.setId(this.getId());
-        input.setName(this.getId());
-        input.setInputType(this.hidden ? "hidden" : this.getHtmType());
-        if (this.hidden) {
-            input.setValue(this.getText());
         } else {
-            String value = this.getValue();
-            input.setValue(value != null ? value : this.getText());
-            input.setReadonly(this.isReadonly());
-            StringBuffer sb = new StringBuffer();
-            sb.append(this.required ? " required" : "");
-            sb.append(this.autofocus ? " autofocus" : "");
-            sb.append(this.multiple ? " multiple" : "");
-            if (sb.length() > 0)
-                input.writeProperty(null, sb.toString().trim());
-            input.setCssClass(this.CSSClass_phone);
-            input.setPlaceholder(this.placeholder);
-            input.writeProperty("autocomplete", this.autocomplete ? "on" : "off");
-            input.writeProperty("pattern", this.pattern);
-            input.writeProperty("oninput", this.oninput);
-            input.writeProperty("onclick", this.onclick);
+            UIInput input = new UIInput(null);
+            input.setId(this.getId());
+            input.setName(this.getId());
+            input.setInputType(this.hidden ? "hidden" : this.getHtmType());
+            if (this.hidden) {
+                input.setValue(this.getText());
+            } else {
+                String value = this.getValue();
+                input.setValue(value != null ? value : this.getText());
+                input.setReadonly(this.isReadonly());
+                input.setCssClass(this.CSSClass_phone);
+                input.setPlaceholder(this.placeholder);
+                input.writeProperty("autocomplete", this.autocomplete ? "on" : "off");
+                input.writeProperty("pattern", this.pattern);
+                input.writeProperty("oninput", this.oninput);
+                input.writeProperty("onclick", this.onclick);
+
+                if (this.required)
+                    input.addSignProperty("required");
+                if (this.autofocus)
+                    input.addSignProperty("autofocus");
+                if (this.multiple)
+                    input.addSignProperty("multiple");
+            }
+            input.output(html);
         }
-        input.output(html);
+        this.endOutput(html);
+    }
+
+    @Override
+    public void endOutput(HtmlWriter html) {
+        if (this.showStar) {
+            new UIFont(null).addComponent(new UIText().setText("*")).output(html);
+        }
+        if (!this.hidden) {
+            UISpan span = new UISpan(null);
+            if (this.dialog != null && this.dialog.isOpen()) {
+                String src = this.icon != null ? this.icon : CDN.get(getIconConfig());
+                UIUrl url = new UIUrl(span).setHref(dialog.getUrl());
+                new UIImage(url).setSrc(src);
+            }
+            span.output(html);
+        }
+        super.endOutput(html);
     }
 
     public DialogField getDialog() {
@@ -391,6 +399,10 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
             this.dialog.add(string);
         }
         return this;
+    }
+
+    public interface BuildUrl {
+        void buildUrl(Record record, UIUrl url);
     }
 
     public void createUrl(BuildUrl build) {
@@ -435,9 +447,8 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
         return this;
     }
 
-    @Deprecated
-    public String getTitle() {
-        return this.getName();
+    public UILabel getTitle() {
+        return this.title;
     }
 
     public boolean isVisible() {
@@ -662,52 +673,8 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
         }
     }
 
-    public void outputOfFormHorizontal(UIUl list) {
-        UIText mark = this.getMark();
-        if (mark != null) {
-            UILi li1 = new UILi(null);
-            li1.writeProperty("role", this.getId());
-            if (this instanceof ExpendField)
-                li1.setCssClass("select");
-            li1.setText(this.toString());
-            UIUrl url = new UIUrl(li1);
-            url.setHref(String.format("javascript:displaySwitch(\"%s\")", this.getId()));
-            new UIImage(url).setSrc(CDN.get(config.getClassProperty("icon", "")));
-            list.addComponent(li1);
-            //
-            UILi li2 = new UILi(null);
-            li2.writeProperty("role", this.getId()).setCssStyle("display: none;");
-            li2.setText(mark.setRootLabel("mark").toString());
-            list.addComponent(li2);
-        } else {
-            UILi li = new UILi(null);
-            li.writeProperty("role", this.getRole());
-            if (this instanceof ExpendField)
-                li.setCssClass("select");
-            li.setText(this.toString());
-            list.addComponent(li);
-        }
-    }
-
-    public void outputOfGridLine(HtmlWriter html) {
-        BuildUrl build = this.getBuildUrl();
-        if (build != null) {
-            UrlRecord url = new UrlRecord();
-            build.buildUrl(this.getCurrent(), url);
-            if (!"".equals(url.getUrl())) {
-                UIUrl item = new UIUrl();
-                item.setHref(url.getUrl());
-                item.writeProperty("title", url.getTitle());
-                item.setTarget(url.getTarget());
-                item.setOnclick(String.format("return confirm(\"%s\");", url.getHintMsg()));
-                item.setText(this.getText());
-                item.output(html);
-            } else {
-                html.print(this.getText());
-            }
-        } else {
-            html.print(this.getText());
-        }
+    public static String getIconConfig() {
+        return config.getClassProperty("icon", "");
     }
 
 }
