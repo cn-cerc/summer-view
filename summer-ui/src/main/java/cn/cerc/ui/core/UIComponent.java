@@ -205,10 +205,18 @@ public class UIComponent implements IOriginOwner, HtmlContent, Iterable<UICompon
         return this.signProperty;
     }
 
-    public final UIComponent addSignProperty(String cssSignValue) {
-        if (cssSignValue != null && !"".equals(cssSignValue))
-            this.signProperty.add(cssSignValue);
+    public final UIComponent setSignProperty(String signValue, boolean value) {
+        if (signValue != null && !"".equals(signValue)) {
+            if (value)
+                this.signProperty.add(signValue);
+            else
+                this.signProperty.remove(signValue);
+        }
         return this;
+    }
+
+    public final boolean getSignProperty(String signValue) {
+        return this.signProperty.contains(signValue);
     }
 
     @Deprecated

@@ -21,7 +21,6 @@ import cn.cerc.ui.vcl.UIInput;
 import cn.cerc.ui.vcl.UILabel;
 import cn.cerc.ui.vcl.UISpan;
 import cn.cerc.ui.vcl.UIText;
-import cn.cerc.ui.vcl.UITextarea;
 import cn.cerc.ui.vcl.UIUrl;
 
 public abstract class AbstractField extends UIComponent implements INameOwner, SearchSource {
@@ -29,15 +28,11 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
     // 数据库相关
     private String field;
     // 自定义取值
-    protected BuildText buildText;
+    private BuildText buildText;
     // 焦点否
     private boolean autofocus;
     //
     private boolean required;
-    // 用于文件上传是否可以选则多个文件
-    private boolean multiple = false;
-    //
-    private String placeholder;
     // 正则过滤
     private String pattern;
     //
@@ -49,13 +44,12 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
     // dialog 小图标
     private String icon;
     //
-    protected BuildUrl buildUrl;
+    private BuildUrl buildUrl;
     // 数据源
     private DataSource source;
 
     private String oninput;
     private String onclick;
-    private String htmlTag = "input";
     private String htmType = UIInput.TYPE_TEXT;
     private String name;
     private String shortName;
@@ -72,19 +66,12 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
     // 栏位说明
     private UIText mark;
     private boolean visible = true;
-    // TODO 专用于textarea标签，需要拆分该标签出来，黄荣君 2016-05-31
-    // 最大字符串数
-    private int maxlength;
-    // 可见行数
-    private int rows;
-    // 可见宽度
-    private int cols;
-    // 是否禁用
-    private boolean resize = true;
     // 是否显示*号
     private boolean showStar = false;
     // 字段标题
     private UILabel title;
+    // 输入字段
+    private UIInput content = new UIInput(this);
 
     public AbstractField(UIComponent owner, String name, String field) {
         this(owner, name, field, 0);
@@ -279,11 +266,11 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
     }
 
     public String getPlaceholder() {
-        return placeholder;
+        return (String) content.readProperty("placeholder");
     }
 
     public AbstractField setPlaceholder(String placeholder) {
-        this.placeholder = placeholder;
+        this.content.writeProperty("placeholder", placeholder);
         return this;
     }
 
@@ -316,52 +303,25 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
     @Override
     public void output(HtmlWriter html) {
         this.beginOutput(html);
-        if (!this.hidden)
-            title.output(html);
-        if ("textarea".equals(htmlTag)) {
-            UITextarea input = new UITextarea(null);
-            input.setId(this.getId());
-            input.setName(this.getId());
-            input.setReadonly(this.isReadonly());
-            input.setCssStyle(resize ? "resize: none;" : null);
-            if (this.required)
-                input.addSignProperty("required");
-            if (this.autofocus)
-                input.addSignProperty("autofocus");
-            input.writeProperty("placeholder", this.placeholder);
-            input.writeProperty("maxlength", maxlength > 0 ? maxlength : null);
-            input.writeProperty("rows", rows > 0 ? rows : null);
-            input.writeProperty("cols", cols > 0 ? cols : null);
-            String value = this.getValue();
-            input.setText(value != null ? value : this.getText());
-            input.output(html);
+        content.setId(this.getId());
+        content.setName(this.getId());
+        content.setInputType(this.hidden ? "hidden" : this.getHtmType());
+        if (this.hidden) {
+            content.setValue(this.getText());
         } else {
-            UIInput input = new UIInput(null);
-            input.setId(this.getId());
-            input.setName(this.getId());
-            input.setInputType(this.hidden ? "hidden" : this.getHtmType());
-            if (this.hidden) {
-                input.setValue(this.getText());
-            } else {
-                String value = this.getValue();
-                input.setValue(value != null ? value : this.getText());
-                input.setReadonly(this.isReadonly());
-                input.setCssClass(this.CSSClass_phone);
-                input.setPlaceholder(this.placeholder);
-                input.writeProperty("autocomplete", this.autocomplete ? "on" : "off");
-                input.writeProperty("pattern", this.pattern);
-                input.writeProperty("oninput", this.oninput);
-                input.writeProperty("onclick", this.onclick);
-
-                if (this.required)
-                    input.addSignProperty("required");
-                if (this.autofocus)
-                    input.addSignProperty("autofocus");
-                if (this.multiple)
-                    input.addSignProperty("multiple");
-            }
-            input.output(html);
+            this.title.output(html);
+            String value = this.getValue();
+            content.setCssClass(this.CSSClass_phone);
+            content.setValue(value != null ? value : this.getText());
+            content.setReadonly(this.isReadonly());
+            content.writeProperty("autocomplete", this.autocomplete ? "on" : "off");
+            content.writeProperty("pattern", this.pattern);
+            content.writeProperty("oninput", this.oninput);
+            content.writeProperty("onclick", this.onclick);
+            content.setSignProperty("required", this.required);
+            content.setSignProperty("autofocus", this.autofocus);
         }
+        content.output(html);
         this.endOutput(html);
     }
 
@@ -568,50 +528,6 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
         this.icon = icon;
     }
 
-    public String getHtmlTag() {
-        return htmlTag;
-    }
-
-    public AbstractField setHtmlTag(String htmlTag) {
-        this.htmlTag = htmlTag;
-        return this;
-    }
-
-    public int getMaxlength() {
-        return maxlength;
-    }
-
-    public AbstractField setMaxlength(int maxlength) {
-        this.maxlength = maxlength;
-        return this;
-    }
-
-    public int getRows() {
-        return rows;
-    }
-
-    public AbstractField setRows(int rows) {
-        this.rows = rows;
-        return this;
-    }
-
-    public int getCols() {
-        return cols;
-    }
-
-    public AbstractField setCols(int cols) {
-        this.cols = cols;
-        return this;
-    }
-
-    public boolean isMultiple() {
-        return multiple;
-    }
-
-    public void setMultiple(boolean multiple) {
-        this.multiple = multiple;
-    }
-
     public class Editor {
         private String xtype;
 
@@ -677,4 +593,7 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
         return config.getClassProperty("icon", "");
     }
 
+    protected UIComponent getContent() {
+        return this.content;
+    }
 }

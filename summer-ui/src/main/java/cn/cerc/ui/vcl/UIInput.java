@@ -16,13 +16,10 @@ public class UIInput extends UIComponent implements IHtml, INameOwner {
     public static final String TYPE_DATETIME_LOCAL = "datetime-local";
     public static final String TYPE_TEXT = "text";
 
-    private String caption;
+    private String title;
     private String name;
     private String value;
     private boolean hidden;
-    private boolean required;
-    private boolean readonly;
-    private boolean checked;
     private String inputType = TYPE_TEXT;
 
     public UIInput(UIComponent owner) {
@@ -32,29 +29,21 @@ public class UIInput extends UIComponent implements IHtml, INameOwner {
 
     @Override
     public void beginOutput(HtmlWriter html) {
-        if (this.caption != null)
-            html.print(this.caption);
+        if (this.title != null)
+            html.print(this.title);
         this.writeProperty("name", this.getName());
         this.writeProperty("type", this.hidden ? "hidden" : this.inputType);
         this.writeProperty("value", this.value);
-        if (!this.hidden) {
-            this.writeProperty("readonly", this.readonly ? "readonly" : null);
-            StringBuffer sb = new StringBuffer();
-            sb.append(this.required ? " required" : "");
-            sb.append(this.checked ? " checked" : "");
-            if (sb.length() > 0)
-                this.writeProperty(null, sb.toString().trim());
-        }
         super.beginOutput(html);
     }
 
     public String getCaption() {
-        return caption;
+        return title;
     }
 
     @Deprecated
     public UIInput setCaption(String caption) {
-        this.caption = caption;
+        this.title = caption;
         return this;
     }
 
@@ -78,11 +67,11 @@ public class UIInput extends UIComponent implements IHtml, INameOwner {
     }
 
     public boolean isReadonly() {
-        return readonly;
+        return this.getSignProperty("readonly");
     }
 
     public void setReadonly(boolean readonly) {
-        this.readonly = readonly;
+        this.setSignProperty("readonly", readonly);
     }
 
     public String getPlaceholder() {
@@ -102,11 +91,11 @@ public class UIInput extends UIComponent implements IHtml, INameOwner {
     }
 
     public boolean isRequired() {
-        return required;
+        return this.getSignProperty("required");
     }
 
     public void setRequired(boolean required) {
-        this.required = required;
+        this.setSignProperty("required", required);
     }
 
     public boolean isHidden() {
@@ -118,11 +107,11 @@ public class UIInput extends UIComponent implements IHtml, INameOwner {
     }
 
     public boolean isChecked() {
-        return checked;
+        return this.getSignProperty("checked");
     }
 
     public void setChecked(boolean checked) {
-        this.checked = checked;
+        this.setSignProperty("checked", checked);
     }
 
 }

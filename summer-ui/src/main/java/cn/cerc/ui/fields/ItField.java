@@ -18,9 +18,9 @@ public class ItField extends AbstractField {
 
     @Override
     public String getText() {
-        if (buildText != null) {
+        if (getBuildText() != null) {
             HtmlWriter html = new HtmlWriter();
-            buildText.outputText(getCurrent(), html);
+            getBuildText().outputText(getCurrent(), html);
             return html.toString();
         }
         return "" + getCurrent().getDataSet().getRecNo();

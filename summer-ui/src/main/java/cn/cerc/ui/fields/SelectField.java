@@ -32,9 +32,9 @@ public class SelectField extends AbstractField implements IFormatColumn, IOutput
 
     @Override
     public String getText() {
-        if (buildText != null) {
+        if (getBuildText() != null) {
             HtmlWriter html = new HtmlWriter();
-            buildText.outputText(getCurrent(), html);
+            getBuildText().outputText(getCurrent(), html);
             return html.toString();
         }
         String val = getCurrent().getString(this.getField());

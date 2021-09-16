@@ -11,78 +11,50 @@ import cn.cerc.ui.core.UIComponent;
  */
 //FIXME 应改为 UITextarea，ZhangGong 2021/3/19
 public class UITextarea extends UIComponent implements IHtml, INameOwner {
-    private UISpan caption;
+    private UISpan title;
     private String name;
-    private StringBuffer lines = new StringBuffer();
-    private String placeholder;
-    private int cols;// 列
-    private int rows;// 行
-    private String onInput;
-    private boolean autofocus;
-    private boolean readonly;
-
-    public UITextarea(UIComponent owner) {
-        super(owner);
-    }
+    private UIText lines;
+    private int cols;
+    private int rows;
 
     public UITextarea() {
         this(null);
     }
 
+    public UITextarea(UIComponent owner) {
+        super(owner);
+        this.setRootLabel("textarea");
+        this.lines = new UIText(lines);
+    }
+
     @Override
-    public void output(HtmlWriter html) {
-        if (caption != null) {
-            caption.output(html);
-        }
-
-        html.print("<textarea ");
+    public void beginOutput(HtmlWriter html) {
+        if (title != null)
+            title.output(html);
+        this.writeProperty("name", this.getName());
         super.outputPropertys(html);
-        if (getName() != null) {
-            html.print("name='%s' ", name);
-        } else if (this.getId() != null) {
-            html.print("name='%s' ", this.getId());
-        }
-        if (getRows() != 0) {
-            html.print("rows='%s' ", rows);
-        }
-        if (getCols() != 0) {
-            html.print("cols='%s' ", cols);
-        }
-        if (getPlaceholder() != null) {
-            html.print("placeholder='%s' ", placeholder);
-        }
-        if (isReadonly()) {
-            html.print("readonly='readonly' ");
-        }
-        if (getOnInput() != null) {
-            html.print("oninput='%s' ", onInput);
-        }
-        if (isAutofocus()) {
-            html.print("autofocus ");
-        }
-        html.print(">");
-
-        if (getText() != null) {
-            html.print(lines.toString());
-        }
-        html.print("</textarea>");
+        if (getRows() != 0)
+            this.writeProperty("rows", rows);
+        if (getCols() != 0)
+            this.writeProperty("cols", cols);
+        super.beginOutput(html);
     }
 
+    @Deprecated
     public UISpan getCaption() {
-        if (caption == null) {
-            caption = new UISpan();
-        }
-        return caption;
+        return getTitle();
     }
 
-    public UITextarea setCaption(UISpan caption) {
-        this.caption = caption;
-        return this;
+    public UISpan getTitle() {
+        if (title == null) {
+            title = new UISpan(this);
+        }
+        return title;
     }
 
     @Override
     public String getName() {
-        if(name == null)
+        if (name == null)
             name = getId();
         return name;
     }
@@ -97,25 +69,25 @@ public class UITextarea extends UIComponent implements IHtml, INameOwner {
     }
 
     public UITextarea setText(String text) {
-        this.lines = new StringBuffer(text);
+        this.lines.setText(text);
         return this;
     }
-    
+
     public UITextarea append(String text) {
-        this.lines = lines.append(text).append("\n");
+        this.lines.setText(lines.getText() + text + "\n");
         return this;
     }
-    
+
     public UITextarea append(String format, Object... args) {
         return this.append(String.format(format, args));
     }
 
     public String getPlaceholder() {
-        return placeholder;
+        return (String) this.readProperty("placeholder");
     }
 
     public UITextarea setPlaceholder(String placeholder) {
-        this.placeholder = placeholder;
+        this.writeProperty("placeholder", placeholder);
         return this;
     }
 
@@ -137,29 +109,22 @@ public class UITextarea extends UIComponent implements IHtml, INameOwner {
         return this;
     }
 
-    public boolean isReadonly() {
-        return readonly;
-    }
-
     public UITextarea setReadonly(boolean readonly) {
-        this.readonly = readonly;
+        this.setSignProperty("readonly", readonly);
+        return this;
+    }
+    
+    public UITextarea setAutofocus(boolean autofocus) {
+        this.setSignProperty("autofocus", autofocus);
         return this;
     }
 
     public String getOnInput() {
-        return onInput;
+        return (String) this.readProperty("oninput");
     }
 
     public void setOnInput(String onInput) {
-        this.onInput = onInput;
-    }
-
-    public boolean isAutofocus() {
-        return autofocus;
-    }
-
-    public void setAutofocus(boolean autofocus) {
-        this.autofocus = autofocus;
+        this.writeProperty("oninput", onInput);
     }
 
 }

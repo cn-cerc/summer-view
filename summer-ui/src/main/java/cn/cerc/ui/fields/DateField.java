@@ -32,9 +32,9 @@ public class DateField extends AbstractField {
 
     @Override
     public String getText() {
-        if (buildText != null) {
+        if (getBuildText() != null) {
             HtmlWriter html = new HtmlWriter();
-            buildText.outputText(getCurrent(), html);
+            getBuildText().outputText(getCurrent(), html);
             return html.toString();
         }
         if (getCurrent().hasValue(getField())) {

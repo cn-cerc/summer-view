@@ -31,9 +31,9 @@ public class ExpendField extends AbstractField implements SearchItem {
         if (this.search) {
             return this.getName();
         }
-        if (buildText != null) {
+        if (getBuildText() != null) {
             HtmlWriter html = new HtmlWriter();
-            buildText.outputText(getCurrent(), html);
+            getBuildText().outputText(getCurrent(), html);
             return html.toString();
         }
         return String.format("<a href=\"javascript:displaySwitch('%d')\">%s</a>", getCurrent().getDataSet().getRecNo(), res.getString(1, "展开"));

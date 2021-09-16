@@ -24,12 +24,13 @@ public class BooleanField extends AbstractField implements SearchItem, IFormatCo
 
     @Override
     public String getText() {
-        if (buildText != null) {
+        if (getBuildText() != null) {
             HtmlWriter html = new HtmlWriter();
-            buildText.outputText(getCurrent(), html);
+            getBuildText().outputText(getCurrent(), html);
             return html.toString();
+        } else {
+            return getCurrent().getBoolean(this.getField()) ? trueText : falseText;
         }
-        return getCurrent().getBoolean(this.getField()) ? trueText : falseText;
     }
 
     public BooleanField setBooleanText(String trueText, String falseText) {
@@ -46,10 +47,8 @@ public class BooleanField extends AbstractField implements SearchItem, IFormatCo
         input.setName(this.getId());
         input.setValue("1");
         input.setInputType(UIInput.TYPE_CHECKBOX);
-        if (getCurrent().getBoolean(this.getField()))
-            input.addSignProperty("checked");
-        if (this.isReadonly())
-            input.addSignProperty("disabled");
+        input.setSignProperty("checked", getCurrent().getBoolean(this.getField()));
+        input.setSignProperty("disabled", this.isReadonly());
         input.writeProperty("onclick", this.getOnclick());
         input.output(html);
         this.endOutput(html);

@@ -24,9 +24,9 @@ public class DoubleField extends AbstractField implements IFormatColumn, IOutput
 
     @Override
     public String getText() {
-        if (buildText != null) {
+        if (getBuildText() != null) {
             HtmlWriter html = new HtmlWriter();
-            buildText.outputText(getCurrent(), html);
+            getBuildText().outputText(getCurrent(), html);
             return html.toString();
         }
         try {
@@ -48,9 +48,9 @@ public class DoubleField extends AbstractField implements IFormatColumn, IOutput
     @Override
     public void outputOfGridLine(HtmlWriter html) {
         if (this.isReadonly()) {
-            if (buildUrl != null) {
+            if (getBuildUrl() != null) {
                 UIUrl url = new UIUrl(null);
-                buildUrl.buildUrl(getCurrent(), url);
+                getBuildUrl().buildUrl(getCurrent(), url);
                 if (!"".equals(url.getHref())) {
                     url.setText(getText());
                     url.output(html);
