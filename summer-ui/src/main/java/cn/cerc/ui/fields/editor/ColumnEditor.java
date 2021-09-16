@@ -9,6 +9,7 @@ import cn.cerc.core.DataSet;
 import cn.cerc.core.Record;
 import cn.cerc.ui.SummerUI;
 import cn.cerc.ui.core.HtmlWriter;
+import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.fields.AbstractField;
 import cn.cerc.ui.fields.IFormatColumn;
 import cn.cerc.ui.grid.lines.AbstractGridLine;
@@ -27,10 +28,17 @@ public class ColumnEditor {
 
     public ColumnEditor(AbstractField owner) {
         this.owner = owner;
-        if (!(owner.getOwner() instanceof AbstractGridLine)) {
-            throw new RuntimeException(String.format(res.getString(1, "不支持的数据类型：%s"), owner.getOwner().getClass().getName()));
+
+        UIComponent root = owner;
+        while (root != null) {
+            if (root instanceof AbstractGridLine) {
+                gridLine = (AbstractGridLine) root;
+                break;
+            }
+            root = root.getOwner();
         }
-        gridLine = (AbstractGridLine) (owner.getOwner());
+        if (gridLine == null)
+            throw new RuntimeException(String.format(res.getString(1, "不支持的数据类型：%s"), owner.getClass().getName()));
     }
 
     public String getOnUpdate() {

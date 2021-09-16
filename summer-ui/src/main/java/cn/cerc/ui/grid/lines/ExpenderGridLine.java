@@ -62,14 +62,14 @@ public class ExpenderGridLine extends AbstractGridLine {
             AbstractField field = (AbstractField) child;
             getFields().add(field);
 
-            RowCell col;
+            RowCell cell;
             if (getCells().size() == 0) {
-                col = new RowCell(null);
-                getCells().add(col);
+                cell = new RowCell(this);
+                getCells().add(cell);
             } else {
-                col = getCells().get(0);
+                cell = getCells().get(0);
             }
-            col.addComponent(field);
+            cell.addComponent(field);
         } else {
             super.addComponent(child);
         }

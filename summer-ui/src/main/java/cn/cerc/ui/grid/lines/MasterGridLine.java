@@ -72,12 +72,12 @@ public class MasterGridLine extends AbstractGridLine {
             AbstractField field = (AbstractField) child;
             getFields().add(field);
 
-            RowCell cell = new RowCell(null);
-            getCells().add(cell);
+            RowCell col = new RowCell(this);
+            getCells().add(col);
 
-            cell.setAlign(field.getAlign());
-            cell.setRole(field.getField());
-            cell.addComponent(field);
+            col.setAlign(field.getAlign());
+            col.setRole(field.getField());
+            col.addComponent(field);
         } else {
             super.addComponent(child);
         }

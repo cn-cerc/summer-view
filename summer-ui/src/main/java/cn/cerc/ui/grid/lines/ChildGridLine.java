@@ -57,12 +57,11 @@ public class ChildGridLine extends AbstractGridLine {
         if (child instanceof AbstractField) {
             AbstractField field = (AbstractField) child;
             getFields().add(field);
-            RowCell col;
-            col = new RowCell(null);
-            col.setAlign(field.getAlign());
-            col.setRole(field.getField());
-            getCells().add(col);
-            col.addComponent(field);
+            RowCell cell= new RowCell(this);
+            cell.setAlign(field.getAlign());
+            cell.setRole(field.getField());
+            getCells().add(cell);
+            cell.addComponent(field);
         } else {
             super.addComponent(child);
         }
