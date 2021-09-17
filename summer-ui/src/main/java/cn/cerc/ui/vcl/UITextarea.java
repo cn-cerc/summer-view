@@ -24,7 +24,7 @@ public class UITextarea extends UIComponent implements IHtml, INameOwner {
     public UITextarea(UIComponent owner) {
         super(owner);
         this.setRootLabel("textarea");
-        this.lines = new UIText(lines);
+        this.lines = new UIText(this);
     }
 
     @Override
@@ -32,7 +32,6 @@ public class UITextarea extends UIComponent implements IHtml, INameOwner {
         if (title != null)
             title.output(html);
         this.writeProperty("name", this.getName());
-        super.outputPropertys(html);
         if (getRows() != 0)
             this.writeProperty("rows", rows);
         if (getCols() != 0)
