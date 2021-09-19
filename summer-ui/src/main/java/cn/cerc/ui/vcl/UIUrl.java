@@ -7,7 +7,6 @@ public class UIUrl extends UIA {
     private UrlRecord url;
     private String hintMsg;
 
-    @Deprecated
     public UIUrl() {
         this(null);
     }

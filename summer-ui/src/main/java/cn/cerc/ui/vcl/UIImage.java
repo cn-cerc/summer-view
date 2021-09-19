@@ -11,7 +11,6 @@ public class UIImage extends UIComponent implements IHtml {
     private AliyunOssProcess process;
     private String staticPath;
 
-    @Deprecated
     public UIImage() {
         this(null);
     }

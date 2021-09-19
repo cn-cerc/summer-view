@@ -7,7 +7,6 @@ public class UISpan extends UIComponent implements IHtml {
     private UIText text;
     private UIComponent url;
 
-    @Deprecated
     public UISpan() {
         this(null);
     }

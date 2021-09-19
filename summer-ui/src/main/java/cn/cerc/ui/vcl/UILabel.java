@@ -6,7 +6,6 @@ import cn.cerc.ui.core.UIComponent;
 public class UILabel extends UIComponent implements IHtml {
     private String text;
 
-    @Deprecated
     public UILabel() {
         this(null);
     }

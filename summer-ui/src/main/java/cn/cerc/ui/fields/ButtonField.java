@@ -12,6 +12,10 @@ public class ButtonField extends AbstractField {
         super(null, null, null);
     }
 
+    public ButtonField(UIComponent owner, String name, String field) {
+        super(owner, name, field);
+    }
+
     public ButtonField(UIComponent owner, String name, String field, String data) {
         super(owner, name, field);
         this.data = data;
