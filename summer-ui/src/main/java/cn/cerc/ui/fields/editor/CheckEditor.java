@@ -1,6 +1,6 @@
 package cn.cerc.ui.fields.editor;
 
-import cn.cerc.core.Record;
+import cn.cerc.core.DataRow;
 import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.fields.AbstractField;
 
@@ -20,7 +20,7 @@ public class CheckEditor {
         this.onUpdate = onUpdate;
     }
 
-    public String format(Record ds) {
+    public String format(DataRow ds) {
         String data = ds.getString(owner.getField());
 
         HtmlWriter html = new HtmlWriter();

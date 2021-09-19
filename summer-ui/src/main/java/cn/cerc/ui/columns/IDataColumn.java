@@ -1,6 +1,6 @@
 package cn.cerc.ui.columns;
 
-import cn.cerc.core.Record;
+import cn.cerc.core.DataRow;
 
 public interface IDataColumn extends IColumn {
 
@@ -12,7 +12,7 @@ public interface IDataColumn extends IColumn {
 
     Object setHidden(boolean hidden);
 
-    Record getRecord();
+    DataRow getRecord();
 
-    void setRecord(Record record);
+    void setRecord(DataRow record);
 }

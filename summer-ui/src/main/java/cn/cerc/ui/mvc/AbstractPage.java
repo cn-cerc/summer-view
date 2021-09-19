@@ -7,7 +7,7 @@ import cn.cerc.core.ClassConfig;
 import cn.cerc.core.DataSet;
 import cn.cerc.core.Datetime;
 import cn.cerc.core.IUserLanguage;
-import cn.cerc.core.Record;
+import cn.cerc.core.DataRow;
 import cn.cerc.core.Utils;
 import cn.cerc.db.redis.RedisRecord;
 import cn.cerc.mis.SummerMIS;
@@ -124,7 +124,7 @@ public abstract class AbstractPage extends UIComponent implements IPage, IUserLa
         put(id, value);
     }
 
-    public void add(String id, Record value) {
+    public void add(String id, DataRow value) {
         put(id, value);
     }
 

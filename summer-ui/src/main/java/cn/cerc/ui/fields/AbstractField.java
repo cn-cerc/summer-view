@@ -7,7 +7,7 @@ import cn.cerc.core.ClassConfig;
 import cn.cerc.core.DataSource;
 import cn.cerc.core.Datetime;
 import cn.cerc.core.FastDate;
-import cn.cerc.core.Record;
+import cn.cerc.core.DataRow;
 import cn.cerc.mis.cdn.CDN;
 import cn.cerc.ui.SummerUI;
 import cn.cerc.ui.core.HtmlWriter;
@@ -182,7 +182,7 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
      * @return 返回输出文本
      */
     protected String getDefaultText() {
-        Record record = this.getCurrent();
+        DataRow record = this.getCurrent();
         if (record != null) {
             if (buildText != null) {
                 HtmlWriter html = new HtmlWriter();
@@ -213,8 +213,8 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
     }
 
     @Override
-    public Record getCurrent() {
-        return source != null ? source.getCurrent() : new Record();
+    public DataRow getCurrent() {
+        return source != null ? source.getCurrent() : new DataRow();
     }
 
     @Override
@@ -362,7 +362,7 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
     }
 
     public interface BuildUrl {
-        void buildUrl(Record record, UIUrl url);
+        void buildUrl(DataRow record, UIUrl url);
     }
 
     public void createUrl(BuildUrl build) {

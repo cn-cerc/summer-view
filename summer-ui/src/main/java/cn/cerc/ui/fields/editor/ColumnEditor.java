@@ -6,7 +6,7 @@ import java.util.List;
 
 import cn.cerc.core.ClassResource;
 import cn.cerc.core.DataSet;
-import cn.cerc.core.Record;
+import cn.cerc.core.DataRow;
 import cn.cerc.ui.SummerUI;
 import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
@@ -49,7 +49,7 @@ public class ColumnEditor {
         this.onUpdate = onUpdate;
     }
 
-    public String format(Record ds) {
+    public String format(DataRow ds) {
         String data = ds.getString(owner.getField());
         if (owner.getBuildText() != null) {
             HtmlWriter html = new HtmlWriter();

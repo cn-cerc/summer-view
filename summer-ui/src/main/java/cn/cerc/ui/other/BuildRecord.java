@@ -1,7 +1,7 @@
 package cn.cerc.ui.other;
 
-import cn.cerc.core.Record;
+import cn.cerc.core.DataRow;
 
 public interface BuildRecord {
-    void build(Object obj, Record row);
+    void build(Object obj, DataRow row);
 }

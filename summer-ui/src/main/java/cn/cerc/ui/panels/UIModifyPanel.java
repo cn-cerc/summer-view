@@ -2,7 +2,7 @@ package cn.cerc.ui.panels;
 
 import javax.servlet.http.HttpServletRequest;
 
-import cn.cerc.core.Record;
+import cn.cerc.core.DataRow;
 import cn.cerc.core.Utils;
 import cn.cerc.mis.core.IForm;
 import cn.cerc.ui.columns.IArrayColumn;
@@ -21,7 +21,7 @@ public class UIModifyPanel extends UIComponent {
     private HttpServletRequest request;
     private String submitValue;
     private UIComponent inputPanel;
-    private Record record;
+    private DataRow record;
     private String title;
     private IForm form;
 
@@ -132,11 +132,11 @@ public class UIModifyPanel extends UIComponent {
         this.inputPanel = inputPanel;
     }
 
-    public Record getRecord() {
+    public DataRow getRecord() {
         return record;
     }
 
-    public void setRecord(Record record) {
+    public void setRecord(DataRow record) {
         this.record = record;
     }
 

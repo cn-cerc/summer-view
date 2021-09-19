@@ -1,6 +1,6 @@
 package cn.cerc.ui.columns;
 
-import cn.cerc.core.Record;
+import cn.cerc.core.DataRow;
 import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.core.IReadonlyOwner;
 import cn.cerc.ui.core.UIComponent;
@@ -83,7 +83,7 @@ public class CustomColumn extends AbstractColumn implements IDataColumn {
     }
 
     public interface IDefineContent {
-        void execute(CustomColumn sender, Record record);
+        void execute(CustomColumn sender, DataRow record);
     }
 
     public CustomColumn defineCell(IDefineContent defineCell) {

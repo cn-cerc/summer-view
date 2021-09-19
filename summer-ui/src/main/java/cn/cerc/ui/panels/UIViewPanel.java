@@ -2,7 +2,7 @@ package cn.cerc.ui.panels;
 
 import javax.servlet.http.HttpServletRequest;
 
-import cn.cerc.core.Record;
+import cn.cerc.core.DataRow;
 import cn.cerc.mis.core.IForm;
 import cn.cerc.ui.columns.IColumn;
 import cn.cerc.ui.columns.IDataColumn;
@@ -18,7 +18,7 @@ public class UIViewPanel extends UIComponent {
     private UIButton submit;
     private HttpServletRequest request;
     private UIComponent content;
-    private Record record;
+    private DataRow record;
     private String title;
     private IForm form;
 
@@ -104,11 +104,11 @@ public class UIViewPanel extends UIComponent {
         return this;
     }
 
-    public Record getRecord() {
+    public DataRow getRecord() {
         return record;
     }
 
-    public UIViewPanel setRecord(Record record) {
+    public UIViewPanel setRecord(DataRow record) {
         this.record = record;
         return this;
     }

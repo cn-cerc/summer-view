@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import cn.cerc.core.ClassResource;
 import cn.cerc.core.DataSet;
 import cn.cerc.core.DataSource;
-import cn.cerc.core.Record;
+import cn.cerc.core.DataRow;
 import cn.cerc.core.Utils;
 import cn.cerc.mis.core.IForm;
 import cn.cerc.ui.SummerUI;
@@ -314,7 +314,7 @@ public class DataGrid extends UIComponent implements DataSource {
     }
 
     @Override
-    public Record getCurrent() {
+    public DataRow getCurrent() {
         return this.dataSet.getCurrent();
     }
 

@@ -5,7 +5,7 @@ import java.util.List;
 
 import cn.cerc.core.DataSet;
 import cn.cerc.core.DataSource;
-import cn.cerc.core.Record;
+import cn.cerc.core.DataRow;
 import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.fields.AbstractField;
@@ -69,7 +69,7 @@ public abstract class AbstractGridLine extends UIComponent implements DataSource
     }
 
     @Override
-    public Record getCurrent() {
+    public DataRow getCurrent() {
         return source.getCurrent();
     }
 

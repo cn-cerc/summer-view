@@ -1,7 +1,7 @@
 package cn.cerc.ui.other;
 
 import cn.cerc.core.ClassResource;
-import cn.cerc.core.Record;
+import cn.cerc.core.DataRow;
 import cn.cerc.ui.SummerUI;
 
 import java.lang.reflect.Field;
@@ -74,7 +74,7 @@ public class BeanRecord<T> implements AutoCloseable, BuildRecord {
 
     }
 
-    public void saveTo(T owner, Record record) {
+    public void saveTo(T owner, DataRow record) {
         init(owner.getClass());
         try {
             for (Field f : gets.keySet()) {
@@ -88,7 +88,7 @@ public class BeanRecord<T> implements AutoCloseable, BuildRecord {
     }
 
     @Override
-    public void build(Object owner, Record record) {
+    public void build(Object owner, DataRow record) {
         init(owner.getClass());
         try {
             for (Field f : sets.keySet()) {

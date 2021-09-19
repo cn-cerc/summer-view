@@ -5,7 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import cn.cerc.core.Record;
+import cn.cerc.core.DataRow;
 import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 
@@ -41,7 +41,7 @@ public class CheckboxesColumn extends AbstractColumn implements IArrayColumn {
         return this;
     }
 
-    public String getText(Record record) {
+    public String getText(DataRow record) {
         if (record == null) {
             return "";
         }

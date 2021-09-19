@@ -1,6 +1,6 @@
 package cn.cerc.ui.columns;
 
-import cn.cerc.core.Record;
+import cn.cerc.core.DataRow;
 import cn.cerc.mis.core.IOriginOwner;
 import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
@@ -9,7 +9,7 @@ public class AbstractColumn extends UIComponent {
     private String code;
     private String name;
     private int spaceWidth = 1;
-    private Record record;
+    private DataRow record;
 
     public AbstractColumn(UIComponent owner) {
         super(owner);
@@ -50,11 +50,11 @@ public class AbstractColumn extends UIComponent {
         return this;
     }
 
-    public Record getRecord() {
+    public DataRow getRecord() {
         return record;
     }
 
-    public void setRecord(Record record) {
+    public void setRecord(DataRow record) {
         this.record = record;
     }
 

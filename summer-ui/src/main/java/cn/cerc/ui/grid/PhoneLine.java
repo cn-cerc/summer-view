@@ -1,7 +1,7 @@
 package cn.cerc.ui.grid;
 
 import cn.cerc.core.DataSource;
-import cn.cerc.core.Record;
+import cn.cerc.core.DataRow;
 import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.fields.AbstractField;
@@ -48,7 +48,7 @@ public class PhoneLine extends UIComponent implements DataSource {
     }
 
     private void outputTableString(HtmlWriter html) {
-        Record record = getCurrent();
+        DataRow record = getCurrent();
         html.print("<tr");
         if (this.expender != null) {
             html.print(String.format(" role=\"%s\" style=\"display: none;\"", expender.getHiddenId()));
@@ -125,7 +125,7 @@ public class PhoneLine extends UIComponent implements DataSource {
     }
 
     @Override
-    public Record getCurrent() {
+    public DataRow getCurrent() {
         return grid.getCurrent();
     }
 

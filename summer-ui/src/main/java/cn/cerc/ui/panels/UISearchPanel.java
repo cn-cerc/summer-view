@@ -2,7 +2,7 @@ package cn.cerc.ui.panels;
 
 import javax.servlet.http.HttpServletRequest;
 
-import cn.cerc.core.Record;
+import cn.cerc.core.DataRow;
 import cn.cerc.core.Utils;
 import cn.cerc.mis.core.IForm;
 import cn.cerc.ui.columns.IArrayColumn;
@@ -18,7 +18,7 @@ public class UISearchPanel extends UIComponent {
     private UIComponent controlPanel;
     private UIButtonSubmit submit;
     private HttpServletRequest request;
-    private Record record;
+    private DataRow record;
     private UIForm uiform;
 
     public UISearchPanel(UIComponent owner) {
@@ -27,7 +27,7 @@ public class UISearchPanel extends UIComponent {
             this.request = ((IForm) this.getOrigin()).getRequest();
         }
         this.uiform = new UIForm();
-        this.record = new Record();
+        this.record = new DataRow();
         this.filterPanel = new UIComponent(uiform);
         this.controlPanel = new UIComponent(uiform);
         submit = new UIButtonSubmit(uiform.getBottom());
@@ -113,11 +113,11 @@ public class UISearchPanel extends UIComponent {
         return this;
     }
 
-    public Record getRecord() {
+    public DataRow getRecord() {
         return record;
     }
 
-    public void setRecord(Record record) {
+    public void setRecord(DataRow record) {
         this.record = record;
     }
 

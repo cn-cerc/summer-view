@@ -3,7 +3,7 @@ package cn.cerc.ui.columns;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.cerc.core.Record;
+import cn.cerc.core.DataRow;
 import cn.cerc.mis.core.IForm;
 import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.core.IReadonlyOwner;
@@ -13,13 +13,13 @@ public class UIPhoneLine extends UIComponent implements IReadonlyOwner {
     private List<UIPhoneLineCell> cells = new ArrayList<>();
     private UIComponent attachLine;
     private boolean readonly;
-    private Record record;
+    private DataRow record;
 
-    public Record getRecord() {
+    public DataRow getRecord() {
         return record;
     }
 
-    public void setRecord(Record record) {
+    public void setRecord(DataRow record) {
         this.record = record;
     }
 
@@ -69,7 +69,7 @@ public class UIPhoneLine extends UIComponent implements IReadonlyOwner {
     private class UIPhoneLineCell extends UIComponent implements IReadonlyOwner {
         // 在UIBlock中，宽度所占百分比
         private int percent;
-        private Record record;
+        private DataRow record;
         private boolean readonly;
 
         public UIPhoneLineCell(UIComponent owner, int percent) {
@@ -103,7 +103,7 @@ public class UIPhoneLine extends UIComponent implements IReadonlyOwner {
             return this;
         }
 
-        public void setRecord(Record record) {
+        public void setRecord(DataRow record) {
             this.record = record;
         }
 
