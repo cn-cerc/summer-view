@@ -11,6 +11,7 @@ import cn.cerc.ui.core.UIComponent;
  */
 public class UIScript extends UIComponent {
     private List<String> lines;
+    private String modulePath;
 
     public UIScript(UIComponent owner) {
         super(owner);
@@ -40,6 +41,21 @@ public class UIScript extends UIComponent {
         if (lines == null)
             lines = new ArrayList<>();
         return lines;
+    }
+
+    public final String getModulePath() {
+        return modulePath;
+    }
+
+    public UIScript setModulePath(String modulePath) {
+        this.modulePath = modulePath;
+        this.writeProperty("type", "module");
+        return this;
+    }
+
+    public UIScript importModule(String moduleCode, String fileName) {
+        this.add("import %s from \"%s/%s\";", moduleCode, this.modulePath, fileName);
+        return this;
     }
 
 }
