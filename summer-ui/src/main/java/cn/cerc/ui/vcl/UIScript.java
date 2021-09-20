@@ -20,6 +20,7 @@ public class UIScript extends UIComponent {
 
     @Override
     public void output(HtmlWriter html) {
+        html.println("");
         super.beginOutput(html);
         if (lines != null) {
             for (String text : lines)

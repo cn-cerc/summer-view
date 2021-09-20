@@ -10,7 +10,6 @@ import javax.servlet.ServletException;
 import cn.cerc.core.ClassConfig;
 import cn.cerc.mis.SummerMIS;
 import cn.cerc.mis.cdn.CDN;
-import cn.cerc.mis.core.Application;
 import cn.cerc.mis.core.IClient;
 import cn.cerc.mis.core.IForm;
 import cn.cerc.mis.core.IPage;
@@ -20,21 +19,21 @@ import cn.cerc.ui.core.UIComponent;
 public abstract class UIAbstractPage extends UIComponent implements IPage {
     protected static final ClassConfig config = new ClassConfig(UIAbstractPage.class, SummerMIS.ID);
 
-    private List<String> cssFiles = new ArrayList<>();
-    private List<String> jsFiles = new ArrayList<>();
+    private List<StaticFile> cssFiles = new ArrayList<>();
+    private List<StaticFile> jsFiles = new ArrayList<>();
     private UIComponent header; // 头部区域，剩下的均为下部区域
     private UIComponent aside; // 左部区域，剩下的均为右部区域
+    private UIComponent frontPanel; // （中间右边上方）控制区域（Web显示固定）
+    private UIComponent content; // （中间右边）主内容区域
+    private UIComponent footer; // （中间右边）尾部区部（Web显示固定）
+    private UIComponent address; // 底部区域
+    private DefineContent defineHead;
     @Deprecated
     private UIComponent menuPath; // （中间右边上方）菜单路径
     @Deprecated
     private UIComponent notice; // （中间右边上方）通知区域
-    private UIComponent frontPanel; // （中间右边上方）控制区域（Web显示固定）
-    private UIComponent content; // （中间右边）主内容区域
-    private UIComponent footer; // （中间右边）尾部区部（Web显示固定）
     @Deprecated
     private UIComponent statusBar; // （中间右边下方）下方状态条（Web显示固定）
-    private UIComponent address; // 底部区域
-    private DefineContent defineHead;
 
     public UIAbstractPage(IForm form) {
         super(null);
@@ -72,19 +71,15 @@ public abstract class UIAbstractPage extends UIComponent implements IPage {
         out.println(
                 "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\"/>");
         // 加入脚本文件
-        String device = this.getForm().getClient().isPhone() ? "phone" : "pc";
-        String staticPath = Application.getStaticPath();
         String version = config.getString(CDN.BROWSER_CACHE_VERSION, "1.0.0.0");
-        for (String file : getJsFiles()) {
-            String[] args = file.split("\\.");
-            out.println(String.format("<script src=\"%s%s-%s.%s?v=%s\"></script>", staticPath, args[0], device, args[1],
-                    version));
+        for (StaticFile file : getJsFiles()) {
+            out.println(String.format("<script src=\"%s\"></script>", file.getUrl(version)));
+            System.out.println(file.getUrl(version));
         }
         // 加入样式文件
-        for (String file : cssFiles) {
-            String[] args = file.split("\\.");
-            out.println(String.format("<link href=\"%s%s-%s.%s?v=%s\" rel=\"stylesheet\">", staticPath, args[0], device,
-                    args[1], version));
+        for (StaticFile file : cssFiles) {
+            out.println(String.format("<link href=\"%s\" rel=\"stylesheet\">", file.getUrl(version)));
+            System.out.println(file.getUrl(version));
         }
 
         if (defineHead != null) {
@@ -173,20 +168,28 @@ public abstract class UIAbstractPage extends UIComponent implements IPage {
         return (IForm) this.getOrigin();
     }
 
-    public final List<String> getJsFiles() {
+    public final List<StaticFile> getJsFiles() {
         return jsFiles;
     }
 
-    public final void addScriptFile(String file) {
-        jsFiles.add(file);
+    public final void addScriptFile(String fileName) {
+        this.addScriptFile(fileName, this.isPhone() ? "phone" : "pc");
     }
 
-    public final List<String> getCssFiles() {
+    public final void addScriptFile(String fileName, String device) {
+        jsFiles.add(new StaticFile(fileName, device));
+    }
+
+    public final List<StaticFile> getCssFiles() {
         return cssFiles;
     }
 
-    public final void addCssFile(String file) {
-        cssFiles.add(file);
+    public final void addCssFile(String fileName) {
+        this.addCssFile(fileName, this.isPhone() ? "phone" : "pc");
+    }
+
+    public final void addCssFile(String fileName, String device) {
+        cssFiles.add(new StaticFile(fileName, device));
     }
 
     public UIComponent getHeader() {
