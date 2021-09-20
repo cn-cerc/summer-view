@@ -7,12 +7,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import cn.cerc.core.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cn.cerc.core.DataSet;
 import cn.cerc.core.ISession;
+import cn.cerc.core.Utils;
 import cn.cerc.mis.core.Application;
 import cn.cerc.mis.core.BasicHandle;
 import cn.cerc.mis.core.DataValidateException;
@@ -41,7 +41,7 @@ public class StartServices extends HttpServlet {
         String text = request.getParameter("dataIn");
         DataSet dataIn = new DataSet().fromJson(text);
         String service = request.getPathInfo().substring(1);
-        response.setContentType("text/html;charset=UTF-8");
+        response.setContentType("application/json;charset=utf-8");
 
         log.debug("token {}", token);
         log.debug("dataIn {}", text);
