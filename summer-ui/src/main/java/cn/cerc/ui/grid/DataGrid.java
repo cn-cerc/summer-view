@@ -7,9 +7,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cn.cerc.core.ClassResource;
+import cn.cerc.core.DataRow;
 import cn.cerc.core.DataSet;
 import cn.cerc.core.DataSource;
-import cn.cerc.core.DataRow;
 import cn.cerc.core.Utils;
 import cn.cerc.mis.core.IForm;
 import cn.cerc.ui.SummerUI;
@@ -68,9 +68,10 @@ public class DataGrid extends UIComponent implements DataSource {
         return dataSet;
     }
 
-    public void setDataSet(DataSet dataSet) {
+    public DataGrid setDataSet(DataSet dataSet) {
         this.dataSet = dataSet;
         pages.setDataSet(dataSet);
+        return this;
     }
 
     @Deprecated
@@ -154,6 +155,14 @@ public class DataGrid extends UIComponent implements DataSource {
 
     @Override
     public final void output(HtmlWriter html) {
+        if(this.isClientRender()) {
+            html.print("let grid = new sci.TGrid()");
+            html.print("grid.setDataSet(new DataSet('%s'))", this.dataSet.toJson());
+            html.print("grid.setContainer('%s')", this.getContainer());
+            html.print("grid.render()");
+            return;
+        }
+        
         this.beginOutput(html);
         if (!this.isPhone() || this.getDataSet().size() > 0) {
             if (getForm() != null)
@@ -169,20 +178,13 @@ public class DataGrid extends UIComponent implements DataSource {
     }
 
     private void outputWebGrid(HtmlWriter html) {
-        DataSet dataSet = this.getDataSet();
-        MutiPage pages = this.getPages();
-
         double sumFieldWidth = 0;
-        for (RowCell cell : this.getMasterLine().getOutputCells()) {
+        for (RowCell cell : this.getMasterLine().getOutputCells())
             sumFieldWidth += cell.getFields().get(0).getWidth();
-        }
-
-        if (sumFieldWidth < 0) {
+        if (sumFieldWidth < 0)
             throw new RuntimeException(res.getString(1, "总列宽不允许小于1"));
-        }
-        if (sumFieldWidth > MaxWidth) {
+        if (sumFieldWidth > MaxWidth)
             throw new RuntimeException(String.format(res.getString(2, "总列宽不允许大于%s"), MaxWidth));
-        }
 
         html.print("<table class=\"%s\"", this.gridCssClass);
         if (this.gridCssStyle != null) {
@@ -207,10 +209,10 @@ public class DataGrid extends UIComponent implements DataSource {
             html.println("</th>");
         }
         html.println("</tr>");
-        if (dataSet.size() > 0) {
-            int i = pages.getBegin();
-            while (i <= pages.getEnd()) {
-                dataSet.setRecNo(i + 1);
+        if (this.dataSet.size() > 0) {
+            int i = this.pages.getBegin();
+            while (i <= this.pages.getEnd()) {
+                this.dataSet.setRecNo(i + 1);
                 for (int lineNo = 0; lineNo < this.getLines().size(); lineNo++) {
                     AbstractGridLine line = this.getLine(lineNo);
                     if (line instanceof ExpenderGridLine) {
@@ -229,17 +231,14 @@ public class DataGrid extends UIComponent implements DataSource {
     }
 
     private void outputPhoneGrid(HtmlWriter html) {
-        DataSet dataSet = this.getDataSet();
-        MutiPage pages = this.getPages();
-        if (dataSet.size() == 0) {
+        if (this.dataSet.size() == 0) 
             return;
-        }
 
         html.println(String.format("<ol class=\"%s\">", "context"));
 
-        int i = pages.getBegin();
-        while (i <= pages.getEnd()) {
-            dataSet.setRecNo(i + 1);
+        int i = this.pages.getBegin();
+        while (i <= this.pages.getEnd()) {
+            this.dataSet.setRecNo(i + 1);
             int flag = 0;
             html.println("<li>");
             for (PhoneLine line : this.phoneLines) {

@@ -23,6 +23,8 @@ public class UIComponent implements IOriginOwner, HtmlContent, Iterable<UICompon
     private int phone = -1;
     // 是否为客户端渲染模式
     private int clientRender = -1;
+    // 客户端渲染时，宿主ID
+    private String container;
 
     public UIComponent(UIComponent owner) {
         super();
@@ -171,10 +173,10 @@ public class UIComponent implements IOriginOwner, HtmlContent, Iterable<UICompon
         return this;
     }
 
-    public final boolean getClientRender() {
+    public final boolean isClientRender() {
         if (this.clientRender == -1) {
-            if (origin instanceof UIComponent)
-                return ((UIComponent) origin).getClientRender();
+            if (this.owner != null)
+                return owner.isClientRender();
             else
                 return false;
         } else {
@@ -235,6 +237,14 @@ public class UIComponent implements IOriginOwner, HtmlContent, Iterable<UICompon
 
     public final boolean getSignProperty(String signValue) {
         return this.signProperty.contains(signValue);
+    }
+
+    public final String getContainer() {
+        return container;
+    }
+
+    public final void setContainer(String container) {
+        this.container = container;
     }
 
     @Deprecated
