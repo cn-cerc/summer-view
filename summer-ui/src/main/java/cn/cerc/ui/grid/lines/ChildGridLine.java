@@ -42,10 +42,13 @@ public class ChildGridLine extends AbstractGridLine {
 
             html.print(">");
             for (AbstractField field : item.getFields()) {
+                // outputCell方法需要在field.getName()之前调用
+                HtmlWriter child = new HtmlWriter();
+                super.outputCell(child, field);
                 if (field.getName() != null && !"".equals(field.getName())) {
                     html.print("<span>%s：</span> ", field.getName());
                 }
-                super.outputCell(html, field);
+                html.print(child.toString());
             }
             html.println("</td>");
         }
@@ -57,7 +60,7 @@ public class ChildGridLine extends AbstractGridLine {
         if (child instanceof AbstractField) {
             AbstractField field = (AbstractField) child;
             getFields().add(field);
-            RowCell cell= new RowCell(this);
+            RowCell cell = new RowCell(this);
             cell.setAlign(field.getAlign());
             cell.setRole(field.getField());
             getCells().add(cell);
