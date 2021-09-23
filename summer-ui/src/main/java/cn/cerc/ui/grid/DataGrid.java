@@ -60,6 +60,8 @@ public class DataGrid extends UIComponent implements DataSource {
     @Deprecated
     public DataGrid(IForm form, UIComponent owner) {
         this(owner);
+        this.form = form;
+        pages.setRequest(this.form.getRequest());
     }
 
     public DataSet getDataSet() {
