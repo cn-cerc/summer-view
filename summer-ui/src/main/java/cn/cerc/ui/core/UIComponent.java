@@ -21,6 +21,8 @@ public class UIComponent implements IOriginOwner, HtmlContent, Iterable<UICompon
     private Object origin;
     private String rootLabel;
     private int phone = -1;
+    // 是否为客户端渲染模式
+    private int clientRender = -1;
 
     public UIComponent(UIComponent owner) {
         super();
@@ -146,8 +148,13 @@ public class UIComponent implements IOriginOwner, HtmlContent, Iterable<UICompon
         return propertys;
     }
 
+    public UIComponent setPhone(boolean value) {
+        this.phone = value ? 1 : 0;
+        return this;
+    }
+
     public final boolean isPhone() {
-        if (phone == -1) {
+        if (this.phone == -1) {
             if (origin instanceof UIComponent)
                 return ((UIComponent) origin).isPhone();
             else if (origin instanceof IForm)
@@ -155,13 +162,24 @@ public class UIComponent implements IOriginOwner, HtmlContent, Iterable<UICompon
             else
                 return false;
         } else {
-            return phone == 1;
+            return this.phone == 1;
         }
     }
 
-    public UIComponent setPhone(boolean value) {
-        this.phone = value ? 1 : 0;
+    public final UIComponent setClientRender(boolean clientRender) {
+        this.clientRender = clientRender ? 1 : 0;
         return this;
+    }
+
+    public final boolean getClientRender() {
+        if (this.clientRender == -1) {
+            if (origin instanceof UIComponent)
+                return ((UIComponent) origin).getClientRender();
+            else
+                return false;
+        } else {
+            return this.clientRender == 1;
+        }
     }
 
     @Override
