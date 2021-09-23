@@ -19,14 +19,16 @@ public class UIScript extends UIComponent {
     }
 
     @Override
+    public void beginOutput(HtmlWriter html) {
+        html.print("\n<").print(getRootLabel()).print(" type='module'>");
+    }
+
+    @Override
     public void output(HtmlWriter html) {
-        html.println("");
-        super.beginOutput(html);
-        if (lines != null) {
-            for (String text : lines)
-                html.println(text);
-        }
-        super.endOutput(html);
+        this.beginOutput(html);
+        for (String text : this.getLines())
+            html.println(text);
+        this.endOutput(html);
     }
 
     public UIScript add(String text) {

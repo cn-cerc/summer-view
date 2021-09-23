@@ -156,10 +156,8 @@ public class DataGrid extends UIComponent implements DataSource {
     @Override
     public final void output(HtmlWriter html) {
         if(this.isClientRender()) {
-            html.print("let grid = new sci.TGrid()");
-            html.print("grid.setDataSet(new DataSet('%s'))", this.dataSet.toJson());
-            html.print("grid.setContainer('%s')", this.getContainer());
-            html.print("grid.render()");
+            html.println("let grid = new sci.TGrid(app)");
+            html.println("grid.setDataSet(new sci.DataSet('%s'))", this.dataSet.toJson());
             return;
         }
         
