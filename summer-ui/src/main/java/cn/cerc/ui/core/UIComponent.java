@@ -85,8 +85,7 @@ public class UIComponent implements IOriginOwner, HtmlContent, Iterable<UICompon
 
     public UIComponent removeComponent(UIComponent component) {
         if (component != null) {
-            if (component.origin == component.owner)
-                component.origin = null;
+            component.origin = null;
             component.owner = null;
             components.remove(component);
         }
