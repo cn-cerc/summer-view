@@ -165,7 +165,7 @@ public class DataGrid extends UIComponent implements DataSource {
         if (!this.isPhone() || this.getDataSet().size() > 0) {
             if (getForm() != null)
                 getForm().beginOutput(html);
-            if (this.isPhone())
+            if (this.isPhone() || form.getClient().isPhone())
                 this.outputPhoneGrid(html);
             else
                 this.outputWebGrid(html);
