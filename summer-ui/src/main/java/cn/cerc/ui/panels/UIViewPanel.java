@@ -8,12 +8,13 @@ import cn.cerc.ui.columns.IColumn;
 import cn.cerc.ui.columns.IDataColumn;
 import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
+import cn.cerc.ui.style.IEditPanelStyle;
 import cn.cerc.ui.vcl.UIButton;
 import cn.cerc.ui.vcl.UIDiv;
 import cn.cerc.ui.vcl.UIForm;
 import cn.cerc.ui.vcl.ext.UIButtonSubmit;
 
-public class UIViewPanel extends UIComponent {
+public class UIViewPanel extends UIComponent implements IEditPanelStyle {
     private UIForm uiform;
     private UIButton submit;
     private HttpServletRequest request;

@@ -14,10 +14,11 @@ import cn.cerc.ui.core.IReadonlyOwner;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.grid.DataGrid;
 import cn.cerc.ui.grid.MutiPage;
+import cn.cerc.ui.style.IGridStyle;
 import cn.cerc.ui.vcl.UITd;
 import cn.cerc.ui.vcl.UITr;
 
-public class UIGrid extends UIComponent implements IReadonlyOwner {
+public class UIGrid extends UIComponent implements IReadonlyOwner, IGridStyle {
     private static final ClassResource res = new ClassResource(DataGrid.class, SummerUI.ID);
     private static final double MaxWidth = 600;
     // 专用于电脑

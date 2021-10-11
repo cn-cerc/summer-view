@@ -3,8 +3,9 @@ package cn.cerc.ui.grid;
 import cn.cerc.core.DataSet;
 import cn.cerc.db.editor.EditorFactory;
 import cn.cerc.ui.core.UIComponent;
+import cn.cerc.ui.style.IGridStyle;
 
-public class UIFastGrid extends UIComponent {
+public class UIFastGrid extends UIComponent implements IGridStyle {
 
     public UIFastGrid(UIComponent owner) {
         super(owner);
@@ -14,13 +15,13 @@ public class UIFastGrid extends UIComponent {
     public static void main(String[] args) {
         DataSet ds = new DataSet();
         ds.append();
-        ds.setField("code", "a01");
-        ds.setField("name", "jason");
-        ds.setField("sex", true);
+        ds.setValue("code", "a01");
+        ds.setValue("name", "jason");
+        ds.setValue("sex", true);
         ds.append();
-        ds.setField("code", "a02");
-        ds.setField("name", "bade");
-        ds.setField("sex", false);
+        ds.setValue("code", "a02");
+        ds.setValue("name", "bade");
+        ds.setValue("sex", false);
 
         ds.getFieldDefs().get("code").setName("工号");
         ds.getFieldDefs().get("name").setName("姓名");

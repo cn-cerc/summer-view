@@ -10,22 +10,19 @@ import cn.cerc.ui.columns.IColumn;
 import cn.cerc.ui.columns.IDataColumn;
 import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
+import cn.cerc.ui.style.ISearchPanelStyle;
 import cn.cerc.ui.vcl.UIForm;
 import cn.cerc.ui.vcl.ext.UIButtonSubmit;
 
-public class UISearchPanel extends UIComponent {
+public class UISearchPanel extends UIComponent implements ISearchPanelStyle {
     private UIComponent filterPanel;
     private UIComponent controlPanel;
     private UIButtonSubmit submit;
-    private HttpServletRequest request;
     private DataRow record;
     private UIForm uiform;
 
     public UISearchPanel(UIComponent owner) {
         super(owner);
-        if (this.getOrigin() instanceof IForm) {
-            this.request = ((IForm) this.getOrigin()).getRequest();
-        }
         this.uiform = new UIForm();
         this.record = new DataRow();
         this.filterPanel = new UIComponent(uiform);
@@ -65,6 +62,10 @@ public class UISearchPanel extends UIComponent {
     }
 
     public String readAll() {
+        if (!(this.getOrigin() instanceof IForm))
+            throw new RuntimeException("origin is not IForm");
+        HttpServletRequest request = ((IForm) this.getOrigin()).getRequest();
+        
         String result = request.getParameter(submit.getName());
         if (!Utils.isEmpty(result)) {
             // 将用户值或缓存值存入到dataSet中
@@ -74,16 +75,16 @@ public class UISearchPanel extends UIComponent {
                     String[] values = request.getParameterValues(column.getCode());
                     if (values == null) {
                         if (!column.isReadonly()) {
-                            record.setField(column.getCode(), "");
+                            record.setValue(column.getCode(), "");
                         }
                     } else {
-                        record.setField(column.getCode(), String.join(",", values));
+                        record.setValue(column.getCode(), String.join(",", values));
                     }
                 } else if (component instanceof IDataColumn) {
                     IDataColumn column = (IDataColumn) component;
                     if (!column.isReadonly()) {
                         String val = request.getParameter(column.getCode());
-                        record.setField(column.getCode(), val == null ? "" : val);
+                        record.setValue(column.getCode(), val == null ? "" : val);
                     }
                 }
             }

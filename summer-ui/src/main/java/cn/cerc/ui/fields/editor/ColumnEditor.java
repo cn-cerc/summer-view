@@ -55,7 +55,7 @@ public class ColumnEditor {
             HtmlWriter html = new HtmlWriter();
             owner.getBuildText().outputText(ds, html);
             data = html.toString();
-        } else if (ds.getField(owner.getField()) instanceof Double) {
+        } else if (ds.getValue(owner.getField()) instanceof Double) {
             DecimalFormat df = new DecimalFormat("0.####");
             data = df.format(ds.getDouble(owner.getField()));
         }

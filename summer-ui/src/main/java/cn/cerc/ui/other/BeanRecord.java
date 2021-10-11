@@ -80,7 +80,7 @@ public class BeanRecord<T> implements AutoCloseable, BuildRecord {
             for (Field f : gets.keySet()) {
                 String field = f.getName();
                 Object value = gets.get(f).invoke(owner);
-                record.setField(field, value);
+                record.setValue(field, value);
             }
         } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
             e.printStackTrace();
@@ -94,7 +94,7 @@ public class BeanRecord<T> implements AutoCloseable, BuildRecord {
             for (Field f : sets.keySet()) {
                 String field = f.getName();
                 if (record.exists(field)) {
-                    Object value = record.getField(field);
+                    Object value = record.getValue(field);
                     Method mt = sets.get(f);
                     Class<?> p1 = mt.getParameterTypes()[0];
                     if (p1.getName().equals(value.getClass().getName())) {

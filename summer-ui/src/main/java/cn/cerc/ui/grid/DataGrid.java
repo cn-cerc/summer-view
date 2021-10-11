@@ -20,9 +20,10 @@ import cn.cerc.ui.grid.lines.AbstractGridLine;
 import cn.cerc.ui.grid.lines.ChildGridLine;
 import cn.cerc.ui.grid.lines.ExpenderGridLine;
 import cn.cerc.ui.grid.lines.MasterGridLine;
+import cn.cerc.ui.style.IGridStyle;
 import cn.cerc.ui.vcl.UIForm;
 
-public class DataGrid extends UIComponent implements DataSource {
+public class DataGrid extends UIComponent implements DataSource, IGridStyle {
     private static final Logger log = LoggerFactory.getLogger(DataGrid.class);
     private static final ClassResource res = new ClassResource(DataGrid.class, SummerUI.ID);
     private static final double MaxWidth = 600;
@@ -155,12 +156,12 @@ public class DataGrid extends UIComponent implements DataSource {
 
     @Override
     public final void output(HtmlWriter html) {
-        if(this.isClientRender()) {
+        if (this.isClientRender()) {
             html.println("let grid = new sci.TGrid(app)");
             html.println("grid.setDataSet(new sci.DataSet('%s'))", this.dataSet.toJson());
             return;
         }
-        
+
         this.beginOutput(html);
         if (!this.isPhone() || this.getDataSet().size() > 0) {
             if (getForm() != null)
@@ -229,7 +230,7 @@ public class DataGrid extends UIComponent implements DataSource {
     }
 
     private void outputPhoneGrid(HtmlWriter html) {
-        if (this.dataSet.size() == 0) 
+        if (this.dataSet.size() == 0)
             return;
 
         html.println(String.format("<ol class=\"%s\">", "context"));

@@ -10,12 +10,13 @@ import cn.cerc.ui.columns.IColumn;
 import cn.cerc.ui.columns.IDataColumn;
 import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
+import cn.cerc.ui.style.IEditPanelStyle;
 import cn.cerc.ui.vcl.UIButton;
 import cn.cerc.ui.vcl.UIDiv;
 import cn.cerc.ui.vcl.UIForm;
 import cn.cerc.ui.vcl.ext.UIButtonSubmit;
 
-public class UIModifyPanel extends UIComponent {
+public class UIModifyPanel extends UIComponent implements IEditPanelStyle {
     private UIForm uiform;
     private UIButton submit;
     private HttpServletRequest request;
@@ -97,16 +98,16 @@ public class UIModifyPanel extends UIComponent {
                     String[] values = request.getParameterValues(column.getCode());
                     if (values == null) {
                         if (!column.isReadonly()) {
-                            record.setField(column.getCode(), "");
+                            record.setValue(column.getCode(), "");
                         }
                     } else {
-                        record.setField(column.getCode(), String.join(",", values));
+                        record.setValue(column.getCode(), String.join(",", values));
                     }
                 } else if (component instanceof IDataColumn) {
                     IDataColumn column = (IDataColumn) component;
                     if (!column.isReadonly()) {
                         String val = request.getParameter(column.getCode());
-                        record.setField(column.getCode(), val == null ? "" : val);
+                        record.setValue(column.getCode(), val == null ? "" : val);
                     }
                 }
             }

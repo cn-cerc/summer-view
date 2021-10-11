@@ -90,7 +90,7 @@ public abstract class AbstractPage extends UIComponent implements IPage, IUserLa
             }
         } else {
             result = result.trim();
-            buff.setField(reqKey, result);
+            buff.setValue(reqKey, result);
         }
         this.add(reqKey, result);
         return result;
