@@ -74,12 +74,10 @@ public abstract class UIAbstractPage extends UIComponent implements IPage {
         String version = config.getString(CDN.BROWSER_CACHE_VERSION, "1.0.0.0");
         for (StaticFile file : getJsFiles()) {
             out.println(String.format("<script src=\"%s\"></script>", file.getUrl(version)));
-            System.out.println(file.getUrl(version));
         }
         // 加入样式文件
         for (StaticFile file : cssFiles) {
             out.println(String.format("<link href=\"%s\" rel=\"stylesheet\">", file.getUrl(version)));
-            System.out.println(file.getUrl(version));
         }
 
         if (defineHead != null) {
