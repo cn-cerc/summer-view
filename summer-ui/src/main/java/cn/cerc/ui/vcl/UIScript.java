@@ -3,15 +3,21 @@ package cn.cerc.ui.vcl;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.cerc.core.ClassConfig;
+import cn.cerc.mis.cdn.CDN;
+import cn.cerc.ui.SummerUI;
 import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
+import cn.cerc.ui.page.StaticFile;
 
 /*
  * 专用于内嵌脚本输出
  */
 public class UIScript extends UIComponent {
+    protected static final ClassConfig config = new ClassConfig(UIScript.class, SummerUI.ID);
     private List<String> lines;
     private String modulePath;
+    private String src;
 
     public UIScript(UIComponent owner) {
         super(owner);
@@ -20,7 +26,14 @@ public class UIScript extends UIComponent {
 
     @Override
     public void beginOutput(HtmlWriter html) {
-        html.print("\n<").print(getRootLabel()).print(" type='module'>");
+        if (this.src != null) {
+            String version = config.getString(CDN.BROWSER_CACHE_VERSION, "1.0.0.0");
+            StaticFile sf = new StaticFile(this.src, "");
+            this.writeProperty("src", sf.getUrl(version));
+        } else {
+            this.writeProperty("src", null);
+        }
+        super.beginOutput(html);
     }
 
     @Override
@@ -51,13 +64,27 @@ public class UIScript extends UIComponent {
     }
 
     public UIScript setModulePath(String modulePath) {
+        if (this.src != null)
+            throw new RuntimeException("src is not null");
+
         this.modulePath = modulePath;
         this.writeProperty("type", "module");
         return this;
     }
 
     public UIScript importModule(String moduleCode, String fileName) {
+        if (this.src != null)
+            throw new RuntimeException("src is not null");
         this.add("import %s from \"%s/%s\";", moduleCode, this.modulePath, fileName);
+        return this;
+    }
+
+    public String getSrc() {
+        return this.src;
+    }
+
+    public UIScript setSrc(String src) {
+        this.src = src;
         return this;
     }
 
