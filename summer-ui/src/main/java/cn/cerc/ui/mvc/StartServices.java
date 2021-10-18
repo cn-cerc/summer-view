@@ -14,6 +14,7 @@ import cn.cerc.core.ClassConfig;
 import cn.cerc.core.DataSet;
 import cn.cerc.core.ISession;
 import cn.cerc.core.Utils;
+import cn.cerc.db.other.RecordFilter;
 import cn.cerc.mis.core.Application;
 import cn.cerc.mis.core.BasicHandle;
 import cn.cerc.mis.core.DataValidateException;
@@ -86,10 +87,9 @@ public class StartServices extends HttpServlet {
                 }
             }
             dataOut = bean.execute(handle, dataIn);
-            if (dataOut == null) {
+            if (dataOut == null)
                 dataOut = new DataSet().setMessage("service return empty");
-            }
-            response.getWriter().write(dataOut.toString());
+            response.getWriter().write(RecordFilter.execute(dataIn, dataOut).toString());
         } catch (DataValidateException e) {
             dataOut.setMessage(e.getMessage());
         } catch (ClassNotFoundException e) {
