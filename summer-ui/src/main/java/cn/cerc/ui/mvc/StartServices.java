@@ -65,7 +65,7 @@ public class StartServices extends HttpServlet {
             handle.getSession().setProperty(ISession.REQUEST, request);
             handle.getSession().setProperty(Application.SessionId, request.getSession().getId());
             handle.getSession().loadToken(token);
-            IService bean = Application.getService(handle, service);
+            IService bean = Application.getService(handle, service, dataIn);
             if (bean == null) {
                 dataOut.setMessage(String.format("service(%s) is null.", service))
                         .setState(ServiceState.NOT_FIND_SERVICE);
