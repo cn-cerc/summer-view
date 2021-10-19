@@ -41,6 +41,8 @@ public class StartServices extends HttpServlet {
         log.debug(uri);
         request.setCharacterEncoding("UTF-8");
         String token = request.getParameter(ISession.TOKEN);
+        if (Utils.isEmpty(token))
+            token = request.getParameter("token");
         String text = request.getParameter("dataIn");
         DataSet dataIn = new DataSet().fromJson(text);
         String service = request.getPathInfo().substring(1);
