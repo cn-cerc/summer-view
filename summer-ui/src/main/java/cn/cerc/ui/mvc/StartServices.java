@@ -9,25 +9,27 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import cn.cerc.core.ClassConfig;
 import cn.cerc.core.DataSet;
-import cn.cerc.core.ISession;
 import cn.cerc.core.Utils;
 import cn.cerc.db.other.RecordFilter;
 import cn.cerc.mis.core.Application;
-import cn.cerc.mis.core.BasicHandle;
 import cn.cerc.mis.core.DataValidateException;
 import cn.cerc.mis.core.IService;
 import cn.cerc.mis.core.ServiceException;
 import cn.cerc.mis.core.ServiceState;
+import cn.cerc.mis.security.PermissionPolice;
+import cn.cerc.mis.security.SecurityHandle;
 import cn.cerc.ui.SummerUI;
 
 public class StartServices extends HttpServlet {
     private static final long serialVersionUID = 2699818753661287159L;
     private static final Logger log = LoggerFactory.getLogger(StartServices.class);
-    private static final PermissionPolice police = new PermissionPolice();
     private static final ClassConfig config = new ClassConfig(StartServices.class, SummerUI.ID);
+    @Autowired
+    private PermissionPolice police;
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -40,9 +42,6 @@ public class StartServices extends HttpServlet {
         String uri = request.getRequestURI();
         log.debug(uri);
         request.setCharacterEncoding("UTF-8");
-        String token = request.getParameter(ISession.TOKEN);
-        if (Utils.isEmpty(token))
-            token = request.getParameter("token");
         String text = request.getParameter("dataIn");
         DataSet dataIn = new DataSet().fromJson(text);
         String service = request.getPathInfo().substring(1);
@@ -51,8 +50,6 @@ public class StartServices extends HttpServlet {
         String allow = config.getProperty("access-control-allow-origin");
         if (!Utils.isEmpty(allow))
             response.addHeader("access-control-allow-origin", allow);
-
-        log.debug("token {}", token);
         log.debug("dataIn {}", text);
 
         DataSet dataOut = new DataSet();
@@ -63,32 +60,9 @@ public class StartServices extends HttpServlet {
         }
 
         // 执行指定函数
-        try (BasicHandle handle = new BasicHandle()) {
-            handle.getSession().setProperty(ISession.REQUEST, request);
-            handle.getSession().setProperty(Application.SessionId, request.getSession().getId());
-            handle.getSession().loadToken(token);
+        try (SecurityHandle handle = new SecurityHandle(request)) {
             IService bean = Application.getService(handle, service, dataIn);
-            if (bean == null) {
-                dataOut.setMessage(String.format("service(%s) is null.", service))
-                        .setState(ServiceState.NOT_FIND_SERVICE);
-                response.getWriter().write(dataOut.toString());
-                return;
-            }
-            String permission = police.getPermission(bean.getClass());
-            if (!police.allowGuestUser(permission)) {
-                ISession sess = handle.getSession();
-                if ((sess == null) || (!sess.logon())) {
-                    dataOut.setMessage("请您先登入系统").setState(ServiceState.ACCESS_DISABLED);
-                    response.getWriter().write(dataOut.toString());
-                    return;
-                }
-                if (!police.checkPassed(handle.getSession().getPermissions(), permission)) {
-                    dataOut.setMessage("您的执行权限不足").setState(ServiceState.ACCESS_DISABLED);
-                    response.getWriter().write(dataOut.toString());
-                    return;
-                }
-            }
-            dataOut = bean.execute(handle, dataIn);
+            dataOut = police.call(handle, bean, dataIn);
             if (dataOut == null)
                 dataOut = new DataSet().setMessage("service return empty");
             response.getWriter().write(RecordFilter.execute(dataIn, dataOut).toString());

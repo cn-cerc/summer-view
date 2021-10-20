@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import cn.cerc.mis.core.Permission;
+import cn.cerc.mis.security.PermissionPolice;
 
 public class PermissionPoliceTest {
     private PermissionPolice police;
