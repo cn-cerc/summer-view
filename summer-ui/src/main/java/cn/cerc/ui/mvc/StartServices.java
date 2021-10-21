@@ -55,15 +55,16 @@ public class StartServices extends HttpServlet {
             response.getWriter().write(dataOut.toString());
             return;
         }
-        PermissionPolice police = Application.getBean(PermissionPolice.class);
-        if (police == null) {
-            dataOut = new DataSet().setMessage("security police not find");
-            response.getWriter().write(dataOut.toString());
-            return;
-        }
 
         // 执行指定函数
         try (SecurityHandle handle = new SecurityHandle(request)) {
+            PermissionPolice police = Application.getBean(PermissionPolice.class);
+            if (police == null) {
+                dataOut = new DataSet().setMessage("security police not find");
+                response.getWriter().write(dataOut.toString());
+                return;
+            }
+
             IService bean = Application.getService(handle, service, dataIn);
             dataOut = police.call(handle, bean, dataIn);
             if (dataOut == null)
