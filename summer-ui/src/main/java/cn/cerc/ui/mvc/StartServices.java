@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import cn.cerc.core.ClassConfig;
 import cn.cerc.core.DataSet;
@@ -28,8 +27,6 @@ public class StartServices extends HttpServlet {
     private static final long serialVersionUID = 2699818753661287159L;
     private static final Logger log = LoggerFactory.getLogger(StartServices.class);
     private static final ClassConfig config = new ClassConfig(StartServices.class, SummerUI.ID);
-    @Autowired
-    private PermissionPolice police;
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -58,6 +55,7 @@ public class StartServices extends HttpServlet {
             response.getWriter().write(dataOut.toString());
             return;
         }
+        PermissionPolice police = Application.getBean(PermissionPolice.class);
         if (police == null) {
             dataOut = new DataSet().setMessage("security police not find");
             response.getWriter().write(dataOut.toString());
