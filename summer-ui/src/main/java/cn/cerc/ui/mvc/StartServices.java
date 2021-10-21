@@ -58,6 +58,11 @@ public class StartServices extends HttpServlet {
             response.getWriter().write(dataOut.toString());
             return;
         }
+        if (police == null) {
+            dataOut = new DataSet().setMessage("security police not find");
+            response.getWriter().write(dataOut.toString());
+            return;
+        }
 
         // 执行指定函数
         try (SecurityHandle handle = new SecurityHandle(request)) {
