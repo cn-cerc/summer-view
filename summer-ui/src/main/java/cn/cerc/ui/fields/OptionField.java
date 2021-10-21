@@ -3,6 +3,7 @@ package cn.cerc.ui.fields;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import cn.cerc.core.Utils;
 import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 
@@ -39,6 +40,13 @@ public class OptionField extends AbstractField {
         return this;
     }
 
+    public OptionField copyValues(Enum[] enums) {
+        for (Enum item : enums) {
+            this.put("" + item.ordinal(), item.name());
+        }
+        return this;
+    }
+
     @Override
     public String getString() {
         String result = super.getString();
@@ -51,6 +59,9 @@ public class OptionField extends AbstractField {
     @Override
     public void output(HtmlWriter html) {
         String current = this.getText();
+        if (Utils.isEmpty(current) && !Utils.isEmpty(this.getValue())) {
+            current = this.getValue();
+        }
         html.println("<label for=\"%s\">%s</label>", this.getId(), this.getName() + "：");
         html.print("<select id=\"%s\" name=\"%s\"", this.getId(), this.getId());
         if (this.size > 0) {
