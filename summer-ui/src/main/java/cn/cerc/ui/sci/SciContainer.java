@@ -15,9 +15,9 @@ public class SciContainer extends UIComponent {
         // 客户端渲染时，宿主
         html.println("<div id='%s'></div>", this.getId());
         html.println("<script type='module'>");
-        html.println("import * as sci from '/static/sci/SummerCI.js'");
-        html.println("let app = new sci.TPage()");
-        html.println("app.setContainer('%s')", this.getId());
+        html.println("import * as aui from '/static/js/autumn-ui.js'");
+        html.println("let app = new aui.TPage()");
+        html.println("app.container = '%s'", this.getId());
         for (UIComponent component : this)
             component.output(html);
         html.println("app.run()");
