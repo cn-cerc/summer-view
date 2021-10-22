@@ -40,6 +40,7 @@ public class OptionField extends AbstractField {
         return this;
     }
 
+    @SuppressWarnings("rawtypes")
     public OptionField copyValues(Enum[] enums) {
         for (Enum item : enums) {
             this.put("" + item.ordinal(), item.name());

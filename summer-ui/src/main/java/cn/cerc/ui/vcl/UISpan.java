@@ -65,7 +65,6 @@ public class UISpan extends UIComponent implements IHtml {
         return (String) this.url.readProperty("href");
     }
 
-    @Deprecated
     public UISpan setUrl(String href) {
         this.url.writeProperty("href", href);
         return this;

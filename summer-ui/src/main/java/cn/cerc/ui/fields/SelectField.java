@@ -17,7 +17,7 @@ public class SelectField extends AbstractField implements IFormatColumn, IOutput
 
     private String trueText = res.getString(1, "是");
     private String falseText = res.getString(2, "否");
-    private String title;
+//    private String title;
     private String onChange;
     private Map<String, String> items = new LinkedHashMap<>();
 
@@ -70,11 +70,11 @@ public class SelectField extends AbstractField implements IFormatColumn, IOutput
         }
         html.print("</select>");
     }
-
-    public SelectField setTitle(String title) {
-        this.title = title;
-        return this;
-    }
+//
+//    public SelectField setTitle(String title) {
+//        this.title = title;
+//        return this;
+//    }
 
     public void add(String key, String value) {
         items.put(key, value);
