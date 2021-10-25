@@ -20,8 +20,8 @@ import cn.cerc.mis.core.DataValidateException;
 import cn.cerc.mis.core.IService;
 import cn.cerc.mis.core.ServiceException;
 import cn.cerc.mis.core.ServiceState;
-import cn.cerc.mis.security.SecurityPolice;
 import cn.cerc.mis.security.SecurityHandle;
+import cn.cerc.mis.security.SecurityPolice;
 import cn.cerc.ui.SummerUI;
 
 public class StartServices extends HttpServlet {
@@ -59,16 +59,9 @@ public class StartServices extends HttpServlet {
 
         // 执行指定函数
         try (SecurityHandle handle = new SecurityHandle(request)) {
-            SecurityPolice police = Application.getBean(SecurityPolice.class);
-            if (police == null) {
-                dataOut = new DataSet().setMessage("security police not find");
-                response.getWriter().write(dataOut.toString());
-                return;
-            }
-
-            KeyValue function = new KeyValue("execute").key(service);
+            KeyValue function = new KeyValue("execute").setKey(service);
             IService bean = Application.getService(handle, service, function);
-            dataOut = police.call(handle, bean, dataIn, function);
+            dataOut = SecurityPolice.call(handle, bean, dataIn, function);
             if (dataOut == null)
                 dataOut = new DataSet().setMessage("service return empty");
             response.getWriter().write(RecordFilter.execute(dataIn, dataOut).toString());
