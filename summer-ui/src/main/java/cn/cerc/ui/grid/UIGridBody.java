@@ -1,0 +1,67 @@
+package cn.cerc.ui.grid;
+
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+
+import cn.cerc.core.DataSet;
+import cn.cerc.core.FieldDefs;
+import cn.cerc.core.FieldMeta;
+import cn.cerc.core.FieldMeta.FieldKind;
+import cn.cerc.ui.core.HtmlWriter;
+import cn.cerc.ui.core.UIComponent;
+import cn.cerc.ui.vcl.UITd;
+
+public class UIGridBody extends UIComponent {
+    private HashSet<FieldMeta> columns = new LinkedHashSet<>();
+    private DataSet dataSet;
+
+    public UIGridBody(UIComponent owner) {
+        this(owner, null);
+    }
+
+    public UIGridBody(UIComponent owner, DataSet dataSet) {
+        super(owner);
+        this.dataSet = dataSet;
+        this.setRootLabel(isPhone() ? "div" : "tr");
+    }
+
+    @Override
+    public void output(HtmlWriter html) {
+        dataSet.first();
+        while (dataSet.fetch())
+            super.output(html);
+    }
+
+    public final DataSet getDataSet() {
+        return dataSet;
+    }
+
+    public final UIGridBody setDataSet(DataSet dataSet) {
+        this.dataSet = dataSet;
+        return this;
+    }
+
+    public final HashSet<FieldMeta> getColumns() {
+        return columns;
+    }
+
+    public FieldMeta add(String field) {
+        FieldMeta meta = dataSet.getFieldDefs().get(field);
+        if (meta == null)
+            meta = dataSet.getFieldDefs().add(field, FieldKind.Calculated);
+        addColumn(meta);
+        return meta;
+    }
+
+    public UIGridBody addAll(FieldDefs fieldDefs) {
+        for (FieldMeta meta : fieldDefs)
+            addColumn(meta);
+        return this;
+    }
+
+    private void addColumn(FieldMeta meta) {
+        columns.add(meta);
+        new UIDataComponent(new UITd(this), dataSet, meta.getCode());
+    }
+
+}
