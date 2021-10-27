@@ -75,8 +75,6 @@ public class StartApp implements Filter {
                 session.setProperty(Application.SessionId, req.getSession().getId());
 
                 IMobileConfig form = Application.getBean(IMobileConfig.class);
-                form.setRequest((HttpServletRequest) request);
-                form.setResponse((HttpServletResponse) response);
                 form.setSession(session);
                 IPage page = form.execute();
                 page.execute();

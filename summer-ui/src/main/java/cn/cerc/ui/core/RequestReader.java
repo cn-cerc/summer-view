@@ -3,14 +3,13 @@ package cn.cerc.ui.core;
 import javax.servlet.http.HttpServletRequest;
 
 import cn.cerc.core.Utils;
-import cn.cerc.mis.core.IRequestOwner;
 
 public class RequestReader {
-
+    
     private HttpServletRequest request;
 
-    public RequestReader(IRequestOwner owner) {
-        this.request = owner.getRequest();
+    RequestReader(HttpServletRequest request){
+        this.request = request;
     }
 
     public boolean hasValue(INameOwner owner) {

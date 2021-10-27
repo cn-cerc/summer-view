@@ -10,7 +10,7 @@ import javax.servlet.ServletException;
 import cn.cerc.core.ClassConfig;
 import cn.cerc.mis.SummerMIS;
 import cn.cerc.mis.cdn.CDN;
-import cn.cerc.mis.core.IClient;
+import cn.cerc.mis.core.AppClient;
 import cn.cerc.mis.core.IForm;
 import cn.cerc.mis.core.IPage;
 import cn.cerc.ui.core.HtmlWriter;
@@ -53,7 +53,7 @@ public abstract class UIAbstractPage extends UIComponent implements IPage {
      * 
      * @param client 代表当前运行的客户端环境
      */
-    public abstract void initComponents(IClient client);
+    public abstract void initComponents(AppClient client);
 
     @Override
     public final String execute() throws ServletException, IOException {

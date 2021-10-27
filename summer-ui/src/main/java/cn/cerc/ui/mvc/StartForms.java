@@ -12,7 +12,6 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import cn.cerc.core.Utils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,19 +19,34 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import cn.cerc.core.ISession;
+import cn.cerc.core.Utils;
 import cn.cerc.mis.config.AppStaticFileDefault;
 import cn.cerc.mis.config.ApplicationConfig;
+import cn.cerc.mis.core.AppClient;
 import cn.cerc.mis.core.Application;
 import cn.cerc.mis.core.BasicHandle;
 import cn.cerc.mis.core.FormFactory;
+import cn.cerc.mis.core.IErrorPage;
+import cn.cerc.mis.core.IdValue;
 
 public class StartForms implements Filter {
     private static final Logger log = LoggerFactory.getLogger(StartForms.class);
 
     @Override
+    public void init(FilterConfig filterConfig) {
+        log.info("{} init.", this.getClass().getName());
+    }
+
+    @Override
+    public void destroy() {
+        log.info("{} destroy.", this.getClass().getName());
+    }
+
+    @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
+
         HttpServletResponse resp = (HttpServletResponse) response;
 
         String uri = req.getRequestURI();
@@ -72,44 +86,34 @@ public class StartForms implements Filter {
             }
             return;
         }
-        if (uri.contains("static/")) {
-            chain.doFilter(req, resp);
-            return;
-        }
-        if (uri.contains("service/")) {
-            chain.doFilter(req, resp);
-            return;
-        }
-        if (uri.contains("services/")) {
-            chain.doFilter(req, resp);
-            return;
-        }
-        if (uri.contains("task/")) {
-            chain.doFilter(req, resp);
-            return;
-        }
-        if (uri.contains("docs/")) {
+
+        if (uri.contains("static/") || uri.contains("service/") || uri.contains("services/") || uri.contains("task/")
+                || uri.contains("docs/")) {
             chain.doFilter(req, resp);
             return;
         }
 
         ApplicationContext context = WebApplicationContextUtils
                 .getRequiredWebApplicationContext(req.getServletContext());
-        FormFactory factory = context.getBean(FormFactory.class);
+        Application.setContext(context);
 
+        ISession session = context.getBean(ISession.class);
+        session.setRequest(req);
+        session.setResponse(resp);
+        context.getBean(AppClient.class).setRequest(req);
+        
         // 2、处理Url请求
         String childCode = getRequestCode(req);
         if (childCode == null) {
-            factory.outputErrorPage(req, resp, new RuntimeException("无效的请求：" + req.getServletPath()));
+            IErrorPage error = context.getBean(IErrorPage.class);
+            error.output(req, resp, new RuntimeException("无效的请求：" + req.getServletPath()));
             return;
         }
 
-        String[] params = childCode.split("\\.");
-        String formId = params[0];
-        String funcCode = params.length == 1 ? "execute" : params[1];
-
+        FormFactory factory = context.getBean(FormFactory.class);
         try (BasicHandle handle = new BasicHandle()) {
-            String viewId = factory.getFormView(handle, req, resp, formId, funcCode);
+            IdValue sv = new IdValue(childCode);
+            String viewId = factory.getView(handle, req, resp, sv.getId(), sv.getValue());
             factory.outputView(req, resp, viewId);
         }
     }
@@ -133,16 +137,6 @@ public class StartForms implements Filter {
             }
         }
         return url;
-    }
-
-    @Override
-    public void init(FilterConfig filterConfig) {
-        log.info("{} init.", this.getClass().getName());
-    }
-
-    @Override
-    public void destroy() {
-        log.info("{} destroy.", this.getClass().getName());
     }
 
 }
