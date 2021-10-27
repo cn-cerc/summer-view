@@ -12,15 +12,17 @@ import org.slf4j.LoggerFactory;
 
 import cn.cerc.core.ClassConfig;
 import cn.cerc.core.DataSet;
+import cn.cerc.core.ISession;
 import cn.cerc.core.KeyValue;
 import cn.cerc.core.Utils;
+import cn.cerc.db.core.Handle;
+import cn.cerc.db.core.IHandle;
 import cn.cerc.db.other.RecordFilter;
 import cn.cerc.mis.core.Application;
 import cn.cerc.mis.core.DataValidateException;
 import cn.cerc.mis.core.IService;
 import cn.cerc.mis.core.ServiceException;
 import cn.cerc.mis.core.ServiceState;
-import cn.cerc.mis.security.SecurityHandle;
 import cn.cerc.mis.security.SecurityPolice;
 import cn.cerc.ui.SummerUI;
 
@@ -58,7 +60,18 @@ public class StartServices extends HttpServlet {
         }
 
         // 执行指定函数
-        try (SecurityHandle handle = new SecurityHandle(request)) {
+        try {
+            ISession session = Application.getSession();
+            session.setProperty(ISession.REQUEST, request);
+            session.setProperty(Application.SessionId, request.getSession().getId());
+            // 获取token
+            String token = request.getParameter(ISession.TOKEN);
+            if (Utils.isEmpty(token))
+                token = request.getParameter("token");
+            // 使用token登录，并获取用户资料与授权数据
+            session.loadToken(token);
+
+            IHandle handle = new Handle(session);
             KeyValue function = new KeyValue("execute").setKey(service);
             IService bean = Application.getService(handle, service, function);
             dataOut = SecurityPolice.call(handle, bean, dataIn, function);

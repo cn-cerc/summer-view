@@ -20,11 +20,12 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import cn.cerc.core.ISession;
 import cn.cerc.core.Utils;
+import cn.cerc.db.core.Handle;
+import cn.cerc.db.core.IHandle;
 import cn.cerc.mis.config.AppStaticFileDefault;
 import cn.cerc.mis.config.ApplicationConfig;
 import cn.cerc.mis.core.AppClient;
 import cn.cerc.mis.core.Application;
-import cn.cerc.mis.core.BasicHandle;
 import cn.cerc.mis.core.FormFactory;
 import cn.cerc.mis.core.IErrorPage;
 import cn.cerc.mis.core.IdValue;
@@ -101,7 +102,7 @@ public class StartForms implements Filter {
         session.setRequest(req);
         session.setResponse(resp);
         context.getBean(AppClient.class).setRequest(req);
-        
+
         // 2、处理Url请求
         String childCode = getRequestCode(req);
         if (childCode == null) {
@@ -111,11 +112,10 @@ public class StartForms implements Filter {
         }
 
         FormFactory factory = context.getBean(FormFactory.class);
-        try (BasicHandle handle = new BasicHandle()) {
-            IdValue sv = new IdValue(childCode);
-            String viewId = factory.getView(handle, req, resp, sv.getId(), sv.getValue());
-            factory.outputView(req, resp, viewId);
-        }
+        IHandle handle = new Handle(session);
+        IdValue sv = new IdValue(childCode);
+        String viewId = factory.getView(handle, req, resp, sv.getId(), sv.getValue());
+        factory.outputView(req, resp, viewId);
     }
 
     public static String getRequestCode(HttpServletRequest req) {
