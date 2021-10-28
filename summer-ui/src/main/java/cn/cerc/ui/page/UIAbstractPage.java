@@ -13,10 +13,11 @@ import cn.cerc.mis.cdn.CDN;
 import cn.cerc.mis.core.AppClient;
 import cn.cerc.mis.core.IForm;
 import cn.cerc.mis.core.IPage;
+import cn.cerc.mis.core.SupportScriptFile;
 import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 
-public abstract class UIAbstractPage extends UIComponent implements IPage {
+public abstract class UIAbstractPage extends UIComponent implements IPage, SupportScriptFile {
     protected static final ClassConfig config = new ClassConfig(UIAbstractPage.class, SummerMIS.ID);
 
     private List<StaticFile> cssFiles = new ArrayList<>();
@@ -170,11 +171,19 @@ public abstract class UIAbstractPage extends UIComponent implements IPage {
         return jsFiles;
     }
 
+    @Override
     public final void addScriptFile(String fileName) {
-        this.addScriptFile(fileName, this.isPhone() ? "phone" : "pc");
+        if (fileName.toLowerCase().startsWith("http"))
+            this.addScriptFile(fileName, "");
+        else
+            this.addScriptFile(fileName, this.isPhone() ? "phone" : "pc");
     }
 
     public final void addScriptFile(String fileName, String device) {
+        for (StaticFile item : jsFiles) {
+            if (fileName.equals(item.getFileName()) && device.equals(item.getDevice()))
+                return;
+        }
         jsFiles.add(new StaticFile(fileName, device));
     }
 
