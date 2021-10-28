@@ -23,7 +23,6 @@ import cn.cerc.mis.core.DataValidateException;
 import cn.cerc.mis.core.IService;
 import cn.cerc.mis.core.ServiceException;
 import cn.cerc.mis.core.ServiceState;
-import cn.cerc.mis.security.SecurityPolice;
 import cn.cerc.ui.SummerUI;
 
 public class StartServices extends HttpServlet {
@@ -74,7 +73,7 @@ public class StartServices extends HttpServlet {
             IHandle handle = new Handle(session);
             KeyValue function = new KeyValue("execute").setKey(service);
             IService bean = Application.getService(handle, service, function);
-            dataOut = SecurityPolice.call(handle, bean, dataIn, function);
+            dataOut = bean._call(handle, dataIn, function);
             if (dataOut == null)
                 dataOut = new DataSet().setMessage("service return empty");
             response.getWriter().write(RecordFilter.execute(dataIn, dataOut).toString());
