@@ -37,7 +37,7 @@ public class UIReact extends UIComponent {
     }
 
     public UIReact add(String text) {
-        this.getLines().add(text);
+        this.script.add(text);
         return this;
     }
 
@@ -62,10 +62,6 @@ public class UIReact extends UIComponent {
         return add(String.format(format, args));
     }
 
-    public List<String> getLines() {
-        return script.getLines();
-    }
-
     @Override
     public void beginOutput(HtmlWriter html) {
         this.content.setId(this.getId());
@@ -73,32 +69,22 @@ public class UIReact extends UIComponent {
     }
 
     public class UIScriptContent extends UIComponent {
-        private String text;
         private List<String> lines;
 
         public UIScriptContent(UIComponent owner) {
             super(owner);
+            lines = new ArrayList<>();
         }
 
         @Override
         public void beginOutput(HtmlWriter html) {
             super.beginOutput(html);
-            if (text != null)
-                html.print(text);
-            if (lines != null) {
-                for (String line : lines)
-                    html.println(line);
-            }
-        }
-
-        public List<String> getLines() {
-            if (lines == null)
-                lines = new ArrayList<>();
-            return lines;
+            for (String line : lines)
+                html.println(line);
         }
 
         public UIScriptContent add(String line) {
-            this.getLines().add(line);
+            this.lines.add(line);
             return this;
         }
 
