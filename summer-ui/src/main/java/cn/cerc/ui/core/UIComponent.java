@@ -111,7 +111,7 @@ public class UIComponent implements IOriginOwner, HtmlContent, Iterable<UICompon
         return (String) propertys.get("id");
     }
 
-    public final UIComponent setId(String id) {
+    public UIComponent setId(String id) {
         propertys.put("id", id);
         return this;
     }
@@ -165,7 +165,7 @@ public class UIComponent implements IOriginOwner, HtmlContent, Iterable<UICompon
         }
     }
 
-    public final UIComponent setClientRender(boolean clientRender) {
+    public UIComponent setClientRender(boolean clientRender) {
         this.clientRender = clientRender ? 1 : 0;
         return this;
     }
@@ -222,7 +222,7 @@ public class UIComponent implements IOriginOwner, HtmlContent, Iterable<UICompon
         return this.signProperty;
     }
 
-    public final UIComponent setSignProperty(String signValue, boolean value) {
+    public UIComponent setSignProperty(String signValue, boolean value) {
         if (signValue != null && !"".equals(signValue)) {
             if (value)
                 this.signProperty.add(signValue);

@@ -18,12 +18,12 @@ public class UIReact extends UIComponent {
         this.script = new UIScriptContent(this);
         this.script.setRootLabel("script");
         this.script.writeProperty("type", "text/babel");
-        addJsFile("https://cdn.bootcdn.net/ajax/libs/react/16.13.1/umd/react.production.min.js");
-        addJsFile("https://cdn.bootcdn.net/ajax/libs/react-dom/16.13.1/umd/react-dom.production.min.js");
-        addJsFile("https://cdn.bootcdn.net/ajax/libs/babel-standalone/7.0.0-beta.3/babel.min.js");
+        addScriptFile("https://cdn.bootcdn.net/ajax/libs/react/16.13.1/umd/react.production.min.js");
+        addScriptFile("https://cdn.bootcdn.net/ajax/libs/react-dom/16.13.1/umd/react-dom.production.min.js");
+        addScriptFile("https://cdn.bootcdn.net/ajax/libs/babel-standalone/7.0.0-beta.3/babel.min.js");
     }
 
-    private void addJsFile(String fileName) {
+    private UIReact addScriptFile(String fileName) {
         UIComponent root = this.getOwner();
         while (root != null) {
             if (root instanceof SupportScriptFile) {
@@ -33,6 +33,7 @@ public class UIReact extends UIComponent {
             }
             root = root.getOwner();
         }
+        return this;
     }
 
     public UIReact add(String text) {
@@ -40,10 +41,20 @@ public class UIReact extends UIComponent {
         return this;
     }
 
-    public UIReact setRender(String jsFile, String reactClass, String id) {
-        this.setId(id);
-        this.addJsFile(jsFile);
+    public UIReact addRender(String reactText) {
+        this.add("ReactDOM.render(%s, document.getElementById(\"%s\"));", reactText);
+        return this;
+    }
+
+    public UIReact addRender(String scriptFile, String reactClass) {
+        this.addScriptFile(scriptFile);
         this.add("ReactDOM.render(<%s/>, document.getElementById(\"%s\"));", reactClass, this.getId());
+        return this;
+    }
+
+    @Override
+    public UIReact setId(String value) {
+        super.setId(value);
         return this;
     }
 
