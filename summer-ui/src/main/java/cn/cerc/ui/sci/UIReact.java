@@ -42,7 +42,7 @@ public class UIReact extends UIComponent {
     }
 
     public UIReact addRender(String reactText) {
-        this.add("ReactDOM.render(%s, document.getElementById(\"%s\"));", reactText);
+        this.add("ReactDOM.render(%s, document.getElementById(\"%s\"));", reactText, this.getId());
         return this;
     }
 
