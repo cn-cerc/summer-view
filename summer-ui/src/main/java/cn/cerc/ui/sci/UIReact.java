@@ -3,7 +3,6 @@ package cn.cerc.ui.sci;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.cerc.mis.core.SupportScriptFile;
 import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.vcl.UIDiv;
@@ -18,23 +17,23 @@ public class UIReact extends UIComponent {
         this.script = new UIScriptContent(this);
         this.script.setRootLabel("script");
         this.script.writeProperty("type", "text/babel");
-        addScriptFile("https://cdn.bootcdn.net/ajax/libs/react/16.13.1/umd/react.production.min.js");
-        addScriptFile("https://cdn.bootcdn.net/ajax/libs/react-dom/16.13.1/umd/react-dom.production.min.js");
-        addScriptFile("https://cdn.bootcdn.net/ajax/libs/babel-standalone/7.0.0-beta.3/babel.min.js");
+//        addScriptFile("https://cdn.bootcdn.net/ajax/libs/react/16.13.1/umd/react.production.min.js");
+//        addScriptFile("https://cdn.bootcdn.net/ajax/libs/react-dom/16.13.1/umd/react-dom.production.min.js");
+//        addScriptFile("https://cdn.bootcdn.net/ajax/libs/babel-standalone/7.0.0-beta.3/babel.min.js");
     }
-
-    private UIReact addScriptFile(String fileName) {
-        UIComponent root = this.getOwner();
-        while (root != null) {
-            if (root instanceof SupportScriptFile) {
-                SupportScriptFile page = (SupportScriptFile) root;
-                page.addScriptFile(fileName);
-                break;
-            }
-            root = root.getOwner();
-        }
-        return this;
-    }
+//
+//    private UIReact addScriptFile(String fileName) {
+//        UIComponent root = this.getOwner();
+//        while (root != null) {
+//            if (root instanceof SupportScriptFile) {
+//                SupportScriptFile page = (SupportScriptFile) root;
+//                page.addScriptFile(fileName);
+//                break;
+//            }
+//            root = root.getOwner();
+//        }
+//        return this;
+//    }
 
     public UIReact add(String text) {
         this.script.add(text);
@@ -43,12 +42,6 @@ public class UIReact extends UIComponent {
 
     public UIReact addRender(String reactText) {
         this.add("ReactDOM.render(%s, document.getElementById(\"%s\"));", reactText, this.getId());
-        return this;
-    }
-
-    public UIReact addRender(String scriptFile, String reactClass) {
-        this.addScriptFile(scriptFile);
-        this.add("ReactDOM.render(<%s/>, document.getElementById(\"%s\"));", reactClass, this.getId());
         return this;
     }
 
