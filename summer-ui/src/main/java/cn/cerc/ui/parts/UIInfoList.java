@@ -55,7 +55,7 @@ public class UIInfoList extends UIComponent {
         return addLine(context, "");
     }
 
-    public Line getLine() {
+    public Line newLine() {
         Line line = new Line();
         items.add(line);
         return line;
@@ -83,9 +83,9 @@ public class UIInfoList extends UIComponent {
         if (components == null || components.length == 0) {
             throw new RuntimeException("components array null or length is 0");
         }
-        Line line = this.getLine();
+        Line line = this.newLine();
         for (UIComponent component : components) {
-            line.getItems().add(component);
+            line.addComponent(component);
         }
         return this;
     }
@@ -108,7 +108,6 @@ public class UIInfoList extends UIComponent {
     }
 
     public class Line extends UIComponent {
-        private List<UIComponent> items = new ArrayList<>();
 
         @Deprecated
         public Line() {
@@ -117,57 +116,41 @@ public class UIInfoList extends UIComponent {
 
         public Line(UIComponent owner) {
             super(owner);
-        }
-
-        @Override
-        public void output(HtmlWriter html) {
-            html.println("<li>");
-            for (UIComponent item : items) {
-                item.output(html);
-            }
-            html.println("</li>");
+            this.setRootLabel("li");
         }
 
         public UISpan setLineContent(String text) {
-            UISpan uiText = new UISpan();
+            UISpan uiText = new UISpan(this);
             uiText.setText(text);
-            items.add(uiText);
             return uiText;
         }
 
         public Line setTitle(String title) {
-            UISpan uiTitle = new UISpan();
+            UISpan uiTitle = new UISpan(this);
             uiTitle.setText(title);
             uiTitle.setRole("title");
-            items.add(uiTitle);
             return this;
         }
 
         public Line setTitle(String imgSrc, String title) {
-            UIImage img = new UIImage();
+            UIImage img = new UIImage(this);
             img.setSrc(imgSrc);
-            items.add(img);
             setTitle(title);
             return this;
         }
 
         public Line addOpera(String text, String href) {
-            UIBottom bottom = new UIBottom(null);
+            UIBottom bottom = new UIBottom(this);
             bottom.setCaption(text).setUrl(href).setTarget("_blank").setCssClass("commonlyMenu");
-            items.add(bottom);
             return this;
         }
 
         public Line setRightOpera(String text, String href) {
-            UIBottom bottom = new UIBottom(null);
+            UIBottom bottom = new UIBottom(this);
             bottom.setCaption(text);
             bottom.setUrl(href);
-            items.add(bottom);
             return this;
         }
 
-        public List<UIComponent> getItems() {
-            return items;
-        }
     }
 }
