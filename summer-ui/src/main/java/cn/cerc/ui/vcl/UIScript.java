@@ -33,6 +33,7 @@ public class UIScript extends UIComponent {
         } else {
             this.writeProperty("src", null);
         }
+        html.println("");
         super.beginOutput(html);
     }
 
