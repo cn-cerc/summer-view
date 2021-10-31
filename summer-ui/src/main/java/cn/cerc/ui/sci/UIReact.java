@@ -11,8 +11,9 @@ public class UIReact extends UIComponent {
     private UIDiv content;
     private UIScriptContent script;
 
-    public UIReact(UIComponent owner) {
+    public UIReact(UIComponent owner, String id) {
         super(owner);
+        this.setId(id);
         this.content = new UIDiv(this);
         this.script = new UIScriptContent(this);
         this.script.setRootLabel("script");
@@ -80,6 +81,12 @@ public class UIReact extends UIComponent {
             this.lines.add(line);
             return this;
         }
+
+    }
+
+    public void addReact(String value, Object... args) {
+        String react = String.format(value, args);
+        this.add("ReactDOM.render(%s, document.getElementById(\"%s\"));", react, this.getId());
 
     }
 
