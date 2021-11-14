@@ -16,21 +16,36 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
+import cn.cerc.core.ClassConfig;
 import cn.cerc.core.ISession;
 import cn.cerc.mis.core.AppClient;
 import cn.cerc.mis.core.Application;
 import cn.cerc.mis.core.IMobileConfig;
 import cn.cerc.mis.core.IPage;
 import cn.cerc.ui.core.UrlRecord;
+import cn.cerc.ui.mvc.ipplus.ClientIPVerify;
 
 public class StartApp implements Filter {
+
     private static final Logger log = LoggerFactory.getLogger(StartApp.class);
+
+    private static final String APP_IP_FILTER = (new ClassConfig(StartApp.class, null)).getString("app.ip.filter",
+            "false");
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse resp = (HttpServletResponse) response;
+
+        if ("true".equals(APP_IP_FILTER)) {
+            String ip = AppClient.getClientIP(req);
+            if (!ClientIPVerify.allowip(ip)) {
+                resp.setContentType("text/html;charset=UTF-8");
+                resp.getWriter().print(String.format("不支持境外ip访问 %s", ip));
+                return;
+            }
+        }
 
         StringBuffer builder = req.getRequestURL();
         UrlRecord url = new UrlRecord();
