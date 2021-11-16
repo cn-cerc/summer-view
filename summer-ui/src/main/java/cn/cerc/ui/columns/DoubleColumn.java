@@ -1,5 +1,6 @@
 package cn.cerc.ui.columns;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 
 import cn.cerc.mis.core.IForm;
@@ -72,10 +73,8 @@ public class DoubleColumn extends AbstractColumn implements IDataColumn {
 
     private String getText() {
         double value = getRecord().getDouble(this.getCode());
-        String text = "0";
         DecimalFormat df = new DecimalFormat(format);
-        text = df.format(value);
-        return text;
+        return df.format(new BigDecimal(Double.toString(value)));
     }
 
     @Override

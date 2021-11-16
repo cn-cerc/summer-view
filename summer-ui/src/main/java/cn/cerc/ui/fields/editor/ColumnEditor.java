@@ -1,5 +1,6 @@
 package cn.cerc.ui.fields.editor;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +58,8 @@ public class ColumnEditor {
             data = html.toString();
         } else if (ds.getValue(owner.getField()) instanceof Double) {
             DecimalFormat df = new DecimalFormat("0.####");
-            data = df.format(ds.getDouble(owner.getField()));
+            double value = ds.getDouble(owner.getField());
+            data = df.format(new BigDecimal(Double.toString(value)));// 确保精度不丢失
         }
 
         if (!this.init) {

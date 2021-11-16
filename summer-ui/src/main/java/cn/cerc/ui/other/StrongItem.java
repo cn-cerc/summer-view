@@ -4,6 +4,7 @@ import cn.cerc.mis.config.ApplicationConfig;
 import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 
 public class StrongItem extends UIComponent {
@@ -51,7 +52,7 @@ public class StrongItem extends UIComponent {
             html.print(" id=\"%s\"", this.getId());
         }
         html.print(">");
-        html.print(df.format(this.value));
+        html.print(df.format(new BigDecimal(this.value.toString())));
         if (this.getPercentSign() != null) {
             html.print(this.percentSign);
         }

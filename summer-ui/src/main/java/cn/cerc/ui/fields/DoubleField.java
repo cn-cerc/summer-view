@@ -1,5 +1,6 @@
 package cn.cerc.ui.fields;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 
 import cn.cerc.ui.core.HtmlWriter;
@@ -32,7 +33,7 @@ public class DoubleField extends AbstractField implements IFormatColumn, IOutput
         try {
             double val = getCurrent().getDouble(this.getField());
             DecimalFormat df = new DecimalFormat(format);
-            return df.format(val);
+            return df.format(new BigDecimal(Double.toString(val)));
         } catch (NumberFormatException e) {
             return "0";
         }
