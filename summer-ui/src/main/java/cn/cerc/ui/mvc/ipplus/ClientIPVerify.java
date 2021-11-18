@@ -1,6 +1,7 @@
 package cn.cerc.ui.mvc.ipplus;
 
 import cn.cerc.db.core.ServerConfig;
+import cn.cerc.mis.core.Application;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,7 +11,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 
 /**
- * 客户端IP地址校验
+ * 客户端IP地址校验，需要先打开 app.ip.filter 参数
  */
 public class ClientIPVerify {
     private static final Logger log = LoggerFactory.getLogger(ClientIPVerify.class);
@@ -23,14 +24,18 @@ public class ClientIPVerify {
         filePath = path + "IP_trial_single_WGS84.awdb";
     }
 
-    public static boolean allowip(String ip) {
-        // 开发环境免校验
+    private static final IClientIPCheckList client = Application.getBean(IClientIPCheckList.class);
+
+    public static boolean allow(String ip) {
+        File file = new File(filePath);
+        // 开发环境下没有离线库文件则免校验
         if (ServerConfig.isServerDevelop()) {
-            return true;
+            if (!file.exists())
+                return true;
         }
 
         try {
-            AWReader awReader = new AWReader(new File(filePath));
+            AWReader awReader = new AWReader(file);
             InetAddress address = InetAddress.getByName(ip);
             JsonNode record = awReader.get(address);
 
@@ -38,34 +43,36 @@ public class ClientIPVerify {
                 return false;
             }
 
-            JsonNode continent = record.get("continent");
-            if (continent != null) {
-                if ("保留IP".equals(continent.asText())) {// 允许保留ip通过
+            if (client == null) {
+                return true;
+            }
+            // 检查大洲通行的白名单
+            if (record.has("continent")) {
+                String continent = record.get("continent").asText();
+                if ("保留IP".equals(continent))
                     return true;
-                }
-            }
-            // 检查国家
-            JsonNode country = record.get("country");
-            if (country != null) {
-                if (!"中国".equals(country.asText())) {
-                    log.warn("境外ip {} {}", ip, record);
+                if (client.getContinentWhiteList().stream().noneMatch(continent::contains)) {
+                    log.info("非法大洲ip {} {}", ip, record);
                     return false;
                 }
             }
-            // 检查省份
-            JsonNode province = record.get("province");
-            if (province != null) {
-                if (province.asText().contains("香港")) {
-                    log.warn("香港ip {} {}", ip, record);
-                    return false;
-                }
-                if (province.asText().contains("台湾")) {
-                    log.warn("台湾ip {} {}", ip, record);
+            // 检查国家通行的白名单
+            if (record.has("country")) {
+                String country = record.get("country").asText();
+                if (client.getCountryWhitelist().stream().noneMatch(country::contains)) {
+                    log.info("非法国家ip {} {}", ip, record);
                     return false;
                 }
             }
-        } catch (IpTypeException |
-                IOException e) {
+            // 检查省份通行的黑名单
+            if (record.has("province")) {
+                String province = record.get("province").asText();
+                if (client.getProvinceBlacklist().stream().anyMatch(province::contains)) {
+                    log.info("非法省份ip {} {}", ip, record);
+                    return false;
+                }
+            }
+        } catch (IpTypeException | IOException e) {
             log.error(e.getMessage(), e);
         }
         return true;
