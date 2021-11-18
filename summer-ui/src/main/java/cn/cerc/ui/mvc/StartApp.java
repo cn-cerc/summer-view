@@ -41,8 +41,7 @@ public class StartApp implements Filter {
         if ("true".equals(APP_IP_FILTER)) {
             String ip = AppClient.getClientIP(req);
             if (!ClientIPVerify.allowip(ip)) {
-                resp.setContentType("text/html;charset=UTF-8");
-                resp.getWriter().print(String.format("不支持境外ip访问 %s", ip));
+                resp.sendError(HttpServletResponse.SC_NOT_FOUND);
                 return;
             }
         }
