@@ -1,14 +1,16 @@
 package cn.cerc.ui.mvc.ipplus;
 
-import cn.cerc.db.core.ServerConfig;
-import cn.cerc.mis.core.Application;
-import com.fasterxml.jackson.databind.JsonNode;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.databind.JsonNode;
+
+import cn.cerc.db.core.ServerConfig;
+import cn.cerc.mis.core.Application;
 
 /**
  * 客户端IP地址校验，需要先打开 app.ip.filter 参数
@@ -34,8 +36,7 @@ public class ClientIPVerify {
                 return true;
         }
 
-        try {
-            AWReader awReader = new AWReader(file);
+        try (AWReader awReader = new AWReader(file)) {
             InetAddress address = InetAddress.getByName(ip);
             JsonNode record = awReader.get(address);
 

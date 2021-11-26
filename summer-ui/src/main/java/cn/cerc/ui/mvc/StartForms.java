@@ -23,7 +23,6 @@ import cn.cerc.core.Utils;
 import cn.cerc.db.core.Handle;
 import cn.cerc.db.core.IHandle;
 import cn.cerc.mis.config.AppStaticFileDefault;
-import cn.cerc.mis.config.ApplicationConfig;
 import cn.cerc.mis.core.AppClient;
 import cn.cerc.mis.core.Application;
 import cn.cerc.mis.core.FormFactory;
@@ -54,8 +53,7 @@ public class StartForms implements Filter {
         log.debug("uri {}", uri);
 
         if (StringUtils.countMatches(uri, "/") < 2 && !uri.contains("favicon.ico")) {
-            String redirect = String.format("%s%s", ApplicationConfig.App_Path,
-                    Application.getConfig().getWelcomePage());
+            String redirect = String.format("/public/%s", Application.getConfig().getWelcomePage());
             redirect = resp.encodeRedirectURL(redirect);
             resp.sendRedirect(redirect);
             return;
