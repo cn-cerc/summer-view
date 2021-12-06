@@ -26,10 +26,10 @@ public class BooleanField extends AbstractField implements SearchItem, IFormatCo
     public String getText() {
         if (getBuildText() != null) {
             HtmlWriter html = new HtmlWriter();
-            getBuildText().outputText(getCurrent(), html);
+            getBuildText().outputText(current(), html);
             return html.toString();
         } else {
-            return getCurrent().getBoolean(this.getField()) ? trueText : falseText;
+            return current().getBoolean(this.getField()) ? trueText : falseText;
         }
     }
 
@@ -47,7 +47,7 @@ public class BooleanField extends AbstractField implements SearchItem, IFormatCo
         input.setName(this.getId());
         input.setValue("1");
         input.setInputType(UIInput.TYPE_CHECKBOX);
-        input.setSignProperty("checked", getCurrent().getBoolean(this.getField()));
+        input.setSignProperty("checked", current().getBoolean(this.getField()));
         input.setSignProperty("disabled", this.isReadonly());
         input.writeProperty("onclick", this.getOnclick());
         input.output(html);
@@ -81,7 +81,7 @@ public class BooleanField extends AbstractField implements SearchItem, IFormatCo
         if (this.isReadonly()) {
             html.print(getText());
         } else {
-            html.print(getEditor().format(getCurrent()));
+            html.print(getEditor().format(current()));
         }
     }
 

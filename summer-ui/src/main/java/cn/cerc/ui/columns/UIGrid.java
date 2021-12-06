@@ -91,10 +91,10 @@ public class UIGrid extends UIComponent implements IReadonlyOwner, IGridStyle {
         DataSet dataSet = this.getDataSet();
         dataSet.first();
         while (dataSet.fetch()) {
-            html.print("<div class=\"record\" data-record=\"%d\">", dataSet.getRecNo());
+            html.print("<div class=\"record\" data-record=\"%d\">", dataSet.recNo());
             html.print("<ul>");
             for (UIPhoneLine block : this.phoneLines) {
-                block.setRecord(dataSet.getCurrent());
+                block.setRecord(dataSet.current());
                 html.print("<li");
                 if (block instanceof UIComponent) {
                     UIComponent item = block;
@@ -169,7 +169,7 @@ public class UIGrid extends UIComponent implements IReadonlyOwner, IGridStyle {
                     if ((item instanceof IColumn)) {
                         IColumn column = (IColumn) item;
                         if (item instanceof IDataColumn) {
-                            ((IDataColumn) column).setRecord(dataSet.getCurrent());
+                            ((IDataColumn) column).setRecord(dataSet.current());
                         }
                         column.outputCell(html);
                     } else {

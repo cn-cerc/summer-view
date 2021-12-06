@@ -24,7 +24,7 @@ public class UIDataComponent extends UIComponent {
 
     @Override
     public void output(HtmlWriter html) {
-        html.print(dataSet.getCurrent().getText(field));
+        html.print(dataSet.current().getText(field));
     }
 
 }

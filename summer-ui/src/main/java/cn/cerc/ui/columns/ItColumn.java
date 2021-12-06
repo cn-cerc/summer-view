@@ -17,12 +17,12 @@ public class ItColumn extends AbstractColumn implements IDataColumn {
 
     @Override
     public void outputCell(HtmlWriter html) {
-        DataSet dataSet = this.getRecord().getDataSet();
+        DataSet dataSet = this.getRecord().dataSet();
         if (dataSet == null) {
             html.print("dataSet is null");
             return;
         }
-        html.print(String.valueOf(dataSet.getRecNo()));
+        html.print(String.valueOf(dataSet.recNo()));
 
         if (this.getOrigin() instanceof IForm) {
             IForm form = (IForm) this.getOrigin();

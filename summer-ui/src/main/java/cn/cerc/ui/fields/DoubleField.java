@@ -27,11 +27,11 @@ public class DoubleField extends AbstractField implements IFormatColumn, IOutput
     public String getText() {
         if (getBuildText() != null) {
             HtmlWriter html = new HtmlWriter();
-            getBuildText().outputText(getCurrent(), html);
+            getBuildText().outputText(current(), html);
             return html.toString();
         }
         try {
-            double val = getCurrent().getDouble(this.getField());
+            double val = current().getDouble(this.getField());
             DecimalFormat df = new DecimalFormat(format);
             return df.format(new BigDecimal(Double.toString(val)));
         } catch (NumberFormatException e) {
@@ -51,7 +51,7 @@ public class DoubleField extends AbstractField implements IFormatColumn, IOutput
         if (this.isReadonly()) {
             if (getBuildUrl() != null) {
                 UIUrl url = new UIUrl(null);
-                getBuildUrl().buildUrl(getCurrent(), url);
+                getBuildUrl().buildUrl(current(), url);
                 if (!"".equals(url.getHref())) {
                     url.setText(getText());
                     url.output(html);
@@ -62,7 +62,7 @@ public class DoubleField extends AbstractField implements IFormatColumn, IOutput
                 html.print(getText());
             }
         } else {
-            html.print(getEditor().format(getCurrent()));
+            html.print(getEditor().format(current()));
         }
     }
 

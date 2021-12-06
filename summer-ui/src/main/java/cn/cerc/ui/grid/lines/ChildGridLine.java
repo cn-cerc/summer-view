@@ -14,7 +14,7 @@ public class ChildGridLine extends AbstractGridLine {
     @Override
     public void output(HtmlWriter html, int lineNo) {
         html.print("<tr");
-        html.print(" id='%s_%s'", "tr" + getCurrent().getDataSet().getRecNo(), lineNo);
+        html.print(" id='%s_%s'", "tr" + current().dataSet().recNo(), lineNo);
         if (!this.isVisible()) {
             html.print(" style=\"display:none\"");
         }

@@ -3,9 +3,9 @@ package cn.cerc.ui.grid.lines;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.cerc.core.DataRow;
 import cn.cerc.core.DataSet;
 import cn.cerc.core.DataSource;
-import cn.cerc.core.DataRow;
 import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.fields.AbstractField;
@@ -42,8 +42,13 @@ public abstract class AbstractGridLine extends UIComponent implements DataSource
         return this;
     }
 
-    public DataSet getDataSet() {
-        return getCurrent().getDataSet();
+    public DataSet dataSet() {
+        return current().dataSet();
+    }
+
+    @Deprecated
+    public final DataSet getDataSet() {
+        return dataSet();
     }
 
     public abstract void output(HtmlWriter html, int lineNo);
@@ -69,8 +74,8 @@ public abstract class AbstractGridLine extends UIComponent implements DataSource
     }
 
     @Override
-    public DataRow getCurrent() {
-        return source.getCurrent();
+    public DataRow current() {
+        return source.current();
     }
 
     @Override
@@ -89,7 +94,7 @@ public abstract class AbstractGridLine extends UIComponent implements DataSource
             BuildUrl build = field.getBuildUrl();
             if (build != null) {
                 UIUrl url = new UIUrl(null);
-                build.buildUrl(this.getCurrent(), url);
+                build.buildUrl(this.current(), url);
                 url.setText(field.getText()).output(html);
             } else {
                 html.print(field.getText());

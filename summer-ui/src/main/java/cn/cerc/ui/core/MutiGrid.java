@@ -50,10 +50,10 @@ public class MutiGrid<T> {
                 dataSet.setRecNo(i + 1);
                 item = clazz.getDeclaredConstructor().newInstance();
                 if (defProcess) {
-                    defMake.build(item, dataSet.getCurrent());
+                    defMake.build(item, dataSet.current());
                 }
                 if (make != null) {
-                    make.build(item, dataSet.getCurrent());
+                    make.build(item, dataSet.current());
                 }
 
                 items.add(item);

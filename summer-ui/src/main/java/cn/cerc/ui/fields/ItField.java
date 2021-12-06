@@ -20,10 +20,10 @@ public class ItField extends AbstractField {
     public String getText() {
         if (getBuildText() != null) {
             HtmlWriter html = new HtmlWriter();
-            getBuildText().outputText(getCurrent(), html);
+            getBuildText().outputText(current(), html);
             return html.toString();
         }
-        return "" + getCurrent().getDataSet().getRecNo();
+        return "" + current().dataSet().recNo();
     }
 
     @Override

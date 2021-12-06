@@ -51,7 +51,7 @@ public class CodeNameField extends AbstractField {
             html.print(" name=\"%s\"", getNameField());
             html.print(" id=\"%s\"", getNameField());
             String nameValue = null;
-            nameValue = getCurrent().getString(getNameField());
+            nameValue = current().getString(getNameField());
             if (nameValue != null) {
                 html.print(" value=\"%s\"", nameValue);
             }

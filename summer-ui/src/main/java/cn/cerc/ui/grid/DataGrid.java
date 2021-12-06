@@ -65,8 +65,13 @@ public class DataGrid extends UIComponent implements DataSource, IGridStyle {
         pages.setRequest(this.form.getRequest());
     }
 
-    public DataSet getDataSet() {
+    public DataSet dataSet() {
         return dataSet;
+    }
+
+    @Deprecated
+    public final DataSet getDataSet() {
+        return dataSet();
     }
 
     public DataGrid setDataSet(DataSet dataSet) {
@@ -158,7 +163,7 @@ public class DataGrid extends UIComponent implements DataSource, IGridStyle {
     public final void output(HtmlWriter html) {
         if (this.isClientRender()) {
             html.println("let grid = new sci.TGrid(app)");
-            html.println("grid.setDataSet(new sci.DataSet('%s'))", this.dataSet.toJson());
+            html.println("grid.setDataSet(new sci.DataSet('%s'))", this.dataSet.json());
             return;
         }
 
@@ -314,8 +319,8 @@ public class DataGrid extends UIComponent implements DataSource, IGridStyle {
     }
 
     @Override
-    public DataRow getCurrent() {
-        return this.dataSet.getCurrent();
+    public DataRow current() {
+        return this.dataSet.current();
     }
 
 }

@@ -23,17 +23,17 @@ public class UIFastGrid extends UIComponent implements IGridStyle {
         ds.setValue("name", "bade");
         ds.setValue("sex", false);
 
-        ds.getFieldDefs().get("code").setName("工号");
-        ds.getFieldDefs().get("name").setName("姓名");
-        ds.getFieldDefs().get("sex").setName("性别").onGetSetText(EditorFactory.ofBoolean("女的", "男的"));
+        ds.fields().get("code").setName("工号");
+        ds.fields().get("name").setName("姓名");
+        ds.fields().get("sex").setName("性别").onGetSetText(EditorFactory.ofBoolean("女的", "男的"));
 
         UIFastGrid grid = new UIFastGrid(null);
         grid.setPhone(false);
         if (grid.isPhone()) {
-            new UIGridBody(grid, ds).addAll(ds.getFieldDefs());
+            new UIGridBody(grid, ds).addAll(ds.fields());
         } else {
             UIGridHead head = new UIGridHead(grid);
-            UIGridBody body = new UIGridBody(grid, ds).addAll(ds.getFieldDefs());
+            UIGridBody body = new UIGridBody(grid, ds).addAll(ds.fields());
             head.addAll(body.getColumns());
         }
         System.out.println(grid.toString());

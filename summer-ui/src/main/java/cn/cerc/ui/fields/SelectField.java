@@ -34,10 +34,10 @@ public class SelectField extends AbstractField implements IFormatColumn, IOutput
     public String getText() {
         if (getBuildText() != null) {
             HtmlWriter html = new HtmlWriter();
-            getBuildText().outputText(getCurrent(), html);
+            getBuildText().outputText(current(), html);
             return html.toString();
         }
-        String val = getCurrent().getString(this.getField());
+        String val = current().getString(this.getField());
         if ("true".equalsIgnoreCase(val) || "false".equalsIgnoreCase(val)) {
             return Boolean.valueOf(val) ? trueText : falseText;
         }
@@ -60,7 +60,7 @@ public class SelectField extends AbstractField implements IFormatColumn, IOutput
         } else {
             html.print(">");
         }
-        String current = getCurrent().getString(this.getField());
+        String current = current().getString(this.getField());
         for (String key : items.keySet()) {
             if (key.equals(current)) {
                 html.print("<option value=\"%s\" selected>%s</option>", key, items.get(key));

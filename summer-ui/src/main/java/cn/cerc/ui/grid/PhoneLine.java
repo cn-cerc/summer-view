@@ -48,7 +48,7 @@ public class PhoneLine extends UIComponent implements DataSource {
     }
 
     private void outputTableString(HtmlWriter html) {
-        DataRow record = getCurrent();
+        DataRow record = current();
         html.print("<tr");
         if (this.expender != null) {
             html.print(String.format(" role=\"%s\" style=\"display: none;\"", expender.getHiddenId()));
@@ -94,7 +94,7 @@ public class PhoneLine extends UIComponent implements DataSource {
             BuildUrl build = field.getBuildUrl();
             if (build != null) {
                 UIUrl url = new UIUrl(null);
-                build.buildUrl(getCurrent(), url);
+                build.buildUrl(current(), url);
                 url.setText(field.getText()).output(html);
             } else {
                 html.print(field.getText());
@@ -125,8 +125,8 @@ public class PhoneLine extends UIComponent implements DataSource {
     }
 
     @Override
-    public DataRow getCurrent() {
-        return grid.getCurrent();
+    public DataRow current() {
+        return grid.current();
     }
 
     @Deprecated

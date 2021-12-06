@@ -34,11 +34,11 @@ public class DateField extends AbstractField {
     public String getText() {
         if (getBuildText() != null) {
             HtmlWriter html = new HtmlWriter();
-            getBuildText().outputText(getCurrent(), html);
+            getBuildText().outputText(current(), html);
             return html.toString();
         }
-        if (getCurrent().hasValue(getField())) {
-            return getCurrent().getDatetime(getField()).getDate();
+        if (current().has(getField())) {
+            return current().getDatetime(getField()).getDate();
         } else {
             return "";
         }

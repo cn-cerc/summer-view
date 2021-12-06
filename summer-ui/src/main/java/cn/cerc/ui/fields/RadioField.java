@@ -17,7 +17,7 @@ public class RadioField extends AbstractField {
 
     @Override
     public String getText() {
-        int val = getCurrent().getInt(this.getField());
+        int val = current().getInt(this.getField());
         if (val < 0 || val > items.size() - 1) {
             return "" + val;
         }

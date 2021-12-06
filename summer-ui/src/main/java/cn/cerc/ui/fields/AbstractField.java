@@ -182,7 +182,7 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
      * @return 返回输出文本
      */
     protected String getDefaultText() {
-        DataRow record = this.getCurrent();
+        DataRow record = this.current();
         if (record != null) {
             if (buildText != null) {
                 HtmlWriter html = new HtmlWriter();
@@ -213,8 +213,8 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
     }
 
     @Override
-    public DataRow getCurrent() {
-        return source != null ? source.getCurrent() : new DataRow();
+    public DataRow current() {
+        return source != null ? source.current() : new DataRow();
     }
 
     @Override
@@ -430,7 +430,7 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
     }
 
     public String getString() {
-        return getCurrent().getString(this.getField());
+        return current().getString(this.getField());
     }
 
     public boolean getBoolean() {

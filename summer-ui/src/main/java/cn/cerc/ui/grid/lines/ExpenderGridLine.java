@@ -15,10 +15,10 @@ public class ExpenderGridLine extends AbstractGridLine {
 
     @Override
     public void output(HtmlWriter html, int lineNo) {
-        DataSet dataSet = getCurrent().getDataSet();
+        DataSet dataSet = current().dataSet();
         html.print("<tr");
-        html.print(" id='%s_%s'", "tr" + dataSet.getRecNo(), lineNo);
-        html.print(" role=\"%s\"", dataSet.getRecNo());
+        html.print(" id='%s_%s'", "tr" + dataSet.recNo(), lineNo);
+        html.print(" role=\"%s\"", dataSet.recNo());
         if (!this.isVisible()) {
             html.print(" style=\"display:none\"");
         }

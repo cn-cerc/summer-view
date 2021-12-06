@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.cerc.core.ClassResource;
-import cn.cerc.core.DataSet;
 import cn.cerc.core.DataRow;
+import cn.cerc.core.DataSet;
 import cn.cerc.ui.SummerUI;
 import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
@@ -63,7 +63,7 @@ public class ColumnEditor {
         }
 
         if (!this.init) {
-            dataSet = gridLine.getDataSet();
+            dataSet = gridLine.dataSet();
             columns = new ArrayList<>();
             for (AbstractField field : gridLine.getFields()) {
                 if (field instanceof IFormatColumn) {
@@ -125,14 +125,14 @@ public class ColumnEditor {
     }
 
     private String getDataId() {
-        int recNo = dataSet.getRecNo();
+        int recNo = dataSet.recNo();
         int colNo = columns.indexOf(owner);
         String selfId = String.format("%d_%d", recNo, colNo);
         return selfId;
     }
 
     private String getDataFocus() {
-        int recNo = dataSet.getRecNo();
+        int recNo = dataSet.recNo();
         int colNo = columns.indexOf(owner);
 
         String prior = recNo > 1 ? String.format("%d_%d", recNo - 1, colNo) : "0";

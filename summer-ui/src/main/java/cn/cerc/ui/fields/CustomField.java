@@ -15,7 +15,7 @@ public class CustomField extends AbstractField {
             return "";
         }
         HtmlWriter html = new HtmlWriter();
-        getBuildText().outputText(getCurrent(), html);
+        getBuildText().outputText(current(), html);
         return html.toString();
     }
 

@@ -59,10 +59,10 @@ public class ProxyService extends AbstractForm {
                 BookHandle bHandle = new BookHandle(this, curBookNo);
                 svr = new LocalService(bHandle, service);
             }
-            svr.getDataIn().fromJson(dataIn);
+            svr.dataIn().setJson(dataIn);
             jsonPage.put("result", svr.exec());
-            jsonPage.put("message", svr.getMessage());
-            jsonPage.put("data", svr.getDataOut().toString());
+            jsonPage.put("message", svr.message());
+            jsonPage.put("data", svr.dataOut().toString());
             log.debug("response {}", new Gson().toJson(jsonPage.getItems()));
         } catch (Exception e) {
             jsonPage.setResultMessage(false, e.getMessage());

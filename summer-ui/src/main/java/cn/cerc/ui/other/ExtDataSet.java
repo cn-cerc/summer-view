@@ -9,17 +9,17 @@ public class ExtDataSet extends DataSet {
 
     public ExtDataSet(String json) {
         super();
-        fromJson(json);
+        setJson(json);
     }
 
     @Override
-    public String toJson() {
+    public String json() {
         return new DataSetGson<>(this).encode();
     }
 
     @Override
-    public ExtDataSet fromJson(String json) {
-        this.close();
+    public ExtDataSet setJson(String json) {
+        super.clear();
         if (!Utils.isEmpty(json))
             new DataSetGson<>(this).decode(json);
         return this;

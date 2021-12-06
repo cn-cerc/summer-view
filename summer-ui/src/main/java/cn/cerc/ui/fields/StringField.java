@@ -23,7 +23,7 @@ public class StringField extends AbstractField implements IFormatColumn, IOutput
         if (this.isReadonly()) {
             if (getBuildUrl() != null) {
                 UIUrl url = new UIUrl(null);
-                getBuildUrl().buildUrl(getCurrent(), url);
+                getBuildUrl().buildUrl(current(), url);
                 if (!"".equals(url.getHref())) {
                     url.setText(getText());
                     url.output(html);
@@ -34,7 +34,7 @@ public class StringField extends AbstractField implements IFormatColumn, IOutput
                 html.print(getText());
             }
         } else {
-            html.print(getEditor().format(getCurrent()));
+            html.print(getEditor().format(current()));
         }
     }
 

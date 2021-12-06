@@ -42,7 +42,7 @@ public class StartServices extends HttpServlet {
         log.debug(uri);
         request.setCharacterEncoding("UTF-8");
         String text = request.getParameter("dataIn");
-        DataSet dataIn = new DataSet().fromJson(text);
+        DataSet dataIn = new DataSet().setJson(text);
         String service = request.getPathInfo().substring(1);
         response.setContentType("application/json;charset=utf-8");
         // 处理跨域问题
