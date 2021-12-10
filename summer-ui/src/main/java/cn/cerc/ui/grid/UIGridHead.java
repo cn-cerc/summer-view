@@ -22,7 +22,7 @@ public class UIGridHead extends UIComponent {
 
     public void addAll(HashSet<FieldMeta> list) {
         for (FieldMeta meta : list) {
-            String name = meta.getName() == null ? meta.getCode() : meta.getName();
+            String name = meta.name() == null ? meta.code() : meta.name();
             columns.add(new UITh(this).setText(name));
         }
     }
