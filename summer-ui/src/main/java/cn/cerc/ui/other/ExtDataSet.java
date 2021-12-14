@@ -4,6 +4,7 @@ import cn.cerc.core.DataSet;
 import cn.cerc.core.DataSetGson;
 import cn.cerc.core.Utils;
 
+@Deprecated
 public class ExtDataSet extends DataSet {
     private static final long serialVersionUID = -8061177880589068767L;
 
