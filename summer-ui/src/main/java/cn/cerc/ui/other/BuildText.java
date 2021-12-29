@@ -1,6 +1,6 @@
 package cn.cerc.ui.other;
 
-import cn.cerc.core.DataRow;
+import cn.cerc.db.core.DataRow;
 import cn.cerc.ui.core.HtmlWriter;
 
 public interface BuildText {

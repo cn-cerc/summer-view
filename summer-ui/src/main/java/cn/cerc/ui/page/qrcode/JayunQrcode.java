@@ -1,6 +1,6 @@
 package cn.cerc.ui.page.qrcode;
 
-import cn.cerc.core.MD5;
+import cn.cerc.db.core.MD5;
 import cn.cerc.db.core.ServerConfig;
 import cn.cerc.security.sapi.JayunAPI;
 

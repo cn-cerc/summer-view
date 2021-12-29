@@ -1,6 +1,6 @@
 package cn.cerc.ui.columns;
 
-import cn.cerc.core.Utils;
+import cn.cerc.db.core.Utils;
 import cn.cerc.mis.core.IForm;
 import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.core.IReadonlyOwner;

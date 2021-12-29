@@ -3,7 +3,7 @@ package cn.cerc.ui.columns;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.cerc.core.DataRow;
+import cn.cerc.db.core.DataRow;
 import cn.cerc.mis.core.IForm;
 import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.core.IReadonlyOwner;

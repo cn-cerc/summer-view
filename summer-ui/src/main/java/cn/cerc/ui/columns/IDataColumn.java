@@ -1,6 +1,6 @@
 package cn.cerc.ui.columns;
 
-import cn.cerc.core.DataRow;
+import cn.cerc.db.core.DataRow;
 
 public interface IDataColumn extends IColumn {
 

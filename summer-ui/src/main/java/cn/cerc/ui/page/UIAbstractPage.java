@@ -7,7 +7,7 @@ import java.util.List;
 
 import javax.servlet.ServletException;
 
-import cn.cerc.core.ClassConfig;
+import cn.cerc.db.core.ClassConfig;
 import cn.cerc.mis.SummerMIS;
 import cn.cerc.mis.cdn.CDN;
 import cn.cerc.mis.core.AppClient;

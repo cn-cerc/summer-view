@@ -1,6 +1,6 @@
 package cn.cerc.ui.core;
 
-import cn.cerc.core.DataSet;
+import cn.cerc.db.core.DataSet;
 import cn.cerc.ui.grid.MutiPage;
 import cn.cerc.ui.other.BeanRecord;
 import cn.cerc.ui.other.BuildRecord;

@@ -1,7 +1,7 @@
 package cn.cerc.ui.core;
 
-import cn.cerc.core.Utils;
 import cn.cerc.db.core.ServerConfig;
+import cn.cerc.db.core.Utils;
 
 public final class HtmlWriter {
     private final StringBuilder builder = new StringBuilder();

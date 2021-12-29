@@ -1,6 +1,6 @@
 package cn.cerc.ui.grid;
 
-import cn.cerc.core.DataSet;
+import cn.cerc.db.core.DataSet;
 import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 

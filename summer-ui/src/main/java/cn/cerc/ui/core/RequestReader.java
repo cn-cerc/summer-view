@@ -2,7 +2,7 @@ package cn.cerc.ui.core;
 
 import javax.servlet.http.HttpServletRequest;
 
-import cn.cerc.core.Utils;
+import cn.cerc.db.core.Utils;
 
 public class RequestReader {
     

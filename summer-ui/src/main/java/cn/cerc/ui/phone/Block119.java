@@ -1,6 +1,6 @@
 package cn.cerc.ui.phone;
 
-import cn.cerc.core.Utils;
+import cn.cerc.db.core.Utils;
 import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.core.UrlRecord;

@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 
-import cn.cerc.core.ClassConfig;
+import cn.cerc.db.core.ClassConfig;
 import cn.cerc.db.core.IHandle;
 import cn.cerc.mis.core.Application;
 

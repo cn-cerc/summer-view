@@ -3,10 +3,10 @@ package cn.cerc.ui.grid;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 
-import cn.cerc.core.DataSet;
-import cn.cerc.core.FieldDefs;
-import cn.cerc.core.FieldMeta;
-import cn.cerc.core.FieldMeta.FieldKind;
+import cn.cerc.db.core.DataSet;
+import cn.cerc.db.core.FieldDefs;
+import cn.cerc.db.core.FieldMeta;
+import cn.cerc.db.core.FieldMeta.FieldKind;
 import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.vcl.UITd;

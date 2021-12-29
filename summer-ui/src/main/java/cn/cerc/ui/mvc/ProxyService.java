@@ -8,8 +8,8 @@ import org.springframework.stereotype.Component;
 
 import com.google.gson.Gson;
 
-import cn.cerc.core.ClassResource;
-import cn.cerc.core.Utils;
+import cn.cerc.db.core.ClassResource;
+import cn.cerc.db.core.Utils;
 import cn.cerc.mis.core.AbstractForm;
 import cn.cerc.mis.core.BookHandle;
 import cn.cerc.mis.core.IPage;

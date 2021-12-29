@@ -1,6 +1,6 @@
 package cn.cerc.ui.vcl;
 
-import cn.cerc.core.Utils;
+import cn.cerc.db.core.Utils;
 import cn.cerc.mis.core.Application;
 import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;

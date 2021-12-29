@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import cn.cerc.core.DataSet;
+import cn.cerc.db.core.DataSet;
 
 public class MutiPage {
     private static final Logger log = LoggerFactory.getLogger(MutiPage.class);

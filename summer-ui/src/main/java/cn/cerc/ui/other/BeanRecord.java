@@ -1,7 +1,7 @@
 package cn.cerc.ui.other;
 
-import cn.cerc.core.ClassResource;
-import cn.cerc.core.DataRow;
+import cn.cerc.db.core.ClassResource;
+import cn.cerc.db.core.DataRow;
 import cn.cerc.ui.SummerUI;
 
 import java.lang.reflect.Field;

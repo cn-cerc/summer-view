@@ -2,8 +2,8 @@ package cn.cerc.ui.panels;
 
 import javax.servlet.http.HttpServletRequest;
 
-import cn.cerc.core.DataRow;
-import cn.cerc.core.Utils;
+import cn.cerc.db.core.DataRow;
+import cn.cerc.db.core.Utils;
 import cn.cerc.mis.core.IForm;
 import cn.cerc.ui.columns.IArrayColumn;
 import cn.cerc.ui.columns.IColumn;

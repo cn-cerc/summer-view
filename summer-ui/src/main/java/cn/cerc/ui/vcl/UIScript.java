@@ -3,7 +3,7 @@ package cn.cerc.ui.vcl;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.cerc.core.ClassConfig;
+import cn.cerc.db.core.ClassConfig;
 import cn.cerc.mis.cdn.CDN;
 import cn.cerc.ui.SummerUI;
 import cn.cerc.ui.core.HtmlWriter;

@@ -1,8 +1,8 @@
 package cn.cerc.ui.other;
 
-import cn.cerc.core.DataSet;
-import cn.cerc.core.DataSetGson;
-import cn.cerc.core.Utils;
+import cn.cerc.db.core.DataSet;
+import cn.cerc.db.core.DataSetGson;
+import cn.cerc.db.core.Utils;
 
 @Deprecated
 public class ExtDataSet extends DataSet {

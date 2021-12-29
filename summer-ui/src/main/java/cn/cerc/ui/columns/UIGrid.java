@@ -3,9 +3,9 @@ package cn.cerc.ui.columns;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.cerc.core.ClassResource;
-import cn.cerc.core.DataSet;
-import cn.cerc.core.Utils;
+import cn.cerc.db.core.ClassResource;
+import cn.cerc.db.core.DataSet;
+import cn.cerc.db.core.Utils;
 import cn.cerc.mis.core.IForm;
 import cn.cerc.mis.core.IOriginOwner;
 import cn.cerc.ui.SummerUI;

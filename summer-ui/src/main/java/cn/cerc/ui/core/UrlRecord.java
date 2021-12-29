@@ -1,11 +1,11 @@
 package cn.cerc.ui.core;
 
-import cn.cerc.core.Utils;
-
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+
+import cn.cerc.db.core.Utils;
 
 public class UrlRecord {
     private String site;

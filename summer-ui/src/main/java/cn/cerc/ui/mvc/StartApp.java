@@ -16,8 +16,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
-import cn.cerc.core.ClassConfig;
-import cn.cerc.core.ISession;
+import cn.cerc.db.core.ClassConfig;
+import cn.cerc.db.core.ISession;
 import cn.cerc.mis.core.AppClient;
 import cn.cerc.mis.core.Application;
 import cn.cerc.mis.core.IMobileConfig;

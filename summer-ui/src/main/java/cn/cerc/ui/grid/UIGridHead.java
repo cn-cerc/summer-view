@@ -3,7 +3,7 @@ package cn.cerc.ui.grid;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 
-import cn.cerc.core.FieldMeta;
+import cn.cerc.db.core.FieldMeta;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.vcl.UITh;
 

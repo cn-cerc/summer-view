@@ -1,7 +1,7 @@
 package cn.cerc.ui.grid;
 
-import cn.cerc.core.DataSource;
-import cn.cerc.core.DataRow;
+import cn.cerc.db.core.DataRow;
+import cn.cerc.db.core.DataSource;
 import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.fields.AbstractField;

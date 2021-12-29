@@ -5,9 +5,9 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.cerc.core.ClassResource;
-import cn.cerc.core.DataRow;
-import cn.cerc.core.DataSet;
+import cn.cerc.db.core.ClassResource;
+import cn.cerc.db.core.DataRow;
+import cn.cerc.db.core.DataSet;
 import cn.cerc.ui.SummerUI;
 import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;

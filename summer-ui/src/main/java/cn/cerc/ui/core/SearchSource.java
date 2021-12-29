@@ -1,6 +1,6 @@
 package cn.cerc.ui.core;
 
-import cn.cerc.core.DataSource;
+import cn.cerc.db.core.DataSource;
 
 public interface SearchSource extends DataSource {
 

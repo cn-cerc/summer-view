@@ -3,7 +3,7 @@ package cn.cerc.ui.phone;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.cerc.core.ClassResource;
+import cn.cerc.db.core.ClassResource;
 import cn.cerc.ui.SummerUI;
 import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
