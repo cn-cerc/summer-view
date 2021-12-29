@@ -42,7 +42,8 @@ public class UIUrl extends UIA {
     public UIUrl setSite(String site) {
         if (url == null)
             url = new UrlRecord();
-        url.setSite(site.replace("'", "\""));
+        if (site != null)
+            url.setSite(site.replace("'", "\""));
         return this;
     }
 
