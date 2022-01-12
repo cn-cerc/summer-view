@@ -15,7 +15,7 @@ import cn.cerc.db.core.DataSet;
 import cn.cerc.db.core.Handle;
 import cn.cerc.db.core.IHandle;
 import cn.cerc.db.core.ISession;
-import cn.cerc.db.core.KeyValue;
+import cn.cerc.db.core.Variant;
 import cn.cerc.db.core.Utils;
 import cn.cerc.db.other.RecordFilter;
 import cn.cerc.mis.core.Application;
@@ -71,7 +71,7 @@ public class StartServices extends HttpServlet {
             session.loadToken(token);
 
             IHandle handle = new Handle(session);
-            KeyValue function = new KeyValue("execute").setKey(service);
+            Variant function = new Variant("execute").setTag(service);
             IService bean = Application.getService(handle, service, function);
             dataOut = bean._call(handle, dataIn, function);
             if (dataOut == null)
