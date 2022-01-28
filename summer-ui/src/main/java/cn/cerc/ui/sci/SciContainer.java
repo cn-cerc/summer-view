@@ -1,6 +1,6 @@
 package cn.cerc.ui.sci;
 
-import cn.cerc.ui.core.HtmlWriter;
+import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 
 public class SciContainer extends UIComponent {

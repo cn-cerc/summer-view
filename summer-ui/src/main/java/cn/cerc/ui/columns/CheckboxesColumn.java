@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import cn.cerc.db.core.DataRow;
-import cn.cerc.ui.core.HtmlWriter;
+import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 
 public class CheckboxesColumn extends AbstractColumn implements IArrayColumn {

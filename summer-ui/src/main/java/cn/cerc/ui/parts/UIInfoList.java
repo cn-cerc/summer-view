@@ -3,7 +3,7 @@ package cn.cerc.ui.parts;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.cerc.ui.core.HtmlWriter;
+import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.vcl.UIImage;
 import cn.cerc.ui.vcl.UISpan;
