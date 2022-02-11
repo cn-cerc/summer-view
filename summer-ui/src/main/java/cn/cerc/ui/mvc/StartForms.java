@@ -26,8 +26,8 @@ import cn.cerc.mis.config.AppStaticFileDefault;
 import cn.cerc.mis.core.AppClient;
 import cn.cerc.mis.core.Application;
 import cn.cerc.mis.core.FormFactory;
+import cn.cerc.mis.core.FormSign;
 import cn.cerc.mis.core.IErrorPage;
-import cn.cerc.mis.core.IdValue;
 
 public class StartForms implements Filter {
     private static final Logger log = LoggerFactory.getLogger(StartForms.class);
@@ -111,7 +111,7 @@ public class StartForms implements Filter {
 
         FormFactory factory = context.getBean(FormFactory.class);
         IHandle handle = new Handle(session);
-        IdValue sv = new IdValue(childCode);
+        FormSign sv = new FormSign(childCode);
         String viewId = factory.getView(handle, req, resp, sv.getId(), sv.getValue());
         factory.outputView(req, resp, viewId);
     }
