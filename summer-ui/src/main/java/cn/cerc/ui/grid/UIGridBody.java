@@ -7,7 +7,7 @@ import cn.cerc.db.core.DataSet;
 import cn.cerc.db.core.FieldDefs;
 import cn.cerc.db.core.FieldMeta;
 import cn.cerc.db.core.FieldMeta.FieldKind;
-import cn.cerc.ui.core.HtmlWriter;
+import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.vcl.UITd;
 

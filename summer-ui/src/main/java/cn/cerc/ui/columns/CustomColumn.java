@@ -1,7 +1,7 @@
 package cn.cerc.ui.columns;
 
 import cn.cerc.db.core.DataRow;
-import cn.cerc.ui.core.HtmlWriter;
+import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.IReadonlyOwner;
 import cn.cerc.ui.core.UIComponent;
 

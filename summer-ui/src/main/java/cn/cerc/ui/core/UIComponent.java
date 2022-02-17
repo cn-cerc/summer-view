@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import cn.cerc.mis.core.HtmlContent;
+import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.mis.core.IForm;
 import cn.cerc.mis.core.IOriginOwner;
 

@@ -2,8 +2,8 @@ package cn.cerc.ui.fields;
 
 import cn.cerc.db.core.ClassConfig;
 import cn.cerc.mis.cdn.CDN;
+import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.SummerUI;
-import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 
 public class CodeNameField extends AbstractField {

@@ -11,10 +11,10 @@ import cn.cerc.db.core.ClassConfig;
 import cn.cerc.mis.SummerMIS;
 import cn.cerc.mis.cdn.CDN;
 import cn.cerc.mis.core.AppClient;
+import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.mis.core.IForm;
 import cn.cerc.mis.core.IPage;
 import cn.cerc.mis.core.SupportScriptFile;
-import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 
 public abstract class UIAbstractPage extends UIComponent implements IPage, SupportScriptFile {

@@ -1,6 +1,6 @@
 package cn.cerc.security.menu;
 
-import cn.cerc.ui.core.HtmlWriter;
+import cn.cerc.mis.core.HtmlWriter;
 
 public interface IMenuItem {
 

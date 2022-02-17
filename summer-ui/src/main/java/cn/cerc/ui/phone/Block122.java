@@ -3,7 +3,7 @@ package cn.cerc.ui.phone;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import cn.cerc.ui.core.HtmlWriter;
+import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.vcl.UIImage;
 import cn.cerc.ui.vcl.UISpan;

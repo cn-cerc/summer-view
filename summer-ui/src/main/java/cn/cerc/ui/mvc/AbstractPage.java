@@ -13,10 +13,10 @@ import cn.cerc.db.redis.RedisRecord;
 import cn.cerc.mis.SummerMIS;
 import cn.cerc.mis.cdn.CDN;
 import cn.cerc.mis.core.Application;
+import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.mis.core.IForm;
 import cn.cerc.mis.core.IPage;
 import cn.cerc.mis.language.R;
-import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 
 //@Component

@@ -1,8 +1,8 @@
 package cn.cerc.ui.columns;
 
 import cn.cerc.db.core.DataSet;
+import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.mis.core.IForm;
-import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 
 public class ItColumn extends AbstractColumn implements IDataColumn {

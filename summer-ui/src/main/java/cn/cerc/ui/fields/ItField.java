@@ -1,8 +1,8 @@
 package cn.cerc.ui.fields;
 
 import cn.cerc.db.core.ClassResource;
+import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.SummerUI;
-import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 
 public class ItField extends AbstractField {

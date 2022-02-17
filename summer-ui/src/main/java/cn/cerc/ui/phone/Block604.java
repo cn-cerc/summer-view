@@ -4,8 +4,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import cn.cerc.db.core.ClassResource;
+import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.SummerUI;
-import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.core.UrlRecord;
 import cn.cerc.ui.vcl.UILabel;

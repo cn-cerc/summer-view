@@ -1,7 +1,7 @@
 package cn.cerc.ui.fields.editor;
 
 import cn.cerc.db.core.DataRow;
-import cn.cerc.ui.core.HtmlWriter;
+import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.fields.AbstractField;
 
 public class CheckEditor {

@@ -3,10 +3,10 @@ package cn.cerc.ui.panels;
 import javax.servlet.http.HttpServletRequest;
 
 import cn.cerc.db.core.DataRow;
+import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.mis.core.IForm;
 import cn.cerc.ui.columns.IColumn;
 import cn.cerc.ui.columns.IDataColumn;
-import cn.cerc.ui.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.style.IEditPanelStyle;
 import cn.cerc.ui.vcl.UIButton;

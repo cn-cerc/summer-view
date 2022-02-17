@@ -1,6 +1,6 @@
 package cn.cerc.ui.columns;
 
-import cn.cerc.ui.core.HtmlWriter;
+import cn.cerc.mis.core.HtmlWriter;
 
 public interface IColumn {
 

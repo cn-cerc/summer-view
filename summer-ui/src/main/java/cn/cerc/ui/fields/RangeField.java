@@ -1,6 +1,6 @@
 package cn.cerc.ui.fields;
 
-import cn.cerc.ui.core.HtmlWriter;
+import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.vcl.UILabel;
 import cn.cerc.ui.vcl.UIText;
