@@ -45,6 +45,8 @@ public class DataGrid extends UIComponent implements DataSource, IGridStyle {
     private String gridCssStyle;
     // 输出每列时的事件
     private OutputEvent beforeOutput;
+    // 表格最后固定列(以列头名称为标记)
+    private String stickyEndRow;
 
     public DataGrid(UIComponent owner) {
         super(owner);
@@ -159,6 +161,15 @@ public class DataGrid extends UIComponent implements DataSource, IGridStyle {
         this.gridCssClass = CSSClass;
     }
 
+    public String getStickyRow() {
+        return stickyEndRow;
+    }
+
+    public DataGrid setStickyEndRow(String stickyEndRow) {
+        this.stickyEndRow = stickyEndRow;
+        return this;
+    }
+
     @Override
     public final void output(HtmlWriter html) {
         if (this.isClientRender()) {
@@ -190,6 +201,11 @@ public class DataGrid extends UIComponent implements DataSource, IGridStyle {
         if (sumFieldWidth > MaxWidth)
             throw new RuntimeException(String.format(res.getString(2, "总列宽不允许大于%s"), MaxWidth));
 
+        if (!Utils.isEmpty(this.stickyEndRow)) {
+            html.println("<script>");
+            html.println("window.addEventListener(\"load\", function(){initGridSticky(\"%s\")})", this.stickyEndRow);
+            html.println("</script>");
+        }
         html.print("<table class=\"%s\"", this.gridCssClass);
         if (this.gridCssStyle != null) {
             html.print(" style=\"%s\"", this.gridCssStyle);
@@ -206,7 +222,6 @@ public class DataGrid extends UIComponent implements DataSource, IGridStyle {
                 double val = Utils.roundTo(field.getWidth() / sumFieldWidth * 100, -2);
                 html.print(" width=\"%f%%\"", val);
             }
-
             html.print("onclick=\"gridSort(this,'%s')\"", field.getField());
             html.print(">");
             html.print(field.getName());
