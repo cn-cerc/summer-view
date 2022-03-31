@@ -72,6 +72,8 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
     private UILabel title;
     // 输入字段
     private UIInput content = new UIInput(this);
+    // 列固定状态
+    private StickyRow stickyRow = StickyRow.def;
 
     public AbstractField(UIComponent owner, String name, String field) {
         this(owner, name, field, 0);
@@ -291,6 +293,14 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
         this.hidden = hidden;
         title.setOwner(hidden ? null : this);
         return this;
+    }
+
+    public StickyRow getStickyRow() {
+        return stickyRow;
+    }
+
+    public void setStickyRow(StickyRow stickyRow) {
+        this.stickyRow = stickyRow;
     }
 
     @Override
@@ -595,5 +605,9 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
 
     protected UIComponent getContent() {
         return this.content;
+    }
+
+    public enum StickyRow {
+        def, left, right;
     }
 }
