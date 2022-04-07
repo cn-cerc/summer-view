@@ -3,6 +3,7 @@ package cn.cerc.ui.mvc.ipplus;
 import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
+import java.util.Arrays;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +28,18 @@ public class ClientIPVerify {
     }
 
     private static final IClientIPCheckList client = Application.getBean(IClientIPCheckList.class);
+
+    /**
+     * 如果经过多层代理，IP会出现多个字段，如<br />
+     * 87.33.114.153, 142.54.177.163, 113.54.2.81
+     * 
+     * @param ip 地址列表
+     * @return 返回第一个IP段
+     */
+    public static String filter(String ip) {
+        String arr[] = ip.split(",");
+        return Arrays.stream(arr).findFirst().orElse("").trim();
+    }
 
     public static boolean allow(String ip) {
         File file = new File(filePath);
@@ -77,6 +90,11 @@ public class ClientIPVerify {
             log.error(e.getMessage(), e);
         }
         return true;
+    }
+
+    public static void main(String[] args) {
+        String ip = "87.33.114.153, 142.54.177.163";
+        System.out.println(ClientIPVerify.filter(ip));
     }
 
 }
