@@ -189,7 +189,6 @@ public class DataGrid extends UIComponent implements DataSource, IGridStyle {
             throw new RuntimeException(res.getString(1, "总列宽不允许小于1"));
         if (sumFieldWidth > MaxWidth)
             throw new RuntimeException(String.format(res.getString(2, "总列宽不允许大于%s"), MaxWidth));
-
         html.print("<table class=\"%s\"", this.gridCssClass);
         if (this.gridCssStyle != null) {
             html.print(" style=\"%s\"", this.gridCssStyle);
@@ -206,7 +205,9 @@ public class DataGrid extends UIComponent implements DataSource, IGridStyle {
                 double val = Utils.roundTo(field.getWidth() / sumFieldWidth * 100, -2);
                 html.print(" width=\"%f%%\"", val);
             }
-
+            if(field.getStickyRow() != AbstractField.StickyRow.def) {
+                html.println(" role=\"%s\"", field.getStickyRow().toString());
+            }
             html.print("onclick=\"gridSort(this,'%s')\"", field.getField());
             html.print(">");
             html.print(field.getName());
