@@ -21,10 +21,14 @@ public class UrlRecord {
 
     private Map<String, String> params = new LinkedHashMap<>();
 
+    public static Builder builder(String site) {
+        return new Builder(site);
+    }
+
     public static class Builder {
         // Required parameters
-        private String site;
 
+        private final String site;
         // Optional parameters - initialized to default values
         private String name;
         private String title;
@@ -33,7 +37,8 @@ public class UrlRecord {
         private String id;
         private String imgage;
         private String arrow;
-        private Map<String, String> params = new HashMap<>();
+
+        private final Map<String, String> params = new HashMap<>();
 
         public Builder(String site) {
             this.site = site;
@@ -71,6 +76,11 @@ public class UrlRecord {
 
         public Builder put(String key, String value) {
             this.params.put(key, value);
+            return this;
+        }
+
+        public Builder arrow(String arrow) {
+            this.arrow = arrow;
             return this;
         }
 
