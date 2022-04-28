@@ -18,7 +18,7 @@ public class UrlRecordTest {
 
     @Test
     public void test() {
-        UrlRecord url = new UrlRecord.Builder("TFrmUserMenu")
+        UrlRecord url = UrlRecord.builder("TFrmUserMenu")
                 .name("菜单设置")
                 .title("这是系统菜单")
                 .put("module", "TBase")
