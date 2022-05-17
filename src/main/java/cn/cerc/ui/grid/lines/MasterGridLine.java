@@ -31,7 +31,7 @@ public class MasterGridLine extends AbstractGridLine {
         for (RowCell cell : this.getOutputCells()) {
             AbstractField field = cell.getFields().get(0);
             html.print("<td");
-            if(field.getShowEllipsis()) {
+            if (field.isShowEllipsis()) {
                 html.print(" title=\"%s\"", field.getText());
             }
             if (cell.getColSpan() > 1) {
