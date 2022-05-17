@@ -2,13 +2,16 @@ package cn.cerc.ui.core;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.stereotype.Component;
+
 import cn.cerc.db.core.Utils;
 
+@Component
 public class RequestReader {
-    
+
     private HttpServletRequest request;
 
-    RequestReader(HttpServletRequest request){
+    RequestReader(HttpServletRequest request) {
         this.request = request;
     }
 
