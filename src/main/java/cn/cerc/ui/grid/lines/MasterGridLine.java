@@ -31,6 +31,9 @@ public class MasterGridLine extends AbstractGridLine {
         for (RowCell cell : this.getOutputCells()) {
             AbstractField field = cell.getFields().get(0);
             html.print("<td");
+            if(field.getShowEllipsis()) {
+                html.print(" title=\"%s\"", field.getText());
+            }
             if (cell.getColSpan() > 1) {
                 html.print(" colspan=\"%d\"", cell.getColSpan());
             }
@@ -52,7 +55,9 @@ public class MasterGridLine extends AbstractGridLine {
                 html.print(" role=\"%s\"", field.getField());
             }
             html.print(">");
+            html.println("<span>");
             super.outputCell(html, field);
+            html.println("</span>");
             html.println("</td>");
         }
         html.println("</tr>");
