@@ -47,9 +47,10 @@ public class UIGrid extends UIComponent implements IReadonlyOwner, IGridStyle {
         }
     }
 
-    public void setDataSet(DataSet dataSet) {
+    public UIGrid setDataSet(DataSet dataSet) {
         this.dataSet = dataSet;
         pages.setDataSet(dataSet);
+        return this;
     }
 
     public MutiPage getPages() {

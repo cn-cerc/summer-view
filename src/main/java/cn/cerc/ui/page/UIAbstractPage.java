@@ -8,6 +8,8 @@ import java.util.List;
 import javax.servlet.ServletException;
 
 import cn.cerc.db.core.ClassConfig;
+import cn.cerc.db.core.Utils;
+import cn.cerc.db.redis.RedisRecord;
 import cn.cerc.mis.SummerMIS;
 import cn.cerc.mis.cdn.CDN;
 import cn.cerc.mis.core.AppClient;
@@ -258,6 +260,28 @@ public abstract class UIAbstractPage extends UIComponent implements IPage, Suppo
         if (address == null)
             address = new UIComponent(this);
         return address;
+    }
+
+    // 从请求或缓存读取数据
+    public final String getValue(RedisRecord buff, String reqKey) {
+        String result = getRequest().getParameter(reqKey);
+        if (result == null) {
+            String val = buff.getString(reqKey).replace("{}", "");
+            if (Utils.isNumeric(val) && val.endsWith(".0")) {
+                result = val.substring(0, val.length() - 2);
+            } else {
+                result = val;
+            }
+        } else {
+            result = result.trim();
+            buff.setValue(reqKey, result);
+        }
+        this.add(reqKey, result);
+        return result;
+    }
+
+    public void add(String key, String value) {
+        getRequest().setAttribute(key, value);
     }
 
 }
