@@ -31,6 +31,7 @@ public class UIInput extends UIComponent implements IHtml, INameOwner {
     public void beginOutput(HtmlWriter html) {
         if (this.title != null)
             html.print(this.title);
+        this.writeProperty("autocomplete", "off");// 默认关闭浏览器表单自动记录
         this.writeProperty("name", this.getName());
         this.writeProperty("type", this.hidden ? "hidden" : this.inputType);
         this.writeProperty("value", this.value);
