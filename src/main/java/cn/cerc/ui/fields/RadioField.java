@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Stream;
 
 import cn.cerc.ui.core.UIComponent;
 
@@ -36,6 +37,11 @@ public class RadioField extends AbstractField {
 
     public RadioField add(Collection<String> items) {
         this.items.addAll(items);
+        return this;
+    }
+
+    public RadioField add(Enum<?>[] enums) {
+        this.add(Stream.of(enums).map(item -> item.name()).toArray(size -> new String[size]));
         return this;
     }
 
