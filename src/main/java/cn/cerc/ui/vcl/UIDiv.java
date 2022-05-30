@@ -30,4 +30,9 @@ public class UIDiv extends UIComponent implements IHtml {
         return this;
     }
 
+    @Override
+    public UIDiv setCssClass(String cssClass) {
+        super.setCssClass(cssClass);
+        return this;
+    }
 }
