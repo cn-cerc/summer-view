@@ -18,13 +18,13 @@ public class UISearchPanel extends UIComponent implements ISearchPanelStyle {
     private UIComponent filterPanel;
     private UIComponent controlPanel;
     private UIButtonSubmit submit;
-    private DataRow record;
+    private DataRow current;
     private UIForm uiform;
 
     public UISearchPanel(UIComponent owner) {
         super(owner);
         this.uiform = new UIForm();
-        this.record = new DataRow();
+        this.current = new DataRow();
         this.filterPanel = new UIComponent(uiform);
         this.controlPanel = new UIComponent(uiform);
         submit = new UIButtonSubmit(uiform.getBottom());
@@ -42,7 +42,7 @@ public class UISearchPanel extends UIComponent implements ISearchPanelStyle {
             if (component instanceof IColumn) {
                 IColumn column = ((IColumn) component);
                 if (component instanceof IDataColumn) {
-                    ((IDataColumn) column).setRecord(record);
+                    ((IDataColumn) column).setRecord(current);
                 }
                 column.outputLine(html);
             } else {
@@ -65,7 +65,7 @@ public class UISearchPanel extends UIComponent implements ISearchPanelStyle {
         if (!(this.getOrigin() instanceof IForm))
             throw new RuntimeException("origin is not IForm");
         HttpServletRequest request = ((IForm) this.getOrigin()).getRequest();
-        
+
         String result = request.getParameter(submit.getName());
         if (!Utils.isEmpty(result)) {
             // 将用户值或缓存值存入到dataSet中
@@ -75,16 +75,16 @@ public class UISearchPanel extends UIComponent implements ISearchPanelStyle {
                     String[] values = request.getParameterValues(column.getCode());
                     if (values == null) {
                         if (!column.isReadonly()) {
-                            record.setValue(column.getCode(), "");
+                            current.setValue(column.getCode(), "");
                         }
                     } else {
-                        record.setValue(column.getCode(), String.join(",", values));
+                        current.setValue(column.getCode(), String.join(",", values));
                     }
                 } else if (component instanceof IDataColumn) {
                     IDataColumn column = (IDataColumn) component;
                     if (!column.isReadonly()) {
                         String val = request.getParameter(column.getCode());
-                        record.setValue(column.getCode(), val == null ? "" : val);
+                        current.setValue(column.getCode(), val == null ? "" : val);
                     }
                 }
             }
@@ -114,12 +114,12 @@ public class UISearchPanel extends UIComponent implements ISearchPanelStyle {
         return this;
     }
 
-    public DataRow getRecord() {
-        return record;
+    public DataRow current() {
+        return current;
     }
 
-    public void setRecord(DataRow record) {
-        this.record = record;
+    public void setCurrent(DataRow record) {
+        this.current = record;
     }
 
     public UIForm getUiform() {

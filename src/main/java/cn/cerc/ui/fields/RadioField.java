@@ -39,4 +39,11 @@ public class RadioField extends AbstractField {
         return this;
     }
 
+    public RadioField add(Enum<?>[] enums) {
+        for (Enum<?> item : enums) {
+            this.items.add(item.name());
+        }
+        return this;
+    }
+
 }

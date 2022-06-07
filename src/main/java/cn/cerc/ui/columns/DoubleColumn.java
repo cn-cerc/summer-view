@@ -25,6 +25,15 @@ public class DoubleColumn extends AbstractColumn implements IDataColumn {
         }
     }
 
+    public DoubleColumn(UIComponent owner, String name, String code) {
+        super(owner);
+        this.setCode(code).setName(name).setSpaceWidth(4);
+        if (owner instanceof IReadonlyOwner) {
+            this.setReadonly(((IReadonlyOwner) owner).isReadonly());
+        }
+        input.setName(code);
+    }
+
     public DoubleColumn(UIComponent owner, String name, String code, int width) {
         super(owner);
         this.setCode(code).setName(name).setSpaceWidth(width);

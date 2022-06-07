@@ -74,6 +74,8 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
     private UIInput content = new UIInput(this);
     // 列固定状态
     private StickyRow stickyRow = StickyRow.def;
+    // 是否超出两行展示为省略号
+    private boolean showEllipsis = false;
 
     public AbstractField(UIComponent owner, String name, String field) {
         this(owner, name, field, 0);
@@ -301,6 +303,14 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
 
     public void setStickyRow(StickyRow stickyRow) {
         this.stickyRow = stickyRow;
+    }
+
+    public boolean isShowEllipsis() {
+        return showEllipsis;
+    }
+
+    public void setShowEllipsis(boolean showEllipse) {
+        this.showEllipsis = showEllipse;
     }
 
     @Override

@@ -45,6 +45,8 @@ public class DataGrid extends UIComponent implements DataSource, IGridStyle {
     private String gridCssStyle;
     // 输出每列时的事件
     private OutputEvent beforeOutput;
+    // 是否开启宽度以字数输出
+    private boolean widthInNum = false;
 
     public DataGrid(UIComponent owner) {
         super(owner);
@@ -159,6 +161,10 @@ public class DataGrid extends UIComponent implements DataSource, IGridStyle {
         this.gridCssClass = CSSClass;
     }
 
+    public void setWidthInNum(Boolean bool) {
+        this.widthInNum = bool;
+    }
+
     @Override
     public final void output(HtmlWriter html) {
         if (this.isClientRender()) {
@@ -190,6 +196,7 @@ public class DataGrid extends UIComponent implements DataSource, IGridStyle {
         if (sumFieldWidth > MaxWidth)
             throw new RuntimeException(String.format(res.getString(2, "总列宽不允许大于%s"), MaxWidth));
         html.print("<table class=\"%s\"", this.gridCssClass);
+        html.println(" role=\"%s\"", this.widthInNum ? "fixed" : "default");
         if (this.gridCssStyle != null) {
             html.print(" style=\"%s\"", this.gridCssStyle);
         }
@@ -202,10 +209,14 @@ public class DataGrid extends UIComponent implements DataSource, IGridStyle {
             if (field.getWidth() == 0) {
                 html.print(" style=\"display:none\"");
             } else {
-                double val = Utils.roundTo(field.getWidth() / sumFieldWidth * 100, -2);
-                html.print(" width=\"%f%%\"", val);
+                String val = String.format(" width=\"%f%%\"",
+                        Utils.roundTo(field.getWidth() / sumFieldWidth * 100, -2));
+                if (this.widthInNum)
+                    val = String.format(" style=\"width: %sem\" data-fixed=\"%s\" title=\"\"", field.getWidth(), field.getWidth());
+                html.print(val);
+
             }
-            if(field.getStickyRow() != AbstractField.StickyRow.def) {
+            if (field.getStickyRow() != AbstractField.StickyRow.def) {
                 html.println(" role=\"%s\"", field.getStickyRow().toString());
             }
             html.print("onclick=\"gridSort(this,'%s')\"", field.getField());

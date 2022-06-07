@@ -22,7 +22,16 @@ public class BooleanColumn extends AbstractColumn implements IDataColumn {
 
     public BooleanColumn(UIComponent owner, String name, String code) {
         super(owner);
-        this.setCode(code).setName(name).setSpaceWidth(10);
+        this.setCode(code).setName(name).setSpaceWidth(3);
+        if (owner instanceof IReadonlyOwner) {
+            this.setReadonly(((IReadonlyOwner) owner).isReadonly());
+        }
+        input.setName(code);
+    }
+
+    public BooleanColumn(UIComponent owner, String name, String code, int with) {
+        super(owner);
+        this.setCode(code).setName(name).setSpaceWidth(with);
         if (owner instanceof IReadonlyOwner) {
             this.setReadonly(((IReadonlyOwner) owner).isReadonly());
         }
@@ -60,7 +69,8 @@ public class BooleanColumn extends AbstractColumn implements IDataColumn {
     }
 
     private void outputCellWeb(HtmlWriter html) {
-        String text = getRecord().getString(this.getCode());
+        boolean value = this.getRecord().getBoolean(getCode());
+        String text = value ? "是" : "否";
         if (this.readonly) {
             html.print(text);
         } else {
