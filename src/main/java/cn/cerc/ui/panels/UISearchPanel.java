@@ -114,11 +114,6 @@ public class UISearchPanel extends UIComponent implements ISearchPanelStyle {
         return this;
     }
 
-    @Deprecated
-    public DataRow getRecord() {
-        return current;
-    }
-
     public DataRow current() {
         return current;
     }
