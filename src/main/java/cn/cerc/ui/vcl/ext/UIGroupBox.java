@@ -13,8 +13,7 @@ public class UIGroupBox extends UIComponent {
     }
 
     public UIGroupBox(UIComponent owner, String title) {
-        super(owner);
-        this.writeProperty("role", "group");
+        this(owner);
         this.title = title;
     }
 
@@ -22,18 +21,16 @@ public class UIGroupBox extends UIComponent {
     public void beginOutput(HtmlWriter html) {
         super.beginOutput(html);
         if (this.title != null)
-            html.println("<fieldset><legend>%s</legend>", this.title);
-    }
-
-    @Override
-    public void endOutput(HtmlWriter html) {
-        if (this.title != null)
-            html.println("</fieldset>");
-        super.endOutput(html);
+            html.println("<legend>%s</legend>", this.title);
     }
 
     public String getTitle() {
         return title;
+    }
+
+    @Override
+    public void endOutput(HtmlWriter html) {
+        super.endOutput(html);
     }
 
 }
