@@ -79,21 +79,20 @@ public abstract class AbstractPage extends UIComponent implements IPage, IUserLa
     }
 
     // 从请求或缓存读取数据
-    public final String getValue(RedisRecord buff, String reqKey) {
-        String result = getRequest().getParameter(reqKey);
-        if (result == null) {
-            String val = buff.getString(reqKey).replace("{}", "");
-            if (Utils.isNumeric(val) && val.endsWith(".0")) {
-                result = val.substring(0, val.length() - 2);
-            } else {
-                result = val;
-            }
-        } else {
-            result = result.trim();
-            buff.setValue(reqKey, result);
+    public final String getValue(RedisRecord buff, String key) {
+        String value = getRequest().getParameter(key);
+        if (value != null) {
+            value = value.trim();
+            buff.setValue(key, value);
+            return value;
         }
-        this.add(reqKey, result);
-        return result;
+
+        value = buff.getString(key).replace("{}", "");
+        if (Utils.isNumeric(value) && value.endsWith(".0"))
+            value = value.substring(0, value.length() - 2);
+
+        this.add(key, value);
+        return value;
     }
 
     public void add(String id, String value) {
