@@ -14,16 +14,13 @@ final class BufferHolder {
     private final ByteBuffer buffer;
 
     BufferHolder(File database, AWReader.FileMode mode) throws IOException {
-        try (
-                final RandomAccessFile file = new RandomAccessFile(database, "r");
-                final FileChannel channel = file.getChannel()
-        ) {
+        try (final RandomAccessFile file = new RandomAccessFile(database, "r");
+                final FileChannel channel = file.getChannel()) {
             if (mode == AWReader.FileMode.MEMORY) {
                 this.buffer = ByteBuffer.wrap(new byte[(int) channel.size()]);
                 if (channel.read(this.buffer) != this.buffer.capacity()) {
-                    throw new IOException("Unable to read "
-                            + database.getName()
-                            + " into memory. Unexpected end of stream.");
+                    throw new IOException(
+                            "Unable to read " + database.getName() + " into memory. Unexpected end of stream.");
                 }
             } else {
                 this.buffer = channel.map(MapMode.READ_ONLY, 0, channel.size());

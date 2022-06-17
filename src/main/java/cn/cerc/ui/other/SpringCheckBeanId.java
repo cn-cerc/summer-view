@@ -71,8 +71,8 @@ public class SpringCheckBeanId {
             if (!path[0].equals(className)) {
                 log.warn("{}, beanId: {} 与类名不一致", object.getClass().getName(), beanId);
             }
-            
-            if(object instanceof UIComponent)
+
+            if (object instanceof UIComponent)
                 continue;
 
             String funcName = path[1];

@@ -13,14 +13,13 @@ import java.nio.ByteBuffer;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
- * Instances of this class provide a reader for the AW DB format. IP
- * addresses can be looked up using the <code>get</code> method.
+ * Instances of this class provide a reader for the AW DB format. IP addresses
+ * can be looked up using the <code>get</code> method.
  */
 public class AWReader implements Closeable {
     private static final int DATA_SECTION_SEPARATOR_SIZE = 16;
-    private static final byte[] METADATA_START_MARKER = {(byte) 0xAB,
-            (byte) 0xCD, (byte) 0xEF, 'i', 'p', 'p', 'l', 'u', 's', '3', '6', '0', '.',
-            'c', 'o', 'm'};
+    private static final byte[] METADATA_START_MARKER = { (byte) 0xAB, (byte) 0xCD, (byte) 0xEF, 'i', 'p', 'p', 'l',
+            'u', 's', '3', '6', '0', '.', 'c', 'o', 'm' };
 
     private final int ipV4Start;
     private final Metadata metadata;
@@ -32,9 +31,9 @@ public class AWReader implements Closeable {
      */
     public enum FileMode {
         /**
-         * The default file mode. This maps the database to virtual memory. This
-         * often provides similar performance to loading the database into real
-         * memory without the overhead.
+         * The default file mode. This maps the database to virtual memory. This often
+         * provides similar performance to loading the database into real memory without
+         * the overhead.
          */
         MEMORY_MAPPED,
         /**
@@ -44,9 +43,8 @@ public class AWReader implements Closeable {
     }
 
     /**
-     * Constructs a Reader for the AW DB format, with no caching. The file
-     * passed to it must be a valid AW DB file such as a GeoIP2 database
-     * file.
+     * Constructs a Reader for the AW DB format, with no caching. The file passed to
+     * it must be a valid AW DB file such as a GeoIP2 database file.
      *
      * @param database the AW DB file to use.
      * @throws IOException if there is an error opening or reading from the file.
@@ -56,9 +54,9 @@ public class AWReader implements Closeable {
     }
 
     /**
-     * Constructs a Reader for the AW DB format, with the specified backing
-     * cache. The file passed to it must be a valid AW DB file such as a
-     * GeoIP2 database file.
+     * Constructs a Reader for the AW DB format, with the specified backing cache.
+     * The file passed to it must be a valid AW DB file such as a GeoIP2 database
+     * file.
      *
      * @param database the AW DB file to use.
      * @param cache    backing cache instance
@@ -69,8 +67,8 @@ public class AWReader implements Closeable {
     }
 
     /**
-     * Constructs a Reader with no caching, as if in mode
-     * {@link FileMode#MEMORY}, without using a <code>File</code> instance.
+     * Constructs a Reader with no caching, as if in mode {@link FileMode#MEMORY},
+     * without using a <code>File</code> instance.
      *
      * @param source the InputStream that contains the AW DB file.
      * @throws IOException if there is an error reading from the Stream.
@@ -92,9 +90,8 @@ public class AWReader implements Closeable {
     }
 
     /**
-     * Constructs a Reader for the AW DB format, with no caching. The file
-     * passed to it must be a valid AW DB file such as a GeoIP2 database
-     * file.
+     * Constructs a Reader for the AW DB format, with no caching. The file passed to
+     * it must be a valid AW DB file such as a GeoIP2 database file.
      *
      * @param database the AW DB file to use.
      * @param fileMode the mode to open the file with.
@@ -105,9 +102,9 @@ public class AWReader implements Closeable {
     }
 
     /**
-     * Constructs a Reader for the AW DB format, with the specified backing
-     * cache. The file passed to it must be a valid AW DB file such as a
-     * GeoIP2 database file.
+     * Constructs a Reader for the AW DB format, with the specified backing cache.
+     * The file passed to it must be a valid AW DB file such as a GeoIP2 database
+     * file.
      *
      * @param database the AW DB file to use.
      * @param fileMode the mode to open the file with.
@@ -119,8 +116,7 @@ public class AWReader implements Closeable {
     }
 
     private AWReader(BufferHolder bufferHolder, String name, NodeCache cache) throws IOException {
-        this.bufferHolderReference = new AtomicReference<>(
-                bufferHolder);
+        this.bufferHolderReference = new AtomicReference<>(bufferHolder);
 
         if (cache == null) {
             throw new NullPointerException("Cache cannot be null");
@@ -147,15 +143,17 @@ public class AWReader implements Closeable {
         int ipVersion = this.getMetadata().getIpVersion();
 
         if (ipAddress instanceof Inet4Address && ipVersion == 6) {
-            throw new IpTypeException(String.format("====================IpTypeException====================\n" +
-                    "Error looking up %s. You attempted to look up an IPv4 address in an IPv6-only database\n" +
-                    "====================IpTypeException====================", ipAddress.getHostAddress()));
+            throw new IpTypeException(
+                    String.format("====================IpTypeException====================\n"
+                            + "Error looking up %s. You attempted to look up an IPv4 address in an IPv6-only database\n"
+                            + "====================IpTypeException====================", ipAddress.getHostAddress()));
         }
 
         if (ipAddress instanceof Inet6Address && ipVersion == 4) {
-            throw new IpTypeException(String.format("====================IpTypeException====================\n" +
-                    "Error looking up %s. You attempted to look up an IPv6 address in an IPv4-only database\n" +
-                    "====================IpTypeException====================", ipAddress.getHostAddress()));
+            throw new IpTypeException(
+                    String.format("====================IpTypeException====================\n"
+                            + "Error looking up %s. You attempted to look up an IPv6 address in an IPv4-only database\n"
+                            + "====================IpTypeException====================", ipAddress.getHostAddress()));
         }
 
         return getRecord(ipAddress).getData();
@@ -165,12 +163,11 @@ public class AWReader implements Closeable {
      * Looks up <code>ipAddress</code> in the AW DB.
      *
      * @param ipAddress the IP address to look up.
-     * @return the record for the IP address. If there is no data for the
-     * address, the non-null {@link Record} will still be returned.
+     * @return the record for the IP address. If there is no data for the address,
+     *         the non-null {@link Record} will still be returned.
      * @throws IOException if a file I/O error occurs.
      */
-    public Record getRecord(InetAddress ipAddress)
-            throws IOException {
+    public Record getRecord(InetAddress ipAddress) throws IOException {
         ByteBuffer buffer = this.getBufferHolder().get();
         byte[] rawAddress = ipAddress.getAddress();
 
@@ -213,8 +210,7 @@ public class AWReader implements Closeable {
         return 0;
     }
 
-    private int findIpV4StartNode(ByteBuffer buffer)
-            throws InvalidDatabaseException {
+    private int findIpV4StartNode(ByteBuffer buffer) throws InvalidDatabaseException {
         if (this.metadata.getIpVersion() == 4) {
             return 0;
         }
@@ -226,77 +222,69 @@ public class AWReader implements Closeable {
         return node;
     }
 
-    private int readNode(ByteBuffer buffer, int nodeNumber, int index)
-            throws InvalidDatabaseException {
+    private int readNode(ByteBuffer buffer, int nodeNumber, int index) throws InvalidDatabaseException {
         int baseOffset = nodeNumber * this.metadata.getNodeByteSize();
 
         switch (this.metadata.getRecordSize()) {
-            case 24:
-                buffer.position(baseOffset + index * 3);
-                return Decoder.decodeInteger(buffer, 0, 3);
-            case 28:
-                int middle = buffer.get(baseOffset + 3);
+        case 24:
+            buffer.position(baseOffset + index * 3);
+            return Decoder.decodeInteger(buffer, 0, 3);
+        case 28:
+            int middle = buffer.get(baseOffset + 3);
 
-                if (index == 0) {
-                    middle = (0xF0 & middle) >>> 4;
-                } else {
-                    middle = 0x0F & middle;
-                }
-                buffer.position(baseOffset + index * 4);
-                return Decoder.decodeInteger(buffer, middle, 3);
-            case 32:
-                buffer.position(baseOffset + index * 4);
-                return Decoder.decodeInteger(buffer, 0, 4);
-            default:
-                throw new InvalidDatabaseException("Unknown record size: "
-                        + this.metadata.getRecordSize());
+            if (index == 0) {
+                middle = (0xF0 & middle) >>> 4;
+            } else {
+                middle = 0x0F & middle;
+            }
+            buffer.position(baseOffset + index * 4);
+            return Decoder.decodeInteger(buffer, middle, 3);
+        case 32:
+            buffer.position(baseOffset + index * 4);
+            return Decoder.decodeInteger(buffer, 0, 4);
+        default:
+            throw new InvalidDatabaseException("Unknown record size: " + this.metadata.getRecordSize());
         }
     }
 
-    private JsonNode resolveDataPointer(ByteBuffer buffer, int pointer)
-            throws IOException {
-        int resolved = (pointer - this.metadata.getNodeCount())
-                + this.metadata.getSearchTreeSize();
+    private JsonNode resolveDataPointer(ByteBuffer buffer, int pointer) throws IOException {
+        int resolved = (pointer - this.metadata.getNodeCount()) + this.metadata.getSearchTreeSize();
 
         if (resolved >= buffer.capacity()) {
             throw new InvalidDatabaseException(
-                    "The AW DB file's search tree is corrupt: "
-                            + "contains pointer larger than the database.");
+                    "The AW DB file's search tree is corrupt: " + "contains pointer larger than the database.");
         }
 
         // We only want the data from the decoder, not the offset where it was
         // found.
-        Decoder decoder = new Decoder(this.cache, buffer,
-                this.metadata.getSearchTreeSize() + DATA_SECTION_SEPARATOR_SIZE);
+        Decoder decoder = new Decoder(
+                this.cache, buffer, this.metadata.getSearchTreeSize() + DATA_SECTION_SEPARATOR_SIZE);
         return decoder.decode(resolved);
     }
 
     /*
-     * Apparently searching a file for a sequence is not a solved problem in
-     * Java. This searches from the end of the file for metadata start.
+     * Apparently searching a file for a sequence is not a solved problem in Java.
+     * This searches from the end of the file for metadata start.
      *
-     * This is an extremely naive but reasonably readable implementation. There
-     * are much faster algorithms (e.g., Boyer-Moore) for this if speed is ever
-     * an issue, but I suspect it won't be.
+     * This is an extremely naive but reasonably readable implementation. There are
+     * much faster algorithms (e.g., Boyer-Moore) for this if speed is ever an
+     * issue, but I suspect it won't be.
      */
-    private int findMetadataStart(ByteBuffer buffer, String databaseName)
-            throws InvalidDatabaseException {
+    private int findMetadataStart(ByteBuffer buffer, String databaseName) throws InvalidDatabaseException {
         int fileSize = buffer.capacity();
 
-        FILE:
-        for (int i = 0; i < fileSize - METADATA_START_MARKER.length + 1; i++) {
+        FILE: for (int i = 0; i < fileSize - METADATA_START_MARKER.length + 1; i++) {
             for (int j = 0; j < METADATA_START_MARKER.length; j++) {
                 byte b = buffer.get(fileSize - i - j - 1);
-                if (b != METADATA_START_MARKER[METADATA_START_MARKER.length - j
-                        - 1]) {
+                if (b != METADATA_START_MARKER[METADATA_START_MARKER.length - j - 1]) {
                     continue FILE;
                 }
             }
             return fileSize - i;
         }
         throw new InvalidDatabaseException(
-                "Could not find a AW DB metadata marker in this file ("
-                        + databaseName + "). Is this a valid AW DB file?");
+                "Could not find a AW DB metadata marker in this file (" + databaseName
+                        + "). Is this a valid AW DB file?");
     }
 
     /**
@@ -311,11 +299,10 @@ public class AWReader implements Closeable {
      * Closes the database.
      * </p>
      * <p>
-     * If you are using <code>FileMode.MEMORY_MAPPED</code>, this will
-     * <em>not</em> unmap the underlying file due to a limitation in Java's
-     * <code>MappedByteBuffer</code>. It will however set the reference to
-     * the buffer to <code>null</code>, allowing the garbage collector to
-     * collect it.
+     * If you are using <code>FileMode.MEMORY_MAPPED</code>, this will <em>not</em>
+     * unmap the underlying file due to a limitation in Java's
+     * <code>MappedByteBuffer</code>. It will however set the reference to the
+     * buffer to <code>null</code>, allowing the garbage collector to collect it.
      * </p>
      *
      * @throws IOException if an I/O error occurs.

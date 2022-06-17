@@ -133,4 +133,3 @@ public class DateColumn extends AbstractColumn implements IDataColumn {
     }
 
 }
-

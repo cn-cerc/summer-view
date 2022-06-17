@@ -28,7 +28,7 @@ public class HtmlPage implements IPage {
         this.origin = (IForm) form;
         return this;
     }
-    
+
     @Override
     public IForm getOrigin() {
         return this.origin;

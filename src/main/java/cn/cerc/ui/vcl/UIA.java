@@ -56,7 +56,7 @@ public class UIA extends UIComponent implements IHtml {
         this.writeProperty("onclick", onclick);
         return this;
     }
-    
+
     public String getTarget() {
         return (String) this.readProperty("target");
     }
@@ -65,5 +65,5 @@ public class UIA extends UIComponent implements IHtml {
         this.writeProperty("target", target);
         return this;
     }
-   
+
 }

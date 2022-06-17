@@ -31,7 +31,7 @@ public class CustomColumn extends AbstractColumn implements IDataColumn {
             this.setReadonly(((IReadonlyOwner) owner).isReadonly());
         }
     }
-    
+
     @Override
     public void outputCell(HtmlWriter html) {
         if (defineCell != null) {

@@ -35,7 +35,6 @@ public class JspFile extends AbstractPage {
         this.jspFile = jspFile;
     }
 
-
     public final String getViewFile() {
         String jspFile = this.getJspFile();
         if (getRequest() == null || jspFile == null) {
@@ -50,7 +49,7 @@ public class JspFile extends AbstractPage {
         String extName = jspFile.substring(jspFile.indexOf(".jsp") + 1);
         IForm form = getForm();
         String langCode = R.getLanguageId(form);
-        
+
         // 检查是否存在 PC 专用版本的jsp文件
         String newFile = String.format("%s-%s.%s", fileName, "pc", extName);
         if (!this.getForm().getClient().isPhone() && fileExists(rootPath + newFile)) {
@@ -70,7 +69,7 @@ public class JspFile extends AbstractPage {
 
         return jspFile;
     }
-    
+
     private boolean fileExists(String fileName) {
         URL url = AbstractPage.class.getClassLoader().getResource("");
         if (url == null) {

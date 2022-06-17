@@ -112,7 +112,7 @@ public class UITextarea extends UIComponent implements IHtml, INameOwner {
         this.setSignProperty("readonly", readonly);
         return this;
     }
-    
+
     public UITextarea setAutofocus(boolean autofocus) {
         this.setSignProperty("autofocus", autofocus);
         return this;

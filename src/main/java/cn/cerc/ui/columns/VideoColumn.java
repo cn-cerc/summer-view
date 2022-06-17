@@ -60,7 +60,7 @@ public class VideoColumn extends AbstractColumn implements IDataColumn {
             video.setWidth(this.getWidth());
             video.setHeight(this.getHeight());
             video.output(html);
-            
+
         } else {
             input.setValue(url);
             input.output(html);

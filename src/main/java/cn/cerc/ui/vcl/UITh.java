@@ -4,7 +4,7 @@ import cn.cerc.ui.core.UIComponent;
 
 public class UITh extends UIComponent implements IHtml {
     private UIText text;
-    
+
     @Deprecated
     public UITh() {
         this(null);

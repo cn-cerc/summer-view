@@ -36,7 +36,8 @@ public class ExpendField extends AbstractField implements SearchItem {
             getBuildText().outputText(current(), html);
             return html.toString();
         }
-        return String.format("<a href=\"javascript:displaySwitch('%d')\">%s</a>", current().dataSet().recNo(), res.getString(1, "展开"));
+        return String.format("<a href=\"javascript:displaySwitch('%d')\">%s</a>", current().dataSet().recNo(),
+                res.getString(1, "展开"));
     }
 
     @Override

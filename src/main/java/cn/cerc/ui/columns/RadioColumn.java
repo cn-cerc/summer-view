@@ -22,13 +22,13 @@ public class RadioColumn extends AbstractColumn implements IDataColumn {
     @Override
     public void outputCell(HtmlWriter html) {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
     public void outputLine(HtmlWriter html) {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
@@ -55,10 +55,10 @@ public class RadioColumn extends AbstractColumn implements IDataColumn {
         return null;
     }
 
-    //FIXME: 此处功能未完成，需要修正
+    // FIXME: 此处功能未完成，需要修正
     public void add(String... params) {
         // TODO Auto-generated method stub
-        
+
     }
 
 }

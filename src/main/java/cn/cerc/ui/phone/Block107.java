@@ -36,7 +36,7 @@ public class Block107 extends UICustomPhone {
     }
 
     public static void outputChoiceItem(HtmlWriter html, String value, String choiceId, String childPage,
-                                        String dataUrl) {
+            String dataUrl) {
         html.print("<li onclick='javascript:choiceItem(\"%s\", \"%s\", \"%s\", \"%s\")'>%s</li>", choiceId, value,
                 childPage, dataUrl, value);
     }

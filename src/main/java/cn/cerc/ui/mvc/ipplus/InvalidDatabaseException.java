@@ -3,9 +3,9 @@ package cn.cerc.ui.mvc.ipplus;
 import java.io.IOException;
 
 /**
- * Signals that there was an issue reading from the AW DB file due to
- * unexpected data formatting. This generally suggests that the database is
- * corrupt or otherwise not in a format supported by the reader.
+ * Signals that there was an issue reading from the AW DB file due to unexpected
+ * data formatting. This generally suggests that the database is corrupt or
+ * otherwise not in a format supported by the reader.
  */
 public class InvalidDatabaseException extends IOException {
 

@@ -8,5 +8,5 @@ public class IField extends AbstractField {
     public IField(UIComponent owner, String name, String field) {
         super(owner, name, field);
     }
-    
+
 }

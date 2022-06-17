@@ -61,7 +61,7 @@ public class ImageColumn extends AbstractColumn implements IDataColumn {
             img.setWidth(this.getWidth());
             img.setHeight(this.getHeight());
             img.output(html);
-            
+
         } else {
             input.setValue(url);
             input.output(html);
