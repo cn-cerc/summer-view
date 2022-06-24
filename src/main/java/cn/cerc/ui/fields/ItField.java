@@ -23,7 +23,7 @@ public class ItField extends AbstractField {
             getBuildText().outputText(current(), html);
             return html.toString();
         }
-        return "" + current().dataSet().recNo();
+        return String.format("<i class=\"gridIt\">%s</i>", current().dataSet().recNo());
     }
 
     @Override
