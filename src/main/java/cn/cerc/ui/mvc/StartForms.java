@@ -98,7 +98,7 @@ public class StartForms implements Filter {
         ISession session = context.getBean(ISession.class);
         session.setRequest(req);
         session.setResponse(resp);
-        context.getBean(AppClient.class).setRequest(req);
+        new AppClient().setRequest(req);
 
         // 2、处理Url请求
         String childCode = getRequestCode(req);

@@ -2,10 +2,7 @@ package cn.cerc.security.sapi;
 
 import javax.servlet.http.HttpServletRequest;
 
-import cn.cerc.db.redis.JedisFactory;
 import cn.cerc.mis.core.AppClient;
-import cn.cerc.mis.other.MemoryBuffer;
-import redis.clients.jedis.Jedis;
 
 public class JayunSecurity {
     private static final String deviceId = "deviceId";
@@ -168,11 +165,7 @@ public class JayunSecurity {
     }
 
     private String getDeviceId() {
-        String device;
-        String key = MemoryBuffer.buildObjectKey(AppClient.class, request.getSession().getId(), AppClient.Version);
-        try (Jedis redis = JedisFactory.getJedis()) {
-            device = redis.hget(key, deviceId);
-        }
+        String device = AppClient.value(request, deviceId);
         return device == null ? "" : device;
     }
 
