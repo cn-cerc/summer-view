@@ -143,17 +143,15 @@ public class AWReader implements Closeable {
         int ipVersion = this.getMetadata().getIpVersion();
 
         if (ipAddress instanceof Inet4Address && ipVersion == 6) {
-            throw new IpTypeException(
-                    String.format("====================IpTypeException====================\n"
-                            + "Error looking up %s. You attempted to look up an IPv4 address in an IPv6-only database\n"
-                            + "====================IpTypeException====================", ipAddress.getHostAddress()));
+            throw new IpTypeException(String.format("====================IpTypeException====================\n"
+                    + "Error looking up %s. You attempted to look up an IPv4 address in an IPv6-only database\n"
+                    + "====================IpTypeException====================", ipAddress.getHostAddress()));
         }
 
         if (ipAddress instanceof Inet6Address && ipVersion == 4) {
-            throw new IpTypeException(
-                    String.format("====================IpTypeException====================\n"
-                            + "Error looking up %s. You attempted to look up an IPv6 address in an IPv4-only database\n"
-                            + "====================IpTypeException====================", ipAddress.getHostAddress()));
+            throw new IpTypeException(String.format("====================IpTypeException====================\n"
+                    + "Error looking up %s. You attempted to look up an IPv6 address in an IPv4-only database\n"
+                    + "====================IpTypeException====================", ipAddress.getHostAddress()));
         }
 
         return getRecord(ipAddress).getData();
@@ -257,8 +255,8 @@ public class AWReader implements Closeable {
 
         // We only want the data from the decoder, not the offset where it was
         // found.
-        Decoder decoder = new Decoder(
-                this.cache, buffer, this.metadata.getSearchTreeSize() + DATA_SECTION_SEPARATOR_SIZE);
+        Decoder decoder = new Decoder(this.cache, buffer,
+                this.metadata.getSearchTreeSize() + DATA_SECTION_SEPARATOR_SIZE);
         return decoder.decode(resolved);
     }
 
@@ -282,9 +280,8 @@ public class AWReader implements Closeable {
             }
             return fileSize - i;
         }
-        throw new InvalidDatabaseException(
-                "Could not find a AW DB metadata marker in this file (" + databaseName
-                        + "). Is this a valid AW DB file?");
+        throw new InvalidDatabaseException("Could not find a AW DB metadata marker in this file (" + databaseName
+                + "). Is this a valid AW DB file?");
     }
 
     /**

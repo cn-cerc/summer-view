@@ -234,7 +234,10 @@ public class UrlRecord {
     }
 
     public enum Target {
-        _blank, _self, _parent, _top;
+        _blank,
+        _self,
+        _parent,
+        _top;
     }
 
 }

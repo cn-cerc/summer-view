@@ -142,9 +142,8 @@ final class Decoder {
             int typeNum = nextByte + 7;
 
             if (typeNum < 8) {
-                throw new InvalidDatabaseException(
-                        "Something went horribly wrong in the decoder. An extended type "
-                                + "resolved to a type number < 8 (" + typeNum + ")");
+                throw new InvalidDatabaseException("Something went horribly wrong in the decoder. An extended type "
+                        + "resolved to a type number < 8 (" + typeNum + ")");
             }
 
             type = Type.get(typeNum);
