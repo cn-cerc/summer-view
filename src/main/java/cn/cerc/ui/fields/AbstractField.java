@@ -618,6 +618,8 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
     }
 
     public enum StickyRow {
-        def, left, right;
+        def,
+        left,
+        right;
     }
 }
