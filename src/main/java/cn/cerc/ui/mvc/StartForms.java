@@ -23,6 +23,7 @@ import cn.cerc.db.core.IHandle;
 import cn.cerc.db.core.ISession;
 import cn.cerc.db.core.Utils;
 import cn.cerc.mis.config.AppStaticFileDefault;
+import cn.cerc.mis.core.AppClient;
 import cn.cerc.mis.core.Application;
 import cn.cerc.mis.core.FormFactory;
 import cn.cerc.mis.core.FormSign;
@@ -97,6 +98,7 @@ public class StartForms implements Filter {
         ISession session = context.getBean(ISession.class);
         session.setRequest(req);
         session.setResponse(resp);
+        AppClient.loadRequest(req);
 
         // 2、处理Url请求
         String childCode = getRequestCode(req);
