@@ -65,14 +65,12 @@ public class StartApp implements Filter {
 
         // 处理默认首页问题
         if ("/".equals(uri)) {
-            new AppClient().setRequest(req);// 将当前的设备信息写入sessionI的缓存
             String redirect = String.format("/%s/%s", Application.getConfig().getFormsPath(),
                     Application.getConfig().getWelcomePage());
             redirect = resp.encodeRedirectURL(redirect);
             resp.sendRedirect(redirect);
             return;
         } else if ("/MobileConfig".equals(uri) || "/mobileConfig".equals(uri)) {
-            new AppClient().setRequest(req);// 将当前的设备信息写入sessionI的缓存
             try {
                 ISession session = Application.getSession();
                 session.setProperty(Application.SessionId, req.getSession().getId());
