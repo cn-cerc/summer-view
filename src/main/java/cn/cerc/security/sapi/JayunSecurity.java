@@ -2,6 +2,8 @@ package cn.cerc.security.sapi;
 
 import javax.servlet.http.HttpServletRequest;
 
+import cn.cerc.mis.core.AppClient;
+
 public class JayunSecurity {
     private static final String deviceId = "deviceId";
     private static final String securityCode = "securityCode";
@@ -163,7 +165,7 @@ public class JayunSecurity {
     }
 
     private String getDeviceId() {
-        String device = (String) request.getSession().getAttribute(deviceId);
+        String device = AppClient.value(request, deviceId);
         return device == null ? "" : device;
     }
 

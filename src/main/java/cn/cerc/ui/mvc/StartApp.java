@@ -65,25 +65,12 @@ public class StartApp implements Filter {
 
         // 处理默认首页问题
         if ("/".equals(uri)) {
-            if (req.getParameter(AppClient.CLIENT_ID) != null) {
-                req.getSession().setAttribute(AppClient.CLIENT_ID, req.getParameter(AppClient.CLIENT_ID));
-            }
-            if (req.getParameter(AppClient.DEVICE) != null) {
-                req.getSession().setAttribute(AppClient.DEVICE, req.getParameter(AppClient.DEVICE));
-            }
-
             String redirect = String.format("/%s/%s", Application.getConfig().getFormsPath(),
                     Application.getConfig().getWelcomePage());
             redirect = resp.encodeRedirectURL(redirect);
             resp.sendRedirect(redirect);
             return;
         } else if ("/MobileConfig".equals(uri) || "/mobileConfig".equals(uri)) {
-            if (req.getParameter(AppClient.CLIENT_ID) != null) {
-                req.getSession().setAttribute(AppClient.CLIENT_ID, req.getParameter(AppClient.CLIENT_ID));
-            }
-            if (req.getParameter(AppClient.DEVICE) != null) {
-                req.getSession().setAttribute(AppClient.DEVICE, req.getParameter(AppClient.DEVICE));
-            }
             try {
                 ISession session = Application.getSession();
                 session.setProperty(Application.SessionId, req.getSession().getId());
