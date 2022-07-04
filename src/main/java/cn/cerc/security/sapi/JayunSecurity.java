@@ -5,7 +5,6 @@ import javax.servlet.http.HttpServletRequest;
 import cn.cerc.mis.core.AppClient;
 
 public class JayunSecurity {
-    private static final String deviceId = "deviceId";
     private static final String securityCode = "securityCode";
     /**
      * 发送模式: 默认为手机简讯，可支持语音发送以及其它方式
@@ -165,7 +164,8 @@ public class JayunSecurity {
     }
 
     private String getDeviceId() {
-        String device = AppClient.value(request, deviceId);
+        AppClient client = new AppClient(request, null);
+        String device = client.getId();
         return device == null ? "" : device;
     }
 
