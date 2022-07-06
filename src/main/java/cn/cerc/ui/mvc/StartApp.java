@@ -73,8 +73,6 @@ public class StartApp implements Filter {
         } else if ("/MobileConfig".equals(uri) || "/mobileConfig".equals(uri)) {
             try {
                 ISession session = Application.getSession();
-                session.setProperty(Application.SessionId, req.getSession().getId());
-
                 IMobileConfig form = Application.getBean(IMobileConfig.class);
                 form.setSession(session);
                 IPage page = form.execute();
