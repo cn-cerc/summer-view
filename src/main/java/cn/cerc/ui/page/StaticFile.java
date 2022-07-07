@@ -15,7 +15,7 @@ public final class StaticFile {
     private static final int Level_3 = 1;
 
     public enum StaticFileType {
-        icon(Level_1), productImage(Level_1), otherImage(Level_1), cssFile(Level_2), jsFile(Level_2);
+        icon(Level_1), productImage(Level_1), otherImage(Level_1), cssFile(Level_2), jsFile(Level_2), summerImage(Level_3);
 
         private int version;
 
@@ -49,6 +49,9 @@ public final class StaticFile {
         case otherImage:
             filePath = "resources/images/";
             break;
+        case summerImage:
+            filePath = "";
+            break;
         default:
             filePath = "";
         }
@@ -60,6 +63,13 @@ public final class StaticFile {
     }
 
     public static String getImage(String fileName) {
+        String file = fileName;
+        if (!fileName.toLowerCase().startsWith("http"))
+            file = new StaticFile(StaticFileType.jsFile, fileName).toString();
+        return file;
+    }
+
+    public static String getSummerImage(String fileName) {
         String file = fileName;
         if (!fileName.toLowerCase().startsWith("http"))
             file = new StaticFile(StaticFileType.jsFile, fileName).toString();
