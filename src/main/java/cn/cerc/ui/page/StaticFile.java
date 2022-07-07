@@ -1,5 +1,6 @@
 package cn.cerc.ui.page;
 
+import cn.cerc.db.core.ServerConfig;
 import cn.cerc.mis.core.Application;
 
 public final class StaticFile {
@@ -38,8 +39,8 @@ public final class StaticFile {
     public StaticFile(StaticFileType fileType, String fileName) {
         super();
         this.fileRoot = Application.getStaticPath();
-//        if (ServerConfig.isServerDevelop())
-//            this.fileRoot = "/public/";
+        if (ServerConfig.isServerDevelop())
+            this.fileRoot = "/public/";
         this.fileName = fileName;
         switch (fileType) {
         case cssFile:
