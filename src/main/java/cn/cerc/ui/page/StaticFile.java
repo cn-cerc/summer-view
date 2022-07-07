@@ -15,7 +15,13 @@ public final class StaticFile {
     private static final int Level_3 = 1;
 
     public enum StaticFileType {
-        icon(Level_1), productImage(Level_1), otherImage(Level_1), cssFile(Level_2), jsFile(Level_2), summerImage(Level_3);
+        icon(Level_1),
+        productImage(Level_1),
+        otherImage(Level_1),
+        cssFile(Level_2),
+        jsFile(Level_2),
+        summerImage(Level_3),
+        menuImage(Level_2);
 
         private int version;
 
@@ -40,17 +46,20 @@ public final class StaticFile {
         super();
         this.fileRoot = Application.getStaticPath();
         if (ServerConfig.isServerDevelop())
-            this.fileRoot = "/public/";
+            this.fileRoot = "/static/";
         this.fileName = fileName;
         switch (fileType) {
         case cssFile:
             filePath = "";
             break;
         case otherImage:
-            filePath = "resources/images/";
+            filePath = "";
             break;
         case summerImage:
             filePath = "";
+            break;
+        case menuImage:
+            filePath = "menu/";
             break;
         default:
             filePath = "";
@@ -75,7 +84,14 @@ public final class StaticFile {
             file = new StaticFile(StaticFileType.jsFile, fileName).toString();
         return file;
     }
-    
+
+    public static String getMenuImage(String fileName) {
+        String file = fileName;
+        if (!fileName.toLowerCase().startsWith("http"))
+            file = new StaticFile(StaticFileType.menuImage, fileName).toString();
+        return file;
+    }
+
     public static String getJsFile(String fileName) {
         String file = fileName;
         if (!fileName.toLowerCase().startsWith("http"))
