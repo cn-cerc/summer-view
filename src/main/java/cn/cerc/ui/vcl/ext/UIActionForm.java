@@ -7,7 +7,7 @@ import cn.cerc.ui.vcl.UIForm;
 public class UIActionForm extends UIForm {
 
     public UIActionForm(UIComponent owner) {
-       super(owner);
+        super(owner);
     }
 
 }

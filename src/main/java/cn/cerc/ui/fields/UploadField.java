@@ -14,10 +14,10 @@ public class UploadField extends AbstractField {
         getContent().setSignProperty("multiple", multiple);
         return this;
     }
- 
+
     @Override
     public UIComponent getContent() {
         return super.getContent();
     }
-    
+
 }

@@ -36,7 +36,7 @@ final class Decoder {
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
-    private static final int[] POINTER_VALUE_OFFSETS = {0, 0, 1 << 11, (1 << 19) + ((1) << 11), 0};
+    private static final int[] POINTER_VALUE_OFFSETS = { 0, 0, 1 << 11, (1 << 19) + ((1) << 11), 0 };
 
     // XXX - This is only for unit testings. We should possibly make a
     // constructor to set this
@@ -51,7 +51,22 @@ final class Decoder {
     private final ByteBuffer buffer;
 
     enum Type {
-        EXTENDED, POINTER, UTF8_STRING, DOUBLE, BYTES, UINT16, UINT32, MAP, INT32, UINT64, UINT128, ARRAY, CONTAINER, END_MARKER, BOOLEAN, FLOAT;
+        EXTENDED,
+        POINTER,
+        UTF8_STRING,
+        DOUBLE,
+        BYTES,
+        UINT16,
+        UINT32,
+        MAP,
+        INT32,
+        UINT64,
+        UINT128,
+        ARRAY,
+        CONTAINER,
+        END_MARKER,
+        BOOLEAN,
+        FLOAT;
 
         // Java clones the array when you call values(). Caching it increased
         // the speed by about 5000 requests per second on my machine.
@@ -88,8 +103,7 @@ final class Decoder {
     JsonNode decode(int offset) throws IOException {
         if (offset >= this.buffer.capacity()) {
             throw new InvalidDatabaseException(
-                    "The AW DB file's data section contains bad data: "
-                            + "pointer larger than the database.");
+                    "The AW DB file's data section contains bad data: " + "pointer larger than the database.");
         }
 
         this.buffer.position(offset);
@@ -128,10 +142,8 @@ final class Decoder {
             int typeNum = nextByte + 7;
 
             if (typeNum < 8) {
-                throw new InvalidDatabaseException(
-                        "Something went horribly wrong in the decoder. An extended type "
-                                + "resolved to a type number < 8 (" + typeNum
-                                + ")");
+                throw new InvalidDatabaseException("Something went horribly wrong in the decoder. An extended type "
+                        + "resolved to a type number < 8 (" + typeNum + ")");
             }
 
             type = Type.get(typeNum);
@@ -140,50 +152,48 @@ final class Decoder {
         int size = ctrlByte & 0x1f;
         if (size >= 29) {
             switch (size) {
-                case 29:
-                    size = 29 + (0xFF & buffer.get());
-                    break;
-                case 30:
-                    size = 285 + decodeInteger(2);
-                    break;
-                default:
-                    size = 65821 + decodeInteger(3);
+            case 29:
+                size = 29 + (0xFF & buffer.get());
+                break;
+            case 30:
+                size = 285 + decodeInteger(2);
+                break;
+            default:
+                size = 65821 + decodeInteger(3);
             }
         }
 
         return this.decodeByType(type, size);
     }
 
-    private JsonNode decodeByType(Type type, int size)
-            throws IOException {
+    private JsonNode decodeByType(Type type, int size) throws IOException {
         switch (type) {
-            case MAP:
-                return this.decodeMap(size);
-            case ARRAY:
-                return this.decodeArray(size);
-            case BOOLEAN:
-                return Decoder.decodeBoolean(size);
-            case UTF8_STRING:
-                return new TextNode(this.decodeString(size));
-            case DOUBLE:
-                return this.decodeDouble(size);
-            case FLOAT:
-                return this.decodeFloat(size);
-            case BYTES:
-                return new TextNode(this.decodeString(size));
+        case MAP:
+            return this.decodeMap(size);
+        case ARRAY:
+            return this.decodeArray(size);
+        case BOOLEAN:
+            return Decoder.decodeBoolean(size);
+        case UTF8_STRING:
+            return new TextNode(this.decodeString(size));
+        case DOUBLE:
+            return this.decodeDouble(size);
+        case FLOAT:
+            return this.decodeFloat(size);
+        case BYTES:
+            return new TextNode(this.decodeString(size));
 //                return new BinaryNode(this.getByteArray(size));
-            case UINT16:
-                return this.decodeUint16(size);
-            case UINT32:
-                return this.decodeUint32(size);
-            case INT32:
-                return this.decodeInt32(size);
-            case UINT64:
-            case UINT128:
-                return this.decodeBigInteger(size);
-            default:
-                throw new InvalidDatabaseException(
-                        "Unknown or unexpected type: " + type.name());
+        case UINT16:
+            return this.decodeUint16(size);
+        case UINT32:
+            return this.decodeUint32(size);
+        case INT32:
+            return this.decodeInt32(size);
+        case UINT64:
+        case UINT128:
+            return this.decodeBigInteger(size);
+        default:
+            throw new InvalidDatabaseException("Unknown or unexpected type: " + type.name());
         }
     }
 
@@ -239,8 +249,7 @@ final class Decoder {
     private DoubleNode decodeDouble(int size) throws InvalidDatabaseException {
         if (size != 8) {
             throw new InvalidDatabaseException(
-                    "The AW DB file's data section contains bad data: "
-                            + "invalid size of double.");
+                    "The AW DB file's data section contains bad data: " + "invalid size of double.");
         }
         return new DoubleNode(this.buffer.getDouble());
     }
@@ -248,23 +257,20 @@ final class Decoder {
     private FloatNode decodeFloat(int size) throws InvalidDatabaseException {
         if (size != 4) {
             throw new InvalidDatabaseException(
-                    "The AW DB file's data section contains bad data: "
-                            + "invalid size of float.");
+                    "The AW DB file's data section contains bad data: " + "invalid size of float.");
         }
         return new FloatNode(this.buffer.getFloat());
     }
 
-    private static BooleanNode decodeBoolean(int size)
-            throws InvalidDatabaseException {
+    private static BooleanNode decodeBoolean(int size) throws InvalidDatabaseException {
         switch (size) {
-            case 0:
-                return BooleanNode.FALSE;
-            case 1:
-                return BooleanNode.TRUE;
-            default:
-                throw new InvalidDatabaseException(
-                        "The AW DB file's data section contains bad data: "
-                                + "invalid size of boolean.");
+        case 0:
+            return BooleanNode.FALSE;
+        case 1:
+            return BooleanNode.TRUE;
+        default:
+            throw new InvalidDatabaseException(
+                    "The AW DB file's data section contains bad data: " + "invalid size of boolean.");
         }
     }
 

@@ -5,7 +5,7 @@ import cn.cerc.ui.vcl.UITextarea;
 
 @Deprecated
 public class UIMemo extends UITextarea {
-    
+
     public UIMemo(UIComponent owner) {
         super(owner);
     }

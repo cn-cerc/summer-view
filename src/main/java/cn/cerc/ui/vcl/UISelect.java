@@ -12,7 +12,7 @@ public class UISelect extends UIComponent implements IHtml {
     private boolean readonly;
     private Map<String, String> options = new LinkedHashMap<>();
     private String selected;
-    
+
     public UISelect(UIComponent owner) {
         super(owner);
     }

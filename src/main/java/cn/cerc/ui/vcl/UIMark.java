@@ -3,7 +3,7 @@ package cn.cerc.ui.vcl;
 import cn.cerc.ui.core.UIComponent;
 
 public class UIMark extends UIText {
-    
+
     public UIMark(UIComponent owner) {
         super(owner);
         this.setRootLabel("mark");

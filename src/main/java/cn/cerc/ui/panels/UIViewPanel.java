@@ -45,7 +45,7 @@ public class UIViewPanel extends UIComponent implements IEditPanelStyle {
             div.setText(this.getTitle());
             div.output(html);
         }
-        
+
         uiform.beginOutput(html);
 
         for (UIComponent component : content) {
@@ -121,11 +121,11 @@ public class UIViewPanel extends UIComponent implements IEditPanelStyle {
     public void setTitle(String title) {
         this.title = title;
     }
-    
+
     public UIForm getUiform() {
         return uiform;
     }
-    
+
     public UIButton getSubmit() {
         return submit;
     }

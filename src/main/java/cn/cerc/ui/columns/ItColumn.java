@@ -58,5 +58,5 @@ public class ItColumn extends AbstractColumn implements IDataColumn {
         this.hidden = hidden;
         return this;
     }
-    
+
 }

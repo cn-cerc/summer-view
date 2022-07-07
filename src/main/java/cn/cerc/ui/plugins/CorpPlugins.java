@@ -122,7 +122,7 @@ public class CorpPlugins {
     /**
      * 用于自定义服务场影
      *
-     * @param form AbstractForm 的实现类
+     * @param form           AbstractForm 的实现类
      * @param defaultService 默认服务名称
      * @return 返回自定义 service 或 defaultService
      */

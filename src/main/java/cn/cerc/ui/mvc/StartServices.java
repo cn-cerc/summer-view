@@ -62,7 +62,6 @@ public class StartServices extends HttpServlet {
         try {
             ISession session = Application.getSession();
             session.setProperty(ISession.REQUEST, request);
-            session.setProperty(Application.SessionId, request.getSession().getId());
             // 获取token
             String token = request.getParameter(ISession.TOKEN);
             if (Utils.isEmpty(token))
