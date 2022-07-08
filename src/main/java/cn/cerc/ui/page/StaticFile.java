@@ -10,7 +10,7 @@ public final class StaticFile {
     private String fileRoot;
     private String filePath;
 
-    private static final int Level_1 = 1;
+    private static final int Level_1 = 2;
     private static final int Level_2 = 1;
     private static final int Level_3 = 1;
 
