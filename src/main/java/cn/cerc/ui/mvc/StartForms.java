@@ -51,7 +51,7 @@ public class StartForms implements Filter {
         log.debug("uri {}", uri);
 
         if (StringUtils.countMatches(uri, "/") == 1 && uri.split("/")[1].startsWith("i.")) {
-            resp.sendRedirect("/public/install?qrcode=" + uri.split("/")[1].substring(2));
+            resp.sendRedirect("/public/install?qr=" + uri.split("/")[1].substring(2));
             return;
         }
         if (StringUtils.countMatches(uri, "/") < 2 && !uri.contains("favicon.ico")) {
