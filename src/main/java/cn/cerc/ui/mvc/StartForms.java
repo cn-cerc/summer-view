@@ -50,6 +50,10 @@ public class StartForms implements Filter {
         String uri = req.getRequestURI();
         log.debug("uri {}", uri);
 
+        if (StringUtils.countMatches(uri, "/") == 1 && uri.split("/")[1].startsWith("i.")) {
+            resp.sendRedirect("/public/install?qr=" + uri.split("/")[1].substring(2));
+            return;
+        }
         if (StringUtils.countMatches(uri, "/") < 2 && !uri.contains("favicon.ico")) {
             String redirect = String.format("/public/%s", Application.getConfig().getWelcomePage());
             redirect = resp.encodeRedirectURL(redirect);
