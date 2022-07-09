@@ -42,7 +42,7 @@ public class CorpPlugins {
     }
 
     /**
-     * 返回当前公司别当前对象之之插件对象，如FrmProduct_131001（必须继承IPlugins）
+     * 返回当前公司别当前对象之之插件对象，如FrmProduct_131001（必须继承 IPlugins）
      *
      * @param owner        插件拥有者，一般为 form
      * @param requiredType IPlugins 的实现类
