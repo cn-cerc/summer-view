@@ -1,6 +1,7 @@
 package cn.cerc.ui.page;
 
 import cn.cerc.db.core.ServerConfig;
+import cn.cerc.db.core.Utils;
 import cn.cerc.mis.core.Application;
 
 public final class StaticFile {
@@ -10,27 +11,24 @@ public final class StaticFile {
     private String fileRoot;
     private String filePath;
 
-    private static final int Level_1 = 1;
-    private static final int Level_2 = 2;
-    private static final int Level_3 = 1;
-
     public enum StaticFileType {
-        icon(Level_1),
-        productImage(Level_1),
-        otherImage(Level_1),
-        cssFile(Level_2),
-        jsFile(Level_2),
-        summerImage(Level_3),
-        menuImage(Level_2);
+        icon(StaticFileGroup.低频更新),
+        productImage(StaticFileGroup.低频更新),
+        otherImage(StaticFileGroup.低频更新),
+        cssFile(StaticFileGroup.中频更新),
+        jsFile(StaticFileGroup.中频更新),
+        imageFile(StaticFileGroup.中频更新),
+        summerImage(StaticFileGroup.高频更新),
+        menuImage(StaticFileGroup.中频更新);
 
-        private int version;
+        private StaticFileGroup group;
 
-        public int getVersion() {
-            return version;
+        public StaticFileGroup getGroup() {
+            return group;
         }
 
-        StaticFileType(int version) {
-            this.version = version;
+        StaticFileType(StaticFileGroup group) {
+            this.group = group;
         }
 
     }
@@ -74,7 +72,7 @@ public final class StaticFile {
     public static String getImage(String fileName) {
         String file = fileName;
         if (!fileName.toLowerCase().startsWith("http"))
-            file = new StaticFile(StaticFileType.jsFile, fileName).toString();
+            file = new StaticFile(StaticFileType.imageFile, fileName).toString();
         return file;
     }
 
@@ -101,11 +99,14 @@ public final class StaticFile {
 
     @Override
     public String toString() {
-        if (this.fileType.getVersion() > 0)
-            return String.format("%s%s%s?v=%d", this.fileRoot, this.filePath, this.fileName,
-                    this.fileType.getVersion());
-        else
-            return String.format("%s%s%s", this.fileRoot, this.filePath, this.fileName);
+        String version = "";
+        StaticFileVersionImpl impl = Application.getBean(StaticFileVersionImpl.class);
+        if (impl != null) {
+            version = impl.getVersion(this.fileType.getGroup());
+            if (!Utils.isEmpty(version))
+                return String.format("%s%s%s?v=%s", this.fileRoot, this.filePath, this.fileName, version);
+        }
+        return String.format("%s%s%s", this.fileRoot, this.filePath, this.fileName);
     }
 
     public String getFileName() {
