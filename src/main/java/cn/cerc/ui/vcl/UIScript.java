@@ -9,6 +9,7 @@ import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.SummerUI;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.page.StaticFile;
+import cn.cerc.ui.page.StaticFileType;
 
 /*
  * 专用于内嵌脚本输出
@@ -28,7 +29,7 @@ public class UIScript extends UIComponent {
     public void beginOutput(HtmlWriter html) {
         if (this.src != null) {
             String version = config.getString(CDN.BROWSER_CACHE_VERSION, "1.0.0.0");
-            StaticFile sf = new StaticFile(this.src, "");
+            StaticFile sf = new StaticFile(StaticFileType.jsFile, this.src);
             this.writeProperty("src", sf.getUrl(version));
         } else {
             this.writeProperty("src", null);
