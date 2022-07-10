@@ -19,8 +19,6 @@ public class StaticFile {
         this.fileRoot = Application.getStaticPath();
         if (isCommonFile)
             this.fileRoot = replace(Application.getStaticPath());
-        else
-            this.fileRoot = Application.getStaticPath();
         //
         this.fileName = fileName;
         this.fileType = fileType;
