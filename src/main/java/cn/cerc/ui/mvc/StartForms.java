@@ -2,6 +2,8 @@ package cn.cerc.ui.mvc;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -41,6 +43,20 @@ public class StartForms implements Filter {
         log.info("{} destroy.", this.getClass().getName());
     }
 
+    public static final List<String> paths = new ArrayList<>();
+    {
+        paths.add("static/");
+        paths.add("service/");
+        paths.add("services/");
+        paths.add("services-std/");
+        paths.add("services-obm/");
+        paths.add("services-oem/");
+        paths.add("services-odm/");
+        paths.add("services-fpl/");
+        paths.add("task/");
+        paths.add("docs/");
+    }
+
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
@@ -50,6 +66,10 @@ public class StartForms implements Filter {
         String uri = req.getRequestURI();
         log.debug("uri {}", uri);
 
+        if (StringUtils.countMatches(uri, "/") == 1 && uri.split("/")[1].startsWith("i.")) {
+            resp.sendRedirect("/public/install?qr=" + uri.split("/")[1].substring(2));
+            return;
+        }
         if (StringUtils.countMatches(uri, "/") < 2 && !uri.contains("favicon.ico")) {
             String redirect = String.format("/public/%s", Application.getConfig().getWelcomePage());
             redirect = resp.encodeRedirectURL(redirect);
@@ -84,8 +104,7 @@ public class StartForms implements Filter {
             return;
         }
 
-        if (uri.contains("static/") || uri.contains("service/") || uri.contains("services/") || uri.contains("task/")
-                || uri.contains("docs/")) {
+        if (paths.stream().anyMatch(key -> uri.contains(key))) {
             chain.doFilter(req, resp);
             return;
         }

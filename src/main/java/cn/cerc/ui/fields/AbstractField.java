@@ -8,7 +8,6 @@ import cn.cerc.db.core.DataRow;
 import cn.cerc.db.core.DataSource;
 import cn.cerc.db.core.Datetime;
 import cn.cerc.db.core.FastDate;
-import cn.cerc.mis.cdn.CDN;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.SummerUI;
 import cn.cerc.ui.core.INameOwner;
@@ -353,7 +352,7 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
         if (!this.hidden) {
             UISpan span = new UISpan(null);
             if (this.dialog != null && this.dialog.isOpen()) {
-                String src = this.icon != null ? this.icon : CDN.get(getIconConfig());
+                String src = this.icon != null ? this.icon : getIconConfig();
                 UIUrl url = new UIUrl(span).setHref(dialog.getUrl());
                 new UIImage(url).setSrc(src);
             }

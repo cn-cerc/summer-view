@@ -186,7 +186,7 @@ public abstract class UIAbstractPage extends UIComponent implements IPage, Suppo
             if (fileName.equals(item.getFileName()) && device.equals(item.getDevice()))
                 return;
         }
-        jsFiles.add(new StaticFile(fileName, device));
+        jsFiles.add(new StaticFile(StaticFileType.jsFile, fileName).setDevice(device));
     }
 
     public final List<StaticFile> getCssFiles() {
@@ -198,7 +198,7 @@ public abstract class UIAbstractPage extends UIComponent implements IPage, Suppo
     }
 
     public final void addCssFile(String fileName, String device) {
-        cssFiles.add(new StaticFile(fileName, device));
+        cssFiles.add(new StaticFile(StaticFileType.cssFile, fileName).setDevice(device));
     }
 
     public UIComponent getHeader() {

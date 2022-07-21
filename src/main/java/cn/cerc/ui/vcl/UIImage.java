@@ -5,6 +5,8 @@ import cn.cerc.mis.core.Application;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.other.AliyunOssProcess;
+import cn.cerc.ui.page.StaticFile;
+import cn.cerc.ui.page.StaticFileType;
 
 public class UIImage extends UIComponent implements IHtml {
     private String src;
@@ -23,11 +25,10 @@ public class UIImage extends UIComponent implements IHtml {
 
     @Override
     public void output(HtmlWriter html) {
-        String url = this.staticPath != null ? staticPath : "";
-        url += this.src;
+        String url = this.src;
         if (this.staticPath != null && this.process != null && !Utils.isEmpty(process.getCommand()))
             url += String.format("?x-oss-process=image%s", process.getCommand());
-        this.writeProperty("src", url);
+        this.writeProperty("src", new StaticFile(StaticFileType.imageFile, url).toString());
         html.print("<").print(getRootLabel());
         this.outputPropertys(html);
         html.print("/>");
