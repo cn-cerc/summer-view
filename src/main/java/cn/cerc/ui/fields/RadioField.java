@@ -43,6 +43,7 @@ public class RadioField extends AbstractField {
             current = this.getValue();
         }
         html.println("<label for=\"%s\">%s</label>", this.getId(), this.getName() + "：");
+        html.println("<span>");
         for (int i = 0; i < items.size(); i++) {
             String value = items.get(i);
             if (UIInput.TYPE_TEXT.equals(this.getHtmType())) {
@@ -55,6 +56,7 @@ public class RadioField extends AbstractField {
             }
             html.print("/>");
         }
+        html.println("</span>");
         if (this.isShowStar()) {
             html.print("<font>*</font>");
         }
