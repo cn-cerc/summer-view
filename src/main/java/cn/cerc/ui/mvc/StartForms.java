@@ -74,15 +74,14 @@ public class StartForms implements Filter {
             resp.sendRedirect("/public/install");
             return;
         }
-        if (StringUtils.countMatches(uri, "/") < 2 && !uri.contains("favicon.ico")) {
-            String redirect = String.format("/public/%s", Application.getConfig().getWelcomePage());
-            redirect = resp.encodeRedirectURL(redirect);
-            resp.sendRedirect(redirect);
-            return;
-        }
 
         // 1、静态文件直接输出
         if (AppStaticFileDefault.getInstance().isStaticFile(uri)) {
+            if (uri.contains(".well-known/")) {
+                request.getServletContext().getRequestDispatcher(uri).forward(request, response);
+                return;
+            }
+
             // 默认没有重定向，直接读取资源文件的默认路径
             // TODO 暂时按该方法放行（jar包的资源文件）
             if (uri.contains("imgZoom")) {
@@ -96,6 +95,7 @@ public class StartForms implements Filter {
              * /forms/images/systeminstall-pc.png
              */
             log.debug("before {}", uri);
+
             int index = uri.indexOf("/", 2);
             if (index < 0) {
                 request.getServletContext().getRequestDispatcher(uri).forward(request, response);
@@ -105,6 +105,13 @@ public class StartForms implements Filter {
                 request.getServletContext().getRequestDispatcher(source).forward(request, response);
                 log.debug("after  {}", source);
             }
+            return;
+        }
+
+        if (StringUtils.countMatches(uri, "/") < 2 && !uri.contains("favicon.ico")) {
+            String redirect = String.format("/public/%s", Application.getConfig().getWelcomePage());
+            redirect = resp.encodeRedirectURL(redirect);
+            resp.sendRedirect(redirect);
             return;
         }
 
