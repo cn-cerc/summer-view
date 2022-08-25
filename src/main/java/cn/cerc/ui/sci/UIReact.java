@@ -84,10 +84,10 @@ public class UIReact extends UIComponent {
 
     }
 
-    public void addReact(String value, Object... args) {
+    public UIReact addReact(String value, Object... args) {
         String react = String.format(value, args);
         this.add("ReactDOM.render(%s, document.getElementById(\"%s\"));", react, this.getId());
-
+        return this;
     }
 
 }
