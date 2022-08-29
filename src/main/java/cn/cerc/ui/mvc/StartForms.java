@@ -23,12 +23,17 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 import cn.cerc.db.core.Handle;
 import cn.cerc.db.core.IHandle;
 import cn.cerc.db.core.ISession;
+import cn.cerc.db.core.MD5;
 import cn.cerc.db.core.Utils;
+import cn.cerc.db.core.Variant;
+import cn.cerc.db.redis.JedisFactory;
 import cn.cerc.mis.config.AppStaticFileDefault;
+import cn.cerc.mis.core.AppClient;
 import cn.cerc.mis.core.Application;
 import cn.cerc.mis.core.FormFactory;
 import cn.cerc.mis.core.FormSign;
 import cn.cerc.mis.core.IErrorPage;
+import redis.clients.jedis.Jedis;
 
 public class StartForms implements Filter {
     private static final Logger log = LoggerFactory.getLogger(StartForms.class);
@@ -138,6 +143,28 @@ public class StartForms implements Filter {
 
         FormFactory factory = context.getBean(FormFactory.class);
         IHandle handle = new Handle(session);
+
+        Variant variant = new Variant();
+        if (!AppClient.createCookie(req, resp, variant)) {
+            StringBuilder builder = new StringBuilder(variant.getString());
+            builder.append(req.getRequestURI());
+            req.getParameterMap().forEach((k, v) -> {
+                builder.append(k);
+                for (int i = 0; i < v.length; i++)
+                    for (String item : v)
+                        builder.append(item);
+            });
+            String key = MD5.get(builder.toString());
+            try (Jedis jedis = JedisFactory.getJedis()) {
+                if (jedis.setnx(key, "1") == 1) {
+                    log.debug("key {} ", key);
+                    jedis.expire(key, 1);
+                } else {
+                    throw new RuntimeException("对不起您操作太快了，服务器忙不过来");
+                }
+            }
+        }
+
         FormSign sv = new FormSign(childCode);
         String viewId = factory.getView(handle, req, resp, sv.getId(), sv.getValue());
         factory.outputView(req, resp, viewId);

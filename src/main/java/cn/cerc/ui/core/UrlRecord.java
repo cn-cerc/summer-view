@@ -87,7 +87,6 @@ public class UrlRecord {
         public UrlRecord build() {
             return new UrlRecord(this);
         }
-
     }
 
     private UrlRecord(Builder builder) {
@@ -105,8 +104,11 @@ public class UrlRecord {
     public UrlRecord() {
     }
 
+    public static UrlRecord create(String site, String name) {
+        return new UrlRecord(site, name);
+    }
+
     public UrlRecord(String site, String name) {
-        super();
         this.site = site;
         this.name = name;
     }
