@@ -45,6 +45,7 @@ public class StartServices extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         request.setCharacterEncoding(StandardCharsets.UTF_8.name());
+        response.setCharacterEncoding(StandardCharsets.UTF_8.name());
         String uri = request.getRequestURI();
         log.debug(uri);
         request.setCharacterEncoding("UTF-8");
