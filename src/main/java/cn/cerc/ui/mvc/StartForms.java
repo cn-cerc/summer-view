@@ -160,7 +160,9 @@ public class StartForms implements Filter {
                     log.debug("key {} ", key);
                     jedis.expire(key, 1);
                 } else {
-                    throw new RuntimeException("对不起您操作太快了，服务器忙不过来");
+                    IErrorPage error = context.getBean(IErrorPage.class);
+                    error.output(req, resp, new RuntimeException("对不起您操作太快了，服务器忙不过来"));
+                    return;
                 }
             }
         }
