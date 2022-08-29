@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -33,6 +34,8 @@ import cn.cerc.mis.core.Application;
 import cn.cerc.mis.core.FormFactory;
 import cn.cerc.mis.core.FormSign;
 import cn.cerc.mis.core.IErrorPage;
+import cn.cerc.mis.core.SystemBuffer;
+import cn.cerc.mis.other.MemoryBuffer;
 import redis.clients.jedis.Jedis;
 
 public class StartForms implements Filter {
@@ -148,16 +151,15 @@ public class StartForms implements Filter {
         if (!AppClient.createCookie(req, resp, variant)) {
             StringBuilder builder = new StringBuilder(variant.getString());
             builder.append(req.getRequestURI());
-            req.getParameterMap().forEach((k, v) -> {
-                builder.append(k);
-                for (int i = 0; i < v.length; i++)
-                    for (String item : v)
-                        builder.append(item);
+            req.getParameterMap().forEach((key, value) -> {
+                builder.append(key);
+                Stream.of(value).forEach(builder::append);
             });
-            String key = MD5.get(builder.toString());
+            String md5 = MD5.get(builder.toString());
+            String key = MemoryBuffer.buildKey(SystemBuffer.User.Frequency, md5);
             try (Jedis jedis = JedisFactory.getJedis()) {
                 if (jedis.setnx(key, "1") == 1) {
-                    log.debug("key {} ", key);
+                    log.debug("key {}, origin {}", key, builder.toString());
                     jedis.expire(key, 1);
                 } else {
                     IErrorPage error = context.getBean(IErrorPage.class);
