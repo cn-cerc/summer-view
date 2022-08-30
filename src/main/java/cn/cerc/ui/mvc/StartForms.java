@@ -159,9 +159,9 @@ public class StartForms implements Filter {
             String key = MemoryBuffer.buildKey(SystemBuffer.User.Frequency, md5);
             try (Jedis jedis = JedisFactory.getJedis()) {
                 if (jedis.setnx(key, "1") == 1) {
-                    log.debug("key {}, origin {}", key, builder.toString());
                     jedis.expire(key, 1);
                 } else {
+                    log.error("key {}, origin {}", key, builder.toString());
                     IErrorPage error = context.getBean(IErrorPage.class);
                     error.output(req, resp, new RuntimeException("对不起您操作太快了，服务器忙不过来"));
                     return;
