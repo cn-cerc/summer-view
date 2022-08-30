@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -24,19 +23,12 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 import cn.cerc.db.core.Handle;
 import cn.cerc.db.core.IHandle;
 import cn.cerc.db.core.ISession;
-import cn.cerc.db.core.MD5;
 import cn.cerc.db.core.Utils;
-import cn.cerc.db.core.Variant;
-import cn.cerc.db.redis.JedisFactory;
 import cn.cerc.mis.config.AppStaticFileDefault;
-import cn.cerc.mis.core.AppClient;
 import cn.cerc.mis.core.Application;
 import cn.cerc.mis.core.FormFactory;
 import cn.cerc.mis.core.FormSign;
 import cn.cerc.mis.core.IErrorPage;
-import cn.cerc.mis.core.SystemBuffer;
-import cn.cerc.mis.other.MemoryBuffer;
-import redis.clients.jedis.Jedis;
 
 public class StartForms implements Filter {
     private static final Logger log = LoggerFactory.getLogger(StartForms.class);
@@ -147,27 +139,30 @@ public class StartForms implements Filter {
         FormFactory factory = context.getBean(FormFactory.class);
         IHandle handle = new Handle(session);
 
-        Variant variant = new Variant();
-        if (!AppClient.createCookie(req, resp, variant)) {
-            StringBuilder builder = new StringBuilder(variant.getString());
-            builder.append(req.getRequestURI());
-            req.getParameterMap().forEach((key, value) -> {
-                builder.append(key);
-                Stream.of(value).forEach(builder::append);
-            });
-            String md5 = MD5.get(builder.toString());
-            String key = MemoryBuffer.buildKey(SystemBuffer.User.Frequency, md5);
-            try (Jedis jedis = JedisFactory.getJedis()) {
-                if (jedis.setnx(key, "1") == 1) {
-                    jedis.expire(key, 1);
-                } else {
-                    log.error("key {}, origin {}", key, builder.toString());
-                    IErrorPage error = context.getBean(IErrorPage.class);
-                    error.output(req, resp, new RuntimeException("对不起您操作太快了，服务器忙不过来"));
-                    return;
-                }
-            }
-        }
+//        Variant variant = new Variant();
+//        if (!AppClient.createCookie(req, resp, variant)) {
+//            StringBuilder builder = new StringBuilder(variant.getString());
+//            if (!uri.contains("WebDefault")) {
+//                builder.append(uri);
+//                req.getParameterMap().forEach((key, value) -> {
+//                    builder.append(key);
+//                    Stream.of(value).forEach(builder::append);
+//                });
+//
+//                String md5 = MD5.get(builder.toString());
+//                String key = MemoryBuffer.buildKey(SystemBuffer.User.Frequency, md5);
+//                try (Jedis jedis = JedisFactory.getJedis()) {
+//                    if (jedis.setnx(key, "1") == 1) {
+//                        jedis.expire(key, 1);
+//                    } else {
+//                        log.error("key {}, origin {}", key, builder.toString());
+//                        IErrorPage error = context.getBean(IErrorPage.class);
+//                        error.output(req, resp, new RuntimeException("对不起您操作太快了，服务器忙不过来"));
+//                        return;
+//                    }
+//                }
+//            }
+//        }
 
         FormSign sv = new FormSign(childCode);
         String viewId = factory.getView(handle, req, resp, sv.getId(), sv.getValue());
