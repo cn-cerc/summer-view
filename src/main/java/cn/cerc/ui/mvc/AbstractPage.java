@@ -40,12 +40,10 @@ public abstract class AbstractPage extends UIComponent implements IPage, IUserLa
         if (form != null) {
             this.add("cdn", Application.getStaticPath());
             this.add("version", config.getString(CDN.BROWSER_CACHE_VERSION, "1.0.0.0"));
-            if (form != null) {
-                this.put("jspPage", this);
-                // 为兼容而设计
-                this.add("summer_js", CDN.get(config.getString("summer.js", "js/summer.js")));
-                this.add("myapp_js", CDN.get(config.getString("myapp.js", "js/myapp.js")));
-            }
+            this.put("jspPage", this);
+            // 为兼容而设计
+            this.add("summer_js", CDN.get(config.getString("static.js.summer", "js/summer.js")));
+            this.add("myapp_js", CDN.get(config.getString("static.js.myapp", "js/myapp.js")));
         }
         return this;
     }
