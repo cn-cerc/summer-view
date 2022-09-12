@@ -99,6 +99,15 @@ public class OptionField extends AbstractField {
         this.size = size;
     }
 
+    public String getDefaultValue() {
+        return defaultValue;
+    }
+
+    public OptionField setDefaultValue(String defaultValue) {
+        this.defaultValue = defaultValue;
+        return this;
+    }
+
     @Override
     public void updateField() {
         super.updateField();
