@@ -22,7 +22,7 @@ public class UIModifyPanel extends UIComponent implements IEditPanelStyle {
     private HttpServletRequest request;
     private String submitValue;
     private UIComponent inputPanel;
-    private DataRow record;
+    private DataRow current;
     private String title;
     private IForm form;
 
@@ -55,7 +55,7 @@ public class UIModifyPanel extends UIComponent implements IEditPanelStyle {
             if (component instanceof IDataColumn) {
                 IDataColumn column = (IDataColumn) component;
                 if (column.isHidden()) {
-                    column.setRecord(record);
+                    column.setRecord(current);
                     column.outputLine(html);
                 }
             }
@@ -68,7 +68,7 @@ public class UIModifyPanel extends UIComponent implements IEditPanelStyle {
                     IDataColumn column = (IDataColumn) component;
                     if (!column.isHidden()) {
                         html.print("<li>");
-                        column.setRecord(record);
+                        column.setRecord(current);
                         column.outputLine(html);
                         html.print("</li>");
                     }
@@ -98,16 +98,16 @@ public class UIModifyPanel extends UIComponent implements IEditPanelStyle {
                     String[] values = request.getParameterValues(column.getCode());
                     if (values == null) {
                         if (!column.isReadonly()) {
-                            record.setValue(column.getCode(), "");
+                            current.setValue(column.getCode(), "");
                         }
                     } else {
-                        record.setValue(column.getCode(), String.join(",", values));
+                        current.setValue(column.getCode(), String.join(",", values));
                     }
                 } else if (component instanceof IDataColumn) {
                     IDataColumn column = (IDataColumn) component;
                     if (!column.isReadonly()) {
                         String val = request.getParameter(column.getCode());
-                        record.setValue(column.getCode(), val == null ? "" : val);
+                        current.setValue(column.getCode(), val == null ? "" : val);
                     }
                 }
             }
@@ -133,12 +133,12 @@ public class UIModifyPanel extends UIComponent implements IEditPanelStyle {
         this.inputPanel = inputPanel;
     }
 
-    public DataRow getRecord() {
-        return record;
+    public DataRow current() {
+        return current;
     }
 
-    public void setRecord(DataRow record) {
-        this.record = record;
+    public void setCurrent(DataRow current) {
+        this.current = current;
     }
 
     public String getTitle() {

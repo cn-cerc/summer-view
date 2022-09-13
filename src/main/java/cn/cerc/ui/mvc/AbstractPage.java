@@ -65,8 +65,9 @@ public abstract class AbstractPage extends UIComponent implements IPage, IUserLa
         return getForm().getParam("message", null);
     }
 
-    public final void setMessage(String message) {
+    public final AbstractPage setMessage(String message) {
         getForm().setParam("message", message);
+        return this;
     }
 
     @Override

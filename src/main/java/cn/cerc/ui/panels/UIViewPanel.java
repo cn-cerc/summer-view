@@ -19,7 +19,7 @@ public class UIViewPanel extends UIComponent implements IEditPanelStyle {
     private UIButton submit;
     private HttpServletRequest request;
     private UIComponent content;
-    private DataRow record;
+    private DataRow current;
     private String title;
     private IForm form;
 
@@ -52,7 +52,7 @@ public class UIViewPanel extends UIComponent implements IEditPanelStyle {
             if (component instanceof IDataColumn) {
                 IDataColumn column = (IDataColumn) component;
                 if (column.isHidden()) {
-                    column.setRecord(record);
+                    column.setRecord(current);
                     column.outputLine(html);
                 }
             }
@@ -64,7 +64,7 @@ public class UIViewPanel extends UIComponent implements IEditPanelStyle {
                 if (component instanceof IDataColumn) {
                     IDataColumn column = (IDataColumn) component;
                     if (!column.isHidden()) {
-                        column.setRecord(record);
+                        column.setRecord(current);
                         column.setReadonly(true);
                         html.print("<li>");
                         column.outputLine(html);
@@ -105,12 +105,12 @@ public class UIViewPanel extends UIComponent implements IEditPanelStyle {
         return this;
     }
 
-    public DataRow getRecord() {
-        return record;
+    public DataRow current() {
+        return current;
     }
 
-    public UIViewPanel setRecord(DataRow record) {
-        this.record = record;
+    public UIViewPanel setCurrent(DataRow current) {
+        this.current = current;
         return this;
     }
 

@@ -8,6 +8,7 @@ import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 
 public class OptionField extends AbstractField {
+
     private String defaultValue;
     private int size;// 默认显示行数
     private final Map<String, String> items = new LinkedHashMap<>();
@@ -96,6 +97,24 @@ public class OptionField extends AbstractField {
 
     public void setSize(int size) {
         this.size = size;
+    }
+
+    public String getDefaultValue() {
+        return defaultValue;
+    }
+
+    public OptionField setDefaultValue(String defaultValue) {
+        this.defaultValue = defaultValue;
+        return this;
+    }
+
+    @Override
+    public void updateField() {
+        super.updateField();
+        if (this.defaultValue != null) {
+            if (!this.current().has(this.getField()))
+                this.current().setValue(this.getField(), this.defaultValue);
+        }
     }
 
 }
