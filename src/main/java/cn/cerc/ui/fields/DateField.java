@@ -11,7 +11,7 @@ public class DateField extends AbstractField {
     public DateField(UIComponent owner, String name, String field) {
         super(owner, name, field, 5);
         this.setDialog("showDateDialog");
-        this.setIcon(config.getClassProperty("icon", "")) ;
+        this.setIcon(config.getClassProperty("icon", ""));
         this.setAlign("center");
     }
 
