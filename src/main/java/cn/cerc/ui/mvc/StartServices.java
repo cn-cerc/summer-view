@@ -94,7 +94,7 @@ public class StartServices extends HttpServlet {
             session.loadToken(token);
 
             IHandle handle = new Handle(session);
-            Variant function = new Variant("execute").setTag(service);
+            Variant function = new Variant("execute").setKey(service);
             IService bean = Application.getService(handle, service, function);
             dataOut = bean._call(handle, dataIn, function);
             if (dataOut == null)
