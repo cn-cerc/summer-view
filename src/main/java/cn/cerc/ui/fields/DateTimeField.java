@@ -1,12 +1,14 @@
 package cn.cerc.ui.fields;
 
 import cn.cerc.db.core.ClassConfig;
+import cn.cerc.db.core.Datetime;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.SummerUI;
 import cn.cerc.ui.core.UIComponent;
 
 public class DateTimeField extends AbstractField {
     private static final ClassConfig config = new ClassConfig(DateField.class, SummerUI.ID);
+    private String format;
 
     public DateTimeField(UIComponent owner, String name, String field) {
         super(owner, name, field, 10);
@@ -37,10 +39,19 @@ public class DateTimeField extends AbstractField {
             return html.toString();
         }
         if (current().has(getField())) {
-            return current().getDatetime(getField()).toString();
+            Datetime datetime = current().getDatetime(getField());
+            if (this.format != null)
+                return datetime.format(format);
+            else
+                return datetime.toString();
         } else {
             return "";
         }
+    }
+
+    public DateTimeField setFormat(String fmt) {
+        this.format = fmt;
+        return this;
     }
 
 }
