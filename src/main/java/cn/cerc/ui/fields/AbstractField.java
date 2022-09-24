@@ -8,6 +8,7 @@ import cn.cerc.db.core.DataRow;
 import cn.cerc.db.core.DataSource;
 import cn.cerc.db.core.Datetime;
 import cn.cerc.db.core.FastDate;
+import cn.cerc.db.core.Variant;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.SummerUI;
 import cn.cerc.ui.core.INameOwner;
@@ -617,8 +618,10 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
     }
 
     public enum StickyRow {
-        def,
-        left,
-        right;
+        def, left, right;
+    }
+
+    public Variant value() {
+        return new Variant(this.current(), this.getField());
     }
 }
