@@ -1,15 +1,61 @@
 package cn.cerc.ui.grid;
 
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+
 import cn.cerc.db.core.DataSet;
+import cn.cerc.db.core.FieldMeta;
+import cn.cerc.db.core.FieldMeta.FieldKind;
 import cn.cerc.db.editor.EditorFactory;
+import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.style.IGridStyle;
 
 public class UIFastGrid extends UIComponent implements IGridStyle {
+    private DataSet dataSet;
+    private boolean active;
+    private HashSet<FieldMeta> columns = new LinkedHashSet<>();
 
     public UIFastGrid(UIComponent owner) {
         super(owner);
         this.setRootLabel(isPhone() ? "div" : "table");
+    }
+
+    private void setDataSet(DataSet dataSet) {
+        this.dataSet = dataSet;
+    }
+
+    public FieldMeta addColumn(String fieldCode) {
+        if (this.dataSet == null)
+            throw new RuntimeException("dataSet is null");
+        FieldMeta meta = dataSet.fields().get(fieldCode);
+        if (meta == null)
+            meta = dataSet.fields().add(fieldCode, FieldKind.Calculated);
+        columns.add(meta);
+        return meta;
+    }
+
+    @Override
+    public void output(HtmlWriter html) {
+        if (!this.active && this.dataSet != null) {
+            if (columns.size() == 0) {
+                for (var field : dataSet.fields())
+                    columns.add(field);
+            }
+            if (this.isPhone()) {
+                UIGridBody body = new UIGridBody(this, dataSet);
+                for (var column : columns)
+                    body.addColumn(column);
+            } else {
+                UIGridHead head = new UIGridHead(this);
+                UIGridBody body = new UIGridBody(this, dataSet);
+                for (var column : columns)
+                    body.addColumn(column);
+                head.addAll(this.columns);
+            }
+            this.active = true;
+        }
+        super.output(html);
     }
 
     public static void main(String[] args) {
@@ -29,13 +75,9 @@ public class UIFastGrid extends UIComponent implements IGridStyle {
 
         UIFastGrid grid = new UIFastGrid(null);
         grid.setPhone(false);
-        if (grid.isPhone()) {
-            new UIGridBody(grid, ds).addAll(ds.fields());
-        } else {
-            UIGridHead head = new UIGridHead(grid);
-            UIGridBody body = new UIGridBody(grid, ds).addAll(ds.fields());
-            head.addAll(body.getColumns());
-        }
+        grid.setDataSet(ds);
+//        grid.addColumn("sex"); //指定栏位输出
+        System.out.println(grid.toString());
         System.out.println(grid.toString());
     }
 

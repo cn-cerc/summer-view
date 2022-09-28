@@ -59,7 +59,7 @@ public class UIGridBody extends UIComponent {
         return this;
     }
 
-    private void addColumn(FieldMeta meta) {
+    public void addColumn(FieldMeta meta) {
         columns.add(meta);
         new UIDataComponent(new UITd(this), dataSet, meta.code());
     }
