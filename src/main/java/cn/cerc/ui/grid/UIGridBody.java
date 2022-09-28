@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 
 import cn.cerc.db.core.DataSet;
-import cn.cerc.db.core.FieldDefs;
 import cn.cerc.db.core.FieldMeta;
 import cn.cerc.db.core.FieldMeta.FieldKind;
 import cn.cerc.mis.core.HtmlWriter;
@@ -32,7 +31,7 @@ public class UIGridBody extends UIComponent {
             super.output(html);
     }
 
-    public final DataSet getDataSet() {
+    public final DataSet dataSet() {
         return dataSet;
     }
 
@@ -41,22 +40,16 @@ public class UIGridBody extends UIComponent {
         return this;
     }
 
-    public final HashSet<FieldMeta> getColumns() {
+    public final HashSet<FieldMeta> columns() {
         return columns;
     }
 
-    public FieldMeta add(String field) {
+    public FieldMeta addColumn(String field) {
         FieldMeta meta = dataSet.fields().get(field);
         if (meta == null)
             meta = dataSet.fields().add(field, FieldKind.Calculated);
         addColumn(meta);
         return meta;
-    }
-
-    public UIGridBody addAll(FieldDefs fieldDefs) {
-        for (FieldMeta meta : fieldDefs)
-            addColumn(meta);
-        return this;
     }
 
     public void addColumn(FieldMeta meta) {
