@@ -21,7 +21,7 @@ public class UIFastGrid extends UIComponent implements IGridStyle {
         this.setRootLabel(isPhone() ? "div" : "table");
     }
 
-    private void setDataSet(DataSet dataSet) {
+    public void setDataSet(DataSet dataSet) {
         this.dataSet = dataSet;
     }
 
