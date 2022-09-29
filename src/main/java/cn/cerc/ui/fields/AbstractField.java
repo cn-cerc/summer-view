@@ -4,11 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import cn.cerc.db.core.ClassConfig;
+import cn.cerc.db.core.DataColumn;
 import cn.cerc.db.core.DataRow;
 import cn.cerc.db.core.DataSource;
 import cn.cerc.db.core.Datetime;
 import cn.cerc.db.core.FastDate;
-import cn.cerc.db.core.DataColumn;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.SummerUI;
 import cn.cerc.ui.core.INameOwner;
@@ -76,6 +76,8 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
     private StickyRow stickyRow = StickyRow.def;
     // 是否超出两行展示为省略号
     private boolean showEllipsis = false;
+    // 名词id
+    private Integer wordId;
 
     public AbstractField(UIComponent owner, String name, String field) {
         this(owner, name, field, 0);
@@ -105,6 +107,15 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
     public AbstractField setMark(UIText mark) {
         this.mark = mark;
         return this;
+    }
+
+    public AbstractField setWordId(Integer id) {
+        this.wordId = id;
+        return this;
+    }
+    
+    public Integer getWordId() {
+        return wordId;
     }
 
     public String getRole() {
@@ -618,7 +629,9 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
     }
 
     public enum StickyRow {
-        def, left, right;
+        def,
+        left,
+        right;
     }
 
     public DataColumn value() {
