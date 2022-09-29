@@ -19,6 +19,7 @@ public class UIFastGrid extends UIComponent implements IGridStyle {
     public UIFastGrid(UIComponent owner) {
         super(owner);
         this.setRootLabel(isPhone() ? "div" : "table");
+        this.setCssClass("dbgrid");
     }
 
     public UIFastGrid setDataSet(DataSet dataSet) {
