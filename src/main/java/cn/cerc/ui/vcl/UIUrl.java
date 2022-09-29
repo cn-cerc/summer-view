@@ -87,4 +87,8 @@ public class UIUrl extends UIA {
         return this.getHref();
     }
 
+    public static String build(String url, String title) {
+        return new UIUrl().setHref(url).setText(title).toString();
+    }
+
 }
