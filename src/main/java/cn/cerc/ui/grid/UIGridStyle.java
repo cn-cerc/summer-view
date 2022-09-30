@@ -103,6 +103,7 @@ public class UIGridStyle implements UIOutputStyleImpl {
             return this.getString();
 
         return switch (dataType) {
+        case "s" -> this.getString();
         case "b" -> this.getBoolean();
         case "n" -> this.getInteger();
         case "f" -> this.getDouble();
