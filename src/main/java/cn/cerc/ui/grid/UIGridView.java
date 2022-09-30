@@ -11,18 +11,19 @@ import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.style.IGridStyle;
 
-public class UIFastGrid extends UIComponent implements IGridStyle {
+public class UIGridView extends UIComponent implements IGridStyle {
     private DataSet dataSet;
     private boolean active;
     private HashSet<FieldMeta> columns = new LinkedHashSet<>();
+    private UIOutputStyleImpl defaultStyle;
 
-    public UIFastGrid(UIComponent owner) {
+    public UIGridView(UIComponent owner) {
         super(owner);
         this.setRootLabel(isPhone() ? "div" : "table");
         this.setCssClass("dbgrid");
     }
 
-    public UIFastGrid setDataSet(DataSet dataSet) {
+    public UIGridView setDataSet(DataSet dataSet) {
         this.dataSet = dataSet;
         return this;
     }
@@ -30,20 +31,27 @@ public class UIFastGrid extends UIComponent implements IGridStyle {
     public FieldMeta addColumn(String fieldCode) {
         if (this.dataSet == null)
             throw new RuntimeException("dataSet is null");
-        FieldMeta meta = dataSet.fields().get(fieldCode);
-        if (meta == null)
-            meta = dataSet.fields().add(fieldCode, FieldKind.Calculated);
-        columns.add(meta);
-        return meta;
+        FieldMeta column = dataSet.fields().get(fieldCode);
+        if (column == null)
+            column = dataSet.fields().add(fieldCode, FieldKind.Calculated);
+        columns.add(column);
+        if (defaultStyle != null)
+            column.onGetText(defaultStyle.getDefault(column));
+        return column;
     }
 
     @Override
     public void output(HtmlWriter html) {
         if (!this.active && this.dataSet != null) {
+            // 若没有指定列时，自动为所有列
             if (columns.size() == 0) {
-                for (var field : dataSet.fields())
-                    columns.add(field);
+                for (var column : dataSet.fields()) {
+                    if (defaultStyle != null)
+                        column.onGetText(defaultStyle.getDefault(column));
+                    columns.add(column);
+                }
             }
+            // 根据不同的设备显示
             if (this.isPhone()) {
                 UIGridBody body = new UIGridBody(this, dataSet);
                 for (var column : columns)
@@ -58,6 +66,15 @@ public class UIFastGrid extends UIComponent implements IGridStyle {
             this.active = true;
         }
         super.output(html);
+    }
+
+    public UIOutputStyleImpl defaultStyle() {
+        return this.defaultStyle;
+    }
+    
+    public UIGridView setDefaultStyle(UIOutputStyleImpl outputStyle) {
+        this.defaultStyle = outputStyle;
+        return this;
     }
 
     public static void main(String[] args) {
@@ -75,9 +92,10 @@ public class UIFastGrid extends UIComponent implements IGridStyle {
         ds.fields().get("name").setName("姓名");
         ds.fields().get("sex").setName("性别").onGetSetText(EditorFactory.ofBoolean("女的", "男的"));
 
-        UIFastGrid grid = new UIFastGrid(null);
+        UIGridView grid = new UIGridView(null);
         grid.setPhone(false);
         grid.setDataSet(ds);
+        grid.setDefaultStyle(new UIGridStyle());
 //        grid.addColumn("sex"); //指定栏位输出
         System.out.println(grid.toString());
         System.out.println(grid.toString());

@@ -115,4 +115,11 @@ public class UIInput extends UIComponent implements IHtml, INameOwner {
         this.setSignProperty("checked", checked);
     }
 
+    public static String html(String key, String value) {
+        UIInput input = new UIInput(null);
+        input.setId(key);
+        input.setValue(value);
+        return input.toString();
+    }
+
 }
