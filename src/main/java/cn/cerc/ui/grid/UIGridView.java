@@ -71,7 +71,7 @@ public class UIGridView extends UIComponent implements IGridStyle {
     public UIOutputStyleImpl defaultStyle() {
         return this.defaultStyle;
     }
-    
+
     public UIGridView setDefaultStyle(UIOutputStyleImpl outputStyle) {
         this.defaultStyle = outputStyle;
         return this;
@@ -99,6 +99,10 @@ public class UIGridView extends UIComponent implements IGridStyle {
 //        grid.addColumn("sex"); //指定栏位输出
         System.out.println(grid.toString());
         System.out.println(grid.toString());
+    }
+
+    public FieldMeta addColumnIt() {
+        return this.addColumn("it").onGetText(data -> "" + data.source().dataSet().recNo()).setName("序");
     }
 
 }
