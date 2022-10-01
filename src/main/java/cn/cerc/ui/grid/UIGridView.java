@@ -3,7 +3,9 @@ package cn.cerc.ui.grid;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 
+import cn.cerc.db.core.DataRow;
 import cn.cerc.db.core.DataSet;
+import cn.cerc.db.core.DataSource;
 import cn.cerc.db.core.FieldMeta;
 import cn.cerc.db.core.FieldMeta.FieldKind;
 import cn.cerc.db.editor.EditorFactory;
@@ -11,7 +13,7 @@ import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.style.IGridStyle;
 
-public class UIGridView extends UIComponent implements IGridStyle {
+public class UIGridView extends UIComponent implements IGridStyle, DataSource {
     private DataSet dataSet;
     private boolean active;
     private HashSet<FieldMeta> columns = new LinkedHashSet<>();
@@ -103,6 +105,15 @@ public class UIGridView extends UIComponent implements IGridStyle {
 
     public FieldMeta addColumnIt() {
         return this.addColumn("it").onGetText(data -> "" + data.source().dataSet().recNo()).setName("序");
+    }
+    @Override
+    public DataRow current() {
+        return dataSet != null ? dataSet.current() : new DataRow();
+    }
+
+    @Override
+    public boolean isReadonly() {
+        return dataSet != null ? dataSet.readonly() : true;
     }
 
 }

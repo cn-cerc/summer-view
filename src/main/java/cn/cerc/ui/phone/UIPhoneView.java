@@ -29,11 +29,6 @@ public class UIPhoneView extends UIComponent implements DataSource {
         return this;
     }
 
-    public UIPhoneView setStyle(UIViewStyleImpl defaultStyle) {
-        this.defaultStyle = defaultStyle;
-        return this;
-    }
-
     public UIPhoneLine addLine(String... fields) {
         UIPhoneLine line = addLine();
         for (var fieldCode : fields) {
@@ -49,17 +44,6 @@ public class UIPhoneView extends UIComponent implements DataSource {
 
     public UIPhoneLine addLine() {
         return new UIPhoneLine(this.block());
-    }
-
-    public UIPhoneView setSource(DataSource source) {
-        if (!(source instanceof DataSet))
-            throw new RuntimeException("only support DataSet");
-        this.dataSet = (DataSet) source;
-        return this;
-    }
-
-    public DataSet source() {
-        return dataSet;
     }
 
     public UIPhoneView setDefaultStyle(UIViewStyleImpl defaultStyle) {
@@ -119,7 +103,7 @@ public class UIPhoneView extends UIComponent implements DataSource {
 
     @Override
     public boolean isReadonly() {
-        return dataSet.readonly();
+        return dataSet != null ? dataSet.readonly() : true;
     }
 
     public List<UIPhoneLine> lines() {
