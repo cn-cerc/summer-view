@@ -93,17 +93,12 @@ public class UIComponent implements IOriginOwner, HtmlContent, Iterable<UICompon
         return this;
     }
 
-    public UIComponent removeChild(UIComponent component) {
+    public UIComponent removeComponent(UIComponent component) {
         if (component != null) {
             components.remove(component);
             this.registerOwner(null);
         }
         return this;
-    }
-
-    @Deprecated
-    public final UIComponent removeComponent(UIComponent child) {
-        return removeChild(child);
     }
 
     protected void registerOwner(UIComponent owner) {
