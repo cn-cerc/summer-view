@@ -66,16 +66,16 @@ public class UIComponent implements IOriginOwner, HtmlContent, Iterable<UICompon
         return origin;
     }
 
+    public final UIComponent getComponent(int index) {
+        return this.components.get(index);
+    }
+
     /**
      * 
      * @return 返回子组件列表
      */
     public final List<UIComponent> getComponents() {
         return this.components;
-    }
-
-    public final UIComponent getComponent(int index) {
-        return this.components.get(index);
     }
 
     /**
