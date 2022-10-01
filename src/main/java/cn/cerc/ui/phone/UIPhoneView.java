@@ -38,7 +38,7 @@ public class UIPhoneView extends UIComponent implements DataSource {
         return line;
     }
 
-    public UIPhoneGridLine addGrid(String... fields) {
+    public UIPhoneGridLine addLineGrid(String... fields) {
         UIPhoneGridLine line = new UIPhoneGridLine(this.block());
         for (var fieldCode : fields) {
             FieldMeta column = dataSet.fields().get(fieldCode);
@@ -137,8 +137,8 @@ public class UIPhoneView extends UIComponent implements DataSource {
         view.setBlock(new UIUrl().setHref("www.baidu.com"));
         new UIUrl(view.addLine()).setText("hello");
         view.addLine("code", "name");
-        view.addGrid("code", "name").split(2, 3);
-        view.addGrid("code", "name").split(2, 3, 2, 3);
+        view.addLineGrid("code", "name").split(2, 3);
+        view.addLineGrid("code", "name").split(2, 3, 2, 3);
         view.setPhone(true);
         System.out.println(view.toString());
     }
