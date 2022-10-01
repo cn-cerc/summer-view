@@ -26,7 +26,7 @@ public class UIPhoneLine extends UIComponent {
     public UIPhoneLine addColumns(String... fields) {
         DataSet dataSet = null;
         UIOutputStyleImpl defaultStyle = null;
-        if (this.getOwner() instanceof UIPhoneView view) {
+        if (this.getOwner() instanceof UIBlockView view) {
             dataSet = view.dataSet();
             defaultStyle = view.defaultStyle();
         }
