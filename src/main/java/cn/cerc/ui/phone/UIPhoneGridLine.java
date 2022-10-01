@@ -5,6 +5,7 @@ import java.text.DecimalFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import cn.cerc.db.core.Utils;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.phone.UIPhoneGridCell.CellTypeEnum;
@@ -39,6 +40,12 @@ public class UIPhoneGridLine extends UIPhoneLine {
 
     @Override
     public void output(HtmlWriter html) {
+        if (this.width == null) {
+            int[] items = new int[this.getChildCount() * 2];
+            for (int i = 0; i < tr.getChildCount(); i++)
+                items[i] = 1;
+            this.split(items);
+        }
         // 指定宽度输出
         boolean titleSplit = this.width.length == tr.getChildCount() * 2;
         if (!(this.width.length == tr.getChildCount() || titleSplit)) {
@@ -53,7 +60,10 @@ public class UIPhoneGridLine extends UIPhoneLine {
             boolean isTitle = titleSplit && i % 2 == 0;
             if (titleSplit && item instanceof UIPhoneGridCell column)
                 column.setCellType(isTitle ? CellTypeEnum.OnlyTitle : CellTypeEnum.OnlyValue);
-            html.print(String.format("<td width='%s'>", this.width[i]));
+            html.print("<td");
+            if (!Utils.isEmpty(this.width[i]))
+                html.print(String.format(" width='%s'", this.width[i]));
+            html.print(">");
             item.setRootLabel(null);
             item.output(html);
             html.print("</td>");
