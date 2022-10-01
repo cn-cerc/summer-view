@@ -84,6 +84,8 @@ public class UIPhoneView extends UIComponent implements DataSource {
 
     @Override
     public void output(HtmlWriter html) {
+        if (!this.isPhone())
+            return;
         html.println("<ul class='phone-view'>");
         dataSet.first();
         while (dataSet.fetch()) {
@@ -144,6 +146,7 @@ public class UIPhoneView extends UIComponent implements DataSource {
         view.addLine("code", "name");
         view.addGrid("code", "name").split(2, 3);
         view.addGrid("code", "name").split(2, 3, 2, 3);
+        view.setPhone(true);
         System.out.println(view.toString());
     }
 

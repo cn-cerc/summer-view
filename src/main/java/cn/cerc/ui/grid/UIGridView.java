@@ -44,6 +44,8 @@ public class UIGridView extends UIComponent implements IGridStyle, DataSource {
 
     @Override
     public void output(HtmlWriter html) {
+        if (this.isPhone())
+            return;
         if (!this.active && this.dataSet != null) {
             // 若没有指定列时，自动为所有列
             if (columns.size() == 0) {
@@ -79,6 +81,20 @@ public class UIGridView extends UIComponent implements IGridStyle, DataSource {
         return this;
     }
 
+    public FieldMeta addColumnIt() {
+        return this.addColumn("it").onGetText(data -> "" + data.source().dataSet().recNo()).setName("序");
+    }
+
+    @Override
+    public DataRow current() {
+        return dataSet != null ? dataSet.current() : new DataRow();
+    }
+
+    @Override
+    public boolean isReadonly() {
+        return dataSet != null ? dataSet.readonly() : true;
+    }
+
     public static void main(String[] args) {
         DataSet ds = new DataSet();
         ds.append();
@@ -100,20 +116,5 @@ public class UIGridView extends UIComponent implements IGridStyle, DataSource {
         grid.setDefaultStyle(new UIGridStyle());
 //        grid.addColumn("sex"); //指定栏位输出
         System.out.println(grid.toString());
-        System.out.println(grid.toString());
     }
-
-    public FieldMeta addColumnIt() {
-        return this.addColumn("it").onGetText(data -> "" + data.source().dataSet().recNo()).setName("序");
-    }
-    @Override
-    public DataRow current() {
-        return dataSet != null ? dataSet.current() : new DataRow();
-    }
-
-    @Override
-    public boolean isReadonly() {
-        return dataSet != null ? dataSet.readonly() : true;
-    }
-
 }
