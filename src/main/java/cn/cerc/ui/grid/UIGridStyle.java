@@ -14,41 +14,37 @@ import cn.cerc.ui.vcl.UIInput;
 
 public class UIGridStyle implements UIViewStyleImpl {
     private static final Logger log = LoggerFactory.getLogger(UIGridStyle.class);
-    public UIGridStateEnum state = UIGridStateEnum.View;
+    public boolean readOnly = true;
     private OnOutput onOutput;
 
-    public enum UIGridStateEnum {
-        View, Input;
-    }
-
     public UIGridStyle() {
-        this(UIGridStateEnum.View);
+        this(true);
     }
 
-    public UIGridStyle(UIGridStateEnum state) {
+    public UIGridStyle(boolean readOnly) {
         super();
-        this.state = state;
+        this.readOnly = readOnly;
     }
 
     public OnGetText getString() {
-        return switch (this.state) {
-        case Input -> data -> UIInput.html(data.key(), data.getString());
-        default -> data -> data.getString();
-        };
+        if (this.readOnly)
+            return data -> UIInput.html(data.key(), data.getString());
+        else
+            return data -> data.getString();
     }
 
     private OnGetText getInteger() {
-        return switch (this.state) {
-        case Input -> data -> UIInput.html(data.key(), data.getString());
-        default -> data -> data.getString();
-        };
+        if (this.readOnly)
+            return data -> UIInput.html(data.key(), data.getString());
+        else
+            return data -> data.getString();
     }
 
     private OnGetText getDouble() {
-        return switch (this.state) {
-        case Input -> data -> UIInput.html(data.key(), data.getString());
-        default -> data -> data.getString();
-        };
+        if (this.readOnly)
+            return data -> UIInput.html(data.key(), data.getString());
+        else
+            return data -> data.getString();
     }
 
     public OnGetText getBoolean() {
@@ -118,7 +114,7 @@ public class UIGridStyle implements UIViewStyleImpl {
     }
 
     public static void main(String[] args) {
-        var style = new UIGridStyle(UIGridStateEnum.View);
+        var style = new UIGridStyle();
         var row = DataRow.of("code", 1);
         var code = row.fields().get("code");
         var data = new DataCell(row, code.code());

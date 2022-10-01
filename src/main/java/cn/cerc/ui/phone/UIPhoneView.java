@@ -10,7 +10,6 @@ import cn.cerc.db.core.FieldMeta;
 import cn.cerc.db.core.FieldMeta.FieldKind;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
-import cn.cerc.ui.grid.UIGridStyle;
 import cn.cerc.ui.grid.UIViewStyleImpl;
 import cn.cerc.ui.vcl.UIUrl;
 
@@ -72,7 +71,7 @@ public class UIPhoneView extends UIComponent implements DataSource {
 
     @Override
     public void output(HtmlWriter html) {
-        html.println("<ul class='phone-dataSet'>");
+        html.println("<ul class='phone-view'>");
         dataSet.first();
         while (dataSet.fetch()) {
             this.setProperty("data-row", "" + (dataSet.recNo() - 1));
@@ -123,11 +122,12 @@ public class UIPhoneView extends UIComponent implements DataSource {
         var ds = new DataSet();
         ds.append().setValue("code", 1).setValue("name", "a");
         ds.append().setValue("code", 2).setValue("name", "b");
-        UIPhoneView view = new UIPhoneView(null);
-        view.setDefaultStyle(new UIGridStyle());
-        view.setDataSet(ds);
-        view.setBlock(new UIUrl().setHref("baidu"));
-        view.addLine("code", "name").split(50, 50);
+        ds.fields().get("code").setName("代码");
+        ds.fields().get("name").setName("名称");
+        UIPhoneView view = new UIPhoneView(null).setDataSet(ds);
+        view.setDefaultStyle(new UIPhoneStyle());
+//        view.setBlock(new UIUrl().setHref("baidu"));
+        view.addLine("code", "name");// .split(50, 50);
         new UIUrl(view.addLine()).setText("hello");
         System.out.println(view.getLine(1).getChild(0).getClass());
         System.out.println(view.toString());
