@@ -9,7 +9,7 @@ public class UIGroupBox extends UIComponent {
     public UIGroupBox(UIComponent owner) {
         super(owner);
         this.setRootLabel("div");
-        this.writeProperty("role", "group");
+        this.setProperty("role", "group");
     }
 
     public UIGroupBox(UIComponent owner, String title) {

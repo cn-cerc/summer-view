@@ -19,7 +19,7 @@ public class UIA extends UIComponent implements IHtml {
 
     @Override
     public void beginOutput(HtmlWriter html) {
-        this.writeProperty("href", this.getHref());
+        this.setProperty("href", this.getHref());
         super.beginOutput(html);
     }
 
@@ -49,20 +49,20 @@ public class UIA extends UIComponent implements IHtml {
     }
 
     public String getOnclick() {
-        return (String) this.readProperty("onclick");
+        return (String) this.getProperty("onclick");
     }
 
     public UIA setOnclick(String onclick) {
-        this.writeProperty("onclick", onclick);
+        this.setProperty("onclick", onclick);
         return this;
     }
 
     public String getTarget() {
-        return (String) this.readProperty("target");
+        return (String) this.getProperty("target");
     }
 
     public UIA setTarget(String target) {
-        this.writeProperty("target", target);
+        this.setProperty("target", target);
         return this;
     }
 

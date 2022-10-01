@@ -24,31 +24,31 @@ public class UIForm extends UIComponent implements IHtml {
         super(owner);
         this.setId(id);
         this.setRootLabel("form");
-        this.writeProperty("method", "post");
+        this.setProperty("method", "post");
     }
 
     public final String getAction() {
-        return (String) this.readProperty("action");
+        return (String) this.getProperty("action");
     }
 
     public final void setAction(String action) {
-        this.writeProperty("action", action);
+        this.setProperty("action", action);
     }
 
     public final String getMethod() {
-        return (String) this.readProperty("method");
+        return (String) this.getProperty("method");
     }
 
     public final void setMethod(String method) {
-        this.writeProperty("method", method);
+        this.setProperty("method", method);
     }
 
     public final String getEnctype() {
-        return (String) this.readProperty("enctype");
+        return (String) this.getProperty("enctype");
     }
 
     public final void setEnctype(String enctype) {
-        this.writeProperty("enctype", enctype);
+        this.setProperty("enctype", enctype);
     }
 
     @Override
@@ -88,7 +88,7 @@ public class UIForm extends UIComponent implements IHtml {
         if (top == null) {
             top = new UIDiv(this);
             top.setOrigin(this.getOrigin());
-            top.writeProperty("role", "top");
+            top.setProperty("role", "top");
         }
         return top;
     }
@@ -97,7 +97,7 @@ public class UIForm extends UIComponent implements IHtml {
         if (bottom == null) {
             bottom = new UIDiv();
             bottom.setOrigin(this.getOrigin());
-            bottom.writeProperty("role", "bottom");
+            bottom.setProperty("role", "bottom");
         }
         return bottom;
     }

@@ -43,41 +43,41 @@ public class UISpan extends UIComponent implements IHtml {
     }
 
     public String getRole() {
-        return (String) this.readProperty("role");
+        return (String) this.getProperty("role");
     }
 
     public UISpan setRole(String role) {
-        this.writeProperty("role", role);
+        this.setProperty("role", role);
         return this;
     }
 
     public String getOnclick() {
-        return (String) this.readProperty("onclick");
+        return (String) this.getProperty("onclick");
     }
 
     public UISpan setOnclick(String onclick) {
-        this.writeProperty("onclick", onclick);
+        this.setProperty("onclick", onclick);
         return this;
     }
 
     @Deprecated
     private String getUrl() {
-        return (String) this.url.readProperty("href");
+        return (String) this.url.getProperty("href");
     }
 
     public UISpan setUrl(String href) {
-        this.url.writeProperty("href", href);
+        this.url.setProperty("href", href);
         return this;
     }
 
     @Deprecated
     private String getTarget() {
-        return (String) url.readProperty("target");
+        return (String) url.getProperty("target");
     }
 
     @Deprecated
     public UISpan setTarget(String target) {
-        url.writeProperty("target", target);
+        url.setProperty("target", target);
         return this;
     }
 

@@ -281,11 +281,11 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
     }
 
     public String getPlaceholder() {
-        return (String) content.readProperty("placeholder");
+        return (String) content.getProperty("placeholder");
     }
 
     public AbstractField setPlaceholder(String placeholder) {
-        this.content.writeProperty("placeholder", placeholder);
+        this.content.setProperty("placeholder", placeholder);
         return this;
     }
 
@@ -345,10 +345,10 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
             content.setCssClass(this.CSSClass_phone);
             content.setValue(value != null ? value : this.getText());
             content.setReadonly(this.isReadonly());
-            content.writeProperty("autocomplete", this.autocomplete ? "on" : "off");
-            content.writeProperty("pattern", this.pattern);
-            content.writeProperty("oninput", this.oninput);
-            content.writeProperty("onclick", this.onclick);
+            content.setProperty("autocomplete", this.autocomplete ? "on" : "off");
+            content.setProperty("pattern", this.pattern);
+            content.setProperty("oninput", this.oninput);
+            content.setProperty("onclick", this.onclick);
             content.setSignProperty("required", this.required);
             content.setSignProperty("autofocus", this.autofocus);
         }

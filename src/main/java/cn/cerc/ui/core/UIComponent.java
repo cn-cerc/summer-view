@@ -77,21 +77,27 @@ public class UIComponent implements IOriginOwner, HtmlContent, Iterable<UICompon
 
     public UIComponent addComponent(UIComponent component) {
         if (component != null && !components.contains(component)) {
-            component.owner = this;
-            if (component.origin == null)
-                component.origin = this.origin != null ? this.origin : this;
             components.add(component);
+            component.registerOwner(this);
         }
         return this;
     }
 
     public UIComponent removeComponent(UIComponent component) {
         if (component != null) {
-            component.origin = null;
-            component.owner = null;
             components.remove(component);
+            this.registerOwner(null);
         }
         return this;
+    }
+
+    protected void registerOwner(UIComponent owner) {
+        this.owner = owner;
+        if (owner == null)
+            this.origin = null;
+        else if (this.origin == null) {
+            this.origin = owner.origin != null ? owner.origin : owner;
+        }
     }
 
     @Override
@@ -136,13 +142,23 @@ public class UIComponent implements IOriginOwner, HtmlContent, Iterable<UICompon
         return this;
     }
 
-    public UIComponent writeProperty(String key, Object value) {
+    public UIComponent setProperty(String key, Object value) {
         propertys.put(key, value);
         return this;
     }
 
-    public final Object readProperty(String key) {
+    @Deprecated
+    public UIComponent writeProperty(String key, Object value) {
+        return this.setProperty(key, value);
+    }
+
+    public final Object getProperty(String key) {
         return propertys.get(key);
+    }
+
+    @Deprecated
+    public final Object readProperty(String key) {
+        return this.getProperty(key);
     }
 
     protected Map<String, Object> getPropertys() {

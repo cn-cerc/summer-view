@@ -31,10 +31,10 @@ public class UIInput extends UIComponent implements IHtml, INameOwner {
     public void beginOutput(HtmlWriter html) {
         if (this.title != null)
             html.print(this.title);
-        this.writeProperty("autocomplete", "off");// 默认关闭浏览器表单自动记录
-        this.writeProperty("name", this.getName());
-        this.writeProperty("type", this.hidden ? "hidden" : this.inputType);
-        this.writeProperty("value", this.value);
+        this.setProperty("autocomplete", "off");// 默认关闭浏览器表单自动记录
+        this.setProperty("name", this.getName());
+        this.setProperty("type", this.hidden ? "hidden" : this.inputType);
+        this.setProperty("value", this.value);
         super.beginOutput(html);
     }
 
@@ -76,11 +76,11 @@ public class UIInput extends UIComponent implements IHtml, INameOwner {
     }
 
     public String getPlaceholder() {
-        return (String) this.readProperty("placeholder");
+        return (String) this.getProperty("placeholder");
     }
 
     public void setPlaceholder(String placeholder) {
-        this.writeProperty("placeholder", placeholder);
+        this.setProperty("placeholder", placeholder);
     }
 
     public String getInputType() {

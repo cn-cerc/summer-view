@@ -28,7 +28,7 @@ public class UIImage extends UIComponent implements IHtml {
         String url = this.src;
         if (this.staticPath != null && this.process != null && !Utils.isEmpty(process.getCommand()))
             url += String.format("?x-oss-process=image%s", process.getCommand());
-        this.writeProperty("src", new StaticFile(StaticFileType.imageFile, url).toString());
+        this.setProperty("src", new StaticFile(StaticFileType.imageFile, url).toString());
         html.print("<").print(getRootLabel());
         this.outputPropertys(html);
         html.print("/>");
@@ -56,47 +56,47 @@ public class UIImage extends UIComponent implements IHtml {
     }
 
     public String getWidth() {
-        return (String) this.readProperty("width");
+        return (String) this.getProperty("width");
     }
 
     public UIImage setWidth(String width) {
-        this.writeProperty("width", width);
+        this.setProperty("width", width);
         return this;
     }
 
     public String getHeight() {
-        return (String) this.readProperty("height");
+        return (String) this.getProperty("height");
     }
 
     public UIImage setHeight(String height) {
-        this.writeProperty("height", height);
+        this.setProperty("height", height);
         return this;
     }
 
     public String getRole() {
-        return (String) this.readProperty("role");
+        return (String) this.getProperty("role");
     }
 
     public UIImage setRole(String role) {
-        this.writeProperty("role", role);
+        this.setProperty("role", role);
         return this;
     }
 
     public String getOnclick() {
-        return (String) this.readProperty("onclick");
+        return (String) this.getProperty("onclick");
     }
 
     public UIImage setOnclick(String onclick) {
-        this.writeProperty("onclick", onclick);
+        this.setProperty("onclick", onclick);
         return this;
     }
 
     public String getAlt() {
-        return (String) this.readProperty("alt");
+        return (String) this.getProperty("alt");
     }
 
     public UIImage setAlt(String alt) {
-        this.writeProperty("alt", alt);
+        this.setProperty("alt", alt);
         return this;
     }
 
