@@ -15,7 +15,7 @@ import cn.cerc.mis.core.IForm;
 import cn.cerc.mis.core.IOriginOwner;
 
 public class UIComponent implements IOriginOwner, HtmlContent, Iterable<UIComponent> {
-    private List<UIComponent> children = new ArrayList<>();
+    private List<UIComponent> components = new ArrayList<>();
     private Map<String, Object> propertys = new HashMap<>();
     private Set<String> signProperty = new HashSet<>();
     private UIComponent owner;
@@ -71,23 +71,23 @@ public class UIComponent implements IOriginOwner, HtmlContent, Iterable<UICompon
      * @return 返回子组件列表
      */
     public final List<UIComponent> getComponents() {
-        return this.children;
+        return this.components;
     }
 
     public final UIComponent getChild(int index) {
-        return this.children.get(index);
+        return this.components.get(index);
     }
 
     /**
      * @return 返回子组件的数量
      */
     public final int getComponentCount() {
-        return children.size();
+        return components.size();
     }
 
     public UIComponent addChild(UIComponent child) {
-        if (child != null && !children.contains(child)) {
-            children.add(child);
+        if (child != null && !components.contains(child)) {
+            components.add(child);
             child.registerOwner(this);
         }
         return this;
@@ -100,7 +100,7 @@ public class UIComponent implements IOriginOwner, HtmlContent, Iterable<UICompon
 
     public UIComponent removeChild(UIComponent component) {
         if (component != null) {
-            children.remove(component);
+            components.remove(component);
             this.registerOwner(null);
         }
         return this;
@@ -129,7 +129,7 @@ public class UIComponent implements IOriginOwner, HtmlContent, Iterable<UICompon
 
     @Override
     public Iterator<UIComponent> iterator() {
-        return children.iterator();
+        return components.iterator();
     }
 
     public final String getId() {
