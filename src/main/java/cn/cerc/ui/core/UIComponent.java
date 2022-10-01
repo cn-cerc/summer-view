@@ -74,7 +74,7 @@ public class UIComponent implements IOriginOwner, HtmlContent, Iterable<UICompon
         return this.components;
     }
 
-    public final UIComponent getChild(int index) {
+    public final UIComponent getComponent(int index) {
         return this.components.get(index);
     }
 

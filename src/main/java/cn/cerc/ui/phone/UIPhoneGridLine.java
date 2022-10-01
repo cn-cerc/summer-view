@@ -56,7 +56,7 @@ public class UIPhoneGridLine extends UIPhoneLine {
         tr.beginOutput(html);
         // 输出每一列
         for (int i = 0; i < this.width.length; i++) {
-            UIComponent item = titleSplit ? tr.getChild(i / 2) : tr.getChild(i);
+            UIComponent item = titleSplit ? tr.getComponent(i / 2) : tr.getComponent(i);
             boolean isTitle = titleSplit && i % 2 == 0;
             if (titleSplit && item instanceof UIPhoneGridCell column)
                 column.setCellType(isTitle ? CellTypeEnum.OnlyTitle : CellTypeEnum.OnlyValue);
