@@ -14,10 +14,6 @@ public class UIGridBody extends UIComponent {
     private HashSet<FieldMeta> columns = new LinkedHashSet<>();
     private DataSet dataSet;
 
-    public UIGridBody(UIComponent owner) {
-        this(owner, null);
-    }
-
     public UIGridBody(UIComponent owner, DataSet dataSet) {
         super(owner);
         this.dataSet = dataSet;

@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -16,7 +15,7 @@ import cn.cerc.mis.core.IForm;
 import cn.cerc.mis.core.IOriginOwner;
 
 public class UIComponent implements IOriginOwner, HtmlContent, Iterable<UIComponent> {
-    private HashSet<UIComponent> components = new LinkedHashSet<>();
+    private List<UIComponent> items = new ArrayList<>();
     private Map<String, Object> propertys = new HashMap<>();
     private Set<String> signProperty = new HashSet<>();
     private UIComponent owner;
@@ -67,17 +66,26 @@ public class UIComponent implements IOriginOwner, HtmlContent, Iterable<UICompon
         return origin;
     }
 
-    public final HashSet<UIComponent> getComponents() {
-        return components;
+    @Deprecated
+    public final List<UIComponent> getComponents() {
+        return this.items;
+    }
+
+    public final List<UIComponent> items() {
+        return this.items;
+    }
+
+    public final UIComponent getItem(int index) {
+        return this.items.get(index);
     }
 
     public int getComponentCount() {
-        return components.size();
+        return items.size();
     }
 
     public UIComponent addComponent(UIComponent component) {
-        if (component != null && !components.contains(component)) {
-            components.add(component);
+        if (component != null && !items.contains(component)) {
+            items.add(component);
             component.registerOwner(this);
         }
         return this;
@@ -85,7 +93,7 @@ public class UIComponent implements IOriginOwner, HtmlContent, Iterable<UICompon
 
     public UIComponent removeComponent(UIComponent component) {
         if (component != null) {
-            components.remove(component);
+            items.remove(component);
             this.registerOwner(null);
         }
         return this;
@@ -109,9 +117,6 @@ public class UIComponent implements IOriginOwner, HtmlContent, Iterable<UICompon
 
     @Override
     public Iterator<UIComponent> iterator() {
-        // 警告：此处不可直接返回 components.iterator
-        List<UIComponent> items = new ArrayList<>();
-        items.addAll(components);
         return items.iterator();
     }
 
