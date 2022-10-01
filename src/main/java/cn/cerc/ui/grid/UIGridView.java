@@ -21,7 +21,7 @@ public class UIGridView extends UIComponent implements IGridStyle, DataSource {
 
     public UIGridView(UIComponent owner) {
         super(owner);
-        this.setRootLabel(isPhone() ? "div" : "table");
+        this.setRootLabel("table");
         this.setCssClass("dbgrid");
     }
 
