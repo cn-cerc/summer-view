@@ -14,37 +14,33 @@ import cn.cerc.ui.vcl.UIInput;
 
 public class UIGridStyle implements UIViewStyleImpl {
     private static final Logger log = LoggerFactory.getLogger(UIGridStyle.class);
-    public boolean readOnly = true;
+    public boolean isInput = false;
     private OnOutput onOutput;
 
     public UIGridStyle() {
         this(true);
     }
 
-    public UIGridStyle(boolean readOnly) {
+    public UIGridStyle(boolean isInput) {
         super();
-        this.readOnly = readOnly;
+        this.isInput = isInput;
     }
 
     public OnGetText getString() {
-        if (this.readOnly)
-            return data -> UIInput.html(data.key(), data.getString());
-        else
-            return data -> data.getString();
+        return data -> {
+            String result = data.getString();
+            if (this.isInput)
+                return UIInput.html(data.key(), result);
+            return result;
+        };
     }
 
     private OnGetText getInteger() {
-        if (this.readOnly)
-            return data -> UIInput.html(data.key(), data.getString());
-        else
-            return data -> data.getString();
+        return getString();
     }
 
     private OnGetText getDouble() {
-        if (this.readOnly)
-            return data -> UIInput.html(data.key(), data.getString());
-        else
-            return data -> data.getString();
+        return getString();
     }
 
     public OnGetText getBoolean() {
