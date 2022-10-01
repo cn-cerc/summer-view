@@ -17,10 +17,12 @@ public class UIPhoneView extends UIComponent implements DataSource {
     private UIOutputStyleImpl defaultStyle;
     private UIComponent block;
     private DataSet dataSet;
+    private boolean active;
 
     public UIPhoneView(UIComponent owner) {
         super(owner);
         this.setRootLabel("li");
+        this.setActive(this.isPhone());
     }
 
     public UIPhoneView setDataSet(DataSet dataSet) {
@@ -77,7 +79,7 @@ public class UIPhoneView extends UIComponent implements DataSource {
 
     @Override
     public void output(HtmlWriter html) {
-        if (!this.isPhone())
+        if (!this.active())
             return;
         html.println("<ul class='phone-view'>");
         dataSet.first();
@@ -126,6 +128,18 @@ public class UIPhoneView extends UIComponent implements DataSource {
         return lines().get(index);
     }
 
+    public DataSet dataSet() {
+        return dataSet;
+    }
+
+    public boolean active() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
     public static void main(String[] args) {
         var ds = new DataSet();
         ds.append().setValue("code", 1).setValue("name", "a");
@@ -141,10 +155,6 @@ public class UIPhoneView extends UIComponent implements DataSource {
         view.addLineGrid("code", "name").split(2, 3, 2, 3);
         view.setPhone(true);
         System.out.println(view.toString());
-    }
-
-    public DataSet dataSet() {
-        return dataSet;
     }
 
 }
