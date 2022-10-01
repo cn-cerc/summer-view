@@ -80,7 +80,4 @@ public class UIPhoneGridLine extends UIPhoneLine {
         return new UIPhoneGridCell(tr).setFieldCode(fieldCode);
     }
 
-    public static void main(String[] args) {
-        System.out.println((float) 2 / 5);
-    }
 }

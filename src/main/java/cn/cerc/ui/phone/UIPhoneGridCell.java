@@ -3,7 +3,7 @@ package cn.cerc.ui.phone;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 
-public class UIPhoneGridCell extends UIPhoneItem {
+public class UIPhoneGridCell extends UIPhoneCell {
     private CellTypeEnum cellType = CellTypeEnum.Combo;
 
     public enum CellTypeEnum {

@@ -4,16 +4,15 @@ import cn.cerc.db.core.DataSource;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 
-public class UIPhoneItem extends UIComponent {
-    private DataSource dataSource;
+public class UIPhoneCell extends UIComponent {
     private String fieldCode;
 
-    public UIPhoneItem(UIComponent owner) {
+    public UIPhoneCell(UIComponent owner) {
         super(owner);
         this.setRootLabel("span");
     }
 
-    public UIPhoneItem setFieldCode(String fieldCode) {
+    public UIPhoneCell setFieldCode(String fieldCode) {
         this.fieldCode = fieldCode;
         return this;
     }
@@ -24,31 +23,32 @@ public class UIPhoneItem extends UIComponent {
 
     @Override
     public void output(HtmlWriter html) {
-        if (this.dataSource != null)
+        DataSource dataSource = dataSource();
+        if (dataSource != null)
             this.setProperty("data-field", this.fieldCode);
         this.beginOutput(html);
-        if (dataSource != null)
-            html.print(dataSource.current().getText(fieldCode));
-        else
+        if (dataSource != null) {
+            String name = dataSource.current().fields().get(fieldCode).name();
+            String text = dataSource.current().getText(fieldCode);
+            html.print(name);
+            html.print(":");
+            html.print(text);
+        } else
             html.print("dataSource is null");
         this.endOutput(html);
     }
 
-    @Override
-    protected void registerOwner(UIComponent owner) {
-        super.registerOwner(owner);
-        UIComponent parent = owner;
+    protected DataSource dataSource() {
+        DataSource result = null;
+        UIComponent parent = this.getOwner();
         while (parent != null) {
             if (parent instanceof DataSource) {
-                dataSource = (DataSource) parent;
+                result = (DataSource) parent;
                 break;
             }
             parent = parent.getOwner();
         }
-    }
-
-    public final DataSource dataSource() {
-        return dataSource;
+        return result;
     }
 
 }

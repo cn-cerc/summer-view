@@ -34,14 +34,7 @@ public class UIPhoneView extends UIComponent implements DataSource {
 
     public UIPhoneLine addLine(String... fields) {
         UIPhoneLine line = addLine();
-        for (var fieldCode : fields) {
-            FieldMeta column = dataSet.fields().get(fieldCode);
-            if (column == null)
-                column = dataSet.fields().add(fieldCode, FieldKind.Calculated);
-            if (defaultStyle != null)
-                column.onGetText(defaultStyle.getDefault(column));
-            line.addColumn(fieldCode);
-        }
+        line.addColumns(fields);
         return line;
     }
 
@@ -148,6 +141,10 @@ public class UIPhoneView extends UIComponent implements DataSource {
         view.addGrid("code", "name").split(2, 3, 2, 3);
         view.setPhone(true);
         System.out.println(view.toString());
+    }
+
+    public DataSet dataSet() {
+        return dataSet;
     }
 
 }
