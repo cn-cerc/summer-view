@@ -72,7 +72,7 @@ public abstract class AbstractPage extends UIComponent implements IPage, IUserLa
 
     @Override
     public void output(HtmlWriter html) {
-        for (UIComponent component : this.getComponents()) {
+        for (UIComponent component : this.children()) {
             component.output(html);
         }
     }

@@ -37,7 +37,7 @@ public class UIPhoneLine extends UIComponent {
         html.print("<tr>");
 
         int i = 0;
-        for (var item : this.getComponents()) {
+        for (var item : this.children()) {
             int col = this.width[i++];
             html.print(String.format("<td width='%d%%'>", col));
             item.output(html);

@@ -78,10 +78,10 @@ public class UIPhoneView extends UIComponent implements DataSource {
             this.setProperty("data-row", "" + (dataSet.recNo() - 1));
             this.beginOutput(html);
             html.println("");
-            for (UIComponent item : this.getComponents()) {
+            for (UIComponent item : this.children()) {
                 item.beginOutput(html);
                 var line = 0;
-                for (UIComponent child : item.getComponents()) {
+                for (UIComponent child : item.children()) {
                     child.setProperty("data-line", "" + (line++));
                     child.output(html);
                     if (line < item.getChildCount())
@@ -108,7 +108,7 @@ public class UIPhoneView extends UIComponent implements DataSource {
 
     public List<UIPhoneLine> lines() {
         List<UIPhoneLine> lines = new ArrayList<>();
-        for (var item : this.block().getComponents()) {
+        for (var item : this.block().children()) {
             if (item instanceof UIPhoneLine line)
                 lines.add(line);
         }

@@ -66,19 +66,28 @@ public class UIComponent implements IOriginOwner, HtmlContent, Iterable<UICompon
         return origin;
     }
 
+    /**
+     * 原函数名为 getComponents
+     * 
+     * @return 返回子组件列表
+     */
+    public final List<UIComponent> children() {
+        return this.children;
+    }
+
     @Deprecated
     public final List<UIComponent> getComponents() {
         return this.children();
     }
 
-    public final List<UIComponent> children() {
-        return this.children;
-    }
-
     public final UIComponent getChild(int index) {
         return this.children.get(index);
     }
-
+    /**
+     * 原函数名为 getComponentCount
+     * 
+     * @return 返回子组件的数量
+     */
     public int getChildCount() {
         return children.size();
     }

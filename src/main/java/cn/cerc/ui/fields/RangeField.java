@@ -35,7 +35,7 @@ public class RangeField extends AbstractField {
     @Override
     public void updateField() {
         AbstractField child = null;
-        for (UIComponent component : this.getComponents()) {
+        for (UIComponent component : this.children()) {
             if (component instanceof AbstractField) {
                 child = (AbstractField) component;
                 child.updateField();

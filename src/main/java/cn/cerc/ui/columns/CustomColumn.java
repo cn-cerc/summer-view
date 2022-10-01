@@ -35,13 +35,13 @@ public class CustomColumn extends AbstractColumn implements IDataColumn {
     @Override
     public void outputCell(HtmlWriter html) {
         if (defineCell != null) {
-            this.getComponents().clear();
+            this.children().clear();
             defineCell.execute(this, getRecord());
         } else if (defineLine != null) {
-            this.getComponents().clear();
+            this.children().clear();
             defineLine.execute(this, getRecord());
         }
-        for (UIComponent item : this.getComponents()) {
+        for (UIComponent item : this.children()) {
             html.print(item.toString());
         }
     }
@@ -49,13 +49,13 @@ public class CustomColumn extends AbstractColumn implements IDataColumn {
     @Override
     public void outputLine(HtmlWriter html) {
         if (defineLine != null) {
-            this.getComponents().clear();
+            this.children().clear();
             defineLine.execute(this, getRecord());
         } else if (defineCell != null) {
-            this.getComponents().clear();
+            this.children().clear();
             defineCell.execute(this, getRecord());
         }
-        for (UIComponent item : this.getComponents()) {
+        for (UIComponent item : this.children()) {
             html.print(item.toString());
         }
     }
