@@ -88,11 +88,11 @@ public class DataGrid extends UIComponent implements DataSource, IGridStyle {
     }
 
     @Override
-    public UIComponent addComponent(UIComponent child) {
+    public UIComponent addChild(UIComponent child) {
         if (child instanceof AbstractField) {
             child.setOwner(getMasterLine());
         } else {
-            super.addComponent(child);
+            super.addChild(child);
         }
         return this;
     }

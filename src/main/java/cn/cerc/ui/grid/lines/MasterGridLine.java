@@ -72,7 +72,7 @@ public class MasterGridLine extends AbstractGridLine {
     }
 
     @Override
-    public UIComponent addComponent(UIComponent child) {
+    public UIComponent addChild(UIComponent child) {
         if (child instanceof AbstractField) {
             AbstractField field = (AbstractField) child;
             getFields().add(field);
@@ -82,9 +82,9 @@ public class MasterGridLine extends AbstractGridLine {
 
             col.setAlign(field.getAlign());
             col.setRole(field.getField());
-            col.addComponent(field);
+            col.addChild(field);
         } else {
-            super.addComponent(child);
+            super.addChild(child);
         }
         return this;
     }

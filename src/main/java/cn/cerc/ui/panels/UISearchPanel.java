@@ -105,11 +105,11 @@ public class UISearchPanel extends UIComponent implements ISearchPanelStyle {
     }
 
     @Override
-    public UIComponent addComponent(UIComponent component) {
+    public UIComponent addChild(UIComponent component) {
         if (component instanceof IColumn) {
-            this.filterPanel.addComponent(component);
+            this.filterPanel.addChild(component);
         } else {
-            super.addComponent(component);
+            super.addChild(component);
         }
         return this;
     }

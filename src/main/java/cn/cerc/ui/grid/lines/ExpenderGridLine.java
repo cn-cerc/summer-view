@@ -57,7 +57,7 @@ public class ExpenderGridLine extends AbstractGridLine {
     }
 
     @Override
-    public UIComponent addComponent(UIComponent child) {
+    public UIComponent addChild(UIComponent child) {
         if (child instanceof AbstractField) {
             AbstractField field = (AbstractField) child;
             getFields().add(field);
@@ -69,9 +69,9 @@ public class ExpenderGridLine extends AbstractGridLine {
             } else {
                 cell = getCells().get(0);
             }
-            cell.addComponent(field);
+            cell.addChild(field);
         } else {
-            super.addComponent(child);
+            super.addChild(child);
         }
         return this;
     }

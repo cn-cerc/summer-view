@@ -240,16 +240,16 @@ public class UIGrid extends UIComponent implements IReadonlyOwner, IGridStyle {
     }
 
     @Override
-    public UIComponent addComponent(UIComponent component) {
+    public UIComponent addChild(UIComponent component) {
         if (component instanceof IColumn) {
             IColumn column = (IColumn) component;
             if (component instanceof IDataColumn) {
                 ((IDataColumn) column).setReadonly(readonly);
             }
-            getMasterLine().addComponent(component);
+            getMasterLine().addChild(component);
             columns.add(column);
         } else {
-            super.addComponent(component);
+            super.addChild(component);
         }
         return this;
     }

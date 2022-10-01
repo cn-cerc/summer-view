@@ -49,11 +49,11 @@ public abstract class AbstractPage extends UIComponent implements IPage, IUserLa
     }
 
     @Override
-    public UIComponent addComponent(UIComponent component) {
+    public UIComponent addChild(UIComponent component) {
         if (component.getId() != null) {
             this.put(component.getId(), component);
         }
-        super.addComponent(component);
+        super.addChild(component);
         return this;
     }
 

@@ -106,7 +106,7 @@ public class PhoneLine extends UIComponent implements DataSource {
 
     public PhoneLine addItem(AbstractField... fields) {
         for (AbstractField field : fields) {
-            addComponent(field);
+            addChild(field);
         }
         return this;
     }

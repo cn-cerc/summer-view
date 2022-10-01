@@ -26,7 +26,7 @@ public class RowCell extends UIComponent {
     }
 
     public void addField(AbstractField field) {
-        this.addComponent(field);
+        this.addChild(field);
     }
 
     public int getColSpan() {

@@ -96,11 +96,11 @@ public class UIViewPanel extends UIComponent implements IEditPanelStyle {
     }
 
     @Override
-    public UIComponent addComponent(UIComponent component) {
+    public UIComponent addChild(UIComponent component) {
         if (component instanceof IColumn) {
-            this.content.addComponent(component);
+            this.content.addChild(component);
         } else {
-            super.addComponent(component);
+            super.addChild(component);
         }
         return this;
     }

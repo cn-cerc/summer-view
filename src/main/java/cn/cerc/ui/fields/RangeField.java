@@ -23,12 +23,12 @@ public class RangeField extends AbstractField {
     }
 
     @Override
-    public RangeField addComponent(UIComponent component) {
+    public RangeField addChild(UIComponent component) {
         if (this.getChildCount() == 1)
-            super.addComponent(new UIText(this).setText("-"));
+            super.addChild(new UIText(this).setText("-"));
         if (component instanceof AbstractField)
             ((AbstractField) component).setCSSClass_phone("price");
-        super.addComponent(component);
+        super.addChild(component);
         return this;
     }
 

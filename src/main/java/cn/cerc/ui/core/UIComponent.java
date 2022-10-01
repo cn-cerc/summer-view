@@ -93,24 +93,34 @@ public class UIComponent implements IOriginOwner, HtmlContent, Iterable<UICompon
     }
 
     @Deprecated
-    public int getComponentCount() {
+    public final int getComponentCount() {
         return getChildCount();
     }
 
-    public UIComponent addComponent(UIComponent component) {
-        if (component != null && !children.contains(component)) {
-            children.add(component);
-            component.registerOwner(this);
+    public UIComponent addChild(UIComponent child) {
+        if (child != null && !children.contains(child)) {
+            children.add(child);
+            child.registerOwner(this);
         }
         return this;
     }
 
-    public UIComponent removeComponent(UIComponent component) {
+    @Deprecated
+    public final UIComponent addComponent(UIComponent child) {
+        return addChild(child);
+    }
+
+    public UIComponent removeChild(UIComponent component) {
         if (component != null) {
             children.remove(component);
             this.registerOwner(null);
         }
         return this;
+    }
+
+    @Deprecated
+    public final UIComponent removeComponent(UIComponent child) {
+        return removeChild(child);
     }
 
     protected void registerOwner(UIComponent owner) {
@@ -167,7 +177,7 @@ public class UIComponent implements IOriginOwner, HtmlContent, Iterable<UICompon
     }
 
     @Deprecated
-    public UIComponent writeProperty(String key, Object value) {
+    public final UIComponent writeProperty(String key, Object value) {
         return this.setProperty(key, value);
     }
 
