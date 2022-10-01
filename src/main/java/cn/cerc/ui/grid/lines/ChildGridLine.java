@@ -56,7 +56,7 @@ public class ChildGridLine extends AbstractGridLine {
     }
 
     @Override
-    public UIComponent addChild(UIComponent child) {
+    public UIComponent addComponent(UIComponent child) {
         if (child instanceof AbstractField) {
             AbstractField field = (AbstractField) child;
             getFields().add(field);
@@ -64,9 +64,9 @@ public class ChildGridLine extends AbstractGridLine {
             cell.setAlign(field.getAlign());
             cell.setRole(field.getField());
             getCells().add(cell);
-            cell.addChild(field);
+            cell.addComponent(field);
         } else {
-            super.addChild(child);
+            super.addComponent(child);
         }
         return this;
     }

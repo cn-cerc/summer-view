@@ -14,8 +14,8 @@ public class UIPhoneLine extends UIComponent {
     }
 
     @Override
-    public UIPhoneLine addChild(UIComponent child) {
-        super.addChild(child);
+    public UIPhoneLine addComponent(UIComponent child) {
+        super.addComponent(child);
         return this;
     }
 
@@ -44,7 +44,7 @@ public class UIPhoneLine extends UIComponent {
     }
 
     public UIPhoneLine addIt() {
-        addChild(new UIPhoneIt());
+        addComponent(new UIPhoneIt());
         return this;
     }
 

@@ -85,7 +85,7 @@ public class UIInfoList extends UIComponent {
         }
         Line line = this.newLine();
         for (UIComponent component : components) {
-            line.addChild(component);
+            line.addComponent(component);
         }
         return this;
     }

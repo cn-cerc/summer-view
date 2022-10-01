@@ -116,11 +116,11 @@ public class UIAppendPanel extends UIComponent implements IEditPanelStyle {
     }
 
     @Override
-    public UIComponent addChild(UIComponent component) {
+    public UIComponent addComponent(UIComponent component) {
         if (component instanceof IColumn) {
-            this.inputPanel.addChild(component);
+            this.inputPanel.addComponent(component);
         } else {
-            super.addChild(component);
+            super.addComponent(component);
         }
         return this;
     }

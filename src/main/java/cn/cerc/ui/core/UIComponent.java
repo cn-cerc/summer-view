@@ -85,17 +85,12 @@ public class UIComponent implements IOriginOwner, HtmlContent, Iterable<UICompon
         return components.size();
     }
 
-    public UIComponent addChild(UIComponent child) {
+    public UIComponent addComponent(UIComponent child) {
         if (child != null && !components.contains(child)) {
             components.add(child);
             child.registerOwner(this);
         }
         return this;
-    }
-
-    @Deprecated
-    public final UIComponent addComponent(UIComponent child) {
-        return addChild(child);
     }
 
     public UIComponent removeChild(UIComponent component) {

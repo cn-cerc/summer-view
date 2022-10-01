@@ -33,8 +33,8 @@ public abstract class AbstractGridLine extends UIComponent implements DataSource
     }
 
     @Override
-    public UIComponent addChild(UIComponent component) {
-        super.addChild(component);
+    public UIComponent addComponent(UIComponent component) {
+        super.addComponent(component);
         if (component instanceof AbstractField) {
             AbstractField field = (AbstractField) component;
             field.setVisible(false);

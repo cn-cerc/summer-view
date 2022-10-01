@@ -359,7 +359,7 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
     @Override
     public void endOutput(HtmlWriter html) {
         if (this.showStar) {
-            new UIFont(null).addChild(new UIText().setText("*")).output(html);
+            new UIFont(null).addComponent(new UIText().setText("*")).output(html);
         }
         if (!this.hidden) {
             UISpan span = new UISpan(null);

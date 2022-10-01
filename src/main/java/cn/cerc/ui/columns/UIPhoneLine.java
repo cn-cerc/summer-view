@@ -95,10 +95,10 @@ public class UIPhoneLine extends UIComponent implements IReadonlyOwner {
         }
 
         @Override
-        public UIComponent addChild(UIComponent owner) {
-            super.addChild(owner);
+        public UIComponent addComponent(UIComponent owner) {
+            super.addComponent(owner);
             if (attachLine != null) {
-                attachLine.addChild(owner);
+                attachLine.addComponent(owner);
             }
             return this;
         }
