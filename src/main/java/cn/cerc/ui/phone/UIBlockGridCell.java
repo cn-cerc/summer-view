@@ -1,5 +1,6 @@
 package cn.cerc.ui.phone;
 
+import cn.cerc.db.core.Utils;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 
@@ -29,16 +30,20 @@ public class UIBlockGridCell extends UIBlockCell {
             this.setCssProperty("data-field", this.fieldCode());
         this.beginOutput(html);
         if (dataSource != null) {
+            String name = dataSource.current().fields().get(fieldCode).name();
             switch (this.cellType) {
             case OnlyTitle:
-                html.print(dataSource.current().fields().get(fieldCode).name());
+                if (!Utils.isEmpty(name))
+                    html.print(name);
                 break;
             case OnlyValue:
                 html.print(dataSource.current().getText(fieldCode));
                 break;
             default:
-                html.print(dataSource.current().fields().get(fieldCode).name());
-                html.print(": ");
+                if (!Utils.isEmpty(name)) {
+                    html.print(name);
+                    html.print(":");
+                }
                 html.print(dataSource.current().getText(fieldCode));
             }
         } else

@@ -1,6 +1,7 @@
 package cn.cerc.ui.phone;
 
 import cn.cerc.db.core.DataSource;
+import cn.cerc.db.core.Utils;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 
@@ -29,10 +30,11 @@ public class UIBlockCell extends UIComponent {
         this.beginOutput(html);
         if (dataSource != null) {
             String name = dataSource.current().fields().get(fieldCode).name();
-            String text = dataSource.current().getText(fieldCode);
-            html.print(name);
-            html.print(":");
-            html.print(text);
+            if (!Utils.isEmpty(name)) {
+                html.print(name);
+                html.print(":");
+            }
+            html.print(dataSource.current().getText(fieldCode));
         } else
             html.print("dataSource is null");
         this.endOutput(html);
