@@ -16,11 +16,11 @@ public class UILabel extends UIComponent implements IHtml {
     }
 
     public String getFor() {
-        return (String) this.getProperty("for");
+        return (String) this.getCssProperty("for");
     }
 
     public UILabel setFor(String focusTarget) {
-        this.setProperty("for", focusTarget);
+        this.setCssProperty("for", focusTarget);
         return this;
     }
 

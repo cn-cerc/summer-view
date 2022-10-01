@@ -82,14 +82,14 @@ public class UIPhoneView extends UIComponent implements DataSource {
         html.println("<ul class='phone-view'>");
         dataSet.first();
         while (dataSet.fetch()) {
-            this.setProperty("data-row", "" + (dataSet.recNo() - 1));
+            this.setCssProperty("data-row", "" + (dataSet.recNo() - 1));
             this.beginOutput(html);
             html.println("");
             for (UIComponent item : this.getComponents()) {
                 item.beginOutput(html);
                 var line = 0;
                 for (UIComponent child : item.getComponents()) {
-                    child.setProperty("data-line", "" + (line++));
+                    child.setCssProperty("data-line", "" + (line++));
                     child.output(html);
                     if (line < item.getComponentCount())
                         html.println("");

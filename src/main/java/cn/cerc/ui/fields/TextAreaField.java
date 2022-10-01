@@ -28,7 +28,7 @@ public class TextAreaField extends AbstractField {
 //        input.setCssStyle(this.isResize() ? "resize: none;" : null);
         input.setSignProperty("required", this.isRequired());
         input.setSignProperty("autofocus", this.isAutofocus());
-        input.setProperty("placeholder", this.getPlaceholder());
+        input.setCssProperty("placeholder", this.getPlaceholder());
         String value = this.getValue();
         input.setText(value != null ? value : this.getText());
         input.output(html);
@@ -36,12 +36,12 @@ public class TextAreaField extends AbstractField {
     }
 
     public TextAreaField setRows(int rows) {
-        input.setProperty("rows", rows > 0 ? rows : null);
+        input.setCssProperty("rows", rows > 0 ? rows : null);
         return this;
     }
 
     public TextAreaField setCols(int cols) {
-        input.setProperty("cols", cols > 0 ? cols : null);
+        input.setCssProperty("cols", cols > 0 ? cols : null);
         return this;
     }
 
@@ -52,7 +52,7 @@ public class TextAreaField extends AbstractField {
     }
 
     public TextAreaField setMaxlength(int maxlength) {
-        input.setProperty("maxlength", maxlength > 0 ? maxlength : null);
+        input.setCssProperty("maxlength", maxlength > 0 ? maxlength : null);
         return this;
     }
 

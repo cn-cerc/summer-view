@@ -30,9 +30,9 @@ public class UIScript extends UIComponent {
         if (this.src != null) {
             String version = config.getString(CDN.BROWSER_CACHE_VERSION, "1.0.0.0");
             StaticFile sf = new StaticFile(StaticFileType.jsFile, this.src);
-            this.setProperty("src", sf.getUrl(version));
+            this.setCssProperty("src", sf.getUrl(version));
         } else {
-            this.setProperty("src", null);
+            this.setCssProperty("src", null);
         }
         html.println("");
         super.beginOutput(html);
@@ -70,7 +70,7 @@ public class UIScript extends UIComponent {
             throw new RuntimeException("src is not null");
 
         this.modulePath = modulePath;
-        this.setProperty("type", "module");
+        this.setCssProperty("type", "module");
         return this;
     }
 

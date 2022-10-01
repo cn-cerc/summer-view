@@ -27,11 +27,11 @@ public class UrlMenu extends UIComponent {
     }
 
     public String getUrl() {
-        return (String) this.getProperty("href");
+        return (String) this.getCssProperty("href");
     }
 
     public UrlMenu setUrl(String url) {
-        this.setProperty("href", url);
+        this.setCssProperty("href", url);
         return this;
     }
 

@@ -65,12 +65,12 @@ public class UIUrl extends UIA {
     }
 
     public UIUrl setTitle(String title) {
-        this.setProperty("title", title);
+        this.setCssProperty("title", title);
         return this;
     }
 
     public String getTitle() {
-        return (String) this.getProperty("title");
+        return (String) this.getCssProperty("title");
     }
 
     public String getHintMsg() {

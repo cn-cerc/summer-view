@@ -26,7 +26,7 @@ public class UIPhoneGridCell extends UIPhoneCell {
         var dataSource = this.dataSource();
         var fieldCode = this.fieldCode();
         if (this.cellType != CellTypeEnum.OnlyTitle)
-            this.setProperty("data-field", this.fieldCode());
+            this.setCssProperty("data-field", this.fieldCode());
         this.beginOutput(html);
         if (dataSource != null) {
             switch (this.cellType) {

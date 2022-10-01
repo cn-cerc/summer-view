@@ -25,7 +25,7 @@ public class UIPhoneCell extends UIComponent {
     public void output(HtmlWriter html) {
         DataSource dataSource = dataSource();
         if (dataSource != null)
-            this.setProperty("data-field", this.fieldCode);
+            this.setCssProperty("data-field", this.fieldCode);
         this.beginOutput(html);
         if (dataSource != null) {
             String name = dataSource.current().fields().get(fieldCode).name();

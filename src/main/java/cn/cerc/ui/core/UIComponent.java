@@ -149,23 +149,23 @@ public class UIComponent implements IOriginOwner, HtmlContent, Iterable<UICompon
         return this;
     }
 
-    public UIComponent setProperty(String key, Object value) {
+    public UIComponent setCssProperty(String key, Object value) {
         propertys.put(key, value);
         return this;
     }
 
     @Deprecated
     public final UIComponent writeProperty(String key, Object value) {
-        return this.setProperty(key, value);
+        return this.setCssProperty(key, value);
     }
 
-    public final Object getProperty(String key) {
+    public final Object getCssProperty(String key) {
         return propertys.get(key);
     }
 
     @Deprecated
     public final Object readProperty(String key) {
-        return this.getProperty(key);
+        return this.getCssProperty(key);
     }
 
     protected Map<String, Object> getPropertys() {

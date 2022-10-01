@@ -17,20 +17,20 @@ public class UITd extends UIComponent implements IHtml {
     }
 
     public int getColspan() {
-        return (int) this.getProperty("colspan");
+        return (int) this.getCssProperty("colspan");
     }
 
     public UITd setColspan(int colspan) {
-        this.setProperty("colspan", colspan);
+        this.setCssProperty("colspan", colspan);
         return this;
     }
 
     public int getRowspan() {
-        return (int) this.getProperty("rowspan");
+        return (int) this.getCssProperty("rowspan");
     }
 
     public UITd setRowspan(int rowspan) {
-        this.setProperty("rowspan", rowspan);
+        this.setCssProperty("rowspan", rowspan);
         return this;
     }
 
