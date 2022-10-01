@@ -206,7 +206,7 @@ public class UIComponent implements IOriginOwner, HtmlContent, Iterable<UICompon
         this.endOutput(html);
     }
 
-    protected void beginOutput(HtmlWriter html) {
+    public void beginOutput(HtmlWriter html) {
         if (this.getRootLabel() == null || "".equals(getRootLabel()))
             return;
         html.print("<").print(getRootLabel());
@@ -214,7 +214,7 @@ public class UIComponent implements IOriginOwner, HtmlContent, Iterable<UICompon
         html.print(">");
     }
 
-    protected void endOutput(HtmlWriter html) {
+    public void endOutput(HtmlWriter html) {
         if (this.getRootLabel() == null || "".equals(getRootLabel()))
             return;
         html.print("</%s>", getRootLabel());
