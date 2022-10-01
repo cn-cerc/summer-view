@@ -28,6 +28,10 @@ public class UIPhoneView extends UIComponent implements DataSource {
         return this;
     }
 
+    public UIPhoneLine addLine() {
+        return new UIPhoneLine(this.block());
+    }
+
     public UIPhoneLine addLine(String... fields) {
         UIPhoneLine line = addLine();
         for (var fieldCode : fields) {
@@ -36,13 +40,22 @@ public class UIPhoneView extends UIComponent implements DataSource {
                 column = dataSet.fields().add(fieldCode, FieldKind.Calculated);
             if (defaultStyle != null)
                 column.onGetText(defaultStyle.getDefault(column));
-            new UIPhoneColumn(line).setFieldCode(fieldCode);
+            line.addColumn(fieldCode);
         }
         return line;
     }
 
-    public UIPhoneLine addLine() {
-        return new UIPhoneLine(this.block());
+    public UIPhoneGridLine addGrid(String... fields) {
+        UIPhoneGridLine line = new UIPhoneGridLine(this.block());
+        for (var fieldCode : fields) {
+            FieldMeta column = dataSet.fields().get(fieldCode);
+            if (column == null)
+                column = dataSet.fields().add(fieldCode, FieldKind.Calculated);
+            if (defaultStyle != null)
+                column.onGetText(defaultStyle.getDefault(column));
+            line.addCell(fieldCode);
+        }
+        return line;
     }
 
     public UIPhoneView setDefaultStyle(UIViewStyleImpl defaultStyle) {
@@ -126,10 +139,11 @@ public class UIPhoneView extends UIComponent implements DataSource {
         ds.fields().get("name").setName("名称");
         UIPhoneView view = new UIPhoneView(null).setDataSet(ds);
         view.setDefaultStyle(new UIPhoneStyle());
-//        view.setBlock(new UIUrl().setHref("baidu"));
-        view.addLine("code", "name");// .split(50, 50);
+        view.setBlock(new UIUrl().setHref("www.baidu.com"));
         new UIUrl(view.addLine()).setText("hello");
-        System.out.println(view.getLine(1).getChild(0).getClass());
+        view.addLine("code", "name");
+        view.addGrid("code", "name").split("20%", "30%");
+        view.addGrid("code", "name").split("20%", "30%", "20%", "30%");
         System.out.println(view.toString());
     }
 

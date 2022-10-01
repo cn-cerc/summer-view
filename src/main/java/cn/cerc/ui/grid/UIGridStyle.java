@@ -18,7 +18,7 @@ public class UIGridStyle implements UIViewStyleImpl {
     private OnOutput onOutput;
 
     public UIGridStyle() {
-        this(true);
+        this(false);
     }
 
     public UIGridStyle(boolean inputState) {
