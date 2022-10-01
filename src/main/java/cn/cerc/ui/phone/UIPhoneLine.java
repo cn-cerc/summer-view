@@ -31,7 +31,7 @@ public class UIPhoneLine extends UIComponent {
             return;
         }
         // 指定宽度输出
-        if (this.width.length != this.getComponentCount())
+        if (this.width.length != this.getChildCount())
             html.print("split error, width size <> component count");
         this.beginOutput(html);
         html.print("<tr>");

@@ -84,7 +84,7 @@ public class UIPhoneView extends UIComponent implements DataSource {
                 for (UIComponent child : item.getComponents()) {
                     child.setProperty("data-line", "" + (line++));
                     child.output(html);
-                    if (line < item.getComponentCount())
+                    if (line < item.getChildCount())
                         html.println("");
                 }
                 item.endOutput(html);
@@ -129,7 +129,7 @@ public class UIPhoneView extends UIComponent implements DataSource {
         view.setBlock(new UIUrl().setHref("baidu"));
         view.addLine("code", "name").split(50, 50);
         new UIUrl(view.addLine()).setText("hello");
-        System.out.println(view.getLine(1).getItem(0).getClass());
+        System.out.println(view.getLine(1).getChild(0).getClass());
         System.out.println(view.toString());
     }
 

@@ -66,21 +66,21 @@ public class UIComponent implements IOriginOwner, HtmlContent, Iterable<UICompon
         return origin;
     }
 
-    @Deprecated
     public final List<UIComponent> getComponents() {
         return this.items;
     }
 
-    public final List<UIComponent> items() {
-        return this.items;
-    }
-
-    public final UIComponent getItem(int index) {
+    public final UIComponent getChild(int index) {
         return this.items.get(index);
     }
 
-    public int getComponentCount() {
+    public int getChildCount() {
         return items.size();
+    }
+
+    @Deprecated
+    public int getComponentCount() {
+        return getChildCount();
     }
 
     public UIComponent addComponent(UIComponent component) {
