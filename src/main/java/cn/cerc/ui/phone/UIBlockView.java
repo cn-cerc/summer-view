@@ -80,7 +80,7 @@ public class UIBlockView extends UIComponent implements DataSource {
     public void output(HtmlWriter html) {
         if (!this.active())
             return;
-        html.println("<ul class='phone-view'>");
+        html.println("<ul class='block-view'>");
         dataSet.first();
         while (dataSet.fetch()) {
             this.setCssProperty("data-row", "" + (dataSet.recNo() - 1));
