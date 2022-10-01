@@ -12,7 +12,15 @@ public class UIPhoneLine extends UIComponent {
     }
 
     public void split(int... width) {
-        this.setRootLabel("table");
+        if (width != null) {
+            for (int item : width) {
+                if (item <= 0)
+                    throw new RuntimeException("width 必须大于 0");
+            }
+            this.setRootLabel("table");
+        } else {
+            this.setRootLabel(null);
+        }
         this.width = width;
     }
 
@@ -27,9 +35,11 @@ public class UIPhoneLine extends UIComponent {
             html.print("split error, width size <> component count");
         this.beginOutput(html);
         html.print("<tr>");
+
         int i = 0;
         for (var item : this.getComponents()) {
-            html.print(String.format("<td width='%d'>", this.width[i++]));
+            int col = this.width[i++];
+            html.print(String.format("<td width='%d%%'>", col));
             item.output(html);
             html.print("</td>");
         }

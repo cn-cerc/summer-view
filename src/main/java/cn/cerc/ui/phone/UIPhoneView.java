@@ -1,5 +1,8 @@
 package cn.cerc.ui.phone;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import cn.cerc.db.core.DataRow;
 import cn.cerc.db.core.DataSet;
 import cn.cerc.db.core.DataSource;
@@ -119,6 +122,15 @@ public class UIPhoneView extends UIComponent implements DataSource {
         return dataSet.readonly();
     }
 
+    public List<UIPhoneLine> lines() {
+        List<UIPhoneLine> lines = new ArrayList<>();
+        for (var item : this.block().getComponents()) {
+            if (item instanceof UIPhoneLine line)
+                lines.add(line);
+        }
+        return lines;
+    }
+
     public static void main(String[] args) {
         var ds = new DataSet();
         ds.append().setValue("code", 1).setValue("name", "a");
@@ -127,8 +139,9 @@ public class UIPhoneView extends UIComponent implements DataSource {
         view.setDefaultStyle(new UIGridStyle());
         view.setDataSet(ds);
 //        view.setBlock(new UIUrl().setHref("baidu"));
-        view.addLine("code", "name").split(5,5);
+        view.addLine("code", "name").split(50, 50);
         new UIUrl(view.addLine()).setText("hello");
+        
         System.out.println(view.toString());
     }
 
