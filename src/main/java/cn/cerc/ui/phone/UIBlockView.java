@@ -29,18 +29,18 @@ public class UIBlockView extends UIComponent implements DataSource {
         return this;
     }
 
-    public UIPhoneLine addLine() {
-        return new UIPhoneLine(this.block());
+    public UIBlockLine addLine() {
+        return new UIBlockLine(this.block());
     }
 
-    public UIPhoneLine addLine(String... fields) {
-        UIPhoneLine line = addLine();
+    public UIBlockLine addLine(String... fields) {
+        UIBlockLine line = addLine();
         line.addColumns(fields);
         return line;
     }
 
-    public UIPhoneGridLine addLineGrid(String... fields) {
-        UIPhoneGridLine line = new UIPhoneGridLine(this.block());
+    public UIBlockGridLine addLineGrid(String... fields) {
+        UIBlockGridLine line = new UIBlockGridLine(this.block());
         for (var fieldCode : fields) {
             FieldMeta column = dataSet.fields().get(fieldCode);
             if (column == null)
@@ -114,16 +114,16 @@ public class UIBlockView extends UIComponent implements DataSource {
         return dataSet != null ? dataSet.readonly() : true;
     }
 
-    public List<UIPhoneLine> lines() {
-        List<UIPhoneLine> lines = new ArrayList<>();
+    public List<UIBlockLine> lines() {
+        List<UIBlockLine> lines = new ArrayList<>();
         for (var item : this.block().getComponents()) {
-            if (item instanceof UIPhoneLine line)
+            if (item instanceof UIBlockLine line)
                 lines.add(line);
         }
         return lines;
     }
 
-    public UIPhoneLine getLine(int index) {
+    public UIBlockLine getLine(int index) {
         return lines().get(index);
     }
 
@@ -146,7 +146,7 @@ public class UIBlockView extends UIComponent implements DataSource {
         ds.fields().get("code").setName("代码");
         ds.fields().get("name").setName("名称");
         UIBlockView view = new UIBlockView(null).setDataSet(ds);
-        view.setDefaultStyle(new UIPhoneStyle());
+        view.setDefaultStyle(new UIBlockStyle());
         view.setBlock(new UIUrl().setHref("www.baidu.com"));
         new UIUrl(view.addLine()).setText("hello");
         view.addLine("code", "name");

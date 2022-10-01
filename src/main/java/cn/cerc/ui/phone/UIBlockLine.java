@@ -6,24 +6,24 @@ import cn.cerc.db.core.FieldMeta.FieldKind;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.grid.UIOutputStyleImpl;
 
-public class UIPhoneLine extends UIComponent {
+public class UIBlockLine extends UIComponent {
 
-    public UIPhoneLine(UIComponent owner) {
+    public UIBlockLine(UIComponent owner) {
         super(owner);
         this.setRootLabel("div");
     }
 
     @Override
-    public UIPhoneLine addComponent(UIComponent child) {
+    public UIBlockLine addComponent(UIComponent child) {
         super.addComponent(child);
         return this;
     }
 
-    public UIPhoneCell addColumn(String fieldCode) {
-        return new UIPhoneCell(this).setFieldCode(fieldCode);
+    public UIBlockCell addColumn(String fieldCode) {
+        return new UIBlockCell(this).setFieldCode(fieldCode);
     }
 
-    public UIPhoneLine addColumns(String... fields) {
+    public UIBlockLine addColumns(String... fields) {
         DataSet dataSet = null;
         UIOutputStyleImpl defaultStyle = null;
         if (this.getOwner() instanceof UIBlockView view) {
@@ -43,8 +43,8 @@ public class UIPhoneLine extends UIComponent {
         return this;
     }
 
-    public UIPhoneLine addIt() {
-        addComponent(new UIPhoneIt());
+    public UIBlockLine addIt() {
+        addComponent(new UIBlockIt());
         return this;
     }
 

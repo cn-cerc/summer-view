@@ -3,20 +3,20 @@ package cn.cerc.ui.phone;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 
-public class UIPhoneGridCell extends UIPhoneCell {
+public class UIBlockGridCell extends UIBlockCell {
     private CellTypeEnum cellType = CellTypeEnum.Combo;
 
     public enum CellTypeEnum {
         OnlyTitle, OnlyValue, Combo;
     }
 
-    public UIPhoneGridCell(UIComponent owner) {
+    public UIBlockGridCell(UIComponent owner) {
         super(owner);
         this.setRootLabel("td");
     }
 
     @Override
-    public UIPhoneGridCell setFieldCode(String fieldCode) {
+    public UIBlockGridCell setFieldCode(String fieldCode) {
         super.setFieldCode(fieldCode);
         return this;
     }
@@ -50,7 +50,7 @@ public class UIPhoneGridCell extends UIPhoneCell {
         return cellType;
     }
 
-    public UIPhoneGridCell setCellType(CellTypeEnum cellType) {
+    public UIBlockGridCell setCellType(CellTypeEnum cellType) {
         this.cellType = cellType;
         return this;
     }

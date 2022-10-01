@@ -8,15 +8,15 @@ import org.slf4j.LoggerFactory;
 import cn.cerc.db.core.Utils;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
-import cn.cerc.ui.phone.UIPhoneGridCell.CellTypeEnum;
+import cn.cerc.ui.phone.UIBlockGridCell.CellTypeEnum;
 import cn.cerc.ui.vcl.UITr;
 
-public class UIPhoneGridLine extends UIPhoneLine {
-    private static final Logger log = LoggerFactory.getLogger(UIPhoneGridLine.class);
+public class UIBlockGridLine extends UIBlockLine {
+    private static final Logger log = LoggerFactory.getLogger(UIBlockGridLine.class);
     private UITr tr = new UITr(this);
     private String[] width;
 
-    public UIPhoneGridLine(UIComponent owner) {
+    public UIBlockGridLine(UIComponent owner) {
         super(owner);
         this.setRootLabel("table");
     }
@@ -58,7 +58,7 @@ public class UIPhoneGridLine extends UIPhoneLine {
         for (int i = 0; i < this.width.length; i++) {
             UIComponent item = titleSplit ? tr.getComponent(i / 2) : tr.getComponent(i);
             boolean isTitle = titleSplit && i % 2 == 0;
-            if (titleSplit && item instanceof UIPhoneGridCell column)
+            if (titleSplit && item instanceof UIBlockGridCell column)
                 column.setCellType(isTitle ? CellTypeEnum.OnlyTitle : CellTypeEnum.OnlyValue);
             html.print("<td");
             if (!Utils.isEmpty(this.width[i]))
@@ -76,8 +76,8 @@ public class UIPhoneGridLine extends UIPhoneLine {
         return tr;
     }
 
-    public UIPhoneGridCell addCell(String fieldCode) {
-        return new UIPhoneGridCell(tr).setFieldCode(fieldCode);
+    public UIBlockGridCell addCell(String fieldCode) {
+        return new UIBlockGridCell(tr).setFieldCode(fieldCode);
     }
 
 }
