@@ -15,24 +15,29 @@ import cn.cerc.ui.vcl.UIInput;
 
 public class UIPhoneStyle implements UIViewStyleImpl {
     private static final Logger log = LoggerFactory.getLogger(UIPhoneStyle.class);
-    public boolean isInput = false;
+    public boolean inputState = false;
     private OnOutput onOutput;
 
     public UIPhoneStyle() {
         this(true);
     }
 
-    public UIPhoneStyle(boolean isInput) {
+    public UIPhoneStyle(boolean inputState) {
         super();
-        this.isInput = isInput;
+        this.inputState = inputState;
+    }
+
+    public boolean inputState() {
+        return this.inputState;
     }
 
     public OnGetText getString() {
         return data -> {
-            String result = data.getString();
-            if (this.isInput)
+            var field = data.source().fields().get(data.key());
+            var result = data.getString();
+            if (this.inputState)
                 return UIInput.html(data.key(), result);
-            return result;
+            return String.format("%s: %s", field.name(), result);
         };
     }
 
@@ -45,32 +50,60 @@ public class UIPhoneStyle implements UIViewStyleImpl {
     }
 
     public OnGetText getBoolean() {
-        return data -> data.getBoolean() ? "是" : "";
+        return data -> {
+            var field = data.source().fields().get(data.key());
+            var result = data.getBoolean() ? "是" : "";
+            return String.format("%s: %s", field.name(), result);
+        };
     }
 
     public OnGetText getBoolean(String trueText, String falseText) {
-        return data -> data.getBoolean() ? trueText : falseText;
+        return data -> {
+            var field = data.source().fields().get(data.key());
+            var result = data.getBoolean() ? trueText : falseText;
+            return String.format("%s: %s", field.name(), result);
+        };
     }
 
     public OnGetText getDatetime() {
-        return data -> data.getDatetime().toString();
+        return data -> {
+            var field = data.source().fields().get(data.key());
+            var result = data.getDatetime().toString();
+            return String.format("%s: %s", field.name(), result);
+        };
     }
 
     public OnGetText getFastDate() {
-        return data -> data.getFastDate().toString();
+        return data -> {
+            var field = data.source().fields().get(data.key());
+            var result = data.getFastDate().toString();
+            return String.format("%s: %s", field.name(), result);
+        };
     }
 
     public OnGetText getFastTime() {
-        return data -> data.getFastTime().toString();
+        return data -> {
+            var field = data.source().fields().get(data.key());
+            var result = data.getFastTime().toString();
+            return String.format("%s: %s", field.name(), result);
+        };
     }
 
     @SuppressWarnings("rawtypes")
     public OnGetText getEnum(Class<? extends Enum> clazz) {
-        return data -> data.getEnum(clazz).name();
+        return data -> {
+            var field = data.source().fields().get(data.key());
+            var result = data.getEnum(clazz).name();
+            return String.format("%s: %s", field.name(), result);
+        };
     }
 
     public OnGetText getList(List<String> items) {
-        return data -> items.get(data.getInt());
+        return data -> {
+            var field = data.source().fields().get(data.key());
+            var result = items.get(data.getInt());
+            return String.format("%s: %s", field.name(), result);
+        };
     }
 
     public interface OnOutput {

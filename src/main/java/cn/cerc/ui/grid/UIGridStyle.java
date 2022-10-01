@@ -14,22 +14,26 @@ import cn.cerc.ui.vcl.UIInput;
 
 public class UIGridStyle implements UIViewStyleImpl {
     private static final Logger log = LoggerFactory.getLogger(UIGridStyle.class);
-    public boolean isInput = false;
+    public boolean inputState = false;
     private OnOutput onOutput;
 
     public UIGridStyle() {
         this(true);
     }
 
-    public UIGridStyle(boolean isInput) {
+    public UIGridStyle(boolean inputState) {
         super();
-        this.isInput = isInput;
+        this.inputState = inputState;
+    }
+
+    public boolean inputState() {
+        return this.inputState;
     }
 
     public OnGetText getString() {
         return data -> {
             String result = data.getString();
-            if (this.isInput)
+            if (this.inputState)
                 return UIInput.html(data.key(), result);
             return result;
         };
@@ -44,32 +48,46 @@ public class UIGridStyle implements UIViewStyleImpl {
     }
 
     public OnGetText getBoolean() {
-        return data -> data.getBoolean() ? "是" : "";
+        return data -> {
+            return data.getBoolean() ? "是" : "";
+        };
     }
 
     public OnGetText getBoolean(String trueText, String falseText) {
-        return data -> data.getBoolean() ? trueText : falseText;
+        return data -> {
+            return data.getBoolean() ? trueText : falseText;
+        };
     }
 
     public OnGetText getDatetime() {
-        return data -> data.getDatetime().toString();
+        return data -> {
+            return data.getDatetime().toString();
+        };
     }
 
     public OnGetText getFastDate() {
-        return data -> data.getFastDate().toString();
+        return data -> {
+            return data.getFastDate().toString();
+        };
     }
 
     public OnGetText getFastTime() {
-        return data -> data.getFastTime().toString();
+        return data -> {
+            return data.getFastTime().toString();
+        };
     }
 
     @SuppressWarnings("rawtypes")
     public OnGetText getEnum(Class<? extends Enum> clazz) {
-        return data -> data.getEnum(clazz).name();
+        return data -> {
+            return data.getEnum(clazz).name();
+        };
     }
 
     public OnGetText getList(List<String> items) {
-        return data -> items.get(data.getInt());
+        return data -> {
+            return items.get(data.getInt());
+        };
     }
 
     public interface OnOutput {
