@@ -15,7 +15,7 @@ import cn.cerc.mis.core.IForm;
 import cn.cerc.mis.core.IOriginOwner;
 
 public class UIComponent implements IOriginOwner, HtmlContent, Iterable<UIComponent> {
-    private List<UIComponent> items = new ArrayList<>();
+    private List<UIComponent> children = new ArrayList<>();
     private Map<String, Object> propertys = new HashMap<>();
     private Set<String> signProperty = new HashSet<>();
     private UIComponent owner;
@@ -66,16 +66,21 @@ public class UIComponent implements IOriginOwner, HtmlContent, Iterable<UICompon
         return origin;
     }
 
+    @Deprecated
     public final List<UIComponent> getComponents() {
-        return this.items;
+        return this.children();
+    }
+
+    public final List<UIComponent> children() {
+        return this.children;
     }
 
     public final UIComponent getChild(int index) {
-        return this.items.get(index);
+        return this.children.get(index);
     }
 
     public int getChildCount() {
-        return items.size();
+        return children.size();
     }
 
     @Deprecated
@@ -84,8 +89,8 @@ public class UIComponent implements IOriginOwner, HtmlContent, Iterable<UICompon
     }
 
     public UIComponent addComponent(UIComponent component) {
-        if (component != null && !items.contains(component)) {
-            items.add(component);
+        if (component != null && !children.contains(component)) {
+            children.add(component);
             component.registerOwner(this);
         }
         return this;
@@ -93,7 +98,7 @@ public class UIComponent implements IOriginOwner, HtmlContent, Iterable<UICompon
 
     public UIComponent removeComponent(UIComponent component) {
         if (component != null) {
-            items.remove(component);
+            children.remove(component);
             this.registerOwner(null);
         }
         return this;
@@ -117,7 +122,7 @@ public class UIComponent implements IOriginOwner, HtmlContent, Iterable<UICompon
 
     @Override
     public Iterator<UIComponent> iterator() {
-        return items.iterator();
+        return children.iterator();
     }
 
     public final String getId() {
