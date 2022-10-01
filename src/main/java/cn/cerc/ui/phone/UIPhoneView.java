@@ -142,8 +142,8 @@ public class UIPhoneView extends UIComponent implements DataSource {
         view.setBlock(new UIUrl().setHref("www.baidu.com"));
         new UIUrl(view.addLine()).setText("hello");
         view.addLine("code", "name");
-        view.addGrid("code", "name").split("20%", "30%");
-        view.addGrid("code", "name").split("20%", "30%", "20%", "30%");
+        view.addGrid("code", "name").split(2, 3);
+        view.addGrid("code", "name").split(2, 3, 2, 3);
         System.out.println(view.toString());
     }
 

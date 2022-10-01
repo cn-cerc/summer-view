@@ -1,5 +1,7 @@
 package cn.cerc.ui.phone;
 
+import java.text.DecimalFormat;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,8 +21,20 @@ public class UIPhoneGridLine extends UIPhoneLine {
     }
 
     public void split(String... width) {
-        this.setRootLabel(width != null ? "table" : null);
         this.width = width;
+    }
+
+    public void split(int... width) {
+        int total = 0;
+        for (int item : width)
+            total += item;
+        if (total <= 0)
+            throw new RuntimeException("validate width fail");
+
+        this.width = new String[width.length];
+        var fmt = new DecimalFormat("0");
+        for (int i = 0; i < width.length; i++)
+            this.width[i] = String.format("%s%%", fmt.format((float) width[i] * 100 / total));
     }
 
     @Override
@@ -56,4 +70,7 @@ public class UIPhoneGridLine extends UIPhoneLine {
         return new UIPhoneGridCell(tr).setFieldCode(fieldCode);
     }
 
+    public static void main(String[] args) {
+        System.out.println((float) 2 / 5);
+    }
 }
