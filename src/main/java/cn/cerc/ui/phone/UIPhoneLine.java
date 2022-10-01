@@ -4,7 +4,7 @@ import cn.cerc.db.core.DataSet;
 import cn.cerc.db.core.FieldMeta;
 import cn.cerc.db.core.FieldMeta.FieldKind;
 import cn.cerc.ui.core.UIComponent;
-import cn.cerc.ui.grid.UIViewStyleImpl;
+import cn.cerc.ui.grid.UIOutputStyleImpl;
 
 public class UIPhoneLine extends UIComponent {
 
@@ -25,7 +25,7 @@ public class UIPhoneLine extends UIComponent {
 
     public UIPhoneLine addColumns(String... fields) {
         DataSet dataSet = null;
-        UIViewStyleImpl defaultStyle = null;
+        UIOutputStyleImpl defaultStyle = null;
         if (this.getOwner() instanceof UIPhoneView view) {
             dataSet = view.dataSet();
             defaultStyle = view.defaultStyle();

@@ -10,11 +10,11 @@ import cn.cerc.db.core.FieldMeta;
 import cn.cerc.db.core.FieldMeta.FieldKind;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
-import cn.cerc.ui.grid.UIViewStyleImpl;
+import cn.cerc.ui.grid.UIOutputStyleImpl;
 import cn.cerc.ui.vcl.UIUrl;
 
 public class UIPhoneView extends UIComponent implements DataSource {
-    private UIViewStyleImpl defaultStyle;
+    private UIOutputStyleImpl defaultStyle;
     private UIComponent block;
     private DataSet dataSet;
 
@@ -51,12 +51,12 @@ public class UIPhoneView extends UIComponent implements DataSource {
         return line;
     }
 
-    public UIPhoneView setDefaultStyle(UIViewStyleImpl defaultStyle) {
+    public UIPhoneView setDefaultStyle(UIOutputStyleImpl defaultStyle) {
         this.defaultStyle = defaultStyle;
         return this;
     }
 
-    public UIViewStyleImpl defaultStyle() {
+    public UIOutputStyleImpl defaultStyle() {
         return defaultStyle;
     }
 
