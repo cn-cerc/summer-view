@@ -12,7 +12,7 @@ import cn.cerc.db.editor.OnGetText;
 import cn.cerc.mis.ado.UsedEnum;
 import cn.cerc.ui.vcl.UIInput;
 
-public class UIGridStyle implements UIOutputStyleImpl {
+public class UIGridStyle implements UIViewStyleImpl {
     private static final Logger log = LoggerFactory.getLogger(UIGridStyle.class);
     public UIGridStateEnum state = UIGridStateEnum.View;
     private OnOutput onOutput;

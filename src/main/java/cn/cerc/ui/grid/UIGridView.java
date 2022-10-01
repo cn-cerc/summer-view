@@ -15,7 +15,7 @@ public class UIGridView extends UIComponent implements IGridStyle {
     private DataSet dataSet;
     private boolean active;
     private HashSet<FieldMeta> columns = new LinkedHashSet<>();
-    private UIOutputStyleImpl defaultStyle;
+    private UIViewStyleImpl defaultStyle;
 
     public UIGridView(UIComponent owner) {
         super(owner);
@@ -68,11 +68,11 @@ public class UIGridView extends UIComponent implements IGridStyle {
         super.output(html);
     }
 
-    public UIOutputStyleImpl defaultStyle() {
+    public UIViewStyleImpl defaultStyle() {
         return this.defaultStyle;
     }
 
-    public UIGridView setDefaultStyle(UIOutputStyleImpl outputStyle) {
+    public UIGridView setDefaultStyle(UIViewStyleImpl outputStyle) {
         this.defaultStyle = outputStyle;
         return this;
     }

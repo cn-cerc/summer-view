@@ -11,11 +11,11 @@ import cn.cerc.db.core.FieldMeta.FieldKind;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.grid.UIGridStyle;
-import cn.cerc.ui.grid.UIOutputStyleImpl;
+import cn.cerc.ui.grid.UIViewStyleImpl;
 import cn.cerc.ui.vcl.UIUrl;
 
 public class UIPhoneView extends UIComponent implements DataSource {
-    private UIOutputStyleImpl defaultStyle;
+    private UIViewStyleImpl defaultStyle;
     private UIComponent block;
     private DataSet dataSet;
 
@@ -29,7 +29,7 @@ public class UIPhoneView extends UIComponent implements DataSource {
         return this;
     }
 
-    public UIPhoneView setStyle(UIOutputStyleImpl defaultStyle) {
+    public UIPhoneView setStyle(UIViewStyleImpl defaultStyle) {
         this.defaultStyle = defaultStyle;
         return this;
     }
@@ -62,12 +62,12 @@ public class UIPhoneView extends UIComponent implements DataSource {
         return dataSet;
     }
 
-    public UIPhoneView setDefaultStyle(UIOutputStyleImpl defaultStyle) {
+    public UIPhoneView setDefaultStyle(UIViewStyleImpl defaultStyle) {
         this.defaultStyle = defaultStyle;
         return this;
     }
 
-    public UIOutputStyleImpl defaultStyle() {
+    public UIViewStyleImpl defaultStyle() {
         return defaultStyle;
     }
 
@@ -131,6 +131,10 @@ public class UIPhoneView extends UIComponent implements DataSource {
         return lines;
     }
 
+    public UIPhoneLine getLine(int index) {
+        return lines().get(index);
+    }
+
     public static void main(String[] args) {
         var ds = new DataSet();
         ds.append().setValue("code", 1).setValue("name", "a");
@@ -141,7 +145,6 @@ public class UIPhoneView extends UIComponent implements DataSource {
 //        view.setBlock(new UIUrl().setHref("baidu"));
         view.addLine("code", "name").split(50, 50);
         new UIUrl(view.addLine()).setText("hello");
-        
         System.out.println(view.toString());
     }
 
