@@ -185,7 +185,7 @@ public class UIGrid extends UIComponent implements IReadonlyOwner, IGridStyle {
         } else {
             UITr tr = new UITr();
             tr.setCssClass("empty");
-            UITd td = new UITd(tr).setColspan(this.getMasterLine().children().size());
+            UITd td = new UITd(tr).setColspan(this.getMasterLine().getComponents().size());
             if (defineEmptyData != null) {
                 defineEmptyData.execute(this, td);
             } else {

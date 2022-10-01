@@ -24,7 +24,7 @@ public class RangeField extends AbstractField {
 
     @Override
     public RangeField addChild(UIComponent component) {
-        if (this.getChildCount() == 1)
+        if (this.getComponentCount() == 1)
             super.addChild(new UIText(this).setText("-"));
         if (component instanceof AbstractField)
             ((AbstractField) component).setCSSClass_phone("price");
@@ -35,7 +35,7 @@ public class RangeField extends AbstractField {
     @Override
     public void updateField() {
         AbstractField child = null;
-        for (UIComponent component : this.children()) {
+        for (UIComponent component : this.getComponents()) {
             if (component instanceof AbstractField) {
                 child = (AbstractField) component;
                 child.updateField();

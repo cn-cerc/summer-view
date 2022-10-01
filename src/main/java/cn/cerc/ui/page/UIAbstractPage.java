@@ -159,7 +159,7 @@ public abstract class UIAbstractPage extends UIComponent implements IPage, Suppo
 
     @Override
     public void output(HtmlWriter html) {
-        for (UIComponent component : this.children()) {
+        for (UIComponent component : this.getComponents()) {
             component.output(html);
         }
     }

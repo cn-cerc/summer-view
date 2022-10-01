@@ -57,7 +57,7 @@ public class PhoneLine extends UIComponent implements DataSource {
         for (UIComponent child : this) {
             AbstractField field = (AbstractField) child;
             html.print("<td");
-            if (this.children().size() == 1) {
+            if (this.getComponents().size() == 1) {
                 html.print(" colspan=2");
             }
             html.print(">");

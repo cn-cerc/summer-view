@@ -41,14 +41,14 @@ public class UIPhoneGridLine extends UIPhoneLine {
     @Override
     public void output(HtmlWriter html) {
         if (this.width == null) {
-            int[] items = new int[this.getChildCount() * 2];
-            for (int i = 0; i < tr.getChildCount(); i++)
+            int[] items = new int[this.getComponentCount() * 2];
+            for (int i = 0; i < tr.getComponentCount(); i++)
                 items[i] = 1;
             this.split(items);
         }
         // 指定宽度输出
-        boolean titleSplit = this.width.length == tr.getChildCount() * 2;
-        if (!(this.width.length == tr.getChildCount() || titleSplit)) {
+        boolean titleSplit = this.width.length == tr.getComponentCount() * 2;
+        if (!(this.width.length == tr.getComponentCount() || titleSplit)) {
             log.error("split error, width size <> component count");
             return;
         }

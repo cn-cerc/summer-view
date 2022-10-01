@@ -83,7 +83,7 @@ public class UIPhoneLine extends UIComponent implements IReadonlyOwner {
         @Override
         public void output(HtmlWriter html) {
             html.print("<span class=\"field\"  style='width:%d%%'>", this.percent);
-            for (UIComponent item : this.children()) {
+            for (UIComponent item : this.getComponents()) {
                 if (item instanceof IColumn) {
                     IColumn column = (IColumn) item;
                     if (item instanceof IDataColumn)
