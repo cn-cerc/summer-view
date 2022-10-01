@@ -119,7 +119,7 @@ public class UIComponent implements IOriginOwner, HtmlContent, Iterable<UICompon
 
     @Override
     public Iterator<UIComponent> iterator() {
-        return components.iterator();
+        return new ArrayList<UIComponent>(components).iterator();
     }
 
     public final String getId() {
@@ -209,7 +209,8 @@ public class UIComponent implements IOriginOwner, HtmlContent, Iterable<UICompon
     @Override
     public void output(HtmlWriter html) {
         this.beginOutput(html);
-        this.forEach(item -> item.output(html));
+        for (var item : this.components)
+            item.output(html);
         this.endOutput(html);
     }
 
