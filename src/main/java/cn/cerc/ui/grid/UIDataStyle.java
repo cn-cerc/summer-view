@@ -46,10 +46,10 @@ public class UIDataStyle implements UIDataStyleImpl {
                 input.setValue(result);
                 var meta = data.source().fields(data.key());
                 if (meta.width() > 0) {
-                    String width = String.format("%dpx", meta.width() * PX_SIZE);
-                    input.setCssProperty("width", width);
+                    String width = String.format("width: %dpx", meta.width() * PX_SIZE);
+                    input.setCssStyle(width);
                 } else
-                    input.setCssProperty("width", null);
+                    input.setCssStyle(null);
                 result = input.toString();
             }
             return result;
