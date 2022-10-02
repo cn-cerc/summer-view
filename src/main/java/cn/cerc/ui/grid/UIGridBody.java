@@ -17,7 +17,7 @@ public class UIGridBody extends UIComponent {
     public UIGridBody(UIComponent owner, DataSet dataSet) {
         super(owner);
         this.dataSet = dataSet;
-        this.setRootLabel(isPhone() ? "div" : "tr");
+        this.setRootLabel("tr");
     }
 
     @Override
