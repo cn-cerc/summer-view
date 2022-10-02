@@ -44,13 +44,13 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
 
     @Override
     public UIGridView setStyle(UIDataStyleImpl style) {
-        this.defaultStyle = style;
         if (style != null) {
             if (this.dataSet == null)
                 this.setDataSet(style.dataSet());
             for (var field : style.fields())
                 this.addField(field.code());
         }
+        this.defaultStyle = style;
         return this;
     }
 

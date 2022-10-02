@@ -143,12 +143,12 @@ public class UIGridStyle implements UIDataStyleImpl {
     public FieldMeta addField(String fieldCode) {
         if (this.dataSet == null)
             throw new RuntimeException("dataSet is null");
-        FieldMeta column = dataSet.fields().get(fieldCode);
-        if (column == null)
-            column = dataSet.fields().add(fieldCode, FieldKind.Calculated);
-        this.fields.add(column);
-        this.setDefault(column);
-        return column;
+        FieldMeta field = dataSet.fields().get(fieldCode);
+        if (field == null)
+            field = dataSet.fields().add(fieldCode, FieldKind.Calculated);
+        this.fields.add(field);
+        this.setDefault(field);
+        return field;
     }
 
     public FieldMeta addFieldIt() {
