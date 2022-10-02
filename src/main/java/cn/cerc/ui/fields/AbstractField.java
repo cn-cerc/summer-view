@@ -233,10 +233,10 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
     }
 
     @Override
-    public final boolean isReadonly() {
+    public final boolean readonly() {
         if (readonly > -1)
             return readonly == 1;
-        return source != null ? source.isReadonly() : false;
+        return source != null ? source.readonly() : false;
     }
 
     public AbstractField setReadonly(boolean readonly) {
@@ -344,7 +344,7 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
             String value = this.getValue();
             content.setCssClass(this.CSSClass_phone);
             content.setValue(value != null ? value : this.getText());
-            content.setReadonly(this.isReadonly());
+            content.setReadonly(this.readonly());
             content.setCssProperty("autocomplete", this.autocomplete ? "on" : "off");
             content.setCssProperty("pattern", this.pattern);
             content.setCssProperty("oninput", this.oninput);

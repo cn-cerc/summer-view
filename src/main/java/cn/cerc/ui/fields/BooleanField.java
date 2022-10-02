@@ -48,7 +48,7 @@ public class BooleanField extends AbstractField implements SearchItem, IFormatCo
         input.setValue("1");
         input.setInputType(UIInput.TYPE_CHECKBOX);
         input.setSignProperty("checked", current().getBoolean(this.getField()));
-        input.setSignProperty("disabled", this.isReadonly());
+        input.setSignProperty("disabled", this.readonly());
         input.setCssProperty("onclick", this.getOnclick());
         input.output(html);
         this.endOutput(html);
@@ -78,7 +78,7 @@ public class BooleanField extends AbstractField implements SearchItem, IFormatCo
 
     @Override
     public void outputOfGridLine(HtmlWriter html) {
-        if (this.isReadonly()) {
+        if (this.readonly()) {
             html.print(getText());
         } else {
             html.print(getEditor().format(current()));

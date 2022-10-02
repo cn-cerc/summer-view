@@ -31,7 +31,6 @@ public class UIPhoneView extends UIComponent implements UIDataViewImpl {
         return dataSet;
     }
 
-    @Override
     public UIPhoneView setDataSet(DataSet dataSet) {
         this.dataSet = dataSet;
         return this;

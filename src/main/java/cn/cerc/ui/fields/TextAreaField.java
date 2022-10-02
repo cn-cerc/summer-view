@@ -24,7 +24,7 @@ public class TextAreaField extends AbstractField {
             getTitle().output(html);
         input.setId(this.getId());
         input.setName(this.getId());
-        input.setReadonly(this.isReadonly());
+        input.setReadonly(this.readonly());
 //        input.setCssStyle(this.isResize() ? "resize: none;" : null);
         input.setSignProperty("required", this.isRequired());
         input.setSignProperty("autofocus", this.isAutofocus());

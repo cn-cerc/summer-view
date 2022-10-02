@@ -31,7 +31,6 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
         this.setActive(!this.isPhone());
     }
 
-    @Override
     public UIGridView setDataSet(DataSet dataSet) {
         this.dataSet = dataSet;
         return this;

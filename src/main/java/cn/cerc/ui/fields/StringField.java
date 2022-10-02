@@ -20,7 +20,7 @@ public class StringField extends AbstractField implements IFormatColumn, IOutput
 
     @Override
     public void outputOfGridLine(HtmlWriter html) {
-        if (this.isReadonly()) {
+        if (this.readonly()) {
             if (getBuildUrl() != null) {
                 UIUrl url = new UIUrl(null);
                 getBuildUrl().buildUrl(current(), url);

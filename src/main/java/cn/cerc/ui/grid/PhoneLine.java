@@ -1,6 +1,7 @@
 package cn.cerc.ui.grid;
 
 import cn.cerc.db.core.DataRow;
+import cn.cerc.db.core.DataSet;
 import cn.cerc.db.core.DataSource;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
@@ -118,15 +119,10 @@ public class PhoneLine extends UIComponent implements DataSource {
     public void setExpender(ExpendField expender) {
         this.expender = expender;
     }
-
+    
     @Override
-    public boolean isReadonly() {
-        return grid.isReadonly();
-    }
-
-    @Override
-    public DataRow current() {
-        return grid.current();
+    public DataSet dataSet() {
+        return grid.dataSet();
     }
 
     @Deprecated
