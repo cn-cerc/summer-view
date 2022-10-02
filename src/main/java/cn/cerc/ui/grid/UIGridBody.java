@@ -3,11 +3,9 @@ package cn.cerc.ui.grid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cn.cerc.db.core.FieldMeta;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.core.UIDataViewImpl;
-import cn.cerc.ui.vcl.UITd;
 
 public class UIGridBody extends UIComponent {
     private static final Logger log = LoggerFactory.getLogger(UIGridBody.class);
@@ -28,10 +26,6 @@ public class UIGridBody extends UIComponent {
         dataSet.first();
         while (dataSet.fetch())
             super.output(html);
-    }
-
-    public void addField(FieldMeta meta) {
-        new UIDataField(new UITd(this)).setField(meta.code());
     }
 
 }
