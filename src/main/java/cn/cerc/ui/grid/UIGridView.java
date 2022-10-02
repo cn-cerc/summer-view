@@ -15,7 +15,7 @@ import cn.cerc.ui.style.IGridStyle;
 public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyle {
     private DataSet dataSet;
     private boolean active;
-    private HashSet<FieldMeta> columns = new LinkedHashSet<>();
+    private HashSet<FieldMeta> fields = new LinkedHashSet<>();
     private UIDataStyleImpl defaultStyle;
     private boolean init;
 
@@ -68,13 +68,13 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
     public FieldMeta addField(String fieldCode) {
         if (this.dataSet == null)
             throw new RuntimeException("dataSet is null");
-        FieldMeta column = dataSet.fields().get(fieldCode);
-        if (column == null)
-            column = dataSet.fields().add(fieldCode, FieldKind.Calculated);
-        columns.add(column);
+        FieldMeta field = dataSet.fields().get(fieldCode);
+        if (field == null)
+            field = dataSet.fields().add(fieldCode, FieldKind.Calculated);
+        fields.add(field);
         if (defaultStyle != null)
-            defaultStyle.setDefault(column);
-        return column;
+            defaultStyle.setDefault(field);
+        return field;
     }
 
     @Override
@@ -83,24 +83,24 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
             return;
         if (!this.init && this.dataSet != null) {
             // 若没有指定列时，自动为所有列
-            if (columns.size() == 0) {
-                for (var column : dataSet.fields()) {
+            if (fields.size() == 0) {
+                for (var field : dataSet.fields()) {
                     if (defaultStyle != null)
-                        defaultStyle.setDefault(column);
-                    columns.add(column);
+                        defaultStyle.setDefault(field);
+                    fields.add(field);
                 }
             }
             // 根据不同的设备显示
             if (this.isPhone()) {
                 UIGridBody body = new UIGridBody(this, dataSet);
-                for (var column : columns)
-                    body.addColumn(column);
+                for (var field : fields)
+                    body.addColumn(field);
             } else {
                 UIGridHead head = new UIGridHead(this);
                 UIGridBody body = new UIGridBody(this, dataSet);
-                for (var column : columns)
-                    body.addColumn(column);
-                head.addAll(this.columns);
+                for (var field : fields)
+                    body.addColumn(field);
+                head.addAll(this.fields);
             }
             this.init = true;
         }
