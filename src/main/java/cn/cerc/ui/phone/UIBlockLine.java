@@ -22,11 +22,7 @@ public class UIBlockLine extends UIComponent {
         return this;
     }
 
-    public UIBlockCell addColumn(String fieldCode) {
-        return new UIBlockCell(this).setFieldCode(fieldCode);
-    }
-
-    public UIBlockLine addColumns(String... fields) {
+    public UIBlockLine addCell(String... fields) {
         var impl = findOwner(UIDataViewImpl.class);
         if (impl == null) {
             log.error("在 owner 中找不到 UIDataViewImpl");
@@ -42,9 +38,13 @@ public class UIBlockLine extends UIComponent {
                 if (defaultStyle != null)
                     defaultStyle.setDefault(column);
             }
-            this.addColumn(fieldCode);
+            new UIBlockCell(this).setFieldCode(fieldCode);
         }
         return this;
+    }
+
+    public UIBlockCell getCell(int index) {
+        return (UIBlockCell) this.getComponent(index);
     }
 
     public UIBlockLine addIt() {

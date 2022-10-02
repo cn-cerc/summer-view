@@ -58,12 +58,6 @@ public class UIBlockView extends UIComponent implements UIDataViewImpl {
         return new UIBlockLine(this.block());
     }
 
-    public UIBlockLine addLine(String... fields) {
-        UIBlockLine line = addLine();
-        line.addColumns(fields);
-        return line;
-    }
-
     public UIBlockGridLine addGrid() {
         return new UIBlockGridLine(this.block());
     }
@@ -139,7 +133,7 @@ public class UIBlockView extends UIComponent implements UIDataViewImpl {
         view.setDefaultStyle(new UIBlockStyle());
         view.setBlock(new UIUrl().setHref("www.baidu.com"));
         new UIUrl(view.addLine()).setText("hello");
-        view.addLine("code", "name");
+        view.addLine().addCell("code", "name");
         view.addGrid(2, 3).addCell("code", "name");
         view.addGrid(2, 3, 2, 3).addCell("code", "name");
         view.setPhone(true);

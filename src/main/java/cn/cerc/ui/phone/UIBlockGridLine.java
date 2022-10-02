@@ -85,6 +85,7 @@ public class UIBlockGridLine extends UIBlockLine {
         return tr;
     }
 
+    @Override
     public UIBlockGridLine addCell(String... fieldList) {
         var impl = findOwner(UIDataViewImpl.class);
         if (impl == null) {
@@ -104,6 +105,7 @@ public class UIBlockGridLine extends UIBlockLine {
         return this;
     }
 
+    @Override
     public UIBlockGridCell getCell(int index) {
         return (UIBlockGridCell) tr.getComponent(index);
     }
