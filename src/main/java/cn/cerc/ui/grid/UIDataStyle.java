@@ -106,9 +106,11 @@ public class UIDataStyle implements UIDataStyleImpl {
 
     @Override
     public UIDataStyle setDefault(FieldMeta meta) {
-        var event = this.getDefault(meta);
-        if (event != null)
-            meta.onGetText(event);
+        if (meta.onGetText() == null) {
+            var event = this.getDefault(meta);
+            if (event != null)
+                meta.onGetText(event);
+        }
         return this;
     }
 
@@ -148,7 +150,6 @@ public class UIDataStyle implements UIDataStyleImpl {
         if (field == null)
             field = dataSet.fields().add(fieldCode, FieldKind.Calculated);
         this.fields.add(field);
-        this.setDefault(field);
         return field;
     }
 

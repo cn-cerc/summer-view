@@ -53,7 +53,7 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
             if (this.dataSet == null)
                 this.setDataSet(style.dataSet());
             for (var field : style.fields())
-                this.addField(field.code());
+                fields.add(field);
         }
         this.viewStyle = style;
         return this;
@@ -77,8 +77,6 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
         if (field == null)
             field = dataSet.fields().add(fieldCode, FieldKind.Calculated);
         fields.add(field);
-        if (viewStyle != null)
-            viewStyle.setDefault(field);
         return field;
     }
 
@@ -89,16 +87,15 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
         if (!this.init && this.dataSet != null) {
             // 若没有指定列时，自动为所有列
             if (fields.size() == 0) {
-                for (var field : dataSet.fields()) {
-                    if (viewStyle != null)
-                        viewStyle.setDefault(field);
+                for (var field : dataSet.fields()) 
                     fields.add(field);
-                }
             }
             // 建立相应的显示组件
             UITr head = head();
             UIGridBody body = body();
             for (var meta : fields) {
+                if (viewStyle != null)
+                    viewStyle.setDefault(meta);
                 String fieldName = meta.name() == null ? meta.code() : meta.name();
                 new UITh(head).setText(fieldName);
                 new UIDataField(new UITd(body)).setField(meta.code());
