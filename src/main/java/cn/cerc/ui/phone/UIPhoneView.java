@@ -14,11 +14,12 @@ public class UIPhoneView extends UIComponent implements UIDataViewImpl {
     private UIDataStyleImpl defaultStyle;
     private UIComponent block;
     private DataSet dataSet;
-    private boolean active = true;
+    private boolean active;
 
     public UIPhoneView(UIComponent owner) {
         super(owner);
         this.setRootLabel("li");
+        this.setActive(this.isPhone());
     }
 
     @Override
@@ -85,7 +86,7 @@ public class UIPhoneView extends UIComponent implements UIDataViewImpl {
     public void output(HtmlWriter html) {
         if (!this.active())
             return;
-        html.println("<ul class='block-view'>");
+        html.println("<ol class='block-view'>");
         var dataSet = dataSet();
         dataSet.first();
         while (dataSet.fetch()) {
@@ -107,7 +108,7 @@ public class UIPhoneView extends UIComponent implements UIDataViewImpl {
             this.endOutput(html);
             html.println("");
         }
-        html.print("</ul>");
+        html.print("</ol>");
     }
 
     public List<UIPhoneLine> lines() {

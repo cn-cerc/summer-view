@@ -22,6 +22,7 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
         super(owner);
         this.setRootLabel("table");
         this.setCssClass("dbgrid");
+        this.setActive(!this.isPhone());
     }
 
     @Override
