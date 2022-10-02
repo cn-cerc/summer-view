@@ -9,10 +9,10 @@ import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.core.UIDataViewImpl;
 import cn.cerc.ui.vcl.UITd;
 
-public class UIGridBody extends UIComponent {
-    private static final Logger log = LoggerFactory.getLogger(UIGridBody.class);
+public class UIGridLine extends UIComponent {
+    private static final Logger log = LoggerFactory.getLogger(UIGridLine.class);
 
-    public UIGridBody(UIComponent owner) {
+    public UIGridLine(UIComponent owner) {
         super(owner);
         this.setRootLabel("tr");
     }
