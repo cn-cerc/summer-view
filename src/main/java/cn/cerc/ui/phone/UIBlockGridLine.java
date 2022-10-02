@@ -97,11 +97,15 @@ public class UIBlockGridLine extends UIBlockLine {
             FieldMeta column = fields.get(fieldCode);
             if (column == null)
                 column = fields.add(fieldCode, FieldKind.Calculated);
-            if (defaultStyle != null) 
+            if (defaultStyle != null)
                 defaultStyle.setDefault(column);
             new UIBlockGridCell(tr).setFieldCode(fieldCode);
         }
         return this;
+    }
+
+    public UIBlockGridCell getCell(int index) {
+        return (UIBlockGridCell) tr.getComponent(index);
     }
 
 }
