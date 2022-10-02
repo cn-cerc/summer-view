@@ -1,7 +1,7 @@
 package cn.cerc.ui.core;
 
 import cn.cerc.db.core.DataSetSourceImpl;
-import cn.cerc.ui.grid.UIDataStyleImpl;
+import cn.cerc.ui.grid.UIFieldStyleImpl;
 
 public interface UIDataViewImpl extends DataSetSourceImpl {
 
@@ -9,7 +9,7 @@ public interface UIDataViewImpl extends DataSetSourceImpl {
 
     Object setActive(boolean active);
 
-    Object setStyle(UIDataStyleImpl defaultStyle);
+    Object setViewStyle(UIFieldStyleImpl defaultStyle);
 
-    UIDataStyleImpl defaultStyle();
+    UIFieldStyleImpl defaultStyle();
 }

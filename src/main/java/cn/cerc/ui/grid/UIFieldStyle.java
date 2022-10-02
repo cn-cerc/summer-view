@@ -15,7 +15,7 @@ import cn.cerc.db.editor.OnGetText;
 import cn.cerc.mis.ado.UsedEnum;
 import cn.cerc.ui.vcl.UIInput;
 
-public class UIFieldStyle implements UIDataStyleImpl {
+public class UIFieldStyle implements UIFieldStyleImpl {
     private static final Logger log = LoggerFactory.getLogger(UIFieldStyle.class);
     public boolean inputState = false;
     private DataSet dataSet;

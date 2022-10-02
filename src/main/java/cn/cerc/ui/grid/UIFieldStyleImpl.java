@@ -5,7 +5,7 @@ import java.util.List;
 import cn.cerc.db.core.DataSet;
 import cn.cerc.db.core.FieldMeta;
 
-public interface UIDataStyleImpl {
+public interface UIFieldStyleImpl {
 
     Object setDefault(FieldMeta fieldMeta);
 

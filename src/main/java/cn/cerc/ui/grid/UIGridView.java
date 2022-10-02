@@ -16,7 +16,7 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
     private DataSet dataSet;
     private boolean active;
     private HashSet<FieldMeta> fields = new LinkedHashSet<>();
-    private UIDataStyleImpl defaultStyle;
+    private UIFieldStyleImpl defaultStyle;
     private boolean init;
 
     public UIGridView(UIComponent owner) {
@@ -38,12 +38,12 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
     }
 
     @Override
-    public UIDataStyleImpl defaultStyle() {
+    public UIFieldStyleImpl defaultStyle() {
         return this.defaultStyle;
     }
 
     @Override
-    public UIGridView setStyle(UIDataStyleImpl style) {
+    public UIGridView setViewStyle(UIFieldStyleImpl style) {
         if (style != null) {
             if (this.dataSet == null)
                 this.setDataSet(style.dataSet());
@@ -125,7 +125,7 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
         UIGridView grid = new UIGridView(null);
         grid.setPhone(false);
         grid.setDataSet(ds);
-        grid.setStyle(new UIFieldStyle());
+        grid.setViewStyle(new UIFieldStyle());
 //        grid.addColumn("sex"); //指定栏位输出
         System.out.println(grid.toString());
     }
