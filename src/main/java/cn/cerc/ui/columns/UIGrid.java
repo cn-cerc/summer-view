@@ -225,7 +225,7 @@ public class UIGrid extends UIComponent implements IReadonlyOwner, IGridStyle {
     }
 
     @Override
-    public boolean isReadonly() {
+    public boolean readonly() {
         return readonly;
     }
 

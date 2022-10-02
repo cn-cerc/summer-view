@@ -15,7 +15,7 @@ public class RadioColumn extends AbstractColumn implements IDataColumn {
         super(owner);
         this.setCode(code).setName(name).setSpaceWidth(width);
         if (owner instanceof IReadonlyOwner) {
-            this.setReadonly(((IReadonlyOwner) owner).isReadonly());
+            this.setReadonly(((IReadonlyOwner) owner).readonly());
         }
     }
 

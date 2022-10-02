@@ -21,7 +21,7 @@ public class DoubleColumn extends AbstractColumn implements IDataColumn {
     public DoubleColumn(UIComponent owner) {
         super(owner);
         if (owner instanceof IReadonlyOwner) {
-            this.setReadonly(((IReadonlyOwner) owner).isReadonly());
+            this.setReadonly(((IReadonlyOwner) owner).readonly());
         }
     }
 
@@ -29,7 +29,7 @@ public class DoubleColumn extends AbstractColumn implements IDataColumn {
         super(owner);
         this.setCode(code).setName(name).setSpaceWidth(4);
         if (owner instanceof IReadonlyOwner) {
-            this.setReadonly(((IReadonlyOwner) owner).isReadonly());
+            this.setReadonly(((IReadonlyOwner) owner).readonly());
         }
         input.setName(code);
     }
@@ -38,7 +38,7 @@ public class DoubleColumn extends AbstractColumn implements IDataColumn {
         super(owner);
         this.setCode(code).setName(name).setSpaceWidth(width);
         if (owner instanceof IReadonlyOwner) {
-            this.setReadonly(((IReadonlyOwner) owner).isReadonly());
+            this.setReadonly(((IReadonlyOwner) owner).readonly());
         }
         input.setName(code);
     }

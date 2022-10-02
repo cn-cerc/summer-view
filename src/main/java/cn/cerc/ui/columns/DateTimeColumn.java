@@ -15,7 +15,7 @@ public class DateTimeColumn extends AbstractColumn implements IDataColumn {
     public DateTimeColumn(UIComponent owner) {
         super(owner);
         if (owner instanceof IReadonlyOwner) {
-            this.setReadonly(((IReadonlyOwner) owner).isReadonly());
+            this.setReadonly(((IReadonlyOwner) owner).readonly());
         }
     }
 
@@ -23,7 +23,7 @@ public class DateTimeColumn extends AbstractColumn implements IDataColumn {
         super(owner);
         this.setCode(code).setName(name).setSpaceWidth(10);
         if (owner instanceof IReadonlyOwner) {
-            this.setReadonly(((IReadonlyOwner) owner).isReadonly());
+            this.setReadonly(((IReadonlyOwner) owner).readonly());
         }
     }
 

@@ -15,7 +15,7 @@ public class IntColumn extends AbstractColumn implements IDataColumn {
     public IntColumn(UIComponent owner) {
         super(owner);
         if (owner instanceof IReadonlyOwner) {
-            this.setReadonly(((IReadonlyOwner) owner).isReadonly());
+            this.setReadonly(((IReadonlyOwner) owner).readonly());
         }
     }
 
@@ -23,7 +23,7 @@ public class IntColumn extends AbstractColumn implements IDataColumn {
         super(owner);
         this.setCode(code).setName(name).setSpaceWidth(width);
         if (owner instanceof IReadonlyOwner) {
-            this.setReadonly(((IReadonlyOwner) owner).isReadonly());
+            this.setReadonly(((IReadonlyOwner) owner).readonly());
         }
         input.setName(code);
     }
