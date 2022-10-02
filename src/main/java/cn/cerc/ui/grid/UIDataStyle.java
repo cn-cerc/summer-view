@@ -22,6 +22,8 @@ public class UIDataStyle implements UIDataStyleImpl {
     private List<FieldMeta> fields = new ArrayList<>();
     private OnOutput onOutput;
 
+    public static int PX_SIZE = 14; // 1个汉字 = 14px
+
     public UIDataStyle() {
         this(false);
     }
@@ -38,8 +40,18 @@ public class UIDataStyle implements UIDataStyleImpl {
     public OnGetText getString() {
         return data -> {
             String result = data.getString();
-            if (this.inputState)
-                return UIInput.html(data.key(), result);
+            if (this.inputState) {
+                UIInput input = new UIInput(null);
+                input.setId(data.key());
+                input.setValue(result);
+                var meta = data.source().fields(data.key());
+                if (meta.width() > 0) {
+                    String width = String.format("%dpx", meta.width() * PX_SIZE);
+                    input.setCssProperty("width", width);
+                } else
+                    input.setCssProperty("width", null);
+                result = input.toString();
+            }
             return result;
         };
     }

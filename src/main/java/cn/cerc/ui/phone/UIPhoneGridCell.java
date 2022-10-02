@@ -34,8 +34,8 @@ public class UIPhoneGridCell extends UIPhoneCell {
             this.setCssProperty("data-field", this.fieldCode());
         var impl = findOwner(DataSource.class);
         if (impl == null) {
-            log.error("在 owner 中找不到 UIDataViewImpl");
-            throw new RuntimeException("在 owner 中找不到 UIDataViewImpl");
+            log.error("在 owner 中找不到 DataSource");
+            throw new RuntimeException("在 owner 中找不到 DataSource");
         }
         this.beginOutput(html);
         String name = impl.current().fields().get(fieldCode).name();

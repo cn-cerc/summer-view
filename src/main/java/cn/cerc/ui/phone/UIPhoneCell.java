@@ -1,9 +1,9 @@
 package cn.cerc.ui.phone;
 
+import cn.cerc.db.core.DataSource;
 import cn.cerc.db.core.Utils;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
-import cn.cerc.ui.core.UIDataViewImpl;
 
 public class UIPhoneCell extends UIComponent {
     private String fieldCode;
@@ -24,7 +24,7 @@ public class UIPhoneCell extends UIComponent {
 
     @Override
     public void output(HtmlWriter html) {
-        var impl = findOwner(UIDataViewImpl.class);
+        var impl = findOwner(DataSource.class);
         if (impl != null)
             this.setCssProperty("data-field", this.fieldCode);
         this.beginOutput(html);

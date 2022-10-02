@@ -42,11 +42,11 @@ public class UIInput extends UIComponent implements IHtml, INameOwner {
         return title;
     }
 
-    @Deprecated
-    public UIInput setCaption(String caption) {
-        this.title = caption;
-        return this;
-    }
+//    @Deprecated
+//    public UIInput setCaption(String caption) {
+//        this.title = caption;
+//        return this;
+//    }
 
     @Override
     public String getName() {

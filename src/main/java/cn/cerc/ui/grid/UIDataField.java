@@ -16,8 +16,8 @@ public class UIDataField extends UIComponent {
         super(owner);
         this.source = findOwner(DataSource.class);
         if (source == null) {
-            log.error("在 owner 中找不到 UIDataViewImpl");
-            throw new RuntimeException("在 owner 中找不到 UIDataViewImpl");
+            log.error("在 owner 中找不到 DataSource");
+            throw new RuntimeException("在 owner 中找不到 DataSource");
         }
     }
 
