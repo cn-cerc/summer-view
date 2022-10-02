@@ -95,8 +95,7 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
                     fields.add(field);
                 }
             }
-            // 根据不同的设备显示
-
+            // 建立相应的显示组件
             UITr head = head();
             UIGridBody body = body();
             for (var meta : fields) {
