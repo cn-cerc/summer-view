@@ -23,6 +23,39 @@ public class UIBlockView extends UIComponent implements UIDataViewImpl {
         this.setRootLabel("li");
     }
 
+    @Override
+    public DataSet dataSet() {
+        return dataSet;
+    }
+
+    @Override
+    public UIBlockView setDataSet(DataSet dataSet) {
+        this.dataSet = dataSet;
+        return this;
+    }
+
+    @Override
+    public UIBlockView setDefaultStyle(UIDataStyleImpl defaultStyle) {
+        this.defaultStyle = defaultStyle;
+        return this;
+    }
+
+    @Override
+    public UIDataStyleImpl defaultStyle() {
+        return defaultStyle;
+    }
+
+    @Override
+    public boolean active() {
+        return active;
+    }
+
+    @Override
+    public UIBlockView setActive(boolean active) {
+        this.active = active;
+        return this;
+    }
+
     public UIBlockLine addLine() {
         return new UIBlockLine(this.block());
     }
@@ -45,17 +78,6 @@ public class UIBlockView extends UIComponent implements UIDataViewImpl {
             line.addCell(fieldCode);
         }
         return line;
-    }
-
-    @Override
-    public UIBlockView setDefaultStyle(UIDataStyleImpl defaultStyle) {
-        this.defaultStyle = defaultStyle;
-        return this;
-    }
-
-    @Override
-    public UIDataStyleImpl defaultStyle() {
-        return defaultStyle;
     }
 
     public UIComponent block() {
@@ -115,27 +137,6 @@ public class UIBlockView extends UIComponent implements UIDataViewImpl {
         return lines().get(index);
     }
 
-    @Override
-    public boolean active() {
-        return active;
-    }
-
-    @Override
-    public UIBlockView setActive(boolean active) {
-        this.active = active;
-        return this;
-    }
-
-    @Override
-    public DataSet dataSet() {
-        return dataSet;
-    }
-
-    @Override
-    public UIBlockView setDataSet(DataSet dataSet) {
-        this.dataSet = dataSet;
-        return this;
-    }
     public static void main(String[] args) {
         var ds = new DataSet();
         ds.append().setValue("code", 1).setValue("name", "a");

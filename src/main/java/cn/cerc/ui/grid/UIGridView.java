@@ -35,6 +35,28 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
         return dataSet;
     }
 
+    @Override
+    public UIDataStyleImpl defaultStyle() {
+        return this.defaultStyle;
+    }
+
+    @Override
+    public UIGridView setDefaultStyle(UIDataStyleImpl outputStyle) {
+        this.defaultStyle = outputStyle;
+        return this;
+    }
+
+    @Override
+    public boolean active() {
+        return active;
+    }
+
+    @Override
+    public UIGridView setActive(boolean active) {
+        this.active = active;
+        return this;
+    }
+
     public FieldMeta addColumn(String fieldCode) {
         if (this.dataSet == null)
             throw new RuntimeException("dataSet is null");
@@ -77,30 +99,8 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
         super.output(html);
     }
 
-    @Override
-    public UIDataStyleImpl defaultStyle() {
-        return this.defaultStyle;
-    }
-
-    @Override
-    public UIGridView setDefaultStyle(UIDataStyleImpl outputStyle) {
-        this.defaultStyle = outputStyle;
-        return this;
-    }
-
     public FieldMeta addColumnIt() {
         return this.addColumn("it").onGetText(data -> "" + data.source().dataSet().recNo()).setName("序");
-    }
-
-    @Override
-    public boolean active() {
-        return active;
-    }
-
-    @Override
-    public UIGridView setActive(boolean active) {
-        this.active = active;
-        return this;
     }
 
     public static void main(String[] args) {
