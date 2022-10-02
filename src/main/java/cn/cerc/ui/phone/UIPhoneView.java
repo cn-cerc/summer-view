@@ -39,7 +39,7 @@ public class UIPhoneView extends UIComponent implements UIDataViewImpl {
 
     @Override
     public UIPhoneView setDataStyle(UIDataStyleImpl style) {
-        if (dataStyle != null) {
+        if (style != null) {
             if (this.dataSet == null)
                 this.setDataSet(style.dataSet());
         }
