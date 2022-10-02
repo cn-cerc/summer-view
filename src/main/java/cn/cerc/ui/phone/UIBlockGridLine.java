@@ -95,8 +95,8 @@ public class UIBlockGridLine extends UIBlockLine {
             log.error("在 owner 中找不到 UIDataViewImpl");
             throw new RuntimeException("在 owner 中找不到 UIDataViewImpl");
         }
-        var defaultStyle = impl.active() ? impl.defaultStyle() : null;
         var fields = impl.dataSet().fields();
+        var defaultStyle = impl.active() ? impl.defaultStyle() : null;
         for (var fieldCode : fieldList) {
             FieldMeta column = fields.get(fieldCode);
             if (column == null)
