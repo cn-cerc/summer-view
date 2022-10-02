@@ -11,14 +11,14 @@ import cn.cerc.ui.fields.ExpendField;
 import cn.cerc.ui.vcl.UIUrl;
 
 public class PhoneLine extends UIComponent implements DataSource {
-    private DataGrid grid;
+    private DataSource source;
     private boolean table = false;
     private String style;
     private ExpendField expender;
 
     public PhoneLine(DataGrid owner) {
         super(owner);
-        this.grid = owner;
+        this.source = owner;
     }
 
     public String getStyle() {
@@ -122,7 +122,7 @@ public class PhoneLine extends UIComponent implements DataSource {
     
     @Override
     public DataSet dataSet() {
-        return grid.dataSet();
+        return source.dataSet();
     }
 
     @Deprecated
