@@ -22,7 +22,7 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
     private boolean active;
     private boolean init;
     private UITr head;
-    private UIGridLine body;
+    private UIGridBody body;
 
     public UIGridView(UIComponent owner) {
         super(owner);
@@ -98,7 +98,7 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
             // 根据不同的设备显示
 
             UITr head = head();
-            UIGridLine body = body();
+            UIGridBody body = body();
             for (var meta : fields) {
                 String fieldName = meta.name() == null ? meta.code() : meta.name();
                 new UITh(head).setText(fieldName);
@@ -115,9 +115,9 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
         return this.head;
     }
 
-    public UIGridLine body() {
+    public UIGridBody body() {
         if (body == null)
-            this.body = new UIGridLine(this);
+            this.body = new UIGridBody(this);
         return this.body;
     }
 
