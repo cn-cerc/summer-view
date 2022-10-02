@@ -2,9 +2,9 @@ package cn.cerc.ui.phone;
 
 import cn.cerc.ui.grid.UIGridStyle;
 
-public class UIBlockStyle extends UIGridStyle {
-    
-    public UIBlockStyle(boolean inputState) {
+public class UIPhoneStyle extends UIGridStyle {
+
+    public UIPhoneStyle(boolean inputState) {
         super(inputState);
     }
 
