@@ -1,12 +1,15 @@
 package cn.cerc.ui.phone;
 
-import cn.cerc.db.core.DataSet;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import cn.cerc.db.core.FieldMeta;
 import cn.cerc.db.core.FieldMeta.FieldKind;
 import cn.cerc.ui.core.UIComponent;
-import cn.cerc.ui.grid.UIDataStyleImpl;
+import cn.cerc.ui.core.UIDataViewImpl;
 
 public class UIBlockLine extends UIComponent {
+    private static final Logger log = LoggerFactory.getLogger(UIBlockLine.class);
 
     public UIBlockLine(UIComponent owner) {
         super(owner);
@@ -24,12 +27,13 @@ public class UIBlockLine extends UIComponent {
     }
 
     public UIBlockLine addColumns(String... fields) {
-        DataSet dataSet = null;
-        UIDataStyleImpl defaultStyle = null;
-        if (this.getOwner() instanceof UIBlockView view) {
-            dataSet = view.dataSet();
-            defaultStyle = view.defaultStyle();
+        var impl = findOwner(UIDataViewImpl.class);
+        if (impl == null) {
+            log.error("在 owner 中找不到 UIDataViewImpl");
+            throw new RuntimeException("在 owner 中找不到 UIDataViewImpl");
         }
+        var dataSet = impl.dataSet();
+        var defaultStyle = impl.active() ? impl.defaultStyle() : null;
         for (var fieldCode : fields) {
             if (dataSet != null) {
                 FieldMeta column = dataSet.fields().get(fieldCode);

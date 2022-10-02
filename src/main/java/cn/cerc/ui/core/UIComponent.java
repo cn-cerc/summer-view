@@ -262,6 +262,20 @@ public class UIComponent implements IOriginOwner, HtmlContent, Iterable<UICompon
         return this.signProperty.contains(signValue);
     }
 
+    @SuppressWarnings("unchecked")
+    public <T> T findOwner(Class<T> clazz) {
+        T result = null;
+        UIComponent parent = this.getOwner();
+        while (parent != null) {
+            if (clazz.isInstance(parent)) {
+                result = (T) parent;
+                break;
+            }
+            parent = parent.getOwner();
+        }
+        return result;
+    }
+
     @Deprecated
     public final <T> T create(Class<T> clazz) throws InstantiationException, IllegalAccessException,
             IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {

@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.cerc.db.core.DataSet;
-import cn.cerc.db.core.FieldMeta;
-import cn.cerc.db.core.FieldMeta.FieldKind;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.core.UIDataViewImpl;
@@ -66,18 +64,12 @@ public class UIBlockView extends UIComponent implements UIDataViewImpl {
         return line;
     }
 
-    public UIBlockGridLine addLineGrid(String... fieldList) {
-        var fields = dataSet().fields();
-        UIBlockGridLine line = new UIBlockGridLine(this.block());
-        for (var fieldCode : fieldList) {
-            FieldMeta column = fields.get(fieldCode);
-            if (column == null)
-                column = fields.add(fieldCode, FieldKind.Calculated);
-            if (defaultStyle != null)
-                column.onGetText(defaultStyle.getDefault(column));
-            line.addCell(fieldCode);
-        }
-        return line;
+    public UIBlockGridLine addGrid() {
+        return new UIBlockGridLine(this.block());
+    }
+
+    public UIBlockGridLine addGrid(int... width) {
+        return new UIBlockGridLine(this.block()).split(width);
     }
 
     public UIComponent block() {
@@ -148,8 +140,8 @@ public class UIBlockView extends UIComponent implements UIDataViewImpl {
         view.setBlock(new UIUrl().setHref("www.baidu.com"));
         new UIUrl(view.addLine()).setText("hello");
         view.addLine("code", "name");
-        view.addLineGrid("code", "name").split(2, 3);
-        view.addLineGrid("code", "name").split(2, 3, 2, 3);
+        view.addGrid(2, 3).addLine("code", "name");
+        view.addGrid(2, 3, 2, 3).addLine("code", "name");
         view.setPhone(true);
         System.out.println(view.toString());
     }

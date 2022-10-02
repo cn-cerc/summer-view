@@ -1,10 +1,15 @@
 package cn.cerc.ui.phone;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import cn.cerc.db.core.DataRowSourceImpl;
 import cn.cerc.db.core.Utils;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 
 public class UIBlockGridCell extends UIBlockCell {
+    private static final Logger log = LoggerFactory.getLogger(UIBlockGridCell.class);
     private CellTypeEnum cellType = CellTypeEnum.Combo;
 
     public enum CellTypeEnum {
@@ -24,30 +29,31 @@ public class UIBlockGridCell extends UIBlockCell {
 
     @Override
     public void output(HtmlWriter html) {
-        var dataSource = this.dataSource();
         var fieldCode = this.fieldCode();
         if (this.cellType != CellTypeEnum.OnlyTitle)
             this.setCssProperty("data-field", this.fieldCode());
+        var impl = findOwner(DataRowSourceImpl.class);
+        if (impl == null) {
+            log.error("在 owner 中找不到 UIDataViewImpl");
+            throw new RuntimeException("在 owner 中找不到 UIDataViewImpl");
+        }
         this.beginOutput(html);
-        if (dataSource != null) {
-            String name = dataSource.current().fields().get(fieldCode).name();
-            switch (this.cellType) {
-            case OnlyTitle:
-                if (!Utils.isEmpty(name))
-                    html.print(name);
-                break;
-            case OnlyValue:
-                html.print(dataSource.current().getText(fieldCode));
-                break;
-            default:
-                if (!Utils.isEmpty(name)) {
-                    html.print(name);
-                    html.print(":");
-                }
-                html.print(dataSource.current().getText(fieldCode));
+        String name = impl.current().fields().get(fieldCode).name();
+        switch (this.cellType) {
+        case OnlyTitle:
+            if (!Utils.isEmpty(name))
+                html.print(name);
+            break;
+        case OnlyValue:
+            html.print(impl.current().getText(fieldCode));
+            break;
+        default:
+            if (!Utils.isEmpty(name)) {
+                html.print(name);
+                html.print(":");
             }
-        } else
-            html.print("dataSource is null");
+            html.print(impl.current().getText(fieldCode));
+        }
         this.endOutput(html);
     }
 
