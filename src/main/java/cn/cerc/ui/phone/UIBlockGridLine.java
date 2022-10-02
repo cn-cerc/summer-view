@@ -85,11 +85,7 @@ public class UIBlockGridLine extends UIBlockLine {
         return tr;
     }
 
-    public UIBlockGridCell addCell(String fieldCode) {
-        return new UIBlockGridCell(tr).setFieldCode(fieldCode);
-    }
-
-    public UIBlockGridLine addLine(String... fieldList) {
+    public UIBlockGridLine addCell(String... fieldList) {
         var impl = findOwner(UIDataViewImpl.class);
         if (impl == null) {
             log.error("在 owner 中找不到 UIDataViewImpl");
@@ -103,7 +99,7 @@ public class UIBlockGridLine extends UIBlockLine {
                 column = fields.add(fieldCode, FieldKind.Calculated);
             if (defaultStyle != null) 
                 defaultStyle.setDefault(column);
-            this.addCell(fieldCode);
+            new UIBlockGridCell(tr).setFieldCode(fieldCode);
         }
         return this;
     }

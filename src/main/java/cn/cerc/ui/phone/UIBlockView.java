@@ -140,8 +140,8 @@ public class UIBlockView extends UIComponent implements UIDataViewImpl {
         view.setBlock(new UIUrl().setHref("www.baidu.com"));
         new UIUrl(view.addLine()).setText("hello");
         view.addLine("code", "name");
-        view.addGrid(2, 3).addLine("code", "name");
-        view.addGrid(2, 3, 2, 3).addLine("code", "name");
+        view.addGrid(2, 3).addCell("code", "name");
+        view.addGrid(2, 3, 2, 3).addCell("code", "name");
         view.setPhone(true);
         System.out.println(view.toString());
     }
