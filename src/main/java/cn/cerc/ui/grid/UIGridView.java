@@ -17,6 +17,7 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
     private boolean active;
     private HashSet<FieldMeta> columns = new LinkedHashSet<>();
     private UIDataStyleImpl defaultStyle;
+    private boolean init;
 
     public UIGridView(UIComponent owner) {
         super(owner);
@@ -74,7 +75,7 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
     public void output(HtmlWriter html) {
         if (!this.active())
             return;
-        if (!this.active && this.dataSet != null) {
+        if (!this.init && this.dataSet != null) {
             // 若没有指定列时，自动为所有列
             if (columns.size() == 0) {
                 for (var column : dataSet.fields()) {
@@ -95,7 +96,7 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
                     body.addColumn(column);
                 head.addAll(this.columns);
             }
-            this.active = true;
+            this.init = true;
         }
         super.output(html);
     }
