@@ -119,6 +119,7 @@ public class UIComponent implements IOriginOwner, HtmlContent, Iterable<UICompon
 
     @Override
     public Iterator<UIComponent> iterator() {
+        // 警告：此处不可直接返回 components.iterator
         return new ArrayList<UIComponent>(components).iterator();
     }
 
