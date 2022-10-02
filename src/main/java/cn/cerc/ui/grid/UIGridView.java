@@ -1,7 +1,7 @@
 package cn.cerc.ui.grid;
 
-import java.util.HashSet;
-import java.util.LinkedHashSet;
+import java.util.ArrayList;
+import java.util.List;
 
 import cn.cerc.db.core.DataSet;
 import cn.cerc.db.core.FieldMeta;
@@ -17,7 +17,7 @@ import cn.cerc.ui.vcl.UITr;
 
 public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyle {
     private DataSet dataSet;
-    private HashSet<FieldMeta> fields = new LinkedHashSet<>();
+    private List<FieldMeta> fields = new ArrayList<>();
     private UIDataStyleImpl viewStyle;
     private boolean active;
     private boolean init;
