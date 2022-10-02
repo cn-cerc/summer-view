@@ -43,7 +43,7 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
     }
 
     @Override
-    public UIGridView setViewStyle(UIDataStyleImpl style) {
+    public UIGridView setDataStyle(UIDataStyleImpl style) {
         if (style != null) {
             if (this.dataSet == null)
                 this.setDataSet(style.dataSet());
@@ -125,7 +125,7 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
         UIGridView grid = new UIGridView(null);
         grid.setPhone(false);
         grid.setDataSet(ds);
-        grid.setViewStyle(new UIDataStyle());
+        grid.setDataStyle(new UIDataStyle());
 //        grid.addColumn("sex"); //指定栏位输出
         System.out.println(grid.toString());
     }

@@ -35,7 +35,7 @@ public class UIPhoneView extends UIComponent implements UIDataViewImpl {
     }
 
     @Override
-    public UIPhoneView setViewStyle(UIDataStyleImpl defaultStyle) {
+    public UIPhoneView setDataStyle(UIDataStyleImpl defaultStyle) {
         this.defaultStyle = defaultStyle;
         return this;
     }
@@ -132,7 +132,7 @@ public class UIPhoneView extends UIComponent implements UIDataViewImpl {
         ds.fields().get("code").setName("代码");
         ds.fields().get("name").setName("名称");
         UIPhoneView view = new UIPhoneView(null).setDataSet(ds);
-        view.setViewStyle(new UIDataStyle());
+        view.setDataStyle(new UIDataStyle());
         view.setBlock(new UIUrl().setHref("www.baidu.com"));
         new UIUrl(view.addLine()).setText("hello");
         view.addLine().addCell("code", "name");
