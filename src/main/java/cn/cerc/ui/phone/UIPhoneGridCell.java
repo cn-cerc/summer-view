@@ -3,7 +3,7 @@ package cn.cerc.ui.phone;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cn.cerc.db.core.DataRowSourceImpl;
+import cn.cerc.db.core.DataSource;
 import cn.cerc.db.core.Utils;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
@@ -32,7 +32,7 @@ public class UIPhoneGridCell extends UIPhoneCell {
         var fieldCode = this.fieldCode();
         if (this.cellType != CellTypeEnum.OnlyTitle)
             this.setCssProperty("data-field", this.fieldCode());
-        var impl = findOwner(DataRowSourceImpl.class);
+        var impl = findOwner(DataSource.class);
         if (impl == null) {
             log.error("在 owner 中找不到 UIDataViewImpl");
             throw new RuntimeException("在 owner 中找不到 UIDataViewImpl");

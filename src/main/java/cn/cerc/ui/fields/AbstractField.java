@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import cn.cerc.db.core.ClassConfig;
 import cn.cerc.db.core.DataColumn;
 import cn.cerc.db.core.DataRow;
-import cn.cerc.db.core.DataRowSourceImpl;
+import cn.cerc.db.core.DataSource;
 import cn.cerc.db.core.Datetime;
 import cn.cerc.db.core.FastDate;
 import cn.cerc.mis.core.HtmlWriter;
@@ -46,7 +46,7 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
     //
     private BuildUrl buildUrl;
     // 数据源
-    private DataRowSourceImpl source;
+    private DataSource source;
 
     private String oninput;
     private String onclick;
@@ -92,8 +92,8 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
         // 查找最近的数据源
         UIComponent root = owner;
         while (root != null) {
-            if (root instanceof DataRowSourceImpl) {
-                this.source = (DataRowSourceImpl) root;
+            if (root instanceof DataSource) {
+                this.source = (DataSource) root;
                 break;
             }
             root = root.getOwner();
