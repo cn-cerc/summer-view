@@ -38,7 +38,7 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
     }
 
     @Override
-    public UIDataStyleImpl viewStyle() {
+    public UIDataStyleImpl dataStyle() {
         return this.viewStyle;
     }
 

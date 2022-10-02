@@ -41,7 +41,7 @@ public class UIPhoneView extends UIComponent implements UIDataViewImpl {
     }
 
     @Override
-    public UIDataStyleImpl viewStyle() {
+    public UIDataStyleImpl dataStyle() {
         return defaultStyle;
     }
 

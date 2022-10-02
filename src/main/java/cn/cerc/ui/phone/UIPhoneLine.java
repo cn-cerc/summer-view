@@ -29,14 +29,14 @@ public class UIPhoneLine extends UIComponent {
             throw new RuntimeException("在 owner 中找不到 UIDataViewImpl");
         }
         var dataSet = impl.dataSet();
-        var defaultStyle = impl.active() ? impl.viewStyle() : null;
+        var dataStyle = impl.dataStyle();
         for (var fieldCode : fields) {
             if (dataSet != null) {
                 FieldMeta column = dataSet.fields().get(fieldCode);
                 if (column == null)
                     column = dataSet.fields().add(fieldCode, FieldKind.Calculated);
-                if (defaultStyle != null)
-                    defaultStyle.setDefault(column);
+                if (impl.active() && dataStyle != null)
+                    dataStyle.setDefault(column);
             }
             new UIPhoneCell(this).setFieldCode(fieldCode);
         }

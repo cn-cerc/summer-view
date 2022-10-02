@@ -93,13 +93,13 @@ public class UIPhoneGridLine extends UIPhoneLine {
             throw new RuntimeException("在 owner 中找不到 UIDataViewImpl");
         }
         var fields = impl.dataSet().fields();
-        var defaultStyle = impl.active() ? impl.viewStyle() : null;
+        var dataStyle = impl.dataStyle();
         for (var fieldCode : fieldList) {
             FieldMeta column = fields.get(fieldCode);
             if (column == null)
                 column = fields.add(fieldCode, FieldKind.Calculated);
-            if (defaultStyle != null)
-                defaultStyle.setDefault(column);
+            if (impl.active() && dataStyle != null)
+                dataStyle.setDefault(column);
             new UIPhoneGridCell(tr).setFieldCode(fieldCode);
         }
         return this;

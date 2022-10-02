@@ -9,7 +9,7 @@ public interface UIDataViewImpl extends DataSetSourceImpl {
 
     Object setActive(boolean active);
 
-    Object setDataStyle(UIDataStyleImpl defaultStyle);
+    Object setDataStyle(UIDataStyleImpl dataStyle);
 
-    UIDataStyleImpl viewStyle();
+    UIDataStyleImpl dataStyle();
 }
