@@ -7,6 +7,7 @@ import cn.cerc.db.core.DataSet;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.core.UIDataViewImpl;
+import cn.cerc.ui.grid.UIFieldStyle;
 import cn.cerc.ui.grid.UIFieldStyleImpl;
 import cn.cerc.ui.vcl.UIUrl;
 
@@ -131,7 +132,7 @@ public class UIPhoneView extends UIComponent implements UIDataViewImpl {
         ds.fields().get("code").setName("代码");
         ds.fields().get("name").setName("名称");
         UIPhoneView view = new UIPhoneView(null).setDataSet(ds);
-        view.setViewStyle(new UIPhoneStyle());
+        view.setViewStyle(new UIFieldStyle());
         view.setBlock(new UIUrl().setHref("www.baidu.com"));
         new UIUrl(view.addLine()).setText("hello");
         view.addLine().addCell("code", "name");
