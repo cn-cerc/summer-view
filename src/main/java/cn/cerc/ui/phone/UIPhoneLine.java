@@ -23,19 +23,19 @@ public class UIPhoneLine extends UIComponent {
     }
 
     public UIPhoneLine addCell(String... fields) {
-        var impl = findOwner(UIDataViewImpl.class);
-        if (impl == null) {
+        var source = findOwner(UIDataViewImpl.class);
+        if (source == null) {
             log.error("在 owner 中找不到 UIDataViewImpl");
             throw new RuntimeException("在 owner 中找不到 UIDataViewImpl");
         }
-        var dataSet = impl.dataSet();
-        var dataStyle = impl.dataStyle();
+        var dataSet = source.dataSet();
+        var dataStyle = source.dataStyle();
         for (var fieldCode : fields) {
             if (dataSet != null) {
                 FieldMeta column = dataSet.fields().get(fieldCode);
                 if (column == null)
                     column = dataSet.fields().add(fieldCode, FieldKind.Calculated);
-                if (impl.active() && dataStyle != null)
+                if (source.active() && dataStyle != null)
                     dataStyle.setDefault(column);
             }
             new UIPhoneCell(this).setFieldCode(fieldCode);

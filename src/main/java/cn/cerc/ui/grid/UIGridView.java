@@ -11,6 +11,9 @@ import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.core.UIDataViewImpl;
 import cn.cerc.ui.style.IGridStyle;
+import cn.cerc.ui.vcl.UITd;
+import cn.cerc.ui.vcl.UITh;
+import cn.cerc.ui.vcl.UITr;
 
 public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyle {
     private DataSet dataSet;
@@ -18,6 +21,8 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
     private UIDataStyleImpl viewStyle;
     private boolean active;
     private boolean init;
+    private UITr head;
+    private UIGridBody body;
 
     public UIGridView(UIComponent owner) {
         super(owner);
@@ -92,14 +97,28 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
             }
             // 根据不同的设备显示
 
-            UIGridHead head = new UIGridHead(this);
-            UIGridBody body = new UIGridBody(this, dataSet);
-            for (var field : fields)
-                body.addColumn(field);
-            head.addAll(this.fields);
+            UITr head = head();
+            UIGridBody body = body();
+            for (var meta : fields) {
+                String fieldName = meta.name() == null ? meta.code() : meta.name();
+                new UITh(head).setText(fieldName);
+                new UIDataField(new UITd(body)).setField(meta.code());
+            }
             this.init = true;
         }
         super.output(html);
+    }
+
+    public UITr head() {
+        if (head == null)
+            this.head = new UITr(this);
+        return this.head;
+    }
+
+    public UIGridBody body() {
+        if (body == null)
+            this.body = new UIGridBody(this);
+        return this.body;
     }
 
     public static void main(String[] args) {
