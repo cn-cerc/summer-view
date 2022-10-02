@@ -11,7 +11,7 @@ public interface UIDataStyleImpl {
 
     FieldMeta addField(String fieldCode);
 
-    Object setDefault(FieldMeta fieldMeta);
+    Object setDefault(FieldMeta meta);
 
     List<FieldMeta> fields();
 

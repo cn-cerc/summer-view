@@ -9,17 +9,20 @@ import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.core.UIDataViewImpl;
 import cn.cerc.ui.grid.UIDataStyle;
 import cn.cerc.ui.grid.UIDataStyleImpl;
+import cn.cerc.ui.vcl.UILi;
 import cn.cerc.ui.vcl.UIUrl;
 
 public class UIPhoneView extends UIComponent implements UIDataViewImpl {
-    private UIDataStyleImpl defaultStyle;
+    private UIDataStyleImpl dataStyle;
     private UIComponent block;
     private DataSet dataSet;
     private boolean active;
+    private UILi li;
 
     public UIPhoneView(UIComponent owner) {
         super(owner);
-        this.setRootLabel("li");
+        this.setRootLabel("ol");
+        this.setCssClass("phone-view");
         this.setActive(this.isPhone());
     }
 
@@ -35,14 +38,14 @@ public class UIPhoneView extends UIComponent implements UIDataViewImpl {
     }
 
     @Override
-    public UIPhoneView setDataStyle(UIDataStyleImpl defaultStyle) {
-        this.defaultStyle = defaultStyle;
+    public UIPhoneView setDataStyle(UIDataStyleImpl dataStyle) {
+        this.dataStyle = dataStyle;
         return this;
     }
 
     @Override
     public UIDataStyleImpl dataStyle() {
-        return defaultStyle;
+        return dataStyle;
     }
 
     @Override
@@ -70,7 +73,7 @@ public class UIPhoneView extends UIComponent implements UIDataViewImpl {
 
     public UIComponent block() {
         if (block == null)
-            block = new UIComponent(this);
+            block = new UIComponent(li());
         return block;
     }
 
@@ -78,23 +81,29 @@ public class UIPhoneView extends UIComponent implements UIDataViewImpl {
         if (block != null) {
             if (this.block != null)
                 throw new RuntimeException("block not is null");
-            block.setOwner(this);
+            block.setOwner(li());
         }
         this.block = block;
+    }
+
+    public UIComponent li() {
+        if (li == null)
+            li = new UILi(this);
+        return li;
     }
 
     @Override
     public void output(HtmlWriter html) {
         if (!this.active())
             return;
-        html.println("<ol class='block-view'>");
+        this.beginOutput(html);
+        var li = li();
         var dataSet = dataSet();
         dataSet.first();
         while (dataSet.fetch()) {
-            this.setCssProperty("data-row", "" + (dataSet.recNo() - 1));
-            this.beginOutput(html);
-            html.println("");
-            for (UIComponent item : this.getComponents()) {
+            li.setCssProperty("data-row", "" + (dataSet.recNo() - 1));
+            li.beginOutput(html);
+            for (UIComponent item : li.getComponents()) {
                 item.beginOutput(html);
                 var line = 0;
                 for (UIComponent child : item.getComponents()) {
@@ -106,10 +115,10 @@ public class UIPhoneView extends UIComponent implements UIDataViewImpl {
                 item.endOutput(html);
                 html.println("");
             }
-            this.endOutput(html);
+            li.endOutput(html);
             html.println("");
         }
-        html.print("</ol>");
+        this.endOutput(html);
     }
 
     public List<UIPhoneLine> lines() {
@@ -137,8 +146,8 @@ public class UIPhoneView extends UIComponent implements UIDataViewImpl {
         new UIUrl(view.addLine()).setText("hello");
         view.addLine().addCell("code", "name");
         view.addGrid(2, 3).addCell("code", "name");
-        view.addGrid(2, 3, 2, 3).addCell("code", "name");
-        view.setPhone(true);
+//        view.addGrid(2, 3, 2, 3).addCell("code", "name");
+        view.setActive(true);
         System.out.println(view.toString());
     }
 

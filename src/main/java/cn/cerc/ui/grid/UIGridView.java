@@ -14,9 +14,9 @@ import cn.cerc.ui.style.IGridStyle;
 
 public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyle {
     private DataSet dataSet;
-    private boolean active;
     private HashSet<FieldMeta> fields = new LinkedHashSet<>();
     private UIDataStyleImpl viewStyle;
+    private boolean active;
     private boolean init;
 
     public UIGridView(UIComponent owner) {
@@ -91,17 +91,12 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
                 }
             }
             // 根据不同的设备显示
-            if (this.isPhone()) {
-                UIGridBody body = new UIGridBody(this, dataSet);
-                for (var field : fields)
-                    body.addColumn(field);
-            } else {
-                UIGridHead head = new UIGridHead(this);
-                UIGridBody body = new UIGridBody(this, dataSet);
-                for (var field : fields)
-                    body.addColumn(field);
-                head.addAll(this.fields);
-            }
+
+            UIGridHead head = new UIGridHead(this);
+            UIGridBody body = new UIGridBody(this, dataSet);
+            for (var field : fields)
+                body.addColumn(field);
+            head.addAll(this.fields);
             this.init = true;
         }
         super.output(html);
@@ -126,7 +121,7 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
         grid.setPhone(false);
         grid.setDataSet(ds);
         grid.setDataStyle(new UIDataStyle());
-//        grid.addColumn("sex"); //指定栏位输出
+//        grid.addField("sex"); //指定栏位输出
         System.out.println(grid.toString());
     }
 

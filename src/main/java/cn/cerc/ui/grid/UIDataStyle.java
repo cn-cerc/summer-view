@@ -96,7 +96,7 @@ public class UIDataStyle implements UIDataStyleImpl {
     }
 
     public interface OnOutput {
-        OnGetText getOutputEvent(UIDataStyle sender, FieldMeta meta);
+        OnGetText getOutputEvent(UIDataStyle style, FieldMeta meta);
     }
 
     public UIDataStyle onOutput(OnOutput onOutput) {
@@ -177,9 +177,9 @@ public class UIDataStyle implements UIDataStyleImpl {
         var code = row.fields().get("code");
         var data = new DataCell(row, code.code());
 
-        style.onOutput((sender, meta) -> switch (meta.code()) {
-        case "code" -> sender.getEnum(UsedEnum.class);
-        default -> null;
+        style.onOutput((styld, meta) -> switch (meta.code()) {
+        case "code" -> styld.getEnum(UsedEnum.class);
+        default -> meta.onGetText();
         });
 
         System.out.println("output:" + style.getDefault(code).getText(data));
