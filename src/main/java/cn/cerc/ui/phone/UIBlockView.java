@@ -3,18 +3,17 @@ package cn.cerc.ui.phone;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.cerc.db.core.DataRow;
 import cn.cerc.db.core.DataSet;
-import cn.cerc.db.core.DataSource;
 import cn.cerc.db.core.FieldMeta;
 import cn.cerc.db.core.FieldMeta.FieldKind;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
-import cn.cerc.ui.grid.UIOutputStyleImpl;
+import cn.cerc.ui.core.UIDataViewImpl;
+import cn.cerc.ui.grid.UIDataStyleImpl;
 import cn.cerc.ui.vcl.UIUrl;
 
-public class UIBlockView extends UIComponent implements DataSource {
-    private UIOutputStyleImpl defaultStyle;
+public class UIBlockView extends UIComponent implements UIDataViewImpl {
+    private UIDataStyleImpl defaultStyle;
     private UIComponent block;
     private DataSet dataSet;
     private boolean active = true;
@@ -22,11 +21,6 @@ public class UIBlockView extends UIComponent implements DataSource {
     public UIBlockView(UIComponent owner) {
         super(owner);
         this.setRootLabel("li");
-    }
-
-    public UIBlockView setDataSet(DataSet dataSet) {
-        this.dataSet = dataSet;
-        return this;
     }
 
     public UIBlockLine addLine() {
@@ -39,12 +33,13 @@ public class UIBlockView extends UIComponent implements DataSource {
         return line;
     }
 
-    public UIBlockGridLine addLineGrid(String... fields) {
+    public UIBlockGridLine addLineGrid(String... fieldList) {
+        var fields = dataSet().fields();
         UIBlockGridLine line = new UIBlockGridLine(this.block());
-        for (var fieldCode : fields) {
-            FieldMeta column = dataSet.fields().get(fieldCode);
+        for (var fieldCode : fieldList) {
+            FieldMeta column = fields.get(fieldCode);
             if (column == null)
-                column = dataSet.fields().add(fieldCode, FieldKind.Calculated);
+                column = fields.add(fieldCode, FieldKind.Calculated);
             if (defaultStyle != null)
                 column.onGetText(defaultStyle.getDefault(column));
             line.addCell(fieldCode);
@@ -52,12 +47,14 @@ public class UIBlockView extends UIComponent implements DataSource {
         return line;
     }
 
-    public UIBlockView setDefaultStyle(UIOutputStyleImpl defaultStyle) {
+    @Override
+    public UIBlockView setDefaultStyle(UIDataStyleImpl defaultStyle) {
         this.defaultStyle = defaultStyle;
         return this;
     }
 
-    public UIOutputStyleImpl defaultStyle() {
+    @Override
+    public UIDataStyleImpl defaultStyle() {
         return defaultStyle;
     }
 
@@ -81,6 +78,7 @@ public class UIBlockView extends UIComponent implements DataSource {
         if (!this.active())
             return;
         html.println("<ul class='block-view'>");
+        var dataSet = dataSet();
         dataSet.first();
         while (dataSet.fetch()) {
             this.setCssProperty("data-row", "" + (dataSet.recNo() - 1));
@@ -104,16 +102,6 @@ public class UIBlockView extends UIComponent implements DataSource {
         html.print("</ul>");
     }
 
-    @Override
-    public DataRow current() {
-        return dataSet != null ? dataSet.current() : new DataRow();
-    }
-
-    @Override
-    public boolean isReadonly() {
-        return dataSet != null ? dataSet.readonly() : true;
-    }
-
     public List<UIBlockLine> lines() {
         List<UIBlockLine> lines = new ArrayList<>();
         for (var item : this.block().getComponents()) {
@@ -127,18 +115,27 @@ public class UIBlockView extends UIComponent implements DataSource {
         return lines().get(index);
     }
 
-    public DataSet dataSet() {
-        return dataSet;
-    }
-
+    @Override
     public boolean active() {
         return active;
     }
 
-    public void setActive(boolean active) {
+    @Override
+    public UIBlockView setActive(boolean active) {
         this.active = active;
+        return this;
     }
 
+    @Override
+    public DataSet dataSet() {
+        return dataSet;
+    }
+
+    @Override
+    public UIBlockView setDataSet(DataSet dataSet) {
+        this.dataSet = dataSet;
+        return this;
+    }
     public static void main(String[] args) {
         var ds = new DataSet();
         ds.append().setValue("code", 1).setValue("name", "a");

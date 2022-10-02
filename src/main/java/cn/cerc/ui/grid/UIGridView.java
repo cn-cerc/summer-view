@@ -3,21 +3,20 @@ package cn.cerc.ui.grid;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 
-import cn.cerc.db.core.DataRow;
 import cn.cerc.db.core.DataSet;
-import cn.cerc.db.core.DataSource;
 import cn.cerc.db.core.FieldMeta;
 import cn.cerc.db.core.FieldMeta.FieldKind;
 import cn.cerc.db.editor.EditorFactory;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
+import cn.cerc.ui.core.UIDataViewImpl;
 import cn.cerc.ui.style.IGridStyle;
 
-public class UIGridView extends UIComponent implements IGridStyle, DataSource {
+public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyle {
     private DataSet dataSet;
     private boolean active;
     private HashSet<FieldMeta> columns = new LinkedHashSet<>();
-    private UIOutputStyleImpl defaultStyle;
+    private UIDataStyleImpl defaultStyle;
 
     public UIGridView(UIComponent owner) {
         super(owner);
@@ -25,9 +24,15 @@ public class UIGridView extends UIComponent implements IGridStyle, DataSource {
         this.setCssClass("dbgrid");
     }
 
+    @Override
     public UIGridView setDataSet(DataSet dataSet) {
         this.dataSet = dataSet;
         return this;
+    }
+
+    @Override
+    public DataSet dataSet() {
+        return dataSet;
     }
 
     public FieldMeta addColumn(String fieldCode) {
@@ -44,7 +49,7 @@ public class UIGridView extends UIComponent implements IGridStyle, DataSource {
 
     @Override
     public void output(HtmlWriter html) {
-        if (this.isPhone())
+        if (!this.active())
             return;
         if (!this.active && this.dataSet != null) {
             // 若没有指定列时，自动为所有列
@@ -72,11 +77,13 @@ public class UIGridView extends UIComponent implements IGridStyle, DataSource {
         super.output(html);
     }
 
-    public UIOutputStyleImpl defaultStyle() {
+    @Override
+    public UIDataStyleImpl defaultStyle() {
         return this.defaultStyle;
     }
 
-    public UIGridView setDefaultStyle(UIOutputStyleImpl outputStyle) {
+    @Override
+    public UIGridView setDefaultStyle(UIDataStyleImpl outputStyle) {
         this.defaultStyle = outputStyle;
         return this;
     }
@@ -86,13 +93,14 @@ public class UIGridView extends UIComponent implements IGridStyle, DataSource {
     }
 
     @Override
-    public DataRow current() {
-        return dataSet != null ? dataSet.current() : new DataRow();
+    public boolean active() {
+        return active;
     }
 
     @Override
-    public boolean isReadonly() {
-        return dataSet != null ? dataSet.readonly() : true;
+    public UIGridView setActive(boolean active) {
+        this.active = active;
+        return this;
     }
 
     public static void main(String[] args) {
@@ -117,4 +125,5 @@ public class UIGridView extends UIComponent implements IGridStyle, DataSource {
 //        grid.addColumn("sex"); //指定栏位输出
         System.out.println(grid.toString());
     }
+
 }

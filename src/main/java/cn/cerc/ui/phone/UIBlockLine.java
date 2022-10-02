@@ -4,7 +4,7 @@ import cn.cerc.db.core.DataSet;
 import cn.cerc.db.core.FieldMeta;
 import cn.cerc.db.core.FieldMeta.FieldKind;
 import cn.cerc.ui.core.UIComponent;
-import cn.cerc.ui.grid.UIOutputStyleImpl;
+import cn.cerc.ui.grid.UIDataStyleImpl;
 
 public class UIBlockLine extends UIComponent {
 
@@ -25,7 +25,7 @@ public class UIBlockLine extends UIComponent {
 
     public UIBlockLine addColumns(String... fields) {
         DataSet dataSet = null;
-        UIOutputStyleImpl defaultStyle = null;
+        UIDataStyleImpl defaultStyle = null;
         if (this.getOwner() instanceof UIBlockView view) {
             dataSet = view.dataSet();
             defaultStyle = view.defaultStyle();

@@ -5,7 +5,7 @@ import java.util.List;
 
 import cn.cerc.db.core.DataRow;
 import cn.cerc.db.core.DataSet;
-import cn.cerc.db.core.DataSource;
+import cn.cerc.db.core.DataRowSourceImpl;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.fields.AbstractField;
@@ -13,8 +13,8 @@ import cn.cerc.ui.fields.AbstractField.BuildUrl;
 import cn.cerc.ui.grid.RowCell;
 import cn.cerc.ui.vcl.UIUrl;
 
-public abstract class AbstractGridLine extends UIComponent implements DataSource {
-    protected DataSource source;
+public abstract class AbstractGridLine extends UIComponent implements DataRowSourceImpl {
+    protected DataRowSourceImpl source;
     private List<AbstractField> fields = new ArrayList<>();
     private List<RowCell> cells = new ArrayList<>();
     private boolean visible = true;
@@ -24,8 +24,8 @@ public abstract class AbstractGridLine extends UIComponent implements DataSource
         // 查找最近的数据源
         UIComponent root = owner;
         while (root != null) {
-            if (root instanceof DataSource) {
-                this.source = (DataSource) root;
+            if (root instanceof DataRowSourceImpl) {
+                this.source = (DataRowSourceImpl) root;
                 break;
             }
             root = root.getOwner();

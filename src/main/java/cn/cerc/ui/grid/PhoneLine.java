@@ -1,7 +1,7 @@
 package cn.cerc.ui.grid;
 
 import cn.cerc.db.core.DataRow;
-import cn.cerc.db.core.DataSource;
+import cn.cerc.db.core.DataRowSourceImpl;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.fields.AbstractField;
@@ -9,7 +9,7 @@ import cn.cerc.ui.fields.AbstractField.BuildUrl;
 import cn.cerc.ui.fields.ExpendField;
 import cn.cerc.ui.vcl.UIUrl;
 
-public class PhoneLine extends UIComponent implements DataSource {
+public class PhoneLine extends UIComponent implements DataRowSourceImpl {
     private DataGrid grid;
     private boolean table = false;
     private String style;

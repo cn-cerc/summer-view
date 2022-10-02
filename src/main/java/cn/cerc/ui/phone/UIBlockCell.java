@@ -1,6 +1,6 @@
 package cn.cerc.ui.phone;
 
-import cn.cerc.db.core.DataSource;
+import cn.cerc.db.core.DataRowSourceImpl;
 import cn.cerc.db.core.Utils;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
@@ -24,7 +24,7 @@ public class UIBlockCell extends UIComponent {
 
     @Override
     public void output(HtmlWriter html) {
-        DataSource dataSource = dataSource();
+        DataRowSourceImpl dataSource = dataSource();
         if (dataSource != null)
             this.setCssProperty("data-field", this.fieldCode);
         this.beginOutput(html);
@@ -40,12 +40,12 @@ public class UIBlockCell extends UIComponent {
         this.endOutput(html);
     }
 
-    protected DataSource dataSource() {
-        DataSource result = null;
+    protected DataRowSourceImpl dataSource() {
+        DataRowSourceImpl result = null;
         UIComponent parent = this.getOwner();
         while (parent != null) {
-            if (parent instanceof DataSource) {
-                result = (DataSource) parent;
+            if (parent instanceof DataRowSourceImpl) {
+                result = (DataRowSourceImpl) parent;
                 break;
             }
             parent = parent.getOwner();
