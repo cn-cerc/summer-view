@@ -8,21 +8,21 @@ import cn.cerc.db.core.FieldMeta.FieldKind;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.core.UIDataViewImpl;
 
-public class UIBlockLine extends UIComponent {
-    private static final Logger log = LoggerFactory.getLogger(UIBlockLine.class);
+public class UIPhoneLine extends UIComponent {
+    private static final Logger log = LoggerFactory.getLogger(UIPhoneLine.class);
 
-    public UIBlockLine(UIComponent owner) {
+    public UIPhoneLine(UIComponent owner) {
         super(owner);
         this.setRootLabel("div");
     }
 
     @Override
-    public UIBlockLine addComponent(UIComponent child) {
+    public UIPhoneLine addComponent(UIComponent child) {
         super.addComponent(child);
         return this;
     }
 
-    public UIBlockLine addCell(String... fields) {
+    public UIPhoneLine addCell(String... fields) {
         var impl = findOwner(UIDataViewImpl.class);
         if (impl == null) {
             log.error("在 owner 中找不到 UIDataViewImpl");
@@ -38,17 +38,17 @@ public class UIBlockLine extends UIComponent {
                 if (defaultStyle != null)
                     defaultStyle.setDefault(column);
             }
-            new UIBlockCell(this).setFieldCode(fieldCode);
+            new UIPhoneCell(this).setFieldCode(fieldCode);
         }
         return this;
     }
 
-    public UIBlockCell getCell(int index) {
-        return (UIBlockCell) this.getComponent(index);
+    public UIPhoneCell getCell(int index) {
+        return (UIPhoneCell) this.getComponent(index);
     }
 
-    public UIBlockLine addIt() {
-        addComponent(new UIBlockIt());
+    public UIPhoneLine addIt() {
+        addComponent(new UIPhoneIt());
         return this;
     }
 

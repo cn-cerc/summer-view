@@ -11,25 +11,25 @@ import cn.cerc.db.core.Utils;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.core.UIDataViewImpl;
-import cn.cerc.ui.phone.UIBlockGridCell.CellTypeEnum;
+import cn.cerc.ui.phone.UIPhoneGridCell.CellTypeEnum;
 import cn.cerc.ui.vcl.UITr;
 
-public class UIBlockGridLine extends UIBlockLine {
-    private static final Logger log = LoggerFactory.getLogger(UIBlockGridLine.class);
+public class UIPhoneGridLine extends UIPhoneLine {
+    private static final Logger log = LoggerFactory.getLogger(UIPhoneGridLine.class);
     private UITr tr = new UITr(this);
     private String[] width;
 
-    public UIBlockGridLine(UIComponent owner) {
+    public UIPhoneGridLine(UIComponent owner) {
         super(owner);
         this.setRootLabel("table");
     }
 
-    public UIBlockGridLine split(String... width) {
+    public UIPhoneGridLine split(String... width) {
         this.width = width;
         return this;
     }
 
-    public UIBlockGridLine split(int... width) {
+    public UIPhoneGridLine split(int... width) {
         int total = 0;
         for (int item : width)
             total += item;
@@ -64,7 +64,7 @@ public class UIBlockGridLine extends UIBlockLine {
             UIComponent item = titleSplit ? tr.getComponent(i / 2) : tr.getComponent(i);
             boolean isTitle = titleSplit && i % 2 == 0;
             if (titleSplit) {
-                if (item instanceof UIBlockGridCell column)
+                if (item instanceof UIPhoneGridCell column)
                     column.setCellType(isTitle ? CellTypeEnum.OnlyTitle : CellTypeEnum.OnlyValue);
                 else
                     log.warn("item 不支持的类型：" + item.getClass().getName());
@@ -86,7 +86,7 @@ public class UIBlockGridLine extends UIBlockLine {
     }
 
     @Override
-    public UIBlockGridLine addCell(String... fieldList) {
+    public UIPhoneGridLine addCell(String... fieldList) {
         var impl = findOwner(UIDataViewImpl.class);
         if (impl == null) {
             log.error("在 owner 中找不到 UIDataViewImpl");
@@ -100,14 +100,14 @@ public class UIBlockGridLine extends UIBlockLine {
                 column = fields.add(fieldCode, FieldKind.Calculated);
             if (defaultStyle != null)
                 defaultStyle.setDefault(column);
-            new UIBlockGridCell(tr).setFieldCode(fieldCode);
+            new UIPhoneGridCell(tr).setFieldCode(fieldCode);
         }
         return this;
     }
 
     @Override
-    public UIBlockGridCell getCell(int index) {
-        return (UIBlockGridCell) tr.getComponent(index);
+    public UIPhoneGridCell getCell(int index) {
+        return (UIPhoneGridCell) tr.getComponent(index);
     }
 
 }

@@ -8,21 +8,21 @@ import cn.cerc.db.core.Utils;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 
-public class UIBlockGridCell extends UIBlockCell {
-    private static final Logger log = LoggerFactory.getLogger(UIBlockGridCell.class);
+public class UIPhoneGridCell extends UIPhoneCell {
+    private static final Logger log = LoggerFactory.getLogger(UIPhoneGridCell.class);
     private CellTypeEnum cellType = CellTypeEnum.Combo;
 
     public enum CellTypeEnum {
         OnlyTitle, OnlyValue, Combo;
     }
 
-    public UIBlockGridCell(UIComponent owner) {
+    public UIPhoneGridCell(UIComponent owner) {
         super(owner);
         this.setRootLabel("td");
     }
 
     @Override
-    public UIBlockGridCell setFieldCode(String fieldCode) {
+    public UIPhoneGridCell setFieldCode(String fieldCode) {
         super.setFieldCode(fieldCode);
         return this;
     }
@@ -61,7 +61,7 @@ public class UIBlockGridCell extends UIBlockCell {
         return cellType;
     }
 
-    public UIBlockGridCell setCellType(CellTypeEnum cellType) {
+    public UIPhoneGridCell setCellType(CellTypeEnum cellType) {
         this.cellType = cellType;
         return this;
     }
