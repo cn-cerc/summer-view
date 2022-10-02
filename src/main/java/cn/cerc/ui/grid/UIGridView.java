@@ -18,7 +18,7 @@ import cn.cerc.ui.vcl.UITr;
 public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyle {
     private DataSet dataSet;
     private List<FieldMeta> fields = new ArrayList<>();
-    private UIDataStyleImpl viewStyle;
+    private UIDataStyleImpl dataStyle;
     private boolean active;
     private boolean init;
     private UITr head;
@@ -44,7 +44,7 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
 
     @Override
     public UIDataStyleImpl dataStyle() {
-        return this.viewStyle;
+        return this.dataStyle;
     }
 
     @Override
@@ -55,7 +55,7 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
             for (var field : style.fields())
                 fields.add(field);
         }
-        this.viewStyle = style;
+        this.dataStyle = style;
         return this;
     }
 
@@ -94,8 +94,8 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
             UITr head = head();
             UIGridBody body = body();
             for (var meta : fields) {
-                if (viewStyle != null)
-                    viewStyle.setDefault(meta);
+                if (dataStyle != null)
+                    dataStyle.setDefault(meta);
                 String fieldName = meta.name() == null ? meta.code() : meta.name();
                 new UITh(head).setText(fieldName);
                 new UIDataField(new UITd(body)).setField(meta.code());

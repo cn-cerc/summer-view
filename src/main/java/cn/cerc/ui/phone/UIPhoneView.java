@@ -38,8 +38,12 @@ public class UIPhoneView extends UIComponent implements UIDataViewImpl {
     }
 
     @Override
-    public UIPhoneView setDataStyle(UIDataStyleImpl dataStyle) {
-        this.dataStyle = dataStyle;
+    public UIPhoneView setDataStyle(UIDataStyleImpl style) {
+        if (dataStyle != null) {
+            if (this.dataSet == null)
+                this.setDataSet(style.dataSet());
+        }
+        this.dataStyle = style;
         return this;
     }
 
