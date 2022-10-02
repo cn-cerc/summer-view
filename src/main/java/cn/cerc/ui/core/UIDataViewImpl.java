@@ -1,9 +1,11 @@
 package cn.cerc.ui.core;
 
-import cn.cerc.db.core.DataSource;
+import cn.cerc.db.core.DataSet;
 import cn.cerc.ui.grid.UIDataStyleImpl;
 
-public interface UIDataViewImpl extends DataSource {
+public interface UIDataViewImpl {
+    
+    DataSet dataSet();
 
     boolean active();
 

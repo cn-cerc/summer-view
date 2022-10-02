@@ -34,7 +34,7 @@ public class UIPhoneCell extends UIComponent {
                 html.print(name);
                 html.print(":");
             }
-            html.print(impl.current().getText(fieldCode));
+            html.print(impl.dataSet().current().getText(fieldCode));
         } else
             html.print("dataSource is null");
         this.endOutput(html);
