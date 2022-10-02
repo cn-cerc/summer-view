@@ -16,7 +16,7 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
     private DataSet dataSet;
     private boolean active;
     private HashSet<FieldMeta> fields = new LinkedHashSet<>();
-    private UIFieldStyleImpl defaultStyle;
+    private UIFieldStyleImpl viewStyle;
     private boolean init;
 
     public UIGridView(UIComponent owner) {
@@ -39,7 +39,7 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
 
     @Override
     public UIFieldStyleImpl viewStyle() {
-        return this.defaultStyle;
+        return this.viewStyle;
     }
 
     @Override
@@ -50,7 +50,7 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
             for (var field : style.fields())
                 this.addField(field.code());
         }
-        this.defaultStyle = style;
+        this.viewStyle = style;
         return this;
     }
 
@@ -72,8 +72,8 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
         if (field == null)
             field = dataSet.fields().add(fieldCode, FieldKind.Calculated);
         fields.add(field);
-        if (defaultStyle != null)
-            defaultStyle.setDefault(field);
+        if (viewStyle != null)
+            viewStyle.setDefault(field);
         return field;
     }
 
@@ -85,8 +85,8 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
             // 若没有指定列时，自动为所有列
             if (fields.size() == 0) {
                 for (var field : dataSet.fields()) {
-                    if (defaultStyle != null)
-                        defaultStyle.setDefault(field);
+                    if (viewStyle != null)
+                        viewStyle.setDefault(field);
                     fields.add(field);
                 }
             }
