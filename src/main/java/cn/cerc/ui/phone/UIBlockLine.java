@@ -40,7 +40,7 @@ public class UIBlockLine extends UIComponent {
                 if (column == null)
                     column = dataSet.fields().add(fieldCode, FieldKind.Calculated);
                 if (defaultStyle != null)
-                    column.onGetText(defaultStyle.getDefault(column));
+                    defaultStyle.setDefault(column);
             }
             this.addColumn(fieldCode);
         }

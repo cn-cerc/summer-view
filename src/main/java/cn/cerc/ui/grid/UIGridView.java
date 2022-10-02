@@ -65,7 +65,7 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
             column = dataSet.fields().add(fieldCode, FieldKind.Calculated);
         columns.add(column);
         if (defaultStyle != null)
-            column.onGetText(defaultStyle.getDefault(column));
+            defaultStyle.setDefault(column);
         return column;
     }
 
@@ -78,7 +78,7 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
             if (columns.size() == 0) {
                 for (var column : dataSet.fields()) {
                     if (defaultStyle != null)
-                        column.onGetText(defaultStyle.getDefault(column));
+                        defaultStyle.setDefault(column);
                     columns.add(column);
                 }
             }

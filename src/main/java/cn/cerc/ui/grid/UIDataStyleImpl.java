@@ -1,10 +1,9 @@
 package cn.cerc.ui.grid;
 
 import cn.cerc.db.core.FieldMeta;
-import cn.cerc.db.editor.OnGetText;
 
 public interface UIDataStyleImpl {
 
-    OnGetText getDefault(FieldMeta fieldMeta);
+    Object setDefault(FieldMeta fieldMeta);
 
 }

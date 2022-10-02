@@ -101,11 +101,8 @@ public class UIBlockGridLine extends UIBlockLine {
             FieldMeta column = fields.get(fieldCode);
             if (column == null)
                 column = fields.add(fieldCode, FieldKind.Calculated);
-            if (defaultStyle != null) {
-                var event = defaultStyle.getDefault(column);
-                if (event != null)
-                    column.onGetText(event);
-            }
+            if (defaultStyle != null) 
+                defaultStyle.setDefault(column);
             this.addCell(fieldCode);
         }
         return this;

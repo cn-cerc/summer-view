@@ -99,6 +99,13 @@ public class UIGridStyle implements UIDataStyleImpl {
     }
 
     @Override
+    public UIGridStyle setDefault(FieldMeta meta) {
+        var event = this.getDefault(meta);
+        if(event != null)
+            meta.onGetText(event);
+        return this;
+    }
+
     public OnGetText getDefault(FieldMeta meta) {
         // 若有自定输出事件，为第一优先
         OnGetText result = null;
