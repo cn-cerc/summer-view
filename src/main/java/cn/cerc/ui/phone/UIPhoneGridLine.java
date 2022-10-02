@@ -93,7 +93,7 @@ public class UIPhoneGridLine extends UIPhoneLine {
             throw new RuntimeException("在 owner 中找不到 UIDataViewImpl");
         }
         var fields = impl.dataSet().fields();
-        var defaultStyle = impl.active() ? impl.defaultStyle() : null;
+        var defaultStyle = impl.active() ? impl.viewStyle() : null;
         for (var fieldCode : fieldList) {
             FieldMeta column = fields.get(fieldCode);
             if (column == null)

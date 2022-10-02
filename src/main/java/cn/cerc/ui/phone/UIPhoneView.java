@@ -40,7 +40,7 @@ public class UIPhoneView extends UIComponent implements UIDataViewImpl {
     }
 
     @Override
-    public UIFieldStyleImpl defaultStyle() {
+    public UIFieldStyleImpl viewStyle() {
         return defaultStyle;
     }
 

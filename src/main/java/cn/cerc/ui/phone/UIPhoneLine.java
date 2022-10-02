@@ -29,7 +29,7 @@ public class UIPhoneLine extends UIComponent {
             throw new RuntimeException("在 owner 中找不到 UIDataViewImpl");
         }
         var dataSet = impl.dataSet();
-        var defaultStyle = impl.active() ? impl.defaultStyle() : null;
+        var defaultStyle = impl.active() ? impl.viewStyle() : null;
         for (var fieldCode : fields) {
             if (dataSet != null) {
                 FieldMeta column = dataSet.fields().get(fieldCode);

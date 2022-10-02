@@ -11,5 +11,5 @@ public interface UIDataViewImpl extends DataSetSourceImpl {
 
     Object setViewStyle(UIFieldStyleImpl defaultStyle);
 
-    UIFieldStyleImpl defaultStyle();
+    UIFieldStyleImpl viewStyle();
 }

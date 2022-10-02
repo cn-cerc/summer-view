@@ -38,7 +38,7 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
     }
 
     @Override
-    public UIFieldStyleImpl defaultStyle() {
+    public UIFieldStyleImpl viewStyle() {
         return this.defaultStyle;
     }
 
