@@ -15,18 +15,18 @@ import cn.cerc.db.editor.OnGetText;
 import cn.cerc.mis.ado.UsedEnum;
 import cn.cerc.ui.vcl.UIInput;
 
-public class UIFieldStyle implements UIFieldStyleImpl {
-    private static final Logger log = LoggerFactory.getLogger(UIFieldStyle.class);
+public class UIDataStyle implements UIDataStyleImpl {
+    private static final Logger log = LoggerFactory.getLogger(UIDataStyle.class);
     public boolean inputState = false;
     private DataSet dataSet;
     private List<FieldMeta> fields = new ArrayList<>();
     private OnOutput onOutput;
 
-    public UIFieldStyle() {
+    public UIDataStyle() {
         this(false);
     }
 
-    public UIFieldStyle(boolean inputState) {
+    public UIDataStyle(boolean inputState) {
         super();
         this.inputState = inputState;
     }
@@ -96,16 +96,16 @@ public class UIFieldStyle implements UIFieldStyleImpl {
     }
 
     public interface OnOutput {
-        OnGetText getOutputEvent(UIFieldStyle sender, FieldMeta meta);
+        OnGetText getOutputEvent(UIDataStyle sender, FieldMeta meta);
     }
 
-    public UIFieldStyle onOutput(OnOutput onOutput) {
+    public UIDataStyle onOutput(OnOutput onOutput) {
         this.onOutput = onOutput;
         return this;
     }
 
     @Override
-    public UIFieldStyle setDefault(FieldMeta meta) {
+    public UIDataStyle setDefault(FieldMeta meta) {
         var event = this.getDefault(meta);
         if (event != null)
             meta.onGetText(event);
@@ -161,7 +161,7 @@ public class UIFieldStyle implements UIFieldStyleImpl {
         return dataSet;
     }
 
-    public UIFieldStyle setDataSet(DataSet dataSet) {
+    public UIDataStyle setDataSet(DataSet dataSet) {
         this.dataSet = dataSet;
         return this;
     }
@@ -172,7 +172,7 @@ public class UIFieldStyle implements UIFieldStyleImpl {
     }
 
     public static void main(String[] args) {
-        var style = new UIFieldStyle();
+        var style = new UIDataStyle();
         var row = DataRow.of("code", 1);
         var code = row.fields().get("code");
         var data = new DataCell(row, code.code());
