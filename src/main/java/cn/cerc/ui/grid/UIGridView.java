@@ -125,7 +125,7 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
         UIGridView grid = new UIGridView(null);
         grid.setPhone(false);
         grid.setDataSet(ds);
-        grid.setStyle(new UIGridStyle());
+        grid.setStyle(new UIFieldStyle());
 //        grid.addColumn("sex"); //指定栏位输出
         System.out.println(grid.toString());
     }

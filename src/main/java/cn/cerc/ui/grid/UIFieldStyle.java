@@ -15,18 +15,18 @@ import cn.cerc.db.editor.OnGetText;
 import cn.cerc.mis.ado.UsedEnum;
 import cn.cerc.ui.vcl.UIInput;
 
-public class UIGridStyle implements UIDataStyleImpl {
-    private static final Logger log = LoggerFactory.getLogger(UIGridStyle.class);
+public class UIFieldStyle implements UIDataStyleImpl {
+    private static final Logger log = LoggerFactory.getLogger(UIFieldStyle.class);
     public boolean inputState = false;
     private DataSet dataSet;
     private List<FieldMeta> fields = new ArrayList<>();
     private OnOutput onOutput;
 
-    public UIGridStyle() {
+    public UIFieldStyle() {
         this(false);
     }
 
-    public UIGridStyle(boolean inputState) {
+    public UIFieldStyle(boolean inputState) {
         super();
         this.inputState = inputState;
     }
@@ -96,15 +96,16 @@ public class UIGridStyle implements UIDataStyleImpl {
     }
 
     public interface OnOutput {
-        OnGetText getOutputEvent(UIGridStyle sender, FieldMeta meta);
+        OnGetText getOutputEvent(UIFieldStyle sender, FieldMeta meta);
     }
 
-    public void onOutput(OnOutput onOutput) {
+    public UIFieldStyle onOutput(OnOutput onOutput) {
         this.onOutput = onOutput;
+        return this;
     }
 
     @Override
-    public UIGridStyle setDefault(FieldMeta meta) {
+    public UIFieldStyle setDefault(FieldMeta meta) {
         var event = this.getDefault(meta);
         if (event != null)
             meta.onGetText(event);
@@ -160,7 +161,7 @@ public class UIGridStyle implements UIDataStyleImpl {
         return dataSet;
     }
 
-    public UIGridStyle setDataSet(DataSet dataSet) {
+    public UIFieldStyle setDataSet(DataSet dataSet) {
         this.dataSet = dataSet;
         return this;
     }
@@ -171,7 +172,7 @@ public class UIGridStyle implements UIDataStyleImpl {
     }
 
     public static void main(String[] args) {
-        var style = new UIGridStyle();
+        var style = new UIFieldStyle();
         var row = DataRow.of("code", 1);
         var code = row.fields().get("code");
         var data = new DataCell(row, code.code());
