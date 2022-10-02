@@ -7,13 +7,12 @@ import cn.cerc.db.core.FieldMeta;
 
 public interface UIFieldStyleImpl {
 
-    Object setDefault(FieldMeta fieldMeta);
-
     DataSet dataSet();
 
     FieldMeta addField(String fieldCode);
 
+    Object setDefault(FieldMeta fieldMeta);
+
     List<FieldMeta> fields();
-    
 
 }
