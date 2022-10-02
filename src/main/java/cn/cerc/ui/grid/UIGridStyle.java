@@ -1,5 +1,6 @@
 package cn.cerc.ui.grid;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -7,7 +8,9 @@ import org.slf4j.LoggerFactory;
 
 import cn.cerc.db.core.DataCell;
 import cn.cerc.db.core.DataRow;
+import cn.cerc.db.core.DataSet;
 import cn.cerc.db.core.FieldMeta;
+import cn.cerc.db.core.FieldMeta.FieldKind;
 import cn.cerc.db.editor.OnGetText;
 import cn.cerc.mis.ado.UsedEnum;
 import cn.cerc.ui.vcl.UIInput;
@@ -15,6 +18,8 @@ import cn.cerc.ui.vcl.UIInput;
 public class UIGridStyle implements UIDataStyleImpl {
     private static final Logger log = LoggerFactory.getLogger(UIGridStyle.class);
     public boolean inputState = false;
+    private DataSet dataSet;
+    private List<FieldMeta> fields = new ArrayList<>();
     private OnOutput onOutput;
 
     public UIGridStyle() {
@@ -101,7 +106,7 @@ public class UIGridStyle implements UIDataStyleImpl {
     @Override
     public UIGridStyle setDefault(FieldMeta meta) {
         var event = this.getDefault(meta);
-        if(event != null)
+        if (event != null)
             meta.onGetText(event);
         return this;
     }
@@ -132,6 +137,37 @@ public class UIGridStyle implements UIDataStyleImpl {
             yield this.getString();
         }
         };
+    }
+
+    @Override
+    public FieldMeta addField(String fieldCode) {
+        if (this.dataSet == null)
+            throw new RuntimeException("dataSet is null");
+        FieldMeta column = dataSet.fields().get(fieldCode);
+        if (column == null)
+            column = dataSet.fields().add(fieldCode, FieldKind.Calculated);
+        this.fields.add(column);
+        this.setDefault(column);
+        return column;
+    }
+
+    public FieldMeta addFieldIt() {
+        return this.addField("it").onGetText(data -> "" + dataSet.recNo()).setName("序");
+    }
+
+    @Override
+    public DataSet dataSet() {
+        return dataSet;
+    }
+
+    public UIGridStyle setDataSet(DataSet dataSet) {
+        this.dataSet = dataSet;
+        return this;
+    }
+
+    @Override
+    public List<FieldMeta> fields() {
+        return this.fields;
     }
 
     public static void main(String[] args) {

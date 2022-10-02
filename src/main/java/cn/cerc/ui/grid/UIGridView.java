@@ -43,8 +43,14 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
     }
 
     @Override
-    public UIGridView setDefaultStyle(UIDataStyleImpl outputStyle) {
-        this.defaultStyle = outputStyle;
+    public UIGridView setStyle(UIDataStyleImpl style) {
+        this.defaultStyle = style;
+        if (style != null) {
+            if (this.dataSet == null)
+                this.setDataSet(style.dataSet());
+            for (var field : style.fields())
+                this.addField(field.code());
+        }
         return this;
     }
 
@@ -59,7 +65,7 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
         return this;
     }
 
-    public FieldMeta addColumn(String fieldCode) {
+    public FieldMeta addField(String fieldCode) {
         if (this.dataSet == null)
             throw new RuntimeException("dataSet is null");
         FieldMeta column = dataSet.fields().get(fieldCode);
@@ -101,10 +107,6 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
         super.output(html);
     }
 
-    public FieldMeta addColumnIt() {
-        return this.addColumn("it").onGetText(data -> "" + data.source().dataSet().recNo()).setName("序");
-    }
-
     public static void main(String[] args) {
         DataSet ds = new DataSet();
         ds.append();
@@ -123,7 +125,7 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
         UIGridView grid = new UIGridView(null);
         grid.setPhone(false);
         grid.setDataSet(ds);
-        grid.setDefaultStyle(new UIGridStyle());
+        grid.setStyle(new UIGridStyle());
 //        grid.addColumn("sex"); //指定栏位输出
         System.out.println(grid.toString());
     }
