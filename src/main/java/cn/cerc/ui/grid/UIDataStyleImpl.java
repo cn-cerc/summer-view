@@ -1,16 +1,16 @@
 package cn.cerc.ui.grid;
 
-import java.util.List;
+import java.util.HashMap;
 
 import cn.cerc.db.core.DataSource;
 import cn.cerc.db.core.FieldMeta;
 
 public interface UIDataStyleImpl extends DataSource {
 
-    FieldMeta addField(String fieldCode);
+    FieldStyleData addField(String fieldCode);
+    
+    HashMap<String, FieldStyleData> fields();
 
     Object setDefault(FieldMeta meta);
-
-    List<FieldMeta> fields();
 
 }

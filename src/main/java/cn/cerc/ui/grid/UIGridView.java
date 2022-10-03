@@ -51,8 +51,8 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
         if (style != null) {
             if (this.dataSet == null)
                 this.setDataSet(style.dataSet());
-            for (var field : style.fields())
-                fields.add(field);
+            for (var item : style.fields().values())
+                fields.add(item.field());
         }
         this.dataStyle = style;
         return this;

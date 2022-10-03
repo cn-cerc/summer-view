@@ -1,6 +1,7 @@
 package cn.cerc.ui.grid;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -19,7 +20,7 @@ public class UIDataStyle implements UIDataStyleImpl {
     private static final Logger log = LoggerFactory.getLogger(UIDataStyle.class);
     public boolean inputState = false;
     private DataSet dataSet;
-    private List<FieldMeta> fields = new ArrayList<>();
+    private HashMap<String, FieldStyleData> items = new LinkedHashMap<>();
     private OnOutput onOutput;
 
     public static int PX_SIZE = 14; // 1个汉字 = 14px
@@ -44,9 +45,9 @@ public class UIDataStyle implements UIDataStyleImpl {
                 UIInput input = new UIInput(null);
                 input.setId(data.key());
                 input.setValue(result);
-                var meta = data.source().fields(data.key());
-                if (meta.width() > 0) {
-                    String width = String.format("width: %dpx", meta.width() * PX_SIZE);
+                var style = this.items.get(data.key());
+                if (style.width() > 0) {
+                    String width = String.format("width: %dpx", style.width() * PX_SIZE);
                     input.setCssStyle(width);
                 } else
                     input.setCssStyle(null);
@@ -155,18 +156,19 @@ public class UIDataStyle implements UIDataStyleImpl {
     }
 
     @Override
-    public FieldMeta addField(String fieldCode) {
+    public FieldStyleData addField(String fieldCode) {
         if (this.dataSet == null)
             throw new RuntimeException("dataSet is null");
         FieldMeta field = dataSet.fields().get(fieldCode);
         if (field == null)
             field = dataSet.fields().add(fieldCode, FieldKind.Calculated);
-        this.fields.add(field);
-        return field;
+        var styleData = new FieldStyleData(field);
+        this.items.put(fieldCode, styleData);
+        return styleData;
     }
 
     public FieldMeta addFieldIt() {
-        return this.addField("it").onGetText(data -> "" + dataSet.recNo()).setName("序");
+        return this.addField("it").field().onGetText(data -> "" + dataSet.recNo()).setName("序");
     }
 
     @Override
@@ -180,8 +182,8 @@ public class UIDataStyle implements UIDataStyleImpl {
     }
 
     @Override
-    public List<FieldMeta> fields() {
-        return this.fields;
+    public HashMap<String, FieldStyleData> fields() {
+        return this.items;
     }
 
     public static void main(String[] args) {
