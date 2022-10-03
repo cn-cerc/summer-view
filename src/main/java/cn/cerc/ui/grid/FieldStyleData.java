@@ -24,6 +24,8 @@ public class FieldStyleData {
     private String dialog;
     // 帮助文档id
     private String helpId;
+    // 若为必填项目，则显示一个星号
+    private boolean starFlag;
 
     public FieldStyleData(UIDataStyle owner, FieldMeta field) {
         this.owner = owner;
@@ -140,6 +142,15 @@ public class FieldStyleData {
 
     public FieldStyleData setHelpId(String helpId) {
         this.helpId = helpId;
+        return this;
+    }
+
+    public boolean starFlag() {
+        return this.starFlag;
+    }
+
+    public FieldStyleData setStarFlag(boolean starFlag) {
+        this.starFlag = starFlag;
         return this;
     }
 }

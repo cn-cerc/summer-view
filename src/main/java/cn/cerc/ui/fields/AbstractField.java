@@ -15,7 +15,6 @@ import cn.cerc.ui.core.INameOwner;
 import cn.cerc.ui.core.SearchSource;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.other.BuildText;
-import cn.cerc.ui.vcl.UIFont;
 import cn.cerc.ui.vcl.UIImage;
 import cn.cerc.ui.vcl.UIInput;
 import cn.cerc.ui.vcl.UILabel;
@@ -24,7 +23,7 @@ import cn.cerc.ui.vcl.UIText;
 import cn.cerc.ui.vcl.UIUrl;
 
 public abstract class AbstractField extends UIComponent implements INameOwner, SearchSource {
-    private static final ClassConfig config = new ClassConfig(AbstractField.class, SummerUI.ID);
+    public static final ClassConfig config = new ClassConfig(AbstractField.class, SummerUI.ID);
     // 数据库相关
     private String field;
     // 自定义取值
@@ -359,7 +358,8 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
     @Override
     public void endOutput(HtmlWriter html) {
         if (this.showStar) {
-            new UIFont(null).addComponent(new UIText().setText("*")).output(html);
+            new UIStarFlag(null).output(html);
+//            new UIFont(null).addComponent(new UIText().setText("*")).output(html);
         }
         if (!this.hidden) {
             UISpan span = new UISpan(null);

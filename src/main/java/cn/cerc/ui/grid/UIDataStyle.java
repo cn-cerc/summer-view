@@ -14,6 +14,8 @@ import cn.cerc.db.core.FieldMeta;
 import cn.cerc.db.core.FieldMeta.FieldKind;
 import cn.cerc.db.editor.OnGetText;
 import cn.cerc.mis.ado.UsedEnum;
+import cn.cerc.ui.core.UIComponent;
+import cn.cerc.ui.fields.UISelectDialog;
 import cn.cerc.ui.vcl.UIInput;
 
 public class UIDataStyle implements UIDataStyleImpl {
@@ -42,10 +44,12 @@ public class UIDataStyle implements UIDataStyleImpl {
         return data -> {
             String result = data.getString();
             if (this.inputState) {
-                UIInput input = new UIInput(null);
+                var styleData = this.items.get(data.key());
+                UIComponent box = new UIComponent(null);
+                //
+                UIInput input = new UIInput(box);
                 input.setId(data.key());
                 input.setValue(result);
-                var styleData = this.items.get(data.key());
                 if (styleData.width() > 0) {
                     String width = String.format("width: %dpx", styleData.width() * PX_SIZE);
                     input.setCssStyle(width);
@@ -53,7 +57,11 @@ public class UIDataStyle implements UIDataStyleImpl {
                     input.setCssStyle(null);
                 input.setPlaceholder(styleData.placeholder());
                 styleData.output(input);
-                result = input.toString();
+                //
+                if (styleData.dialog() != null)
+                    new UISelectDialog(box).setDialog(styleData.dialog()).setInputId(data.key());
+                //
+                result = box.toString();
             }
             return result;
         };

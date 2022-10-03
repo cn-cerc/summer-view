@@ -40,6 +40,8 @@ public abstract class UIAbstractView extends UIComponent implements UIDataViewIm
      * @return 返回视图管理器自身
      */
     public UIAbstractView setDataStyle(UIDataStyleImpl dataStyle) {
+        if (dataStyle != null && this.dataSet == null)
+            this.dataSet = dataStyle.dataSet();
         this.dataStyle = dataStyle;
         return this;
     }
@@ -133,5 +135,5 @@ public abstract class UIAbstractView extends UIComponent implements UIDataViewIm
         }
         this.endOutput(html);
     }
-    
+
 }
