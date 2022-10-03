@@ -13,11 +13,15 @@ import cn.cerc.ui.core.UIComponent;
  */
 public class FieldStyleData {
     private final FieldMeta field;
-    private int width = 0; // 建议显示宽度
     private UIDataStyle owner;
-    private String placeholder;
     private UIComponent executant;
     private OnOutput onOutput;
+    // 输入时的提示讯息
+    private String placeholder;
+    // 建议显示宽度
+    private int width = 0;
+    // 是否出现开窗选择按钮
+    private String dialog;
 
     public FieldStyleData(UIDataStyle owner, FieldMeta field) {
         this.owner = owner;
@@ -117,5 +121,14 @@ public class FieldStyleData {
         this.executant = executant;
         if (onOutput != null)
             onOutput.execute(this);
+    }
+
+    public String dialog() {
+        return dialog;
+    }
+
+    public FieldStyleData setDialog(String dialog) {
+        this.dialog = dialog;
+        return this;
     }
 }
