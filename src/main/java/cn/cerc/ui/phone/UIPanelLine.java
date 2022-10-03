@@ -6,8 +6,10 @@ import cn.cerc.ui.core.UIComponent;
 
 public class UIPanelLine extends UIBlockLine {
 
-    private OnCreateCell onCreateCell;
     private DataSource source;
+    private OnCreateCell onCreateCellBefore;
+    private OnCreateCell onCreateCell;
+    private OnCreateCell onCreateCellAfter;
 
     public UIPanelLine(UIComponent owner) {
         super(owner);
@@ -25,10 +27,19 @@ public class UIPanelLine extends UIBlockLine {
 
     @Override
     public void createCell(String fieldCode) {
-        new UIPanelCell(this).setFieldCode(fieldCode);
+        if (onCreateCellBefore != null) {
+            FieldMeta fieldMeta = source().dataSet().fields(fieldCode);
+            onCreateCellBefore.execute(this, fieldMeta);
+        }
         if (onCreateCell != null) {
             FieldMeta fieldMeta = source().dataSet().fields(fieldCode);
             onCreateCell.execute(this, fieldMeta);
+        } else {
+            new UIPanelCell(this).setFieldCode(fieldCode);
+        }
+        if (onCreateCellAfter != null) {
+            FieldMeta fieldMeta = source().dataSet().fields(fieldCode);
+            onCreateCellAfter.execute(this, fieldMeta);
         }
     }
 
@@ -36,8 +47,18 @@ public class UIPanelLine extends UIBlockLine {
         void execute(UIPanelLine owner, FieldMeta fieldMeta);
     }
 
+    public UIPanelLine onCreateCellBefore(OnCreateCell onCreateCell) {
+        this.onCreateCellBefore = onCreateCell;
+        return this;
+    }
+
     public UIPanelLine onCreateCell(OnCreateCell onCreateCell) {
         this.onCreateCell = onCreateCell;
+        return this;
+    }
+
+    public UIPanelLine onCreateCellAfter(OnCreateCell onCreateCell) {
+        this.onCreateCellAfter = onCreateCell;
         return this;
     }
 

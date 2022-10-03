@@ -32,7 +32,7 @@ public class UIPanelView extends UIAbstractView {
         ds.fields().get("name").setName("名称");
         UIPanelView view = new UIPanelView(null).setDataSet(ds);
         view.setDataStyle(new UIDataStyle());
-        UIPanelLine line = view.addLine().onCreateCell((owner, field) -> {
+        UIPanelLine line = view.addLine().onCreateCellAfter((owner, field) -> {
             new UISpan(owner).setText("js:dialog:" + field.code());
         });
         line.addCell("code", "name");
