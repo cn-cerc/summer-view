@@ -5,7 +5,7 @@ import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.grid.UIDataStyle;
 import cn.cerc.ui.vcl.UIUrl;
 
-public class UIPhoneView extends UICustomView {
+public class UIPhoneView extends UIAbstractView {
 
     public UIPhoneView(UIComponent owner) {
         super(owner);
@@ -17,6 +17,11 @@ public class UIPhoneView extends UICustomView {
     public UIPhoneView setDataSet(DataSet dataSet) {
         super.setDataSet(dataSet);
         return this;
+    }
+
+    @Override
+    public UIPhoneLine addLine() {
+        return new UIPhoneLine(this.block());
     }
 
     /**

@@ -7,12 +7,10 @@ import cn.cerc.db.core.DataSet;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.core.UIDataViewImpl;
-import cn.cerc.ui.grid.UIDataStyle;
 import cn.cerc.ui.grid.UIDataStyleImpl;
 import cn.cerc.ui.vcl.UILi;
-import cn.cerc.ui.vcl.UIUrl;
 
-public class UICustomView extends UIComponent implements UIDataViewImpl {
+public abstract class UIAbstractView extends UIComponent implements UIDataViewImpl {
 
     private boolean active;
     private UIDataStyleImpl dataStyle;
@@ -20,11 +18,9 @@ public class UICustomView extends UIComponent implements UIDataViewImpl {
     private UIComponent block;
     private UILi li;
 
-    public UICustomView(UIComponent owner) {
+    public UIAbstractView(UIComponent owner) {
         super(owner);
         this.setRootLabel("ol");
-        this.setCssClass("panel-view");
-        this.setActive(true);
     }
 
     @Override
@@ -32,7 +28,7 @@ public class UICustomView extends UIComponent implements UIDataViewImpl {
         return active;
     }
 
-    public UICustomView setActive(boolean active) {
+    public UIAbstractView setActive(boolean active) {
         this.active = active;
         return this;
     }
@@ -43,7 +39,7 @@ public class UICustomView extends UIComponent implements UIDataViewImpl {
      * @param dataStyle 视图管理器
      * @return 返回视图管理器自身
      */
-    public UICustomView setDataStyle(UIDataStyleImpl dataStyle) {
+    public UIAbstractView setDataStyle(UIDataStyleImpl dataStyle) {
         this.dataStyle = dataStyle;
         return this;
     }
@@ -58,7 +54,7 @@ public class UICustomView extends UIComponent implements UIDataViewImpl {
         return dataSet;
     }
 
-    public UICustomView setDataSet(DataSet dataSet) {
+    public UIAbstractView setDataSet(DataSet dataSet) {
         this.dataSet = dataSet;
         return this;
     }
@@ -68,9 +64,7 @@ public class UICustomView extends UIComponent implements UIDataViewImpl {
      * 
      * @return 返回创建的 UIPanelView
      */
-    public UIPhoneLine addLine() {
-        return new UIPhoneLine(this.block());
-    }
+    public abstract UIBlockLine addLine();
 
     public UIComponent block() {
         if (block == null)
@@ -98,16 +92,16 @@ public class UICustomView extends UIComponent implements UIDataViewImpl {
         return li;
     }
 
-    public List<UIPhoneLine> lines() {
-        List<UIPhoneLine> lines = new ArrayList<>();
+    public List<UIBlockLine> lines() {
+        List<UIBlockLine> lines = new ArrayList<>();
         for (var item : this.block().getComponents()) {
-            if (item instanceof UIPhoneLine line)
+            if (item instanceof UIBlockLine line)
                 lines.add(line);
         }
         return lines;
     }
 
-    public UIPhoneLine getLine(int index) {
+    public UIBlockLine getLine(int index) {
         return lines().get(index);
     }
 
@@ -140,19 +134,4 @@ public class UICustomView extends UIComponent implements UIDataViewImpl {
         this.endOutput(html);
     }
     
-    public static void main(String[] args) {
-        var ds = new DataSet();
-        ds.append().setValue("code", 1).setValue("name", "a");
-        ds.append().setValue("code", 2).setValue("name", "b");
-        ds.fields().get("code").setName("代码");
-        ds.fields().get("name").setName("名称");
-        UICustomView view = new UICustomView(null).setDataSet(ds);
-        view.setDataStyle(new UIDataStyle());
-        view.setBlock(new UIUrl().setHref("www.baidu.com"));
-        new UIUrl(view.addLine()).setText("hello");
-        view.addLine().addCell("code", "name");
-//        view.addGrid(2, 3, 2, 3).addCell("code", "name");
-        view.setActive(true);
-        System.out.println(view.toString());
-    }
 }

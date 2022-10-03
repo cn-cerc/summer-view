@@ -8,15 +8,15 @@ import cn.cerc.db.core.FieldMeta.FieldKind;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.core.UIDataViewImpl;
 
-public class UIPhoneLine extends UIBlockLine {
-    private static final Logger log = LoggerFactory.getLogger(UIPhoneLine.class);
+public class UIPanelLine extends UIBlockLine {
+    private static final Logger log = LoggerFactory.getLogger(UIPanelLine.class);
 
-    public UIPhoneLine(UIComponent owner) {
+    public UIPanelLine(UIComponent owner) {
         super(owner);
     }
 
     @Override
-    public UIPhoneLine addCell(String... fields) {
+    public UIPanelLine addCell(String... fields) {
         var source = findOwner(UIDataViewImpl.class);
         if (source == null) {
             log.error("在 owner 中找不到 UIDataViewImpl");
@@ -32,7 +32,7 @@ public class UIPhoneLine extends UIBlockLine {
                 if (source.active() && dataStyle != null)
                     dataStyle.setDefault(column);
             }
-            new UIPhoneCell(this).setFieldCode(fieldCode);
+            new UIPanelCell(this).setFieldCode(fieldCode);
         }
         return this;
     }
