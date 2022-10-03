@@ -14,6 +14,7 @@ public class FieldStyleData {
     private final FieldMeta field;
     private int width = 0; // 建议显示宽度
     private UIDataStyle owner;
+    private String placeholder;
 
     public FieldStyleData(UIDataStyle owner, FieldMeta field) {
         this.owner = owner;
@@ -63,4 +64,12 @@ public class FieldStyleData {
         return this.field.dataType();
     }
 
+    public String placeholder() {
+        return this.placeholder;
+    }
+
+    public FieldStyleData setPlaceholder(String placeholder) {
+        this.placeholder = placeholder;
+        return this;
+    }
 }

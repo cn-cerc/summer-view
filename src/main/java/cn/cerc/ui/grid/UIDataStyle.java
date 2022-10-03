@@ -45,12 +45,13 @@ public class UIDataStyle implements UIDataStyleImpl {
                 UIInput input = new UIInput(null);
                 input.setId(data.key());
                 input.setValue(result);
-                var style = this.items.get(data.key());
-                if (style.width() > 0) {
-                    String width = String.format("width: %dpx", style.width() * PX_SIZE);
+                var styleData = this.items.get(data.key());
+                if (styleData.width() > 0) {
+                    String width = String.format("width: %dpx", styleData.width() * PX_SIZE);
                     input.setCssStyle(width);
                 } else
                     input.setCssStyle(null);
+                input.setPlaceholder(styleData.placeholder());
                 result = input.toString();
             }
             return result;
