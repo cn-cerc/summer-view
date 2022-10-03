@@ -3,6 +3,7 @@ package cn.cerc.ui.phone;
 import cn.cerc.db.core.DataSet;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.grid.UIDataStyle;
+import cn.cerc.ui.grid.UIDataStyleImpl;
 import cn.cerc.ui.vcl.UIUrl;
 
 public class UIPhoneView extends UIAbstractView {
@@ -12,10 +13,16 @@ public class UIPhoneView extends UIAbstractView {
         this.setCssClass("phone-view");
         this.setActive(this.isPhone());
     }
-    
+
     @Override
     public UIPhoneView setDataSet(DataSet dataSet) {
         super.setDataSet(dataSet);
+        return this;
+    }
+
+    @Override
+    public UIPhoneView setDataStyle(UIDataStyleImpl dataStyle) {
+        super.setDataStyle(dataStyle);
         return this;
     }
 

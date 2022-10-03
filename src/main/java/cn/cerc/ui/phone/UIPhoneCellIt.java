@@ -4,13 +4,13 @@ import cn.cerc.db.core.DataSource;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 
-public class UIPhoneGridIt extends UIComponent {
+public class UIPhoneCellIt extends UIComponent {
 
-    public UIPhoneGridIt() {
+    public UIPhoneCellIt() {
         this(null);
     }
 
-    public UIPhoneGridIt(UIComponent owner) {
+    public UIPhoneCellIt(UIComponent owner) {
         super(owner);
         this.setRootLabel("span");
     }

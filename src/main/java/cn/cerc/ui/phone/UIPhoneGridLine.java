@@ -98,7 +98,7 @@ public class UIPhoneGridLine extends UIBlockLine {
     }
 
     public UIPhoneGridLine addIt() {
-        addComponent(new UIPhoneGridIt());
+        addComponent(new UIPhoneCellIt());
         return this;
     }
 

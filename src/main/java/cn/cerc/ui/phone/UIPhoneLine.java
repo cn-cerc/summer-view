@@ -23,4 +23,9 @@ public class UIPhoneLine extends UIBlockLine {
         return (UIPhoneCell) this.getComponent(index);
     }
 
+    public UIPhoneLine addIt() {
+        addComponent(new UIPhoneCellIt());
+        return this;
+    }
+
 }
