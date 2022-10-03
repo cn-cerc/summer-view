@@ -69,10 +69,16 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
         return this;
     }
 
+    /**
+     * 注册dataSet中的字段，若不存在则自动于dataSet中增加
+     * 
+     * @param fieldCode
+     * @return 返回 dataSet.fields(fieldCode)
+     */
     public FieldMeta addField(String fieldCode) {
         if (this.dataSet == null)
             throw new RuntimeException("dataSet is null");
-        FieldMeta field = dataSet.fields().get(fieldCode);
+        FieldMeta field = dataSet.fields(fieldCode);
         if (field == null)
             field = dataSet.fields().add(fieldCode, FieldKind.Calculated);
         fields.add(field);
@@ -86,7 +92,7 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
         if (!this.init && this.dataSet != null) {
             // 若没有指定列时，自动为所有列
             if (fields.size() == 0) {
-                for (var field : dataSet.fields()) 
+                for (var field : dataSet.fields())
                     fields.add(field);
             }
             // 建立相应的显示组件
@@ -104,12 +110,20 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
         super.output(html);
     }
 
+    /**
+     * 
+     * @return 返回表格输出时，tr的处理器
+     */
     public UITr head() {
         if (head == null)
             this.head = new UITr(this);
         return this.head;
     }
 
+    /**
+     * 
+     * @return 返回表格输入时，单身的处理器
+     */
     public UIGridBody body() {
         if (body == null)
             this.body = new UIGridBody(this);
@@ -131,10 +145,9 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
         ds.fields().get("name").setName("姓名");
         ds.fields().get("sex").setName("性别").onGetSetText(EditorFactory.ofBoolean("女的", "男的"));
 
-        UIGridView grid = new UIGridView(null);
-        grid.setPhone(false);
-        grid.setDataSet(ds);
+        UIGridView grid = new UIGridView(null).setDataSet(ds);
         grid.setDataStyle(new UIDataStyle());
+        grid.setActive(true);
 //        grid.addField("sex"); //指定栏位输出
         System.out.println(grid.toString());
     }

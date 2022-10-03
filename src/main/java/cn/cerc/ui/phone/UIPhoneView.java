@@ -62,16 +62,32 @@ public class UIPhoneView extends UIComponent implements UIDataViewImpl {
         return this;
     }
 
+    /**
+     * 增加行数据处理器UIPhoneLine，此处理器以span的形式呈现
+     * 
+     * @return 返回创建的 UIPhoneLine
+     */
     public UIPhoneLine addLine() {
         return new UIPhoneLine(this.block());
     }
 
+    /**
+     * 增加行数据处理器UIPhoneGridLine，此处理器以table的形式呈现
+     * 
+     * @return 返回创建的 UIPhoneGridLine
+     */
     public UIPhoneGridLine addGrid() {
         return new UIPhoneGridLine(this.block());
     }
 
-    public UIPhoneGridLine addGrid(int... width) {
-        return new UIPhoneGridLine(this.block()).split(width);
+    /**
+     * 定义的列表可为字段的总个数，或为字段总个数的2倍，后者表示字段名称要独立一列
+     * 
+     * @param fieldListWidth 字段列表的宽度
+     * @return 返回创建的 UIPhoneGridLine
+     */
+    public UIPhoneGridLine addGrid(int... fieldListWidth) {
+        return new UIPhoneGridLine(this.block()).split(fieldListWidth);
     }
 
     public UIComponent block() {
@@ -80,6 +96,11 @@ public class UIPhoneView extends UIComponent implements UIDataViewImpl {
         return block;
     }
 
+    /**
+     * 若要整块数据可执行点示时，可设置此属性为 UIUrl 对象
+     * 
+     * @param block 设置每一条数据的包裹对象
+     */
     public void setBlock(UIComponent block) {
         if (block != null) {
             if (this.block != null)

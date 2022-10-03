@@ -120,13 +120,16 @@ public class UIDataStyle implements UIDataStyleImpl {
     }
 
     @Override
-    public UIDataStyle setDefault(FieldMeta meta) {
+    public boolean setDefault(FieldMeta meta) {
+        boolean result = false;
         if (meta.onGetText() == null) {
             var event = this.getDefault(meta);
-            if (event != null)
+            if (event != null) {
                 meta.onGetText(event);
+                result = true;
+            }
         }
-        return this;
+        return result;
     }
 
     public OnGetText getDefault(FieldMeta meta) {

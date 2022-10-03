@@ -1,1 +1,46 @@
 summer-ui
+
+##UIGridView
+
+#用途
+UIGridView用于在pc浏览器上显示表格
+
+#使用范例
+```
+DataSet dataSet = svr.dataOut();
+// 定义要参与显示的栏位内容
+var style = new UIDataStyle().setDataSet(svr.dataOut());
+style.addField("Name_").setName("部门名称");
+style.addField("ParentName").setName("一级部门");
+style.addField("Depute_").setName("外发否").dataType().setClass(Boolean.class);
+style.addField("Disable_").setName("停用否").dataType().setClass(Boolean.class);
+
+// 定义pc环境下的表格显示（在phone环境将不会工作）
+var view1 = new UIGridView(jspPage.getContent()).setDataStyle(style);
+// 定义phone环境下的显示（在pc环境将不会工作）
+var view2 = new UIPhoneView(jspPage.getContent()).setDataStyle(style);
+// 混合显示在一起
+view2.addLine().addCell("Name_", "ParentName");
+// 分成4栏，按1：2：1：2的宽度比例显示
+view2.addGrid(1, 2, 1, 2).addCell("Depute_", "Disable_");
+```
+
+#UIDataStyle
+UIDataStyle(): 等同于 new UIDataStyle(false)，使用显示样式，不可编辑内容
+UIDataStyle(true): 使用编辑样式，各字段会显示输入框, 可编辑内容
+addField(): 增加一个字段，返回 FieldDataStyle
+
+#FieldDataStyle： 字段的样式定义数据
+onGetText(OnGetText onGetText)：定义在执行getText时的处理器
+setName(String fieldName): 设置字段名称，其作用与dataSet.fields(fileCode).setName相同
+
+#UIPhoneView 定义在phone环境下的显示，此组件在非phone环境下不会输出，但可以使用setActive(true)设置为任何环境均会输出
+addLine(): 增加一行，并返回UIPhoneLine对象
+addGrid(int...displyWidth): 增加一行，并同时定义各列的显示宽度比例，并返回UIPhoneGridLine对象
+
+#UIPhoneLine 配合UIPhoneView，控制一行数据的显示，其内容将以<span>分开
+addCell(String...fileList)：增加多列
+
+#UIPhoneGridLine 配合UIPhoneView，控制一行数据的显示，其内容将以表格形式体现，因此可以设置宽度
+addCell(String...fileList)：增加多列
+
