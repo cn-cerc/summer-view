@@ -22,10 +22,6 @@ public abstract class UIBlockLine extends UIComponent {
         return this;
     }
 
-    public UIPhoneCell getCell(int index) {
-        return (UIPhoneCell) this.getComponent(index);
-    }
-
     public UIBlockLine addCell(String... fieldList) {
         var impl = findOwner(UIDataViewImpl.class);
         if (impl == null) {
@@ -40,11 +36,11 @@ public abstract class UIBlockLine extends UIComponent {
                 column = fields.add(fieldCode, FieldKind.Calculated);
             if (impl.active() && dataStyle != null)
                 dataStyle.setDefault(column);
-            newCell(fieldCode);
+            createCell(fieldCode);
         }
         return this;
     }
 
-    abstract UIComponent newCell(String fieldCode);
+    public abstract void createCell(String fieldCode);
 
 }

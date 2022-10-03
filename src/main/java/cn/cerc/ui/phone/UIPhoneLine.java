@@ -15,8 +15,12 @@ public class UIPhoneLine extends UIBlockLine {
     }
 
     @Override
-    public UIPhoneCell newCell(String fieldCode) {
-        return new UIPhoneCell(this).setFieldCode(fieldCode);
+    public void createCell(String fieldCode) {
+        new UIPhoneCell(this).setFieldCode(fieldCode);
+    }
+
+    public UIPhoneCell getCell(int index) {
+        return (UIPhoneCell) this.getComponent(index);
     }
 
 }

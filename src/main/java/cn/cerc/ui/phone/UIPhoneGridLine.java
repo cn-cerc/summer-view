@@ -28,8 +28,8 @@ public class UIPhoneGridLine extends UIBlockLine {
     }
 
     @Override
-    public UIPhoneGridCell newCell(String fieldCode) {
-        return new UIPhoneGridCell(tr).setFieldCode(fieldCode);
+    public void createCell(String fieldCode) {
+        new UIPhoneGridCell(tr).setFieldCode(fieldCode);
     }
 
     public UIPhoneGridLine split(String... width) {
@@ -93,7 +93,6 @@ public class UIPhoneGridLine extends UIBlockLine {
         return tr;
     }
 
-    @Override
     public UIPhoneGridCell getCell(int index) {
         return (UIPhoneGridCell) tr.getComponent(index);
     }

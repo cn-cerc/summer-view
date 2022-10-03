@@ -3,6 +3,7 @@ package cn.cerc.ui.phone;
 import cn.cerc.db.core.DataSet;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.grid.UIDataStyle;
+import cn.cerc.ui.vcl.UISpan;
 
 public class UIPanelView extends UIAbstractView {
 
@@ -31,7 +32,10 @@ public class UIPanelView extends UIAbstractView {
         ds.fields().get("name").setName("名称");
         UIPanelView view = new UIPanelView(null).setDataSet(ds);
         view.setDataStyle(new UIDataStyle());
-        view.addLine().addCell("code", "name");
+        UIPanelLine line = view.addLine().onCreateCell((owner, field) -> {
+            new UISpan(owner).setText("js:dialog:" + field.code());
+        });
+        line.addCell("code", "name");
         view.setActive(true);
         System.out.println(view.toString());
     }
