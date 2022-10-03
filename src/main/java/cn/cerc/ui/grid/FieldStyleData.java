@@ -22,6 +22,8 @@ public class FieldStyleData {
     private int width = 0;
     // 是否出现开窗选择按钮
     private String dialog;
+    // 帮助文档id
+    private String helpId;
 
     public FieldStyleData(UIDataStyle owner, FieldMeta field) {
         this.owner = owner;
@@ -129,6 +131,15 @@ public class FieldStyleData {
 
     public FieldStyleData setDialog(String dialog) {
         this.dialog = dialog;
+        return this;
+    }
+
+    public String helpId() {
+        return helpId;
+    }
+
+    public FieldStyleData setHelpId(String helpId) {
+        this.helpId = helpId;
         return this;
     }
 }
