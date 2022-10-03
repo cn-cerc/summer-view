@@ -17,7 +17,7 @@ public class FieldStyleData {
     private UIDataStyle owner;
     private String placeholder;
     private UIComponent executant;
-    private OnBeforeOutput onBeforeOutput;
+    private OnOutput onOutput;
 
     public FieldStyleData(UIDataStyle owner, FieldMeta field) {
         this.owner = owner;
@@ -80,18 +80,18 @@ public class FieldStyleData {
         return executant;
     }
 
-    public interface OnBeforeOutput {
+    public interface OnOutput {
         void execute(FieldStyleData styleData);
     }
 
-    public FieldStyleData onBeforeOutput(OnBeforeOutput onBeforeOutput) {
-        this.onBeforeOutput = onBeforeOutput;
+    public FieldStyleData onOutput(OnOutput onOutput) {
+        this.onOutput = onOutput;
         return this;
     }
 
-    public void beforeOutput(UIComponent executant) {
+    public void output(UIComponent executant) {
         this.executant = executant;
-        if (onBeforeOutput != null)
-            onBeforeOutput.execute(this);
+        if (onOutput != null)
+            onOutput.execute(this);
     }
 }

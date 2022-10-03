@@ -52,7 +52,7 @@ public class UIDataStyle implements UIDataStyleImpl {
                 } else
                     input.setCssStyle(null);
                 input.setPlaceholder(styleData.placeholder());
-                styleData.beforeOutput(input);
+                styleData.output(input);
                 result = input.toString();
             }
             return result;
