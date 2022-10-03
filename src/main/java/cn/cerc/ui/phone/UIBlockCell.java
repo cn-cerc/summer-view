@@ -5,15 +5,15 @@ import cn.cerc.db.core.Utils;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 
-public class UIPhoneCell extends UIComponent {
+public class UIBlockCell extends UIComponent {
     private String fieldCode;
 
-    public UIPhoneCell(UIComponent owner) {
+    public UIBlockCell(UIComponent owner) {
         super(owner);
         this.setRootLabel("span");
     }
 
-    public UIPhoneCell setFieldCode(String fieldCode) {
+    public UIBlockCell setFieldCode(String fieldCode) {
         this.fieldCode = fieldCode;
         return this;
     }

@@ -46,7 +46,12 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
         return this.dataStyle;
     }
 
-    @Override
+    /**
+     * 设置视图管理器的视图处理器
+     * 
+     * @param dataStyle 视图管理器
+     * @return 返回视图管理器自身
+     */
     public UIGridView setDataStyle(UIDataStyleImpl style) {
         if (style != null) {
             if (this.dataSet == null)
