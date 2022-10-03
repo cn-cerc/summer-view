@@ -132,14 +132,21 @@ public class UIDataStyle implements UIDataStyleImpl {
         return result;
     }
 
-    public OnGetText getDefault(FieldMeta meta) {
+    /**
+     * 根据fieldMeta.dataType()返回不同的OnGetText函数
+     * 若有定义onOutput事件，则先执行OnOutput事件函数，若OnOutput返回不为空，则以onOutput的返回值为主
+     * 
+     * @param fieldMeta 要设置的字段对象
+     * @return 返回新的OnGetText事件函数
+     */
+    public OnGetText getDefault(FieldMeta fieldMeta) {
         // 若有自定输出事件，为第一优先
         OnGetText result = null;
         if (onOutput != null) {
-            var style = items.get(meta.code());
+            var style = items.get(fieldMeta.code());
             if (style == null) {
-                style = new FieldStyleData(this, meta);
-                items.put(meta.code(), style);
+                style = new FieldStyleData(this, fieldMeta);
+                items.put(fieldMeta.code(), style);
             }
             result = onOutput.execute(style);
         }
@@ -147,7 +154,7 @@ public class UIDataStyle implements UIDataStyleImpl {
             return result;
 
         // 根据数据类型输出
-        var dataType = meta.dataType().dataType();
+        var dataType = fieldMeta.dataType().dataType();
         if (dataType == null)
             return this.getString();
 
@@ -178,6 +185,10 @@ public class UIDataStyle implements UIDataStyleImpl {
         return styleData;
     }
 
+    /**
+     * 
+     * @return 于dataSet中增加一个it字段，并自动等于dataSet.recNo
+     */
     public FieldMeta addFieldIt() {
         return this.addField("it").field().onGetText(data -> "" + dataSet.recNo()).setName("序");
     }
