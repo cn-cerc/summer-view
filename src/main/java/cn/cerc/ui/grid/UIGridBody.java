@@ -24,8 +24,10 @@ public class UIGridBody extends UIComponent {
         }
         var dataSet = impl.dataSet();
         dataSet.first();
-        while (dataSet.fetch())
+        while (dataSet.fetch()) {
             super.output(html);
+            html.println("");
+        }
     }
 
 }
