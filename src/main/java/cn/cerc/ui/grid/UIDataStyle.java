@@ -109,7 +109,7 @@ public class UIDataStyle implements UIDataStyleImpl {
     }
 
     public interface OnOutput {
-        OnGetText getOutputEvent(UIDataStyle style, FieldMeta meta);
+        OnGetText execute(FieldStyleData styleData);
     }
 
     public UIDataStyle onOutput(OnOutput onOutput) {
@@ -130,8 +130,14 @@ public class UIDataStyle implements UIDataStyleImpl {
     public OnGetText getDefault(FieldMeta meta) {
         // 若有自定输出事件，为第一优先
         OnGetText result = null;
-        if (onOutput != null)
-            result = onOutput.getOutputEvent(this, meta);
+        if (onOutput != null) {
+            var style = items.get(meta.code());
+            if (style == null) {
+                style = new FieldStyleData(this, meta);
+                items.put(meta.code(), style);
+            }
+            result = onOutput.execute(style);
+        }
         if (result != null)
             return result;
 
@@ -162,7 +168,7 @@ public class UIDataStyle implements UIDataStyleImpl {
         FieldMeta field = dataSet.fields().get(fieldCode);
         if (field == null)
             field = dataSet.fields().add(fieldCode, FieldKind.Calculated);
-        var styleData = new FieldStyleData(field);
+        var styleData = new FieldStyleData(this, field);
         this.items.put(fieldCode, styleData);
         return styleData;
     }
@@ -187,14 +193,14 @@ public class UIDataStyle implements UIDataStyleImpl {
     }
 
     public static void main(String[] args) {
-        var style = new UIDataStyle();
-        var row = DataRow.of("code", 1);
+        UIDataStyle style = new UIDataStyle();
+        DataRow row = DataRow.of("code", 1);
         var code = row.fields().get("code");
         var data = new DataCell(row, code.code());
 
-        style.onOutput((styld, meta) -> switch (meta.code()) {
-        case "code" -> styld.getEnum(UsedEnum.class);
-        default -> meta.onGetText();
+        style.onOutput(styleData -> switch (styleData.code()) {
+        case "code" -> styleData.owner().getEnum(UsedEnum.class);
+        default -> styleData.onGetText();
         });
 
         System.out.println("output:" + style.getDefault(code).getText(data));

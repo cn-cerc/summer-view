@@ -13,18 +13,36 @@ import cn.cerc.db.editor.OnGetText;
 public class FieldStyleData {
     private final FieldMeta field;
     private int width = 0; // 建议显示宽度
+    private UIDataStyle owner;
 
-    public FieldStyleData(FieldMeta field) {
+    public FieldStyleData(UIDataStyle owner, FieldMeta field) {
+        this.owner = owner;
         this.field = field;
+    }
+
+    public UIDataStyle owner() {
+        return this.owner;
     }
 
     public FieldMeta field() {
         return this.field;
     }
 
+    public String code() {
+        return this.field.code();
+    }
+
+    public OnGetText onGetText() {
+        return this.field.onGetText();
+    }
+
     public FieldStyleData onGetText(OnGetText onGetText) {
         this.field.onGetText(onGetText);
         return this;
+    }
+
+    public String name() {
+        return this.field.name();
     }
 
     public FieldStyleData setName(String fieldName) {
@@ -44,4 +62,5 @@ public class FieldStyleData {
     public DataType dataType() {
         return this.field.dataType();
     }
+
 }
