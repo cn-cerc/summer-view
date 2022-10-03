@@ -11,7 +11,13 @@ public class UIPanelView extends UIAbstractView {
         this.setCssClass("panel-view");
         this.setActive(true);
     }
-    
+
+    @Override
+    public UIPanelView setDataSet(DataSet dataSet) {
+        super.setDataSet(dataSet);
+        return this;
+    }
+
     @Override
     public UIPanelLine addLine() {
         return new UIPanelLine(this.block());
@@ -23,10 +29,8 @@ public class UIPanelView extends UIAbstractView {
         ds.append().setValue("code", 2).setValue("name", "b");
         ds.fields().get("code").setName("代码");
         ds.fields().get("name").setName("名称");
-        UIAbstractView view = new UIPanelView(null).setDataSet(ds);
+        UIPanelView view = new UIPanelView(null).setDataSet(ds);
         view.setDataStyle(new UIDataStyle());
-//        view.setBlock(new UIUrl().setHref("www.baidu.com"));
-//        new UIUrl(view.addLine()).setText("hello");
         view.addLine().addCell("code", "name");
         view.setActive(true);
         System.out.println(view.toString());

@@ -5,12 +5,9 @@ import java.text.DecimalFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cn.cerc.db.core.FieldMeta;
-import cn.cerc.db.core.FieldMeta.FieldKind;
 import cn.cerc.db.core.Utils;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
-import cn.cerc.ui.core.UIDataViewImpl;
 import cn.cerc.ui.phone.UIPhoneGridCell.CellTypeEnum;
 import cn.cerc.ui.vcl.UITr;
 
@@ -22,6 +19,17 @@ public class UIPhoneGridLine extends UIBlockLine {
     public UIPhoneGridLine(UIComponent owner) {
         super(owner);
         this.setRootLabel("table");
+    }
+
+    @Override
+    public UIPhoneGridLine addCell(String... fieldList) {
+        super.addCell(fieldList);
+        return this;
+    }
+
+    @Override
+    public UIPhoneGridCell newCell(String fieldCode) {
+        return new UIPhoneGridCell(tr).setFieldCode(fieldCode);
     }
 
     public UIPhoneGridLine split(String... width) {
@@ -86,33 +94,13 @@ public class UIPhoneGridLine extends UIBlockLine {
     }
 
     @Override
-    public UIPhoneGridLine addCell(String... fieldList) {
-        var impl = findOwner(UIDataViewImpl.class);
-        if (impl == null) {
-            log.error("在 owner 中找不到 UIDataViewImpl");
-            throw new RuntimeException("在 owner 中找不到 UIDataViewImpl");
-        }
-        var fields = impl.dataSet().fields();
-        var dataStyle = impl.dataStyle();
-        for (var fieldCode : fieldList) {
-            FieldMeta column = fields.get(fieldCode);
-            if (column == null)
-                column = fields.add(fieldCode, FieldKind.Calculated);
-            if (impl.active() && dataStyle != null)
-                dataStyle.setDefault(column);
-            new UIPhoneGridCell(tr).setFieldCode(fieldCode);
-        }
-        return this;
+    public UIPhoneGridCell getCell(int index) {
+        return (UIPhoneGridCell) tr.getComponent(index);
     }
 
     public UIPhoneGridLine addIt() {
         addComponent(new UIPhoneGridIt());
         return this;
-    }
-
-    @Override
-    public UIPhoneGridCell getCell(int index) {
-        return (UIPhoneGridCell) tr.getComponent(index);
     }
 
 }

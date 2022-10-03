@@ -38,7 +38,6 @@ public class UIPanelCell extends UIComponent {
         } else
             html.print("dataSource is null");
         this.endOutput(html);
-//        html.print("<div>dialog</div>");
     }
 
 }
