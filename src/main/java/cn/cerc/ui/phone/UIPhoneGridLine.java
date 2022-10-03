@@ -14,7 +14,7 @@ import cn.cerc.ui.core.UIDataViewImpl;
 import cn.cerc.ui.phone.UIPhoneGridCell.CellTypeEnum;
 import cn.cerc.ui.vcl.UITr;
 
-public class UIPhoneGridLine extends UIBlockLine {
+public class UIPhoneGridLine extends UIPhoneLine {
     private static final Logger log = LoggerFactory.getLogger(UIPhoneGridLine.class);
     private UITr tr = new UITr(this);
     private String[] width;

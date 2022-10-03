@@ -8,7 +8,7 @@ import cn.cerc.db.core.Utils;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 
-public class UIPhoneGridCell extends UIBlockCell {
+public class UIPhoneGridCell extends UIPhoneCell {
     private static final Logger log = LoggerFactory.getLogger(UIPhoneGridCell.class);
     private CellTypeEnum cellType = CellTypeEnum.Combo;
 

@@ -5,7 +5,7 @@ import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.grid.UIDataStyle;
 import cn.cerc.ui.vcl.UIUrl;
 
-public class UIPhoneView extends UIBlockView {
+public class UIPhoneView extends UICustomView {
 
     public UIPhoneView(UIComponent owner) {
         super(owner);

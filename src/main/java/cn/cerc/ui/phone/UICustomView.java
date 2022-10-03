@@ -12,7 +12,7 @@ import cn.cerc.ui.grid.UIDataStyleImpl;
 import cn.cerc.ui.vcl.UILi;
 import cn.cerc.ui.vcl.UIUrl;
 
-public class UIBlockView extends UIComponent implements UIDataViewImpl {
+public class UICustomView extends UIComponent implements UIDataViewImpl {
 
     private boolean active;
     private UIDataStyleImpl dataStyle;
@@ -20,7 +20,7 @@ public class UIBlockView extends UIComponent implements UIDataViewImpl {
     private UIComponent block;
     private UILi li;
 
-    public UIBlockView(UIComponent owner) {
+    public UICustomView(UIComponent owner) {
         super(owner);
         this.setRootLabel("ol");
         this.setCssClass("panel-view");
@@ -32,7 +32,7 @@ public class UIBlockView extends UIComponent implements UIDataViewImpl {
         return active;
     }
 
-    public UIBlockView setActive(boolean active) {
+    public UICustomView setActive(boolean active) {
         this.active = active;
         return this;
     }
@@ -43,7 +43,7 @@ public class UIBlockView extends UIComponent implements UIDataViewImpl {
      * @param dataStyle 视图管理器
      * @return 返回视图管理器自身
      */
-    public UIBlockView setDataStyle(UIDataStyleImpl dataStyle) {
+    public UICustomView setDataStyle(UIDataStyleImpl dataStyle) {
         this.dataStyle = dataStyle;
         return this;
     }
@@ -58,7 +58,7 @@ public class UIBlockView extends UIComponent implements UIDataViewImpl {
         return dataSet;
     }
 
-    public UIBlockView setDataSet(DataSet dataSet) {
+    public UICustomView setDataSet(DataSet dataSet) {
         this.dataSet = dataSet;
         return this;
     }
@@ -68,8 +68,8 @@ public class UIBlockView extends UIComponent implements UIDataViewImpl {
      * 
      * @return 返回创建的 UIPanelView
      */
-    public UIBlockLine addLine() {
-        return new UIBlockLine(this.block());
+    public UIPhoneLine addLine() {
+        return new UIPhoneLine(this.block());
     }
 
     public UIComponent block() {
@@ -98,16 +98,16 @@ public class UIBlockView extends UIComponent implements UIDataViewImpl {
         return li;
     }
 
-    public List<UIBlockLine> lines() {
-        List<UIBlockLine> lines = new ArrayList<>();
+    public List<UIPhoneLine> lines() {
+        List<UIPhoneLine> lines = new ArrayList<>();
         for (var item : this.block().getComponents()) {
-            if (item instanceof UIBlockLine line)
+            if (item instanceof UIPhoneLine line)
                 lines.add(line);
         }
         return lines;
     }
 
-    public UIBlockLine getLine(int index) {
+    public UIPhoneLine getLine(int index) {
         return lines().get(index);
     }
 
@@ -146,7 +146,7 @@ public class UIBlockView extends UIComponent implements UIDataViewImpl {
         ds.append().setValue("code", 2).setValue("name", "b");
         ds.fields().get("code").setName("代码");
         ds.fields().get("name").setName("名称");
-        UIBlockView view = new UIBlockView(null).setDataSet(ds);
+        UICustomView view = new UICustomView(null).setDataSet(ds);
         view.setDataStyle(new UIDataStyle());
         view.setBlock(new UIUrl().setHref("www.baidu.com"));
         new UIUrl(view.addLine()).setText("hello");
