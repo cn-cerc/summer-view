@@ -14,13 +14,6 @@ public interface UIDataViewImpl extends DataSource {
     boolean active();
 
     /**
-     * 
-     * @param active 是否输出
-     * @return 返回视图管理器
-     */
-    Object setActive(boolean active);
-
-    /**
      * 设置视图管理器的视图处理器
      * 
      * @param dataStyle 视图管理器

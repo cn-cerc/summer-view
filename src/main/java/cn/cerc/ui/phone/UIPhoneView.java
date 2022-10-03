@@ -56,7 +56,11 @@ public class UIPhoneView extends UIComponent implements UIDataViewImpl {
         return active;
     }
 
-    @Override
+    /**
+     * 
+     * @param active 是否输出
+     * @return 返回视图管理器
+     */
     public UIPhoneView setActive(boolean active) {
         this.active = active;
         return this;

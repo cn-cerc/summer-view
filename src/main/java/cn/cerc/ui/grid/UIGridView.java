@@ -63,7 +63,11 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
         return active;
     }
 
-    @Override
+    /**
+     * 
+     * @param active 是否输出
+     * @return 返回视图管理器
+     */
     public UIGridView setActive(boolean active) {
         this.active = active;
         return this;
