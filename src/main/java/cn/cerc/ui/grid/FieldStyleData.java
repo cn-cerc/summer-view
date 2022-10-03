@@ -3,6 +3,7 @@ package cn.cerc.ui.grid;
 import cn.cerc.db.core.DataType;
 import cn.cerc.db.core.FieldMeta;
 import cn.cerc.db.editor.OnGetText;
+import cn.cerc.ui.core.UIComponent;
 
 /**
  * 字段显示样式数据定义
@@ -15,6 +16,8 @@ public class FieldStyleData {
     private int width = 0; // 建议显示宽度
     private UIDataStyle owner;
     private String placeholder;
+    private UIComponent executant;
+    private OnBeforeOutput onBeforeOutput;
 
     public FieldStyleData(UIDataStyle owner, FieldMeta field) {
         this.owner = owner;
@@ -71,5 +74,24 @@ public class FieldStyleData {
     public FieldStyleData setPlaceholder(String placeholder) {
         this.placeholder = placeholder;
         return this;
+    }
+
+    public UIComponent executant() {
+        return executant;
+    }
+
+    public interface OnBeforeOutput {
+        void execute(FieldStyleData styleData);
+    }
+
+    public FieldStyleData onBeforeOutput(OnBeforeOutput onBeforeOutput) {
+        this.onBeforeOutput = onBeforeOutput;
+        return this;
+    }
+
+    public void beforeOutput(UIComponent executant) {
+        this.executant = executant;
+        if (onBeforeOutput != null)
+            onBeforeOutput.execute(this);
     }
 }
