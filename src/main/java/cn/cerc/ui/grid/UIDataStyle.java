@@ -17,6 +17,7 @@ import cn.cerc.mis.ado.UsedEnum;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.fields.UISelectDialog;
 import cn.cerc.ui.vcl.UIInput;
+import cn.cerc.ui.vcl.UISelect;
 
 public class UIDataStyle implements UIDataStyleImpl {
     private static final Logger log = LoggerFactory.getLogger(UIDataStyle.class);
@@ -57,6 +58,7 @@ public class UIDataStyle implements UIDataStyleImpl {
                 } else
                     input.setCssStyle(null);
                 input.setPlaceholder(styleData.placeholder());
+                //允许外部更改input组件的属性
                 styleData.output(input);
                 //
                 if (styleData.dialog() != null)
@@ -96,8 +98,34 @@ public class UIDataStyle implements UIDataStyleImpl {
 
     public OnGetText getFastDate() {
         return data -> {
-            return data.getFastDate().toString();
+            String result = data.getFastDate().toString();
+            if (data.getFastDate().isEmpty())
+                result = "";
+            var styleData = this.items.get(data.key());
+            if (!styleData.readonly()) {
+                UIComponent box = new UIComponent(null);
+                //
+                UIInput input = new UIInput(box);
+                input.setId(data.key());
+                input.setValue(result);
+                if (styleData.width() > 0) {
+                    String width = String.format("width: %dpx", styleData.width() * PX_SIZE);
+                    input.setCssStyle(width);
+                } else
+                    input.setCssStyle(null);
+                input.setPlaceholder(styleData.placeholder());
+                input.setInputType(UIInput.TYPE_DATE);
+                //允许外部更改input组件的属性
+                styleData.output(input);
+                //
+                if (styleData.dialog() != null)
+                    new UISelectDialog(box).setDialog(styleData.dialog()).setInputId(data.key());
+                //
+                result = box.toString();
+            }
+            return result;
         };
+
     }
 
     public OnGetText getFastTime() {
@@ -109,7 +137,25 @@ public class UIDataStyle implements UIDataStyleImpl {
     @SuppressWarnings("rawtypes")
     public OnGetText getEnum(Class<? extends Enum> clazz) {
         return data -> {
-            return data.getEnum(clazz).name();
+            String result = data.getEnum(clazz).name();
+            var styleData = this.items.get(data.key());
+            if (!styleData.readonly()) {
+                UIComponent box = new UIComponent(null);
+                //
+                UISelect input = new UISelect(box);
+                input.setId(data.key());
+                for(var item : clazz.getEnumConstants()) 
+                    input.getOptions().put("" + item.ordinal(), item.name());
+                input.setSelected("" + data.getInt());
+                //允许外部更改input组件的属性
+                styleData.output(input);
+                //
+                if (styleData.dialog() != null)
+                    new UISelectDialog(box).setDialog(styleData.dialog()).setInputId(data.key());
+                //
+                return box.toString();
+            }
+            return result;
         };
     }
 
