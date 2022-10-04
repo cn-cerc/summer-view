@@ -27,6 +27,7 @@ public class UIDataStyle implements UIDataStyleImpl {
     private DataRow dataRow;
     private HashMap<String, FieldStyleData> items = new LinkedHashMap<>();
     private OnOutput onOutput;
+    private Class<?> entityClass;
 
     public static int PX_SIZE = 14; // 1个汉字 = 14px
 
@@ -297,7 +298,7 @@ public class UIDataStyle implements UIDataStyleImpl {
                 //
                 UISelect input = new UISelect(box);
                 input.setId(data.key());
-                for (var key : items.keySet()) 
+                for (var key : items.keySet())
                     input.getOptions().put(key, items.get(key));
                 input.setSelected(data.getString());
                 // 允许外部更改input组件的属性
@@ -377,13 +378,22 @@ public class UIDataStyle implements UIDataStyleImpl {
         };
     }
 
+    public UIDataStyle setEntityClass(Class<?> entityClass) {
+        this.entityClass = entityClass;
+        return this;
+    }
+
     @Override
     public FieldStyleData addField(String fieldCode) {
         if (this.current() == null)
             throw new RuntimeException("current is null");
         FieldMeta field = current().fields().get(fieldCode);
         if (field == null)
-            field = current().fields().add(fieldCode, FieldKind.Calculated);
+            field = current().fields().add(fieldCode);
+        if (this.entityClass != null) {
+            if (!field.readEntity(entityClass))
+                field.setKind(FieldKind.Calculated);
+        }
         var styleData = new FieldStyleData(this, field);
         styleData.setReadonly(!this.inputState);
         this.items.put(fieldCode, styleData);
