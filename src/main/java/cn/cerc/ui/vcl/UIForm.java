@@ -8,8 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.mis.core.IForm;
 import cn.cerc.ui.core.UIComponent;
-import cn.cerc.ui.grid.UIDataStyleImpl;
-import cn.cerc.ui.phone.UIPanelView;
 
 public class UIForm extends UIComponent implements IHtml {
     private Map<String, String> items = new HashMap<>();
@@ -129,16 +127,6 @@ public class UIForm extends UIComponent implements IHtml {
             return new UIFormGatherHelper(this, form.getRequest()).total();
         else
             return 0;
-    }
-
-    public static UIForm build(UIComponent owner, UIDataStyleImpl dataStyle) {
-        UIForm form = new UIForm(owner);
-        UIPanelView find = new UIPanelView(form).setDataStyle(dataStyle);
-        var line = find.addLine();
-        for (var item : dataStyle.fields().keySet())
-            line.addCell(item);
-        new UIButton(form).setText("提交").setId("submit");
-        return form;
     }
 
 }
