@@ -18,14 +18,13 @@ public class FieldStyleData {
     private OnOutput onOutput;
     // 输入时的提示讯息
     private String placeholder;
-    // 建议显示宽度
-    private int width = 0;
     // 是否出现开窗选择按钮
     private String dialog;
     // 帮助文档id
     private String helpId;
     // 若为必填项目，则显示一个星号
     private boolean required;
+    // 是否为只读字段
     private boolean readonly;
 
     public FieldStyleData(UIDataStyle owner, FieldMeta field) {
@@ -70,7 +69,7 @@ public class FieldStyleData {
     }
 
     public int width() {
-        return this.width;
+        return this.field.width();
     }
 
     /**
@@ -80,14 +79,14 @@ public class FieldStyleData {
      * @return 自身
      */
     public FieldStyleData setWidth(int width) {
-        this.width = width;
+        this.field.setWidth(width);
         return this;
     }
 
     public DataType setClass(Class<?> clazz) {
         return this.field.dataType().setClass(clazz);
     }
-    
+
     public String placeholder() {
         return this.placeholder;
     }
