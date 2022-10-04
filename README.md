@@ -54,3 +54,18 @@ addCell(String...fileList)：增加多列
 #UIBlockLine 配合UIBlockView与UIPhoneView，控制一行数据的显示，其内容将以<span>分开
 addCell(String...fileList)：增加多列
 
+#第2代写法：创建搜索面板
+```
+UISearchPanel search1 = new UISearchPanel(page.getContent());
+new StringColumn(search1, "员工工号", "code_").setPlaceholder("请输入员工工号");
+new StringColumn(search1, "查询条件", "searchText_").setPlaceholder("请输入查询条件");
+search1.readAll();
+```
+#第3代写法：创建搜索面板
+```
+var search2 = new UIDataStyle(true).setDataRow(new DataRow());
+search2.addField("code_").setName("员工工号").setPlaceholder("请输入员工工号");
+search2.addField("searchText_").setName("查询条件").setPlaceholder("请输入查询条件");
+if (UIForm.build(page.getContent(), search2).gatherRequest() > 0)
+    System.out.println(search2.current());
+```
