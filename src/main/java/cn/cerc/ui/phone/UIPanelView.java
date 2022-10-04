@@ -138,7 +138,7 @@ public class UIPanelView extends UIComponent implements UIDataViewImpl {
 
         UIDataStyle style = new UIDataStyle(true).setDataRow(ds);
         style.addField("code").setDialog("selectCode");
-        style.addField("name").setStarFlag(true).setReadonly(true);
+        style.addField("name").setRequired(true).setReadonly(true);
         var form = new UIForm(null).setAction("FrmXXX");
         UIPanelView view = new UIPanelView(form).setDataStyle(style);
         view.addLine().addCell("code");

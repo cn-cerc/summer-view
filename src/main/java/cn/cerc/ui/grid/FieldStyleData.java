@@ -25,7 +25,7 @@ public class FieldStyleData {
     // 帮助文档id
     private String helpId;
     // 若为必填项目，则显示一个星号
-    private boolean starFlag;
+    private boolean required;
     private boolean readonly;
 
     public FieldStyleData(UIDataStyle owner, FieldMeta field) {
@@ -146,12 +146,12 @@ public class FieldStyleData {
         return this;
     }
 
-    public boolean starFlag() {
-        return this.starFlag;
+    public boolean required() {
+        return this.required;
     }
 
-    public FieldStyleData setStarFlag(boolean starFlag) {
-        this.starFlag = starFlag;
+    public FieldStyleData setRequired(boolean required) {
+        this.required = required;
         return this;
     }
 
