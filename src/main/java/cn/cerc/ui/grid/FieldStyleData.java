@@ -84,10 +84,10 @@ public class FieldStyleData {
         return this;
     }
 
-    public DataType dataType() {
-        return this.field.dataType();
+    public DataType setClass(Class<?> clazz) {
+        return this.field.dataType().setClass(clazz);
     }
-
+    
     public String placeholder() {
         return this.placeholder;
     }
