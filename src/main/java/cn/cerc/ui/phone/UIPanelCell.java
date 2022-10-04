@@ -59,7 +59,10 @@ public class UIPanelCell extends UIComponent implements UIFormGatherImpl {
         var impl = findOwner(UIDataViewImpl.class);
         if (impl != null) {
             String value = request.getParameter(fieldCode);
-            if (value != null) {
+            boolean readonly = impl.readonly();
+            if (impl.dataStyle() != null)
+                readonly = impl.dataStyle().fields().get(this.fieldCode).readonly();
+            if (!readonly) {
                 impl.current().setValue(this.fieldCode, value);
                 return 1;
             }

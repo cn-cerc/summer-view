@@ -123,10 +123,13 @@ public class UIForm extends UIComponent implements IHtml {
      * @return 返回收集成功的笔数
      */
     public int gatherRequest() {
-        if (this.getOrigin() instanceof IForm form)
-            return new UIFormGatherHelper(this, form.getRequest()).total();
-        else
-            return 0;
+        int result = 0;
+        if (this.getOrigin() instanceof IForm form) {
+            var request = form.getRequest();
+            if (request.getParameter("submit") != null)
+                result = new UIFormGatherHelper(this, request).total();
+        }
+        return result;
     }
 
 }
