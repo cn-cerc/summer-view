@@ -19,7 +19,7 @@ public class UIPanelView extends UIComponent implements UIDataViewImpl {
 
     public UIPanelView(UIComponent owner) {
         super(owner);
-        this.setRootLabel("li");
+        this.setRootLabel("");
         this.setActive(true);
     }
 
@@ -141,8 +141,9 @@ public class UIPanelView extends UIComponent implements UIDataViewImpl {
 //            if (style.inputState())
 //                new UISelectDialog(owner).setInputId(field.code()).setDialog("selectCode");
         });
-        line.addCell("code", "name");
-        view.setActive(true);
+        line.addCell("code");
+        view.addLine().addCell("name");
+        view.setRootLabel("div");
         System.out.println(view.toString());
     }
 }
