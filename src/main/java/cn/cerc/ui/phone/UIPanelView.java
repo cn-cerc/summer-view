@@ -9,6 +9,8 @@ import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.core.UIDataViewImpl;
 import cn.cerc.ui.grid.UIDataStyle;
 import cn.cerc.ui.grid.UIDataStyleImpl;
+import cn.cerc.ui.vcl.UIButton;
+import cn.cerc.ui.vcl.UIForm;
 
 public class UIPanelView extends UIComponent implements UIDataViewImpl {
 
@@ -71,14 +73,16 @@ public class UIPanelView extends UIComponent implements UIDataViewImpl {
      * 若要整块数据可执行点示时，可设置此属性为 UIUrl 对象
      * 
      * @param block 设置每一条数据的包裹对象
+     * @return block对象
      */
-    public void setBlock(UIComponent block) {
+    public UIComponent setBlock(UIComponent block) {
         if (block != null) {
             if (this.block != null)
                 throw new RuntimeException("block not is null");
             block.setOwner(this);
         }
         this.block = block;
+        return block;
     }
 
     public List<UIBlockLine> lines() {
@@ -135,15 +139,12 @@ public class UIPanelView extends UIComponent implements UIDataViewImpl {
         UIDataStyle style = new UIDataStyle(true).setDataRow(ds);
         style.addField("code").setDialog("selectCode");
         style.addField("name").setStarFlag(true).setReadonly(true);
-        UIPanelView view = new UIPanelView(null).setDataStyle(style);
-
-        UIPanelLine line = view.addLine().onCreateCellAfter((owner, field) -> {
-//            if (style.inputState())
-//                new UISelectDialog(owner).setInputId(field.code()).setDialog("selectCode");
-        });
-        line.addCell("code");
+        var form = new UIForm(null).setAction("FrmXXX");
+        UIPanelView view = new UIPanelView(form).setDataStyle(style);
+        view.addLine().addCell("code");
         view.addLine().addCell("name");
-        view.setRootLabel("div");
-        System.out.println(view.toString());
+        new UIButton(form).setName("summit");
+        System.out.println(form.gatherRequest());
+        System.out.println(form.toString());
     }
 }

@@ -1,13 +1,16 @@
 package cn.cerc.ui.phone;
 
+import javax.servlet.http.HttpServletRequest;
+
 import cn.cerc.db.core.Utils;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.core.UIDataViewImpl;
 import cn.cerc.ui.fields.UIStarFlag;
 import cn.cerc.ui.grid.FieldStyleData;
+import cn.cerc.ui.vcl.UIForm.UIFormGatherImpl;
 
-public class UIPanelCell extends UIComponent {
+public class UIPanelCell extends UIComponent implements UIFormGatherImpl {
     private String fieldCode;
 
     public UIPanelCell(UIComponent owner) {
@@ -49,6 +52,19 @@ public class UIPanelCell extends UIComponent {
         } else
             html.print("UIDataViewImpl is null");
         this.endOutput(html);
+    }
+
+    @Override
+    public int gatherRequest(HttpServletRequest request) {
+        var impl = findOwner(UIDataViewImpl.class);
+        if (impl != null) {
+            String value = request.getParameter(fieldCode);
+            if (value != null) {
+                impl.current().setValue(this.fieldCode, value);
+                return 1;
+            }
+        }
+        return 0;
     }
 
 }

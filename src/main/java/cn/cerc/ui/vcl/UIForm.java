@@ -3,6 +3,9 @@ package cn.cerc.ui.vcl;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
+import cn.cerc.db.core.IHandle;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 
@@ -31,8 +34,9 @@ public class UIForm extends UIComponent implements IHtml {
         return (String) this.getCssProperty("action");
     }
 
-    public final void setAction(String action) {
+    public final UIForm setAction(String action) {
         this.setCssProperty("action", action);
+        return this;
     }
 
     public final String getMethod() {
@@ -100,6 +104,30 @@ public class UIForm extends UIComponent implements IHtml {
             bottom.setCssProperty("role", "bottom");
         }
         return bottom;
+    }
+
+    public interface UIFormGatherImpl {
+        /**
+         * 允许一个组件收集多个字段的数据，正常情况下一个组件只会收集一个字段的数据
+         * 
+         * @param request HttpServletRequest
+         * @return 返回成功收集的笔数
+         */
+        int gatherRequest(HttpServletRequest request);
+
+    }
+
+    /**
+     * 收集所有提交的数据
+     * 
+     * @return 返回收集成功的笔数
+     */
+    public int gatherRequest() {
+        var handle = findOwner(IHandle.class);
+        if (handle != null)
+            return new UIFormGatherHelper(this, handle.getRequest()).total();
+        else
+            return 0;
     }
 
 }

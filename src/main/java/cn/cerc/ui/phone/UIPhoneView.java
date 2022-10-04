@@ -59,7 +59,7 @@ public class UIPhoneView extends UIComponent implements UIDataViewImpl {
     public DataSet dataSet() {
         return dataSet;
     }
-    
+
     public UIPhoneView setDataSet(DataSet dataSet) {
         this.dataSet = dataSet;
         return this;
@@ -75,14 +75,16 @@ public class UIPhoneView extends UIComponent implements UIDataViewImpl {
      * 若要整块数据可执行点示时，可设置此属性为 UIUrl 对象
      * 
      * @param block 设置每一条数据的包裹对象
+     * @return block对象
      */
-    public void setBlock(UIComponent block) {
+    public UIComponent setBlock(UIComponent block) {
         if (block != null) {
             if (this.block != null)
                 throw new RuntimeException("block not is null");
             block.setOwner(li());
         }
         this.block = block;
+        return block;
     }
 
     public UIComponent li() {
