@@ -9,13 +9,27 @@
 
 对于个别需要有特殊要求的页面，这些页面仍能继续使用jquery、vue、React等处理，兼顾易用性。
 
-
 #主要组件简介
 UIGridView：用于在pc浏览器上显示表格
 UIBlockView：用于显示各类块状排版
 UIPhoneView：用于在phone浏览器上显示，继承于UIBlockView
 
-#使用范例
+##创建搜索面板代码范例
+```
+//第2代写法
+UISearchPanel search1 = new UISearchPanel(page.getContent());
+new StringColumn(search1, "员工工号", "code_").setPlaceholder("请输入员工工号");
+new StringColumn(search1, "查询条件", "searchText_").setPlaceholder("请输入查询条件");
+search1.readAll();
+//第3代写法
+var search2 = new UIDataStyle(true).setDataRow(new DataRow());
+search2.addField("code_").setName("员工工号").setPlaceholder("请输入员工工号");
+search2.addField("searchText_").setName("查询条件").setPlaceholder("请输入查询条件");
+if (UIForm.build(page.getContent(), search2).gatherRequest() > 0)
+    System.out.println(search2.current());
+```
+
+#查询结果显示代码范例
 ```
 DataSet dataSet = svr.dataOut();
 // 定义要参与显示的栏位内容
@@ -53,19 +67,3 @@ addCell(String...fileList)：增加多列
 
 #UIBlockLine 配合UIBlockView与UIPhoneView，控制一行数据的显示，其内容将以<span>分开
 addCell(String...fileList)：增加多列
-
-#第2代写法：创建搜索面板
-```
-UISearchPanel search1 = new UISearchPanel(page.getContent());
-new StringColumn(search1, "员工工号", "code_").setPlaceholder("请输入员工工号");
-new StringColumn(search1, "查询条件", "searchText_").setPlaceholder("请输入查询条件");
-search1.readAll();
-```
-#第3代写法：创建搜索面板
-```
-var search2 = new UIDataStyle(true).setDataRow(new DataRow());
-search2.addField("code_").setName("员工工号").setPlaceholder("请输入员工工号");
-search2.addField("searchText_").setName("查询条件").setPlaceholder("请输入查询条件");
-if (UIForm.build(page.getContent(), search2).gatherRequest() > 0)
-    System.out.println(search2.current());
-```
