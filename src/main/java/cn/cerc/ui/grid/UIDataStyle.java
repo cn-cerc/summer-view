@@ -22,26 +22,28 @@ import cn.cerc.ui.vcl.UISelect;
 
 public class UIDataStyle implements UIDataStyleImpl {
     private static final Logger log = LoggerFactory.getLogger(UIDataStyle.class);
-    public boolean inputState = false;
     private DataSet dataSet;
     private DataRow dataRow;
+    private boolean readonly = true;
     private HashMap<String, FieldStyleData> items = new LinkedHashMap<>();
     private OnOutput onOutput;
     private Class<?> entityClass;
+    private boolean grid;
 
     public static int PX_SIZE = 14; // 1个汉字 = 14px
 
     public UIDataStyle() {
-        this(false);
+        this(true);
     }
 
-    public UIDataStyle(boolean inputState) {
+    public UIDataStyle(boolean readonly) {
         super();
-        this.inputState = inputState;
+        this.readonly = readonly;
     }
 
-    public boolean inputState() {
-        return this.inputState;
+    @Override
+    public boolean readonly() {
+        return this.readonly;
     }
 
     public OnGetText getString() {
@@ -68,17 +70,19 @@ public class UIDataStyle implements UIDataStyleImpl {
                 //
                 result = box.toString();
             } else if (!this.readonly()) {
-                result = getOnlyDisplay(styleData, result);
+                result = getDisplayText(styleData, result);
             }
             return result;
         };
     }
 
-    private String getOnlyDisplay(FieldStyleData styleData, String defaultText) {
+    private String getDisplayText(FieldStyleData styleData, String text) {
+        if (this.grid)
+            return text;
         UIComponent box = new UIComponent(null);
         UIInput input = new UIInput(box);
         input.setId(styleData.field().code());
-        input.setValue(defaultText);
+        input.setValue(text);
         if (styleData.width() > 0) {
             String width = String.format("width: %dpx", styleData.width() * PX_SIZE);
             input.setCssStyle(width);
@@ -127,7 +131,7 @@ public class UIDataStyle implements UIDataStyleImpl {
                 //
                 result = box.toString();
             } else if (!this.readonly()) {
-                result = getOnlyDisplay(styleData, result);
+                result = getDisplayText(styleData, result);
             }
             return result;
         };
@@ -160,7 +164,7 @@ public class UIDataStyle implements UIDataStyleImpl {
                 //
                 result = box.toString();
             } else if (!this.readonly()) {
-                result = getOnlyDisplay(styleData, result);
+                result = getDisplayText(styleData, result);
             }
             return result;
         };
@@ -194,7 +198,7 @@ public class UIDataStyle implements UIDataStyleImpl {
                 //
                 result = box.toString();
             } else if (!this.readonly()) {
-                result = getOnlyDisplay(styleData, result);
+                result = getDisplayText(styleData, result);
             }
             return result;
         };
@@ -227,7 +231,7 @@ public class UIDataStyle implements UIDataStyleImpl {
                 //
                 result = box.toString();
             } else if (!this.readonly()) {
-                result = getOnlyDisplay(styleData, result);
+                result = getDisplayText(styleData, result);
             }
             return result;
         };
@@ -254,7 +258,7 @@ public class UIDataStyle implements UIDataStyleImpl {
                 //
                 return box.toString();
             } else if (!this.readonly()) {
-                result = getOnlyDisplay(styleData, result);
+                result = getDisplayText(styleData, result);
             }
             return result;
         };
@@ -283,7 +287,7 @@ public class UIDataStyle implements UIDataStyleImpl {
                 //
                 return box.toString();
             } else if (!this.readonly()) {
-                result = getOnlyDisplay(styleData, result);
+                result = getDisplayText(styleData, result);
             }
             return result;
         };
@@ -309,7 +313,7 @@ public class UIDataStyle implements UIDataStyleImpl {
                 //
                 return box.toString();
             } else if (!this.readonly()) {
-                result = getOnlyDisplay(styleData, result);
+                result = getDisplayText(styleData, result);
             }
             return result;
         };
@@ -395,7 +399,7 @@ public class UIDataStyle implements UIDataStyleImpl {
                 field.setKind(FieldKind.Calculated);
         }
         var styleData = new FieldStyleData(this, field);
-        styleData.setReadonly(!this.inputState);
+        styleData.setReadonly(this.readonly);
         this.items.put(fieldCode, styleData);
         return styleData;
     }
@@ -438,6 +442,16 @@ public class UIDataStyle implements UIDataStyleImpl {
     @Override
     public HashMap<String, FieldStyleData> fields() {
         return this.items;
+    }
+
+    public boolean grid() {
+        return grid;
+    }
+
+    @Override
+    public UIDataStyle setGrid(boolean grid) {
+        this.grid = grid;
+        return this;
     }
 
     public static void main(String[] args) {

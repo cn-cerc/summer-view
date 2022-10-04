@@ -23,7 +23,7 @@ public class FieldStyleData {
     // 帮助文档id
     private String helpId;
     // 是否为只读字段
-    private boolean readonly;
+    private boolean readonly = true;
 
     public FieldStyleData(UIDataStyle owner, FieldMeta field) {
         this.owner = owner;

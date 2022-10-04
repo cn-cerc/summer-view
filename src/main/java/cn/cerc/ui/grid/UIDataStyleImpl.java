@@ -35,4 +35,11 @@ public interface UIDataStyleImpl extends DataSource {
      */
     boolean setDefault(FieldMeta fieldMeta);
 
+    /**
+     * 是否在表格环境中显示
+     * 
+     * @param grid 若为表格环境，则设置为true
+     */
+    Object setGrid(boolean grid);
+
 }
