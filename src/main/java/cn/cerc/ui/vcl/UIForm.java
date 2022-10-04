@@ -5,8 +5,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import cn.cerc.db.core.IHandle;
 import cn.cerc.mis.core.HtmlWriter;
+import cn.cerc.mis.core.IForm;
 import cn.cerc.ui.core.UIComponent;
 
 public class UIForm extends UIComponent implements IHtml {
@@ -123,9 +123,8 @@ public class UIForm extends UIComponent implements IHtml {
      * @return 返回收集成功的笔数
      */
     public int gatherRequest() {
-        var handle = findOwner(IHandle.class);
-        if (handle != null)
-            return new UIFormGatherHelper(this, handle.getRequest()).total();
+        if(this.getOrigin() instanceof IForm form)
+            return new UIFormGatherHelper(this, form.getRequest()).total();
         else
             return 0;
     }
