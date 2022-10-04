@@ -31,10 +31,10 @@ public class UIInput extends UIComponent implements IHtml, INameOwner {
     public void beginOutput(HtmlWriter html) {
         if (this.title != null)
             html.print(this.title);
-        this.writeProperty("autocomplete", "off");// 默认关闭浏览器表单自动记录
-        this.writeProperty("name", this.getName());
-        this.writeProperty("type", this.hidden ? "hidden" : this.inputType);
-        this.writeProperty("value", this.value);
+        this.setCssProperty("autocomplete", "off");// 默认关闭浏览器表单自动记录
+        this.setCssProperty("name", this.getName());
+        this.setCssProperty("type", this.hidden ? "hidden" : this.inputType);
+        this.setCssProperty("value", this.value);
         super.beginOutput(html);
     }
 
@@ -42,11 +42,11 @@ public class UIInput extends UIComponent implements IHtml, INameOwner {
         return title;
     }
 
-    @Deprecated
-    public UIInput setCaption(String caption) {
-        this.title = caption;
-        return this;
-    }
+//    @Deprecated
+//    public UIInput setCaption(String caption) {
+//        this.title = caption;
+//        return this;
+//    }
 
     @Override
     public String getName() {
@@ -76,11 +76,11 @@ public class UIInput extends UIComponent implements IHtml, INameOwner {
     }
 
     public String getPlaceholder() {
-        return (String) this.readProperty("placeholder");
+        return (String) this.getCssProperty("placeholder");
     }
 
     public void setPlaceholder(String placeholder) {
-        this.writeProperty("placeholder", placeholder);
+        this.setCssProperty("placeholder", placeholder);
     }
 
     public String getInputType() {

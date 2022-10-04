@@ -67,7 +67,7 @@ public class ColumnEditor {
             columns = new ArrayList<>();
             for (AbstractField field : gridLine.getFields()) {
                 if (field instanceof IFormatColumn) {
-                    if (field.isReadonly()) {
+                    if (field.readonly()) {
                         continue;
                     }
                     if (field.getWidth() == 0) {

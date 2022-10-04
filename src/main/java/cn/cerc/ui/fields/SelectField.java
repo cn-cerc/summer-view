@@ -52,10 +52,10 @@ public class SelectField extends AbstractField implements IFormatColumn, IOutput
     @Override
     public void output(HtmlWriter html) {
         html.print("<select name=\"%s\" role=\"%s\"", this.getId(), this.getField());
-        if (!this.isReadonly() && getOnChange() != null) {
+        if (!this.readonly() && getOnChange() != null) {
             html.print(" onChange=\"%s\"", getOnChange());
         }
-        if (this.isReadonly()) {
+        if (this.readonly()) {
             html.print(" readonly='readonly' disabled='disabled'>");
         } else {
             html.print(">");

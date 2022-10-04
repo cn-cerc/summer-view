@@ -15,7 +15,6 @@ import cn.cerc.ui.core.INameOwner;
 import cn.cerc.ui.core.SearchSource;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.other.BuildText;
-import cn.cerc.ui.vcl.UIFont;
 import cn.cerc.ui.vcl.UIImage;
 import cn.cerc.ui.vcl.UIInput;
 import cn.cerc.ui.vcl.UILabel;
@@ -24,7 +23,7 @@ import cn.cerc.ui.vcl.UIText;
 import cn.cerc.ui.vcl.UIUrl;
 
 public abstract class AbstractField extends UIComponent implements INameOwner, SearchSource {
-    private static final ClassConfig config = new ClassConfig(AbstractField.class, SummerUI.ID);
+    public static final ClassConfig config = new ClassConfig(AbstractField.class, SummerUI.ID);
     // 数据库相关
     private String field;
     // 自定义取值
@@ -233,10 +232,10 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
     }
 
     @Override
-    public final boolean isReadonly() {
+    public final boolean readonly() {
         if (readonly > -1)
             return readonly == 1;
-        return source != null ? source.isReadonly() : false;
+        return source != null ? source.readonly() : false;
     }
 
     public AbstractField setReadonly(boolean readonly) {
@@ -281,11 +280,11 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
     }
 
     public String getPlaceholder() {
-        return (String) content.readProperty("placeholder");
+        return (String) content.getCssProperty("placeholder");
     }
 
     public AbstractField setPlaceholder(String placeholder) {
-        this.content.writeProperty("placeholder", placeholder);
+        this.content.setCssProperty("placeholder", placeholder);
         return this;
     }
 
@@ -344,11 +343,11 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
             String value = this.getValue();
             content.setCssClass(this.CSSClass_phone);
             content.setValue(value != null ? value : this.getText());
-            content.setReadonly(this.isReadonly());
-            content.writeProperty("autocomplete", this.autocomplete ? "on" : "off");
-            content.writeProperty("pattern", this.pattern);
-            content.writeProperty("oninput", this.oninput);
-            content.writeProperty("onclick", this.onclick);
+            content.setReadonly(this.readonly());
+            content.setCssProperty("autocomplete", this.autocomplete ? "on" : "off");
+            content.setCssProperty("pattern", this.pattern);
+            content.setCssProperty("oninput", this.oninput);
+            content.setCssProperty("onclick", this.onclick);
             content.setSignProperty("required", this.required);
             content.setSignProperty("autofocus", this.autofocus);
         }
@@ -359,7 +358,8 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
     @Override
     public void endOutput(HtmlWriter html) {
         if (this.showStar) {
-            new UIFont(null).addComponent(new UIText().setText("*")).output(html);
+            new UIStarFlag(null).output(html);
+//            new UIFont(null).addComponent(new UIText().setText("*")).output(html);
         }
         if (!this.hidden) {
             UISpan span = new UISpan(null);

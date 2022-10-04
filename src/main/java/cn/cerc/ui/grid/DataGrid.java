@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cn.cerc.db.core.ClassResource;
-import cn.cerc.db.core.DataRow;
 import cn.cerc.db.core.DataSet;
 import cn.cerc.db.core.DataSource;
 import cn.cerc.db.core.Utils;
@@ -67,14 +66,15 @@ public class DataGrid extends UIComponent implements DataSource, IGridStyle {
         pages.setRequest(this.form.getRequest());
     }
 
+    @Override
     public DataSet dataSet() {
         return dataSet;
     }
 
-    @Deprecated
-    public final DataSet getDataSet() {
-        return dataSet();
-    }
+//    @Deprecated
+//    public final DataSet getDataSet() {
+//        return dataSet();
+//    }
 
     public DataGrid setDataSet(DataSet dataSet) {
         this.dataSet = dataSet;
@@ -82,10 +82,10 @@ public class DataGrid extends UIComponent implements DataSource, IGridStyle {
         return this;
     }
 
-    @Deprecated
-    public void addField(AbstractField field) {
-        this.addComponent(field);
-    }
+//    @Deprecated
+//    public void addField(AbstractField field) {
+//        this.addComponent(field);
+//    }
 
     @Override
     public UIComponent addComponent(UIComponent child) {
@@ -149,7 +149,7 @@ public class DataGrid extends UIComponent implements DataSource, IGridStyle {
     }
 
     @Override
-    public final boolean isReadonly() {
+    public final boolean readonly() {
         return true;
     }
 
@@ -174,7 +174,7 @@ public class DataGrid extends UIComponent implements DataSource, IGridStyle {
         }
 
         this.beginOutput(html);
-        if (!this.isPhone() || this.getDataSet().size() > 0) {
+        if (!this.isPhone() || this.dataSet().size() > 0) {
             if (getForm() != null)
                 getForm().beginOutput(html);
             if (this.isPhone())
@@ -329,11 +329,6 @@ public class DataGrid extends UIComponent implements DataSource, IGridStyle {
         PhoneLine line = new PhoneLine(this);
         phoneLines.add(line);
         return line;
-    }
-
-    @Override
-    public DataRow current() {
-        return this.dataSet.current();
     }
 
 }

@@ -28,7 +28,7 @@ public class UIImage extends UIComponent implements IHtml {
         String url = this.src;
         if (this.staticPath != null && this.process != null && !Utils.isEmpty(process.getCommand()))
             url += String.format("?x-oss-process=image%s", process.getCommand());
-        this.writeProperty("src", new StaticFile(StaticFileType.imageFile, url).toString());
+        this.setCssProperty("src", new StaticFile(StaticFileType.imageFile, url).toString());
         html.print("<").print(getRootLabel());
         this.outputPropertys(html);
         html.print("/>");
@@ -56,47 +56,47 @@ public class UIImage extends UIComponent implements IHtml {
     }
 
     public String getWidth() {
-        return (String) this.readProperty("width");
+        return (String) this.getCssProperty("width");
     }
 
     public UIImage setWidth(String width) {
-        this.writeProperty("width", width);
+        this.setCssProperty("width", width);
         return this;
     }
 
     public String getHeight() {
-        return (String) this.readProperty("height");
+        return (String) this.getCssProperty("height");
     }
 
     public UIImage setHeight(String height) {
-        this.writeProperty("height", height);
+        this.setCssProperty("height", height);
         return this;
     }
 
     public String getRole() {
-        return (String) this.readProperty("role");
+        return (String) this.getCssProperty("role");
     }
 
     public UIImage setRole(String role) {
-        this.writeProperty("role", role);
+        this.setCssProperty("role", role);
         return this;
     }
 
     public String getOnclick() {
-        return (String) this.readProperty("onclick");
+        return (String) this.getCssProperty("onclick");
     }
 
     public UIImage setOnclick(String onclick) {
-        this.writeProperty("onclick", onclick);
+        this.setCssProperty("onclick", onclick);
         return this;
     }
 
     public String getAlt() {
-        return (String) this.readProperty("alt");
+        return (String) this.getCssProperty("alt");
     }
 
     public UIImage setAlt(String alt) {
-        this.writeProperty("alt", alt);
+        this.setCssProperty("alt", alt);
         return this;
     }
 

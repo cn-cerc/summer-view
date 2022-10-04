@@ -68,7 +68,7 @@ public class OptionField extends AbstractField {
         if (this.size > 0) {
             html.print(" size=\"%s\"", this.getSize());
         }
-        if (this.isReadonly()) {
+        if (this.readonly()) {
             html.print(" disabled");
         }
         if (this.getCssStyle() != null) {

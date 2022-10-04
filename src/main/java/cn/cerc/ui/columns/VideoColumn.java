@@ -18,7 +18,7 @@ public class VideoColumn extends AbstractColumn implements IDataColumn {
     public VideoColumn(UIComponent owner) {
         super(owner);
         if (owner instanceof IReadonlyOwner) {
-            this.setReadonly(((IReadonlyOwner) owner).isReadonly());
+            this.setReadonly(((IReadonlyOwner) owner).readonly());
         }
     }
 
@@ -26,7 +26,7 @@ public class VideoColumn extends AbstractColumn implements IDataColumn {
         super(owner);
         this.setCode(code).setName(name);
         if (owner instanceof IReadonlyOwner) {
-            this.setReadonly(((IReadonlyOwner) owner).isReadonly());
+            this.setReadonly(((IReadonlyOwner) owner).readonly());
         }
         input.setName(code);
     }
@@ -35,7 +35,7 @@ public class VideoColumn extends AbstractColumn implements IDataColumn {
         super(owner);
         this.setCode(code).setName(name).setSpaceWidth(width);
         if (owner instanceof IReadonlyOwner) {
-            this.setReadonly(((IReadonlyOwner) owner).isReadonly());
+            this.setReadonly(((IReadonlyOwner) owner).readonly());
         }
         input.setName(code);
     }

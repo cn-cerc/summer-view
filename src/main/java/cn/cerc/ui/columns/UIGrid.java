@@ -89,7 +89,7 @@ public class UIGrid extends UIComponent implements IReadonlyOwner, IGridStyle {
         html.print("<div");
         super.outputPropertys(html);
         html.print(">");
-        DataSet dataSet = this.getDataSet();
+        DataSet dataSet = this.dataSet();
         dataSet.first();
         while (dataSet.fetch()) {
             html.print("<div class=\"record\" data-record=\"%d\">", dataSet.recNo());
@@ -118,7 +118,7 @@ public class UIGrid extends UIComponent implements IReadonlyOwner, IGridStyle {
         html.print("<div");
         super.outputPropertys(html);
         html.print(">");
-        DataSet dataSet = this.getDataSet();
+        DataSet dataSet = this.dataSet();
         MutiPage pages = this.getPages();
 
         double sumFieldWidth = 0;
@@ -225,7 +225,7 @@ public class UIGrid extends UIComponent implements IReadonlyOwner, IGridStyle {
     }
 
     @Override
-    public boolean isReadonly() {
+    public boolean readonly() {
         return readonly;
     }
 
@@ -235,7 +235,7 @@ public class UIGrid extends UIComponent implements IReadonlyOwner, IGridStyle {
         return this;
     }
 
-    public DataSet getDataSet() {
+    public DataSet dataSet() {
         return dataSet;
     }
 

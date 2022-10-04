@@ -17,7 +17,7 @@ public class UIReact extends UIComponent {
         this.content = new UIDiv(this);
         this.script = new UIScriptContent(this);
         this.script.setRootLabel("script");
-        this.script.writeProperty("type", "text/babel");
+        this.script.setCssProperty("type", "text/babel");
 //        addScriptFile("https://cdn.bootcdn.net/ajax/libs/react/16.13.1/umd/react.production.min.js");
 //        addScriptFile("https://cdn.bootcdn.net/ajax/libs/react-dom/16.13.1/umd/react-dom.production.min.js");
 //        addScriptFile("https://cdn.bootcdn.net/ajax/libs/babel-standalone/7.0.0-beta.3/babel.min.js");

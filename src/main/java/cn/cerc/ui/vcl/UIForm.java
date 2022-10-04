@@ -3,7 +3,10 @@ package cn.cerc.ui.vcl;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import cn.cerc.mis.core.HtmlWriter;
+import cn.cerc.mis.core.IForm;
 import cn.cerc.ui.core.UIComponent;
 
 public class UIForm extends UIComponent implements IHtml {
@@ -24,31 +27,32 @@ public class UIForm extends UIComponent implements IHtml {
         super(owner);
         this.setId(id);
         this.setRootLabel("form");
-        this.writeProperty("method", "post");
+        this.setCssProperty("method", "post");
     }
 
     public final String getAction() {
-        return (String) this.readProperty("action");
+        return (String) this.getCssProperty("action");
     }
 
-    public final void setAction(String action) {
-        this.writeProperty("action", action);
+    public final UIForm setAction(String action) {
+        this.setCssProperty("action", action);
+        return this;
     }
 
     public final String getMethod() {
-        return (String) this.readProperty("method");
+        return (String) this.getCssProperty("method");
     }
 
     public final void setMethod(String method) {
-        this.writeProperty("method", method);
+        this.setCssProperty("method", method);
     }
 
     public final String getEnctype() {
-        return (String) this.readProperty("enctype");
+        return (String) this.getCssProperty("enctype");
     }
 
     public final void setEnctype(String enctype) {
-        this.writeProperty("enctype", enctype);
+        this.setCssProperty("enctype", enctype);
     }
 
     @Override
@@ -88,7 +92,7 @@ public class UIForm extends UIComponent implements IHtml {
         if (top == null) {
             top = new UIDiv(this);
             top.setOrigin(this.getOrigin());
-            top.writeProperty("role", "top");
+            top.setCssProperty("role", "top");
         }
         return top;
     }
@@ -97,9 +101,35 @@ public class UIForm extends UIComponent implements IHtml {
         if (bottom == null) {
             bottom = new UIDiv();
             bottom.setOrigin(this.getOrigin());
-            bottom.writeProperty("role", "bottom");
+            bottom.setCssProperty("role", "bottom");
         }
         return bottom;
+    }
+
+    public interface UIFormGatherImpl {
+        /**
+         * 允许一个组件收集多个字段的数据，正常情况下一个组件只会收集一个字段的数据
+         * 
+         * @param request HttpServletRequest
+         * @return 返回成功收集的笔数
+         */
+        int gatherRequest(HttpServletRequest request);
+
+    }
+
+    /**
+     * 收集所有提交的数据
+     * 
+     * @return 返回收集成功的笔数
+     */
+    public int gatherRequest() {
+        int result = 0;
+        if (this.getOrigin() instanceof IForm form) {
+            var request = form.getRequest();
+            if (request.getParameter("submit") != null)
+                result = new UIFormGatherHelper(this, request).total();
+        }
+        return result;
     }
 
 }

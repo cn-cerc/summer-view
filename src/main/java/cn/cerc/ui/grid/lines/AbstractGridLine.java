@@ -3,7 +3,6 @@ package cn.cerc.ui.grid.lines;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.cerc.db.core.DataRow;
 import cn.cerc.db.core.DataSet;
 import cn.cerc.db.core.DataSource;
 import cn.cerc.mis.core.HtmlWriter;
@@ -42,14 +41,15 @@ public abstract class AbstractGridLine extends UIComponent implements DataSource
         return this;
     }
 
+    @Override
     public DataSet dataSet() {
-        return current().dataSet();
+        return source.dataSet();
     }
 
-    @Deprecated
-    public final DataSet getDataSet() {
-        return dataSet();
-    }
+//    @Deprecated
+//    public final DataSet getDataSet() {
+//        return dataSet();
+//    }
 
     public abstract void output(HtmlWriter html, int lineNo);
 
@@ -71,16 +71,6 @@ public abstract class AbstractGridLine extends UIComponent implements DataSource
 
     public void setVisible(boolean visible) {
         this.visible = visible;
-    }
-
-    @Override
-    public DataRow current() {
-        return source.current();
-    }
-
-    @Override
-    public boolean isReadonly() {
-        return source.isReadonly();
     }
 
     public interface IOutputOfGridLine {

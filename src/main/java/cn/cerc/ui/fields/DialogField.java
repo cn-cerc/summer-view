@@ -6,30 +6,25 @@ import java.util.List;
 public class DialogField {
     private List<String> params = new ArrayList<>();
     private String inputId;
-    private String dialogfun;
+    private String dialogFunc;
     private boolean show = true;
 
-    public DialogField(String dialogfun) {
-        this.dialogfun = dialogfun;
+    public DialogField() {
+        super();
     }
 
-    public static void main(String[] args) {
-        DialogField obj = new DialogField("showVipInfo");
-        obj.setInputId("inputid");
-        obj.add("1");
-        obj.add("2");
-        obj.add("3");
-        System.out.println(obj.getUrl());
+    public DialogField(String dialogFunction) {
+        this.dialogFunc = dialogFunction;
     }
 
     public String getUrl() {
-        if (dialogfun == null) {
+        if (dialogFunc == null) {
             throw new RuntimeException("dialogfun is null");
         }
 
         StringBuilder build = new StringBuilder();
         build.append("javascript:");
-        build.append(dialogfun);
+        build.append(dialogFunc);
         build.append("(");
 
         build.append("\"");
@@ -64,11 +59,11 @@ public class DialogField {
     }
 
     public String getDialogfun() {
-        return dialogfun;
+        return dialogFunc;
     }
 
     public DialogField setDialogfun(String dialogfun) {
-        this.dialogfun = dialogfun;
+        this.dialogFunc = dialogfun;
         return this;
     }
 
@@ -88,6 +83,15 @@ public class DialogField {
 
     public boolean isOpen() {
         return show;
+    }
+
+    public static void main(String[] args) {
+        DialogField obj = new DialogField("showVipInfo");
+        obj.setInputId("inputid");
+        obj.add("1");
+        obj.add("2");
+        obj.add("3");
+        System.out.println(obj.getUrl());
     }
 
 }

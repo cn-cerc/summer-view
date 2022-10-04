@@ -31,11 +31,11 @@ public class UITextarea extends UIComponent implements IHtml, INameOwner {
     public void beginOutput(HtmlWriter html) {
         if (title != null)
             title.output(html);
-        this.writeProperty("name", this.getName());
+        this.setCssProperty("name", this.getName());
         if (getRows() != 0)
-            this.writeProperty("rows", rows);
+            this.setCssProperty("rows", rows);
         if (getCols() != 0)
-            this.writeProperty("cols", cols);
+            this.setCssProperty("cols", cols);
         super.beginOutput(html);
     }
 
@@ -82,11 +82,11 @@ public class UITextarea extends UIComponent implements IHtml, INameOwner {
     }
 
     public String getPlaceholder() {
-        return (String) this.readProperty("placeholder");
+        return (String) this.getCssProperty("placeholder");
     }
 
     public UITextarea setPlaceholder(String placeholder) {
-        this.writeProperty("placeholder", placeholder);
+        this.setCssProperty("placeholder", placeholder);
         return this;
     }
 
@@ -119,11 +119,11 @@ public class UITextarea extends UIComponent implements IHtml, INameOwner {
     }
 
     public String getOnInput() {
-        return (String) this.readProperty("oninput");
+        return (String) this.getCssProperty("oninput");
     }
 
     public void setOnInput(String onInput) {
-        this.writeProperty("oninput", onInput);
+        this.setCssProperty("oninput", onInput);
     }
 
 }

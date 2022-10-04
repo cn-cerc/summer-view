@@ -19,7 +19,7 @@ public class OptionColumn extends AbstractColumn implements IDataColumn {
         super(owner);
         this.select = new UISelect(null);
         if (owner instanceof IReadonlyOwner) {
-            this.setReadonly(((IReadonlyOwner) owner).isReadonly());
+            this.setReadonly(((IReadonlyOwner) owner).readonly());
         }
         this.setReadonly(this.isReadonly());
     }
@@ -29,7 +29,7 @@ public class OptionColumn extends AbstractColumn implements IDataColumn {
         this.setCode(code).setName(name);
         this.select = new UISelect(null);
         if (owner instanceof IReadonlyOwner) {
-            this.setReadonly(((IReadonlyOwner) owner).isReadonly());
+            this.setReadonly(((IReadonlyOwner) owner).readonly());
         }
         this.setReadonly(this.isReadonly());
     }
@@ -39,7 +39,7 @@ public class OptionColumn extends AbstractColumn implements IDataColumn {
         this.setCode(code).setName(name).setSpaceWidth(width);
         this.select = new UISelect(null);
         if (owner instanceof IReadonlyOwner) {
-            this.setReadonly(((IReadonlyOwner) owner).isReadonly());
+            this.setReadonly(((IReadonlyOwner) owner).readonly());
         }
         this.setReadonly(this.isReadonly());
     }

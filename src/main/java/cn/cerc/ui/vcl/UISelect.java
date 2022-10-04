@@ -53,7 +53,7 @@ public class UISelect extends UIComponent implements IHtml {
     }
 
     public String getName() {
-        return name;
+        return name != null ? this.name : this.getId();
     }
 
     public UISelect setName(String name) {

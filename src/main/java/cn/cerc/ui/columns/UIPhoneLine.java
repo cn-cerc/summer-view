@@ -26,7 +26,7 @@ public class UIPhoneLine extends UIComponent implements IReadonlyOwner {
     public UIPhoneLine(UIComponent owner) {
         super(owner);
         if (owner instanceof IReadonlyOwner) {
-            this.setReadonly(((IReadonlyOwner) owner).isReadonly());
+            this.setReadonly(((IReadonlyOwner) owner).readonly());
         }
     }
 
@@ -75,7 +75,7 @@ public class UIPhoneLine extends UIComponent implements IReadonlyOwner {
         public UIPhoneLineCell(UIComponent owner, int percent) {
             super(owner);
             if (owner instanceof IReadonlyOwner) {
-                this.setReadonly(((IReadonlyOwner) owner).isReadonly());
+                this.setReadonly(((IReadonlyOwner) owner).readonly());
             }
             this.percent = percent;
         }
@@ -108,7 +108,7 @@ public class UIPhoneLine extends UIComponent implements IReadonlyOwner {
         }
 
         @Override
-        public boolean isReadonly() {
+        public boolean readonly() {
             return readonly;
         }
 
@@ -129,7 +129,7 @@ public class UIPhoneLine extends UIComponent implements IReadonlyOwner {
     }
 
     @Override
-    public boolean isReadonly() {
+    public boolean readonly() {
         return readonly;
     }
 

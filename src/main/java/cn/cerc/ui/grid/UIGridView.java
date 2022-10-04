@@ -1,7 +1,7 @@
 package cn.cerc.ui.grid;
 
-import java.util.HashSet;
-import java.util.LinkedHashSet;
+import java.util.ArrayList;
+import java.util.List;
 
 import cn.cerc.db.core.DataSet;
 import cn.cerc.db.core.FieldMeta;
@@ -9,18 +9,26 @@ import cn.cerc.db.core.FieldMeta.FieldKind;
 import cn.cerc.db.editor.EditorFactory;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
+import cn.cerc.ui.core.UIDataViewImpl;
 import cn.cerc.ui.style.IGridStyle;
+import cn.cerc.ui.vcl.UITd;
+import cn.cerc.ui.vcl.UITh;
+import cn.cerc.ui.vcl.UITr;
 
-public class UIGridView extends UIComponent implements IGridStyle {
+public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyle {
     private DataSet dataSet;
+    private List<FieldMeta> fields = new ArrayList<>();
+    private UIDataStyleImpl dataStyle;
     private boolean active;
-    private HashSet<FieldMeta> columns = new LinkedHashSet<>();
-    private UIOutputStyleImpl defaultStyle;
+    private boolean init;
+    private UITr head;
+    private UIGridBody body;
 
     public UIGridView(UIComponent owner) {
         super(owner);
-        this.setRootLabel(isPhone() ? "div" : "table");
+        this.setRootLabel("table");
         this.setCssClass("dbgrid");
+        this.setActive(!this.isPhone());
     }
 
     public UIGridView setDataSet(DataSet dataSet) {
@@ -28,53 +36,108 @@ public class UIGridView extends UIComponent implements IGridStyle {
         return this;
     }
 
-    public FieldMeta addColumn(String fieldCode) {
+    @Override
+    public DataSet dataSet() {
+        return dataSet;
+    }
+
+    @Override
+    public UIDataStyleImpl dataStyle() {
+        return this.dataStyle;
+    }
+
+    /**
+     * 设置视图管理器的视图处理器
+     * 
+     * @param dataStyle 视图管理器
+     * @return 返回视图管理器自身
+     */
+    public UIGridView setDataStyle(UIDataStyleImpl style) {
+        if (style != null) {
+            if (this.dataSet == null)
+                this.setDataSet(style.dataSet());
+            for (var item : style.fields().values())
+                fields.add(item.field());
+            style.setGrid(true);
+        }
+        this.dataStyle = style;
+        return this;
+    }
+
+    @Override
+    public boolean active() {
+        return active;
+    }
+
+    /**
+     * 
+     * @param active 是否输出
+     * @return 返回视图管理器
+     */
+    public UIGridView setActive(boolean active) {
+        this.active = active;
+        return this;
+    }
+
+    /**
+     * 注册dataSet中的字段，若不存在则自动于dataSet中增加
+     * 
+     * @param fieldCode
+     * @return 返回 dataSet.fields(fieldCode)
+     */
+    public FieldMeta addField(String fieldCode) {
         if (this.dataSet == null)
             throw new RuntimeException("dataSet is null");
-        FieldMeta column = dataSet.fields().get(fieldCode);
-        if (column == null)
-            column = dataSet.fields().add(fieldCode, FieldKind.Calculated);
-        columns.add(column);
-        if (defaultStyle != null)
-            column.onGetText(defaultStyle.getDefault(column));
-        return column;
+        FieldMeta field = dataSet.fields(fieldCode);
+        if (field == null)
+            field = dataSet.fields().add(fieldCode, FieldKind.Calculated);
+        fields.add(field);
+        return field;
     }
 
     @Override
     public void output(HtmlWriter html) {
-        if (!this.active && this.dataSet != null) {
+        if (!this.active())
+            return;
+        if (!this.init && this.dataSet != null) {
             // 若没有指定列时，自动为所有列
-            if (columns.size() == 0) {
-                for (var column : dataSet.fields()) {
-                    if (defaultStyle != null)
-                        column.onGetText(defaultStyle.getDefault(column));
-                    columns.add(column);
-                }
+            if (fields.size() == 0) {
+                for (var field : dataSet.fields())
+                    fields.add(field);
             }
-            // 根据不同的设备显示
-            if (this.isPhone()) {
-                UIGridBody body = new UIGridBody(this, dataSet);
-                for (var column : columns)
-                    body.addColumn(column);
-            } else {
-                UIGridHead head = new UIGridHead(this);
-                UIGridBody body = new UIGridBody(this, dataSet);
-                for (var column : columns)
-                    body.addColumn(column);
-                head.addAll(this.columns);
+            // 建立相应的显示组件
+            UITr head = head();
+            UIGridBody body = body();
+            for (var meta : fields) {
+                if (dataStyle != null)
+                    dataStyle.setDefault(meta);
+                String fieldName = meta.name() == null ? meta.code() : meta.name();
+                new UITh(head).setText(fieldName);
+                new UIDataField(new UITd(body)).setField(meta.code());
             }
-            this.active = true;
+            this.init = true;
         }
         super.output(html);
     }
 
-    public UIOutputStyleImpl defaultStyle() {
-        return this.defaultStyle;
+    /**
+     * 
+     * @return 返回表格输出时，tr的处理器
+     */
+    public UITr head() {
+        if (head == null)
+            this.head = new UITr(this);
+        return this.head;
     }
 
-    public UIGridView setDefaultStyle(UIOutputStyleImpl outputStyle) {
-        this.defaultStyle = outputStyle;
-        return this;
+    /**
+     * 
+     * @return 返回表格输入时，单身的处理器
+     */
+    public UIGridBody body() {
+        if (body == null)
+            this.body = new UIGridBody(this);
+        return this.body;
     }
 
     public static void main(String[] args) {
@@ -92,17 +155,11 @@ public class UIGridView extends UIComponent implements IGridStyle {
         ds.fields().get("name").setName("姓名");
         ds.fields().get("sex").setName("性别").onGetSetText(EditorFactory.ofBoolean("女的", "男的"));
 
-        UIGridView grid = new UIGridView(null);
-        grid.setPhone(false);
-        grid.setDataSet(ds);
-        grid.setDefaultStyle(new UIGridStyle());
-//        grid.addColumn("sex"); //指定栏位输出
+        UIGridView grid = new UIGridView(null).setDataSet(ds);
+        grid.setDataStyle(new UIDataStyle());
+        grid.setActive(true);
+//        grid.addField("sex"); //指定栏位输出
         System.out.println(grid.toString());
-        System.out.println(grid.toString());
-    }
-
-    public FieldMeta addColumnIt() {
-        return this.addColumn("it").onGetText(data -> "" + data.source().dataSet().recNo()).setName("序");
     }
 
 }

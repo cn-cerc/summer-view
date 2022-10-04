@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -16,7 +15,7 @@ import cn.cerc.mis.core.IForm;
 import cn.cerc.mis.core.IOriginOwner;
 
 public class UIComponent implements IOriginOwner, HtmlContent, Iterable<UIComponent> {
-    private HashSet<UIComponent> components = new LinkedHashSet<>();
+    private List<UIComponent> components = new ArrayList<>();
     private Map<String, Object> propertys = new HashMap<>();
     private Set<String> signProperty = new HashSet<>();
     private UIComponent owner;
@@ -67,31 +66,48 @@ public class UIComponent implements IOriginOwner, HtmlContent, Iterable<UICompon
         return origin;
     }
 
-    public final HashSet<UIComponent> getComponents() {
-        return components;
+    public final UIComponent getComponent(int index) {
+        return this.components.get(index);
     }
 
-    public int getComponentCount() {
+    /**
+     * 
+     * @return 返回子组件列表
+     */
+    public final List<UIComponent> getComponents() {
+        return this.components;
+    }
+
+    /**
+     * @return 返回子组件的数量
+     */
+    public final int getComponentCount() {
         return components.size();
     }
 
-    public UIComponent addComponent(UIComponent component) {
-        if (component != null && !components.contains(component)) {
-            component.owner = this;
-            if (component.origin == null)
-                component.origin = this.origin != null ? this.origin : this;
-            components.add(component);
+    public UIComponent addComponent(UIComponent child) {
+        if (child != null && !components.contains(child)) {
+            components.add(child);
+            child.registerOwner(this);
         }
         return this;
     }
 
     public UIComponent removeComponent(UIComponent component) {
         if (component != null) {
-            component.origin = null;
-            component.owner = null;
             components.remove(component);
+            this.registerOwner(null);
         }
         return this;
+    }
+
+    protected void registerOwner(UIComponent owner) {
+        this.owner = owner;
+        if (owner == null)
+            this.origin = null;
+        else if (this.origin == null) {
+            this.origin = owner.origin != null ? owner.origin : owner;
+        }
     }
 
     @Override
@@ -104,9 +120,7 @@ public class UIComponent implements IOriginOwner, HtmlContent, Iterable<UICompon
     @Override
     public Iterator<UIComponent> iterator() {
         // 警告：此处不可直接返回 components.iterator
-        List<UIComponent> items = new ArrayList<>();
-        items.addAll(components);
-        return items.iterator();
+        return new ArrayList<UIComponent>(components).iterator();
     }
 
     public final String getId() {
@@ -136,13 +150,23 @@ public class UIComponent implements IOriginOwner, HtmlContent, Iterable<UICompon
         return this;
     }
 
-    public UIComponent writeProperty(String key, Object value) {
+    public UIComponent setCssProperty(String key, Object value) {
         propertys.put(key, value);
         return this;
     }
 
-    public final Object readProperty(String key) {
+    @Deprecated
+    public final UIComponent writeProperty(String key, Object value) {
+        return this.setCssProperty(key, value);
+    }
+
+    public final Object getCssProperty(String key) {
         return propertys.get(key);
+    }
+
+    @Deprecated
+    public final Object readProperty(String key) {
+        return this.getCssProperty(key);
     }
 
     protected Map<String, Object> getPropertys() {
@@ -186,11 +210,12 @@ public class UIComponent implements IOriginOwner, HtmlContent, Iterable<UICompon
     @Override
     public void output(HtmlWriter html) {
         this.beginOutput(html);
-        this.forEach(item -> item.output(html));
+        for (var item : this.components)
+            item.output(html);
         this.endOutput(html);
     }
 
-    protected void beginOutput(HtmlWriter html) {
+    public void beginOutput(HtmlWriter html) {
         if (this.getRootLabel() == null || "".equals(getRootLabel()))
             return;
         html.print("<").print(getRootLabel());
@@ -198,7 +223,7 @@ public class UIComponent implements IOriginOwner, HtmlContent, Iterable<UICompon
         html.print(">");
     }
 
-    protected void endOutput(HtmlWriter html) {
+    public void endOutput(HtmlWriter html) {
         if (this.getRootLabel() == null || "".equals(getRootLabel()))
             return;
         html.print("</%s>", getRootLabel());
@@ -236,6 +261,20 @@ public class UIComponent implements IOriginOwner, HtmlContent, Iterable<UICompon
 
     public final boolean getSignProperty(String signValue) {
         return this.signProperty.contains(signValue);
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T> T findOwner(Class<T> clazz) {
+        T result = null;
+        UIComponent parent = this.getOwner();
+        while (parent != null) {
+            if (clazz.isInstance(parent)) {
+                result = (T) parent;
+                break;
+            }
+            parent = parent.getOwner();
+        }
+        return result;
     }
 
     @Deprecated

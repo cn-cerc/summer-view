@@ -55,7 +55,7 @@ public class CodeNameField extends AbstractField {
             if (nameValue != null) {
                 html.print(" value=\"%s\"", nameValue);
             }
-            if (this.isReadonly()) {
+            if (this.readonly()) {
                 html.print(" readonly=\"readonly\"");
             }
             if (this.isAutofocus()) {

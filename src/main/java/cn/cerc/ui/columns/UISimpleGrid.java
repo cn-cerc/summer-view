@@ -17,7 +17,7 @@ public class UISimpleGrid extends UIGrid {
 
     public void initColumns() {
         if (this.getColumns().size() == 0) {
-            for (String code : this.getDataSet().fields().names()) {
+            for (String code : this.dataSet().fields().names()) {
                 new StringColumn(this).setCode(code).setName(code);
             }
         }

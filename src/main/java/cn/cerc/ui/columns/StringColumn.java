@@ -20,7 +20,7 @@ public class StringColumn extends AbstractColumn implements IDataColumn {
     public StringColumn(UIComponent owner) {
         super(owner);
         if (owner instanceof IReadonlyOwner) {
-            this.setReadonly(((IReadonlyOwner) owner).isReadonly());
+            this.setReadonly(((IReadonlyOwner) owner).readonly());
         }
     }
 
@@ -28,7 +28,7 @@ public class StringColumn extends AbstractColumn implements IDataColumn {
         super(owner);
         this.setCode(field.getCode()).setName(field.getName());
         if (owner instanceof IReadonlyOwner) {
-            this.setReadonly(((IReadonlyOwner) owner).isReadonly());
+            this.setReadonly(((IReadonlyOwner) owner).readonly());
         }
         input.setName(field.getCode());
     }
@@ -37,7 +37,7 @@ public class StringColumn extends AbstractColumn implements IDataColumn {
         super(owner);
         this.setCode(code).setName(name);
         if (owner instanceof IReadonlyOwner) {
-            this.setReadonly(((IReadonlyOwner) owner).isReadonly());
+            this.setReadonly(((IReadonlyOwner) owner).readonly());
         }
         input.setName(code);
     }
@@ -46,7 +46,7 @@ public class StringColumn extends AbstractColumn implements IDataColumn {
         super(owner);
         this.setCode(code).setName(name).setSpaceWidth(width);
         if (owner instanceof IReadonlyOwner) {
-            this.setReadonly(((IReadonlyOwner) owner).isReadonly());
+            this.setReadonly(((IReadonlyOwner) owner).readonly());
         }
         input.setName(code);
     }
