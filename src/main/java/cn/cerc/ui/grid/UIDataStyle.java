@@ -22,6 +22,7 @@ public class UIDataStyle implements UIDataStyleImpl {
     private static final Logger log = LoggerFactory.getLogger(UIDataStyle.class);
     public boolean inputState = false;
     private DataSet dataSet;
+    private DataRow dataRow;
     private HashMap<String, FieldStyleData> items = new LinkedHashMap<>();
     private OnOutput onOutput;
 
@@ -43,8 +44,8 @@ public class UIDataStyle implements UIDataStyleImpl {
     public OnGetText getString() {
         return data -> {
             String result = data.getString();
-            if (this.inputState) {
-                var styleData = this.items.get(data.key());
+            var styleData = this.items.get(data.key());
+            if (!styleData.readonly()) {
                 UIComponent box = new UIComponent(null);
                 //
                 UIInput input = new UIInput(box);
@@ -183,12 +184,13 @@ public class UIDataStyle implements UIDataStyleImpl {
 
     @Override
     public FieldStyleData addField(String fieldCode) {
-        if (this.dataSet == null)
-            throw new RuntimeException("dataSet is null");
-        FieldMeta field = dataSet.fields().get(fieldCode);
+        if (this.current() == null)
+            throw new RuntimeException("current is null");
+        FieldMeta field = current().fields().get(fieldCode);
         if (field == null)
-            field = dataSet.fields().add(fieldCode, FieldKind.Calculated);
+            field = current().fields().add(fieldCode, FieldKind.Calculated);
         var styleData = new FieldStyleData(this, field);
+        styleData.setReadonly(!this.inputState);
         this.items.put(fieldCode, styleData);
         return styleData;
     }
@@ -198,12 +200,29 @@ public class UIDataStyle implements UIDataStyleImpl {
      * @return 于dataSet中增加一个it字段，并自动等于dataSet.recNo
      */
     public FieldMeta addFieldIt() {
+        var dataSet = current().dataSet();
+        if (dataSet == null) {
+            log.error("没有找到dataSet");
+            throw new RuntimeException("没有找到dataSet");
+        }
         return this.addField("it").field().onGetText(data -> "" + dataSet.recNo()).setName("序");
+    }
+
+    public UIDataStyle setDataRow(DataRow dataRow) {
+        if (this.dataSet != null)
+            throw new RuntimeException("dataSet not is null");
+        this.dataRow = dataRow;
+        return this;
     }
 
     @Override
     public DataSet dataSet() {
         return dataSet;
+    }
+
+    @Override
+    public DataRow current() {
+        return dataSet != null ? dataSet.current() : dataRow;
     }
 
     public UIDataStyle setDataSet(DataSet dataSet) {

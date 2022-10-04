@@ -31,7 +31,7 @@ public class UIPanelCell extends UIComponent {
             this.setCssProperty("data-field", this.fieldCode);
         this.beginOutput(html);
         if (impl != null) {
-            String name = impl.dataSet().fields().get(fieldCode).name();
+            String name = impl.current().fields().get(fieldCode).name();
             if (!Utils.isEmpty(name)) {
                 // 若有需要星标，则予以显示
                 var style = impl.dataStyle();
@@ -45,7 +45,7 @@ public class UIPanelCell extends UIComponent {
                 html.print(name);
                 html.print(":");
             }
-            html.print(impl.dataSet().current().getText(fieldCode));
+            html.print(impl.current().getText(fieldCode));
         } else
             html.print("UIDataViewImpl is null");
         this.endOutput(html);

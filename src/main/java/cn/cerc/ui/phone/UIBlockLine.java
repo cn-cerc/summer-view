@@ -28,7 +28,7 @@ public abstract class UIBlockLine extends UIComponent {
             log.error("在 owner 中找不到 UIDataViewImpl");
             throw new RuntimeException("在 owner 中找不到 UIDataViewImpl");
         }
-        var fields = impl.dataSet().fields();
+        var fields = impl.current().fields();
         var dataStyle = impl.dataStyle();
         for (var fieldCode : fieldList) {
             FieldMeta column = fields.get(fieldCode);

@@ -18,4 +18,5 @@ public interface UIDataViewImpl extends DataSource {
      * @return 返回视图处理器，可为null
      */
     UIDataStyleImpl dataStyle();
+
 }

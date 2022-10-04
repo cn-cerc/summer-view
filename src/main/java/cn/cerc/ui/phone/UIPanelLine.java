@@ -38,7 +38,7 @@ public class UIPanelLine extends UIBlockLine {
             new UIPanelCell(this).setFieldCode(fieldCode);
         }
         if (onCreateCellAfter != null) {
-            FieldMeta fieldMeta = source().dataSet().fields(fieldCode);
+            FieldMeta fieldMeta = source().current().fields(fieldCode);
             onCreateCellAfter.execute(this, fieldMeta);
         }
     }

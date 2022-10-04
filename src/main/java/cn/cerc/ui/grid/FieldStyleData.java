@@ -26,6 +26,7 @@ public class FieldStyleData {
     private String helpId;
     // 若为必填项目，则显示一个星号
     private boolean starFlag;
+    private boolean readonly;
 
     public FieldStyleData(UIDataStyle owner, FieldMeta field) {
         this.owner = owner;
@@ -153,4 +154,14 @@ public class FieldStyleData {
         this.starFlag = starFlag;
         return this;
     }
+
+    public boolean readonly() {
+        return this.readonly;
+    }
+
+    public FieldStyleData setReadonly(boolean readonly) {
+        this.readonly = readonly;
+        return this;
+    }
+
 }
