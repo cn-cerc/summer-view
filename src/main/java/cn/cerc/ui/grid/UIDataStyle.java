@@ -3,6 +3,7 @@ package cn.cerc.ui.grid;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -273,6 +274,32 @@ public class UIDataStyle implements UIDataStyleImpl {
                     ordinal++;
                 }
                 input.setSelected("" + data.getInt());
+                // 允许外部更改input组件的属性
+                styleData.output(input);
+                //
+                if (styleData.dialog() != null)
+                    new UISelectDialog(box).setDialog(styleData.dialog()).setInputId(data.key());
+                //
+                return box.toString();
+            } else if (!this.readonly()) {
+                result = getOnlyDisplay(styleData, result);
+            }
+            return result;
+        };
+    }
+
+    public OnGetText getMap(Map<String, String> items) {
+        return data -> {
+            String result = items.get(data.getString());
+            var styleData = this.items.get(data.key());
+            if (!styleData.readonly()) {
+                UIComponent box = new UIComponent(null);
+                //
+                UISelect input = new UISelect(box);
+                input.setId(data.key());
+                for (var key : items.keySet()) 
+                    input.getOptions().put(key, items.get(key));
+                input.setSelected(data.getString());
                 // 允许外部更改input组件的属性
                 styleData.output(input);
                 //
