@@ -41,7 +41,7 @@ public class UIPanelCell extends UIComponent implements UIFormGatherImpl {
                 if (style != null) {
                     FieldStyleData field = style.fields().get(fieldCode);
                     if (field != null) {
-                        if (field.required())
+                        if (field.required() && !field.readonly())
                             new UIStarFlag(null).output(html);
                     }
                 }

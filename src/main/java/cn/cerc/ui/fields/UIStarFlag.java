@@ -12,20 +12,17 @@ public class UIStarFlag extends UIComponent {
         this.setRootLabel("font");
     }
 
-    
-    
-    public static void main(String[] args) {
-        var font = new UIFont(null).addComponent(new UIText().setText("*"));
-        System.out.println(font.toString());
-        System.out.println(new UIStarFlag(null).toString());
-    }
-
-
-
     @Override
     public void output(HtmlWriter html) {
         this.beginOutput(html);
         html.print("*");
         this.endOutput(html);
     }
+
+    public static void main(String[] args) {
+        var font = new UIFont(null).addComponent(new UIText().setText("*"));
+        System.out.println(font.toString());
+        System.out.println(new UIStarFlag(null).toString());
+    }
+
 }

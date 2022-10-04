@@ -22,8 +22,6 @@ public class FieldStyleData {
     private String dialog;
     // 帮助文档id
     private String helpId;
-    // 若为必填项目，则显示一个星号
-    private boolean required;
     // 是否为只读字段
     private boolean readonly;
 
@@ -146,11 +144,11 @@ public class FieldStyleData {
     }
 
     public boolean required() {
-        return this.required;
+        return this.field.required();
     }
 
     public FieldStyleData setRequired(boolean required) {
-        this.required = required;
+        this.field.setRequired(required);
         return this;
     }
 
