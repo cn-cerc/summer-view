@@ -15,20 +15,17 @@ import cn.cerc.db.core.FieldMeta;
 import cn.cerc.db.core.FieldMeta.FieldKind;
 import cn.cerc.db.editor.OnGetText;
 import cn.cerc.mis.ado.UsedEnum;
-import cn.cerc.ui.core.UIComponent;
-import cn.cerc.ui.fields.UISelectDialog;
 import cn.cerc.ui.vcl.UIInput;
-import cn.cerc.ui.vcl.UISelect;
 
 public class UIDataStyle implements UIDataStyleImpl {
     private static final Logger log = LoggerFactory.getLogger(UIDataStyle.class);
     private DataSet dataSet;
     private DataRow dataRow;
     private boolean readonly = true;
-    private HashMap<String, FieldStyleData> items = new LinkedHashMap<>();
+    private HashMap<String, FieldStyleDefine> items = new LinkedHashMap<>();
     private OnOutput onOutput;
     private Class<?> entityClass;
-    private boolean grid;
+    private boolean inGrid;
 
     public static int PX_SIZE = 14; // 1个汉字 = 14px
 
@@ -48,92 +45,34 @@ public class UIDataStyle implements UIDataStyleImpl {
 
     public OnGetText getString() {
         return data -> {
-            String result = data.getString();
-            FieldStyleData styleData = this.items.get(data.key());
-            if (!styleData.readonly()) {
-                UIComponent box = new UIComponent(null);
-                //
-                UIInput input = new UIInput(box);
-                input.setId(data.key());
-                input.setValue(result);
-                if (styleData.width() > 0) {
-                    String width = String.format("width: %dpx", styleData.width() * PX_SIZE);
-                    input.setCssStyle(width);
-                } else
-                    input.setCssStyle(null);
-                input.setPlaceholder(styleData.placeholder());
-                // 允许外部更改input组件的属性
-                styleData.output(input);
-                //
-                if (styleData.dialog() != null)
-                    new UISelectDialog(box).setDialog(styleData.dialog()).setInputId(data.key());
-                //
-                result = box.toString();
-            } else if (!this.readonly()) {
-                result = getDisplayText(styleData, result);
-            }
-            return result;
+            return new UIStringDataStyle(this, data, this.inGrid).getText(data.getString());
         };
     }
 
-    private String getDisplayText(FieldStyleData styleData, String text) {
-        if (this.grid)
-            return text;
-        UIComponent box = new UIComponent(null);
-        UIInput input = new UIInput(box);
-        input.setId(styleData.field().code());
-        input.setValue(text);
-        if (styleData.width() > 0) {
-            String width = String.format("width: %dpx", styleData.width() * PX_SIZE);
-            input.setCssStyle(width);
-        } else
-            input.setCssStyle(null);
-        input.setReadonly(true);
-        // 允许外部更改input组件的属性
-        styleData.output(input);
-        return box.toString();
-    }
-
     private OnGetText getInteger() {
-        return getString();
+        return data -> {
+            return new UIStringDataStyle(this, data, this.inGrid).getText(data.getString());
+        };
     }
 
     private OnGetText getDouble() {
-        return getString();
+        return data -> {
+            return new UIStringDataStyle(this, data, this.inGrid).getText(data.getString());
+        };
     }
 
     public OnGetText getBoolean() {
-        return getBoolean("是", "否");
+        return data -> {
+            return new UIBooleanDataStyle(this, data, this.inGrid).getText(data.getString());
+        };
     }
 
     public OnGetText getBoolean(String trueText, String falseText) {
         return data -> {
-            String result = data.getBoolean() ? trueText : falseText;
-            var styleData = this.items.get(data.key());
-            if (!styleData.readonly()) {
-                UIComponent box = new UIComponent(null);
-                //
-                UIInput input = new UIInput(box);
-                input.setId(data.key());
-                if (styleData.width() > 0) {
-                    String width = String.format("width: %dpx", styleData.width() * PX_SIZE);
-                    input.setCssStyle(width);
-                } else
-                    input.setCssStyle(null);
-                input.setPlaceholder(styleData.placeholder());
-                input.setInputType(UIInput.TYPE_CHECKBOX);
-                input.setChecked(data.getBoolean());
-                // 允许外部更改input组件的属性
-                styleData.output(input);
-                //
-                if (styleData.dialog() != null)
-                    new UISelectDialog(box).setDialog(styleData.dialog()).setInputId(data.key());
-                //
-                result = box.toString();
-            } else if (!this.readonly()) {
-                result = getDisplayText(styleData, result);
-            }
-            return result;
+            UIBooleanDataStyle style = new UIBooleanDataStyle(this, data, this.inGrid);
+            style.setTrueText(trueText);
+            style.setFalseText(falseText);
+            return style.getText(data.getString());
         };
     }
 
@@ -142,33 +81,10 @@ public class UIDataStyle implements UIDataStyleImpl {
             String result = data.getDatetime().toString();
             if (data.getDatetime().isEmpty())
                 result = "";
-            var styleData = this.items.get(data.key());
-            if (!styleData.readonly()) {
-                UIComponent box = new UIComponent(null);
-                //
-                UIInput input = new UIInput(box);
-                input.setId(data.key());
-                input.setValue(result);
-                if (styleData.width() > 0) {
-                    String width = String.format("width: %dpx", styleData.width() * PX_SIZE);
-                    input.setCssStyle(width);
-                } else
-                    input.setCssStyle(null);
-                input.setPlaceholder(styleData.placeholder());
-                input.setInputType(UIInput.TYPE_DATETIME_LOCAL);
-                // 允许外部更改input组件的属性
-                styleData.output(input);
-                //
-                if (styleData.dialog() != null)
-                    new UISelectDialog(box).setDialog(styleData.dialog()).setInputId(data.key());
-                //
-                result = box.toString();
-            } else if (!this.readonly()) {
-                result = getDisplayText(styleData, result);
-            }
-            return result;
+            var style = new UIStringDataStyle(this, data, this.inGrid);
+            style.setInputType(UIInput.TYPE_DATETIME_LOCAL);
+            return style.getText(result);
         };
-
     }
 
     public OnGetText getFastDate() {
@@ -176,64 +92,20 @@ public class UIDataStyle implements UIDataStyleImpl {
             String result = data.getFastDate().toString();
             if (data.getFastDate().isEmpty())
                 result = "";
-            var styleData = this.items.get(data.key());
-            if (!styleData.readonly()) {
-                UIComponent box = new UIComponent(null);
-                //
-                UIInput input = new UIInput(box);
-                input.setId(data.key());
-                input.setValue(result);
-                if (styleData.width() > 0) {
-                    String width = String.format("width: %dpx", styleData.width() * PX_SIZE);
-                    input.setCssStyle(width);
-                } else
-                    input.setCssStyle(null);
-                input.setPlaceholder(styleData.placeholder());
-                input.setInputType(UIInput.TYPE_DATE);
-                // 允许外部更改input组件的属性
-                styleData.output(input);
-                //
-                if (styleData.dialog() != null)
-                    new UISelectDialog(box).setDialog(styleData.dialog()).setInputId(data.key());
-                //
-                result = box.toString();
-            } else if (!this.readonly()) {
-                result = getDisplayText(styleData, result);
-            }
-            return result;
+            var style = new UIStringDataStyle(this, data, this.inGrid);
+            style.setInputType(UIInput.TYPE_DATE);
+            return style.getText(result);
         };
 
     }
 
     public OnGetText getFastTime() {
         return data -> {
+            var style = new UIStringDataStyle(this, data, this.inGrid);
             String result = data.getFastTime().toString();
             if (data.getFastTime().isEmpty())
                 result = "";
-            FieldStyleData styleData = this.items.get(data.key());
-            if (!styleData.readonly()) {
-                UIComponent box = new UIComponent(null);
-                //
-                UIInput input = new UIInput(box);
-                input.setId(data.key());
-                input.setValue(result);
-                if (styleData.width() > 0) {
-                    String width = String.format("width: %dpx", styleData.width() * PX_SIZE);
-                    input.setCssStyle(width);
-                } else
-                    input.setCssStyle(null);
-                input.setPlaceholder(styleData.placeholder());
-                // 允许外部更改input组件的属性
-                styleData.output(input);
-                //
-                if (styleData.dialog() != null)
-                    new UISelectDialog(box).setDialog(styleData.dialog()).setInputId(data.key());
-                //
-                result = box.toString();
-            } else if (!this.readonly()) {
-                result = getDisplayText(styleData, result);
-            }
-            return result;
+            return style.getText(result);
         };
     }
 
@@ -241,86 +113,41 @@ public class UIDataStyle implements UIDataStyleImpl {
     public OnGetText getEnum(Class<? extends Enum> clazz) {
         return data -> {
             String result = data.getEnum(clazz).name();
-            var styleData = this.items.get(data.key());
-            if (!styleData.readonly()) {
-                UIComponent box = new UIComponent(null);
-                //
-                UISelect input = new UISelect(box);
-                input.setId(data.key());
-                for (var item : clazz.getEnumConstants())
-                    input.getOptions().put("" + item.ordinal(), item.name());
-                input.setSelected("" + data.getInt());
-                // 允许外部更改input组件的属性
-                styleData.output(input);
-                //
-                if (styleData.dialog() != null)
-                    new UISelectDialog(box).setDialog(styleData.dialog()).setInputId(data.key());
-                //
-                return box.toString();
-            } else if (!this.readonly()) {
-                result = getDisplayText(styleData, result);
-            }
-            return result;
+            var style = new UISelectDataStyle(this, data, this.inGrid);
+            for (var item : clazz.getEnumConstants())
+                style.put("" + item.ordinal(), item.name());
+            style.setSelected("" + data.getInt());
+            return style.getText(result);
         };
     }
 
     public OnGetText getList(List<String> items) {
         return data -> {
             String result = items.get(data.getInt());
-            var styleData = this.items.get(data.key());
-            if (!styleData.readonly()) {
-                UIComponent box = new UIComponent(null);
-                //
-                UISelect input = new UISelect(box);
-                input.setId(data.key());
-                int ordinal = 0;
-                for (var item : items) {
-                    input.getOptions().put("" + ordinal, item);
-                    ordinal++;
-                }
-                input.setSelected("" + data.getInt());
-                // 允许外部更改input组件的属性
-                styleData.output(input);
-                //
-                if (styleData.dialog() != null)
-                    new UISelectDialog(box).setDialog(styleData.dialog()).setInputId(data.key());
-                //
-                return box.toString();
-            } else if (!this.readonly()) {
-                result = getDisplayText(styleData, result);
+            var style = new UISelectDataStyle(this, data, this.inGrid);
+            int ordinal = 0;
+            for (var item : items) {
+                style.put("" + ordinal, item);
+                ordinal++;
             }
-            return result;
+            style.setSelected("" + data.getInt());
+            return style.getText(result);
         };
     }
 
     public OnGetText getMap(Map<String, String> items) {
         return data -> {
             String result = items.get(data.getString());
-            var styleData = this.items.get(data.key());
-            if (!styleData.readonly()) {
-                UIComponent box = new UIComponent(null);
-                //
-                UISelect input = new UISelect(box);
-                input.setId(data.key());
-                for (var key : items.keySet())
-                    input.getOptions().put(key, items.get(key));
-                input.setSelected(data.getString());
-                // 允许外部更改input组件的属性
-                styleData.output(input);
-                //
-                if (styleData.dialog() != null)
-                    new UISelectDialog(box).setDialog(styleData.dialog()).setInputId(data.key());
-                //
-                return box.toString();
-            } else if (!this.readonly()) {
-                result = getDisplayText(styleData, result);
-            }
-            return result;
+            var style = new UISelectDataStyle(this, data, this.inGrid);
+            for (var key : items.keySet())
+                style.put(key, items.get(key));
+            style.setSelected(data.getString());
+            return style.getText(result);
         };
     }
 
     public interface OnOutput {
-        OnGetText execute(FieldStyleData styleData);
+        OnGetText execute(FieldStyleDefine styleData);
     }
 
     public UIDataStyle onOutput(OnOutput onOutput) {
@@ -354,7 +181,7 @@ public class UIDataStyle implements UIDataStyleImpl {
         if (onOutput != null) {
             var style = items.get(fieldMeta.code());
             if (style == null) {
-                style = new FieldStyleData(this, fieldMeta);
+                style = new FieldStyleDefine(this, fieldMeta);
                 items.put(fieldMeta.code(), style);
             }
             result = onOutput.execute(style);
@@ -388,7 +215,7 @@ public class UIDataStyle implements UIDataStyleImpl {
     }
 
     @Override
-    public FieldStyleData addField(String fieldCode) {
+    public FieldStyleDefine addField(String fieldCode) {
         if (this.current() == null)
             throw new RuntimeException("current is null");
         FieldMeta field = current().fields().get(fieldCode);
@@ -398,7 +225,7 @@ public class UIDataStyle implements UIDataStyleImpl {
             if (!field.readEntity(entityClass))
                 field.setKind(FieldKind.Calculated);
         }
-        var styleData = new FieldStyleData(this, field);
+        var styleData = new FieldStyleDefine(this, field);
         styleData.setReadonly(this.readonly);
         this.items.put(fieldCode, styleData);
         return styleData;
@@ -440,18 +267,22 @@ public class UIDataStyle implements UIDataStyleImpl {
     }
 
     @Override
-    public HashMap<String, FieldStyleData> fields() {
+    public HashMap<String, FieldStyleDefine> fields() {
         return this.items;
     }
 
-    public boolean grid() {
-        return grid;
+    public boolean inGrid() {
+        return inGrid;
     }
 
     @Override
-    public UIDataStyle setGrid(boolean grid) {
-        this.grid = grid;
+    public UIDataStyle setInGrid(boolean grid) {
+        this.inGrid = grid;
         return this;
+    }
+
+    public HashMap<String, FieldStyleDefine> items() {
+        return items;
     }
 
     public static void main(String[] args) {

@@ -19,13 +19,13 @@ public interface UIDataStyleImpl extends DataSource {
      * @param fieldCode 字段代码
      * @return 字段样式数据对象
      */
-    FieldStyleData addField(String fieldCode);
+    FieldStyleDefine addField(String fieldCode);
 
     /**
      * 
      * @return 返回所有已注册的字段
      */
-    HashMap<String, FieldStyleData> fields();
+    HashMap<String, FieldStyleDefine> fields();
 
     /**
      * 设置fieldMeta的onGetText事件函数
@@ -40,6 +40,6 @@ public interface UIDataStyleImpl extends DataSource {
      * 
      * @param grid 若为表格环境，则设置为true
      */
-    Object setGrid(boolean grid);
+    Object setInGrid(boolean grid);
 
 }

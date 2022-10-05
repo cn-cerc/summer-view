@@ -7,7 +7,7 @@ import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.core.UIDataViewImpl;
 import cn.cerc.ui.fields.UIStarFlag;
-import cn.cerc.ui.grid.FieldStyleData;
+import cn.cerc.ui.grid.FieldStyleDefine;
 import cn.cerc.ui.vcl.UIForm.UIFormGatherImpl;
 
 public class UIPanelCell extends UIComponent implements UIFormGatherImpl {
@@ -39,7 +39,7 @@ public class UIPanelCell extends UIComponent implements UIFormGatherImpl {
                 // 若有需要星标，则予以显示
                 var style = impl.dataStyle();
                 if (style != null) {
-                    FieldStyleData field = style.fields().get(fieldCode);
+                    FieldStyleDefine field = style.fields().get(fieldCode);
                     if (field != null) {
                         if (field.required() && !field.readonly())
                             new UIStarFlag(null).output(html);
