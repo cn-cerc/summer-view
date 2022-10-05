@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import cn.cerc.db.core.FieldMeta;
 import cn.cerc.db.core.FieldMeta.FieldKind;
+import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.core.UIDataViewImpl;
 
@@ -42,5 +43,17 @@ public abstract class UIBlockLine extends UIComponent {
     }
 
     public abstract void createCell(String fieldCode);
+
+    @Override
+    public void output(HtmlWriter html) {
+        var line = 0;
+        for (var item : this.getOwner()) {
+            if (item == this)
+                break;
+            line++;
+        }
+        this.setCssProperty("data-line", "" + line);
+        super.output(html);
+    }
 
 }

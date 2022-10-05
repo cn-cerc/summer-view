@@ -105,20 +105,7 @@ public class UIPanelView extends UIComponent implements UIDataViewImpl {
         var dataSet = current().dataSet();
         if (dataSet != null)
             this.setCssProperty("data-row", "" + (dataSet.recNo() - 1));
-        this.beginOutput(html);
-        for (UIComponent item : this.getComponents()) {
-            item.beginOutput(html);
-            var line = 0;
-            for (UIComponent child : item.getComponents()) {
-                child.setCssProperty("data-line", "" + (line++));
-                child.output(html);
-                if (line < item.getComponentCount())
-                    html.println("");
-            }
-            item.endOutput(html);
-            html.println("");
-        }
-        this.endOutput(html);
+        super.output(html);
     }
 
     /**

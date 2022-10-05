@@ -52,15 +52,15 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
      * @param dataStyle 视图管理器
      * @return 返回视图管理器自身
      */
-    public UIGridView setDataStyle(UIDataStyleImpl style) {
-        if (style != null) {
+    public UIGridView setDataStyle(UIDataStyleImpl dataStyle) {
+        if (dataStyle != null) {
             if (this.dataSet == null)
-                this.setDataSet(style.dataSet());
-            for (var item : style.fields().values())
+                this.setDataSet(dataStyle.dataSet());
+            for (var item : dataStyle.fields().values())
                 fields.add(item.field());
-            style.setGrid(true);
+            dataStyle.setGrid(true);
         }
-        this.dataStyle = style;
+        this.dataStyle = dataStyle;
         return this;
     }
 
