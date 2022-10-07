@@ -3,6 +3,7 @@ package cn.cerc.ui.grid;
 import java.util.List;
 
 import cn.cerc.db.core.DataCell;
+import cn.cerc.db.core.Utils;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.fields.UISelectDialog;
 import cn.cerc.ui.vcl.UIInput;
@@ -44,7 +45,7 @@ public class UIBooleanDataStyle extends UIAbstractDataStye {
             // 允许外部更改input组件的属性
             define.output(input);
             //
-            if (define.dialog() != null)
+            if (!Utils.isEmpty(define.dialog()))
                 new UISelectDialog(box).setDialog(define.dialog()).setInputId(data.key());
             //
             result = box.toString();

@@ -16,6 +16,10 @@ public class FieldStyleDefine {
     private UIDataStyle owner;
     private UIComponent executant;
     private OnOutput onOutput;
+    // 默认显示宽度
+    private int width;
+    // 是否为必填项目
+    private boolean required;
     // 输入时的提示讯息
     private String placeholder;
     // 是否出现开窗选择按钮
@@ -30,6 +34,11 @@ public class FieldStyleDefine {
     public FieldStyleDefine(UIDataStyle owner, FieldMeta field) {
         this.owner = owner;
         this.field = field;
+        if (field != null && field.describe() != null) {
+            this.width = field.describe().width();
+            this.required = field.describe().required();
+            this.dialog = field.describe().dialog();
+        }
     }
 
     public UIDataStyle owner() {
@@ -69,7 +78,7 @@ public class FieldStyleDefine {
     }
 
     public int width() {
-        return this.field.width();
+        return this.width;
     }
 
     /**
@@ -79,7 +88,7 @@ public class FieldStyleDefine {
      * @return 自身
      */
     public FieldStyleDefine setWidth(int width) {
-        this.field.setWidth(width);
+        this.width = width;
         return this;
     }
 
@@ -146,11 +155,11 @@ public class FieldStyleDefine {
     }
 
     public boolean required() {
-        return this.field.required();
+        return this.required;
     }
 
     public FieldStyleDefine setRequired(boolean required) {
-        this.field.setRequired(required);
+        this.required = required;
         return this;
     }
 
