@@ -5,11 +5,15 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.mis.core.IForm;
 import cn.cerc.ui.core.UIComponent;
 
 public class UIForm extends UIComponent implements IHtml {
+    private static final Logger log = LoggerFactory.getLogger(UIForm.class);
     private Map<String, String> items = new HashMap<>();
     private UIComponent top;
     private UIComponent bottom;
@@ -117,6 +121,11 @@ public class UIForm extends UIComponent implements IHtml {
 
     }
 
+    public UIForm addSubmit(String buttonTitle) {
+        new UIButton(this).setText(buttonTitle).setId("submit");
+        return this;
+    }
+
     /**
      * 收集所有提交的数据
      * 
@@ -128,6 +137,8 @@ public class UIForm extends UIComponent implements IHtml {
             var request = form.getRequest();
             if (request.getParameter("submit") != null)
                 result = new UIFormGatherHelper(this, request).total();
+        }else {
+            log.error("{} 没有实现IForm接口", this.getOrigin().getClass().getName());
         }
         return result;
     }
