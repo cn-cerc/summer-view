@@ -3,6 +3,11 @@ package cn.cerc.ui.grid;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import cn.cerc.db.core.DataSet;
 import cn.cerc.db.core.FieldMeta;
 import cn.cerc.db.core.FieldMeta.FieldKind;
@@ -11,11 +16,13 @@ import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.core.UIDataViewImpl;
 import cn.cerc.ui.style.IGridStyle;
+import cn.cerc.ui.vcl.UIForm.UIFormGatherImpl;
 import cn.cerc.ui.vcl.UITd;
 import cn.cerc.ui.vcl.UITh;
 import cn.cerc.ui.vcl.UITr;
 
-public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyle {
+public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyle, UIFormGatherImpl {
+    private static final Logger log = LoggerFactory.getLogger(UIGridView.class);
     private DataSet dataSet;
     private List<FieldMeta> fields = new ArrayList<>();
     private UIDataStyleImpl dataStyle;
@@ -138,6 +145,37 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
         if (body == null)
             this.body = new UIGridBody(this);
         return this.body;
+    }
+
+    @Override
+    public int gatherRequest(HttpServletRequest request) {
+        int total = 0;
+        for (FieldMeta field : fields) {
+            String fieldCode = field.code();
+            String[] values = request.getParameterValues(fieldCode);
+            boolean readonly = readonly();
+            if (dataStyle != null)
+                readonly = dataStyle.fields().get(fieldCode).readonly();
+            if (readonly)
+                continue;
+            // 开始更新
+            if (values != null) {
+                if (values.length != dataSet.size()) {
+                    log.error("数据集的大小与收集到的数据，其数量不相符");
+                    return 0;
+                }
+                for (int recNo = 0; recNo < values.length; recNo++) {
+                    dataSet.setRecNo(recNo + 1);
+                    dataSet.current().setValue(fieldCode, values[recNo]);
+                }
+            } else {
+                for (var row : dataSet)
+                    row.setValue(fieldCode, null);
+            }
+            total++;
+        }
+        return total++;
+
     }
 
     public static void main(String[] args) {

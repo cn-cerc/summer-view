@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import cn.cerc.mis.core.IForm;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.vcl.UIForm.UIFormGatherImpl;
 
@@ -14,14 +15,18 @@ public class UIFormGatherHelper {
     private HttpServletRequest request;
     private int total;
 
-    public UIFormGatherHelper(UIComponent root, HttpServletRequest request) {
+    public UIFormGatherHelper(UIComponent root, String sumitId) {
         super();
         this.root = root;
-        this.request = request;
-        if (request != null) {
-            gatherReuqest(this.root);
+        if (root.getOrigin() instanceof IForm form) {
+            this.request = form.getRequest();
+            if (request == null) {
+                log.error("request is null");
+            } else if (request.getParameter(sumitId) != null) {
+                gatherReuqest(this.root);
+            }
         } else {
-            log.error("request is null");
+            log.error("{} 没有实现IForm接口", root.getOrigin().getClass().getName());
         }
     }
 
@@ -35,5 +40,4 @@ public class UIFormGatherHelper {
     public int total() {
         return total;
     }
-
 }

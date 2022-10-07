@@ -5,15 +5,11 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import cn.cerc.mis.core.HtmlWriter;
-import cn.cerc.mis.core.IForm;
 import cn.cerc.ui.core.UIComponent;
 
 public class UIForm extends UIComponent implements IHtml {
-    private static final Logger log = LoggerFactory.getLogger(UIForm.class);
+//    private static final Logger log = LoggerFactory.getLogger(UIForm.class);
     private Map<String, String> items = new HashMap<>();
     private UIComponent top;
     private UIComponent bottom;
@@ -111,19 +107,14 @@ public class UIForm extends UIComponent implements IHtml {
     }
 
     public interface UIFormGatherImpl {
-        /**
-         * 允许一个组件收集多个字段的数据，正常情况下一个组件只会收集一个字段的数据
-         * 
-         * @param request HttpServletRequest
-         * @return 返回成功收集的笔数
-         */
         int gatherRequest(HttpServletRequest request);
-
     }
 
-    public UIForm addSubmit(String buttonTitle) {
-        new UIButton(this).setText(buttonTitle).setId("submit");
-        return this;
+    public UIButton addSubmit(String buttonTitle) {
+        var button = new UIButton(this).setText(buttonTitle);
+        button.setValue("submit");
+        button.setId("submit");
+        return button;
     }
 
     /**
@@ -132,15 +123,11 @@ public class UIForm extends UIComponent implements IHtml {
      * @return 返回收集成功的笔数
      */
     public int gatherRequest() {
-        int result = 0;
-        if (this.getOrigin() instanceof IForm form) {
-            var request = form.getRequest();
-            if (request.getParameter("submit") != null)
-                result = new UIFormGatherHelper(this, request).total();
-        }else {
-            log.error("{} 没有实现IForm接口", this.getOrigin().getClass().getName());
-        }
-        return result;
+        return new UIFormGatherHelper(this, "submit").total();
+    }
+
+    public int gatherRequest(String submitId) {
+        return new UIFormGatherHelper(this, submitId).total();
     }
 
 }
