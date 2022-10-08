@@ -9,7 +9,7 @@ import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.fields.UISelectDialog;
 import cn.cerc.ui.vcl.UISelect;
 
-public class UISelectDataStyle extends UIAbstractDataStye {
+public class UISelectDataStyle extends UIAbstractDataStyle {
     private Map<String, String> items = new LinkedHashMap<>();
     private String selected;
 
@@ -19,7 +19,7 @@ public class UISelectDataStyle extends UIAbstractDataStye {
 
     @Override
     public String getText(String defaultText) {
-        if (!define.readonly()) {
+        if (define != null && !define.readonly()) {
             UIComponent box = new UIComponent(null);
             //
             UISelect input = new UISelect(box);

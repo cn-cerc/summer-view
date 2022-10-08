@@ -8,7 +8,7 @@ import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.fields.UISelectDialog;
 import cn.cerc.ui.vcl.UIInput;
 
-public class UIBooleanDataStyle extends UIAbstractDataStye {
+public class UIBooleanDataStyle extends UIAbstractDataStyle {
     private String trueText = "是";
     private String falseText = "否";
 
@@ -29,7 +29,7 @@ public class UIBooleanDataStyle extends UIAbstractDataStye {
     @Override
     public String getText(String defaultText) {
         String result = data.getBoolean() ? trueText : falseText;
-        if (!define.readonly()) {
+        if (define != null && !define.readonly()) {
             UIComponent box = new UIComponent(null);
             //
             UIInput input = new UIInput(box);

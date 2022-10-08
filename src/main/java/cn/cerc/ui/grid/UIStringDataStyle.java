@@ -6,7 +6,7 @@ import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.fields.UISelectDialog;
 import cn.cerc.ui.vcl.UIInput;
 
-public class UIStringDataStyle extends UIAbstractDataStye {
+public class UIStringDataStyle extends UIAbstractDataStyle {
 
     private String inputType;
 
@@ -16,7 +16,7 @@ public class UIStringDataStyle extends UIAbstractDataStye {
 
     @Override
     public String getText(String defaultText) {
-        if (!define.readonly()) {
+        if (define != null && !define.readonly()) {
             UIComponent box = new UIComponent(null);
             //
             UIInput input = new UIInput(box);
