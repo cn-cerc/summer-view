@@ -16,7 +16,7 @@ public class UIStringDataStyle extends UIAbstractDataStye {
 
     @Override
     public String getText(String defaultText) {
-        if (!define.readonly()) {
+        if (define != null && !define.readonly()) {
             UIComponent box = new UIComponent(null);
             //
             UIInput input = new UIInput(box);
