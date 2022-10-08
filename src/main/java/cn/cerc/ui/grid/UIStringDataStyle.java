@@ -6,7 +6,7 @@ import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.fields.UISelectDialog;
 import cn.cerc.ui.vcl.UIInput;
 
-public class UIStringDataStyle extends UIAbstractDataStye {
+public class UIStringDataStyle extends UIAbstractDataStyle {
 
     private String inputType;
 

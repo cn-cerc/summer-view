@@ -4,13 +4,13 @@ import cn.cerc.db.core.DataCell;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.vcl.UIInput;
 
-public abstract class UIAbstractDataStye {
+public abstract class UIAbstractDataStyle {
     protected FieldStyleDefine define;
     protected DataCell data;
     protected boolean inGrid;
     protected UIDataStyle owner;
 
-    public UIAbstractDataStye(UIDataStyle owner, DataCell data, boolean inGrid) {
+    public UIAbstractDataStyle(UIDataStyle owner, DataCell data, boolean inGrid) {
         super();
         this.owner = owner;
         this.define = owner.items().get(data.key());
