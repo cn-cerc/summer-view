@@ -54,7 +54,7 @@ public class StartServices extends HttpServlet {
 //            });
 //            String md5 = MD5.get(builder.toString());
 //            String key = MemoryBuffer.buildKey(SystemBuffer.User.Frequency, md5);
-//            try (Jedis jedis = JedisFactory.getJedis()) {
+//            try (RedisImpl redis = JedisFactory.getJedis()) {
 //                if (jedis.setnx(key, "1") == 1) {
 //                    jedis.expire(key, 1);
 //                } else {
