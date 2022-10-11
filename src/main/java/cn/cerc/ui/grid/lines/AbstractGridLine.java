@@ -73,6 +73,11 @@ public abstract class AbstractGridLine extends UIComponent implements DataSource
         this.visible = visible;
     }
 
+    @Override
+    public boolean readonly() {
+        return source.readonly();
+    }
+
     public interface IOutputOfGridLine {
         void outputOfGridLine(HtmlWriter html);
     }
