@@ -44,4 +44,10 @@ public class StringField extends AbstractField implements IFormatColumn, IOutput
         }
         return editor;
     }
+
+    @Override
+    public UIComponent setCssProperty(String key, Object value) {
+        return this.getContent().setCssProperty(key, value);
+    }
+
 }
