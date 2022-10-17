@@ -1,7 +1,9 @@
 package cn.cerc.ui.grid;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -11,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import cn.cerc.db.core.DataSet;
 import cn.cerc.db.core.FieldMeta;
 import cn.cerc.db.core.FieldMeta.FieldKind;
+import cn.cerc.db.core.Utils;
 import cn.cerc.db.editor.EditorFactory;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
@@ -30,6 +33,7 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
     private boolean init;
     private UITr head;
     private UIGridBody body;
+    private Map<String, String> alignMap = new LinkedHashMap<>();
 
     public UIGridView(UIComponent owner) {
         super(owner);
@@ -102,6 +106,24 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
         return field;
     }
 
+    public FieldMeta addField(String fieldCode, String align) {
+        return this.setAlign(fieldCode, align).addField(fieldCode);
+    }
+
+    public FieldMeta addFieldIt() {
+        var dataSet = current().dataSet();
+        if (dataSet == null) {
+            log.error("没有找到dataSet");
+            throw new RuntimeException("没有找到dataSet");
+        }
+        return this.addField("it", "center").onGetText(data -> "" + dataSet.recNo()).setName("序");
+    }
+
+    public UIGridView setAlign(String code, String align) {
+        this.alignMap.put(code, align);
+        return this;
+    }
+
     @Override
     public void output(HtmlWriter html) {
         if (!this.active())
@@ -120,7 +142,10 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
                     dataStyle.setDefault(meta);
                 String fieldName = meta.name() == null ? meta.code() : meta.name();
                 new UITh(head).setText(fieldName);
-                new UIDataField(new UITd(body)).setField(meta.code());
+                UITd td = new UITd(body);
+                if (this.alignMap.size() != 0 && !Utils.isEmpty(this.alignMap.get(meta.code())))
+                    td.setCssProperty("align", this.alignMap.get(meta.code()));
+                new UIDataField(td).setField(meta.code());
             }
             this.init = true;
         }
