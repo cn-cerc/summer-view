@@ -212,8 +212,8 @@ public class DataGrid extends UIComponent implements DataSource, IGridStyle {
                 String val = String.format(" width=\"%f%%\"",
                         Utils.roundTo(field.getWidth() / sumFieldWidth * 100, -2));
                 if (this.widthInNum)
-                    val = String.format(" style=\"width: %sem\" data-fixed=\"%s\" title=\"\"", field.getWidth(),
-                            field.getWidth());
+                    val = String.format(" style=\"width: %sem\" data-fixed=\"%s\" title=\"%s\"", field.getWidth(),
+                            field.getWidth(), field.getColumnTitle());
                 html.print(val);
 
             }

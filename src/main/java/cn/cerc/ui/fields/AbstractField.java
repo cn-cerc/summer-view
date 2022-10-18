@@ -77,6 +77,8 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
     private boolean showEllipsis = false;
     // 名词id
     private Integer wordId;
+    // 列标题
+    private String columnTitle;
 
     public AbstractField(UIComponent owner, String name, String field) {
         this(owner, name, field, 0);
@@ -457,6 +459,15 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
 
     public AbstractField setShowStar(boolean showStar) {
         this.showStar = showStar;
+        return this;
+    }
+
+    public String getColumnTitle() {
+        return columnTitle;
+    }
+
+    public AbstractField setColumnTitle(String rowTitle) {
+        this.columnTitle = rowTitle;
         return this;
     }
 
