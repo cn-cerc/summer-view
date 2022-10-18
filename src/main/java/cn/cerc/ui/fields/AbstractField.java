@@ -351,16 +351,14 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
             content.setSignProperty("required", this.required);
             content.setSignProperty("autofocus", this.autofocus);
         }
+        html.print("<div class='inputContent'>");
         content.output(html);
         this.endOutput(html);
     }
 
     @Override
     public void endOutput(HtmlWriter html) {
-        if (this.showStar) {
-            new UIStarFlag(null).output(html);
-//            new UIFont(null).addComponent(new UIText().setText("*")).output(html);
-        }
+        // 输出弹窗
         if (!this.hidden) {
             UISpan span = new UISpan(null);
             if (this.dialog != null && this.dialog.isOpen()) {
@@ -369,6 +367,11 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
                 new UIImage(url).setSrc(src);
             }
             span.output(html);
+        }
+        html.print("</div>");
+        // 输出必填标志*
+        if (this.showStar) {
+            new UIStarFlag(null).output(html);
         }
         super.endOutput(html);
     }
