@@ -112,7 +112,7 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
         this.wordId = id;
         return this;
     }
-    
+
     public Integer getWordId() {
         return wordId;
     }
@@ -351,7 +351,10 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
             content.setSignProperty("required", this.required);
             content.setSignProperty("autofocus", this.autofocus);
         }
-        html.print("<div class='inputContent'>");
+        html.print("<div class='inputContent");
+        if (!this.hidden && this.dialog != null && this.dialog.isOpen())
+            html.print(" dialogContent");
+        html.print("'>");
         content.output(html);
         this.endOutput(html);
     }
