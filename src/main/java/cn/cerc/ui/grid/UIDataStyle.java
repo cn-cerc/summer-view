@@ -236,17 +236,18 @@ public class UIDataStyle implements UIDataStyleImpl {
      * @return 于dataSet中增加一个it字段，并自动等于dataSet.recNo
      */
     public FieldMeta addFieldIt() {
-        var dataSet = current().dataSet();
-        if (dataSet == null) {
-            log.error("没有找到dataSet");
-            throw new RuntimeException("没有找到dataSet");
-        }
-        return this.addField("it").field().onGetText(data -> "" + dataSet.recNo()).setName("序");
+        DataSet dataSet = current().dataSet();
+        if (dataSet == null)
+            dataSet = new DataSet();
+//            log.error("没有找到dataSet");
+//            throw new RuntimeException("没有找到dataSet");
+        var dataOut = dataSet;
+        return this.addField("it").field().onGetText(data -> "" + dataOut.recNo()).setName("序");
     }
 
     public UIDataStyle setDataRow(DataRow dataRow) {
         if (this.dataSet != null)
-            throw new RuntimeException("dataSet not is null");
+            throw new RuntimeException("dataSet is not null");
         this.dataRow = dataRow;
         return this;
     }
@@ -258,7 +259,11 @@ public class UIDataStyle implements UIDataStyleImpl {
 
     @Override
     public DataRow current() {
-        return dataSet != null ? dataSet.current() : dataRow;
+        if (dataSet != null && !dataSet.eof())
+            return dataSet.current();
+        else if (dataRow == null)
+            dataRow = new DataRow();
+        return dataRow;
     }
 
     public UIDataStyle setDataSet(DataSet dataSet) {
