@@ -216,11 +216,12 @@ public class UIDataStyle implements UIDataStyleImpl {
 
     @Override
     public FieldStyleDefine addField(String fieldCode) {
-        if (this.current() == null)
-            throw new RuntimeException("current is null");
-        FieldMeta field = current().fields().get(fieldCode);
+        var fields = this.dataSet != null ? this.dataSet.fields() : this.dataRow.fields();
+        if (fields == null)
+            throw new RuntimeException("fields is null");
+        FieldMeta field = fields.get(fieldCode);
         if (field == null)
-            field = current().fields().add(fieldCode);
+            field = fields.add(fieldCode);
         if (this.entityClass != null) {
             if (!field.readEntity(entityClass))
                 field.setKind(FieldKind.Calculated);
@@ -236,12 +237,15 @@ public class UIDataStyle implements UIDataStyleImpl {
      * @return 于dataSet中增加一个it字段，并自动等于dataSet.recNo
      */
     public FieldMeta addFieldIt() {
-        var dataSet = current().dataSet();
+        var dataSet = dataSet();
+        if (dataSet == null && current() != null)
+            dataSet = current().dataSet();
         if (dataSet == null) {
             log.error("没有找到dataSet");
             throw new RuntimeException("没有找到dataSet");
         }
-        return this.addField("it").field().onGetText(data -> "" + dataSet.recNo()).setName("序");
+        var ds = dataSet;
+        return this.addField("it").field().onGetText(data -> "" + ds.recNo()).setName("序");
     }
 
     public UIDataStyle setDataRow(DataRow dataRow) {
