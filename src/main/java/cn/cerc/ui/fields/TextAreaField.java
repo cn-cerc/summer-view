@@ -34,7 +34,6 @@ public class TextAreaField extends AbstractField {
         html.print("<div class='inputContent textareaContent'>");
         input.output(html);
         html.print("<img src='%s' class='textareaIcon' onclick='toggleTextArea(this)'/>", StaticFile.getImage("images/icon/textarea.png"));
-        html.print("</div>");
         this.endOutput(html);
     }
 
