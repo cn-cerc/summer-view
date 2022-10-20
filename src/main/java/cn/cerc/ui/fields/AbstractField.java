@@ -326,7 +326,12 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
     @Override
     public void beginOutput(HtmlWriter html) {
         super.beginOutput(html);
-        this.title.setFor(this.getId()).setText(this.getName() + "：");
+        this.title.setText(this.getName() + "：");
+        if (this.mark != null) {
+            this.title.setCssClass("markLabel");
+            this.title.setCssProperty("onclick", String.format("displaySwitch(\"%s\")", this.getId()));
+        } else
+            this.title.setFor(this.getId());
         this.title.setOwner(visible ? this : null);
     }
 
