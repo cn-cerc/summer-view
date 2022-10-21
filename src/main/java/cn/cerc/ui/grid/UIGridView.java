@@ -113,7 +113,7 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
     }
 
     private FieldMeta addFieldIt() {
-        var dataSet = current().dataSet();
+        DataSet dataSet = this.dataSet() != null ? this.dataSet() : this.current().dataSet();
         if (dataSet == null) {
             log.error("没有找到dataSet");
             throw new RuntimeException("没有找到dataSet");
