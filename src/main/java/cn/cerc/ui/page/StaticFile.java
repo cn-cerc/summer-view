@@ -29,17 +29,17 @@ public class StaticFile {
         if (fileName.toLowerCase().startsWith("http"))
             return fileName;
 
-        StringBuilder sb = new StringBuilder();
-        sb.append(this.fileRoot).append("/");
-        sb.append(this.fileName);
+        StringBuilder builder = new StringBuilder();
+        builder.append(this.fileRoot).append("/");
+        builder.append(this.fileName);
         // 取得版本号
         StaticFileVersionImpl impl = Application.getBean(StaticFileVersionImpl.class);
         if (impl != null) {
             String version = impl.getVersion(this.fileType.getGroup());
             if (!Utils.isEmpty(version))
-                sb.append("?v=").append(version);
+                builder.append("?v=").append(version);
         }
-        return sb.toString();
+        return builder.toString();
     }
 
     public String getFileName() {
