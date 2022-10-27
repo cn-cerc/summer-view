@@ -1,5 +1,26 @@
 package cn.cerc.ui.mvc;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Stream;
+
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
+
 import cn.cerc.db.core.Handle;
 import cn.cerc.db.core.IHandle;
 import cn.cerc.db.core.ISession;
@@ -15,26 +36,7 @@ import cn.cerc.mis.core.FormSign;
 import cn.cerc.mis.core.IErrorPage;
 import cn.cerc.mis.core.SystemBuffer;
 import cn.cerc.mis.other.MemoryBuffer;
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
 import redis.clients.jedis.Jedis;
-
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Stream;
 
 public class StartForms implements Filter {
     private static final Logger log = LoggerFactory.getLogger(StartForms.class);
@@ -62,6 +64,11 @@ public class StartForms implements Filter {
         paths.add("services-fpl/");
         paths.add("task/");
         paths.add("docs/");
+    }
+
+    public static final List<String> whiteList = new ArrayList<>();
+    static {
+        whiteList.add("WebDefault");
     }
 
     @Override
@@ -150,7 +157,8 @@ public class StartForms implements Filter {
             Variant variant = new Variant();
             if (!AppClient.createCookie(req, resp, variant)) {
                 StringBuilder builder = new StringBuilder(variant.getString());
-                if (!uri.contains("WebDefault")) {
+                // 不在白名单里面统一强制校验
+                if (whiteList.stream().noneMatch(uri::contains)) {
                     builder.append(uri);
                     req.getParameterMap().forEach((key, value) -> {
                         builder.append(key);
