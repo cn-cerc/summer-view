@@ -10,7 +10,7 @@ import java.text.DecimalFormat;
 public class StrongItem extends UIComponent {
     private String name;
     private Double value;
-    private String percentSign;
+    private String unit;
 
     public StrongItem(UIComponent owner) {
         super(owner);
@@ -34,12 +34,12 @@ public class StrongItem extends UIComponent {
         return this;
     }
 
-    public String getPercentSign() {
-        return percentSign;
+    public String getUnit() {
+        return unit;
     }
 
-    public StrongItem setPercentSign(String percentSign) {
-        this.percentSign = percentSign;
+    public StrongItem setUnit(String unit) {
+        this.unit = unit;
         return this;
     }
 
@@ -53,8 +53,8 @@ public class StrongItem extends UIComponent {
         }
         html.print(">");
         html.print(df.format(new BigDecimal(this.value.toString())));
-        if (this.getPercentSign() != null) {
-            html.print(this.percentSign);
+        if (this.getUnit() != null) {
+            html.print(this.unit);
         }
         html.print("</strong>");
     }
