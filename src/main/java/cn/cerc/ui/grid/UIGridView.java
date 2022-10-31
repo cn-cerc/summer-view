@@ -34,6 +34,8 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
     private UITr head;
     private UIGridBody body;
     private Map<String, String> alignMap = new LinkedHashMap<>();
+    private FieldMeta columnIt;
+    private boolean columnItHidden;
 
     public UIGridView(UIComponent owner) {
         super(owner);
@@ -110,13 +112,15 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
         return this.setAlign(fieldCode, align).addField(fieldCode);
     }
 
-    public FieldMeta addFieldIt() {
-        var dataSet = current().dataSet();
+    private FieldMeta addFieldIt() {
+        DataSet dataSet = this.dataSet() != null ? this.dataSet() : this.current().dataSet();
         if (dataSet == null) {
             log.error("没有找到dataSet");
             throw new RuntimeException("没有找到dataSet");
         }
-        return this.addField("it", "center").onGetText(data -> "" + dataSet.recNo()).setName("序");
+        if (columnIt == null)
+            columnIt = this.addField("it", "center").onGetText(data -> "" + dataSet.recNo()).setName("序");
+        return columnIt;
     }
 
     public UIGridView setAlign(String code, String align) {
@@ -137,19 +141,28 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
             // 建立相应的显示组件
             UITr head = head();
             UIGridBody body = body();
+            // 先输出it
+            if (!columnItHidden)
+                outputCell(head, body, addFieldIt());
+            // 再输出非it
             for (var meta : fields) {
-                if (dataStyle != null)
-                    dataStyle.setDefault(meta);
-                String fieldName = meta.name() == null ? meta.code() : meta.name();
-                new UITh(head).setText(fieldName);
-                UITd td = new UITd(body);
-                if (this.alignMap.size() != 0 && !Utils.isEmpty(this.alignMap.get(meta.code())))
-                    td.setCssProperty("align", this.alignMap.get(meta.code()));
-                new UIDataField(td).setField(meta.code());
+                if (meta != columnIt)
+                    outputCell(head, body, meta);
             }
             this.init = true;
         }
         super.output(html);
+    }
+
+    private void outputCell(UITr head, UIGridBody body, FieldMeta meta) {
+        if (dataStyle != null)
+            dataStyle.setDefault(meta);
+        String fieldName = meta.name() == null ? meta.code() : meta.name();
+        new UITh(head).setText(fieldName);
+        UITd td = new UITd(body);
+        if (this.alignMap.size() != 0 && !Utils.isEmpty(this.alignMap.get(meta.code())))
+            td.setCssProperty("align", this.alignMap.get(meta.code()));
+        new UIDataField(td).setField(meta.code());
     }
 
     /**
@@ -201,6 +214,15 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
         }
         return total++;
 
+    }
+
+    public boolean columnItHidden() {
+        return columnItHidden;
+    }
+
+    public UIGridView setColumnItHidden(boolean columnItHidden) {
+        this.columnItHidden = columnItHidden;
+        return this;
     }
 
     public static void main(String[] args) {
