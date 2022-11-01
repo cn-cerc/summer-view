@@ -181,7 +181,7 @@ public class UIDataStyle implements UIDataStyleImpl {
         if (onOutput != null) {
             var style = items.get(fieldMeta.code());
             if (style == null) {
-                style = new FieldStyleDefine(this, fieldMeta);
+                style = new FieldStyleDefine(fieldMeta);
                 items.put(fieldMeta.code(), style);
             }
             result = onOutput.execute(style);
@@ -226,7 +226,7 @@ public class UIDataStyle implements UIDataStyleImpl {
             if (!field.readEntity(entityClass))
                 field.setKind(FieldKind.Calculated);
         }
-        var styleData = new FieldStyleDefine(this, field);
+        var styleData = new FieldStyleDefine(field);
         styleData.setReadonly(this.readonly);
         this.items.put(fieldCode, styleData);
         return styleData;
@@ -245,7 +245,12 @@ public class UIDataStyle implements UIDataStyleImpl {
             throw new RuntimeException("没有找到dataSet");
         }
         var ds = dataSet;
-        return this.addField("it").field().onGetText(data -> "" + ds.recNo()).setName("序");
+        return this.addField("it")
+                .setWidth(2)
+                .setAlign("center")
+                .field()
+                .onGetText(data -> "" + ds.recNo())
+                .setName("序");
     }
 
     public UIDataStyle setDataRow(DataRow dataRow) {
@@ -296,11 +301,16 @@ public class UIDataStyle implements UIDataStyleImpl {
         var data = new DataCell(row, code.code());
 
         style.onOutput(styleData -> switch (styleData.code()) {
-        case "code" -> styleData.owner().getEnum(UsedEnum.class);
+        case "code" -> style.getEnum(UsedEnum.class);
         default -> styleData.onGetText();
         });
 
         System.out.println("output:" + style.getDefault(code).getText(data));
+    }
+
+    @Override
+    public FieldStyleDefine getFieldStyle(String fieldCode) {
+        return items.get(fieldCode);
     }
 
 }

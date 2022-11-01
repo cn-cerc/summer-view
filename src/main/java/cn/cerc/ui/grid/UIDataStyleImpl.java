@@ -12,7 +12,7 @@ import cn.cerc.db.core.FieldMeta;
  *
  */
 public interface UIDataStyleImpl extends DataSource {
-
+    
     /**
      * 于样式处理器中注册一个字段，若不存在，则自动于dataSet.fields中增加
      * 
@@ -20,6 +20,8 @@ public interface UIDataStyleImpl extends DataSource {
      * @return 字段样式数据对象
      */
     FieldStyleDefine addField(String fieldCode);
+    
+    FieldStyleDefine getFieldStyle(String fieldCode);
 
     /**
      * 

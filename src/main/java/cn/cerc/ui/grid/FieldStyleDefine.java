@@ -13,7 +13,6 @@ import cn.cerc.ui.core.UIComponent;
  */
 public class FieldStyleDefine {
     private final FieldMeta field;
-    private UIDataStyle owner;
     private UIComponent executant;
     private OnOutput onOutput;
     // 默认显示宽度
@@ -30,19 +29,16 @@ public class FieldStyleDefine {
     private boolean readonly = true;
     // 添加其它配套数据
     private Object data;
+    // 对齐方式
+    private String align = "left";
 
-    public FieldStyleDefine(UIDataStyle owner, FieldMeta field) {
-        this.owner = owner;
+    public FieldStyleDefine(FieldMeta field) {
         this.field = field;
         if (field != null && field.describe() != null) {
             this.width = field.describe().width();
             this.required = field.describe().required();
             this.dialog = field.describe().dialog();
         }
-    }
-
-    public UIDataStyle owner() {
-        return this.owner;
     }
 
     public FieldMeta field() {
@@ -178,6 +174,15 @@ public class FieldStyleDefine {
 
     public FieldStyleDefine setData(Object data) {
         this.data = data;
+        return this;
+    }
+
+    public String align() {
+        return align;
+    }
+
+    public FieldStyleDefine setAlign(String align) {
+        this.align = align;
         return this;
     }
 
