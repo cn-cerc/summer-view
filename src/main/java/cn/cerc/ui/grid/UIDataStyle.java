@@ -247,7 +247,7 @@ public class UIDataStyle implements UIDataStyleImpl {
         var ds = dataSet;
         return this.addField("it")
                 .setWidth(2)
-                .setAlign("center")
+                .setAlignCenter()
                 .field()
                 .onGetText(data -> "" + ds.recNo())
                 .setName("序");

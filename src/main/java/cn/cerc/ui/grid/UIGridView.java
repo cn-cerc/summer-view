@@ -122,7 +122,8 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
         }
         if (columnIt == null)
             columnIt = this.addField("it")
-                    .setAlign("center")
+                    .setWidth(2)
+                    .setAlignCenter()
                     .field()
                     .onGetText(data -> "" + dataSet.recNo())
                     .setName("序");
@@ -138,7 +139,8 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
             for (FieldMeta meta : fields) {
                 FieldStyleDefine styleDefine = this.items.get(meta.code());
                 if (styleDefine != null)
-                    this.sumWidth += styleDefine.width();
+                    // 如果没设置默认取name长度
+                    this.sumWidth += styleDefine.width() > 0 ? styleDefine.width() : styleDefine.name().length();
             }
 
             // 若没有指定列时，自动为所有列
@@ -171,9 +173,8 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
 
         FieldStyleDefine styleDefine = this.items.get(meta.code());
         if (styleDefine != null) {
-            if (styleDefine.width() > 0)
-                th.setCssProperty("width",
-                        String.format("%f%%", Utils.roundTo((double) styleDefine.width() / sumWidth * 100, -2)));
+            int width = styleDefine.width() > 0 ? styleDefine.width() : styleDefine.name().length();
+            th.setCssProperty("width", String.format("%f%%", Utils.roundTo((double) width / sumWidth * 100, -2)));
             if (!Utils.isEmpty(styleDefine.align())) {
                 td.setCssProperty("align", styleDefine.align());
             }
@@ -258,6 +259,7 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
         ds.fields().get("sex").setName("性别").onGetSetText(EditorFactory.ofBoolean("女的", "男的"));
 
         UIGridView grid = new UIGridView(null).setDataSet(ds);
+        grid.addField("Name_").setAlignRight();
         grid.setDataStyle(new UIDataStyle());
         grid.setActive(true);
 //        grid.addField("sex"); //指定栏位输出

@@ -181,9 +181,18 @@ public class FieldStyleDefine {
         return align;
     }
 
-    public FieldStyleDefine setAlign(String align) {
+    private FieldStyleDefine setAlign(String align) {
         this.align = align;
         return this;
     }
-
+    
+    public FieldStyleDefine setAlignCenter() {
+        this.setAlign("center");
+        return this;
+    }
+    
+    public FieldStyleDefine setAlignRight() {
+        this.setAlign("right");
+        return this;
+    }
 }
