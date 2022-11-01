@@ -30,7 +30,7 @@ public class FieldStyleDefine {
     // 添加其它配套数据
     private Object data;
     // 对齐方式
-    private String align = "left";
+    private String align;
 
     public FieldStyleDefine(FieldMeta field) {
         this.field = field;
