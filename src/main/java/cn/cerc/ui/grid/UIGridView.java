@@ -112,7 +112,7 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
         return this.setAlign(fieldCode, align).addField(fieldCode);
     }
 
-    private FieldMeta addFieldIt() {
+    public FieldMeta addFieldIt() {
         DataSet dataSet = this.dataSet() != null ? this.dataSet() : this.current().dataSet();
         if (dataSet == null) {
             log.error("没有找到dataSet");
