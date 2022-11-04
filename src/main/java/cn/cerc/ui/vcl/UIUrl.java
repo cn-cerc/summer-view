@@ -1,5 +1,6 @@
 package cn.cerc.ui.vcl;
 
+import cn.cerc.db.core.Utils;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.core.UrlRecord;
 
@@ -89,6 +90,13 @@ public class UIUrl extends UIA {
 
     public static String html(String url, String title) {
         return new UIUrl().setHref(url).setText(title).toString();
+    }
+
+    public static String html(UrlRecord url, String title) {
+        UIUrl uiUrl = new UIUrl().setHref(url.getUrl()).setText(title);
+        if (!Utils.isEmpty(url.getTarget()))
+            uiUrl.setTarget(url.getTarget());
+        return uiUrl.toString();
     }
 
 }
