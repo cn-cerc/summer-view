@@ -1,26 +1,10 @@
 package cn.cerc.ui.mvc;
 
-import cn.cerc.db.core.Handle;
-import cn.cerc.db.core.IHandle;
-import cn.cerc.db.core.ISession;
-import cn.cerc.db.core.MD5;
-import cn.cerc.db.core.Utils;
-import cn.cerc.db.core.Variant;
-import cn.cerc.db.redis.JedisFactory;
-import cn.cerc.mis.config.AppStaticFileDefault;
-import cn.cerc.mis.core.AppClient;
-import cn.cerc.mis.core.Application;
-import cn.cerc.mis.core.FormFactory;
-import cn.cerc.mis.core.FormSign;
-import cn.cerc.mis.core.IErrorPage;
-import cn.cerc.mis.core.SystemBuffer;
-import cn.cerc.mis.other.MemoryBuffer;
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
-import redis.clients.jedis.Jedis;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Stream;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -30,11 +14,28 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Stream;
+
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
+
+import cn.cerc.db.core.Handle;
+import cn.cerc.db.core.IHandle;
+import cn.cerc.db.core.ISession;
+import cn.cerc.db.core.MD5;
+import cn.cerc.db.core.Utils;
+import cn.cerc.db.core.Variant;
+import cn.cerc.db.redis.Redis;
+import cn.cerc.mis.config.AppStaticFileDefault;
+import cn.cerc.mis.core.AppClient;
+import cn.cerc.mis.core.Application;
+import cn.cerc.mis.core.FormFactory;
+import cn.cerc.mis.core.FormSign;
+import cn.cerc.mis.core.IErrorPage;
+import cn.cerc.mis.core.SystemBuffer;
+import cn.cerc.mis.other.MemoryBuffer;
 
 public class StartForms implements Filter {
     private static final Logger log = LoggerFactory.getLogger(StartForms.class);
@@ -159,7 +160,7 @@ public class StartForms implements Filter {
 
                     String md5 = MD5.get(builder.toString());
                     String key = MemoryBuffer.buildKey(SystemBuffer.User.Frequency, md5);
-                    try (Jedis jedis = JedisFactory.getJedis()) {
+                    try (Redis jedis = new Redis()) {
                         if (jedis.setnx(key, "1") == 1) {
                             jedis.expire(key, 1);
                         } else {
