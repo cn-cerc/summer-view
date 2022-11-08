@@ -2,7 +2,6 @@ package cn.cerc.ui.fields;
 
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
-import cn.cerc.ui.page.StaticFile;
 import cn.cerc.ui.vcl.UITextarea;
 
 public class TextAreaField extends AbstractField {
@@ -26,14 +25,13 @@ public class TextAreaField extends AbstractField {
         input.setId(this.getId());
         input.setName(this.getId());
         input.setReadonly(this.readonly());
+//        input.setCssStyle(this.isResize() ? "resize: none;" : null);
         input.setSignProperty("required", this.isRequired());
         input.setSignProperty("autofocus", this.isAutofocus());
         input.setCssProperty("placeholder", this.getPlaceholder());
         String value = this.getValue();
         input.setText(value != null ? value : this.getText());
-        html.print("<div class='inputContent'>");
         input.output(html);
-        html.print("<img src='%s' class='textareaIcon' onclick='toggleTextArea(this)'/>", StaticFile.getImage("images/icon/textarea.png"));
         this.endOutput(html);
     }
 

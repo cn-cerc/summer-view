@@ -112,7 +112,7 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
         this.wordId = id;
         return this;
     }
-
+    
     public Integer getWordId() {
         return wordId;
     }
@@ -326,12 +326,7 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
     @Override
     public void beginOutput(HtmlWriter html) {
         super.beginOutput(html);
-        this.title.setText(this.getName() + "：");
-        if (this.mark != null) {
-            this.title.setCssClass("markLabel");
-            this.title.setCssProperty("onclick", String.format("displaySwitch(\"%s\")", this.getId()));
-        } else
-            this.title.setFor(this.getId());
+        this.title.setFor(this.getId()).setText(this.getName() + "：");
         this.title.setOwner(visible ? this : null);
     }
 
@@ -356,17 +351,16 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
             content.setSignProperty("required", this.required);
             content.setSignProperty("autofocus", this.autofocus);
         }
-        html.print("<div class='inputContent");
-        if (!this.hidden && this.dialog != null && this.dialog.isOpen())
-            html.print(" dialogContent");
-        html.print("'>");
         content.output(html);
         this.endOutput(html);
     }
 
     @Override
     public void endOutput(HtmlWriter html) {
-        // 输出弹窗
+        if (this.showStar) {
+            new UIStarFlag(null).output(html);
+//            new UIFont(null).addComponent(new UIText().setText("*")).output(html);
+        }
         if (!this.hidden) {
             UISpan span = new UISpan(null);
             if (this.dialog != null && this.dialog.isOpen()) {
@@ -375,11 +369,6 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
                 new UIImage(url).setSrc(src);
             }
             span.output(html);
-        }
-        html.print("</div>");
-        // 输出必填标志*
-        if (this.showStar) {
-            new UIStarFlag(null).output(html);
         }
         super.endOutput(html);
     }

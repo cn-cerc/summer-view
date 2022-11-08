@@ -63,8 +63,7 @@ public class OptionField extends AbstractField {
         if (Utils.isEmpty(current) && !Utils.isEmpty(this.getValue())) {
             current = this.getValue();
         }
-        html.print("<label for=\"%s\">%s</label>", this.getId(), this.getName() + "：");
-        html.print("<div class='inputContent'>");
+        html.println("<label for=\"%s\">%s</label>", this.getId(), this.getName() + "：");
         html.print("<select id=\"%s\" name=\"%s\"", this.getId(), this.getId());
         if (this.size > 0) {
             html.print(" size=\"%s\"", this.getSize());
@@ -86,11 +85,10 @@ public class OptionField extends AbstractField {
             html.println(String.format("%s</option>", value));
         }
         html.println("</select>");
-        html.print("<span></span>");
-        html.print("</div>");
         if (this.isShowStar()) {
             html.print("<font>*</font>");
         }
+        html.print("<span></span>");
     }
 
     public int getSize() {
