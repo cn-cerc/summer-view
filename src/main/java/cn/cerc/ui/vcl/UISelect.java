@@ -87,4 +87,9 @@ public class UISelect extends UIComponent implements IHtml {
         this.options = options;
     }
 
+    public UISelect put(String key, String value) {
+        this.options.put(key, value);
+        return this;
+    }
+
 }
