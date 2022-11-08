@@ -34,7 +34,9 @@ public class CodeNameField extends AbstractField {
             }
             html.println("/>");
         } else {
-            html.println("<label for=\"%s\">%s</label>", this.getId(), this.getName() + "：");
+            html.print("<label for=\"%s\">%s</label>", this.getId(), this.getName() + "：");
+
+            html.print("<div class='inputContent dialogContent'>");
 
             html.print("<input");
             html.print(" type=\"hidden\"");
@@ -69,10 +71,6 @@ public class CodeNameField extends AbstractField {
             }
             html.println("/>");
 
-            if (this.isShowStar()) {
-                html.println("<font>*</font>");
-            }
-
             html.print("<span>");
             if (this.getDialog() != null && this.getDialog().isOpen()) {
                 html.print("<a href=\"%s\">", getUrl(this.getDialog()));
@@ -80,6 +78,11 @@ public class CodeNameField extends AbstractField {
                 html.print("</a>");
             }
             html.print("</span>");
+            html.print("</div>");
+
+            if (this.isShowStar()) {
+                html.println("<font>*</font>");
+            }
         }
     }
 
