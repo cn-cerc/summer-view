@@ -128,8 +128,8 @@ public class StartForms implements Filter {
             return;
         }
 
-        ApplicationContext context = WebApplicationContextUtils.getRequiredWebApplicationContext(
-                req.getServletContext());
+        ApplicationContext context = WebApplicationContextUtils
+                .getRequiredWebApplicationContext(req.getServletContext());
         Application.setContext(context);
 
         ISession session = context.getBean(ISession.class);
@@ -147,7 +147,12 @@ public class StartForms implements Filter {
         FormFactory factory = context.getBean(FormFactory.class);
         IHandle handle = new Handle(session);
 
-        if ("POST".equalsIgnoreCase(req.getMethod())) {
+        boolean existWhiteList = false;
+        IFormWhiteListVerify whiteListVerify = Application.getBean(IFormWhiteListVerify.class);
+        if (whiteListVerify != null)
+            existWhiteList = whiteListVerify.exist(childCode);
+
+        if ("POST".equalsIgnoreCase(req.getMethod()) && !existWhiteList) {
             Variant variant = new Variant();
             if (!AppClient.createCookie(req, resp, variant)) {
                 StringBuilder builder = new StringBuilder(variant.getString());
@@ -166,8 +171,7 @@ public class StartForms implements Filter {
                         } else {
                             log.error("key {}, origin {}", key, builder);
                             IErrorPage error = context.getBean(IErrorPage.class);
-                            error.output(req, resp,
-                                    new RuntimeException(String.format("对不起您操作太快了，服务器忙不过来 %s", uri)));
+                            error.output(req, resp, new RuntimeException(String.format("对不起您操作太快了，服务器忙不过来 %s", uri)));
                             return;
                         }
                     }
