@@ -108,11 +108,15 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
         return this;
     }
 
+    public AbstractField setMark(String mark) {
+        return setMark(new UIText().setText(mark));
+    }
+
     public AbstractField setWordId(Integer id) {
         this.wordId = id;
         return this;
     }
-    
+
     public Integer getWordId() {
         return wordId;
     }
