@@ -61,6 +61,11 @@ public class CodeNameField extends AbstractField {
             if (this.isAutofocus()) {
                 html.print(" autofocus");
             }
+            if (this.isAutocomplete())
+                html.print(" autocomplete=\"on\"");
+            else
+                html.print(" autocomplete=\"off\"");
+
             if (this.isRequired()) {
                 html.print(" required");
             }
