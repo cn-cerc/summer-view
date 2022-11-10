@@ -3,9 +3,7 @@ package cn.cerc.ui.mvc;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Stream;
 
 import javax.servlet.Filter;
@@ -150,9 +148,9 @@ public class StartForms implements Filter {
         IHandle handle = new Handle(session);
 
         boolean existWhiteList = false;
-        IFormWhiteListVerify bean = Application.getBean(IFormWhiteListVerify.class);
-        if (bean != null)
-            existWhiteList = bean.exist(childCode);
+        IFormWhiteListVerify whiteListVerify = Application.getBean(IFormWhiteListVerify.class);
+        if (whiteListVerify != null)
+            existWhiteList = whiteListVerify.exist(childCode);
 
         if ("POST".equalsIgnoreCase(req.getMethod()) && !existWhiteList) {
             Variant variant = new Variant();
