@@ -138,7 +138,7 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
         if (!this.init && this.dataSet != null) {
             for (FieldMeta meta : fields) {
                 FieldStyleDefine styleDefine = this.items.get(meta.code());
-                if (styleDefine != null)
+                if (styleDefine != null && styleDefine.name() != null)
                     // 如果没设置默认取name长度
                     this.sumWidth += styleDefine.width() > 0 ? styleDefine.width() : styleDefine.name().length();
             }
@@ -172,9 +172,10 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
         UITd td = new UITd(body);
 
         FieldStyleDefine styleDefine = this.items.get(meta.code());
-        if (styleDefine != null) {
+        if (styleDefine != null && styleDefine.name() != null) {
             int width = styleDefine.width() > 0 ? styleDefine.width() : styleDefine.name().length();
-            th.setCssProperty("width", String.format("%f%%", Utils.roundTo((double) width / sumWidth * 100, -2)));
+            if (sumWidth > 0)
+                th.setCssProperty("width", String.format("%f%%", Utils.roundTo((double) width / sumWidth * 100, -2)));
             if (!Utils.isEmpty(styleDefine.align())) {
                 td.setCssProperty("align", styleDefine.align());
             }
