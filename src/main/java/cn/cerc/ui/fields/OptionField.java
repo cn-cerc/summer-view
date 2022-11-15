@@ -43,7 +43,7 @@ public class OptionField extends AbstractField {
 
     public OptionField copyValues(Enum<?>[] enums) {
         for (Enum<?> item : enums) {
-            this.put("" + item.ordinal(), item.name());
+            this.put(String.valueOf(item.ordinal()), item.name());
         }
         return this;
     }
