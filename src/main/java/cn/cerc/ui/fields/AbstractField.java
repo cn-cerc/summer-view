@@ -400,8 +400,9 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
         void buildUrl(DataRow record, UIUrl url);
     }
 
-    public void createUrl(BuildUrl build) {
+    public AbstractField createUrl(BuildUrl build) {
         this.buildUrl = build;
+        return this;
     }
 
     public BuildUrl getBuildUrl() {
