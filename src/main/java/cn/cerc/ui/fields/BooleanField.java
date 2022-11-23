@@ -50,7 +50,10 @@ public class BooleanField extends AbstractField implements SearchItem, IFormatCo
         input.setSignProperty("checked", current().getBoolean(this.getField()));
         input.setSignProperty("disabled", this.readonly());
         input.setCssProperty("onclick", this.getOnclick());
+        html.print("<div class='inputContent switchContent'>");
         input.output(html);
+        html.println("<span class='switch' onclick='toggleSwitch(this)'><i>%s</i><i>%s</i></span>", this.trueText,
+                this.falseText);
         this.endOutput(html);
     }
 
