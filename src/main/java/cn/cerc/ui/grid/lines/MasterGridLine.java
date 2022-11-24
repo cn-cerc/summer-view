@@ -82,6 +82,8 @@ public class MasterGridLine extends AbstractGridLine {
 
             col.setAlign(field.getAlign());
             col.setRole(field.getField());
+            col.setColSpan(field.getColspan());
+            col.setRowSpan(field.getRowspan());
             col.addComponent(field);
         } else {
             super.addComponent(child);

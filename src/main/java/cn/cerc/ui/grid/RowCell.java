@@ -13,6 +13,7 @@ public class RowCell extends UIComponent {
     }
 
     private int colSpan = 1;
+    private int rowSpan = 1;
     private String align;
     private String role;
     private String style;
@@ -35,6 +36,14 @@ public class RowCell extends UIComponent {
 
     public void setColSpan(int colSpan) {
         this.colSpan = colSpan;
+    }
+
+    public int getRowSpan() {
+        return rowSpan;
+    }
+
+    public void setRowSpan(int rowSpan) {
+        this.rowSpan = rowSpan;
     }
 
     public List<AbstractField> getFields() {

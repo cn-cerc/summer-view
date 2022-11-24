@@ -188,6 +188,19 @@ public class DataGrid extends UIComponent implements DataSource, IGridStyle {
     }
 
     private void outputWebGrid(HtmlWriter html) {
+        html.print("<table class=\"%s\"", this.gridCssClass);
+        html.println(" role=\"%s\"", this.widthInNum ? "fixed" : "default");
+        if (this.gridCssStyle != null) {
+            html.print(" style=\"%s\"", this.gridCssStyle);
+        }
+        html.println(">");
+        outputHead(html);
+        outputRows(html);
+        html.println("</table>");
+    }
+
+    // 输出表格头部
+    private void outputHead(HtmlWriter html) {
         double sumFieldWidth = 0;
         for (RowCell cell : this.getMasterLine().getOutputCells())
             sumFieldWidth += cell.getFields().get(0).getWidth();
@@ -195,13 +208,6 @@ public class DataGrid extends UIComponent implements DataSource, IGridStyle {
             throw new RuntimeException(res.getString(1, "总列宽不允许小于1"));
         if (sumFieldWidth > MaxWidth)
             throw new RuntimeException(String.format(res.getString(2, "总列宽不允许大于%s"), MaxWidth));
-        html.print("<table class=\"%s\"", this.gridCssClass);
-        html.println(" role=\"%s\"", this.widthInNum ? "fixed" : "default");
-        if (this.gridCssStyle != null) {
-            html.print(" style=\"%s\"", this.gridCssStyle);
-        }
-        html.println(">");
-
         html.println("<tr>");
         for (RowCell cell : this.getMasterLine().getOutputCells()) {
             AbstractField field = cell.getFields().get(0);
@@ -226,6 +232,10 @@ public class DataGrid extends UIComponent implements DataSource, IGridStyle {
             html.println("</th>");
         }
         html.println("</tr>");
+    }
+
+    // 输出表格列
+    private void outputRows(HtmlWriter html) {
         if (this.dataSet.size() > 0) {
             int i = this.pages.getBegin();
             while (i <= this.pages.getEnd()) {
@@ -244,7 +254,6 @@ public class DataGrid extends UIComponent implements DataSource, IGridStyle {
                 i++;
             }
         }
-        html.println("</table>");
     }
 
     private void outputPhoneGrid(HtmlWriter html) {

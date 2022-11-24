@@ -77,6 +77,10 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
     private boolean showEllipsis = false;
     // 名词id
     private Integer wordId;
+    // 跨列数
+    private int colspan = 1;
+    // 跨行数
+    private int rowspan = 1;
 
     public AbstractField(UIComponent owner, String name, String field) {
         this(owner, name, field, 0);
@@ -641,5 +645,21 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
 
     public DataColumn value() {
         return new DataColumn(this, this.getField());
+    }
+
+    public int getColspan() {
+        return colspan;
+    }
+
+    public void setColspan(int colspan) {
+        this.colspan = colspan;
+    }
+
+    public int getRowspan() {
+        return rowspan;
+    }
+
+    public void setRowspan(int rowspan) {
+        this.rowspan = rowspan;
     }
 }
