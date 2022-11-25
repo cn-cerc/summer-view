@@ -1,5 +1,6 @@
 package cn.cerc.ui.page;
 
+import cn.cerc.db.core.ServerConfig;
 import cn.cerc.db.core.Utils;
 import cn.cerc.mis.core.Application;
 
@@ -11,15 +12,13 @@ public class StaticFile {
     private String device = "";
 
     public StaticFile(StaticFileType fileType, String fileName) {
-        this(fileType, fileName, false);
+        this(fileType, fileName, true);
     }
 
     public StaticFile(StaticFileType fileType, String fileName, boolean isCommonFile) {
         super();
         this.fileRoot = Application.getStaticPath();
-        if (isCommonFile)
-            this.fileRoot = replace(Application.getStaticPath());
-        //
+        this.fileRoot += isCommonFile ? "/common" : "/" + ServerConfig.getAppTrademark();
         this.fileName = fileName;
         this.fileType = fileType;
     }
@@ -70,20 +69,40 @@ public class StaticFile {
         return new StaticFile(StaticFileType.cssFile, fileName).toString();
     }
 
+    public static String getProductCssFile(String fileName) {
+        return new StaticFile(StaticFileType.cssFile, fileName, false).toString();
+    }
+
     public static String getImage(String fileName) {
         return new StaticFile(StaticFileType.imageFile, fileName).toString();
+    }
+
+    public static String getProductImage(String fileName) {
+        return new StaticFile(StaticFileType.imageFile, fileName, false).toString();
     }
 
     public static String getSummerImage(String fileName) {
         return new StaticFile(StaticFileType.jsFile, fileName).toString();
     }
 
+    public static String getProductSummerImage(String fileName) {
+        return new StaticFile(StaticFileType.jsFile, fileName, false).toString();
+    }
+
     public static String getMenuImage(String fileName) {
         return new StaticFile(StaticFileType.menuImage, fileName).toString();
     }
 
+    public static String getProductMenuImage(String fileName) {
+        return new StaticFile(StaticFileType.menuImage, fileName, false).toString();
+    }
+
     public static String getJsFile(String fileName) {
         return new StaticFile(StaticFileType.jsFile, fileName).toString();
+    }
+
+    public static String getProductJsFile(String fileName) {
+        return new StaticFile(StaticFileType.jsFile, fileName, false).toString();
     }
 
     @Deprecated

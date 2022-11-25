@@ -12,15 +12,21 @@ public class UIImage extends UIComponent implements IHtml {
     private String src;
     private AliyunOssProcess process;
     private String staticPath;
+    private boolean isCommomFile;
 
     public UIImage() {
-        this(null);
+        this(null, true);
     }
 
     public UIImage(UIComponent owner) {
+        this(owner, true);
+    }
+
+    public UIImage(UIComponent owner, boolean isCommonFile) {
         super(owner);
         this.setRootLabel("img");
         this.staticPath = Application.getStaticPath();
+        this.isCommomFile = isCommonFile;
     }
 
     @Override
@@ -28,7 +34,7 @@ public class UIImage extends UIComponent implements IHtml {
         String url = this.src;
         if (this.staticPath != null && this.process != null && !Utils.isEmpty(process.getCommand()))
             url += String.format("?x-oss-process=image%s", process.getCommand());
-        this.setCssProperty("src", new StaticFile(StaticFileType.imageFile, url).toString());
+        this.setCssProperty("src", new StaticFile(StaticFileType.imageFile, url, this.isCommomFile).toString());
         html.print("<").print(getRootLabel());
         this.outputPropertys(html);
         html.print("/>");
@@ -116,6 +122,14 @@ public class UIImage extends UIComponent implements IHtml {
 
     public void setProcess(AliyunOssProcess process) {
         this.process = process;
+    }
+
+    public boolean isCommomFile() {
+        return isCommomFile;
+    }
+
+    public void setCommomFile(boolean isCommomFile) {
+        this.isCommomFile = isCommomFile;
     }
 
 }
