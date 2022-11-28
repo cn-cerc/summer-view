@@ -49,6 +49,12 @@ public class UIImage extends UIComponent implements IHtml {
         return this;
     }
 
+    public UIImage setProductSrc(String src) {
+        this.isCommomFile = true;
+        this.src = src;
+        return this;
+    }
+
     /**
      * 阿里云OSS图片压缩
      * 
