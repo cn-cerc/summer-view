@@ -12,29 +12,20 @@ public class UIImage extends UIComponent implements IHtml {
     private String src;
     private AliyunOssProcess process;
     private String staticPath;
-    private boolean isCommomFile;
 
     public UIImage() {
-        this(null, true);
+        this(null);
     }
 
     public UIImage(UIComponent owner) {
-        this(owner, true);
-    }
-
-    public UIImage(UIComponent owner, boolean isCommonFile) {
         super(owner);
         this.setRootLabel("img");
         this.staticPath = Application.getStaticPath();
-        this.isCommomFile = isCommonFile;
     }
 
     @Override
     public void output(HtmlWriter html) {
-        String url = this.src;
-        if (this.staticPath != null && this.process != null && !Utils.isEmpty(process.getCommand()))
-            url += String.format("?x-oss-process=image%s", process.getCommand());
-        this.setCssProperty("src", new StaticFile(StaticFileType.imageFile, url, this.isCommomFile).toString());
+        this.setCssProperty("src", this.src);
         html.print("<").print(getRootLabel());
         this.outputPropertys(html);
         html.print("/>");
@@ -45,12 +36,23 @@ public class UIImage extends UIComponent implements IHtml {
     }
 
     public UIImage setSrc(String src) {
-        this.src = src;
+        if (this.staticPath != null && this.process != null && !Utils.isEmpty(process.getCommand()))
+            src += String.format("?x-oss-process=image%s", process.getCommand());
+        this.src = new StaticFile(StaticFileType.imageFile, src).toString();
         return this;
     }
 
     public UIImage setProductSrc(String src) {
-        this.isCommomFile = true;
+        if (this.staticPath != null && this.process != null && !Utils.isEmpty(process.getCommand()))
+            src += String.format("?x-oss-process=image%s", process.getCommand());
+        this.src = new StaticFile(StaticFileType.imageFile, src).toProductString();
+        return this;
+    }
+
+    public UIImage setOriginalSrc(String src) {
+        if (this.staticPath != null && this.process != null && !Utils.isEmpty(process.getCommand()))
+            src += String.format("?x-oss-process=image%s", process.getCommand());
+        this.src = new StaticFile(StaticFileType.imageFile, src).toOriginalString();
         this.src = src;
         return this;
     }
@@ -128,14 +130,6 @@ public class UIImage extends UIComponent implements IHtml {
 
     public void setProcess(AliyunOssProcess process) {
         this.process = process;
-    }
-
-    public boolean isCommomFile() {
-        return isCommomFile;
-    }
-
-    public void setCommomFile(boolean isCommomFile) {
-        this.isCommomFile = isCommomFile;
     }
 
 }
