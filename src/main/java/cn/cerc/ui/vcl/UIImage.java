@@ -42,6 +42,9 @@ public class UIImage extends UIComponent implements IHtml {
         return this;
     }
 
+    /**
+     * 设置公司（产品）专用的资源
+     */
     public UIImage setProductSrc(String src) {
         if (this.staticPath != null && this.process != null && !Utils.isEmpty(process.getCommand()))
             src += String.format("?x-oss-process=image%s", process.getCommand());
@@ -49,6 +52,9 @@ public class UIImage extends UIComponent implements IHtml {
         return this;
     }
 
+    /**
+     * 设置产业别专用的资源
+     */
     public UIImage setOriginalSrc(String src) {
         if (this.staticPath != null && this.process != null && !Utils.isEmpty(process.getCommand()))
             src += String.format("?x-oss-process=image%s", process.getCommand());
