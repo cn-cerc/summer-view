@@ -25,7 +25,10 @@ public class UIImage extends UIComponent implements IHtml {
 
     @Override
     public void output(HtmlWriter html) {
-        this.setCssProperty("src", this.src);
+        String url = this.src;
+        if (this.staticPath != null && this.process != null && !Utils.isEmpty(process.getCommand()))
+            url += String.format("?x-oss-process=image%s", process.getCommand());
+        this.setCssProperty("src", new StaticFile(StaticFileType.imageFile, url).toString());
         html.print("<").print(getRootLabel());
         this.outputPropertys(html);
         html.print("/>");
@@ -36,29 +39,6 @@ public class UIImage extends UIComponent implements IHtml {
     }
 
     public UIImage setSrc(String src) {
-        if (this.staticPath != null && this.process != null && !Utils.isEmpty(process.getCommand()))
-            src += String.format("?x-oss-process=image%s", process.getCommand());
-        this.src = new StaticFile(StaticFileType.imageFile, src).toString();
-        return this;
-    }
-
-    /**
-     * 设置公司（产品）专用的资源
-     */
-    public UIImage setProductSrc(String src) {
-        if (this.staticPath != null && this.process != null && !Utils.isEmpty(process.getCommand()))
-            src += String.format("?x-oss-process=image%s", process.getCommand());
-        this.src = new StaticFile(StaticFileType.imageFile, src).toProductString();
-        return this;
-    }
-
-    /**
-     * 设置产业别专用的资源
-     */
-    public UIImage setOriginalSrc(String src) {
-        if (this.staticPath != null && this.process != null && !Utils.isEmpty(process.getCommand()))
-            src += String.format("?x-oss-process=image%s", process.getCommand());
-        this.src = new StaticFile(StaticFileType.imageFile, src).toOriginalString();
         this.src = src;
         return this;
     }

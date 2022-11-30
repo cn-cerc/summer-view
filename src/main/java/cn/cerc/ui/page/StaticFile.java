@@ -1,6 +1,5 @@
 package cn.cerc.ui.page;
 
-import cn.cerc.db.core.ServerConfig;
 import cn.cerc.db.core.Utils;
 import cn.cerc.mis.core.Application;
 
@@ -8,13 +7,19 @@ public class StaticFile {
     private String fileName;
     private StaticFileType fileType;
     private String fileRoot;
-    private String fileFolder;
     @Deprecated
     private String device = "";
 
     public StaticFile(StaticFileType fileType, String fileName) {
+        this(fileType, fileName, false);
+    }
+
+    public StaticFile(StaticFileType fileType, String fileName, boolean isCommonFile) {
+        super();
         this.fileRoot = Application.getStaticPath();
-        this.fileFolder = "common";
+        if (isCommonFile)
+            this.fileRoot = replace(Application.getStaticPath());
+        //
         this.fileName = fileName;
         this.fileType = fileType;
     }
@@ -25,7 +30,7 @@ public class StaticFile {
             return fileName;
 
         StringBuilder builder = new StringBuilder();
-        builder.append(this.fileRoot).append(String.format("/%s/", this.fileFolder));
+        builder.append(this.fileRoot).append("/");
         builder.append(this.fileName);
         // 取得版本号
         StaticFileVersionImpl impl = Application.getBean(StaticFileVersionImpl.class);
@@ -35,16 +40,6 @@ public class StaticFile {
                 builder.append("?v=").append(version);
         }
         return builder.toString();
-    }
-
-    public String toProductString() {
-        this.fileFolder = ServerConfig.getAppProduct();
-        return this.toString();
-    }
-
-    public String toOriginalString() {
-        this.fileFolder = ServerConfig.getAppIndustry();
-        return this.toString();
     }
 
     public String getFileName() {
@@ -75,60 +70,20 @@ public class StaticFile {
         return new StaticFile(StaticFileType.cssFile, fileName).toString();
     }
 
-    public static String getProductCssFile(String fileName) {
-        return new StaticFile(StaticFileType.cssFile, fileName).toProductString();
-    }
-
-    public static String getOriginalCssFile(String fileName) {
-        return new StaticFile(StaticFileType.cssFile, fileName).toProductString();
-    }
-
     public static String getImage(String fileName) {
         return new StaticFile(StaticFileType.imageFile, fileName).toString();
-    }
-
-    public static String getProductImage(String fileName) {
-        return new StaticFile(StaticFileType.imageFile, fileName).toProductString();
-    }
-
-    public static String getOriginalImage(String fileName) {
-        return new StaticFile(StaticFileType.imageFile, fileName).toOriginalString();
     }
 
     public static String getSummerImage(String fileName) {
         return new StaticFile(StaticFileType.jsFile, fileName).toString();
     }
 
-    public static String getProductSummerImage(String fileName) {
-        return new StaticFile(StaticFileType.jsFile, fileName).toProductString();
-    }
-
-    public static String getOriginalSummerImage(String fileName) {
-        return new StaticFile(StaticFileType.jsFile, fileName).toOriginalString();
-    }
-
     public static String getMenuImage(String fileName) {
         return new StaticFile(StaticFileType.menuImage, fileName).toString();
     }
 
-    public static String getProductMenuImage(String fileName) {
-        return new StaticFile(StaticFileType.menuImage, fileName).toProductString();
-    }
-
-    public static String getOriginalMenuImage(String fileName) {
-        return new StaticFile(StaticFileType.menuImage, fileName).toOriginalString();
-    }
-
     public static String getJsFile(String fileName) {
         return new StaticFile(StaticFileType.jsFile, fileName).toString();
-    }
-
-    public static String getProductJsFile(String fileName) {
-        return new StaticFile(StaticFileType.jsFile, fileName).toProductString();
-    }
-
-    public static String getOriginalJsFile(String fileName) {
-        return new StaticFile(StaticFileType.jsFile, fileName).toOriginalString();
     }
 
     @Deprecated
