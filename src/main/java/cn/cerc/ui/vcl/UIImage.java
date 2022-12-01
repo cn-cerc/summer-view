@@ -59,7 +59,6 @@ public class UIImage extends UIComponent implements IHtml {
         if (this.staticPath != null && this.process != null && !Utils.isEmpty(process.getCommand()))
             src += String.format("?x-oss-process=image%s", process.getCommand());
         this.src = new StaticFile(StaticFileType.imageFile, src).toOriginalString();
-        this.src = src;
         return this;
     }
 
