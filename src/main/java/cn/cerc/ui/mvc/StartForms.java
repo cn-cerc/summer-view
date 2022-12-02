@@ -85,6 +85,8 @@ public class StartForms implements Filter {
 
         // 1、静态文件直接输出
         if (AppStaticFileDefault.getInstance().isStaticFile(uri)) {
+            // 静态资源允许跨域访问
+            resp.setHeader("Access-Control-Allow-Origin", "*");
             if (uri.contains(".well-known/")) {
                 request.getServletContext().getRequestDispatcher(uri).forward(request, response);
                 return;
