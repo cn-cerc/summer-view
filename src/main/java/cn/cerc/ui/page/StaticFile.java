@@ -140,16 +140,6 @@ public class StaticFile {
         return device;
     }
 
-    @Deprecated
-    public String getUrl(String version) {
-        String staticPath = Application.getStaticPath();
-        String[] args = getFileName().split("\\.");
-        if (device == null || "".equals(device))
-            return String.format("%s%s.%s?v=%s", staticPath, args[0], args[1], version);
-        else
-            return String.format("%s%s-%s.%s?v=%s", staticPath, args[0], device, args[1], version);
-    }
-
     public StaticFile setDevice(String device) {
         this.device = device;
         return this;

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.cerc.db.core.ClassConfig;
-import cn.cerc.mis.cdn.CDN;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.SummerUI;
 import cn.cerc.ui.core.UIComponent;
@@ -28,9 +27,8 @@ public class UIScript extends UIComponent {
     @Override
     public void beginOutput(HtmlWriter html) {
         if (this.src != null) {
-            String version = config.getString(CDN.BROWSER_CACHE_VERSION, "1.0.0.0");
             StaticFile sf = new StaticFile(StaticFileType.jsFile, this.src);
-            this.setCssProperty("src", sf.getUrl(version));
+            this.setCssProperty("src", sf.toString());
         } else {
             this.setCssProperty("src", null);
         }

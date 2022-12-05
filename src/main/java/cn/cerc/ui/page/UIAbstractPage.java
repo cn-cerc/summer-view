@@ -11,7 +11,6 @@ import cn.cerc.db.core.ClassConfig;
 import cn.cerc.db.core.Utils;
 import cn.cerc.db.redis.RedisRecord;
 import cn.cerc.mis.SummerMIS;
-import cn.cerc.mis.cdn.CDN;
 import cn.cerc.mis.core.AppClient;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.mis.core.IForm;
@@ -74,13 +73,12 @@ public abstract class UIAbstractPage extends UIComponent implements IPage, Suppo
         out.println(
                 "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\"/>");
         // 加入脚本文件
-        String version = config.getString(CDN.BROWSER_CACHE_VERSION, "1.0.0.0");
         for (StaticFile file : getJsFiles()) {
-            out.println(String.format("<script src=\"%s\"></script>", file.getUrl(version)));
+            out.println(String.format("<script src=\"%s\"></script>", file.toString()));
         }
         // 加入样式文件
         for (StaticFile file : cssFiles) {
-            out.println(String.format("<link href=\"%s\" rel=\"stylesheet\">", file.getUrl(version)));
+            out.println(String.format("<link href=\"%s\" rel=\"stylesheet\">", file.toString()));
         }
 
         if (defineHead != null) {
