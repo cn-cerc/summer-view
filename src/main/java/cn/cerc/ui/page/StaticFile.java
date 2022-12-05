@@ -42,12 +42,12 @@ public class StaticFile {
     }
 
     public String toProductString() {
-        this.bucket = ServerConfig.getAppProduct();
+        this.bucket = "/" + ServerConfig.getAppProduct() + "/";
         return this.toString();
     }
 
     public String toOriginalString() {
-        this.bucket = ServerConfig.getAppIndustry();
+        this.bucket = "/" + ServerConfig.getAppIndustry() + "/";
         return this.toString();
     }
 
