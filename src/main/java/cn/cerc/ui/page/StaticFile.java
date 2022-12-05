@@ -14,7 +14,13 @@ public class StaticFile {
 
     public StaticFile(StaticFileType fileType, String fileName) {
         this.fileRoot = Application.getStaticPath();
-        this.fileFolder = "common";
+
+        // 表示开启了cdn或者调用静态仓库
+        if (fileRoot.startsWith("http"))
+            this.fileFolder = "common";
+        else
+            this.fileFolder = "";
+
         this.fileName = fileName;
         this.fileType = fileType;
     }
@@ -24,8 +30,12 @@ public class StaticFile {
         if (fileName.toLowerCase().startsWith("http"))
             return fileName;
 
+        String path = "/";
+        if (!Utils.isEmpty(this.fileFolder))
+            path = String.format("/%s/", this.fileFolder);
+
         StringBuilder builder = new StringBuilder();
-        builder.append(this.fileRoot).append(String.format("/%s/", this.fileFolder));
+        builder.append(this.fileRoot).append(path);// 在节点 common/cdn 之后加上 /
         builder.append(this.fileName);
         // 取得版本号
         StaticFileVersionImpl impl = Application.getBean(StaticFileVersionImpl.class);

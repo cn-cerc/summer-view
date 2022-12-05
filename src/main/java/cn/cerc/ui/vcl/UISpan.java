@@ -32,11 +32,6 @@ public class UISpan extends UIComponent implements IHtml {
         return text.getText();
     }
 
-    public UISpan setText(String text) {
-        this.text.setText(text);
-        return this;
-    }
-
     public UISpan setText(String format, Object... args) {
         this.text.setText(String.format(format, args));
         return this;
