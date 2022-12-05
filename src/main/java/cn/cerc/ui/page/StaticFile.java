@@ -5,38 +5,32 @@ import cn.cerc.db.core.Utils;
 import cn.cerc.mis.core.Application;
 
 public class StaticFile {
-    private String fileName;
+    private String object;
     private StaticFileType fileType;
-    private String fileRoot;
-    private String fileFolder;
+    private String endpoint;
+    private String bucket = "/";
     @Deprecated
     private String device = "";
 
-    public StaticFile(StaticFileType fileType, String fileName) {
-        this.fileRoot = Application.getStaticPath();
-
-        // 表示开启了cdn或者调用静态仓库
-        if (fileRoot.startsWith("http"))
-            this.fileFolder = "common";
-        else
-            this.fileFolder = "";
-
-        this.fileName = fileName;
+    public StaticFile(StaticFileType fileType, String object) {
         this.fileType = fileType;
+        // 表示开启了 CDN 或者 静态仓库
+        this.endpoint = Application.getStaticPath();
+        if (endpoint.startsWith("http"))
+            this.bucket = "/common/";
+        this.object = object;
     }
 
     @Override
     public String toString() {
-        if (fileName.toLowerCase().startsWith("http"))
-            return fileName;
-
-        String path = "/";
-        if (!Utils.isEmpty(this.fileFolder))
-            path = String.format("/%s/", this.fileFolder);
+        // 文件自带 HTTP 网址则直接返回
+        if (object.toLowerCase().startsWith("http"))
+            return object;
 
         StringBuilder builder = new StringBuilder();
-        builder.append(this.fileRoot).append(path);// 在节点 common/cdn 之后加上 /
-        builder.append(this.fileName);
+        builder.append(this.endpoint).append(this.bucket)
+                .append(this.object);
+
         // 取得版本号
         StaticFileVersionImpl impl = Application.getBean(StaticFileVersionImpl.class);
         if (impl != null) {
@@ -48,25 +42,25 @@ public class StaticFile {
     }
 
     public String toProductString() {
-        this.fileFolder = ServerConfig.getAppProduct();
+        this.bucket = ServerConfig.getAppProduct();
         return this.toString();
     }
 
     public String toOriginalString() {
-        this.fileFolder = ServerConfig.getAppIndustry();
+        this.bucket = ServerConfig.getAppIndustry();
         return this.toString();
     }
 
     public String getFileName() {
-        return fileName;
+        return object;
     }
 
     protected String getFileRoot() {
-        return fileRoot;
+        return endpoint;
     }
 
     protected void setFileRoot(String fileRoot) {
-        this.fileRoot = fileRoot;
+        this.endpoint = fileRoot;
     }
 
     private static String replace(String path) {
