@@ -5,6 +5,7 @@ import cn.cerc.mis.cdn.CDN;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.SummerUI;
 import cn.cerc.ui.core.UIComponent;
+import cn.cerc.ui.page.StaticFile;
 
 public class CodeNameField extends AbstractField {
     private static final ClassConfig config = new ClassConfig(CodeNameField.class, SummerUI.ID);
@@ -81,7 +82,7 @@ public class CodeNameField extends AbstractField {
             html.print("<span>");
             if (this.getDialog() != null && this.getDialog().isOpen()) {
                 html.print("<a href=\"%s\">", getUrl(this.getDialog()));
-                html.print("<img src=\"%s\">", CDN.get(config.getClassProperty("icon", "")));
+                html.print("<img src=\"%s\">", CDN.get(StaticFile.getImage(config.getClassProperty("icon", ""))));
                 html.print("</a>");
             }
             html.print("</span>");
