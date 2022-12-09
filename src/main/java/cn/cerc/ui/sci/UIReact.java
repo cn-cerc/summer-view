@@ -1,15 +1,22 @@
 package cn.cerc.ui.sci;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import cn.cerc.db.core.DataRow;
+import cn.cerc.db.core.FieldMeta;
+import cn.cerc.mis.core.Application;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
+import cn.cerc.ui.page.StaticFile;
 import cn.cerc.ui.vcl.UIDiv;
 
 public class UIReact extends UIComponent {
     private UIDiv content;
     private UIScriptContent script;
+    private Set<String> reactList = new HashSet<>();
 
     public UIReact(UIComponent owner, String id) {
         super(owner);
@@ -18,31 +25,10 @@ public class UIReact extends UIComponent {
         this.script = new UIScriptContent(this);
         this.script.setRootLabel("script");
         this.script.setCssProperty("type", "text/babel");
-//        addScriptFile("https://cdn.bootcdn.net/ajax/libs/react/16.13.1/umd/react.production.min.js");
-//        addScriptFile("https://cdn.bootcdn.net/ajax/libs/react-dom/16.13.1/umd/react-dom.production.min.js");
-//        addScriptFile("https://cdn.bootcdn.net/ajax/libs/babel-standalone/7.0.0-beta.3/babel.min.js");
     }
-//
-//    private UIReact addScriptFile(String fileName) {
-//        UIComponent root = this.getOwner();
-//        while (root != null) {
-//            if (root instanceof SupportScriptFile) {
-//                SupportScriptFile page = (SupportScriptFile) root;
-//                page.addScriptFile(fileName);
-//                break;
-//            }
-//            root = root.getOwner();
-//        }
-//        return this;
-//    }
 
     public UIReact add(String text) {
         this.script.add(text);
-        return this;
-    }
-
-    public UIReact addRender(String reactText) {
-        this.add("ReactDOM.render(%s, document.getElementById(\"%s\"));", reactText, this.getId());
         return this;
     }
 
@@ -58,6 +44,12 @@ public class UIReact extends UIComponent {
 
     @Override
     public void beginOutput(HtmlWriter html) {
+        if (this.reactList.size() > 0) {
+            for (String react : this.reactList) {
+                html.println("<script src='%s'></script>",
+                        StaticFile.getProductJsFile(Application.getAuiPath(String.format("aui-%s.js", react))));
+            }
+        }
         this.content.setId(this.getId());
         super.beginOutput(html);
     }
@@ -84,9 +76,36 @@ public class UIReact extends UIComponent {
 
     }
 
-    public UIReact addReact(String value, Object... args) {
-        String react = String.format(value, args);
-        this.add("ReactDOM.render(%s, document.getElementById(\"%s\"));", react, this.getId());
+    public UIReact addReact(String name) {
+        this.add("ReactDOM.render(<aui.%s />, document.getElementById(\"%s\"))", name, this.getId());
+        reactList.add(name);
+        return this;
+    }
+
+    public UIReact addReact(String name, DataRow row) {
+        String props = "";
+        for (FieldMeta meta : row.fields().getItems()) {
+            Object value = row.getValue(meta.code());
+            if (value instanceof String)
+                value = "'" + value + "'";
+            props += String.format("%s={%s} ", meta.code(), value);
+        }
+        this.add("ReactDOM.render(<aui.%s %s/>, document.getElementById(\"%s\"))", name, props, this.getId());
+        reactList.add(name);
+        return this;
+    }
+
+    public UIReact addReact(String name, String className, DataRow row) {
+        String props = "";
+        for (FieldMeta meta : row.fields().getItems()) {
+            Object value = row.getValue(meta.code());
+            if (value instanceof String)
+                value = "'" + value + "'";
+            props += String.format("%s={%s} ", meta.code(), value);
+        }
+        this.add("ReactDOM.render(<aui.%s.%s %s/>, document.getElementById(\"%s\"))", name, className, props,
+                this.getId());
+        reactList.add(name);
         return this;
     }
 
