@@ -13,6 +13,7 @@ import cn.cerc.db.core.DataRow;
 import cn.cerc.db.core.DataSet;
 import cn.cerc.db.core.FieldMeta;
 import cn.cerc.db.core.FieldMeta.FieldKind;
+import cn.cerc.db.core.Utils;
 import cn.cerc.db.editor.OnGetText;
 import cn.cerc.mis.ado.UsedEnum;
 import cn.cerc.ui.vcl.UIInput;
@@ -111,12 +112,23 @@ public class UIDataStyle implements UIDataStyleImpl {
 
     @SuppressWarnings("rawtypes")
     public OnGetText getEnum(Class<? extends Enum> clazz) {
+        return getEnum(clazz, false);
+    }
+
+    @SuppressWarnings("rawtypes")
+    public OnGetText getEnum(Class<? extends Enum> clazz, boolean addAll) {
         return data -> {
             String result = data.getEnum(clazz).name();
             var style = new UISelectDataStyle(this, data, this.inGrid);
-            for (var item : clazz.getEnumConstants())
+            if (addAll)
+                style.put("", "ALL");
+            for (var item : clazz.getEnumConstants()) {
                 style.put("" + item.ordinal(), item.name());
-            style.setSelected("" + data.getInt());
+            }
+            if (addAll && Utils.isEmpty(data.getString()))
+                style.setSelected("");
+            else
+                style.setSelected("" + data.getInt());
             return style.getText(result);
         };
     }
