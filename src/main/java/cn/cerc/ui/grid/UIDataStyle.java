@@ -112,14 +112,7 @@ public class UIDataStyle implements UIDataStyleImpl {
 
     @SuppressWarnings("rawtypes")
     public OnGetText getEnum(Class<? extends Enum> clazz) {
-        return data -> {
-            String result = data.getEnum(clazz).name();
-            var style = new UISelectDataStyle(this, data, this.inGrid);
-            for (var item : clazz.getEnumConstants())
-                style.put("" + item.ordinal(), item.name());
-            style.setSelected("" + data.getInt());
-            return style.getText(result);
-        };
+        return getEnum(clazz, false);
     }
 
     @SuppressWarnings("rawtypes")
@@ -264,12 +257,7 @@ public class UIDataStyle implements UIDataStyleImpl {
             throw new RuntimeException("没有找到dataSet");
         }
         var ds = dataSet;
-        return this.addField("it")
-                .setWidth(2)
-                .setAlignCenter()
-                .field()
-                .onGetText(data -> "" + ds.recNo())
-                .setName("序");
+        return this.addField("it").setWidth(2).setAlignCenter().field().onGetText(data -> "" + ds.recNo()).setName("序");
     }
 
     public UIDataStyle setDataRow(DataRow dataRow) {
