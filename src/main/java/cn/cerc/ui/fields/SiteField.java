@@ -72,8 +72,8 @@ public class SiteField extends AbstractField {
             if (key.equals(current))
                 initialValue = items.get(key);
         }
-        html.print("<input id=\"%s\" type=\"text\" name=\"%s\" value=\"%s\" />", this.getId(),
-                this.getId(), initialValue);
+        html.print("<input id=\"%s\" type=\"text\" name=\"%s\" value=\"%s\" placeholder=\"%s\" />", this.getId(),
+                this.getId(), initialValue, this.getPlaceholder());
         if (this.size > 0) {
             html.print(" size=\"%s\"", this.getSize());
         }
