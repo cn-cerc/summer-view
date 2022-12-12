@@ -3,6 +3,8 @@ package cn.cerc.ui.fields;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.apache.commons.lang.RandomStringUtils;
+
 import cn.cerc.db.core.Utils;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
@@ -64,8 +66,14 @@ public class SiteField extends AbstractField {
             current = this.getValue();
         }
         html.println("<label for=\"%s\">%s</label>", this.getId(), this.getName() + "：");
-        html.print("<div class=\"%s\">", this.getId(), this.getId());
-        html.print("<input id=\"%s\" placeholder=\"请输入地址\" type=\"text\" name=\"%s\"/>", this.getId(), this.getId());
+        html.print("<div class=\"%s\">", this.getId());
+        String initialValue = "";
+        for (String key : items.keySet()) {
+            if (key.equals(current))
+                initialValue = items.get(key);
+        }
+        html.print("<input id=\"%s\" placeholder=\"请输入地址\" type=\"text\" name=\"%s\" value=\"%s\" />", this.getId(),
+                this.getId(), initialValue);
         if (this.size > 0) {
             html.print(" size=\"%s\"", this.getSize());
         }
@@ -78,12 +86,7 @@ public class SiteField extends AbstractField {
         html.print("<div>");
         for (String key : items.keySet()) {
             String value = items.get(key);
-            html.print("<span value=\"%s\"", key);
-            if (key.equals(current)) {
-                html.print(" selected");
-            }
-            html.print(">");
-            html.println(String.format("%s</span>", value));
+            html.print("<span value=\"%s\" >%s</span>", key, value);
         }
         html.println("</div>");
         html.println("</div>");
