@@ -1,0 +1,64 @@
+package cn.cerc.ui.form;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class UIDialogField {
+    private String dialogFunc;
+    private String inputId;
+    private String text;
+    private List<String> params = new ArrayList<>();
+
+    @Override
+    public String toString() {
+        if (getDialogFunc() == null) {
+            throw new RuntimeException("dialogfun is null");
+        }
+        if (inputId == null) {
+            throw new RuntimeException("inputId is null");
+        }
+        StringBuilder build = new StringBuilder();
+        build.append(getDialogFunc());
+        build.append("(");
+        build.append(inputId);
+
+        for (String param : params) {
+            build.append(",");
+            build.append(param);
+        }
+        build.append(")");
+        return build.toString();
+    }
+
+    public String getDialogFunc() {
+        return dialogFunc;
+    }
+
+    public UIDialogField setDialogFunc(String dialogFunc) {
+        this.dialogFunc = dialogFunc;
+        return this;
+    }
+
+    public String getInputId() {
+        return inputId;
+    }
+
+    public UIDialogField setInputId(String inputId) {
+        this.inputId = inputId;
+        return this;
+    }
+
+    public UIDialogField add(String param) {
+        params.add(param);
+        return this;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public UIDialogField setText(String text) {
+        this.text = text;
+        return this;
+    }
+}
