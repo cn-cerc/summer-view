@@ -26,10 +26,10 @@ public class UISelectFiled extends UIOptionField {
     @Override
     public void writeContent(HtmlWriter html) {
         html.println("<select>");
-        for (String key : options.keySet()) {
-            String value = options.get(key);
+        for (String key : getOptions().keySet()) {
+            String value = getOptions().get(key);
             html.print("<option value=\"%s\"", value);
-            if (this.getRecord().getString(this.getCode()).equals(value))
+            if (this.current().getString(this.getCode()).equals(value))
                 html.print(" selected");
             html.print("%s</option>", key);
         }

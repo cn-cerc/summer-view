@@ -26,15 +26,14 @@ public class UIRrdiaField extends UIOptionField {
     @Override
     public void writeContent(HtmlWriter html) {
         int index = 1;
-        for (String key : options.keySet()) {
-            String value = options.get(key);
+        for (String key : getOptions().keySet()) {
+            String value = getOptions().get(key);
             String id = this.getCode() + index;
             html.print("<input type='%s' name='%s'", UIInput.TYPE_RADIO, this.getCode());
-            if (this.getRecord().getString(this.getCode()).equals(value))
+            if (this.current().getString(this.getCode()).equals(value))
                 html.print(" checked");
             html.print(" value='%s' id='%s' />", value, id);
             html.print("<label for='%s'>%s</label>", id, key);
-            html.print("%s</option>", key);
             index++;
         }
     }

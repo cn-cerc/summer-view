@@ -7,7 +7,7 @@ import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 
 public class UIOptionField extends UIAbstractField {
-    public Map<String, String> options = new LinkedHashMap<>();
+    private Map<String, String> options = new LinkedHashMap<>();
     private Boolean inSelect;
 
     public UIOptionField(UIComponent owner, String code) {
@@ -24,15 +24,12 @@ public class UIOptionField extends UIAbstractField {
 
     public UIOptionField(UIComponent owner, String code, String name, int width, Map<String, String> options) {
         super(owner, code, name, width);
-        this.options = options;
+        this.setOptions(options);
     }
 
     public UIOptionField(UIComponent owner, String code, String name, int width, Enum<?> enums) {
         super(owner, code, name, width);
-        Enum<?>[] items = enums.getClass().getEnumConstants();
-        for (Enum<?> item : items) {
-            this.options.put(item.name(), "" + item.ordinal());
-        }
+        this.setEnum(enums);
     }
 
     @Override
@@ -44,7 +41,25 @@ public class UIOptionField extends UIAbstractField {
         return inSelect;
     }
 
-    public void setInSelect(boolean inSelect) {
+    public UIOptionField setInSelect(boolean inSelect) {
         this.inSelect = inSelect;
+        return this;
+    }
+
+    public Map<String, String> getOptions() {
+        return options;
+    }
+
+    public UIOptionField setOptions(Map<String, String> options) {
+        this.options = options;
+        return this;
+    }
+
+    public UIOptionField setEnum(Enum<?> enums) {
+        Enum<?>[] items = enums.getClass().getEnumConstants();
+        for (Enum<?> item : items) {
+            this.getOptions().put(item.name(), "" + item.ordinal());
+        }
+        return this;
     }
 }

@@ -1,6 +1,7 @@
 package cn.cerc.ui.form;
 
 import cn.cerc.db.core.DataRow;
+import cn.cerc.db.core.DataSource;
 import cn.cerc.db.core.Utils;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
@@ -19,21 +20,34 @@ public class UIAbstractField extends UIComponent {
     private UIDialogField dialog;
 
     // 数据源
-    private DataRow record;
+    private DataSource source;
+
+    public UIAbstractField(UIComponent owner) {
+        super(owner);
+        // 查找最近的数据源
+        UIComponent root = owner;
+        while (root != null) {
+            if (root instanceof DataSource) {
+                this.source = (DataSource) root;
+                break;
+            }
+            root = root.getOwner();
+        }
+    }
 
     public UIAbstractField(UIComponent owner, String code) {
-        super(owner);
+        this(owner);
         this.setCode(code);
     }
 
     public UIAbstractField(UIComponent owner, String code, String name) {
-        super(owner);
+        this(owner);
         this.setCode(code);
         this.setName(name);
     }
 
     public UIAbstractField(UIComponent owner, String code, String name, int width) {
-        super(owner);
+        this(owner);
         this.setCode(code);
         this.setName(name);
         this.setWidth(width);
@@ -41,14 +55,17 @@ public class UIAbstractField extends UIComponent {
 
     @Override
     public void output(HtmlWriter html) {
-        html.println("<div class='formEdit'>");
+        if (this.source == null) {
+            throw new RuntimeException("source is null.");
+        }
+        html.print("<div class='formEdit'>");
         if (!Utils.isEmpty(this.getName())) {
             if (this.require)
                 html.print("<span class='requireMark'>*</span>");
             html.print("<label for='%s'>%s</label>", this.getCode(), this.getName());
         }
         this.writeContent(html);
-        html.print("</div>");
+        html.println("</div>");
         if (this.dialog != null) {
             html.println("<span class='dialogSpan' onclick='%s'>%s</span>", this.dialog.toString(),
                     this.dialog.getText());
@@ -86,13 +103,8 @@ public class UIAbstractField extends UIComponent {
         return this;
     }
 
-    public DataRow getRecord() {
-        return record;
-    }
-
-    public UIAbstractField setRecord(DataRow record) {
-        this.record = record;
-        return this;
+    public DataRow current() {
+        return source != null ? source.current() : new DataRow();
     }
 
     public boolean isRequire() {
@@ -106,7 +118,7 @@ public class UIAbstractField extends UIComponent {
 
     public UIAbstractField setDialog(String dialogFuction) {
         if (this.dialog == null)
-            this.dialog = new UIDialogField().setInputId(this.code);
+            this.dialog = new UIDialogField(this.code, dialogFuction);
         this.dialog.setDialogFunc(dialogFuction);
         this.dialog.setInputId(this.code);
         return this;
@@ -122,7 +134,7 @@ public class UIAbstractField extends UIComponent {
 
     public UIAbstractField setDialogText(String text) {
         if (this.dialog == null)
-            this.dialog = new UIDialogField().setInputId(this.code);
+            this.dialog = new UIDialogField(this.code);
         this.dialog.setText(text);
         return this;
     }

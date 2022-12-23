@@ -19,9 +19,9 @@ public class UIBooleanField extends UIAbstractField {
 
     @Override
     public void writeContent(HtmlWriter html) {
-        html.println("<span class='switchSpan' onclick='switchToogle(this)'></span>");
-        html.println("<input type='%s' name='%s' value='%s'/>", UIInput.TYPE_CHECKBOX, this.getCode(),
-                this.getRecord().getString(this.getCode()));
+        html.print("<span class='switchSpan' onclick='switchToogle(this)'></span>");
+        html.print("<input type='%s' name='%s' id='%s' value='1' checked='%s'/>", UIInput.TYPE_CHECKBOX, this.getCode(),
+                this.getCode(), this.current().getBoolean(this.getCode()));
     }
 
 }

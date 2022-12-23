@@ -8,14 +8,20 @@ public class UIDialogField {
     private String inputId;
     private String text;
     private List<String> params = new ArrayList<>();
+    
+    public UIDialogField(String inputId) {
+        this.inputId = inputId;
+    }
+    
+    public UIDialogField(String inputId, String dialogfun) {
+        this.inputId = inputId;
+        this.dialogFunc = dialogfun;
+    }
 
     @Override
     public String toString() {
         if (getDialogFunc() == null) {
             throw new RuntimeException("dialogfun is null");
-        }
-        if (inputId == null) {
-            throw new RuntimeException("inputId is null");
         }
         StringBuilder build = new StringBuilder();
         build.append(getDialogFunc());

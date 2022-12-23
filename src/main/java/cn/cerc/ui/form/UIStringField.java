@@ -22,8 +22,8 @@ public class UIStringField extends UIAbstractField {
 
     @Override
     public void writeContent(HtmlWriter html) {
-        html.print("<input type='%s' name='%s' value='%s'>", this.getInputType(), this.getCode(),
-                this.getRecord().getString(this.getCode()));
+        html.print("<input type='%s' name='%s' id='%s' value='%s'>", this.getInputType(), this.getCode(),
+                this.getCode(), this.current().getString(this.getCode()));
     }
 
     public String getInputType() {
