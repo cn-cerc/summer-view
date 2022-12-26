@@ -48,7 +48,7 @@ public class UIImage extends UIComponent implements IHtml {
     public UIImage setProductSrc(String src) {
         if (this.staticPath != null && this.process != null && !Utils.isEmpty(process.getCommand()))
             src += String.format("?x-oss-process=image%s", process.getCommand());
-        this.src = new StaticFile(StaticFileType.imageFile, src).toProductString();
+        this.src = new StaticFile(StaticFileType.productImage, src).toProductString();
         return this;
     }
 

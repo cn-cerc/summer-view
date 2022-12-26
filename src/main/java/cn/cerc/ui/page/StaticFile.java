@@ -28,8 +28,7 @@ public class StaticFile {
             return object;
 
         StringBuilder builder = new StringBuilder();
-        builder.append(this.endpoint).append(this.bucket)
-                .append(this.object);
+        builder.append(this.endpoint).append(this.bucket).append(this.object);
 
         // 取得版本号
         StaticFileVersionImpl impl = Application.getBean(StaticFileVersionImpl.class);
@@ -92,7 +91,7 @@ public class StaticFile {
     }
 
     public static String getProductImage(String fileName) {
-        return new StaticFile(StaticFileType.imageFile, fileName).toProductString();
+        return new StaticFile(StaticFileType.productImage, fileName).toProductString();
     }
 
     public static String getOriginalImage(String fileName) {
@@ -100,15 +99,15 @@ public class StaticFile {
     }
 
     public static String getSummerImage(String fileName) {
-        return new StaticFile(StaticFileType.jsFile, fileName).toString();
+        return new StaticFile(StaticFileType.summerImage, fileName).toString();
     }
 
     public static String getProductSummerImage(String fileName) {
-        return new StaticFile(StaticFileType.jsFile, fileName).toProductString();
+        return new StaticFile(StaticFileType.summerImage, fileName).toProductString();
     }
 
     public static String getOriginalSummerImage(String fileName) {
-        return new StaticFile(StaticFileType.jsFile, fileName).toOriginalString();
+        return new StaticFile(StaticFileType.summerImage, fileName).toOriginalString();
     }
 
     public static String getMenuImage(String fileName) {
