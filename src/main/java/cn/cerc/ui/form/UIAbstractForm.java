@@ -7,12 +7,12 @@ import cn.cerc.db.core.DataSet;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.SearchSource;
 import cn.cerc.ui.core.UIComponent;
-import cn.cerc.ui.fields.AbstractField;
 import cn.cerc.ui.mvc.AbstractPage;
+import cn.cerc.ui.vcl.UIButton;
 
 public class UIAbstractForm extends UIComponent implements SearchSource {
     private DataSet dataSet;
-    protected List<AbstractField> fields = new ArrayList<>();
+    protected List<UIAbstractField> fields = new ArrayList<>();
     private String submit;
     private boolean readAll;
     private AbstractPage page;
@@ -20,8 +20,9 @@ public class UIAbstractForm extends UIComponent implements SearchSource {
     public UIAbstractForm(UIComponent owner, AbstractPage page) {
         super(owner);
         this.page = page;
+        this.dataSet = new DataSet();
+        dataSet.append();
         this.setRootLabel("form");
-        this.setDataSet(new DataSet());
     }
 
     public UIAbstractForm setAction(String action) {
@@ -33,12 +34,10 @@ public class UIAbstractForm extends UIComponent implements SearchSource {
     public void output(HtmlWriter html) {
         this.beginOutput(html);
         html.println("<ul>");
-        for (var component : this.getComponents()) {
-            if (component instanceof UIAbstractField) {
-                html.println("<li>");
-                component.output(html);
-                html.println("</li>");
-            }
+        for (UIAbstractField field : fields) {
+            html.println("<li>");
+            field.output(html);
+            html.println("</li>");
         }
         html.println("</ul>");
         this.endOutput(html);
@@ -56,8 +55,8 @@ public class UIAbstractForm extends UIComponent implements SearchSource {
 
     @Override
     public UIAbstractForm addComponent(UIComponent child) {
-        if (child instanceof AbstractField) {
-            fields.add((AbstractField) child);
+        if (child instanceof UIAbstractField) {
+            fields.add((UIAbstractField) child);
         } else {
             super.addComponent(child);
         }
@@ -70,7 +69,7 @@ public class UIAbstractForm extends UIComponent implements SearchSource {
         }
 
         submit = page.getRequest().getParameter("opera");
-        for (AbstractField field : this.fields) {
+        for (UIAbstractField field : this.fields) {
             field.updateField();
         }
 
@@ -80,7 +79,7 @@ public class UIAbstractForm extends UIComponent implements SearchSource {
 
     @Override
     public void updateValue(String id, String code) {
-        String val = page.getRequest().getParameter(id);
+        String val = page.getRequest().getParameter(code);
         if (submit != null) {
             dataSet.setValue(code, val);
         } else {
@@ -88,6 +87,15 @@ public class UIAbstractForm extends UIComponent implements SearchSource {
                 dataSet.setValue(code, val);
             }
         }
+    }
+
+    public UIButton addButton(String text, String name, String value, String type) {
+        UIButton button = new UIButton(this);
+        button.setText(text);
+        button.setName(name);
+        button.setType(type);
+        button.setValue(value);
+        return button;
     }
 
 }

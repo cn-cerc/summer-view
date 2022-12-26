@@ -4,6 +4,7 @@ import cn.cerc.db.core.DataRow;
 import cn.cerc.db.core.DataSource;
 import cn.cerc.db.core.Utils;
 import cn.cerc.mis.core.HtmlWriter;
+import cn.cerc.ui.core.SearchSource;
 import cn.cerc.ui.core.UIComponent;
 
 public class UIAbstractField extends UIComponent {
@@ -137,5 +138,14 @@ public class UIAbstractField extends UIComponent {
             this.dialog = new UIDialogField(this.code);
         this.dialog.setText(text);
         return this;
+    }
+
+    public void updateField() {
+        this.updateValue(this.getId(), this.code);
+    }
+
+    public void updateValue(String id, String code) {
+        if (source instanceof SearchSource)
+            ((SearchSource) source).updateValue(id, code);
     }
 }

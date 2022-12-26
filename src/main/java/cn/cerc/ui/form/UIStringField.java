@@ -1,5 +1,6 @@
 package cn.cerc.ui.form;
 
+import cn.cerc.db.core.DataRow;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.vcl.UIInput;
@@ -22,6 +23,8 @@ public class UIStringField extends UIAbstractField {
 
     @Override
     public void writeContent(HtmlWriter html) {
+        DataRow row = this.current();
+        System.out.println(row);
         html.print("<input type='%s' name='%s' id='%s' value='%s'>", this.getInputType(), this.getCode(),
                 this.getCode(), this.current().getString(this.getCode()));
     }
