@@ -75,18 +75,18 @@ public class SiteField extends AbstractField {
         String placeholder = "";
         if (this.getPlaceholder() != null)
             placeholder = this.getPlaceholder();
-        html.print("<input id=\"%s\" type=\"text\" name=\"%s\" value=\"%s\" placeholder=\"%s\" />", this.getId(),
+        html.print("<input id=\"%s\" type=\"text\" name=\"%s\" value=\"%s\" placeholder=\"%s\" ", this.getId(),
                 this.getId(), initialValue, placeholder);
         if (this.size > 0) {
             html.print(" size=\"%s\"", this.getSize());
         }
         if (this.readonly()) {
-            html.print(" disabled");
+            html.print(" readonly");
         }
         if (this.getCssStyle() != null) {
             html.print(" style=\"%s\"", this.getCssStyle());
         }
-        html.print("<div>");
+        html.print("/><div>");
         for (String key : items.keySet()) {
             String value = items.get(key);
             html.print("<span value=\"%s\" >%s</span>", key, value);
