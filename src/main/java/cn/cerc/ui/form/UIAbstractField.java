@@ -9,7 +9,10 @@ import cn.cerc.ui.core.UIComponent;
 
 public class UIAbstractField extends UIComponent {
     public int MAX_GRID_NUM = 12;
-    // 栅格布局宽度，默认为4（三分之一）
+    public int MIN_GRID_NUM = 1;
+    // 栅格布局外部宽度，默认为4（三分之一）
+    private int outWidth = 4;
+    // 栅格布局内容宽度，默认为4（三分之一）
     private int width = 4;
     // 表单元素标题
     private String name;
@@ -18,7 +21,9 @@ public class UIAbstractField extends UIComponent {
     // 是否必填
     private boolean require = false;
     // 开窗
-    private UIDialogField dialog;
+    protected UIDialogField dialog;
+    // 是否只读
+    private boolean readonly = false;
 
     // 数据源
     private DataSource source;
@@ -59,22 +64,48 @@ public class UIAbstractField extends UIComponent {
         if (this.source == null) {
             throw new RuntimeException("source is null.");
         }
-        html.print("<div class='formEdit'>");
+        html.print("<div class='formEdit' role='col%s'>", this.width);
         if (!Utils.isEmpty(this.getName())) {
+            html.print("<label for='%s'>", this.getCode());
             if (this.require)
                 html.print("<span class='requireMark'>*</span>");
-            html.print("<label for='%s'>%s</label>", this.getCode(), this.getName());
+            html.print("%s：</label>", this.getName());
         }
         this.writeContent(html);
-        html.println("</div>");
         if (this.dialog != null) {
-            html.println("<span class='dialogSpan' onclick='%s'>%s</span>", this.dialog.toString(),
+            html.println("<span class='dialogSpan' onclick=\"%s\">%s</span>", this.dialog.toString(),
                     this.dialog.getText());
         }
+        html.println("</div>");
     }
 
     public void writeContent(HtmlWriter html) {
         html.print("UIAbstractColumn not support.");
+    }
+
+    public int getOutWidth() {
+        return outWidth;
+    }
+
+    public UIAbstractField setOutWidth(int width) {
+        int width_ = width;
+        if (width_ > MAX_GRID_NUM)
+            width_ = MAX_GRID_NUM;
+        if (width_ < MIN_GRID_NUM)
+            width_ = MIN_GRID_NUM;
+        this.outWidth = width_;
+        return this;
+    }
+
+    public UIAbstractField setLineWidth(int width) {
+        this.setOutWidth(MAX_GRID_NUM);
+        this.setWidth(width);
+        return this;
+    }
+
+    public UIAbstractField setFullLine() {
+        this.setLineWidth(MAX_GRID_NUM);
+        return this;
     }
 
     public int getWidth() {
@@ -82,7 +113,14 @@ public class UIAbstractField extends UIComponent {
     }
 
     public UIAbstractField setWidth(int width) {
-        this.width = width;
+        int width_ = width;
+        if (width_ > MAX_GRID_NUM)
+            width_ = MAX_GRID_NUM;
+        if (width_ < MIN_GRID_NUM)
+            width_ = MIN_GRID_NUM;
+        this.width = width_;
+        if (this.outWidth < this.width)
+            this.outWidth = this.width;
         return this;
     }
 
@@ -133,6 +171,12 @@ public class UIAbstractField extends UIComponent {
         return this;
     }
 
+    public UIAbstractField setDialogText(String text, String dialogFuction) {
+        this.setDialog(dialogFuction);
+        this.dialog.setText(text);
+        return this;
+    }
+
     public UIAbstractField setDialogText(String text) {
         if (this.dialog == null)
             this.dialog = new UIDialogField(this.code);
@@ -141,11 +185,20 @@ public class UIAbstractField extends UIComponent {
     }
 
     public void updateField() {
-        this.updateValue(this.getId(), this.code);
+        this.updateValue(this.code, this.code);
     }
 
     public void updateValue(String id, String code) {
         if (source instanceof SearchSource)
             ((SearchSource) source).updateValue(id, code);
+    }
+
+    public boolean isReadonly() {
+        return readonly;
+    }
+
+    public UIAbstractField setReadonly(boolean readonly) {
+        this.readonly = readonly;
+        return this;
     }
 }

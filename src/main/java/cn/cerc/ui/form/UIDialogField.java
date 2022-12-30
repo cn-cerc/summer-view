@@ -8,11 +8,11 @@ public class UIDialogField {
     private String inputId;
     private String text;
     private List<String> params = new ArrayList<>();
-    
+
     public UIDialogField(String inputId) {
         this.inputId = inputId;
     }
-    
+
     public UIDialogField(String inputId, String dialogfun) {
         this.inputId = inputId;
         this.dialogFunc = dialogfun;
@@ -26,11 +26,11 @@ public class UIDialogField {
         StringBuilder build = new StringBuilder();
         build.append(getDialogFunc());
         build.append("(");
-        build.append(inputId);
+        build.append(String.format("'%s'", inputId));
 
         for (String param : params) {
             build.append(",");
-            build.append(param);
+            build.append(String.format("'%s'", param));
         }
         build.append(")");
         return build.toString();

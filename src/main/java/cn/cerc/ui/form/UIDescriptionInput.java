@@ -1,7 +1,9 @@
 package cn.cerc.ui.form;
 
 import cn.cerc.ui.core.UIComponent;
+import cn.cerc.ui.vcl.UIImage;
 import cn.cerc.ui.vcl.UIInput;
+import cn.cerc.ui.vcl.UISpan;
 
 public class UIDescriptionInput extends UIComponent {
     private UIInput input = new UIInput(this);
@@ -11,15 +13,19 @@ public class UIDescriptionInput extends UIComponent {
         super(owner);
         this.setRootLabel("div");
         this.setCssClass("descriptionInput");
+        input.setCssProperty("autocomplete", "off");
     }
 
     public UIInput getInput() {
         return input;
     }
-
-    public void setDescription(UIComponent description) {
-        this.description = description;
-        this.description.setOwner(this);
+    
+    public void setDescriptionIcon(String imageSrc) {
+        this.description = new UIImage(this).setSrc(imageSrc);
+    }
+    
+    public void setDescriptionText(String text) {
+        this.description = new UISpan(this).setText(text);
     }
 
     public String getName() {
@@ -28,6 +34,7 @@ public class UIDescriptionInput extends UIComponent {
 
     public UIDescriptionInput setName(String name) {
         this.input.setName(name);
+        this.input.setId(name);
         return this;
     }
 

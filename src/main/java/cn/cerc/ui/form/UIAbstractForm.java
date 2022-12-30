@@ -1,9 +1,12 @@
 package cn.cerc.ui.form;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import cn.cerc.db.core.DataSet;
+import cn.cerc.db.core.Utils;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.SearchSource;
 import cn.cerc.ui.core.UIComponent;
@@ -12,7 +15,9 @@ import cn.cerc.ui.vcl.UIButton;
 
 public class UIAbstractForm extends UIComponent implements SearchSource {
     private DataSet dataSet;
-    protected List<UIAbstractField> fields = new ArrayList<>();
+    private List<UIAbstractField> fields = new ArrayList<>();
+    private Map<String, List<UIAbstractField>> groupMap = new LinkedHashMap<String, List<UIAbstractField>>();
+    private String currentGroup;
     private String submit;
     private boolean readAll;
     private AbstractPage page;
@@ -23,6 +28,8 @@ public class UIAbstractForm extends UIComponent implements SearchSource {
         this.dataSet = new DataSet();
         dataSet.append();
         this.setRootLabel("form");
+        this.setCssClass("customForm");
+        this.setCssProperty("method", "post");
     }
 
     public UIAbstractForm setAction(String action) {
@@ -32,15 +39,30 @@ public class UIAbstractForm extends UIComponent implements SearchSource {
 
     @Override
     public void output(HtmlWriter html) {
+        if (!Utils.isEmpty(currentGroup))
+            this.setCssClass("customForm groupForm");
         this.beginOutput(html);
+        if (Utils.isEmpty(currentGroup)) {
+            printList(html, fields);
+        } else {
+            for (String key : groupMap.keySet()) {
+                html.print("<div class='formGroup'>");
+                html.print("<div class='groupTitle'>%s</div>", key);
+                printList(html, groupMap.get(key));
+                html.print("</div>");
+            }
+        }
+        this.endOutput(html);
+    }
+
+    private void printList(HtmlWriter html, List<UIAbstractField> fields) {
         html.println("<ul>");
         for (UIAbstractField field : fields) {
-            html.println("<li>");
+            html.print("<li role='col%s'>", field.getOutWidth());
             field.output(html);
             html.println("</li>");
         }
         html.println("</ul>");
-        this.endOutput(html);
     }
 
     @Override
@@ -56,7 +78,16 @@ public class UIAbstractForm extends UIComponent implements SearchSource {
     @Override
     public UIAbstractForm addComponent(UIComponent child) {
         if (child instanceof UIAbstractField) {
-            fields.add((UIAbstractField) child);
+            UIAbstractField abstractField = (UIAbstractField) child;
+            if (Utils.isEmpty(currentGroup))
+                fields.add(abstractField);
+            else if (groupMap.get(currentGroup) != null)
+                groupMap.get(currentGroup).add(abstractField);
+            else {
+                List<UIAbstractField> fields_ = new ArrayList<>();
+                fields_.add(abstractField);
+                groupMap.put(currentGroup, fields_);
+            }
         } else {
             super.addComponent(child);
         }
@@ -69,8 +100,16 @@ public class UIAbstractForm extends UIComponent implements SearchSource {
         }
 
         submit = page.getRequest().getParameter("opera");
-        for (UIAbstractField field : this.fields) {
-            field.updateField();
+        if (Utils.isEmpty(this.currentGroup))
+            for (UIAbstractField field : this.fields) {
+                field.updateField();
+            }
+        else {
+            for (String key : groupMap.keySet()) {
+                for (UIAbstractField field : groupMap.get(key)) {
+                    field.updateField();
+                }
+            }
         }
 
         readAll = true;
@@ -96,6 +135,10 @@ public class UIAbstractForm extends UIComponent implements SearchSource {
         button.setType(type);
         button.setValue(value);
         return button;
+    }
+
+    public void addGroup(String group) {
+        this.currentGroup = group;
     }
 
 }

@@ -5,7 +5,7 @@ import java.util.Map;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 
-public class UISelectFiled extends UIOptionField {
+public class UISelectFiled extends UIListField {
 
     public UISelectFiled(UIComponent owner, String code) {
         super(owner, code);
@@ -31,7 +31,7 @@ public class UISelectFiled extends UIOptionField {
             html.print("<option value=\"%s\"", value);
             if (this.current().getString(this.getCode()).equals(value))
                 html.print(" selected");
-            html.print("%s</option>", key);
+            html.print(">%s</option>", key);
         }
         html.println("</select>");
     }
