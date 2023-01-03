@@ -136,6 +136,8 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
         if (!this.active())
             return;
         if (!this.init && this.dataSet != null) {
+            if (!columnItHidden)
+                addFieldIt();
             for (FieldMeta meta : fields) {
                 FieldStyleDefine styleDefine = this.items.get(meta.code());
                 if (styleDefine != null && styleDefine.name() != null)
@@ -153,7 +155,7 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
             UIGridBody body = body();
             // 先输出it
             if (!columnItHidden)
-                outputCell(head, body, addFieldIt());
+                outputCell(head, body, columnIt);
             // 再输出非it
             for (var meta : fields) {
                 if (meta != columnIt)
@@ -255,13 +257,19 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
         ds.setValue("name", "bade");
         ds.setValue("sex", false);
 
-        ds.fields().get("code").setName("工号");
-        ds.fields().get("name").setName("姓名");
-        ds.fields().get("sex").setName("性别").onGetSetText(EditorFactory.ofBoolean("女的", "男的"));
+//        ds.fields().get("code").setName("工号");
+//        ds.fields().get("name").setName("姓名");
+//        ds.fields().get("sex").setName("性别").onGetSetText(EditorFactory.ofBoolean("女的", "男的"));
+
+        UIDataStyle style = new UIDataStyle();
+        style.setDataSet(ds);
+        style.addField("code").setName("工号");
+        style.addField("name").setName("姓名");
+        style.addField("sex").setName("性别").onGetText(EditorFactory.ofBoolean("女的", "男的"));
 
         UIGridView grid = new UIGridView(null).setDataSet(ds);
-        grid.addField("Name_").setAlignRight();
-        grid.setDataStyle(new UIDataStyle());
+//        grid.addField("Name_").setAlignRight();
+        grid.setDataStyle(style);
         grid.setActive(true);
 //        grid.addField("sex"); //指定栏位输出
         System.out.println(grid.toString());

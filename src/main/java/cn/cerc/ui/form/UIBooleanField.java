@@ -37,7 +37,7 @@ public class UIBooleanField extends UIAbstractField {
         html.print(" onchange='switchUpdate(this)' />");
         html.print("</div>");
         if (this.dialog != null) {
-            html.println("<span class='dialogSpan' onclick=\"%s\">%s</span>", this.dialog.toString(),
+            html.println("<span class='dialogSpan' onclick='%s'>%s</span>", this.dialog.toString(),
                     this.dialog.getText());
         }
         html.print("</div>");

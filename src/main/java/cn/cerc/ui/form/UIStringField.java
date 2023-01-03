@@ -34,11 +34,6 @@ public class UIStringField extends UIAbstractField {
         input.setValue(this.current().getString(this.getCode()));
         input.setPlaceholder(placeholder);
         input.output(html);
-//        html.print("<input type='%s' name='%s' id='%s' value='%s' autocomplete='off'", this.getInputType(), this.getCode(), this.getCode(),
-//                this.current().getString(this.getCode()));
-//        if (!Utils.isEmpty(this.placeholder))
-//            html.print(" placeholder='%s'", this.placeholder);
-//        html.print(">");
     }
 
     public String getInputType() {
@@ -66,6 +61,22 @@ public class UIStringField extends UIAbstractField {
 
     public UIStringField setDescriptionText(String text) {
         this.input.setDescriptionText(text);
+        return this;
+    }
+
+    @Override
+    public UIStringField setReadonly(boolean readonly) {
+        this.input.setReadonly(readonly);
+        return this;
+    }
+
+    public UIStringField setClickDialog(String dialogFunc) {
+        this.input.setDialog(this.getCode(), dialogFunc);
+        return this;
+    }
+
+    public UIStringField setClickDialog(String dialogFunc, String... params) {
+        this.input.setDialog(this.getCode(), dialogFunc, params);
         return this;
     }
 

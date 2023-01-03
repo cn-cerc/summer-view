@@ -26,11 +26,11 @@ public class UIDialogField {
         StringBuilder build = new StringBuilder();
         build.append(getDialogFunc());
         build.append("(");
-        build.append(String.format("'%s'", inputId));
+        build.append(String.format("\"%s\"", inputId));
 
         for (String param : params) {
             build.append(",");
-            build.append(String.format("'%s'", param));
+            build.append(String.format("\"%s\"", param));
         }
         build.append(")");
         return build.toString();

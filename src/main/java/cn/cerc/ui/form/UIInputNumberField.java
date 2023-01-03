@@ -24,9 +24,9 @@ public class UIInputNumberField extends UIAbstractField {
     @Override
     public void writeContent(HtmlWriter html) {
         html.print("<div class='inputNumber'>");
-        html.print("<span onclick='reduceNumber(this, %s)'>－</span>", step);
-        html.print("<input type='number' value='%s' />", this.current().getString(this.getCode()));
-        html.print("<span onclick='increaseNumber(this, %s)'>+</span>", step);
+        html.print("<span onclick='reduceNumber(this, %s)'>－</span>", getStep());
+        html.print("<input type='number' name='%s' value='%s' />", this.code, this.current().getString(this.code));
+        html.print("<span onclick='increaseNumber(this, %s)'>+</span>", getStep());
         if (!Utils.isEmpty(description))
             html.print("<span>%s</span>", description);
         html.print("</div>");
@@ -38,6 +38,15 @@ public class UIInputNumberField extends UIAbstractField {
 
     public UIInputNumberField setDescription(String description) {
         this.description = description;
+        return this;
+    }
+
+    public int getStep() {
+        return step;
+    }
+
+    public UIInputNumberField setStep(int step) {
+        this.step = step;
         return this;
     }
 }

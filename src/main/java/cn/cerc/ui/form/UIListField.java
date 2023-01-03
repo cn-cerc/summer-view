@@ -27,9 +27,9 @@ public class UIListField extends UIAbstractField {
         this.setOptions(options);
     }
 
-    public UIListField(UIComponent owner, String code, String name, int width, Enum<?> enums) {
+    public UIListField(UIComponent owner, String code, String name, int width, Enum<?>[] items) {
         super(owner, code, name, width);
-        this.setEnum(enums);
+        this.setEnum(items);
     }
 
     @Override
@@ -55,8 +55,7 @@ public class UIListField extends UIAbstractField {
         return this;
     }
 
-    public UIListField setEnum(Enum<?> enums) {
-        Enum<?>[] items = enums.getClass().getEnumConstants();
+    public UIListField setEnum(Enum<?>[] items) {
         for (Enum<?> item : items) {
             this.getOptions().put(item.name(), "" + item.ordinal());
         }

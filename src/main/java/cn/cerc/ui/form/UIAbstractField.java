@@ -17,7 +17,7 @@ public class UIAbstractField extends UIComponent {
     // 表单元素标题
     private String name;
     // 表单元素name属性
-    private String code;
+    protected String code;
     // 是否必填
     private boolean require = false;
     // 开窗
@@ -73,7 +73,7 @@ public class UIAbstractField extends UIComponent {
         }
         this.writeContent(html);
         if (this.dialog != null) {
-            html.println("<span class='dialogSpan' onclick=\"%s\">%s</span>", this.dialog.toString(),
+            html.println("<span class='dialogSpan' onclick='%s'>%s</span>", this.dialog.toString(),
                     this.dialog.getText());
         }
         html.println("</div>");

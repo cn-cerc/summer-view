@@ -19,11 +19,11 @@ public class UIDescriptionInput extends UIComponent {
     public UIInput getInput() {
         return input;
     }
-    
+
     public void setDescriptionIcon(String imageSrc) {
         this.description = new UIImage(this).setSrc(imageSrc);
     }
-    
+
     public void setDescriptionText(String text) {
         this.description = new UISpan(this).setText(text);
     }
@@ -47,12 +47,10 @@ public class UIDescriptionInput extends UIComponent {
         return this;
     }
 
-    public boolean isReadonly() {
-        return this.input.getSignProperty("readonly");
-    }
-
     public void setReadonly(boolean readonly) {
-        this.input.setSignProperty("readonly", readonly);
+        if (readonly)
+            this.setCssClass("descriptionInput readonly");
+        this.input.setReadonly(readonly);
     }
 
     public String getPlaceholder() {
@@ -95,6 +93,25 @@ public class UIDescriptionInput extends UIComponent {
 
     public UIDescriptionInput setChecked(boolean checked) {
         this.input.setSignProperty("checked", checked);
+        return this;
+    }
+
+    public UIDescriptionInput setDialog(String inputId, String dialogFunc) {
+        this.setReadonly(true);
+        this.setCssClass("descriptionInput click");
+        UIDialogField dialog = new UIDialogField(inputId, dialogFunc);
+        this.setCssProperty("onclick", dialog.toString());
+        return this;
+    }
+
+    public UIDescriptionInput setDialog(String inputId, String dialogFunc, String... params) {
+        this.setReadonly(true);
+        this.setCssClass("descriptionInput click");
+        UIDialogField dialog = new UIDialogField(inputId, dialogFunc);
+        for (String param : params) {
+            dialog.add(param);
+        }
+        this.setCssProperty("onclick", dialog.toString());
         return this;
     }
 
