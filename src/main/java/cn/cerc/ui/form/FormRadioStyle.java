@@ -1,16 +1,20 @@
 package cn.cerc.ui.form;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 import cn.cerc.db.core.DataRow;
 import cn.cerc.ui.vcl.UIInput;
 
-public class FormRadioStyle extends FormStyleDefine {
-    private Map<String, String> options = new LinkedHashMap<>();
-
+public class FormRadioStyle extends FrmListStyle {
     public FormRadioStyle(String code, DataRow data) {
         super(code, data);
+        this.setWidth(12);
+    }
+
+    public FormRadioStyle(String name, String code, DataRow data) {
+        super(name, code, 12, data);
+    }
+
+    public FormRadioStyle(String name, String code, int width, DataRow data) {
+        super(name, code, width, data);
     }
 
     @Override
@@ -28,36 +32,6 @@ public class FormRadioStyle extends FormStyleDefine {
             index++;
         }
         builder.append("</div>");
-    }
-
-    public FormRadioStyle setOptions(LinkedHashMap<String, String> options) {
-        for (String key : options.keySet()) {
-            String val = options.get(key);
-            this.options.put(key, val);
-        }
-        return this;
-    }
-
-    public FormRadioStyle put(String key, String name) {
-        this.options.put(key, name);
-        return this;
-    }
-
-    public FormRadioStyle setEnum(Enum<?>[] items) {
-        for (Enum<?> item : items) {
-            options.put(String.valueOf(item.ordinal()), item.name());
-        }
-        return this;
-    }
-
-    public static void main(String[] args) {
-//        FromRadioStyle radioStyle = new FromRadioStyle("type");
-//        Map<String, String> options = new LinkedHashMap<String, String>();
-//        options.put("张三", "张三");
-//        options.put("李四", "李四");
-//        options.put("王五", "王五");
-//        radioStyle.setOptions(options);
-//        System.out.println(radioStyle.getHtml());
     }
 
 }

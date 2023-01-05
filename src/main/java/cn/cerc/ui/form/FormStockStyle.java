@@ -14,26 +14,31 @@ public class FormStockStyle {
     public List<FormLineStyleImpl> items = new ArrayList<>();
 
     public FormStockStyle(String caption, DataRow dataRow) {
-        this.caption = caption;
+        this.setCaption(caption);
         this.dataRow = dataRow;
     }
 
-    public FormLineStyleImpl addLine(Class<? extends FormLineStyleImpl> styleDefine) {
+    @SuppressWarnings("unchecked")
+    public <T extends FormLineStyleImpl> T addLine(Class<T> styleDefine) {
         try {
             Constructor<? extends FormLineStyleImpl> constructor = styleDefine.getDeclaredConstructor();
             constructor.setAccessible(true);
             FormLineStyleImpl styleImpl = constructor.newInstance();
             styleImpl.setDataRow(dataRow);
             items.add(styleImpl);
-            return styleImpl;
+            return (T) styleImpl;
         } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException
                 | IllegalArgumentException | InvocationTargetException e) {
             e.printStackTrace();
         }
         return null;
     }
-    
-    public static void main(String[] args) {
-//        addLine(FromRadioStyle.class);
+
+    public String getCaption() {
+        return caption;
+    }
+
+    public void setCaption(String caption) {
+        this.caption = caption;
     }
 }

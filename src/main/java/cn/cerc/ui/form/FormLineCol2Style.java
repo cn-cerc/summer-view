@@ -5,8 +5,8 @@ import java.lang.reflect.InvocationTargetException;
 
 import cn.cerc.db.core.DataRow;
 
-public class FormLineCol1Style implements FormLineStyleImpl {
-    private FormStyleImpl[] list = new FormStyleImpl[1];
+public class FormLineCol2Style implements FormLineStyleImpl {
+    private FormStyleImpl[] list = new FormStyleImpl[2];
     private DataRow dataRow;
 
     @Override
@@ -27,7 +27,7 @@ public class FormLineCol1Style implements FormLineStyleImpl {
                     DataRow.class);
             constructor.setAccessible(true);
             FormStyleImpl styleImpl = constructor.newInstance(code, dataRow);
-            list[0] = styleImpl;
+            addFormStyle(styleImpl);
             return (T) styleImpl;
         } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException
                 | IllegalArgumentException | InvocationTargetException e) {
@@ -44,7 +44,7 @@ public class FormLineCol1Style implements FormLineStyleImpl {
                     String.class, DataRow.class);
             constructor.setAccessible(true);
             FormStyleImpl styleImpl = constructor.newInstance(name, code, dataRow);
-            list[0] = styleImpl;
+            addFormStyle(styleImpl);
             return (T) styleImpl;
         } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException
                 | IllegalArgumentException | InvocationTargetException e) {
@@ -61,7 +61,7 @@ public class FormLineCol1Style implements FormLineStyleImpl {
                     String.class, int.class, DataRow.class);
             constructor.setAccessible(true);
             FormStyleImpl styleImpl = constructor.newInstance(name, code, width, dataRow);
-            list[0] = styleImpl;
+            addFormStyle(styleImpl);
             return (T) styleImpl;
         } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException
                 | IllegalArgumentException | InvocationTargetException e) {
@@ -73,6 +73,13 @@ public class FormLineCol1Style implements FormLineStyleImpl {
     @Override
     public void setDataRow(DataRow dataRow) {
         this.dataRow = dataRow;
+    }
+
+    private void addFormStyle(FormStyleImpl styleImpl) {
+        if (list[0] == null)
+            list[0] = styleImpl;
+        else
+            list[1] = styleImpl;
     }
 
 }

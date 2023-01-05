@@ -13,7 +13,6 @@ public class UIDescriptionInput extends UIComponent {
         super(owner);
         this.setRootLabel("div");
         this.setCssClass("descriptionInput");
-        input.setCssProperty("autocomplete", "off");
     }
 
     public UIInput getInput() {

@@ -13,7 +13,6 @@ public class UIFormStyle implements UIFormStyleImpl {
 
     public UIFormStyle() {
         super();
-        items.put(currentCaption, new FormStockStyle(currentCaption, dataRow));
     }
 
     public FormStockStyle formStock() {
@@ -29,8 +28,10 @@ public class UIFormStyle implements UIFormStyleImpl {
     }
 
     public FormLineStyleImpl addLine() {
-        if (Utils.isEmpty(currentCaption))
+        if (Utils.isEmpty(currentCaption)) {
             currentCaption = "表单信息";
+            items.put(currentCaption, new FormStockStyle(currentCaption, dataRow));
+        }
         return formStock().addLine(FormLineCol1Style.class);
     }
 
