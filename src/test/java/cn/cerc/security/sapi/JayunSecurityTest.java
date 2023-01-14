@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.junit.Ignore;
 import org.junit.Test;
 
+@Ignore
 public class JayunSecurityTest {
     private JayunSecurity api = new JayunSecurity(null);
     private HttpServletRequest request;

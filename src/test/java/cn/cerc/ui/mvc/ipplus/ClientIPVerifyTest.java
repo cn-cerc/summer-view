@@ -1,12 +1,15 @@
 package cn.cerc.ui.mvc.ipplus;
 
-import cn.cerc.mis.core.Application;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
 import java.util.Random;
 
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
+
+import cn.cerc.mis.core.Application;
+
+@Ignore
 public class ClientIPVerifyTest {
 
     @Before

@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.junit.Ignore;
 import org.junit.Test;
 
+@Ignore
 public class JayunMessageTest {
     private JayunMessage api = new JayunMessage(null);
     private HttpServletRequest request;

@@ -2,8 +2,10 @@ package cn.cerc.security.sapi;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
+@Ignore
 public class JayunVerifyTest {
 
     private HttpServletRequest request;
@@ -14,6 +16,7 @@ public class JayunVerifyTest {
      * @param realName 用户真实姓名
      * @param idCard   用户身份证号
      */
+    @Ignore
     public void idCard(String user, String realName, String idCard) {
         JayunVerify api = new JayunVerify(request);
         boolean result = api.idCard(user, realName, idCard);

@@ -1,5 +1,7 @@
 package cn.cerc.ui.core;
 
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Test;
 
 public class UrlRecordTest {
@@ -13,7 +15,7 @@ public class UrlRecordTest {
         UrlRecord url = new UrlRecord();
         url.setSite(str);
         url.putParam("partCode", "ZKYXBSB-A+-L");
-        System.out.println(url.getUrl());
+        assertEquals("http://127.0.0.1/911001/TFrmPartImage.listPartImages?partCode=ZKYXBSB-A%2B-L", url.getUrl());
     }
 
     @Test
@@ -25,7 +27,7 @@ public class UrlRecordTest {
                 .put("menuCode", "TFrmPartInfo")
                 .put("标记", "中国")
                 .build();
-        System.out.println(url.getUrl());
+        assertEquals("TFrmUserMenu?标记=%E4%B8%AD%E5%9B%BD&module=TBase&menuCode=TFrmPartInfo", url.getUrl());
     }
 
 }
