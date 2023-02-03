@@ -3,8 +3,6 @@ package cn.cerc.ui.fields;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.apache.commons.lang.RandomStringUtils;
-
 import cn.cerc.db.core.Utils;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
