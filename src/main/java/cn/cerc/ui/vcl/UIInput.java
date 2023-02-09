@@ -15,6 +15,7 @@ public class UIInput extends UIComponent implements IHtml, INameOwner {
     public static final String TYPE_DATE = "date";
     public static final String TYPE_DATETIME_LOCAL = "datetime-local";
     public static final String TYPE_TEXT = "text";
+    public static final String TYPE_NUMBER = "number";
 
     private String title;
     private String name;
@@ -87,8 +88,9 @@ public class UIInput extends UIComponent implements IHtml, INameOwner {
         return inputType;
     }
 
-    public void setInputType(String inputType) {
+    public UIInput setInputType(String inputType) {
         this.inputType = inputType;
+        return this;
     }
 
     public boolean isRequired() {
