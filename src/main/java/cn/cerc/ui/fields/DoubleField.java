@@ -81,4 +81,9 @@ public class DoubleField extends AbstractField implements IFormatColumn, IOutput
         this.format = format;
         return this;
     }
+
+    @Override
+    public UIComponent setCssProperty(String key, Object value) {
+        return this.getContent().setCssProperty(key, value);
+    }
 }
