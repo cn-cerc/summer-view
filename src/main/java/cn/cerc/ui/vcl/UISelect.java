@@ -83,6 +83,12 @@ public class UISelect extends UIComponent implements IHtml {
         return options;
     }
 
+    public UISelect setOptions(Enum<?>[] enums) {
+        for (Enum<?> item : enums)
+            this.options.put(String.valueOf(item.ordinal()), item.name());
+        return this;
+    }
+
     public void setOptions(Map<String, String> options) {
         this.options = options;
     }
