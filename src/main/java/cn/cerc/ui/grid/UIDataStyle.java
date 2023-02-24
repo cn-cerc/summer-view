@@ -147,15 +147,24 @@ public class UIDataStyle implements UIDataStyleImpl {
         };
     }
 
-    public OnGetText getMap(Map<String, String> items) {
+    public OnGetText getMap(Map<String, String> items, boolean addAll) {
         return data -> {
             String result = items.get(data.getString());
             var style = new UISelectDataStyle(this, data, this.inGrid);
             for (var key : items.keySet())
                 style.put(key, items.get(key));
-            style.setSelected(data.getString());
+            if (addAll)
+                style.put("", "全部");
+            if (addAll && Utils.isEmpty(data.getString()))
+                style.setSelected("");
+            else
+                style.setSelected(data.getString());
             return style.getText(result);
         };
+    }
+
+    public OnGetText getMap(Map<String, String> items) {
+        return getMap(items, false);
     }
 
     public interface OnOutput {
