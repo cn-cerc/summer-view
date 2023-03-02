@@ -16,11 +16,13 @@ public class DoubleField extends AbstractField implements IFormatColumn, IOutput
     public DoubleField(UIComponent owner, String title, String field) {
         super(owner, title, field, 4);
         this.setAlign("right");
+        this.setPattern("[-+]?\\d+(?:\\.\\d+)?");
     }
 
     public DoubleField(UIComponent owner, String title, String field, int width) {
         super(owner, title, field, width);
         this.setAlign("right");
+        this.setPattern("[-+]?\\d+(?:\\.\\d+)?");
     }
 
     @Override
