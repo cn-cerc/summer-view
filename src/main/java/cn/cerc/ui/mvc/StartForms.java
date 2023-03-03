@@ -61,6 +61,7 @@ public class StartForms implements Filter {
         paths.add("services-oem/");
         paths.add("services-odm/");
         paths.add("services-fpl/");
+        paths.add("services-csm/");
         paths.add("task/");
         paths.add("docs/");
     }
