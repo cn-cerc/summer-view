@@ -151,10 +151,10 @@ public class UIDataStyle implements UIDataStyleImpl {
         return data -> {
             String result = items.get(data.getString());
             var style = new UISelectDataStyle(this, data, this.inGrid);
-            for (var key : items.keySet())
-                style.put(key, items.get(key));
             if (addAll)
                 style.put("", "全部");
+            for (var key : items.keySet())
+                style.put(key, items.get(key));
             if (addAll && Utils.isEmpty(data.getString()))
                 style.setSelected("");
             else
