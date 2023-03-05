@@ -46,7 +46,7 @@ public class StaticFile {
     }
 
     public String toOriginalString() {
-        this.bucket = "/" + ServerConfig.getAppIndustry() + "/";
+        this.bucket = "/" + ServerConfig.getAppOriginal() + "/";
         return this.toString();
     }
 
