@@ -67,6 +67,7 @@ public class PhoneLine extends UIComponent implements DataSource {
             if (!"".equals(name))
                 html.print(name + ": ");
             BuildUrl build = field.getBuildUrl();
+            html.print("<span role='%s'>", field.getField());
             if (build != null) {
                 UIUrl url = new UIUrl(null);
                 build.buildUrl(record, url);
@@ -75,6 +76,7 @@ public class PhoneLine extends UIComponent implements DataSource {
                 html.print(field.getText());
             }
 
+            html.print("</span>");
             html.print("</td>");
         }
         html.print("</tr>");
@@ -119,7 +121,7 @@ public class PhoneLine extends UIComponent implements DataSource {
     public void setExpender(ExpendField expender) {
         this.expender = expender;
     }
-    
+
     @Override
     public DataSet dataSet() {
         return source.dataSet();
