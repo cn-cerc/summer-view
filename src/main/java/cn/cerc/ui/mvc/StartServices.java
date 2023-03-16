@@ -92,6 +92,12 @@ public class StartServices extends HttpServlet {
                 token = request.getParameter("token");
             // 使用token登录，并获取用户资料与授权数据
             session.loadToken(token);
+            // token失效则直接返回
+            if ((Integer) session.getProperty(token) == ServiceState.TOKEN_INVALID) {
+                dataOut.setState(ServiceState.TOKEN_INVALID).setMessage("token is invalid, please login again.");
+                response.getWriter().write(RecordFilter.execute(dataIn, dataOut).toString());
+                return;
+            }
 
             IHandle handle = new Handle(session);
             Variant function = new Variant("execute").setKey(service);
