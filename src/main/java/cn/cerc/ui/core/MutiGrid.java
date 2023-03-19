@@ -1,14 +1,15 @@
 package cn.cerc.ui.core;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
 import cn.cerc.db.core.DataSet;
 import cn.cerc.ui.grid.MutiPage;
 import cn.cerc.ui.other.BeanRecord;
 import cn.cerc.ui.other.BuildRecord;
-
-import javax.servlet.http.HttpServletRequest;
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class MutiGrid<T> {
     private DataSet dataSet;
@@ -50,10 +51,10 @@ public class MutiGrid<T> {
                 dataSet.setRecNo(i + 1);
                 item = clazz.getDeclaredConstructor().newInstance();
                 if (defProcess) {
-                    defMake.build(item, dataSet.current());
+                    defMake.build(item, dataSet.currentRow().orElseThrow());
                 }
                 if (make != null) {
-                    make.build(item, dataSet.current());
+                    make.build(item, dataSet.currentRow().orElseThrow());
                 }
 
                 items.add(item);
