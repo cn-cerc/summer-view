@@ -1,12 +1,14 @@
 package cn.cerc.ui.fields;
 
+import java.util.Optional;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import cn.cerc.db.core.ClassConfig;
 import cn.cerc.db.core.DataColumn;
 import cn.cerc.db.core.DataRow;
-import cn.cerc.db.core.DataSource;
+import cn.cerc.db.core.DataSetSource;
 import cn.cerc.db.core.Datetime;
 import cn.cerc.db.core.FastDate;
 import cn.cerc.mis.core.HtmlWriter;
@@ -45,7 +47,7 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
     //
     private BuildUrl buildUrl;
     // 数据源
-    private DataSource source;
+    private DataSetSource source;
 
     private String oninput;
     private String onclick;
@@ -91,8 +93,8 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
         // 查找最近的数据源
         UIComponent root = owner;
         while (root != null) {
-            if (root instanceof DataSource) {
-                this.source = (DataSource) root;
+            if (root instanceof DataSetSource) {
+                this.source = (DataSetSource) root;
                 break;
             }
             root = root.getOwner();
@@ -231,11 +233,16 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
     }
 
     @Override
-    public DataRow current() {
-        return source != null ? source.current() : new DataRow();
+    public Optional<DataRow> source() {
+        if (source == null)
+            return Optional.empty();
+        return source.currentRow();
     }
 
-    @Override
+    public DataRow current() {
+        return source().orElseGet(() -> new DataRow());
+    }
+
     public final boolean readonly() {
         if (readonly > -1)
             return readonly == 1;
@@ -640,6 +647,6 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
     }
 
     public DataColumn value() {
-        return new DataColumn(this, this.getField());
+        return new DataColumn(this.source, this.getField());
     }
 }
