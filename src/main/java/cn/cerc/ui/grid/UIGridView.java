@@ -228,7 +228,7 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
                 }
                 for (int recNo = 0; recNo < values.length; recNo++) {
                     dataSet.setRecNo(recNo + 1);
-                    dataSet.currentRow().get().setValue(fieldCode, values[recNo]);
+                    dataSet.current().setValue(fieldCode, values[recNo]);
                 }
             } else {
                 for (var row : dataSet)
