@@ -84,7 +84,7 @@ public class DataGrid extends UIComponent implements DataSetSource, IGridStyle {
      */
     @Deprecated
     public IRecord current() {
-        return dataSet.currentRow().orElseThrow();
+        return dataSet.current();
     }
 
     public DataGrid setDataSet(DataSet dataSet) {
