@@ -13,7 +13,9 @@ public class UIPhoneGridCell extends UIPhoneCell {
     private CellTypeEnum cellType = CellTypeEnum.Combo;
 
     public enum CellTypeEnum {
-        OnlyTitle, OnlyValue, Combo;
+        OnlyTitle,
+        OnlyValue,
+        Combo;
     }
 
     public UIPhoneGridCell(UIComponent owner) {
@@ -38,21 +40,21 @@ public class UIPhoneGridCell extends UIPhoneCell {
             throw new RuntimeException("在 owner 中找不到 DataSource");
         }
         this.beginOutput(html);
-        String name = impl.currentRow().orElseThrow().fields().get(fieldCode).name();
+        String name = impl.getDataSet().map(ds -> ds.current()).orElseThrow().fields().get(fieldCode).name();
         switch (this.cellType) {
         case OnlyTitle:
             if (!Utils.isEmpty(name))
                 html.print(name);
             break;
         case OnlyValue:
-            html.print(impl.currentRow().orElseThrow().getText(fieldCode));
+            html.print(impl.getDataSet().map(ds -> ds.current()).orElseThrow().getText(fieldCode));
             break;
         default:
             if (!Utils.isEmpty(name)) {
                 html.print(name);
                 html.print(":");
             }
-            html.print(impl.currentRow().orElseThrow().getText(fieldCode));
+            html.print(impl.getDataSet().map(ds -> ds.current()).orElseThrow().getText(fieldCode));
         }
         this.endOutput(html);
     }

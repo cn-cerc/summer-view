@@ -233,7 +233,7 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
     }
 
     @Override
-    public Optional<DataRow> getDataRow() {
+    public Optional<DataRow> currentRow() {
         if (source == null)
             return Optional.empty();
         return Optional.ofNullable(source.getDataSet().map(ds -> ds.current()).orElse(null));
@@ -241,7 +241,7 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
 
     @Override
     public DataRow current() {
-        return getDataRow().orElseGet(() -> new DataRow());
+        return currentRow().orElseGet(() -> new DataRow());
     }
 
     @Override

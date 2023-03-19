@@ -46,7 +46,7 @@ public class UIPhoneView extends UIComponent implements UIDataViewImpl {
      */
     public UIPhoneView setDataStyle(UIDataStyleImpl dataStyle) {
         if (dataStyle != null && this.dataSet == null)
-            this.dataSet = dataStyle.source().orElseThrow();
+            this.dataSet = dataStyle.getDataSet().orElseThrow();
         this.dataStyle = dataStyle;
         return this;
     }
@@ -57,7 +57,7 @@ public class UIPhoneView extends UIComponent implements UIDataViewImpl {
     }
 
     @Override
-    public Optional<DataSet> source() {
+    public Optional<DataSet> getDataSet() {
         return Optional.ofNullable(dataSet);
     }
 

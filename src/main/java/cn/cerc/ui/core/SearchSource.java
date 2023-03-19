@@ -8,7 +8,7 @@ public interface SearchSource extends DataRowSource {
     void updateValue(String id, String code);
 
     default DataRow current() {
-        return getDataRow().orElse(null);
+        return currentRow().orElse(null);
     }
 
 }

@@ -22,7 +22,7 @@ public class UIGridBody extends UIComponent {
             log.error("在 owner 中找不到 DataSource");
             throw new RuntimeException("在 owner 中找不到 DataSource");
         }
-        var dataSet = impl.source().orElseThrow();
+        var dataSet = impl.getDataSet().orElseThrow();
         dataSet.first();
         while (dataSet.fetch()) {
             super.output(html);

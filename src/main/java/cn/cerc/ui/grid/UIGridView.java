@@ -52,7 +52,7 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
     }
 
     @Override
-    public Optional<DataSet> source() {
+    public Optional<DataSet> getDataSet() {
         return Optional.ofNullable(dataSet);
     }
 
@@ -74,7 +74,7 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
     public UIGridView setDataStyle(UIDataStyleImpl dataStyle) {
         if (dataStyle != null) {
             if (this.dataSet == null)
-                this.setDataSet(dataStyle.source().orElse(null));
+                this.setDataSet(dataStyle.getDataSet().orElse(null));
             for (var item : dataStyle.fields().values()) {
                 fields.add(item.field());
                 this.items.put(item.field().code(), dataStyle.getFieldStyle(item.field().code()));

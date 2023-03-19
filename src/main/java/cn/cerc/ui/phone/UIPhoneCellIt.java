@@ -20,7 +20,7 @@ public class UIPhoneCellIt extends UIComponent {
         this.beginOutput(html);
         var impl = findOwner(DataSetSource.class);
         if (impl != null)
-            html.print(impl.source().orElseThrow().recNo() + "#");
+            html.print(impl.getDataSet().orElseThrow().recNo() + "#");
         this.endOutput(html);
     }
 

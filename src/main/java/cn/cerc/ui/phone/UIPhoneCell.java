@@ -30,7 +30,7 @@ public class UIPhoneCell extends UIComponent {
             this.setCssProperty("data-field", this.fieldCode);
         this.beginOutput(html);
         if (impl != null) {
-            DataSet source = impl.source().orElseThrow();
+            DataSet source = impl.getDataSet().orElseThrow();
             String name = source.fields().get(fieldCode).name();
             if (!Utils.isEmpty(name)) {
                 html.print(name);

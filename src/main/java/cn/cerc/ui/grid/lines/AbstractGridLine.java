@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import cn.cerc.db.core.DataRow;
 import cn.cerc.db.core.DataSet;
 import cn.cerc.db.core.DataSetSource;
 import cn.cerc.db.core.IRecord;
@@ -44,12 +45,12 @@ public abstract class AbstractGridLine extends UIComponent implements DataSetSou
     }
 
     @Override
-    public Optional<DataSet> source() {
-        return source.source();
+    public Optional<DataSet> getDataSet() {
+        return source.getDataSet();
     }
 
     public DataSet dataSet() {
-        return source.source().orElse(null);
+        return source.getDataSet().orElse(null);
     }
 
     /**
@@ -59,7 +60,7 @@ public abstract class AbstractGridLine extends UIComponent implements DataSetSou
      */
     @Deprecated
     public IRecord current() {
-        return source.source().orElseThrow().currentRow().orElseThrow();
+        return source.getDataSet().orElseThrow().currentRow().orElseThrow();
     }
 
     public abstract void output(HtmlWriter html, int lineNo);
@@ -100,12 +101,15 @@ public abstract class AbstractGridLine extends UIComponent implements DataSetSou
             BuildUrl build = field.getBuildUrl();
             if (build != null) {
                 UIUrl url = new UIUrl(null);
-                build.buildUrl(this.currentRow().orElseThrow(), url);
+                build.buildUrl(this.getDataSet().orElseThrow().current(), url);
                 url.setText(field.getText()).output(html);
             } else {
                 html.print(field.getText());
             }
         }
     }
-
+    
+    public Optional<DataRow> currentRow() {
+        return this.getDataSet().map(ds -> ds.currentRow()).orElse(Optional.empty());
+    }
 }

@@ -69,7 +69,7 @@ public class DataGrid extends UIComponent implements DataSetSource, IGridStyle {
     }
 
     @Override
-    public Optional<DataSet> source() {
+    public Optional<DataSet> getDataSet() {
         return Optional.ofNullable(dataSet);
     }
 

@@ -51,7 +51,7 @@ public class PhoneLine extends UIComponent implements DataSetSource {
     }
 
     private void outputTableString(HtmlWriter html) {
-        DataRow record = currentRow().orElseThrow();
+        DataRow record = getDataSet().map(ds -> ds.current()).orElseThrow();
         html.print("<tr");
         if (this.expender != null) {
             html.print(String.format(" role=\"%s\" style=\"display: none;\"", expender.getHiddenId()));
@@ -99,7 +99,7 @@ public class PhoneLine extends UIComponent implements DataSetSource {
             BuildUrl build = field.getBuildUrl();
             if (build != null) {
                 UIUrl url = new UIUrl(null);
-                build.buildUrl(currentRow().orElseThrow(), url);
+                build.buildUrl(getDataSet().map(ds -> ds.current()).orElseThrow(), url);
                 url.setText(field.getText()).output(html);
             } else {
                 html.print(field.getText());
@@ -129,8 +129,8 @@ public class PhoneLine extends UIComponent implements DataSetSource {
      * @return 返回数据集
      */
     @Override
-    public Optional<DataSet> source() {
-        return source.source();
+    public Optional<DataSet> getDataSet() {
+        return source.getDataSet();
     }
 
     /**
@@ -139,7 +139,7 @@ public class PhoneLine extends UIComponent implements DataSetSource {
      */
     @Deprecated
     public DataSet dataSet() {
-        return source.source().orElse(null);
+        return source.getDataSet().orElse(null);
     }
 
     @Deprecated

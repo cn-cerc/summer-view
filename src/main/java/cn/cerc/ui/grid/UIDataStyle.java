@@ -283,7 +283,7 @@ public class UIDataStyle implements UIDataStyleImpl {
     }
 
     @Override
-    public Optional<DataSet> source() {
+    public Optional<DataSet> getDataSet() {
         return Optional.ofNullable(dataSet);
     }
 

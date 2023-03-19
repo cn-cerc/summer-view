@@ -32,7 +32,7 @@ public class UIDataField extends UIComponent {
 
     @Override
     public void output(HtmlWriter html) {
-        html.print(source.currentRow().orElseThrow().getText(fieldCode));
+        html.print(source.getDataSet().map(ds -> ds.current()).orElseThrow().getText(fieldCode));
     }
 
 }
