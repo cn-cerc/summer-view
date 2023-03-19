@@ -28,17 +28,17 @@ public class UIPanelLine extends UIBlockLine {
     @Override
     public void createCell(String fieldCode) {
         if (onCreateCellBefore != null) {
-            FieldMeta fieldMeta = source().source().orElseThrow().fields(fieldCode);
+            FieldMeta fieldMeta = source().getDataSet().orElseThrow().fields(fieldCode);
             onCreateCellBefore.execute(this, fieldMeta);
         }
         if (onCreateCell != null) {
-            FieldMeta fieldMeta = source().source().orElseThrow().fields(fieldCode);
+            FieldMeta fieldMeta = source().getDataSet().orElseThrow().fields(fieldCode);
             onCreateCell.execute(this, fieldMeta);
         } else {
             new UIPanelCell(this).setFieldCode(fieldCode);
         }
         if (onCreateCellAfter != null) {
-            FieldMeta fieldMeta = source().currentRow().orElseThrow().fields(fieldCode);
+            FieldMeta fieldMeta = source().getDataSet().orElseThrow().fields(fieldCode);
             onCreateCellAfter.execute(this, fieldMeta);
         }
     }

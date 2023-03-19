@@ -33,8 +33,8 @@ public abstract class UIBlockLine extends UIComponent {
         FieldDefs fields = null;
         if (impl.getDataSet().isPresent()) {
             var ds = impl.getDataSet().get();
-            if (ds.getDataRow().isPresent())
-                fields = ds.getDataRow().get().fields();
+            if (ds.currentRow().isPresent())
+                fields = ds.currentRow().get().fields();
             else
                 fields = ds.fields();
         }

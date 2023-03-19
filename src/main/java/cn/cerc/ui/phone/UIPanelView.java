@@ -45,7 +45,7 @@ public class UIPanelView extends UIComponent implements UIDataViewImpl {
      */
     public UIPanelView setDataStyle(UIDataStyleImpl dataStyle) {
         if (dataStyle != null && this.dataRow == null)
-            dataStyle.currentRow().ifPresent(item -> setDataRow(item));
+            dataStyle.getDataSet().ifPresent(item -> setDataRow(item.current()));
         this.dataStyle = dataStyle;
         return this;
     }
@@ -53,6 +53,14 @@ public class UIPanelView extends UIComponent implements UIDataViewImpl {
     @Override
     public UIDataStyleImpl dataStyle() {
         return dataStyle;
+    }
+
+    @Override
+    public Optional<DataSet> getDataSet() {
+        if (dataRow == null)
+            return Optional.empty();
+        else
+            return Optional.ofNullable(dataRow.dataSet());
     }
 
     public UIPanelView setDataRow(DataRow dataRow) {
@@ -99,7 +107,7 @@ public class UIPanelView extends UIComponent implements UIDataViewImpl {
     public void output(HtmlWriter html) {
         if (!this.active())
             return;
-        var dataSet = currentRow().map(row -> row.dataSet()).orElse(null);
+        var dataSet = getDataSet().orElse(null);
         if (dataSet != null)
             this.setCssProperty("data-row", "" + (dataSet.recNo() - 1));
         super.output(html);
@@ -130,11 +138,6 @@ public class UIPanelView extends UIComponent implements UIDataViewImpl {
         new UIButton(form).setName("summit");
         System.out.println(form.gatherRequest());
         System.out.println(form.toString());
-    }
-
-    @Override
-    public Optional<DataSet> source() {
-        return Optional.empty();
     }
 
 }
