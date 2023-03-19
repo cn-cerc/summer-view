@@ -287,7 +287,7 @@ public class UIDataStyle implements UIDataStyleImpl {
     }
 
     public DataRow current() {
-        return dataSet != null ? dataSet.currentRow().orElse(null) : dataRow;
+        return dataSet != null ? dataSet.current() : dataRow;
     }
 
     public UIDataStyle setDataSet(DataSet dataSet) {
