@@ -112,7 +112,7 @@ public class OptionField extends AbstractField {
     public void updateField() {
         super.updateField();
         if (this.defaultValue != null) {
-            if (!this.current().has(this.getField()))
+            if (!this.current().hasValue(this.getField()))
                 this.current().setValue(this.getField(), this.defaultValue);
         }
     }
