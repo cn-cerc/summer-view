@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import cn.cerc.db.core.DataRow;
 import cn.cerc.db.core.DataSet;
 import cn.cerc.db.core.DataSetSource;
 import cn.cerc.db.core.IRecord;
@@ -48,7 +47,7 @@ public abstract class AbstractGridLine extends UIComponent implements DataSetSou
     public Optional<DataSet> getDataSet() {
         return source.getDataSet();
     }
-
+    
     public DataSet dataSet() {
         return source.getDataSet().orElse(null);
     }
@@ -109,7 +108,4 @@ public abstract class AbstractGridLine extends UIComponent implements DataSetSou
         }
     }
 
-    public Optional<DataRow> currentRow() {
-        return this.getDataSet().map(ds -> ds.currentRow()).orElse(Optional.empty());
-    }
 }
