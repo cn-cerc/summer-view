@@ -60,7 +60,7 @@ public abstract class AbstractGridLine extends UIComponent implements DataSetSou
      */
     @Deprecated
     public IRecord current() {
-        return source.getDataSet().orElseThrow().currentRow().orElseThrow();
+        return source.getDataSet().map(ds -> ds.current()).orElse(null);
     }
 
     public abstract void output(HtmlWriter html, int lineNo);
@@ -108,7 +108,7 @@ public abstract class AbstractGridLine extends UIComponent implements DataSetSou
             }
         }
     }
-    
+
     public Optional<DataRow> currentRow() {
         return this.getDataSet().map(ds -> ds.currentRow()).orElse(Optional.empty());
     }
