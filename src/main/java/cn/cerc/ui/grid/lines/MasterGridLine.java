@@ -21,7 +21,7 @@ public class MasterGridLine extends AbstractGridLine {
 
     @Override
     public void output(HtmlWriter html, int lineNo) {
-        DataSet dataSet = current().dataSet();
+        DataSet dataSet = currentRow().orElseThrow().dataSet();
         html.print("<tr");
         html.print(" id='%s'", "tr" + dataSet.recNo());
         if (this.getPrimaryKey() != null) {
