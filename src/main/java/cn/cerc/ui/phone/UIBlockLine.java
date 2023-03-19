@@ -31,10 +31,13 @@ public abstract class UIBlockLine extends UIComponent {
             throw new RuntimeException("在 owner 中找不到 UIDataViewImpl");
         }
         FieldDefs fields = null;
-        if (impl.currentRow().isPresent())
-            fields = impl.currentRow().get().fields();
-        else if (impl.source().isPresent())
-            fields = impl.source().get().fields();
+        if (impl.getDataSet().isPresent()) {
+            var ds = impl.getDataSet().get();
+            if (ds.getDataRow().isPresent())
+                fields = ds.getDataRow().get().fields();
+            else
+                fields = ds.fields();
+        }
         if (fields == null) {
             log.error("在 owner 中找不到数据源，代码编写错误");
             throw new RuntimeException("在 owner 中找不到数据源，代码编写错误");
