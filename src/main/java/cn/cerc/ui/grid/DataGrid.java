@@ -2,13 +2,15 @@ package cn.cerc.ui.grid;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cn.cerc.db.core.ClassResource;
 import cn.cerc.db.core.DataSet;
-import cn.cerc.db.core.DataSource;
+import cn.cerc.db.core.DataSetSource;
+import cn.cerc.db.core.IRecord;
 import cn.cerc.db.core.Utils;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.mis.core.IForm;
@@ -22,7 +24,7 @@ import cn.cerc.ui.grid.lines.MasterGridLine;
 import cn.cerc.ui.style.IGridStyle;
 import cn.cerc.ui.vcl.UIForm;
 
-public class DataGrid extends UIComponent implements DataSource, IGridStyle {
+public class DataGrid extends UIComponent implements DataSetSource, IGridStyle {
     private static final Logger log = LoggerFactory.getLogger(DataGrid.class);
     private static final ClassResource res = new ClassResource(DataGrid.class, SummerUI.ID);
     private static final double MaxWidth = 600;
@@ -67,14 +69,23 @@ public class DataGrid extends UIComponent implements DataSource, IGridStyle {
     }
 
     @Override
+    public Optional<DataSet> source() {
+        return Optional.ofNullable(dataSet);
+    }
+
     public DataSet dataSet() {
         return dataSet;
     }
 
-//    @Deprecated
-//    public final DataSet getDataSet() {
-//        return dataSet();
-//    }
+    /**
+     * 请改使用source函数
+     * 
+     * @return
+     */
+    @Deprecated
+    public IRecord current() {
+        return dataSet.currentRow().orElseThrow();
+    }
 
     public DataGrid setDataSet(DataSet dataSet) {
         this.dataSet = dataSet;
