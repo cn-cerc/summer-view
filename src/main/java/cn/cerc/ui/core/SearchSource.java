@@ -1,8 +1,8 @@
 package cn.cerc.ui.core;
 
-import cn.cerc.db.core.DataSource;
+import cn.cerc.db.core.DataRowSource;
 
-public interface SearchSource extends DataSource {
+public interface SearchSource extends DataRowSource {
 
     void updateValue(String id, String code);
 
