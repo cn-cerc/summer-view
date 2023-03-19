@@ -2,6 +2,7 @@ package cn.cerc.ui.phone;
 
 import javax.servlet.http.HttpServletRequest;
 
+import cn.cerc.db.core.DataRow;
 import cn.cerc.db.core.Utils;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
@@ -34,7 +35,8 @@ public class UIPanelCell extends UIComponent implements UIFormGatherImpl {
             this.setCssProperty("data-field", this.fieldCode);
         this.beginOutput(html);
         if (impl != null) {
-            String name = impl.current().fields().get(fieldCode).name();
+            DataRow row = impl.currentRow().orElseThrow();
+            String name = row.fields().get(fieldCode).name();
             if (!Utils.isEmpty(name)) {
                 // 若有需要星标，则予以显示
                 var style = impl.dataStyle();
@@ -48,7 +50,7 @@ public class UIPanelCell extends UIComponent implements UIFormGatherImpl {
                 html.print(name);
                 html.print(":");
             }
-            html.print(impl.current().getText(fieldCode));
+            html.print(row.getText(fieldCode));
         } else
             html.print("UIDataViewImpl is null");
         this.endOutput(html);
@@ -63,7 +65,7 @@ public class UIPanelCell extends UIComponent implements UIFormGatherImpl {
             if (impl.dataStyle() != null)
                 readonly = impl.dataStyle().fields().get(this.fieldCode).readonly();
             if (!readonly) {
-                impl.current().setValue(this.fieldCode, value);
+                impl.currentRow().orElseThrow().setValue(this.fieldCode, value);
                 return 1;
             }
         }

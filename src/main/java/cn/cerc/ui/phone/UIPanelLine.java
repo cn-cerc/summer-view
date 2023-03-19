@@ -1,12 +1,12 @@
 package cn.cerc.ui.phone;
 
-import cn.cerc.db.core.DataSource;
+import cn.cerc.db.core.DataSetSource;
 import cn.cerc.db.core.FieldMeta;
 import cn.cerc.ui.core.UIComponent;
 
 public class UIPanelLine extends UIBlockLine {
 
-    private DataSource source;
+    private DataSetSource source;
     private OnCreateCell onCreateCellBefore;
     private OnCreateCell onCreateCell;
     private OnCreateCell onCreateCellAfter;
@@ -28,17 +28,17 @@ public class UIPanelLine extends UIBlockLine {
     @Override
     public void createCell(String fieldCode) {
         if (onCreateCellBefore != null) {
-            FieldMeta fieldMeta = source().dataSet().fields(fieldCode);
+            FieldMeta fieldMeta = source().source().orElseThrow().fields(fieldCode);
             onCreateCellBefore.execute(this, fieldMeta);
         }
         if (onCreateCell != null) {
-            FieldMeta fieldMeta = source().dataSet().fields(fieldCode);
+            FieldMeta fieldMeta = source().source().orElseThrow().fields(fieldCode);
             onCreateCell.execute(this, fieldMeta);
         } else {
             new UIPanelCell(this).setFieldCode(fieldCode);
         }
         if (onCreateCellAfter != null) {
-            FieldMeta fieldMeta = source().current().fields(fieldCode);
+            FieldMeta fieldMeta = source().currentRow().orElseThrow().fields(fieldCode);
             onCreateCellAfter.execute(this, fieldMeta);
         }
     }
@@ -62,9 +62,9 @@ public class UIPanelLine extends UIBlockLine {
         return this;
     }
 
-    public DataSource source() {
+    public DataSetSource source() {
         if (source == null)
-            source = findOwner(DataSource.class);
+            source = findOwner(DataSetSource.class);
         return source;
     }
 

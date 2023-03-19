@@ -2,8 +2,10 @@ package cn.cerc.ui.phone;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import cn.cerc.db.core.DataRow;
+import cn.cerc.db.core.DataSet;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.core.UIDataViewImpl;
@@ -43,7 +45,7 @@ public class UIPanelView extends UIComponent implements UIDataViewImpl {
      */
     public UIPanelView setDataStyle(UIDataStyleImpl dataStyle) {
         if (dataStyle != null && this.dataRow == null)
-            setDataRow(dataStyle.current());
+            dataStyle.currentRow().ifPresent(item -> setDataRow(item));
         this.dataStyle = dataStyle;
         return this;
     }
@@ -56,11 +58,6 @@ public class UIPanelView extends UIComponent implements UIDataViewImpl {
     public UIPanelView setDataRow(DataRow dataRow) {
         this.dataRow = dataRow;
         return this;
-    }
-
-    @Override
-    public DataRow dataRow() {
-        return this.dataRow;
     }
 
     public UIComponent block() {
@@ -102,7 +99,7 @@ public class UIPanelView extends UIComponent implements UIDataViewImpl {
     public void output(HtmlWriter html) {
         if (!this.active())
             return;
-        var dataSet = current().dataSet();
+        var dataSet = currentRow().map(row -> row.dataSet()).orElse(null);
         if (dataSet != null)
             this.setCssProperty("data-row", "" + (dataSet.recNo() - 1));
         super.output(html);
@@ -133,6 +130,11 @@ public class UIPanelView extends UIComponent implements UIDataViewImpl {
         new UIButton(form).setName("summit");
         System.out.println(form.gatherRequest());
         System.out.println(form.toString());
+    }
+
+    @Override
+    public Optional<DataSet> source() {
+        return Optional.empty();
     }
 
 }

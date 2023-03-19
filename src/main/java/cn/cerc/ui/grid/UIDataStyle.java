@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -282,13 +283,16 @@ public class UIDataStyle implements UIDataStyleImpl {
     }
 
     @Override
+    public Optional<DataSet> source() {
+        return Optional.ofNullable(dataSet);
+    }
+
     public DataSet dataSet() {
         return dataSet;
     }
 
-    @Override
     public DataRow current() {
-        return dataSet != null ? dataSet.current() : dataRow;
+        return dataSet != null ? dataSet.currentRow().orElse(null) : dataRow;
     }
 
     public UIDataStyle setDataSet(DataSet dataSet) {

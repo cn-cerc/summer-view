@@ -1,6 +1,6 @@
 package cn.cerc.ui.phone;
 
-import cn.cerc.db.core.DataSource;
+import cn.cerc.db.core.DataSetSource;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 
@@ -18,9 +18,9 @@ public class UIPhoneCellIt extends UIComponent {
     @Override
     public void output(HtmlWriter html) {
         this.beginOutput(html);
-        var impl = findOwner(DataSource.class);
+        var impl = findOwner(DataSetSource.class);
         if (impl != null)
-            html.print(impl.dataSet().recNo() + "#");
+            html.print(impl.source().orElseThrow().recNo() + "#");
         this.endOutput(html);
     }
 
