@@ -647,6 +647,6 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
     }
 
     public DataColumn value() {
-        return new DataColumn(this.source, this.getField());
+        return new DataColumn(this.source.getDataSet().orElseThrow(), this.getField());
     }
 }

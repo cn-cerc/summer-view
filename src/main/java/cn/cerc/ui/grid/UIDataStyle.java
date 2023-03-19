@@ -267,12 +267,7 @@ public class UIDataStyle implements UIDataStyleImpl {
             throw new RuntimeException("没有找到dataSet");
         }
         var ds = dataSet;
-        return this.addField("it")
-                .setWidth(2)
-                .setAlignCenter()
-                .field()
-                .onGetText(data -> "" + ds.recNo())
-                .setName("序");
+        return this.addField("it").setWidth(2).setAlignCenter().field().onGetText(data -> "" + ds.recNo()).setName("序");
     }
 
     public UIDataStyle setDataRow(DataRow dataRow) {
@@ -319,6 +314,11 @@ public class UIDataStyle implements UIDataStyleImpl {
         return items;
     }
 
+    @Override
+    public FieldStyleDefine getFieldStyle(String fieldCode) {
+        return items.get(fieldCode);
+    }
+
     public static void main(String[] args) {
         UIDataStyle style = new UIDataStyle();
         DataRow row = DataRow.of("code", 1);
@@ -331,11 +331,6 @@ public class UIDataStyle implements UIDataStyleImpl {
         });
 
         System.out.println("output:" + style.getDefault(code).getText(data));
-    }
-
-    @Override
-    public FieldStyleDefine getFieldStyle(String fieldCode) {
-        return items.get(fieldCode);
     }
 
 }

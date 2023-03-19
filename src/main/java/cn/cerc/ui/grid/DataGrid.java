@@ -78,7 +78,7 @@ public class DataGrid extends UIComponent implements DataSetSource, IGridStyle {
     }
 
     /**
-     * 请改使用source函数
+     * 请改使用 getDataSet 函数
      * 
      * @return
      */
@@ -92,11 +92,6 @@ public class DataGrid extends UIComponent implements DataSetSource, IGridStyle {
         pages.setDataSet(dataSet);
         return this;
     }
-
-//    @Deprecated
-//    public void addField(AbstractField field) {
-//        this.addComponent(field);
-//    }
 
     @Override
     public UIComponent addComponent(UIComponent child) {

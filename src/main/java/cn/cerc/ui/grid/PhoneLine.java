@@ -133,15 +133,6 @@ public class PhoneLine extends UIComponent implements DataSetSource {
         return source.getDataSet();
     }
 
-    /**
-     * 
-     * @return 返回数据集，可能会为null值, 建议改使用source函数
-     */
-    @Deprecated
-    public DataSet dataSet() {
-        return source.getDataSet().orElse(null);
-    }
-
     @Deprecated
     public void addField(AbstractField child) {
         this.addComponent(child);
