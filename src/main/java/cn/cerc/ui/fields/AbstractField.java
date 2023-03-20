@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import cn.cerc.db.core.ClassConfig;
 import cn.cerc.db.core.DataColumn;
 import cn.cerc.db.core.DataRow;
+import cn.cerc.db.core.DataSet;
 import cn.cerc.db.core.DataSetSource;
 import cn.cerc.db.core.Datetime;
 import cn.cerc.db.core.FastDate;
@@ -233,13 +234,8 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
     }
 
     @Override
-    public Optional<DataRow> currentRow() {
-        DataRow result = null;
-        if (source != null)
-            result = source.getDataSet().map(ds -> ds.current()).orElse(null);
-        if (result == null)
-            result = new DataRow();
-        return Optional.of(result);
+    public Optional<DataSet> getDataSet() {
+        return source.getDataSet();
     }
 
     @Override
@@ -647,6 +643,6 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
     }
 
     public DataColumn value() {
-        return new DataColumn(this.currentRow().orElseThrow().dataSet(), this.getField());
+        return new DataColumn(source.getDataSet().get(), this.getField());
     }
 }

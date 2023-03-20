@@ -1,14 +1,14 @@
 package cn.cerc.ui.core;
 
 import cn.cerc.db.core.DataRow;
-import cn.cerc.db.core.DataRowSource;
+import cn.cerc.db.core.DataSetSource;
 
-public interface SearchSource extends DataRowSource {
+public interface SearchSource extends DataSetSource {
 
     void updateValue(String id, String code);
 
     default DataRow current() {
-        return currentRow().orElse(null);
+        return this.getDataSet().get().current();
     }
 
 }
