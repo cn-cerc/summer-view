@@ -3,6 +3,7 @@ package cn.cerc.ui.phone;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import cn.cerc.db.core.FieldDefs;
 import cn.cerc.db.core.FieldMeta;
 import cn.cerc.db.core.FieldMeta.FieldKind;
 import cn.cerc.mis.core.HtmlWriter;
@@ -29,7 +30,18 @@ public abstract class UIBlockLine extends UIComponent {
             log.error("在 owner 中找不到 UIDataViewImpl");
             throw new RuntimeException("在 owner 中找不到 UIDataViewImpl");
         }
-        var fields = impl.current() != null ? impl.current().fields() : impl.dataSet().fields();
+        FieldDefs fields = null;
+        if (impl.getDataSet().isPresent()) {
+            var ds = impl.getDataSet().get();
+            if (ds.currentRow().isPresent())
+                fields = ds.current().fields();
+            else
+                fields = ds.fields();
+        }
+        if (fields == null) {
+            log.error("在 owner 中找不到数据源，代码编写错误");
+            throw new RuntimeException("在 owner 中找不到数据源，代码编写错误");
+        }
         var dataStyle = impl.dataStyle();
         for (var fieldCode : fieldList) {
             FieldMeta column = fields.get(fieldCode);

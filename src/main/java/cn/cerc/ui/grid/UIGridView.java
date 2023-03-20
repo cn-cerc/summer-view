@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -51,6 +52,10 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
     }
 
     @Override
+    public Optional<DataSet> getDataSet() {
+        return Optional.ofNullable(dataSet);
+    }
+
     public DataSet dataSet() {
         return dataSet;
     }
@@ -69,7 +74,7 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
     public UIGridView setDataStyle(UIDataStyleImpl dataStyle) {
         if (dataStyle != null) {
             if (this.dataSet == null)
-                this.setDataSet(dataStyle.dataSet());
+                this.setDataSet(dataStyle.getDataSet().orElse(null));
             for (var item : dataStyle.fields().values()) {
                 fields.add(item.field());
                 this.items.put(item.field().code(), dataStyle.getFieldStyle(item.field().code()));
@@ -115,7 +120,7 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
     }
 
     private FieldMeta addFieldIt() {
-        DataSet dataSet = this.dataSet() != null ? this.dataSet() : this.current().dataSet();
+        DataSet dataSet = this.dataSet() != null ? this.dataSet() : this.currentRow().orElseThrow().dataSet();
         if (dataSet == null) {
             log.error("没有找到dataSet");
             throw new RuntimeException("没有找到dataSet");

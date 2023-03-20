@@ -2,7 +2,7 @@ package cn.cerc.ui.grid;
 
 import java.util.HashMap;
 
-import cn.cerc.db.core.DataSource;
+import cn.cerc.db.core.DataSetSource;
 import cn.cerc.db.core.FieldMeta;
 
 /**
@@ -11,7 +11,7 @@ import cn.cerc.db.core.FieldMeta;
  * @author ZhangGong
  *
  */
-public interface UIDataStyleImpl extends DataSource {
+public interface UIDataStyleImpl extends DataSetSource {
     
     /**
      * 于样式处理器中注册一个字段，若不存在，则自动于dataSet.fields中增加

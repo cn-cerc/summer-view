@@ -1,8 +1,10 @@
 package cn.cerc.ui.grid;
 
+import java.util.Optional;
+
 import cn.cerc.db.core.DataRow;
 import cn.cerc.db.core.DataSet;
-import cn.cerc.db.core.DataSource;
+import cn.cerc.db.core.DataSetSource;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.fields.AbstractField;
@@ -10,8 +12,8 @@ import cn.cerc.ui.fields.AbstractField.BuildUrl;
 import cn.cerc.ui.fields.ExpendField;
 import cn.cerc.ui.vcl.UIUrl;
 
-public class PhoneLine extends UIComponent implements DataSource {
-    private DataSource source;
+public class PhoneLine extends UIComponent implements DataSetSource {
+    private DataSetSource source;
     private boolean table = false;
     private String style;
     private ExpendField expender;
@@ -49,7 +51,7 @@ public class PhoneLine extends UIComponent implements DataSource {
     }
 
     private void outputTableString(HtmlWriter html) {
-        DataRow record = current();
+        DataRow record = getDataSet().map(ds -> ds.current()).orElseThrow();
         html.print("<tr");
         if (this.expender != null) {
             html.print(String.format(" role=\"%s\" style=\"display: none;\"", expender.getHiddenId()));
@@ -97,7 +99,7 @@ public class PhoneLine extends UIComponent implements DataSource {
             BuildUrl build = field.getBuildUrl();
             if (build != null) {
                 UIUrl url = new UIUrl(null);
-                build.buildUrl(current(), url);
+                build.buildUrl(getDataSet().map(ds -> ds.current()).orElseThrow(), url);
                 url.setText(field.getText()).output(html);
             } else {
                 html.print(field.getText());
@@ -122,9 +124,13 @@ public class PhoneLine extends UIComponent implements DataSource {
         this.expender = expender;
     }
 
+    /**
+     * 
+     * @return 返回数据集
+     */
     @Override
-    public DataSet dataSet() {
-        return source.dataSet();
+    public Optional<DataSet> getDataSet() {
+        return source.getDataSet();
     }
 
     @Deprecated

@@ -2,6 +2,7 @@ package cn.cerc.ui.phone;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import cn.cerc.db.core.DataSet;
 import cn.cerc.mis.core.HtmlWriter;
@@ -45,7 +46,7 @@ public class UIPhoneView extends UIComponent implements UIDataViewImpl {
      */
     public UIPhoneView setDataStyle(UIDataStyleImpl dataStyle) {
         if (dataStyle != null && this.dataSet == null)
-            this.dataSet = dataStyle.dataSet();
+            this.dataSet = dataStyle.getDataSet().orElseThrow();
         this.dataStyle = dataStyle;
         return this;
     }
@@ -56,10 +57,14 @@ public class UIPhoneView extends UIComponent implements UIDataViewImpl {
     }
 
     @Override
-    public DataSet dataSet() {
-        return dataSet;
+    public Optional<DataSet> getDataSet() {
+        return Optional.ofNullable(dataSet);
     }
 
+    public DataSet dataSet() {
+        return this.dataSet;
+    }
+    
     public UIPhoneView setDataSet(DataSet dataSet) {
         this.dataSet = dataSet;
         return this;
