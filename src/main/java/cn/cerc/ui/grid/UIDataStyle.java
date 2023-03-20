@@ -22,7 +22,6 @@ import cn.cerc.ui.vcl.UIInput;
 public class UIDataStyle implements UIDataStyleImpl {
     private static final Logger log = LoggerFactory.getLogger(UIDataStyle.class);
     private DataSet dataSet;
-    private DataRow dataRow;
     private boolean readonly = true;
     private HashMap<String, FieldStyleDefine> items = new LinkedHashMap<>();
     private OnOutput onOutput;
@@ -238,7 +237,7 @@ public class UIDataStyle implements UIDataStyleImpl {
 
     @Override
     public FieldStyleDefine addField(String fieldCode) {
-        var fields = this.dataSet != null ? this.dataSet.fields() : this.dataRow.fields();
+        var fields = this.dataSet.fields();
         if (fields == null)
             throw new RuntimeException("fields is null");
         FieldMeta field = fields.get(fieldCode);
@@ -273,7 +272,11 @@ public class UIDataStyle implements UIDataStyleImpl {
     public UIDataStyle setDataRow(DataRow dataRow) {
         if (this.dataSet != null)
             throw new RuntimeException("dataSet not is null");
-        this.dataRow = dataRow;
+        this.dataSet = new DataSet();
+        this.dataSet.fields().copyFrom(dataRow.fields());
+        this.dataSet.records().add(dataRow);
+        this.dataSet.setRecNo(1);
+        dataRow.setDataSet(this.dataSet);
         return this;
     }
 
@@ -287,7 +290,7 @@ public class UIDataStyle implements UIDataStyleImpl {
     }
 
     public DataRow current() {
-        return dataSet != null ? dataSet.current() : dataRow;
+        return dataSet.current();
     }
 
     public UIDataStyle setDataSet(DataSet dataSet) {
