@@ -235,7 +235,7 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
 
     @Override
     public Optional<DataSet> getDataSet() {
-        return source.getDataSet();
+        return source != null ? source.getDataSet() : Optional.of(new DataSet());
     }
 
     @Override
