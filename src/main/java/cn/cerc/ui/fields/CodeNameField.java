@@ -35,7 +35,7 @@ public class CodeNameField extends AbstractField {
             }
             html.println("/>");
         } else {
-            html.println("<label for=\"%s\">%s</label>", this.getId(), this.getName() + "：");
+            html.println("<label for=\"%s\">%s</label>", getNameField(), this.getName() + "：");
 
             html.print("<input");
             html.print(" type=\"hidden\"");

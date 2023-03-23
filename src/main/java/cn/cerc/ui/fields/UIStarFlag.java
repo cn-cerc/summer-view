@@ -1,22 +1,17 @@
 package cn.cerc.ui.fields;
 
-import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.vcl.UIFont;
 import cn.cerc.ui.vcl.UIText;
 
 public class UIStarFlag extends UIComponent {
+    private UIText text;
 
     public UIStarFlag(UIComponent owner) {
         super(owner);
         this.setRootLabel("font");
-    }
-
-    @Override
-    public void output(HtmlWriter html) {
-        this.beginOutput(html);
-        html.print("*");
-        this.endOutput(html);
+        text = new UIText(this);
+        text.setText("*");
     }
 
     public static void main(String[] args) {
