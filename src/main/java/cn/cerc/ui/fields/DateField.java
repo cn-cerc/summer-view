@@ -36,7 +36,7 @@ public class DateField extends AbstractField {
             getBuildText().outputText(current(), html);
             return html.toString();
         }
-        if (current().hasValue(getField())) {
+        if (current() != null && current().hasValue(getField())) {
             return current().getDatetime(getField()).getDate();
         } else {
             return "";

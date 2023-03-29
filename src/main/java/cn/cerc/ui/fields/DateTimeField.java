@@ -38,7 +38,7 @@ public class DateTimeField extends AbstractField {
             getBuildText().outputText(current(), html);
             return html.toString();
         }
-        if (current().hasValue(getField())) {
+        if (current() != null && current().hasValue(getField())) {
             Datetime datetime = current().getDatetime(getField());
             if (this.format != null)
                 return datetime.format(format);
