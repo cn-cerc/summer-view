@@ -87,7 +87,8 @@ public class SiteField extends AbstractField {
         html.print("/><div>");
         for (String key : items.keySet()) {
             String value = items.get(key);
-            html.print("<span value=\"%s\" >%s</span>", key, value);
+            if (key != null && key != "")
+                html.print("<span value=\"%s\" >%s</span>", key, value);
         }
         html.println("</div></div>");
         if (this.isShowStar()) {
