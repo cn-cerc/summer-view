@@ -17,6 +17,8 @@ public class PhoneLine extends UIComponent implements DataSetSource {
     private boolean table = false;
     private String style;
     private ExpendField expender;
+    private boolean hidden = false;
+    private boolean role = false;
 
     public PhoneLine(DataGrid owner) {
         super(owner);
@@ -53,8 +55,11 @@ public class PhoneLine extends UIComponent implements DataSetSource {
     private void outputTableString(HtmlWriter html) {
         DataRow record = getDataSet().map(ds -> ds.current()).orElseThrow();
         html.print("<tr");
-        if (this.expender != null) {
-            html.print(String.format(" role=\"%s\" style=\"display: none;\"", expender.getHiddenId()));
+        if (this.expender != null || this.hidden) {
+            html.print(" style='display: none;'");
+            if(this.expender != null) {
+                html.print(String.format(" role=\"%s\"", expender.getHiddenId()));
+            }
         }
         html.print(">");
         for (UIComponent child : this) {
@@ -69,6 +74,9 @@ public class PhoneLine extends UIComponent implements DataSetSource {
             if (!"".equals(name))
                 html.print(name + ": ");
             BuildUrl build = field.getBuildUrl();
+            if(this.role) {
+                html.print("<span role='%s'>", field.getField());
+            }
             if (build != null) {
                 UIUrl url = new UIUrl(null);
                 build.buildUrl(record, url);
@@ -76,7 +84,9 @@ public class PhoneLine extends UIComponent implements DataSetSource {
             } else {
                 html.print(field.getText());
             }
-
+            if(this.role) {
+                html.print("</span>");
+            }
             html.print("</td>");
         }
         html.print("</tr>");
@@ -116,6 +126,14 @@ public class PhoneLine extends UIComponent implements DataSetSource {
 
     public ExpendField getExpender() {
         return expender;
+    }
+    
+    public void setRole(boolean role) {
+        this.role = role;
+    }
+    
+    public void addHidden(boolean hidden) {
+        this.hidden = hidden;
     }
 
     public void setExpender(ExpendField expender) {
