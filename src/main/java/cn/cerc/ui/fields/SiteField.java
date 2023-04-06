@@ -73,7 +73,7 @@ public class SiteField extends AbstractField {
         String placeholder = "";
         if (this.getPlaceholder() != null)
             placeholder = this.getPlaceholder();
-        html.print("<input id=\"%s\" type=\"text\" name=\"%s\" value=\"%s\" placeholder=\"%s\" ", this.getId(),
+        html.print("<input autocomplete='off' id=\"%s\" type=\"text\" name=\"%s\" value=\"%s\" placeholder=\"%s\" ", this.getId(),
                 this.getId(), initialValue, placeholder);
         if (this.size > 0) {
             html.print(" size=\"%s\"", this.getSize());
@@ -87,7 +87,8 @@ public class SiteField extends AbstractField {
         html.print("/><div>");
         for (String key : items.keySet()) {
             String value = items.get(key);
-            html.print("<span value=\"%s\" >%s</span>", key, value);
+            if (key != null && key != "")
+                html.print("<span value=\"%s\" >%s</span>", key, value);
         }
         html.println("</div></div>");
         if (this.isShowStar()) {
