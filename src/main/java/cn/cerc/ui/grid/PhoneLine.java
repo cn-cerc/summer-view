@@ -93,7 +93,11 @@ public class PhoneLine extends UIComponent implements DataSetSource {
     }
 
     public void outputListString(HtmlWriter html) {
-        html.print("<section>");
+        html.print("<section");
+        if(this.hidden) {
+            html.print(" style='display: none;' ");
+        }
+        html.print(">");
         for (UIComponent child : this) {
             AbstractField field = (AbstractField) child;
             html.print("<span");
@@ -105,12 +109,18 @@ public class PhoneLine extends UIComponent implements DataSetSource {
             if (!"".equals(name))
                 html.print(name + ": ");
             BuildUrl build = field.getBuildUrl();
+            if(this.role) {
+                html.print("<span role='%s'>", field.getField());
+            }
             if (build != null) {
                 UIUrl url = new UIUrl(null);
                 build.buildUrl(getDataSet().map(ds -> ds.current()).orElseThrow(), url);
                 url.setText(field.getText()).output(html);
             } else {
                 html.print(field.getText());
+            }
+            if(this.role) {
+                html.print("</span>");
             }
             html.print("</span>");
         }
@@ -128,12 +138,14 @@ public class PhoneLine extends UIComponent implements DataSetSource {
         return expender;
     }
     
-    public void setRole(boolean role) {
+    public PhoneLine setRole(boolean role) {
         this.role = role;
+        return this;
     }
     
-    public void addHidden(boolean hidden) {
+    public PhoneLine addHidden(boolean hidden) {
         this.hidden = hidden;
+        return this;
     }
 
     public void setExpender(ExpendField expender) {
