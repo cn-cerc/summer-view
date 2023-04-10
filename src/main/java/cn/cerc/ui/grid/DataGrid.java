@@ -274,19 +274,12 @@ public class DataGrid extends UIComponent implements DataSetSource, IGridStyle {
             int flag = 0;
             html.println("<li>");
             for (PhoneLine line : this.phoneLines) {
-                if (line.isTable()) {
-                    if (flag == 0) {
-                        html.println("<table>");
-                        flag = 1;
-                    } else if (flag == 2) {
-                        html.println("</table>");
-                        html.println("<table>");
-                    }
-                } else {
-                    if (flag == 1) {
-                        html.println("</table>");
-                        flag = 2;
-                    }
+                if (line.isTable() && flag == 0) {
+                    html.println("<table>");
+                    flag = 1;
+                } else if (!line.isTable() && flag == 1) {
+                    html.println("</table>");
+                    flag = 0;
                 }
                 line.output(html);
             }
