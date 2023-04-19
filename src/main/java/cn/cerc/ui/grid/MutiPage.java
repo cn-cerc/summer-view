@@ -152,7 +152,11 @@ public class MutiPage {
     public void setDataSet(DataSet dataSet) {
         this.dataSet = dataSet;
         if (dataSet != null) {
-            this.setRecordCount(dataSet.size());
+            int size = dataSet.head().getInt("size");
+            if (size != 0)
+                this.setRecordCount(size);
+            else
+                this.setRecordCount(dataSet.size());
             reset();
         }
     }
