@@ -47,7 +47,7 @@ public class UIReact extends UIComponent {
         if (this.reactList.size() > 0) {
             for (String react : this.reactList) {
                 html.println("<script src='%s'></script>",
-                        StaticFile.getProductJsFile(Application.getAuiPath(String.format("aui-%s.js", react))));
+                        StaticFile.getProductFile(Application.getAuiPath(String.format("aui-%s.js", react))));
             }
         }
         this.content.setId(this.getId());

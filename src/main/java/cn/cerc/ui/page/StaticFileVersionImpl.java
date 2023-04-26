@@ -1,5 +1,7 @@
 package cn.cerc.ui.page;
 
+import java.util.Optional;
+
 public interface StaticFileVersionImpl {
 
     /**
@@ -7,5 +9,5 @@ public interface StaticFileVersionImpl {
      * @param group
      * @return sample: 220101.1
      */
-    String getVersion(StaticFileGroup group);
+    Optional<Integer> getVersion(String fileName);
 }

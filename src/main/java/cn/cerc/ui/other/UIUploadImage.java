@@ -53,11 +53,11 @@ public class UIUploadImage extends UIComponent {
                 readOnly ? String.format("data-event='uploadImage' data-file='%s' data-param='%s'", uploadFile, param)
                         : String.format("onclick='%s'", clickEvent));
         if (Utils.isEmpty(imageSrc)) {
-            html.println("<img src='%s' class='uploadIcon'/>", StaticFile.getImage("images/icon/photograph.png"));
+            html.println("<img src='%s' class='uploadIcon'/>", StaticFile.getCommonFile("images/icon/photograph.png"));
             if (!Utils.isEmpty(uploadText))
                 html.println("<span>%s</span>", uploadText);
         } else
-            html.println("<img src='%s' />", StaticFile.getImage(imageSrc));
+            html.println("<img src='%s' />", StaticFile.getCommonFile(imageSrc));
         html.println("</div>");
         html.println("<div class='uploadInput'>");
         html.println("<input type='file' accept='image/*' onChange='%s' />", Utils.isEmpty(param)

@@ -6,7 +6,6 @@ import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.other.AliyunOssProcess;
 import cn.cerc.ui.page.StaticFile;
-import cn.cerc.ui.page.StaticFileType;
 
 public class UIImage extends UIComponent implements IHtml {
     private String src;
@@ -38,7 +37,7 @@ public class UIImage extends UIComponent implements IHtml {
     public UIImage setSrc(String src) {
         if (this.staticPath != null && this.process != null && !Utils.isEmpty(process.getCommand()))
             src += String.format("?x-oss-process=image%s", process.getCommand());
-        this.src = new StaticFile(StaticFileType.imageFile, src).toString();
+        this.src = new StaticFile(src).toString();
         return this;
     }
 
@@ -48,7 +47,7 @@ public class UIImage extends UIComponent implements IHtml {
     public UIImage setProductSrc(String src) {
         if (this.staticPath != null && this.process != null && !Utils.isEmpty(process.getCommand()))
             src += String.format("?x-oss-process=image%s", process.getCommand());
-        this.src = new StaticFile(StaticFileType.productImage, src).toProductString();
+        this.src = new StaticFile(src).toProductString();
         return this;
     }
 
@@ -58,7 +57,7 @@ public class UIImage extends UIComponent implements IHtml {
     public UIImage setOriginalSrc(String src) {
         if (this.staticPath != null && this.process != null && !Utils.isEmpty(process.getCommand()))
             src += String.format("?x-oss-process=image%s", process.getCommand());
-        this.src = new StaticFile(StaticFileType.imageFile, src).toOriginalString();
+        this.src = new StaticFile(src).toOriginalString();
         return this;
     }
 

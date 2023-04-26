@@ -8,7 +8,6 @@ import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.SummerUI;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.page.StaticFile;
-import cn.cerc.ui.page.StaticFileType;
 
 /*
  * 专用于内嵌脚本输出
@@ -27,7 +26,7 @@ public class UIScript extends UIComponent {
     @Override
     public void beginOutput(HtmlWriter html) {
         if (this.src != null) {
-            StaticFile sf = new StaticFile(StaticFileType.jsFile, this.src);
+            StaticFile sf = new StaticFile(this.src);
             this.setCssProperty("src", sf.toString());
         } else {
             this.setCssProperty("src", null);

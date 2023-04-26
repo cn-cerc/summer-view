@@ -173,18 +173,12 @@ public abstract class UIAbstractPage extends UIComponent implements IPage, Suppo
 
     @Override
     public final void addScriptFile(String fileName) {
-        if (fileName.toLowerCase().startsWith("http"))
-            this.addScriptFile(fileName, "");
-        else
-            this.addScriptFile(fileName, this.isPhone() ? "phone" : "pc");
-    }
-
-    public final void addScriptFile(String fileName, String device) {
         for (StaticFile item : jsFiles) {
-            if (fileName.equals(item.getFileName()) && device.equals(item.getDevice()))
+            if (fileName.equals(item.getFileName()))
                 return;
         }
-        jsFiles.add(new StaticFile(StaticFileType.jsFile, fileName).setDevice(device));
+        jsFiles.add(new StaticFile(fileName));
+
     }
 
     public final List<StaticFile> getCssFiles() {
@@ -192,11 +186,7 @@ public abstract class UIAbstractPage extends UIComponent implements IPage, Suppo
     }
 
     public final void addCssFile(String fileName) {
-        this.addCssFile(fileName, this.isPhone() ? "phone" : "pc");
-    }
-
-    public final void addCssFile(String fileName, String device) {
-        cssFiles.add(new StaticFile(StaticFileType.cssFile, fileName).setDevice(device));
+        cssFiles.add(new StaticFile(fileName));
     }
 
     public UIComponent getHeader() {

@@ -1,23 +1,20 @@
 package cn.cerc.ui.page;
 
+import java.util.Optional;
+
 import cn.cerc.db.core.ServerConfig;
-import cn.cerc.db.core.Utils;
 import cn.cerc.mis.core.Application;
 
 public class StaticFile {
     private String object;
-    private StaticFileType fileType;
     private String endpoint;
-    private String bucket = "/";
-    @Deprecated
-    private String device = "";
+    private String bucket = "";
 
-    public StaticFile(StaticFileType fileType, String object) {
-        this.fileType = fileType;
+    public StaticFile(String object) {
         // 表示开启了 CDN 或者 静态仓库
         this.endpoint = Application.getStaticPath();
         if (endpoint.startsWith("http"))
-            this.bucket = "/common/";
+            this.bucket = "common/";
         this.object = object;
     }
 
@@ -28,25 +25,25 @@ public class StaticFile {
             return object;
 
         StringBuilder builder = new StringBuilder();
-        builder.append(this.endpoint).append(this.bucket).append(this.object);
+        builder.append(this.endpoint).append("/").append(this.bucket).append(this.object);
 
         // 取得版本号
         StaticFileVersionImpl impl = Application.getBean(StaticFileVersionImpl.class);
         if (impl != null) {
-            String version = impl.getVersion(this.fileType.getGroup());
-            if (!Utils.isEmpty(version))
-                builder.append("?v=").append(version);
+            Optional<Integer> version = impl.getVersion(this.bucket + this.object);
+            if (version.isPresent())
+                builder.append("?v=").append(version.get());
         }
         return builder.toString();
     }
 
     public String toProductString() {
-        this.bucket = "/" + ServerConfig.getAppProduct() + "/";
+        this.bucket = ServerConfig.getAppProduct() + "/";
         return this.toString();
     }
 
     public String toOriginalString() {
-        this.bucket = "/" + ServerConfig.getAppOriginal() + "/";
+        this.bucket = ServerConfig.getAppOriginal() + "/";
         return this.toString();
     }
 
@@ -74,74 +71,16 @@ public class StaticFile {
         return path;
     }
 
-    public static String getCssFile(String fileName) {
-        return new StaticFile(StaticFileType.cssFile, fileName).toString();
+    public static String getCommonFile(String fileName) {
+        return new StaticFile(fileName).toString();
     }
 
-    public static String getProductCssFile(String fileName) {
-        return new StaticFile(StaticFileType.cssFile, fileName).toProductString();
+    public static String getProductFile(String fileName) {
+        return new StaticFile(fileName).toProductString();
     }
 
-    public static String getOriginalCssFile(String fileName) {
-        return new StaticFile(StaticFileType.cssFile, fileName).toProductString();
-    }
-
-    public static String getImage(String fileName) {
-        return new StaticFile(StaticFileType.imageFile, fileName).toString();
-    }
-
-    public static String getProductImage(String fileName) {
-        return new StaticFile(StaticFileType.productImage, fileName).toProductString();
-    }
-
-    public static String getOriginalImage(String fileName) {
-        return new StaticFile(StaticFileType.imageFile, fileName).toOriginalString();
-    }
-
-    public static String getSummerImage(String fileName) {
-        return new StaticFile(StaticFileType.summerImage, fileName).toString();
-    }
-
-    public static String getProductSummerImage(String fileName) {
-        return new StaticFile(StaticFileType.summerImage, fileName).toProductString();
-    }
-
-    public static String getOriginalSummerImage(String fileName) {
-        return new StaticFile(StaticFileType.summerImage, fileName).toOriginalString();
-    }
-
-    public static String getMenuImage(String fileName) {
-        return new StaticFile(StaticFileType.menuImage, fileName).toString();
-    }
-
-    public static String getProductMenuImage(String fileName) {
-        return new StaticFile(StaticFileType.menuImage, fileName).toProductString();
-    }
-
-    public static String getOriginalMenuImage(String fileName) {
-        return new StaticFile(StaticFileType.menuImage, fileName).toOriginalString();
-    }
-
-    public static String getJsFile(String fileName) {
-        return new StaticFile(StaticFileType.jsFile, fileName).toString();
-    }
-
-    public static String getProductJsFile(String fileName) {
-        return new StaticFile(StaticFileType.jsFile, fileName).toProductString();
-    }
-
-    public static String getOriginalJsFile(String fileName) {
-        return new StaticFile(StaticFileType.jsFile, fileName).toOriginalString();
-    }
-
-    @Deprecated
-    protected String getDevice() {
-        return device;
-    }
-
-    public StaticFile setDevice(String device) {
-        this.device = device;
-        return this;
+    public static String getOriginalFile(String fileName) {
+        return new StaticFile(fileName).toOriginalString();
     }
 
     public static void main(String[] args) {
