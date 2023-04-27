@@ -14,9 +14,9 @@ import cn.cerc.ui.page.StaticFile;
 import cn.cerc.ui.vcl.UIDiv;
 
 public class UIReact extends UIComponent {
-    protected UIDiv content;
+    private UIDiv content;
     private UIScriptContent script;
-    protected Set<String> reactList = new HashSet<>();
+    private Set<String> reactList = new HashSet<>();
 
     public UIReact(UIComponent owner, String id) {
         super(owner);
