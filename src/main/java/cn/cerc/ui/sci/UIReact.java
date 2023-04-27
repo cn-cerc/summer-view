@@ -47,11 +47,15 @@ public class UIReact extends UIComponent {
         if (this.reactList.size() > 0) {
             for (String react : this.reactList) {
                 html.println("<script src='%s'></script>",
-                        StaticFile.getProductJsFile(Application.getAuiPath(String.format("aui-%s.js", react))));
+                        getStaticFile(Application.getAuiPath(String.format("aui-%s.js", react))));
             }
         }
         this.content.setId(this.getId());
         super.beginOutput(html);
+    }
+
+    protected String getStaticFile(String filename) {
+        return StaticFile.getProductJsFile(filename);
     }
 
     public class UIScriptContent extends UIComponent {
