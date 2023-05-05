@@ -12,6 +12,7 @@ import cn.cerc.db.core.DataSet;
 import cn.cerc.db.core.DataSetSource;
 import cn.cerc.db.core.Datetime;
 import cn.cerc.db.core.FastDate;
+import cn.cerc.mis.core.Application;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.SummerUI;
 import cn.cerc.ui.core.INameOwner;
@@ -629,7 +630,13 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
     }
 
     public static String getIconConfig() {
-        return config.getClassProperty("icon", "");
+        String icon = "";
+        var impl = Application.getBean(ImageConfigImpl.class);
+        if (impl != null)
+            icon = impl.getClassProperty(AbstractField.class, SummerUI.ID, "icon", "");
+        else
+            icon = config.getClassProperty("icon", "");
+        return icon;
     }
 
     protected UIComponent getContent() {

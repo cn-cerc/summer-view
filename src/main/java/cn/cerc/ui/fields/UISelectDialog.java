@@ -1,6 +1,8 @@
 package cn.cerc.ui.fields;
 
+import cn.cerc.mis.core.Application;
 import cn.cerc.mis.core.HtmlWriter;
+import cn.cerc.ui.SummerUI;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.vcl.UIImage;
 import cn.cerc.ui.vcl.UIUrl;
@@ -14,7 +16,11 @@ public class UISelectDialog extends UIComponent {
     public UISelectDialog(UIComponent owner) {
         super(owner);
 //        this.setRootLabel("span");
-        this.icon = AbstractField.config.getClassProperty("icon", "");
+        var impl = Application.getBean(ImageConfigImpl.class);
+        if (impl != null)
+            this.icon = impl.getClassProperty(AbstractField.class, SummerUI.ID, "icon", "");
+        else
+            this.icon = AbstractField.config.getClassProperty("icon", "");
         this.button = new DialogField();
     }
 
