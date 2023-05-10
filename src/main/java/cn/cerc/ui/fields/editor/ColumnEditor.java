@@ -70,9 +70,6 @@ public class ColumnEditor {
                     if (field.readonly()) {
                         continue;
                     }
-                    if (field.getWidth() == 0) {
-                        continue;
-                    }
                     columns.add(field);
                 }
             }
