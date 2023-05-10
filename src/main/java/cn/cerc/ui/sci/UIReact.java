@@ -24,7 +24,7 @@ public class UIReact extends UIComponent {
         this.content = new UIDiv(this);
         this.script = new UIScriptContent(this);
         this.script.setRootLabel("script");
-        this.script.setCssProperty("type", "text/babel");
+        this.script.setCssProperty("type", "text/javascript");
     }
 
     public UIReact add(String text) {
@@ -87,14 +87,16 @@ public class UIReact extends UIComponent {
     }
 
     public UIReact addReact(String name, DataRow row) {
-        String props = "";
+        String props = "{";
         for (FieldMeta meta : row.fields().getItems()) {
             Object value = row.getValue(meta.code());
             if (value instanceof String)
                 value = "'" + value + "'";
-            props += String.format("%s={%s} ", meta.code(), value);
+            props += String.format("%s: %s, ", meta.code(), value);
         }
-        this.add("ReactDOM.render(<aui.%s %s/>, document.getElementById(\"%s\"))", name, props, this.getId());
+        props += "}";
+        this.add("aui.babel.loadAuiPage(aui.%s, %s, '%s')", name, props, this.getId());
+//        this.add("ReactDOM.render(<aui.%s %s/>, document.getElementById(\"%s\"))", name, props, this.getId());
         reactList.add(name);
         return this;
     }
