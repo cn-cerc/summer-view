@@ -23,12 +23,12 @@ public class UIReact extends UIComponent {
         this.setId(id);
         this.content = new UIDiv(this);
         this.script = new UIScriptContent(this);
-        this.script.setRootLabel("script");
-        this.script.setCssProperty("type", "text/javascript");
+        this.getScript().setRootLabel("script");
+        this.getScript().setCssProperty("type", "text/javascript");
     }
 
     public UIReact add(String text) {
-        this.script.add(text);
+        this.getScript().add(text);
         return this;
     }
 
@@ -44,8 +44,8 @@ public class UIReact extends UIComponent {
 
     @Override
     public void beginOutput(HtmlWriter html) {
-        if (this.reactList.size() > 0) {
-            for (String react : this.reactList) {
+        if (this.getReactList().size() > 0) {
+            for (String react : this.getReactList()) {
                 html.println("<script src='%s'></script>",
                         getStaticFile(Application.getAuiPath(String.format("aui-%s.js", react))));
             }
@@ -82,7 +82,7 @@ public class UIReact extends UIComponent {
 
     public UIReact addReact(String name) {
         this.add("ReactDOM.render(<aui.%s />, document.getElementById(\"%s\"))", name, this.getId());
-        reactList.add(name);
+        getReactList().add(name);
         return this;
     }
 
@@ -96,23 +96,20 @@ public class UIReact extends UIComponent {
         }
         props += "}";
         this.add("aui.babel.loadAuiPage(aui.%s, %s, '%s')", name, props, this.getId());
-//        this.add("ReactDOM.render(<aui.%s %s/>, document.getElementById(\"%s\"))", name, props, this.getId());
-        reactList.add(name);
+        getReactList().add(name);
         return this;
     }
 
     public UIReact addReact(String name, String className, DataRow row) {
-        String props = "";
-        for (FieldMeta meta : row.fields().getItems()) {
-            Object value = row.getValue(meta.code());
-            if (value instanceof String)
-                value = "'" + value + "'";
-            props += String.format("%s={%s} ", meta.code(), value);
-        }
-        this.add("ReactDOM.render(<aui.%s.%s %s/>, document.getElementById(\"%s\"))", name, className, props,
-                this.getId());
-        reactList.add(name);
-        return this;
+        return addReact(String.format("%s.%s", className, name), row);
+    }
+
+    public UIScriptContent getScript() {
+        return script;
+    }
+
+    public Set<String> getReactList() {
+        return reactList;
     }
 
 }
