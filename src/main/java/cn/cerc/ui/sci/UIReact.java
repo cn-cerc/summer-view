@@ -23,12 +23,12 @@ public class UIReact extends UIComponent {
         this.setId(id);
         this.content = new UIDiv(this);
         this.script = new UIScriptContent(this);
-        this.script.setRootLabel("script");
-        this.script.setCssProperty("type", "text/babel");
+        this.getScript().setRootLabel("script");
+        this.getScript().setCssProperty("type", "text/babel");
     }
 
     public UIReact add(String text) {
-        this.script.add(text);
+        this.getScript().add(text);
         return this;
     }
 
@@ -44,8 +44,8 @@ public class UIReact extends UIComponent {
 
     @Override
     public void beginOutput(HtmlWriter html) {
-        if (this.reactList.size() > 0) {
-            for (String react : this.reactList) {
+        if (this.getReactList().size() > 0) {
+            for (String react : this.getReactList()) {
                 html.println("<script src='%s'></script>",
                         getStaticFile(Application.getAuiPath(String.format("aui-%s.js", react))));
             }
@@ -82,7 +82,7 @@ public class UIReact extends UIComponent {
 
     public UIReact addReact(String name) {
         this.add("ReactDOM.render(<aui.%s />, document.getElementById(\"%s\"))", name, this.getId());
-        reactList.add(name);
+        getReactList().add(name);
         return this;
     }
 
@@ -95,7 +95,7 @@ public class UIReact extends UIComponent {
             props += String.format("%s={%s} ", meta.code(), value);
         }
         this.add("ReactDOM.render(<aui.%s %s/>, document.getElementById(\"%s\"))", name, props, this.getId());
-        reactList.add(name);
+        getReactList().add(name);
         return this;
     }
 
@@ -109,8 +109,16 @@ public class UIReact extends UIComponent {
         }
         this.add("ReactDOM.render(<aui.%s.%s %s/>, document.getElementById(\"%s\"))", name, className, props,
                 this.getId());
-        reactList.add(name);
+        getReactList().add(name);
         return this;
+    }
+
+    public UIScriptContent getScript() {
+        return script;
+    }
+
+    public Set<String> getReactList() {
+        return reactList;
     }
 
 }
