@@ -84,7 +84,7 @@ public class StartForms implements Filter {
         } else if (StringUtils.countMatches(uri, "/") == 1 && uri.split("/")[1].startsWith("k.")) {
             String deviceNo = uri.split("/")[1].substring(2);
             String deviceName = req.getParameter("deviceName");
-            resp.sendRedirect(UrlRecord.builder("/public/FrmAdvertContent.list")
+            resp.sendRedirect(UrlRecord.builder("/public/kanban")
                     .put("deviceNo", deviceNo)
                     .put("deviceName", deviceName)
                     .build()
