@@ -36,6 +36,7 @@ import cn.cerc.mis.core.FormSign;
 import cn.cerc.mis.core.IErrorPage;
 import cn.cerc.mis.core.SystemBuffer;
 import cn.cerc.mis.other.MemoryBuffer;
+import cn.cerc.ui.core.UrlRecord;
 
 public class StartForms implements Filter {
     private static final Logger log = LoggerFactory.getLogger(StartForms.class);
@@ -79,6 +80,15 @@ public class StartForms implements Filter {
 
         if (StringUtils.countMatches(uri, "/") == 1 && uri.split("/")[1].startsWith("i.")) {
             resp.sendRedirect("/public/install?qr=" + uri.split("/")[1].substring(2));
+            return;
+        } else if (StringUtils.countMatches(uri, "/") == 1 && uri.split("/")[1].startsWith("k.")) {
+            String deviceNo = uri.split("/")[1].substring(2);
+            String deviceName = req.getParameter("deviceName");
+            resp.sendRedirect(UrlRecord.builder("/public/kanban")
+                    .put("deviceNo", deviceNo)
+                    .put("deviceName", deviceName)
+                    .build()
+                    .getUrl());
             return;
         }
         if (StringUtils.countMatches(uri, "/") == 1 && uri.split("/")[1].equalsIgnoreCase("i")) {
