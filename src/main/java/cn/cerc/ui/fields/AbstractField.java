@@ -358,6 +358,9 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
             content.setCssProperty("onclick", this.onclick);
             content.setSignProperty("required", this.required);
             content.setSignProperty("autofocus", this.autofocus);
+            if (this.dialog != null && this.dialog.isOpen()) {
+                content.setCssClass(String.format("%s %s", this.CSSClass_phone, "inputDialogPadding"));
+            }
         }
         content.output(html);
         this.endOutput(html);
@@ -371,6 +374,7 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
         }
         if (!this.hidden) {
             UISpan span = new UISpan(null);
+            span.setCssClass("formDialogSpan");
             if (this.dialog != null && this.dialog.isOpen()) {
                 String src = this.icon != null ? this.icon : getIconConfig();
                 UIUrl url = new UIUrl(span).setHref(dialog.getUrl());
