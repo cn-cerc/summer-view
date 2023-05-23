@@ -48,6 +48,8 @@ public class DataGrid extends UIComponent implements DataSetSource, IGridStyle {
     private OutputEvent beforeOutput;
     // 是否开启宽度以字数输出
     private boolean widthInNum = false;
+    // 表格的标题
+    private String gridTitle;
 
     public DataGrid(UIComponent owner) {
         super(owner);
@@ -59,6 +61,7 @@ public class DataGrid extends UIComponent implements DataSetSource, IGridStyle {
             this.form = (IForm) this.getOrigin();
             pages.setRequest(this.form.getRequest());
         }
+        this.setGridTitle("查询结果");
     }
 
     @Deprecated
@@ -171,6 +174,11 @@ public class DataGrid extends UIComponent implements DataSetSource, IGridStyle {
         this.widthInNum = bool;
     }
 
+    public DataGrid setGridTitle(String gridTitle) {
+        this.gridTitle = gridTitle;
+        return this;
+    }
+
     @Override
     public final void output(HtmlWriter html) {
         if (this.isClientRender()) {
@@ -194,6 +202,7 @@ public class DataGrid extends UIComponent implements DataSetSource, IGridStyle {
     }
 
     private void outputWebGrid(HtmlWriter html) {
+        html.println("<b class='gridViewTitle'>%s</b>", this.gridTitle);
         html.print("<table class=\"%s\"", this.gridCssClass);
         html.println(" role=\"%s\"", this.widthInNum ? "fixed" : "default");
         if (this.gridCssStyle != null) {

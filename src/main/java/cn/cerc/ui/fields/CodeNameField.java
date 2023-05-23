@@ -83,10 +83,10 @@ public class CodeNameField extends AbstractField {
             html.println("/>");
 
             if (this.isShowStar()) {
-                html.println("<font>*</font>");
+                html.println("<font class='formStarFont'>*</font>");
             }
 
-            html.print("<span>");
+            html.print("<span class='formDialogSpan'>");
             if (this.getDialog() != null && this.getDialog().isOpen()) {
                 html.print("<a href=\"%s\">", getUrl(this.getDialog()));
                 html.print("<img src=\"%s\">", CDN.get(StaticFile.getImage(this.getIcon())));
