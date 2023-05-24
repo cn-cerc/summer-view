@@ -174,7 +174,7 @@ public class StartForms implements Filter {
                         if (jedis.setnx(key, "1") == 1) {
                             jedis.expire(key, 1);
                         } else {
-                            log.error("key {}, origin {}", key, builder);
+                            log.debug("key {}, origin {}", key, builder);
                             IErrorPage error = context.getBean(IErrorPage.class);
                             error.output(req, resp, new RuntimeException(String.format("对不起您操作太快了，服务器忙不过来 %s", uri)));
                             return;
