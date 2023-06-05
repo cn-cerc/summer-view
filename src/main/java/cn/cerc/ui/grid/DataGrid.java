@@ -49,7 +49,7 @@ public class DataGrid extends UIComponent implements DataSetSource, IGridStyle {
     // 是否开启宽度以字数输出
     private boolean widthInNum = false;
     // 表格的标题
-    private String gridTitle;
+    private String gridTitle = "";
 
     public DataGrid(UIComponent owner) {
         super(owner);
@@ -61,7 +61,6 @@ public class DataGrid extends UIComponent implements DataSetSource, IGridStyle {
             this.form = (IForm) this.getOrigin();
             pages.setRequest(this.form.getRequest());
         }
-        this.setGridTitle("查询结果");
     }
 
     @Deprecated

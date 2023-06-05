@@ -39,14 +39,13 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
     private boolean columnItHidden;
     private int sumWidth = 0;
     // 表格的标题
-    private String gridTitle;
+    private String gridTitle = "";
 
     public UIGridView(UIComponent owner) {
         super(owner);
         this.setRootLabel("table");
         this.setCssClass("dbgrid gridView");
         this.setActive(!this.isPhone());
-        this.setGridTitle("查询结果");
     }
 
     public UIGridView setDataSet(DataSet dataSet) {
