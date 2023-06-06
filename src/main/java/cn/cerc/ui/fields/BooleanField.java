@@ -45,6 +45,7 @@ public class BooleanField extends AbstractField implements SearchItem, IFormatCo
         UIInput input = new UIInput(null);
         input.setId(this.getId());
         input.setName(this.getId());
+        input.setCssClass("formBooleanField");
         input.setValue("1");
         input.setInputType(UIInput.TYPE_CHECKBOX);
         if (current() != null)
