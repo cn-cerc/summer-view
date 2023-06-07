@@ -17,9 +17,9 @@ public class CodeNameField extends AbstractField {
         super(owner, name, field);
         var impl = Application.getBean(ImageConfigImpl.class);
         if (impl != null)
-            this.setIcon(impl.getClassProperty(CodeNameField.class, SummerUI.ID, "icon", ""));
+            this.getDialog().setIcon(impl.getClassProperty(CodeNameField.class, SummerUI.ID, "icon", ""));
         else
-            this.setIcon(config.getClassProperty("icon", ""));
+            this.getDialog().setIcon(config.getClassProperty("icon", ""));
     }
 
     @Override
@@ -89,7 +89,7 @@ public class CodeNameField extends AbstractField {
             html.print("<span>");
             if (this.getDialog() != null && this.getDialog().isOpen()) {
                 html.print("<a href=\"%s\">", getUrl(this.getDialog()));
-                html.print("<img src=\"%s\">", CDN.get(StaticFile.getImage(this.getIcon())));
+                html.print("<img src=\"%s\">", CDN.get(StaticFile.getImage(this.getDialog().getIcon())));
                 html.print("</a>");
             }
             html.print("</span>");

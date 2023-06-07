@@ -13,6 +13,7 @@ public class UIPanelLine extends UIBlockLine {
 
     public UIPanelLine(UIComponent owner) {
         super(owner);
+        this.setRootLabel("");
     }
 
     @Override

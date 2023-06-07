@@ -16,7 +16,8 @@ public class UIPanelCell extends UIComponent implements UIFormGatherImpl {
 
     public UIPanelCell(UIComponent owner) {
         super(owner);
-        this.setRootLabel("span");
+        this.setRootLabel("div");
+        this.setCssProperty("role", "panelCell");
     }
 
     public UIPanelCell setFieldCode(String fieldCode) {
@@ -47,8 +48,10 @@ public class UIPanelCell extends UIComponent implements UIFormGatherImpl {
                             new UIStarFlag(null).output(html);
                     }
                 }
+                html.print("<label for='%s'>", fieldCode);
                 html.print(name);
-                html.print(":");
+                html.print("：");
+                html.println("</label>");
             }
             html.print(row.getText(fieldCode));
         } else

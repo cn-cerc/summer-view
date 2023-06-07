@@ -16,9 +16,9 @@ public class DateTimeField extends AbstractField {
         this.setDialog("showDateTimeDialog");
         var impl = Application.getBean(ImageConfigImpl.class);
         if (impl != null)
-            this.setIcon(impl.getClassProperty(DateField.class, SummerUI.ID, "icon", ""));
+            this.getDialog().setIcon(impl.getClassProperty(DateField.class, SummerUI.ID, "icon", ""));
         else
-            this.setIcon(config.getClassProperty("icon", ""));
+            this.getDialog().setIcon(config.getClassProperty("icon", ""));
         this.setAlign("center");
     }
 
@@ -27,9 +27,9 @@ public class DateTimeField extends AbstractField {
         this.setDialog("showDateTimeDialog");
         var impl = Application.getBean(ImageConfigImpl.class);
         if (impl != null)
-            this.setIcon(impl.getClassProperty(DateField.class, SummerUI.ID, "icon", ""));
+            this.getDialog().setIcon(impl.getClassProperty(DateField.class, SummerUI.ID, "icon", ""));
         else
-            this.setIcon(config.getClassProperty("icon", ""));
+            this.getDialog().setIcon(config.getClassProperty("icon", ""));
         this.setAlign("center");
     }
 

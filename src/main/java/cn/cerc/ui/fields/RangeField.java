@@ -9,7 +9,7 @@ public class RangeField extends AbstractField {
 
     public RangeField(UIComponent dataView, String name) {
         super(dataView, name, "_range_", 0);
-        this.setIcon("images/select-pic.png");
+        this.getDialog().setIcon("images/select-pic.png");
     }
 
     @Override

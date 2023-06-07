@@ -4,7 +4,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import cn.cerc.db.core.DataCell;
-import cn.cerc.db.core.Utils;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.fields.UISelectDialog;
 import cn.cerc.ui.vcl.UISelect;
@@ -29,7 +28,7 @@ public class UISelectDataStyle extends UIAbstractDataStyle {
             // 允许外部更改input组件的属性
             define.output(input);
             //
-            if (!Utils.isEmpty(define.dialog()))
+            if (define.dialog() != null)
                 new UISelectDialog(box).setDialog(define.dialog()).setInputId(data.key());
             //
             return box.toString();

@@ -3,10 +3,17 @@ package cn.cerc.ui.fields;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.cerc.db.core.ClassConfig;
+import cn.cerc.db.core.Utils;
+import cn.cerc.mis.core.Application;
+import cn.cerc.ui.SummerUI;
+
 public class DialogField {
+    public static final ClassConfig config = new ClassConfig(AbstractField.class, SummerUI.ID);
     private List<String> params = new ArrayList<>();
     private String inputId;
     private String dialogFunc;
+    private String icon;
     private boolean show = true;
 
     public DialogField() {
@@ -83,6 +90,25 @@ public class DialogField {
 
     public boolean isOpen() {
         return show;
+    }
+
+    public String getIcon() {
+        return Utils.isEmpty(icon) ? DialogField.getIconConfig() : icon;
+    }
+
+    public DialogField setIcon(String icon) {
+        this.icon = icon;
+        return this;
+    }
+
+    public static String getIconConfig() {
+        String icon = "";
+        var impl = Application.getBean(ImageConfigImpl.class);
+        if (impl != null)
+            icon = impl.getClassProperty(AbstractField.class, SummerUI.ID, "icon", "");
+        else
+            icon = config.getClassProperty("icon", "");
+        return icon;
     }
 
     public static void main(String[] args) {

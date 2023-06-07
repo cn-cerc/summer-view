@@ -7,16 +7,16 @@ import cn.cerc.ui.SummerUI;
 import cn.cerc.ui.core.UIComponent;
 
 public class DateField extends AbstractField {
-    private static final ClassConfig config = new ClassConfig(DateField.class, SummerUI.ID);
+    public static final ClassConfig config = new ClassConfig(DateField.class, SummerUI.ID);
 
     public DateField(UIComponent owner, String name, String field) {
         super(owner, name, field, 5);
         this.setDialog("showDateDialog");
         var impl = Application.getBean(ImageConfigImpl.class);
         if (impl != null)
-            this.setIcon(impl.getClassProperty(DateField.class, SummerUI.ID, "icon", ""));
+            this.getDialog().setIcon(impl.getClassProperty(DateField.class, SummerUI.ID, "icon", ""));
         else
-            this.setIcon(config.getClassProperty("icon", ""));
+            this.getDialog().setIcon(config.getClassProperty("icon", ""));
         this.setAlign("center");
     }
 
@@ -25,9 +25,9 @@ public class DateField extends AbstractField {
         this.setDialog("showDateDialog");
         var impl = Application.getBean(ImageConfigImpl.class);
         if (impl != null)
-            this.setIcon(impl.getClassProperty(DateField.class, SummerUI.ID, "icon", ""));
+            this.getDialog().setIcon(impl.getClassProperty(DateField.class, SummerUI.ID, "icon", ""));
         else
-            this.setIcon(config.getClassProperty("icon", ""));
+            this.getDialog().setIcon(config.getClassProperty("icon", ""));
         this.setAlign("center");
     }
 

@@ -1,56 +1,43 @@
 package cn.cerc.ui.fields;
 
-import cn.cerc.mis.core.Application;
 import cn.cerc.mis.core.HtmlWriter;
-import cn.cerc.ui.SummerUI;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.vcl.UIImage;
 import cn.cerc.ui.vcl.UIUrl;
 
 public class UISelectDialog extends UIComponent {
-    private DialogField button;
-    private String icon;
+    private DialogField dialog;
     private UIUrl url;
     private UIImage image;
 
     public UISelectDialog(UIComponent owner) {
         super(owner);
-//        this.setRootLabel("span");
-        var impl = Application.getBean(ImageConfigImpl.class);
-        if (impl != null)
-            this.icon = impl.getClassProperty(AbstractField.class, SummerUI.ID, "icon", "");
-        else
-            this.icon = AbstractField.config.getClassProperty("icon", "");
-        this.button = new DialogField();
+        this.dialog = new DialogField();
     }
 
     public String inputId() {
-        return button.getInputId();
+        return dialog.getInputId();
     }
 
     public UISelectDialog setInputId(String inputId) {
-        this.button.setInputId(inputId);
+        this.dialog.setInputId(inputId);
         return this;
     }
 
-    public String icon() {
-        return icon;
-    }
-
-    public UISelectDialog setIcon(String icon) {
-        this.icon = icon;
-        return this;
-    }
-
-    public UISelectDialog setDialog(String dialogFunc) {
-        button.setDialogfun(dialogFunc);
+    public UISelectDialog setDialog(DialogField dialog) {
+        this.dialog = dialog;
         return this;
     }
 
     public UISelectDialog setDialog(String dialogFunc, String... params) {
-        button.setDialogfun(dialogFunc);
+        dialog.setDialogfun(dialogFunc);
         for (String param : params)
-            this.button.add(param);
+            this.dialog.add(param);
+        return this;
+    }
+
+    public UISelectDialog setDialogIcon(String icon) {
+        this.dialog.setIcon(icon);
         return this;
     }
 
@@ -68,8 +55,8 @@ public class UISelectDialog extends UIComponent {
 
     @Override
     public void output(HtmlWriter html) {
-        url().setHref(button.getUrl());
-        image().setSrc(icon);
+        url().setHref(dialog.getUrl());
+        image().setSrc(dialog.getIcon());
         super.output(html);
     }
 

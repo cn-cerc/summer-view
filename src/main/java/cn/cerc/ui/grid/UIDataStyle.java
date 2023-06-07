@@ -97,15 +97,14 @@ public class UIDataStyle implements UIDataStyleImpl {
             style.setInputType(UIInput.TYPE_DATE);
             return style.getText(result);
         };
-
     }
 
     public OnGetText getFastTime() {
         return data -> {
-            var style = new UIStringDataStyle(this, data, this.inGrid);
             String result = data.getFastTime().toString();
             if (data.getFastTime().isEmpty())
                 result = "";
+            var style = new UIStringDataStyle(this, data, this.inGrid);
             return style.getText(result);
         };
     }
@@ -165,6 +164,14 @@ public class UIDataStyle implements UIDataStyleImpl {
 
     public OnGetText getMap(Map<String, String> items) {
         return getMap(items, false);
+    }
+
+    public OnGetText getDate() {
+        return data -> {
+            String result = data.getString();
+            var style = new UIDateDataStyle(this, data, this.inGrid);
+            return style.getText(result);
+        };
     }
 
     public interface OnOutput {
@@ -247,9 +254,15 @@ public class UIDataStyle implements UIDataStyleImpl {
             if (!field.readEntity(entityClass))
                 field.setKind(FieldKind.Calculated);
         }
-        var styleData = new FieldStyleDefine(field);
-        styleData.setReadonly(this.readonly);
-        this.items.put(fieldCode, styleData);
+        var styleData = this.items().get(fieldCode);
+        if (styleData == null) {
+            styleData = new FieldStyleDefine(field);
+            // 如果第一次添加需要列，则自动赋初始值
+            if (fieldCode == "it")
+                styleData.setWidth(2).setAlignCenter().field().onGetText(data -> "" + dataSet.recNo()).setName("序");
+            styleData.setReadonly(this.readonly);
+            this.items.put(fieldCode, styleData);
+        }
         return styleData;
     }
 
@@ -257,7 +270,7 @@ public class UIDataStyle implements UIDataStyleImpl {
      * 
      * @return 于dataSet中增加一个it字段，并自动等于dataSet.recNo
      */
-    public FieldMeta addFieldIt() {
+    public FieldStyleDefine addFieldIt() {
         var dataSet = dataSet();
         if (dataSet == null && current() != null)
             dataSet = current().dataSet();
@@ -265,8 +278,10 @@ public class UIDataStyle implements UIDataStyleImpl {
             log.error("没有找到dataSet");
             throw new RuntimeException("没有找到dataSet");
         }
-        var ds = dataSet;
-        return this.addField("it").setWidth(2).setAlignCenter().field().onGetText(data -> "" + ds.recNo()).setName("序");
+        var styleData = this.fields().get("it");
+        if (styleData == null)
+            styleData = this.addField("it");
+        return styleData;
     }
 
     public UIDataStyle setDataRow(DataRow dataRow) {

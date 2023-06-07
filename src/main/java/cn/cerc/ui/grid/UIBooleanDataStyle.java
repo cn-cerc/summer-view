@@ -45,7 +45,7 @@ public class UIBooleanDataStyle extends UIAbstractDataStyle {
             // 允许外部更改input组件的属性
             define.output(input);
             //
-            if (!Utils.isEmpty(define.dialog()))
+            if (!Utils.isEmpty(define.dialog().getDialogfun()))
                 new UISelectDialog(box).setDialog(define.dialog()).setInputId(data.key());
             //
             result = box.toString();

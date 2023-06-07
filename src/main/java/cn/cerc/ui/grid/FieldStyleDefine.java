@@ -4,6 +4,7 @@ import cn.cerc.db.core.DataType;
 import cn.cerc.db.core.FieldMeta;
 import cn.cerc.db.editor.OnGetText;
 import cn.cerc.ui.core.UIComponent;
+import cn.cerc.ui.fields.DialogField;
 
 /**
  * 字段显示样式数据定义
@@ -22,7 +23,7 @@ public class FieldStyleDefine {
     // 输入时的提示讯息
     private String placeholder;
     // 是否出现开窗选择按钮
-    private String dialog;
+    private DialogField dialog;
     // 帮助文档id
     private String helpId;
     // 是否为只读字段
@@ -37,7 +38,7 @@ public class FieldStyleDefine {
         if (field != null && field.describe() != null) {
             this.width = field.describe().width();
             this.required = field.describe().required();
-            this.dialog = field.describe().dialog();
+            this.setDialog(field.describe().dialog());
         }
     }
 
@@ -132,12 +133,29 @@ public class FieldStyleDefine {
             onOutput.execute(this);
     }
 
-    public String dialog() {
+    public DialogField dialog() {
         return dialog;
     }
 
     public FieldStyleDefine setDialog(String dialog) {
-        this.dialog = dialog;
+        if (this.dialog == null)
+            this.dialog = new DialogField();
+        this.dialog.setDialogfun(dialog);
+        return this;
+    }
+
+    public FieldStyleDefine setDialog(String dialog, String... params) {
+        this.setDialog(dialog);
+        for (String string : params) {
+            this.dialog.add(string);
+        }
+        return this;
+    }
+
+    public FieldStyleDefine setDialogIcon(String icon) {
+        if (this.dialog == null)
+            this.dialog = new DialogField();
+        this.dialog.setIcon(icon);
         return this;
     }
 
@@ -185,12 +203,12 @@ public class FieldStyleDefine {
         this.align = align;
         return this;
     }
-    
+
     public FieldStyleDefine setAlignCenter() {
         this.setAlign("center");
         return this;
     }
-    
+
     public FieldStyleDefine setAlignRight() {
         this.setAlign("right");
         return this;

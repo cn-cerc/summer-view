@@ -5,16 +5,13 @@ import java.util.Optional;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-import cn.cerc.db.core.ClassConfig;
 import cn.cerc.db.core.DataColumn;
 import cn.cerc.db.core.DataRow;
 import cn.cerc.db.core.DataSet;
 import cn.cerc.db.core.DataSetSource;
 import cn.cerc.db.core.Datetime;
 import cn.cerc.db.core.FastDate;
-import cn.cerc.mis.core.Application;
 import cn.cerc.mis.core.HtmlWriter;
-import cn.cerc.ui.SummerUI;
 import cn.cerc.ui.core.INameOwner;
 import cn.cerc.ui.core.SearchSource;
 import cn.cerc.ui.core.UIComponent;
@@ -27,7 +24,6 @@ import cn.cerc.ui.vcl.UIText;
 import cn.cerc.ui.vcl.UIUrl;
 
 public abstract class AbstractField extends UIComponent implements INameOwner, SearchSource {
-    public static final ClassConfig config = new ClassConfig(AbstractField.class, SummerUI.ID);
     // 数据库相关
     private String field;
     // 自定义取值
@@ -44,8 +40,6 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
     private String role;
     //
     private DialogField dialog;
-    // dialog 小图标
-    private String icon;
     //
     private BuildUrl buildUrl;
     // 数据源
@@ -372,9 +366,8 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
         if (!this.hidden) {
             UISpan span = new UISpan(null);
             if (this.dialog != null && this.dialog.isOpen()) {
-                String src = this.icon != null ? this.icon : getIconConfig();
                 UIUrl url = new UIUrl(span).setHref(dialog.getUrl());
-                new UIImage(url).setSrc(src);
+                new UIImage(url).setSrc(this.dialog.getIcon());
             }
             span.output(html);
         }
@@ -382,6 +375,8 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
     }
 
     public DialogField getDialog() {
+        if (dialog == null)
+            dialog = new DialogField();
         return dialog;
     }
 
@@ -560,14 +555,6 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
         return result.isEmpty() ? def : result;
     }
 
-    public String getIcon() {
-        return icon;
-    }
-
-    public void setIcon(String icon) {
-        this.icon = icon;
-    }
-
     public class Editor {
         private String xtype;
 
@@ -627,16 +614,6 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
             }
             return json.toString().replace("\"", "'");
         }
-    }
-
-    public static String getIconConfig() {
-        String icon = "";
-        var impl = Application.getBean(ImageConfigImpl.class);
-        if (impl != null)
-            icon = impl.getClassProperty(AbstractField.class, SummerUI.ID, "icon", "");
-        else
-            icon = config.getClassProperty("icon", "");
-        return icon;
     }
 
     protected UIComponent getContent() {

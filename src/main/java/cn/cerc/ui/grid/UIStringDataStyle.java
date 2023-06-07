@@ -18,22 +18,18 @@ public class UIStringDataStyle extends UIAbstractDataStyle {
     public String getText(String defaultText) {
         if (define != null && !define.readonly()) {
             UIComponent box = new UIComponent(null);
+            box.setRootLabel("div");
             //
             UIInput input = new UIInput(box);
             input.setId(data.key());
             input.setValue(defaultText);
-            if (define.width() > 0) {
-                String width = String.format("width: %dpx", define.width() * UIDataStyle.PX_SIZE);
-                input.setCssStyle(width);
-            } else
-                input.setCssStyle(null);
             input.setPlaceholder(define.placeholder());
             if (inputType != null)
                 input.setInputType(inputType);
             // 允许外部更改input组件的属性
             define.output(input);
             //
-            if (!Utils.isEmpty(define.dialog()))
+            if (!Utils.isEmpty(define.dialog().getDialogfun()))
                 new UISelectDialog(box).setDialog(define.dialog()).setInputId(data.key());
             //
             return box.toString();
