@@ -88,11 +88,13 @@ public class StartApp implements Filter {
     @Override
     public void init(FilterConfig filterConfig) {
         log.info("{} init.", this.getClass().getName());
+        ZkLoad.get().register();
     }
 
     @Override
     public void destroy() {
         log.info("{} destroy.", this.getClass().getName());
+        ZkLoad.get().unRegister();
     }
 
 }
