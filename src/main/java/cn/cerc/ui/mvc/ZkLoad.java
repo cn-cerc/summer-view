@@ -3,7 +3,6 @@ package cn.cerc.ui.mvc;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.WatchedEvent;
@@ -26,9 +25,12 @@ public class ZkLoad implements Watcher {
     private String childPath = null;
     private String wanIp = "";
 
+    private volatile Integer current;
+
     private ZkLoad() {
         map = new HashMap<>();
         rootPath = String.format("/%s/%s/%s/", ServerConfig.getAppProduct(), ServerConfig.getAppVersion(), "services");
+        current = 0;
     }
 
     public static ZkLoad get() {
@@ -37,7 +39,7 @@ public class ZkLoad implements Watcher {
 
     public String getUrl(String application) {
         String path = rootPath + application;
-        log.info("获取服务 {}", path);
+//        log.info("获取服务 {}", path);
         List<String> childList = map.get(path);
         if (childList == null) {
             ZkServer zk = ZkServer.get();
@@ -50,7 +52,8 @@ public class ZkLoad implements Watcher {
         }
         String server = "127.0.0.1";
         if (childList.size() > 0) {
-            String zkServer = childList.get(new Random().nextInt(childList.size()));
+            String zkServer = childList.get(current);
+            current = (current + 1) % childList.size();
             String[] values = zkServer.split(":");
             if (values.length > 2) {
                 String destWanIp = values[2];
@@ -63,7 +66,7 @@ public class ZkLoad implements Watcher {
                 server = String.format("%s:%s", values[0], values[1]);
             }
         }
-        return server;
+        return "http://" + server;
     }
 
     // 刷新内存
@@ -85,7 +88,7 @@ public class ZkLoad implements Watcher {
             zk.create(path, "", CreateMode.PERSISTENT);
         }
         childPath = path + "/" + lanIp + ":" + port + ":" + wanIp;
-        String content = "";
+        String content = "http://" + lanIp + ":" + port;
         zk.create(childPath, content.toString(), CreateMode.EPHEMERAL);
         log.info("注册服务 {}", childPath);
         return childPath;
