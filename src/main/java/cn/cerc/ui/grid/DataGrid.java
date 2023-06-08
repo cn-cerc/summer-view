@@ -201,7 +201,7 @@ public class DataGrid extends UIComponent implements DataSetSource, IGridStyle {
     }
 
     private void outputWebGrid(HtmlWriter html) {
-        html.println("<b class='gridViewTitle'>%s</b>", this.gridTitle);
+        html.println("<div role='aui-table'><b class='gridViewTitle'>%s</b>", this.gridTitle);
         html.print("<table class=\"%s\"", this.gridCssClass);
         html.println(" role=\"%s\"", this.widthInNum ? "fixed" : "default");
         if (this.gridCssStyle != null) {
@@ -212,7 +212,7 @@ public class DataGrid extends UIComponent implements DataSetSource, IGridStyle {
         outputHead(html);
         outputRows(html);
 
-        html.println("</table>");
+        html.println("</table></div>");
     }
 
     public void outputHead(HtmlWriter html) {

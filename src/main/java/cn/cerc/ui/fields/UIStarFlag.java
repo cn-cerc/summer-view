@@ -9,8 +9,7 @@ public class UIStarFlag extends UIComponent {
 
     public UIStarFlag(UIComponent owner) {
         super(owner);
-        this.setRootLabel("font");
-        this.setCssClass("formStarFont");
+        this.setRootLabel("font").setCssProperty("role", "require");
     }
 
     @Override
