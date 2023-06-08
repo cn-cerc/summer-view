@@ -83,7 +83,7 @@ public class CodeNameField extends AbstractField {
             html.println("/>");
 
             if (this.isShowStar()) {
-                html.println("<font>*</font>");
+                new UIStarFlag(null).output(html);
             }
 
             html.print("<span role='suffix-icon'>");
