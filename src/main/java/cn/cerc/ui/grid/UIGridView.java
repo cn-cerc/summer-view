@@ -53,11 +53,6 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
         return this;
     }
 
-    public UIGridView setGridTitle(String gridTitle) {
-        this.gridTitle = gridTitle;
-        return this;
-    }
-
     @Override
     public Optional<DataSet> getDataSet() {
         return Optional.ofNullable(dataSet);
@@ -96,12 +91,6 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
     @Override
     public boolean active() {
         return active;
-    }
-
-    @Override
-    public void beginOutput(HtmlWriter html) {
-        html.println("<b class='gridViewTitle'>%s</b>", this.gridTitle);
-        super.beginOutput(html);
     }
 
     /**
