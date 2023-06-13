@@ -38,8 +38,6 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
     private FieldMeta columnIt;
     private boolean columnItHidden;
     private int sumWidth = 0;
-    // 表格的标题
-    private String gridTitle = "";
 
     public UIGridView(UIComponent owner) {
         super(owner);
