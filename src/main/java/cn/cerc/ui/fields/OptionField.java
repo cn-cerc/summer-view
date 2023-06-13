@@ -88,7 +88,7 @@ public class OptionField extends AbstractField {
         if (this.isShowStar()) {
             html.print("<font>*</font>");
         }
-        html.print("<span class='formDialogSpan'></span>");
+        html.print("<span role='suffix-icon'></span>");
     }
 
     public int getSize() {
