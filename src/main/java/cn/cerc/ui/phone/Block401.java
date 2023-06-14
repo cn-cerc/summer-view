@@ -99,6 +99,8 @@ public class Block401 extends UICustomPhone {
         images.add(image);
     }
 
+    public List<UIImage> getImages() { return images; }
+
     public UIImage getProduct() {
         return product;
     }
