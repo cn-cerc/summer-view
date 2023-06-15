@@ -18,35 +18,34 @@ import cn.cerc.mis.core.Application;
 public class ClientIPVerify {
     private static final Logger log = LoggerFactory.getLogger(ClientIPVerify.class);
 
-    private static final String filePath;
+    private static final File file;
 
     static {
         // 加载本地文件配置
         String path = System.getProperty("user.home") + System.getProperty("file.separator");
-        filePath = path + "IP_trial_single_WGS84.awdb";
+        String filePath = path + "IP_trial_single_WGS84.awdb";
+        file = new File(filePath);
     }
 
     private static final IClientIPCheckList client = Application.getBean(IClientIPCheckList.class);
 
     public static boolean allow(String ip) {
-        File file = new File(filePath);
-        // 开发环境下没有离线库文件则免校验
-        if (ServerConfig.isServerDevelop()) {
-            if (!file.exists())
-                return true;
-        }
+        // 没有定义则免校验
+        if (client == null)
+            return true;
+
+        // 没有文件则免校验
+        if (!file.exists())
+            return true;
 
         try (AWReader awReader = new AWReader(file)) {
             InetAddress address = InetAddress.getByName(ip);
             JsonNode record = awReader.get(address);
-
             if (record == null) {
+                log.error("{} IP地址读取不到地址解析", ip);
                 return false;
             }
 
-            if (client == null) {
-                return true;
-            }
             // 检查大洲通行的白名单
             if (record.has("continent")) {
                 String continent = record.get("continent").asText();
