@@ -66,7 +66,7 @@ public class OptionField extends AbstractField {
         }
         html.print("<label for=\"%s\"", id);
         if (this.getMark() != null) {
-            html.print(" role='formMark'");
+            html.print(" class='formMark'");
         }
         html.print(">");
         html.println("<span>%s</span>：", this.getName());
