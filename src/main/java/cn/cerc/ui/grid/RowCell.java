@@ -46,14 +46,6 @@ public class RowCell extends UIComponent {
         return items;
     }
 
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
     public String getStyle() {
         return style;
     }
