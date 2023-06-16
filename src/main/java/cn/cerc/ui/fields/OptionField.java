@@ -60,11 +60,18 @@ public class OptionField extends AbstractField {
     @Override
     public void output(HtmlWriter html) {
         String current = this.getText();
+        String id = this.getId();
         if (Utils.isEmpty(current) && !Utils.isEmpty(this.getValue())) {
             current = this.getValue();
         }
-        html.println("<label for=\"%s\">%s</label>", this.getId(), this.getName() + "：");
-        html.print("<select id=\"%s\" name=\"%s\"", this.getId(), this.getId());
+        html.print("<label for=\"%s\"", id);
+        if (this.getMark() != null) {
+            html.print(" role='formMark'");
+        }
+        html.print(">");
+        html.println("<span>%s</span>：", this.getName());
+        html.println("</label>");
+        html.print("<select id=\"%s\" name=\"%s\"", id, id);
         if (this.size > 0) {
             html.print(" size=\"%s\"", this.getSize());
         }
