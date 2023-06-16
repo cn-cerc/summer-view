@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
-import cn.cerc.db.core.ServerConfig;
 import cn.cerc.mis.core.Application;
 
 /**
