@@ -43,7 +43,7 @@ public class CodeNameField extends AbstractField {
         } else {
             html.print("<label for=\"%s\"", this.getNameField());
             if (this.getMark() != null) {
-                html.print(" role='formMark'");
+                html.print(" class='formMark'");
             }
             html.print(">");
             html.println("<span>%s</span>：", this.getName());
