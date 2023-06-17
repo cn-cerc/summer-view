@@ -69,7 +69,7 @@ public class OptionField extends AbstractField {
             html.print(" class='formMark'");
         }
         html.print(">");
-        html.println("<span>%s</span>：", this.getName());
+        html.println("<em>%s</em>：", this.getName());
         html.println("</label>");
         html.print("<select id=\"%s\" name=\"%s\"", id, id);
         if (this.size > 0) {
