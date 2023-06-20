@@ -155,6 +155,15 @@ public class UIComponent implements IOriginOwner, HtmlContent, Iterable<UICompon
         return this;
     }
 
+    public UIComponent setRole(String role) {
+        propertys.put("role", role);
+        return this;
+    }
+
+    public final String getRole() {
+        return (String) propertys.get("role");
+    }
+
     @Deprecated
     public final UIComponent writeProperty(String key, Object value) {
         return this.setCssProperty(key, value);

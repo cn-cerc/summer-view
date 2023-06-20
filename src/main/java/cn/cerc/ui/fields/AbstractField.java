@@ -40,8 +40,6 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
     private String pattern;
     //
     private boolean hidden;
-    // 角色
-    private String role;
     //
     private DialogField dialog;
     // dialog 小图标
@@ -123,14 +121,6 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
 
     public Integer getWordId() {
         return wordId;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
     }
 
     public int getWidth() {
