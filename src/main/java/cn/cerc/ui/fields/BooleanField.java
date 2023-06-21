@@ -58,7 +58,7 @@ public class BooleanField extends AbstractField implements SearchItem, IFormatCo
 
     @Override
     public void endOutput(HtmlWriter html) {
-        this.getTitle().setText(this.getName());
+        this.getTitle().setText(String.format("<em>%s</em>", this.getName()));
         this.getTitle().output(html);
         super.endOutput(html);
     }

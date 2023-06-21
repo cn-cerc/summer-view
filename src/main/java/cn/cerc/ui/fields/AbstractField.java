@@ -19,6 +19,7 @@ import cn.cerc.ui.core.INameOwner;
 import cn.cerc.ui.core.SearchSource;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.other.BuildText;
+import cn.cerc.ui.vcl.UIDiv;
 import cn.cerc.ui.vcl.UIImage;
 import cn.cerc.ui.vcl.UIInput;
 import cn.cerc.ui.vcl.UILabel;
@@ -75,6 +76,8 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
     private UILabel title;
     // 输入字段
     private UIInput content = new UIInput(this);
+    // 输入字段的父级区域
+    private UIDiv contentBox = new UIDiv(this);
     // 列固定状态
     private StickyRow stickyRow = StickyRow.def;
     // 是否超出两行展示为省略号
@@ -334,8 +337,17 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
     @Override
     public void beginOutput(HtmlWriter html) {
         super.beginOutput(html);
-        this.title.setFor(this.getId()).setText(new UIText(null).setText(this.getName()).setRootLabel("em") + "：");
+        this.title.setFor(this.getId()).setText(String.format("<em>%s</em>", this.getName()));
         this.title.setOwner(visible ? this : null);
+        if (mark != null)
+            this.title.setCssClass("formMark");
+        if (wordId != null) {
+            this.title.setCssClass("formMark");
+            this.title.setCssProperty("wordId", wordId);
+        }
+        if (this.showStar) {
+            new UIStarFlag(this.title);
+        }
     }
 
     @Override
@@ -358,30 +370,28 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
             content.setCssProperty("onclick", this.onclick);
             content.setSignProperty("required", this.required);
             content.setSignProperty("autofocus", this.autofocus);
-            if (this.dialog != null && this.dialog.isOpen()) {
-                content.setCssProperty("data-suffix", "dialog");
-            }
         }
-        content.output(html);
-        this.endOutput(html);
-    }
-
-    @Override
-    public void endOutput(HtmlWriter html) {
-        if (this.showStar) {
-            new UIStarFlag(null).output(html);
-        }
+        content.setOwner(this.getContentBox());
         if (!this.hidden) {
-            UISpan span = new UISpan(null);
+            UISpan span = new UISpan(this.getContentBox());
             span.setRole("suffix-icon");
             if (this.dialog != null && this.dialog.isOpen()) {
                 String src = this.icon != null ? this.icon : getIconConfig();
                 UIUrl url = new UIUrl(span).setHref(dialog.getUrl());
                 new UIImage(url).setSrc(src);
             }
-            span.output(html);
         }
+        this.getContentBox().output(html);
+        this.endOutput(html);
+    }
+
+    @Override
+    public void endOutput(HtmlWriter html) {
         super.endOutput(html);
+    }
+
+    public UIDiv getContentBox() {
+        return contentBox;
     }
 
     public DialogField getDialog() {
