@@ -1,5 +1,6 @@
 package cn.cerc.ui.vcl.ext;
 
+import cn.cerc.db.core.Utils;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 
@@ -12,7 +13,6 @@ public class UICheckBox extends UIComponent {
     private String name;
     private String type;
     private String value;
-    private String role;
     private boolean checked;
     private boolean disabled;
 
@@ -37,8 +37,8 @@ public class UICheckBox extends UIComponent {
             html.print(" type=\"%s\"", type);
         if (value != null)
             html.print(" value='%s'", this.value);
-        if (role != null)
-            html.print(" role='%s'", this.role);
+        if (!Utils.isEmpty(this.getRole()))
+            html.print(" role='%s'", this.getRole());
         if (checked)
             html.print(" checked='checked'");
         if (disabled)
@@ -79,15 +79,6 @@ public class UICheckBox extends UIComponent {
 
     public UICheckBox setChecked(boolean checked) {
         this.checked = checked;
-        return this;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public UICheckBox setRole(String role) {
-        this.role = role;
         return this;
     }
 
