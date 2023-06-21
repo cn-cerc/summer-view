@@ -31,8 +31,10 @@ public class TextAreaField extends AbstractField {
         input.setCssProperty("placeholder", this.getPlaceholder());
         String value = this.getValue();
         input.setText(value != null ? value : this.getText());
+        html.println("<div>");
         input.output(html);
         this.endOutput(html);
+        html.println("</div>");
     }
 
     public TextAreaField setRows(int rows) {

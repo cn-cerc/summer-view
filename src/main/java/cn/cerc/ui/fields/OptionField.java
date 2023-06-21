@@ -69,8 +69,12 @@ public class OptionField extends AbstractField {
             html.print(" class='formMark'");
         }
         html.print(">");
-        html.println("<em>%s</em>：", this.getName());
+        if (this.isShowStar()) {
+            new UIStarFlag(null).output(html);
+        }
+        html.println("<em>%s</em>", this.getName());
         html.println("</label>");
+        html.println("<div>");
         html.print("<select id=\"%s\" name=\"%s\"", id, id);
         if (this.size > 0) {
             html.print(" size=\"%s\"", this.getSize());
@@ -92,10 +96,8 @@ public class OptionField extends AbstractField {
             html.println(String.format("%s</option>", value));
         }
         html.println("</select>");
-        if (this.isShowStar()) {
-            html.print("<font>*</font>");
-        }
         html.print("<span role='suffix-icon'></span>");
+        html.println("</div>");
     }
 
     public int getSize() {
