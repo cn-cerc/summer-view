@@ -328,7 +328,7 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
         this.title.setOwner(visible ? this : null);
         if (mark != null)
             this.title.setCssClass("formMark");
-        if (wordId != null) {
+        else if (wordId != null) {
             this.title.setCssClass("formMark");
             this.title.setCssProperty("wordId", wordId);
         }
