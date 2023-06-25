@@ -53,6 +53,11 @@ public class BooleanField extends AbstractField implements SearchItem, IFormatCo
         input.setSignProperty("disabled", this.readonly());
         input.setCssProperty("onclick", this.getOnclick());
         input.output(html);
+        this.endOutput(html);
+    }
+
+    @Override
+    public void endOutput(HtmlWriter html) {
         UILabel label = this.getTitle();
         if (this.getMark() != null)
             label.setCssClass("formMark");
@@ -64,13 +69,6 @@ public class BooleanField extends AbstractField implements SearchItem, IFormatCo
         if (this.isShowStar())
             new UIStarFlag(label);
         label.output(html);
-    }
-
-    @Override
-    public void endOutput(HtmlWriter html) {
-        this.getTitle().setText(String.format("<em>%s</em>", this.getName()));
-        this.getTitle().output(html);
-        super.endOutput(html);
     }
 
     @Deprecated
