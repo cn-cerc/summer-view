@@ -361,9 +361,9 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
             content.setSignProperty("required", this.required);
             content.setSignProperty("autofocus", this.autofocus);
         }
-        content.setOwner(this.getContentBox());
+        content.setOwner(this.contentBox);
         if (!this.hidden) {
-            UISpan span = new UISpan(this.getContentBox());
+            UISpan span = new UISpan(this.contentBox);
             span.setRole("suffix-icon");
             if (this.dialog != null && this.dialog.isOpen()) {
                 String src = this.icon != null ? this.icon : getIconConfig();
@@ -371,7 +371,7 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
                 new UIImage(url).setSrc(src);
             }
         }
-        this.getContentBox().output(html);
+        this.contentBox.output(html);
         this.endOutput(html);
     }
 
