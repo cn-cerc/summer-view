@@ -19,7 +19,6 @@ import cn.cerc.ui.core.INameOwner;
 import cn.cerc.ui.core.SearchSource;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.other.BuildText;
-import cn.cerc.ui.vcl.UIDiv;
 import cn.cerc.ui.vcl.UIImage;
 import cn.cerc.ui.vcl.UIInput;
 import cn.cerc.ui.vcl.UILabel;
@@ -74,8 +73,6 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
     private UILabel title;
     // 输入字段
     private UIInput content = new UIInput(this);
-    // 输入字段的父级区域
-    private UIDiv contentBox = new UIDiv(this);
     // 列固定状态
     private StickyRow stickyRow = StickyRow.def;
     // 是否超出两行展示为省略号
@@ -381,10 +378,6 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
         }
         html.print("</div>");
         super.endOutput(html);
-    }
-
-    public UIDiv getContentBox() {
-        return contentBox;
     }
 
     public DialogField getDialog() {
