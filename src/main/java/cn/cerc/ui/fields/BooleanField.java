@@ -6,6 +6,7 @@ import cn.cerc.ui.fields.editor.CheckEditor;
 import cn.cerc.ui.grid.lines.AbstractGridLine.IOutputOfGridLine;
 import cn.cerc.ui.other.SearchItem;
 import cn.cerc.ui.vcl.UIInput;
+import cn.cerc.ui.vcl.UILabel;
 
 public class BooleanField extends AbstractField implements SearchItem, IFormatColumn, IOutputOfGridLine {
     private String trueText = "是";
@@ -41,7 +42,6 @@ public class BooleanField extends AbstractField implements SearchItem, IFormatCo
 
     @Override
     public void output(HtmlWriter html) {
-        this.beginOutput(html);
         UIInput input = new UIInput(null);
         input.setId(this.getId());
         input.setName(this.getId());
@@ -53,7 +53,17 @@ public class BooleanField extends AbstractField implements SearchItem, IFormatCo
         input.setSignProperty("disabled", this.readonly());
         input.setCssProperty("onclick", this.getOnclick());
         input.output(html);
-        this.endOutput(html);
+        UILabel label = this.getTitle();
+        if (this.getMark() != null)
+            label.setCssClass("formMark");
+        if (this.getWordId() != null) {
+            label.setCssClass("formMark");
+            label.setCssProperty("wordId", this.getWordId());
+        }
+        label.setFor(this.getId()).setText(String.format("<em>%s</em>", this.getName()));
+        if (this.isShowStar())
+            new UIStarFlag(label);
+        label.output(html);
     }
 
     @Override
