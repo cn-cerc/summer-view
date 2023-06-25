@@ -20,8 +20,6 @@ public class TextAreaField extends AbstractField {
     @Override
     public void output(HtmlWriter html) {
         this.beginOutput(html);
-        if (!this.isHidden())
-            getTitle().output(html);
         input.setId(this.getId());
         input.setName(this.getId());
         input.setReadonly(this.readonly());
@@ -31,10 +29,8 @@ public class TextAreaField extends AbstractField {
         input.setCssProperty("placeholder", this.getPlaceholder());
         String value = this.getValue();
         input.setText(value != null ? value : this.getText());
-        html.println("<div>");
         input.output(html);
         this.endOutput(html);
-        html.println("</div>");
     }
 
     public TextAreaField setRows(int rows) {
