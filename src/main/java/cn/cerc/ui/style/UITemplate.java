@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import cn.cerc.db.core.DataRow;
 
@@ -39,6 +41,18 @@ public class UITemplate {
         }
     }
 
+    private String decode(List<String> list) {
+        var sb = new StringBuffer();
+        // TODO
+        return sb.toString();
+    }
+
+    private String decode(Map<String, String> map) {
+        var sb = new StringBuffer();
+        // TODO
+        return sb.toString();
+    }
+
     public String decode(DataRow row) {
         var sb = new StringBuffer();
         for (var line : template) {
@@ -66,13 +80,28 @@ public class UITemplate {
     public static void main(String[] args) {
         var row = DataRow.of("Code_", "001");
         var template = new UITemplate();
-        
+
         var list = template.getTemplate();
         list.add("<div>");
         list.add("<span>${Code_}</span>");
         list.add("</div>");
-        
         System.out.println(template.decode(row));
 
+        list.clear();
+        list.add("<div>");
+        list.add("${map.begin}");
+        list.add("<span>${map.key}:${map.value}</span>");
+        list.add("${map.end}");
+        list.add("</div>");
+        System.out.println(template.decode(Map.of("code", "001", "name", "jason")));
+
+        list.clear();
+        list.add("<div>");
+        list.add("${list.begin>");
+        list.add("<span>${list.item}</span>");
+        list.add("${list.end}");
+        list.add("</div>");
+        System.out.println(template.decode(List.of("main", "beta")));
     }
+
 }
