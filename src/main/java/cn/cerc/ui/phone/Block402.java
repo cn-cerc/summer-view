@@ -116,14 +116,6 @@ public class Block402 extends UICustomPhone {
         return diff;
     }
 
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
     public String getDataJson() {
         return dataJson;
     }

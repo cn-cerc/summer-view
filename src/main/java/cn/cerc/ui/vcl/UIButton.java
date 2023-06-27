@@ -1,5 +1,6 @@
 package cn.cerc.ui.vcl;
 
+import cn.cerc.db.core.Utils;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.INameOwner;
 import cn.cerc.ui.core.UIComponent;
@@ -9,7 +10,6 @@ public class UIButton extends UIComponent implements IHtml, INameOwner {
     private String value;
     private String text;
     private String onclick;
-    private String role;
     private String type;
 
     public UIButton(UIComponent owner) {
@@ -32,8 +32,8 @@ public class UIButton extends UIComponent implements IHtml, INameOwner {
         if (value != null) {
             html.print(String.format(" value=\"%s\"", value));
         }
-        if (role != null) {
-            html.print(" role='%s'", this.role);
+        if (!Utils.isEmpty(this.getRole())) {
+            html.print(" role='%s'", this.getRole());
         }
         if (type != null) {
             html.print(" type='%s'", this.type);
@@ -85,15 +85,6 @@ public class UIButton extends UIComponent implements IHtml, INameOwner {
 
     public UIButton setClickUrl(String url) {
         this.setOnclick(String.format("location.href='%s'", url));
-        return this;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public UIButton setRole(String role) {
-        this.role = role;
         return this;
     }
 

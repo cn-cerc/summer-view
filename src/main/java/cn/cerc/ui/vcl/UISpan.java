@@ -42,10 +42,7 @@ public class UISpan extends UIComponent implements IHtml {
         return this;
     }
 
-    public String getRole() {
-        return (String) this.getCssProperty("role");
-    }
-
+    @Override
     public UISpan setRole(String role) {
         this.setCssProperty("role", role);
         return this;
