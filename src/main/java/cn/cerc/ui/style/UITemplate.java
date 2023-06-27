@@ -90,9 +90,9 @@ public class UITemplate {
         var list = template.getTemplate();
         list.clear();
         list.add("<div>");
-        list.add("${list.begin>");
+        list.add("${list}");
         list.add("<span>${list.item}</span>");
-        list.add("${list.end}");
+        list.add("${/list}");
         list.add("</div>");
         System.out.println(template.decode(List.of("main", "beta")));
 
