@@ -112,9 +112,11 @@ public class UITemplate {
 
         list.clear();
         list.add("<div>");
+        list.add("<table>");
         list.add("${dataset.begin}");
         list.add("<span>${Code_}</span>");
         list.add("${dataset.end}");
+        list.add("</table>");
         list.add("</div>");
 
         var dataSet = new DataSet();
