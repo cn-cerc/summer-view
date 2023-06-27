@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import cn.cerc.db.core.DataRow;
+import cn.cerc.db.core.DataSet;
 
 public class UITemplate {
     private ArrayList<String> template = new ArrayList<String>();
@@ -77,15 +78,23 @@ public class UITemplate {
         return sb.toString();
     }
 
+    private String decode(DataSet dataSet) {
+        var sb = new StringBuffer();
+        // TODO
+        return sb.toString();
+    }
+
     public static void main(String[] args) {
-        var row = DataRow.of("Code_", "001");
         var template = new UITemplate();
 
         var list = template.getTemplate();
+        list.clear();
         list.add("<div>");
-        list.add("<span>${Code_}</span>");
+        list.add("${list.begin>");
+        list.add("<span>${list.item}</span>");
+        list.add("${list.end}");
         list.add("</div>");
-        System.out.println(template.decode(row));
+        System.out.println(template.decode(List.of("main", "beta")));
 
         list.clear();
         list.add("<div>");
@@ -97,11 +106,22 @@ public class UITemplate {
 
         list.clear();
         list.add("<div>");
-        list.add("${list.begin>");
-        list.add("<span>${list.item}</span>");
-        list.add("${list.end}");
+        list.add("<span>${Code_}</span>");
         list.add("</div>");
-        System.out.println(template.decode(List.of("main", "beta")));
+        System.out.println(template.decode(DataRow.of("Code_", "001")));
+
+        list.clear();
+        list.add("<div>");
+        list.add("${dataset.begin}");
+        list.add("<span>${Code_}</span>");
+        list.add("${dataset.end}");
+        list.add("</div>");
+
+        var dataSet = new DataSet();
+        dataSet.append().setValue("Code_", "001");
+        dataSet.append().setValue("Code_", "002");
+        System.out.println(template.decode(dataSet));
+
     }
 
 }
