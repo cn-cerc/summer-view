@@ -324,8 +324,20 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
     @Override
     public void beginOutput(HtmlWriter html) {
         super.beginOutput(html);
-        this.title.setFor(this.getId()).setText(new UIText(null).setText(this.getName()).setRootLabel("em") + "：");
+        this.title.setFor(this.getId()).setText(String.format("<em>%s</em>", this.getName()));
         this.title.setOwner(visible ? this : null);
+        if (mark != null)
+            this.title.setCssClass("formMark");
+        else if (wordId != null) {
+            this.title.setCssClass("formMark");
+            this.title.setCssProperty("wordId", wordId);
+        }
+        if (this.showStar) {
+            new UIStarFlag(this.title);
+        }
+        if (!this.hidden)
+            this.title.output(html);
+        html.print("<div>");
     }
 
     @Override
@@ -337,7 +349,6 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
         if (this.hidden) {
             content.setValue(this.getText());
         } else {
-            this.title.output(html);
             String value = this.getValue();
             content.setCssClass(this.CSSClass_phone);
             content.setValue(value != null ? value : this.getText());
@@ -348,9 +359,6 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
             content.setCssProperty("onclick", this.onclick);
             content.setSignProperty("required", this.required);
             content.setSignProperty("autofocus", this.autofocus);
-            if (this.dialog != null && this.dialog.isOpen()) {
-                content.setCssProperty("data-suffix", "dialog");
-            }
         }
         content.output(html);
         this.endOutput(html);
@@ -358,9 +366,6 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
 
     @Override
     public void endOutput(HtmlWriter html) {
-        if (this.showStar) {
-            new UIStarFlag(null).output(html);
-        }
         if (!this.hidden) {
             UISpan span = new UISpan(null);
             span.setRole("suffix-icon");
@@ -371,6 +376,7 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
             }
             span.output(html);
         }
+        html.print("</div>");
         super.endOutput(html);
     }
 

@@ -46,9 +46,13 @@ public class CodeNameField extends AbstractField {
                 html.print(" class='formMark'");
             }
             html.print(">");
-            html.println("<em>%s</em>：", this.getName());
+            if (this.isShowStar()) {
+                new UIStarFlag(null).output(html);
+            }
+            html.println("<em>%s</em>", this.getName());
             html.println("</label>");
 
+            html.println("<div>");
             html.print("<input");
             html.print(" type=\"hidden\"");
             html.print(" name=\"%s\"", this.getId());
@@ -88,10 +92,6 @@ public class CodeNameField extends AbstractField {
             }
             html.println("/>");
 
-            if (this.isShowStar()) {
-                new UIStarFlag(null).output(html);
-            }
-
             html.print("<span role='suffix-icon'>");
             if (this.getDialog() != null && this.getDialog().isOpen()) {
                 html.print("<a href=\"%s\">", getUrl(this.getDialog()));
@@ -99,6 +99,7 @@ public class CodeNameField extends AbstractField {
                 html.print("</a>");
             }
             html.print("</span>");
+            html.println("</div>");
         }
     }
 
