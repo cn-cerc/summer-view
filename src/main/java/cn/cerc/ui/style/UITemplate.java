@@ -82,7 +82,7 @@ public class UITemplate {
                     sb.append(row.getString(field));
                 } else {
                     log.error("not find field: {}", field);
-                    sb.append("${").append(field).append("}");
+                    sb.append(node.getSourceText());
                 }
             } else {
                 sb.append(node.getText());
@@ -105,20 +105,20 @@ public class UITemplate {
 
     private ArrayList<UISsrNodeImpl> getForeachNodes(String startFlag, String endFlag, SupperForeachImpl supper) {
         var result = new ArrayList<UISsrNodeImpl>();
-        UIForeachNode start = null;
-        for (var node : nodes) {
+        UIForeachNode container = null;
+        for (var node : this.nodes) {
             if (node instanceof UIValueNode item) {
                 if (startFlag.equals(item.getText())) {
-                    start = supper.getObject(item.getText());
-                    result.add(start);
+                    container = supper.createObject(item.getText());
+                    result.add(container);
                     continue;
                 } else if (endFlag.equals(item.getText())) {
-                    start = null;
+                    container = null;
                     continue;
                 }
             }
-            if (start != null) {
-                start.addItem(node);
+            if (container != null) {
+                container.addItem(node);
             } else {
                 result.add(node);
             }
