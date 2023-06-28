@@ -13,14 +13,20 @@ import org.slf4j.LoggerFactory;
 
 import cn.cerc.db.core.DataRow;
 import cn.cerc.db.core.DataSet;
+import cn.cerc.db.core.Utils;
 
 public class UITemplate {
     private static final Logger log = LoggerFactory.getLogger(UITemplate.class);
     private List<UISsrNodeImpl> nodes;
+    private DataRow dataRow;
+    private DataSet dataSet;
+    private List<String> list;
+    private Map<String, String> map;
+    private String[] params;
 
     public UITemplate(String templateText) {
         super();
-        this.nodes = this.asNodes(templateText);
+        initNodes(templateText);
     }
 
     public UITemplate(Class<?> class1, String id) {
@@ -42,86 +48,84 @@ public class UITemplate {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        this.nodes = this.asNodes(sb.toString());
+        initNodes(sb.toString());
     }
 
-    public List<UISsrNodeImpl> getNodes() {
-        return nodes;
+    private void initNodes(String templateText) {
+        this.nodes = this.asNodes(templateText);
+        compressNodes(UIIfNode.StartFlag, UIIfNode.EndFlag, (text) -> new UIIfNode(text));
+        compressNodes(UIListNode.StartFlag, UIListNode.EndFlag, (text) -> new UIListNode(text));
+        compressNodes(UIMapNode.StartFlag, UIMapNode.EndFlag, (text) -> new UIMapNode(text));
+        compressNodes(UIDatasetNode.StartFlag, UIDatasetNode.EndFlag, (text) -> new UIDatasetNode(text));
     }
 
-    public String decode(List<String> list) {
+    public UITemplate setArray(String... params) {
+        this.params = params;
+        return this;
+    }
+
+    public UITemplate setList(List<String> list) {
+        this.list = list;
+        return this;
+    }
+
+    public UITemplate setMap(Map<String, String> map) {
+        this.map = map;
+        return this;
+    }
+
+    public UITemplate setDataRow(DataRow dataRow) {
+        this.dataRow = dataRow;
+        return this;
+    }
+
+    public UITemplate setDataSet(DataSet dataSet) {
+        this.dataSet = dataSet;
+        return this;
+    }
+
+    public String html() {
         var sb = new StringBuffer();
-        var nodes = getForeachNodes(UIListNode.StartFlag, UIListNode.EndFlag, (text) -> new UIListNode(text));
-        for (var node : nodes) {
+        for (var node : this.nodes) {
             if (node instanceof UIListNode items)
                 sb.append(items.getValue(list));
-            else
-                sb.append(node.getText());
-        }
-        return sb.toString();
-    }
-
-    public String decode(Map<String, String> map) {
-        var sb = new StringBuffer();
-        var nodes = getForeachNodes(UIMapNode.StartFlag, UIMapNode.EndFlag, (text) -> new UIMapNode(text));
-        for (var node : nodes) {
-            if (node instanceof UIMapNode items)
+            else if (node instanceof UIMapNode items)
                 sb.append(items.getValue(map));
-            else
-                sb.append(node.getText());
-        }
-        return sb.toString();
-    }
-
-    public String decode(String... params) {
-        var sb = new StringBuffer();
-        for (var node : this.nodes) {
-            if (node instanceof UIValueNode item) {
-                var index = Integer.parseInt(item.getText());
-                if (index >= 0 && index < params.length) {
-                    sb.append(params[index]);
-                } else {
-                    log.error("not find index: {}", item.getText());
-                    sb.append(node.getSourceText());
-                }
-            } else {
-                sb.append(node.getText());
-            }
-        }
-        return sb.toString();
-    }
-
-    public String decode(DataRow dataRow) {
-        var sb = new StringBuffer();
-        for (var node : this.nodes) {
-            if (node instanceof UIValueNode item) {
-                var field = item.getText();
-                if (dataRow.exists(field)) {
-                    sb.append(dataRow.getString(field));
-                } else {
-                    log.error("not find field: {}", field);
-                    sb.append(node.getSourceText());
-                }
-            } else {
-                sb.append(node.getText());
-            }
-        }
-        return sb.toString();
-    }
-
-    public String decode(DataSet dataSet) {
-        var sb = new StringBuffer();
-        var nodes = getForeachNodes(UIDatasetNode.StartFlag, UIDatasetNode.EndFlag, (text) -> new UIDatasetNode(text));
-        for (var node : nodes) {
-            if (node instanceof UIDatasetNode items)
+            else if (node instanceof UIDatasetNode items)
                 sb.append(items.getValue(dataSet));
-            else
+            else if (node instanceof UIIfNode iif)
+                sb.append(iif.getValue(dataRow));
+            else if (node instanceof UIValueNode item) {
+                var field = item.getText();
+                if (Utils.isNumeric(field)) {
+                    if (params != null) {
+                        var index = Integer.parseInt(item.getText());
+                        if (index >= 0 && index < params.length) {
+                            sb.append(params[index]);
+                        } else {
+                            log.error("not find index: {}", item.getText());
+                            sb.append(node.getSourceText());
+                        }
+                    } else {
+                        sb.append(item.getSourceText());
+                    }
+                } else if (dataRow != null) {
+                    if (dataRow.exists(field)) {
+                        sb.append(dataRow.getString(field));
+                    } else {
+                        log.error("not find field: {}", field);
+                        sb.append(node.getSourceText());
+                    }
+                } else
+                    sb.append(item.getSourceText());
+            } else
                 sb.append(node.getText());
+
         }
         return sb.toString();
     }
 
-    private ArrayList<UISsrNodeImpl> getForeachNodes(String startFlag, String endFlag, SupperForeachImpl supper) {
+    private void compressNodes(String startFlag, String endFlag, SupperForeachImpl supper) {
         var result = new ArrayList<UISsrNodeImpl>();
         UIForeachNode container = null;
         for (var node : this.nodes) {
@@ -141,7 +145,7 @@ public class UITemplate {
                 result.add(node);
             }
         }
-        return result;
+        this.nodes = result;
     }
 
     private List<UISsrNodeImpl> asNodes(String templateText) {
@@ -159,6 +163,10 @@ public class UITemplate {
             }
         }
         return list;
+    }
+
+    public List<UISsrNodeImpl> getNodes() {
+        return nodes;
     }
 
 }
