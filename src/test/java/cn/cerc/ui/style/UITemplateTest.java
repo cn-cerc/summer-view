@@ -32,8 +32,8 @@ public class UITemplateTest {
 
     @Test
     public void testDecodeString3() {
-        var template = new UITemplate("<div>${if-year}<span>${Code_}</span>${endif}</div>");
-        assertEquals("<div>,if-year,<span>,Code_,</span>,endif,</div>,", margeList(template.getNodes()));
+        var template = new UITemplate("<div>${if year_}<span>${Code_}</span>${endif}</div>");
+        assertEquals("<div>,if year_,</div>,", margeList(template.getNodes()));
     }
 
     @Test

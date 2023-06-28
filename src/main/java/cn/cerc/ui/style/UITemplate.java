@@ -20,7 +20,7 @@ public class UITemplate {
 
     public UITemplate(String templateText) {
         super();
-        this.nodes = this.asNodes(templateText);
+        initNodes(templateText);
     }
 
     public UITemplate(Class<?> class1, String id) {
@@ -42,7 +42,15 @@ public class UITemplate {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        this.nodes = this.asNodes(sb.toString());
+        initNodes(sb.toString());
+    }
+
+    private void initNodes(String templateText) {
+        this.nodes = this.asNodes(templateText);
+        compressNodes(UIIfNode.StartFlag, UIIfNode.EndFlag, (text) -> new UIIfNode(text));
+        compressNodes(UIListNode.StartFlag, UIListNode.EndFlag, (text) -> new UIListNode(text));
+        compressNodes(UIMapNode.StartFlag, UIMapNode.EndFlag, (text) -> new UIMapNode(text));
+        compressNodes(UIDatasetNode.StartFlag, UIDatasetNode.EndFlag, (text) -> new UIDatasetNode(text));
     }
 
     public List<UISsrNodeImpl> getNodes() {
@@ -51,7 +59,6 @@ public class UITemplate {
 
     public String decode(List<String> list) {
         var sb = new StringBuffer();
-        var nodes = getForeachNodes(UIListNode.StartFlag, UIListNode.EndFlag, (text) -> new UIListNode(text));
         for (var node : nodes) {
             if (node instanceof UIListNode items)
                 sb.append(items.getValue(list));
@@ -63,7 +70,6 @@ public class UITemplate {
 
     public String decode(Map<String, String> map) {
         var sb = new StringBuffer();
-        var nodes = getForeachNodes(UIMapNode.StartFlag, UIMapNode.EndFlag, (text) -> new UIMapNode(text));
         for (var node : nodes) {
             if (node instanceof UIMapNode items)
                 sb.append(items.getValue(map));
@@ -92,7 +98,6 @@ public class UITemplate {
     }
 
     public String decode(DataRow dataRow) {
-        var nodes = getForeachNodes(UIIfNode.StartFlag, UIIfNode.EndFlag, (text) -> new UIIfNode(text));
         var sb = new StringBuffer();
         for (var node : nodes) {
             if (node instanceof UIIfNode iif) {
@@ -114,7 +119,6 @@ public class UITemplate {
 
     public String decode(DataSet dataSet) {
         var sb = new StringBuffer();
-        var nodes = getForeachNodes(UIDatasetNode.StartFlag, UIDatasetNode.EndFlag, (text) -> new UIDatasetNode(text));
         for (var node : nodes) {
             if (node instanceof UIDatasetNode items)
                 sb.append(items.getValue(dataSet));
@@ -124,7 +128,7 @@ public class UITemplate {
         return sb.toString();
     }
 
-    private ArrayList<UISsrNodeImpl> getForeachNodes(String startFlag, String endFlag, SupperForeachImpl supper) {
+    private void compressNodes(String startFlag, String endFlag, SupperForeachImpl supper) {
         var result = new ArrayList<UISsrNodeImpl>();
         UIForeachNode container = null;
         for (var node : this.nodes) {
@@ -144,7 +148,7 @@ public class UITemplate {
                 result.add(node);
             }
         }
-        return result;
+        this.nodes = result;
     }
 
     private List<UISsrNodeImpl> asNodes(String templateText) {
