@@ -189,7 +189,8 @@ public class DataGrid extends UIComponent implements DataSetSource, IGridStyle {
         }
 
         if (this.template != null) {
-            html.print(template.decode(dataSet));
+            template.setDataSet(dataSet);
+            html.print(template.html());
             return;
         }
 
