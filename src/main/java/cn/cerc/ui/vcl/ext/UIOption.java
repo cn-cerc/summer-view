@@ -10,7 +10,6 @@ public class UIOption extends UIComponent {
     private String name;
     private Map<String, String> options = new LinkedHashMap<>();
 
-    private String role;
     private String form;// form_id
     private String selectedKey;
 
@@ -98,15 +97,6 @@ public class UIOption extends UIComponent {
 
     public Map<String, String> getOptions() {
         return options;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public UIOption setRole(String role) {
-        this.role = role;
-        return this;
     }
 
     public String getForm() {
