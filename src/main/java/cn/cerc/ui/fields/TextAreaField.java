@@ -20,6 +20,8 @@ public class TextAreaField extends AbstractField {
     @Override
     public void output(HtmlWriter html) {
         this.beginOutput(html);
+        if (!this.isHidden())
+            getTitle().output(html);
         input.setId(this.getId());
         input.setName(this.getId());
         input.setReadonly(this.readonly());

@@ -63,12 +63,7 @@ public class SiteField extends AbstractField {
         if (Utils.isEmpty(current) && !Utils.isEmpty(this.getValue())) {
             current = this.getValue();
         }
-        html.println("<label for=\"%s\">", this.getId());
-        if (this.isShowStar()) {
-            new UIStarFlag(null).output(html);
-        }
-        html.println("<em>%s</em>", this.getName());
-        html.println("</label>");
+        html.println("<label for=\"%s\">%s</label>", this.getId(), this.getName() + "：");
         html.print("<div class=\"%s\">", this.getId());
         String initialValue = "";
         for (String key : items.keySet()) {
@@ -78,8 +73,8 @@ public class SiteField extends AbstractField {
         String placeholder = "";
         if (this.getPlaceholder() != null)
             placeholder = this.getPlaceholder();
-        html.print("<input autocomplete='off' id=\"%s\" type=\"text\" name=\"%s\" value=\"%s\" placeholder=\"%s\" ",
-                this.getId(), this.getId(), initialValue, placeholder);
+        html.print("<input autocomplete='off' id=\"%s\" type=\"text\" name=\"%s\" value=\"%s\" placeholder=\"%s\" ", this.getId(),
+                this.getId(), initialValue, placeholder);
         if (this.size > 0) {
             html.print(" size=\"%s\"", this.getSize());
         }
@@ -96,6 +91,9 @@ public class SiteField extends AbstractField {
                 html.print("<span value=\"%s\" >%s</span>", key, value);
         }
         html.println("</div></div>");
+        if (this.isShowStar()) {
+            html.print("<font>*</font>");
+        }
         html.print("<span></span>");
         html.print("<script>SiteFieldInit(\"" + this.getId() + "\")</script>");
     }
