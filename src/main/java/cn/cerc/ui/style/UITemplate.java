@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import cn.cerc.db.core.DataRow;
 import cn.cerc.db.core.DataSet;
+import cn.cerc.db.core.Utils;
 
 public class UITemplate {
     private static final Logger log = LoggerFactory.getLogger(UITemplate.class);
@@ -96,19 +97,23 @@ public class UITemplate {
                 sb.append(iif.getValue(dataRow));
             else if (node instanceof UIValueNode item) {
                 var field = item.getText();
-                if (dataRow != null) {
+                if (Utils.isNumeric(field)) {
+                    if (params != null) {
+                        var index = Integer.parseInt(item.getText());
+                        if (index >= 0 && index < params.length) {
+                            sb.append(params[index]);
+                        } else {
+                            log.error("not find index: {}", item.getText());
+                            sb.append(node.getSourceText());
+                        }
+                    } else {
+                        sb.append(item.getSourceText());
+                    }
+                } else if (dataRow != null) {
                     if (dataRow.exists(field)) {
                         sb.append(dataRow.getString(field));
                     } else {
                         log.error("not find field: {}", field);
-                        sb.append(node.getSourceText());
-                    }
-                } else if (params != null) {
-                    var index = Integer.parseInt(item.getText());
-                    if (index >= 0 && index < params.length) {
-                        sb.append(params[index]);
-                    } else {
-                        log.error("not find index: {}", item.getText());
                         sb.append(node.getSourceText());
                     }
                 } else

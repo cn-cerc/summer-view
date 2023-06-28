@@ -88,6 +88,15 @@ public class UITemplateTest {
         assertEquals("<div></div>", result);
     }
 
+    @Test
+    public void testDecode_combo() {
+        var template = new UITemplate("<div>${0}${code_}${if final_}<span></span>${endif}${1}</div>");
+        template.setArray("aaa", "bbb");
+        template.setDataRow(DataRow.of("code_", "001", "final_", true));
+        var result = template.html();
+        assertEquals("<div>aaa001<span></span>bbb</div>", result);
+    }
+
     private String margeList(List<UISsrNodeImpl> list) {
         var sb = new StringBuffer();
         for (var item : list)
