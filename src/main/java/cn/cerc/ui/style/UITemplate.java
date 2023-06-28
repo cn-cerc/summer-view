@@ -18,9 +18,9 @@ public class UITemplate {
     private static final Logger log = LoggerFactory.getLogger(UITemplate.class);
     private List<UISsrNodeImpl> nodes;
 
-    public UITemplate(String text) {
+    public UITemplate(String templateText) {
         super();
-        this.nodes = this.asNodes(text);
+        this.nodes = this.asNodes(templateText);
     }
 
     public UITemplate(Class<?> class1, String id) {
@@ -91,13 +91,13 @@ public class UITemplate {
         return sb.toString();
     }
 
-    public String decode(DataRow row) {
+    public String decode(DataRow dataRow) {
         var sb = new StringBuffer();
         for (var node : this.nodes) {
             if (node instanceof UIValueNode item) {
                 var field = item.getText();
-                if (row.exists(field)) {
-                    sb.append(row.getString(field));
+                if (dataRow.exists(field)) {
+                    sb.append(dataRow.getString(field));
                 } else {
                     log.error("not find field: {}", field);
                     sb.append(node.getSourceText());
@@ -144,10 +144,10 @@ public class UITemplate {
         return result;
     }
 
-    private List<UISsrNodeImpl> asNodes(String text) {
+    private List<UISsrNodeImpl> asNodes(String templateText) {
         var list = new ArrayList<UISsrNodeImpl>();
         int start, end;
-        var line = text;
+        var line = templateText;
         while (line.length() > 0) {
             if ((start = line.indexOf("${")) > -1 && (end = line.indexOf("}")) > -1) {
                 list.add(new UITextNode(line.substring(0, start)));
