@@ -11,6 +11,9 @@ public class UIMapNode extends UIForeachNode {
     }
 
     public String getValue(Map<String, String> params) {
+        if(params == null)
+            return this.getSourceText();
+        
         var sb = new StringBuffer();
         for (var key : params.keySet()) {
             var value = params.get(key);

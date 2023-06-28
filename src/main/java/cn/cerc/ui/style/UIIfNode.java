@@ -15,6 +15,9 @@ public class UIIfNode extends UIForeachNode {
     }
 
     public String getValue(DataRow dataRow) {
+        if(dataRow == null)
+            return this.getSourceText();
+        
         var field = this.getText().substring(3, this.getText().length());
         if (!dataRow.exists(field)) {
             log.error("not find field: {}", field);

@@ -15,6 +15,9 @@ public class UIDatasetNode extends UIForeachNode {
     }
 
     public String getValue(DataSet params) {
+        if (params == null)
+            return this.getSourceText();
+
         var sb = new StringBuffer();
         for (int i = 1; i <= params.size(); i++) {
             var row = params.records().get(i - 1);

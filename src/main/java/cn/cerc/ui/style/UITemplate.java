@@ -17,6 +17,11 @@ import cn.cerc.db.core.DataSet;
 public class UITemplate {
     private static final Logger log = LoggerFactory.getLogger(UITemplate.class);
     private List<UISsrNodeImpl> nodes;
+    private DataRow dataRow;
+    private DataSet dataSet;
+    private List<String> list;
+    private Map<String, String> map;
+    private String[] params;
 
     public UITemplate(String templateText) {
         super();
@@ -53,77 +58,64 @@ public class UITemplate {
         compressNodes(UIDatasetNode.StartFlag, UIDatasetNode.EndFlag, (text) -> new UIDatasetNode(text));
     }
 
-    public List<UISsrNodeImpl> getNodes() {
-        return nodes;
+    public UITemplate setArray(String... params) {
+        this.params = params;
+        return this;
     }
 
-    public String decode(List<String> list) {
-        var sb = new StringBuffer();
-        for (var node : nodes) {
-            if (node instanceof UIListNode items)
-                sb.append(items.getValue(list));
-            else
-                sb.append(node.getText());
-        }
-        return sb.toString();
+    public UITemplate setList(List<String> list) {
+        this.list = list;
+        return this;
     }
 
-    public String decode(Map<String, String> map) {
-        var sb = new StringBuffer();
-        for (var node : nodes) {
-            if (node instanceof UIMapNode items)
-                sb.append(items.getValue(map));
-            else
-                sb.append(node.getText());
-        }
-        return sb.toString();
+    public UITemplate setMap(Map<String, String> map) {
+        this.map = map;
+        return this;
     }
 
-    public String decode(String... params) {
+    public UITemplate setDataRow(DataRow dataRow) {
+        this.dataRow = dataRow;
+        return this;
+    }
+
+    public UITemplate setDataSet(DataSet dataSet) {
+        this.dataSet = dataSet;
+        return this;
+    }
+
+    public String html() {
         var sb = new StringBuffer();
         for (var node : this.nodes) {
-            if (node instanceof UIValueNode item) {
-                var index = Integer.parseInt(item.getText());
-                if (index >= 0 && index < params.length) {
-                    sb.append(params[index]);
-                } else {
-                    log.error("not find index: {}", item.getText());
-                    sb.append(node.getSourceText());
-                }
-            } else {
-                sb.append(node.getText());
-            }
-        }
-        return sb.toString();
-    }
-
-    public String decode(DataRow dataRow) {
-        var sb = new StringBuffer();
-        for (var node : nodes) {
-            if (node instanceof UIIfNode iif) {
-                sb.append(iif.getValue(dataRow));
-            } else if (node instanceof UIValueNode item) {
-                var field = item.getText();
-                if (dataRow.exists(field)) {
-                    sb.append(dataRow.getString(field));
-                } else {
-                    log.error("not find field: {}", field);
-                    sb.append(node.getSourceText());
-                }
-            } else {
-                sb.append(node.getText());
-            }
-        }
-        return sb.toString();
-    }
-
-    public String decode(DataSet dataSet) {
-        var sb = new StringBuffer();
-        for (var node : nodes) {
-            if (node instanceof UIDatasetNode items)
+            if (node instanceof UIListNode items)
+                sb.append(items.getValue(list));
+            else if (node instanceof UIMapNode items)
+                sb.append(items.getValue(map));
+            else if (node instanceof UIDatasetNode items)
                 sb.append(items.getValue(dataSet));
-            else
+            else if (node instanceof UIIfNode iif)
+                sb.append(iif.getValue(dataRow));
+            else if (node instanceof UIValueNode item) {
+                var field = item.getText();
+                if (dataRow != null) {
+                    if (dataRow.exists(field)) {
+                        sb.append(dataRow.getString(field));
+                    } else {
+                        log.error("not find field: {}", field);
+                        sb.append(node.getSourceText());
+                    }
+                } else if (params != null) {
+                    var index = Integer.parseInt(item.getText());
+                    if (index >= 0 && index < params.length) {
+                        sb.append(params[index]);
+                    } else {
+                        log.error("not find index: {}", item.getText());
+                        sb.append(node.getSourceText());
+                    }
+                } else
+                    sb.append(item.getSourceText());
+            } else
                 sb.append(node.getText());
+
         }
         return sb.toString();
     }
@@ -166,6 +158,10 @@ public class UITemplate {
             }
         }
         return list;
+    }
+
+    public List<UISsrNodeImpl> getNodes() {
+        return nodes;
     }
 
 }
