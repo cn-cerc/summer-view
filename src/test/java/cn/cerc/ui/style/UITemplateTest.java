@@ -31,6 +31,13 @@ public class UITemplateTest {
     }
 
     @Test
+    public void testDecode_array() {
+        var template = new UITemplate("<div><span>${0},${1}</span></div>");
+        var result = template.decode("001", "002");
+        assertEquals("<div><span>001,002</span></div>", result);
+    }
+
+    @Test
     public void testDecode_row() {
         var template = new UITemplate("<div><span>${Code_}</span></div>");
         var result = template.decode(DataRow.of("Code_", "001"));

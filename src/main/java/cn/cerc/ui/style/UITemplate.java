@@ -73,6 +73,24 @@ public class UITemplate {
         return sb.toString();
     }
 
+    public String decode(String... params) {
+        var sb = new StringBuffer();
+        for (var node : this.nodes) {
+            if (node instanceof UIValueNode item) {
+                var index = Integer.parseInt(item.getText());
+                if (index >= 0 && index < params.length) {
+                    sb.append(params[index]);
+                } else {
+                    log.error("not find index: {}", item.getText());
+                    sb.append(node.getSourceText());
+                }
+            } else {
+                sb.append(node.getText());
+            }
+        }
+        return sb.toString();
+    }
+
     public String decode(DataRow row) {
         var sb = new StringBuffer();
         for (var node : this.nodes) {
