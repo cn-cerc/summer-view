@@ -126,11 +126,11 @@ public class UITemplate {
         UIForeachNode container = null;
         for (var node : this.nodes) {
             if (node instanceof UIValueNode item) {
-                if (startFlag.equals(item.getText())) {
+                if (item.getText().startsWith(startFlag)) {
                     container = supper.createObject(item.getText());
                     result.add(container);
                     continue;
-                } else if (endFlag.equals(item.getText())) {
+                } else if (item.getText().startsWith(endFlag)) {
                     container = null;
                     continue;
                 }
