@@ -335,9 +335,10 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
         if (this.showStar) {
             new UIStarFlag(this.title);
         }
-        if (!this.hidden)
+        if (!this.hidden) {
             this.title.output(html);
-        html.print("<div>");
+            html.print("<div>");
+        }
     }
 
     @Override
@@ -375,8 +376,8 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
                 new UIImage(url).setSrc(src);
             }
             span.output(html);
+            html.print("</div>");
         }
-        html.print("</div>");
         super.endOutput(html);
     }
 
