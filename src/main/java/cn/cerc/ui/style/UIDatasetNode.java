@@ -35,4 +35,9 @@ public class UIDatasetNode extends UIForeachNode {
         return sb.toString();
     }
 
+    @Override
+    protected String getEndFlag() {
+        return EndFlag;
+    }
+
 }

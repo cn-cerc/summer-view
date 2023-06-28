@@ -29,4 +29,9 @@ public class UIMapNode extends UIForeachNode {
         return sb.toString();
     }
 
+    @Override
+    protected String getEndFlag() {
+        return EndFlag;
+    }
+
 }

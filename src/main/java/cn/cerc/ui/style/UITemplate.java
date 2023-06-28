@@ -92,9 +92,12 @@ public class UITemplate {
     }
 
     public String decode(DataRow dataRow) {
+        var nodes = getForeachNodes(UIIfNode.StartFlag, UIIfNode.EndFlag, (text) -> new UIIfNode(text));
         var sb = new StringBuffer();
-        for (var node : this.nodes) {
-            if (node instanceof UIValueNode item) {
+        for (var node : nodes) {
+            if (node instanceof UIIfNode iif) {
+                sb.append(iif.getValue(dataRow));
+            } else if (node instanceof UIValueNode item) {
                 var field = item.getText();
                 if (dataRow.exists(field)) {
                     sb.append(dataRow.getString(field));

@@ -31,6 +31,12 @@ public class UITemplateTest {
     }
 
     @Test
+    public void testDecodeString3() {
+        var template = new UITemplate("<div>${if-year}<span>${Code_}</span>${endif}</div>");
+        assertEquals("<div>,if-year,<span>,Code_,</span>,endif,</div>,", margeList(template.getNodes()));
+    }
+
+    @Test
     public void testDecode_array() {
         var template = new UITemplate("<div><span>${0},${1}</span></div>");
         var result = template.decode("001", "002");
@@ -66,6 +72,20 @@ public class UITemplateTest {
         ds.append().setValue("Code_", "002");
         var result = template.decode(ds);
         assertEquals("<div><span>001</span><span>002</span></div>", result);
+    }
+
+    @Test
+    public void testDecode_if_true() {
+        var template = new UITemplate("<div>${if final_}<span>ok</span>${endif}</div>");
+        var result = template.decode(DataRow.of("final_", true));
+        assertEquals("<div><span>ok</span></div>", result);
+    }
+
+    @Test
+    public void testDecode_if_false() {
+        var template = new UITemplate("<div>${if final_}<span>ok</span>${endif}</div>");
+        var result = template.decode(DataRow.of("final_", false));
+        assertEquals("<div></div>", result);
     }
 
     private String margeList(List<UISsrNodeImpl> list) {
