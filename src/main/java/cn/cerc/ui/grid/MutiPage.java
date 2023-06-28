@@ -12,6 +12,9 @@ import cn.cerc.db.core.DataSet;
 
 public class MutiPage {
     private static final Logger log = LoggerFactory.getLogger(MutiPage.class);
+
+    public static final int PAGE_SIZE = 500;
+
     // 数据源
     private DataSet dataSet;
     // 请求环境
@@ -19,7 +22,7 @@ public class MutiPage {
     // 总记录数
     private int recordCount;
     // 页面大小
-    private int pageSize = 100;
+    private int pageSize = MutiPage.PAGE_SIZE;
     // 当前页
     private int current = 1;
     // 上一页

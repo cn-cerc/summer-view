@@ -179,6 +179,7 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
         FieldStyleDefine styleDefine = this.items.get(meta.code());
         if (styleDefine != null && styleDefine.name() != null) {
             int width = styleDefine.width() > 0 ? styleDefine.width() : styleDefine.name().length();
+            th.setCssProperty("onclick", "gridViewSort(this)");
             if (sumWidth > 0)
                 th.setCssProperty("width", String.format("%f%%", Utils.roundTo((double) width / sumWidth * 100, -2)));
             if (!Utils.isEmpty(styleDefine.align())) {

@@ -35,6 +35,7 @@ import cn.cerc.mis.core.FormFactory;
 import cn.cerc.mis.core.FormSign;
 import cn.cerc.mis.core.IErrorPage;
 import cn.cerc.mis.core.SystemBuffer;
+import cn.cerc.mis.core.UserRequestException;
 import cn.cerc.mis.other.MemoryBuffer;
 import cn.cerc.ui.core.UrlRecord;
 
@@ -184,9 +185,9 @@ public class StartForms implements Filter {
                         if (jedis.setnx(key, "1") == 1) {
                             jedis.expire(key, 1);
                         } else {
-                            log.error("key {}, origin {}", key, builder);
+                            log.debug("key {}, origin {}", key, builder);
                             IErrorPage error = context.getBean(IErrorPage.class);
-                            error.output(req, resp, new RuntimeException(String.format("对不起您操作太快了，服务器忙不过来 %s", uri)));
+                            error.output(req, resp, new UserRequestException(String.format("对不起您操作太快了，服务器忙不过来 %s", uri)));
                             return;
                         }
                     }

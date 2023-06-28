@@ -2,6 +2,7 @@ package cn.cerc.ui.fields;
 
 import cn.cerc.db.core.ClassConfig;
 import cn.cerc.mis.cdn.CDN;
+import cn.cerc.mis.core.Application;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.SummerUI;
 import cn.cerc.ui.core.UIComponent;
@@ -14,6 +15,11 @@ public class CodeNameField extends AbstractField {
 
     public CodeNameField(UIComponent owner, String name, String field) {
         super(owner, name, field);
+        var impl = Application.getBean(ImageConfigImpl.class);
+        if (impl != null)
+            this.setIcon(impl.getClassProperty(CodeNameField.class, SummerUI.ID, "icon", ""));
+        else
+            this.setIcon(config.getClassProperty("icon", ""));
     }
 
     @Override
@@ -35,7 +41,13 @@ public class CodeNameField extends AbstractField {
             }
             html.println("/>");
         } else {
-            html.println("<label for=\"%s\">%s</label>", this.getId(), this.getName() + "：");
+            html.print("<label for=\"%s\"", this.getNameField());
+            if (this.getMark() != null) {
+                html.print(" class='formMark'");
+            }
+            html.print(">");
+            html.println("<em>%s</em>：", this.getName());
+            html.println("</label>");
 
             html.print("<input");
             html.print(" type=\"hidden\"");
@@ -77,13 +89,13 @@ public class CodeNameField extends AbstractField {
             html.println("/>");
 
             if (this.isShowStar()) {
-                html.println("<font>*</font>");
+                new UIStarFlag(null).output(html);
             }
 
-            html.print("<span>");
+            html.print("<span role='suffix-icon'>");
             if (this.getDialog() != null && this.getDialog().isOpen()) {
                 html.print("<a href=\"%s\">", getUrl(this.getDialog()));
-                html.print("<img src=\"%s\">", CDN.get(StaticFile.getImage(config.getClassProperty("icon", ""))));
+                html.print("<img src=\"%s\">", CDN.get(StaticFile.getImage(this.getIcon())));
                 html.print("</a>");
             }
             html.print("</span>");

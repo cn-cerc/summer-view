@@ -92,15 +92,6 @@ public class UIImage extends UIComponent implements IHtml {
         return this;
     }
 
-    public String getRole() {
-        return (String) this.getCssProperty("role");
-    }
-
-    public UIImage setRole(String role) {
-        this.setCssProperty("role", role);
-        return this;
-    }
-
     public String getOnclick() {
         return (String) this.getCssProperty("onclick");
     }

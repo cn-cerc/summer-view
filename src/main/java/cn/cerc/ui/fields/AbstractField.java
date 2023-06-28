@@ -12,6 +12,7 @@ import cn.cerc.db.core.DataSet;
 import cn.cerc.db.core.DataSetSource;
 import cn.cerc.db.core.Datetime;
 import cn.cerc.db.core.FastDate;
+import cn.cerc.mis.core.Application;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.SummerUI;
 import cn.cerc.ui.core.INameOwner;
@@ -39,8 +40,6 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
     private String pattern;
     //
     private boolean hidden;
-    // 角色
-    private String role;
     //
     private DialogField dialog;
     // dialog 小图标
@@ -122,14 +121,6 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
 
     public Integer getWordId() {
         return wordId;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
     }
 
     public int getWidth() {
@@ -333,7 +324,7 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
     @Override
     public void beginOutput(HtmlWriter html) {
         super.beginOutput(html);
-        this.title.setFor(this.getId()).setText(this.getName() + "：");
+        this.title.setFor(this.getId()).setText(new UIText(null).setText(this.getName()).setRootLabel("em") + "：");
         this.title.setOwner(visible ? this : null);
     }
 
@@ -357,6 +348,9 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
             content.setCssProperty("onclick", this.onclick);
             content.setSignProperty("required", this.required);
             content.setSignProperty("autofocus", this.autofocus);
+            if (this.dialog != null && this.dialog.isOpen()) {
+                content.setCssProperty("data-suffix", "dialog");
+            }
         }
         content.output(html);
         this.endOutput(html);
@@ -366,10 +360,10 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
     public void endOutput(HtmlWriter html) {
         if (this.showStar) {
             new UIStarFlag(null).output(html);
-//            new UIFont(null).addComponent(new UIText().setText("*")).output(html);
         }
         if (!this.hidden) {
             UISpan span = new UISpan(null);
+            span.setRole("suffix-icon");
             if (this.dialog != null && this.dialog.isOpen()) {
                 String src = this.icon != null ? this.icon : getIconConfig();
                 UIUrl url = new UIUrl(span).setHref(dialog.getUrl());
@@ -629,7 +623,13 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
     }
 
     public static String getIconConfig() {
-        return config.getClassProperty("icon", "");
+        String icon = "";
+        var impl = Application.getBean(ImageConfigImpl.class);
+        if (impl != null)
+            icon = impl.getClassProperty(AbstractField.class, SummerUI.ID, "icon", "");
+        else
+            icon = config.getClassProperty("icon", "");
+        return icon;
     }
 
     protected UIComponent getContent() {
