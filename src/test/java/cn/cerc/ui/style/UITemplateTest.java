@@ -76,9 +76,9 @@ public class UITemplateTest {
 
     @Test
     public void testDecode_if_true() {
-        var template = new UITemplate("<div>${if final_}<span>ok</span>${endif}</div>");
-        var result = template.decode(DataRow.of("final_", true));
-        assertEquals("<div><span>ok</span></div>", result);
+        var template = new UITemplate("<div>${if final_}<span>${code_}</span>${endif}</div>");
+        var result = template.decode(DataRow.of("final_", true, "code_", "001"));
+        assertEquals("<div><span>001</span></div>", result);
     }
 
     @Test

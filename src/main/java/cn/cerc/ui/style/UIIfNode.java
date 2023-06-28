@@ -26,7 +26,11 @@ public class UIIfNode extends UIForeachNode {
         var sb = new StringBuffer();
         for (var item : this.getItems()) {
             if (item instanceof UIValueNode value) {
-                sb.append(value.getSourceText());
+                field = value.getText();
+                if (dataRow.exists(field))
+                    sb.append(dataRow.getString(field));
+                else
+                    sb.append(value.getSourceText());
             } else
                 sb.append(item.getSourceText());
         }
