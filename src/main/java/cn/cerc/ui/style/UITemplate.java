@@ -8,18 +8,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import cn.cerc.db.core.DataRow;
 import cn.cerc.db.core.DataSet;
 
 public class UITemplate {
-    private ArrayList<String> template = new ArrayList<String>();
+    private static final Logger log = LoggerFactory.getLogger(UITemplate.class);
+    private List<UISsrNodeImpl> nodes;
 
-    public ArrayList<String> getTemplate() {
-        return template;
-    }
-
-    public UITemplate() {
-
+    public UITemplate(String text) {
+        super();
+        this.nodes = this.asNodes(text);
     }
 
     public UITemplate(Class<?> class1, String id) {
@@ -27,6 +28,7 @@ public class UITemplate {
         var file = class1.getResourceAsStream(fileName);
         var list = new BufferedReader(new InputStreamReader(file, StandardCharsets.UTF_8));
         String line;
+        var sb = new StringBuffer();
         boolean start = false;
         try {
             while ((line = list.readLine()) != null) {
@@ -35,95 +37,110 @@ public class UITemplate {
                 else if ("</body>".equals(line))
                     break;
                 else if (start)
-                    template.add(line);
+                    sb.append(line);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+        this.nodes = this.asNodes(sb.toString());
     }
 
-    private String decode(List<String> list) {
+    public List<UISsrNodeImpl> getNodes() {
+        return nodes;
+    }
+
+    public String decode(List<String> list) {
         var sb = new StringBuffer();
-        // TODO
+        var nodes = getForeachNodes(UIListNode.StartFlag, UIListNode.EndFlag, (text) -> new UIListNode(text));
+        for (var node : nodes) {
+            if (node instanceof UIListNode items)
+                sb.append(items.getValue(list));
+            else
+                sb.append(node.getText());
+        }
         return sb.toString();
     }
 
-    private String decode(Map<String, String> map) {
+    public String decode(Map<String, String> map) {
         var sb = new StringBuffer();
-        // TODO
+        var nodes = getForeachNodes(UIMapNode.StartFlag, UIMapNode.EndFlag, (text) -> new UIMapNode(text));
+        for (var node : nodes) {
+            if (node instanceof UIMapNode items)
+                sb.append(items.getValue(map));
+            else
+                sb.append(node.getText());
+        }
         return sb.toString();
     }
 
     public String decode(DataRow row) {
         var sb = new StringBuffer();
-        for (var line : template) {
-            var start = line.indexOf("${");
-            if (start > -1) {
-                sb.append(line.substring(0, start));
-
-                var str = line.substring(start + 2, line.length());
-                var end = str.indexOf("}");
-                var field = str.substring(0, end);
-
+        for (var node : this.nodes) {
+            if (node instanceof UIValueNode item) {
+                var field = item.getText();
                 if (row.exists(field)) {
                     sb.append(row.getString(field));
                 } else {
-                    System.out.println("not find field: " + field);
+                    log.error("not find field: {}", field);
+                    sb.append("${").append(field).append("}");
                 }
-                sb.append(str.substring(end + 1, str.length()));
             } else {
-                sb.append(line);
+                sb.append(node.getText());
             }
         }
         return sb.toString();
     }
 
-    private String decode(DataSet dataSet) {
+    public String decode(DataSet dataSet) {
         var sb = new StringBuffer();
-        // TODO
+        var nodes = getForeachNodes(UIDatasetNode.StartFlag, UIDatasetNode.EndFlag, (text) -> new UIDatasetNode(text));
+        for (var node : nodes) {
+            if (node instanceof UIDatasetNode items)
+                sb.append(items.getValue(dataSet));
+            else
+                sb.append(node.getText());
+        }
         return sb.toString();
     }
 
-    public static void main(String[] args) {
-        var template = new UITemplate();
+    private ArrayList<UISsrNodeImpl> getForeachNodes(String startFlag, String endFlag, SupperForeachImpl supper) {
+        var result = new ArrayList<UISsrNodeImpl>();
+        UIForeachNode start = null;
+        for (var node : nodes) {
+            if (node instanceof UIValueNode item) {
+                if (startFlag.equals(item.getText())) {
+                    start = supper.getObject(item.getText());
+                    result.add(start);
+                    continue;
+                } else if (endFlag.equals(item.getText())) {
+                    start = null;
+                    continue;
+                }
+            }
+            if (start != null) {
+                start.addItem(node);
+            } else {
+                result.add(node);
+            }
+        }
+        return result;
+    }
 
-        var list = template.getTemplate();
-        list.clear();
-        list.add("<div>");
-        list.add("${list.begin>");
-        list.add("<span>${list.item}</span>");
-        list.add("${list.end}");
-        list.add("</div>");
-        System.out.println(template.decode(List.of("main", "beta")));
-
-        list.clear();
-        list.add("<div>");
-        list.add("${map.begin}");
-        list.add("<span>${map.key}:${map.value}</span>");
-        list.add("${map.end}");
-        list.add("</div>");
-        System.out.println(template.decode(Map.of("code", "001", "name", "jason")));
-
-        list.clear();
-        list.add("<div>");
-        list.add("<span>${Code_}</span>");
-        list.add("</div>");
-        System.out.println(template.decode(DataRow.of("Code_", "001")));
-
-        list.clear();
-        list.add("<div>");
-        list.add("<table>");
-        list.add("${dataset.begin}");
-        list.add("<span>${Code_}</span>");
-        list.add("${dataset.end}");
-        list.add("</table>");
-        list.add("</div>");
-
-        var dataSet = new DataSet();
-        dataSet.append().setValue("Code_", "001");
-        dataSet.append().setValue("Code_", "002");
-        System.out.println(template.decode(dataSet));
-
+    private List<UISsrNodeImpl> asNodes(String text) {
+        var list = new ArrayList<UISsrNodeImpl>();
+        int start, end;
+        var line = text;
+        while (line.length() > 0) {
+            if ((start = line.indexOf("${")) > -1 && (end = line.indexOf("}")) > -1) {
+                list.add(new UITextNode(line.substring(0, start)));
+                list.add(new UIValueNode(line.substring(start + 2, end)));
+                line = line.substring(end + 1, line.length());
+            } else {
+                list.add(new UITextNode(line));
+                break;
+            }
+        }
+        return list;
     }
 
 }
