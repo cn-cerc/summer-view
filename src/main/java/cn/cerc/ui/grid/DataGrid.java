@@ -22,6 +22,7 @@ import cn.cerc.ui.grid.lines.ChildGridLine;
 import cn.cerc.ui.grid.lines.ExpenderGridLine;
 import cn.cerc.ui.grid.lines.MasterGridLine;
 import cn.cerc.ui.style.IGridStyle;
+import cn.cerc.ui.style.UITemplate;
 import cn.cerc.ui.vcl.UIForm;
 
 public class DataGrid extends UIComponent implements DataSetSource, IGridStyle {
@@ -50,6 +51,7 @@ public class DataGrid extends UIComponent implements DataSetSource, IGridStyle {
     private boolean widthInNum = false;
     // 表格的标题
     private String gridTitle = "";
+    private UITemplate template;
 
     public DataGrid(UIComponent owner) {
         super(owner);
@@ -183,6 +185,11 @@ public class DataGrid extends UIComponent implements DataSetSource, IGridStyle {
         if (this.isClientRender()) {
             html.println("let grid = new sci.TGrid(app)");
             html.println("grid.setDataSet(new sci.DataSet('%s'))", this.dataSet.json());
+            return;
+        }
+
+        if (this.template != null) {
+            html.print(template.decode(dataSet));
             return;
         }
 
@@ -352,6 +359,14 @@ public class DataGrid extends UIComponent implements DataSetSource, IGridStyle {
         PhoneLine line = new PhoneLine(this);
         phoneLines.add(line);
         return line;
+    }
+
+    public void setTemplate(UITemplate template) {
+        this.template = template;
+    }
+
+    public UITemplate getTemplate() {
+        return template;
     }
 
 }
