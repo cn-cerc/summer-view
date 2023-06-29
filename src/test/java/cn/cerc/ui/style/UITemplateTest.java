@@ -181,6 +181,20 @@ public class UITemplateTest {
     }
 
     @Test
+    public void testDecode_if_true() {
+        var template = new UITemplate("<div>${if final_}<span>${code_}</span>${endif}</div>");
+        var result = template.setDataRow(DataRow.of("final_", true, "code_", "001")).html();
+        assertEquals("<div><span>001</span></div>", result);
+    }
+
+    @Test
+    public void testDecode_if_false() {
+        var template = new UITemplate("<div>${if final_}<span>ok</span>${endif}</div>");
+        var result = template.setDataRow(DataRow.of("final_", false)).html();
+        assertEquals("<div></div>", result);
+    }
+
+    @Test
     public void testDecode_list() {
         var template = new UITemplate("<div>${list.begin}<span>${list.item}</span>${list.end}</div>");
         var result = template.setList(List.of("a1", "a2")).html();
@@ -196,26 +210,19 @@ public class UITemplateTest {
 
     @Test
     public void testDecode_dataset() {
-        var template = new UITemplate("<div>${dataset.begin}<span>${Code_}</span>${dataset.end}</div>");
+        var template = new UITemplate("""
+                <div>${dataset.begin}
+                ${if Final_}
+                <span>${Code_}</span>
+                ${endif}
+                ${dataset.end}</div>
+                """);
         var ds = new DataSet();
-        ds.append().setValue("Code_", "001");
-        ds.append().setValue("Code_", "002");
+        ds.append().setValue("Code_", "001").setValue("Final_", true);
+        ds.append().setValue("Code_", "002").setValue("Final_", true);
+        ds.append().setValue("Code_", "003");
         var result = template.setDataSet(ds).html();
         assertEquals("<div><span>001</span><span>002</span></div>", result);
-    }
-
-    @Test
-    public void testDecode_if_true() {
-        var template = new UITemplate("<div>${if final_}<span>${code_}</span>${endif}</div>");
-        var result = template.setDataRow(DataRow.of("final_", true, "code_", "001")).html();
-        assertEquals("<div><span>001</span></div>", result);
-    }
-
-    @Test
-    public void testDecode_if_false() {
-        var template = new UITemplate("<div>${if final_}<span>ok</span>${endif}</div>");
-        var result = template.setDataRow(DataRow.of("final_", false)).html();
-        assertEquals("<div></div>", result);
     }
 
     @Test
