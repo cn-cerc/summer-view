@@ -1,10 +1,6 @@
 package cn.cerc.ui.style;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 public class UIDatasetNode extends UIForeachNode {
-    private static final Logger log = LoggerFactory.getLogger(UIDatasetNode.class);
     public static final String StartFlag = "dataset.begin";
     public static final String EndFlag = "dataset.end";
 

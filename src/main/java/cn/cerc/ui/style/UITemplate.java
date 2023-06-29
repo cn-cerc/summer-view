@@ -8,14 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import cn.cerc.db.core.DataRow;
 import cn.cerc.db.core.DataSet;
 
 public class UITemplate {
-    private static final Logger log = LoggerFactory.getLogger(UITemplate.class);
     private ArrayList<UISsrNodeImpl> nodes;
     private DataRow dataRow;
     private DataSet dataSet;
