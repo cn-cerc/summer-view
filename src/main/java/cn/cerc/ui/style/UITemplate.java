@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 
 import cn.cerc.db.core.DataRow;
 import cn.cerc.db.core.DataSet;
-import cn.cerc.db.core.Utils;
 
 public class UITemplate {
     private static final Logger log = LoggerFactory.getLogger(UITemplate.class);
@@ -75,11 +74,15 @@ public class UITemplate {
     }
 
     public UITemplate setDataRow(DataRow dataRow) {
+        if (dataSet != null)
+            throw new RuntimeException("dataSet is not null");
         this.dataRow = dataRow;
         return this;
     }
 
     public UITemplate setDataSet(DataSet dataSet) {
+        if (dataRow != null)
+            throw new RuntimeException("dataRow is not null");
         this.dataSet = dataSet;
         return this;
     }
@@ -92,32 +95,11 @@ public class UITemplate {
             else if (node instanceof UIMapNode items)
                 sb.append(items.getValue(map));
             else if (node instanceof UIDatasetNode items)
-                sb.append(items.getValue(dataSet));
+                sb.append(items.getValue(this));
             else if (node instanceof UIIfNode iif)
                 sb.append(iif.getValue(dataRow));
             else if (node instanceof UIValueNode item) {
-                var field = item.getText();
-                if (Utils.isNumeric(field)) {
-                    if (params != null) {
-                        var index = Integer.parseInt(item.getText());
-                        if (index >= 0 && index < params.length) {
-                            sb.append(params[index]);
-                        } else {
-                            log.error("not find index: {}", item.getText());
-                            sb.append(node.getSourceText());
-                        }
-                    } else {
-                        sb.append(item.getSourceText());
-                    }
-                } else if (dataRow != null) {
-                    if (dataRow.exists(field)) {
-                        sb.append(dataRow.getString(field));
-                    } else {
-                        log.error("not find field: {}", field);
-                        sb.append(node.getSourceText());
-                    }
-                } else
-                    sb.append(item.getSourceText());
+                sb.append(item.getValue(this));
             } else
                 sb.append(node.getText());
 
@@ -179,7 +161,7 @@ public class UITemplate {
     }
 
     public DataRow getDataRow() {
-        return dataRow;
+        return dataSet != null ? dataSet.currentRow().get() : dataRow;
     }
 
     public List<String> getList() {
@@ -188,6 +170,10 @@ public class UITemplate {
 
     public Map<String, String> getMap() {
         return map;
+    }
+
+    public DataSet getDataSet() {
+        return dataSet;
     }
 
 }
