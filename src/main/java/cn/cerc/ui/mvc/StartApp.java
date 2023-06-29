@@ -38,9 +38,8 @@ public class StartApp implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse resp = (HttpServletResponse) response;
 
-        String ip = AppClient.getClientIP(req);
-        log.info("{} {}", APP_IP_FILTER, ip);
         if ("true".equals(APP_IP_FILTER)) {
+            String ip = AppClient.getClientIP(req);
             if (!ClientIPVerify.allow(ip)) {
                 resp.sendError(HttpServletResponse.SC_NOT_FOUND);
                 return;
