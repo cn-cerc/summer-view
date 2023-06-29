@@ -36,8 +36,6 @@ public class UIIfNode extends UIForeachNode {
                 log.error("not find field: {}", field);
                 status.setValue(-1);
             }
-            System.out.println("left:" + dataRow.getString(field));
-            System.out.println("right:" + value);
             status.setValue(lrEquals.execute(dataRow.getString(field), value) ? 1 : 0);
             return true;
         } else {
