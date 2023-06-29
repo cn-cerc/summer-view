@@ -37,6 +37,13 @@ public class UITemplateTest {
     }
 
     @Test
+    public void testDecodeString4() {
+        var template = new UITemplate("${a}{abc}<div>${if year_}<span>${Code_}</span>${endif}</div>");
+        assertEquals(4, template.getNodes().size());
+        assertEquals("a,{abc}<div>,if year_,</div>,", margeList(template.getNodes()));
+    }
+
+    @Test
     public void testDecode_array() {
         var template = new UITemplate("<div><span>${0},${1}</span></div>");
         var result = template.setArray("001", "002").html();
@@ -96,7 +103,7 @@ public class UITemplateTest {
         var result = template.html();
         assertEquals("<div>aaa001<span></span>bbb</div>", result);
     }
-
+   
     private String margeList(List<UISsrNodeImpl> list) {
         var sb = new StringBuffer();
         for (var item : list)

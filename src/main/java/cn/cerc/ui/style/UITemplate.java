@@ -157,8 +157,9 @@ public class UITemplate {
         int start, end;
         var line = templateText;
         while (line.length() > 0) {
-            if ((start = line.indexOf("${")) > -1 && (end = line.indexOf("}")) > -1) {
-                list.add(new UITextNode(line.substring(0, start)));
+            if ((start = line.indexOf("${")) > -1 && (end = line.indexOf("}", start)) > -1) {
+                if (start > 0)
+                    list.add(new UITextNode(line.substring(0, start)));
                 list.add(new UIValueNode(line.substring(start + 2, end)));
                 line = line.substring(end + 1, line.length());
             } else {
