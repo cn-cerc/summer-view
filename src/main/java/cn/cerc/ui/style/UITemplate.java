@@ -17,7 +17,7 @@ import cn.cerc.db.core.Utils;
 
 public class UITemplate {
     private static final Logger log = LoggerFactory.getLogger(UITemplate.class);
-    private List<UISsrNodeImpl> nodes;
+    private ArrayList<UISsrNodeImpl> nodes;
     private DataRow dataRow;
     private DataSet dataSet;
     private List<String> list;
@@ -52,11 +52,11 @@ public class UITemplate {
     }
 
     private void initNodes(String templateText) {
-        this.nodes = this.asNodes(templateText);
-        compressNodes(UIIfNode.StartFlag, UIIfNode.EndFlag, (text) -> new UIIfNode(text));
-        compressNodes(UIListNode.StartFlag, UIListNode.EndFlag, (text) -> new UIListNode(text));
-        compressNodes(UIMapNode.StartFlag, UIMapNode.EndFlag, (text) -> new UIMapNode(text));
-        compressNodes(UIDatasetNode.StartFlag, UIDatasetNode.EndFlag, (text) -> new UIDatasetNode(text));
+        this.nodes = this.createNodes(templateText);
+        compressNodes(nodes, UIIfNode.StartFlag, UIIfNode.EndFlag, (text) -> new UIIfNode(text));
+        compressNodes(nodes, UIMapNode.StartFlag, UIMapNode.EndFlag, (text) -> new UIMapNode(text));
+        compressNodes(nodes, UIListNode.StartFlag, UIListNode.EndFlag, (text) -> new UIListNode(text));
+        compressNodes(nodes, UIDatasetNode.StartFlag, UIDatasetNode.EndFlag, (text) -> new UIDatasetNode(text));
     }
 
     public UITemplate setArray(String... params) {
@@ -125,14 +125,19 @@ public class UITemplate {
         return sb.toString();
     }
 
-    private void compressNodes(String startFlag, String endFlag, SupperForeachImpl supper) {
-        var result = new ArrayList<UISsrNodeImpl>();
+    private void compressNodes(ArrayList<UISsrNodeImpl> nodes, String startFlag, String endFlag,
+            SupperForeachImpl supper) {
+        // 先复制到 temp 变量中
+        var temp = new ArrayList<UISsrNodeImpl>();
+        temp.addAll(nodes);
+        nodes.clear();
+        // 开始归集
         UIForeachNode container = null;
-        for (var node : this.nodes) {
+        for (var node : temp) {
             if (node instanceof UIValueNode item) {
                 if (item.getText().startsWith(startFlag)) {
                     container = supper.createObject(item.getText());
-                    result.add(container);
+                    nodes.add(container);
                     continue;
                 } else if (item.getText().startsWith(endFlag)) {
                     container = null;
@@ -142,19 +147,19 @@ public class UITemplate {
             if (container != null) {
                 container.addItem(node);
             } else {
-                result.add(node);
+                nodes.add(node);
             }
         }
-        this.nodes = result;
     }
 
-    private List<UISsrNodeImpl> asNodes(String templateText) {
+    private ArrayList<UISsrNodeImpl> createNodes(String templateText) {
         var list = new ArrayList<UISsrNodeImpl>();
         int start, end;
         var line = templateText;
         while (line.length() > 0) {
-            if ((start = line.indexOf("${")) > -1 && (end = line.indexOf("}")) > -1) {
-                list.add(new UITextNode(line.substring(0, start)));
+            if ((start = line.indexOf("${")) > -1 && (end = line.indexOf("}", start)) > -1) {
+                if (start > 0)
+                    list.add(new UITextNode(line.substring(0, start)));
                 list.add(new UIValueNode(line.substring(start + 2, end)));
                 line = line.substring(end + 1, line.length());
             } else {
