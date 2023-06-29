@@ -46,7 +46,7 @@ public class UITemplateTest {
     @Test
     public void testDecode_array() {
         var template = new UITemplate("<div><span>${0},${1}</span></div>");
-        var result = template.setArray("001", "002").html();
+        var result = template.setParams("001", "002").html();
         assertEquals("<div><span>001,002</span></div>", result);
     }
 
@@ -228,7 +228,7 @@ public class UITemplateTest {
     @Test
     public void testDecode_combo() {
         var template = new UITemplate("<div>${0}${code_}${if final_}<span></span>${endif}${1}</div>");
-        template.setArray("aaa", "bbb");
+        template.setParams("aaa", "bbb");
         template.setDataRow(DataRow.of("code_", "001", "final_", true));
         var result = template.html();
         assertEquals("<div>aaa001<span></span>bbb</div>", result);
