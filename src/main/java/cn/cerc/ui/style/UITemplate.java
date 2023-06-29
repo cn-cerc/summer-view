@@ -52,7 +52,7 @@ public class UITemplate {
     }
 
     private void initNodes(String templateText) {
-        this.nodes = this.asNodes(templateText);
+        this.nodes = this.createNodes(templateText);
         compressNodes(nodes, UIIfNode.StartFlag, UIIfNode.EndFlag, (text) -> new UIIfNode(text));
         compressNodes(nodes, UIMapNode.StartFlag, UIMapNode.EndFlag, (text) -> new UIMapNode(text));
         compressNodes(nodes, UIListNode.StartFlag, UIListNode.EndFlag, (text) -> new UIListNode(text));
@@ -152,7 +152,7 @@ public class UITemplate {
         }
     }
 
-    private ArrayList<UISsrNodeImpl> asNodes(String templateText) {
+    private ArrayList<UISsrNodeImpl> createNodes(String templateText) {
         var list = new ArrayList<UISsrNodeImpl>();
         int start, end;
         var line = templateText;
