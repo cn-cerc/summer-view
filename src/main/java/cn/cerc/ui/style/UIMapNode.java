@@ -11,6 +11,9 @@ public class UIMapNode extends UIForeachNode {
     }
 
     public String getValue(Map<String, String> params) {
+        if(params == null)
+            return this.getSourceText();
+        
         var sb = new StringBuffer();
         for (var key : params.keySet()) {
             var value = params.get(key);
@@ -27,6 +30,11 @@ public class UIMapNode extends UIForeachNode {
             }
         }
         return sb.toString();
+    }
+
+    @Override
+    protected String getEndFlag() {
+        return EndFlag;
     }
 
 }
