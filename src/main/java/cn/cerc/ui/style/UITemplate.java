@@ -59,7 +59,7 @@ public class UITemplate {
         compressNodes(nodes, UIDatasetNode.StartFlag, UIDatasetNode.EndFlag, (text) -> new UIDatasetNode(text));
     }
 
-    public UITemplate setArray(String... params) {
+    public UITemplate setParams(String... params) {
         this.params = params;
         return this;
     }
@@ -172,6 +172,22 @@ public class UITemplate {
 
     public List<UISsrNodeImpl> getNodes() {
         return nodes;
+    }
+
+    public String[] getParams() {
+        return params;
+    }
+
+    public DataRow getDataRow() {
+        return dataRow;
+    }
+
+    public List<String> getList() {
+        return list;
+    }
+
+    public Map<String, String> getMap() {
+        return map;
     }
 
 }
