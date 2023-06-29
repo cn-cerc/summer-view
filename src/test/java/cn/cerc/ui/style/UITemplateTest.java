@@ -103,7 +103,7 @@ public class UITemplateTest {
         var result = template.html();
         assertEquals("<div>aaa001<span></span>bbb</div>", result);
     }
-   
+
     private String margeList(List<UISsrNodeImpl> list) {
         var sb = new StringBuffer();
         for (var item : list)
