@@ -18,4 +18,15 @@ public abstract class UIForeachNode extends UIValueNode {
         return items;
     }
 
+    @Override
+    public String getSourceText() {
+        var sb = new StringBuffer();
+        sb.append("${").append(this.getText()).append("}");
+        for (var item : this.getItems())
+            sb.append(item.getSourceText());
+        sb.append("${").append(getEndFlag()).append("}");
+        return sb.toString();
+    }
+
+    protected abstract String getEndFlag();
 }

@@ -11,6 +11,9 @@ public class UIListNode extends UIForeachNode {
     }
 
     public String getValue(List<String> list) {
+        if (list == null)
+            return this.getSourceText();
+
         var sb = new StringBuffer();
         for (var param : list) {
             for (var item : this.getItems()) {
@@ -24,6 +27,11 @@ public class UIListNode extends UIForeachNode {
             }
         }
         return sb.toString();
+    }
+
+    @Override
+    protected String getEndFlag() {
+        return EndFlag;
     }
 
 }
