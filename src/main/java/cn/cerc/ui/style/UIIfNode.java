@@ -43,7 +43,9 @@ public class UIIfNode extends UIForeachNode {
         }
     }
 
-    public String getValue(DataRow dataRow) {
+    @Override
+    public String getValue() {
+        var dataRow = this.getTemplate().getDataRow();
         if (dataRow == null)
             return this.getSourceText();
 

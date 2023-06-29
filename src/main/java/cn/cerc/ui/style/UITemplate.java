@@ -11,7 +11,7 @@ import java.util.Map;
 import cn.cerc.db.core.DataRow;
 import cn.cerc.db.core.DataSet;
 
-public class UITemplate {
+public class UITemplate implements UITemplateImpl {
     private ArrayList<UISsrNodeImpl> nodes;
     private DataRow dataRow;
     private DataSet dataSet;
@@ -87,15 +87,15 @@ public class UITemplate {
         var sb = new StringBuffer();
         for (var node : this.nodes) {
             if (node instanceof UIListNode items)
-                sb.append(items.getValue(list));
+                sb.append(items.getValue());
             else if (node instanceof UIMapNode items)
-                sb.append(items.getValue(map));
+                sb.append(items.getValue());
             else if (node instanceof UIDatasetNode items)
-                sb.append(items.getValue(this));
+                sb.append(items.getValue());
             else if (node instanceof UIIfNode iif)
-                sb.append(iif.getValue(dataRow));
+                sb.append(iif.getValue());
             else if (node instanceof UIValueNode item) {
-                sb.append(item.getValue(this));
+                sb.append(item.getValue());
             } else
                 sb.append(node.getText());
 
@@ -115,6 +115,7 @@ public class UITemplate {
             if (node instanceof UIValueNode item) {
                 if (item.getText().startsWith(startFlag)) {
                     container = supper.createObject(item.getText());
+                    container.setTemplate(this);
                     nodes.add(container);
                     continue;
                 } else if (item.getText().startsWith(endFlag)) {
@@ -145,6 +146,7 @@ public class UITemplate {
                 break;
             }
         }
+        list.forEach(item -> item.setTemplate(this));
         return list;
     }
 
@@ -152,22 +154,27 @@ public class UITemplate {
         return nodes;
     }
 
+    @Override
     public String[] getParams() {
         return params;
     }
 
+    @Override
     public DataRow getDataRow() {
         return dataSet != null ? dataSet.currentRow().get() : dataRow;
     }
 
+    @Override
     public List<String> getList() {
         return list;
     }
 
+    @Override
     public Map<String, String> getMap() {
         return map;
     }
 
+    @Override
     public DataSet getDataSet() {
         return dataSet;
     }

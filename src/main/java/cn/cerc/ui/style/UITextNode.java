@@ -17,4 +17,8 @@ public class UITextNode implements UISsrNodeImpl {
         return text;
     }
 
+    @Override
+    public void setTemplate(UITemplateImpl template) {
+    }
+
 }

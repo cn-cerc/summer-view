@@ -7,7 +7,7 @@ import cn.cerc.db.core.Utils;
 
 public class UIValueNode implements UISsrNodeImpl {
     private static final Logger log = LoggerFactory.getLogger(UIValueNode.class);
-
+    private UITemplateImpl template;
     private String text;
 
     @Override
@@ -24,10 +24,10 @@ public class UIValueNode implements UISsrNodeImpl {
         return "${" + this.text + "}";
     }
 
-    public String getValue(UITemplate dataSource) {
+    public String getValue() {
         var field = this.getText();
-        var params = dataSource.getParams();
-        var dataRow = dataSource.getDataRow();
+        var params = this.getTemplate().getParams();
+        var dataRow = this.getTemplate().getDataRow();
         if (Utils.isNumeric(field)) {
             if (params != null) {
                 var index = Integer.parseInt(field);
@@ -49,5 +49,14 @@ public class UIValueNode implements UISsrNodeImpl {
             }
         } else
             return this.getSourceText();
+    }
+
+    protected UITemplateImpl getTemplate() {
+        return template;
+    }
+
+    @Override
+    public void setTemplate(UITemplateImpl template) {
+        this.template = template;
     }
 }

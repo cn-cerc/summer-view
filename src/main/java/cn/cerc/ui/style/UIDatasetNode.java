@@ -9,24 +9,35 @@ public class UIDatasetNode extends UIForeachNode {
     }
 
     @Override
-    public String getValue(UITemplate dataSource) {
-        var dataSet = dataSource.getDataSet();
+    public String getValue() {
+        var dataSet = this.getTemplate().getDataSet();
         if (dataSet == null)
             return this.getSourceText();
 
-        var sb = new StringBuffer();
-        for (int i = 1; i <= dataSet.size(); i++) {
-            var row = dataSet.records().get(i - 1);
-            for (var item : this.getItems()) {
-                if (item instanceof UIIfNode child) {
-                    sb.append(child.getValue(row));
-                } else if (item instanceof UIValueNode child) {
-                   sb.append(child.getValue(dataSource));
-                } else
-                    sb.append(item.getSourceText());
+        if (dataSet.size() == 0)
+            return "";
+
+        int save_recNo = dataSet.recNo();
+        try {
+            var sb = new StringBuffer();
+            dataSet.first();
+            while (dataSet.fetch()) {
+                for (var item : this.getItems()) {
+                    if (item instanceof UIIfNode child) {
+                        sb.append(child.getValue());
+                    } else if (item instanceof UIValueNode child) {
+                        if ("dataset.rec".equals(item.getText()))
+                            sb.append(dataSet.recNo());
+                        else
+                            sb.append(child.getValue());
+                    } else
+                        sb.append(item.getSourceText());
+                }
             }
+            return sb.toString();
+        } finally {
+            dataSet.setRecNo(save_recNo);
         }
-        return sb.toString();
     }
 
     @Override
