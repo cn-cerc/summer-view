@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cn.cerc.db.core.DataRow;
+import cn.cerc.db.core.Variant;
 
 public class UIIfNode extends UIForeachNode {
     private static final Logger log = LoggerFactory.getLogger(UIIfNode.class);
@@ -14,22 +15,70 @@ public class UIIfNode extends UIForeachNode {
         super(text);
     }
 
-    public String getValue(DataRow dataRow) {
-        if(dataRow == null)
-            return this.getSourceText();
-        
-        var field = this.getText().substring(3, this.getText().length());
-        if (!dataRow.exists(field)) {
-            log.error("not find field: {}", field);
-            return this.getSourceText();
-        }
-        if (!dataRow.getBoolean(field))
-            return "";
+    public interface LeftRightEquals {
+        boolean execute(String left, String right);
+    }
 
+    public boolean check(DataRow dataRow, Variant status, String text, String flag, LeftRightEquals lrEquals) {
+        var arr = text.split(flag);
+        if (arr.length == 1 && text.endsWith(flag)) {
+            var field = arr[0];
+            if (!dataRow.exists(field)) {
+                log.error("not find field: {}", field);
+                status.setValue(-1);
+            }
+            status.setValue(lrEquals.execute(dataRow.getString(field), "") ? 1 : 0);
+            return true;
+        } else if (arr.length == 2 && (arr[0].length()) > 0) {
+            var field = arr[0];
+            var value = arr[1];
+            if (!dataRow.exists(field)) {
+                log.error("not find field: {}", field);
+                status.setValue(-1);
+            }
+            System.out.println("left:" + dataRow.getString(field));
+            System.out.println("right:" + value);
+            status.setValue(lrEquals.execute(dataRow.getString(field), value) ? 1 : 0);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public String getValue(DataRow dataRow) {
+        if (dataRow == null)
+            return this.getSourceText();
+
+        Variant status = new Variant();
+        var text = this.getText().substring(3, this.getText().length());
+        if (check(dataRow, status, text, "==", (left, right) -> left.equals(right))
+                || check(dataRow, status, text, "<>", (left, right) -> !left.equals(right))
+                || check(dataRow, status, text, "!=", (left, right) -> !left.equals(right))
+                || check(dataRow, status, text, ">=", (left, right) -> left.compareTo(right) >= 0)
+                || check(dataRow, status, text, "<=", (left, right) -> left.compareTo(right) <= 0)
+                || check(dataRow, status, text, ">", (left, right) -> left.compareTo(right) > 0)
+                || check(dataRow, status, text, "<", (left, right) -> left.compareTo(right) < 0)
+                || check(dataRow, status, text, " is null", (left, right) -> left.equals(right))
+                || check(dataRow, status, text, " is not null", (left, right) -> !left.equals(right))) {
+            if (status.getInt() == -1)
+                return this.getSourceText();
+            return status.getInt() == 1 ? getChildren(dataRow) : "";
+        } else {
+            // 直接使用boolean字段
+            String field = text;
+            if (!dataRow.exists(field)) {
+                log.error("not find field: {}", field);
+                return this.getSourceText();
+            }
+            return dataRow.getBoolean(field) ? getChildren(dataRow) : "";
+        }
+    }
+
+    private String getChildren(DataRow dataRow) {
         var sb = new StringBuffer();
         for (var item : this.getItems()) {
             if (item instanceof UIValueNode value) {
-                field = value.getText();
+                String field = value.getText();
                 if (dataRow.exists(field))
                     sb.append(dataRow.getString(field));
                 else

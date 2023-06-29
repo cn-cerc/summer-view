@@ -51,10 +51,133 @@ public class UITemplateTest {
     }
 
     @Test
-    public void testDecode_row() {
-        var template = new UITemplate("<div><span>${Code_}</span></div>");
+    public void testDecode_if1() {
+        var template = new UITemplate("""
+                <div>
+                    ${if Code_==001}
+                    <span>${Code_}</span>
+                    ${endif}
+                </div>
+                """);
         var result = template.setDataRow(DataRow.of("Code_", "001")).html();
         assertEquals("<div><span>001</span></div>", result);
+    }
+
+    @Test
+    public void testDecode_if2() {
+        var template = new UITemplate("""
+                <div>
+                    ${if Code_==002}
+                    <span>${Code_}</span>
+                    ${endif}
+                </div>
+                """);
+        var result = template.setDataRow(DataRow.of("Code_", "001")).html();
+        assertEquals("<div></div>", result);
+    }
+
+    @Test
+    public void testDecode_if3() {
+        var template = new UITemplate("""
+                <div>
+                    ${if Code_!=002}
+                    <span>${Code_}</span>
+                    ${endif}
+                </div>
+                """);
+        var result = template.setDataRow(DataRow.of("Code_", "001")).html();
+        assertEquals("<div><span>001</span></div>", result);
+    }
+
+    @Test
+    public void testDecode_if4() {
+        var template = new UITemplate("""
+                <div>
+                    ${if Code_<>002}
+                    <span>${Code_}</span>
+                    ${endif}
+                </div>
+                """);
+        var result = template.setDataRow(DataRow.of("Code_", "001")).html();
+        assertEquals("<div><span>001</span></div>", result);
+    }
+
+    @Test
+    public void testDecode_if5() {
+        var template = new UITemplate("""
+                <div>
+                    ${if Code_>=000}
+                    <span></span>
+                    ${endif}
+                </div>
+                """);
+        var result = template.setDataRow(DataRow.of("Code_", "001")).html();
+        assertEquals("<div><span></span></div>", result);
+    }
+
+    @Test
+    public void testDecode_if6() {
+        var template = new UITemplate("""
+                <div>
+                    ${if Code_<=002}
+                    <span></span>
+                    ${endif}
+                </div>
+                """);
+        var result = template.setDataRow(DataRow.of("Code_", "001")).html();
+        assertEquals("<div><span></span></div>", result);
+    }
+
+    @Test
+    public void testDecode_if7() {
+        var template = new UITemplate("""
+                <div>
+                    ${if Code_<002}
+                    <span></span>
+                    ${endif}
+                </div>
+                """);
+        var result = template.setDataRow(DataRow.of("Code_", "001")).html();
+        assertEquals("<div><span></span></div>", result);
+    }
+
+    @Test
+    public void testDecode_if8() {
+        var template = new UITemplate("""
+                <div>
+                    ${if Code_>0}
+                    <span></span>
+                    ${endif}
+                </div>
+                """);
+        var result = template.setDataRow(DataRow.of("Code_", "001")).html();
+        assertEquals("<div><span></span></div>", result);
+    }
+
+    @Test
+    public void testDecode_if9() {
+        var template = new UITemplate("""
+                <div>
+                    ${if Code_ is null}
+                    <span></span>
+                    ${endif}
+                </div>
+                """);
+        var result = template.setDataRow(DataRow.of("Code_", "")).html();
+        assertEquals("<div><span></span></div>", result);
+    }
+
+    @Test
+    public void testDecode_if10() {
+        var template = new UITemplate("""
+                <div>
+                    ${if Code_ is not null}
+                    <span></span>
+                    ${endif}
+                </div>
+                """);
+        var result = template.setDataRow(DataRow.of("Code_", "001")).html();
+        assertEquals("<div><span></span></div>", result);
     }
 
     @Test

@@ -1,7 +1,6 @@
 package cn.cerc.ui.style;
 
 public class UITextNode implements UISsrNodeImpl {
-
     private String text;
 
     @Override
@@ -10,7 +9,7 @@ public class UITextNode implements UISsrNodeImpl {
     }
 
     public UITextNode(String text) {
-        this.text = text;
+        this.text = text.trim();
     }
 
     @Override
