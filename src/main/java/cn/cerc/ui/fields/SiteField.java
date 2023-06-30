@@ -63,7 +63,12 @@ public class SiteField extends AbstractField {
         if (Utils.isEmpty(current) && !Utils.isEmpty(this.getValue())) {
             current = this.getValue();
         }
-        html.println("<label for=\"%s\">%s</label>", this.getId(), this.getName() + "：");
+        html.println("<label for=\"%s\">", this.getId());
+        if (this.isShowStar()) {
+            new UIStarFlag(null).output(html);
+        }
+        html.println("<em>%s</em>", this.getName());
+        html.println("</label>");
         html.print("<div class=\"%s\">", this.getId());
         String initialValue = "";
         for (String key : items.keySet()) {
@@ -91,9 +96,6 @@ public class SiteField extends AbstractField {
                 html.print("<span value=\"%s\" >%s</span>", key, value);
         }
         html.println("</div></div>");
-        if (this.isShowStar()) {
-            html.print("<font>*</font>");
-        }
         html.print("<span></span>");
         html.print("<script>SiteFieldInit(\"" + this.getId() + "\")</script>");
     }
