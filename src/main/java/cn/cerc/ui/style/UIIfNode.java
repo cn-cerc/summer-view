@@ -1,5 +1,7 @@
 package cn.cerc.ui.style;
 
+import java.util.ArrayList;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -62,26 +64,45 @@ public class UIIfNode extends UIForeachNode {
                 || check(dataRow, status, text, " is not null", (left, right) -> !left.equals(right))) {
             if (status.getInt() == -1)
                 return this.getSourceText();
-            return status.getInt() == 1 ? getChildren(dataRow) : "";
+            return getChildren(status.getInt() == 1);
         } else {
             // 直接使用boolean字段
             String field = text;
             var map = this.getTemplate().getMap();
             if (map != null && map.containsKey(field)) {
                 var value = new Variant(map.get(field));
-                return value.getBoolean() ? getChildren(dataRow) : "";
+                return getChildren(value.getBoolean());
             }
             if (!dataRow.exists(field)) {
                 log.error("not find field: {}", field);
                 return this.getSourceText();
             }
-            return dataRow.getBoolean(field) ? getChildren(dataRow) : "";
+            return getChildren(dataRow.getBoolean(field));
         }
     }
 
-    private String getChildren(DataRow dataRow) {
+    private String getChildren(boolean ifValue) {
+        var dataRow = this.getTemplate().getDataRow();
         var sb = new StringBuffer();
+
+        // 将子项依据else分离成2组
+        var items1 = new ArrayList<UISsrNodeImpl>();
+        var items2 = new ArrayList<UISsrNodeImpl>();
+        var elseFlag = false;
         for (var item : this.getItems()) {
+            if ("else".equals(item.getField())) {
+                elseFlag = true;
+                continue;
+            }
+            if (!elseFlag)
+                items1.add(item);
+            else
+                items2.add(item);
+        }
+        
+        // 根据参数决定是执行1还是执行2
+        var items = ifValue ? items1 : items2;
+        for (var item : items) {
             if (item instanceof UIValueNode value) {
                 String field = value.getField();
                 if (dataRow.exists(field))

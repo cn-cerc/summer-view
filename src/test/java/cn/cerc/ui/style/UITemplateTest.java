@@ -213,7 +213,9 @@ public class UITemplateTest {
         var template = new UITemplate("""
                 <div>${dataset.begin}
                 ${if Final_}
-                <span>${Code_}</span>
+                    <span>${Code_}</span>
+                ${else}
+                    <span>else</span>
                 ${endif}
                 ${dataset.end}</div>
                 """);
@@ -222,7 +224,7 @@ public class UITemplateTest {
         ds.append().setValue("Code_", "002").setValue("Final_", true);
         ds.append().setValue("Code_", "003");
         var result = template.setDataSet(ds).html();
-        assertEquals("<div><span>001</span><span>002</span></div>", result);
+        assertEquals("<div><span>001</span><span>002</span><span>else</span></div>", result);
     }
 
     @Test
