@@ -28,6 +28,7 @@ public class SsrValueNode implements SsrNodeImpl {
     public String getValue() {
         var field = this.getField();
         var list = this.getTemplate().getList();
+        var map = this.getTemplate().getMap();
         var dataRow = this.getTemplate().getDataRow();
         if (Utils.isNumeric(field)) {
             if (list != null) {
@@ -41,8 +42,10 @@ public class SsrValueNode implements SsrNodeImpl {
             } else {
                 return this.getSourceText();
             }
-        } else if (dataRow != null) {
-            if (dataRow.exists(field)) {
+        } else if (map != null || dataRow != null) {
+            if (map != null && map.containsKey(field))
+                return map.get(field);
+            else if (dataRow != null && dataRow.exists(field)) {
                 return dataRow.getText(field);
             } else {
                 log.error("not find field: {}", field);
