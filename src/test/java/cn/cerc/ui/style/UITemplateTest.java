@@ -55,25 +55,16 @@ public class UITemplateTest {
         var template = new UITemplate("""
                 <div>
                     ${if Code_==001}
-                    <span>${Code_}</span>
+                    yes
+                    ${else}
+                    no
                     ${endif}
                 </div>
                 """);
-        var result = template.setDataRow(DataRow.of("Code_", "001")).html();
-        assertEquals("<div><span>001</span></div>", result);
-    }
-
-    @Test
-    public void testDecode_if2() {
-        var template = new UITemplate("""
-                <div>
-                    ${if Code_==002}
-                    <span>${Code_}</span>
-                    ${endif}
-                </div>
-                """);
-        var result = template.setDataRow(DataRow.of("Code_", "001")).html();
-        assertEquals("<div></div>", result);
+        var result1 = template.setDataRow(DataRow.of("Code_", "001")).html();
+        assertEquals("<div>yes</div>", result1);
+        var result2 = template.setDataRow(DataRow.of("Code_", "002")).html();
+        assertEquals("<div>no</div>", result2);
     }
 
     @Test
@@ -158,7 +149,7 @@ public class UITemplateTest {
     public void testDecode_if9() {
         var template = new UITemplate("""
                 <div>
-                    ${if Code_ is null}
+                    ${if Code_ is empty}
                     <span></span>
                     ${endif}
                 </div>
@@ -171,7 +162,7 @@ public class UITemplateTest {
     public void testDecode_if10() {
         var template = new UITemplate("""
                 <div>
-                    ${if Code_ is not null}
+                    ${if Code_ is not empty}
                     <span></span>
                     ${endif}
                 </div>

@@ -60,8 +60,8 @@ public class UIIfNode extends UIForeachNode {
                 || check(dataRow, status, text, "<=", (left, right) -> left.compareTo(right) <= 0)
                 || check(dataRow, status, text, ">", (left, right) -> left.compareTo(right) > 0)
                 || check(dataRow, status, text, "<", (left, right) -> left.compareTo(right) < 0)
-                || check(dataRow, status, text, " is null", (left, right) -> left.equals(right))
-                || check(dataRow, status, text, " is not null", (left, right) -> !left.equals(right))) {
+                || check(dataRow, status, text, " is empty", (left, right) -> left.equals(right))
+                || check(dataRow, status, text, " is not empty", (left, right) -> !left.equals(right))) {
             if (status.getInt() == -1)
                 return this.getSourceText();
             return getChildren(status.getInt() == 1);
