@@ -66,6 +66,11 @@ public class UIIfNode extends UIForeachNode {
         } else {
             // 直接使用boolean字段
             String field = text;
+            var map = this.getTemplate().getMap();
+            if (map != null && map.containsKey(field)) {
+                var value = new Variant(map.get(field));
+                return value.getBoolean() ? getChildren(dataRow) : "";
+            }
             if (!dataRow.exists(field)) {
                 log.error("not find field: {}", field);
                 return this.getSourceText();
