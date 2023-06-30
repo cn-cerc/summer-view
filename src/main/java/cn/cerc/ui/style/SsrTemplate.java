@@ -154,7 +154,7 @@ public class SsrTemplate implements SsrTemplateImpl {
 
     @Override
     public String[] getParams() {
-        return params.toArray(new String[params.size()]);
+        return params != null ? params.toArray(new String[params.size()]) : null;
     }
 
     @Override
