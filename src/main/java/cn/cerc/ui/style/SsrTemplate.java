@@ -13,7 +13,6 @@ import cn.cerc.db.core.DataSet;
 
 public class SsrTemplate implements SsrTemplateImpl {
     private ArrayList<SsrNodeImpl> nodes;
-    private List<String> params;
     private List<String> list;
     private Map<String, String> map;
     private DataRow dataRow;
@@ -54,20 +53,11 @@ public class SsrTemplate implements SsrTemplateImpl {
         compressNodes(nodes, SsrDatasetNode.StartFlag, SsrDatasetNode.EndFlag, (text) -> new SsrDatasetNode(text));
     }
 
-    public SsrTemplate addParam(String text) {
-        if (this.params == null)
-            this.params = new ArrayList<>();
-        this.params.add(text);
-        return this;
-    }
-
-    public SsrTemplate setParams(String... params) {
-        if (this.params == null)
-            this.params = new ArrayList<>();
-        else
-            this.params.clear();
-        for (String param : params)
-            this.params.add(param);
+    public SsrTemplate addItems(String... items) {
+        if (list == null)
+            this.list = new ArrayList<String>();
+        for (String item : items)
+            this.list.add(item);
         return this;
     }
 
@@ -150,11 +140,6 @@ public class SsrTemplate implements SsrTemplateImpl {
 
     public List<SsrNodeImpl> getNodes() {
         return nodes;
-    }
-
-    @Override
-    public String[] getParams() {
-        return params != null ? params.toArray(new String[params.size()]) : null;
     }
 
     @Override
