@@ -13,11 +13,11 @@ import cn.cerc.db.core.DataSet;
 
 public class SsrTemplate implements SsrTemplateImpl {
     private ArrayList<SsrNodeImpl> nodes;
-    private DataRow dataRow;
-    private DataSet dataSet;
+    private List<String> params;
     private List<String> list;
     private Map<String, String> map;
-    private String[] params;
+    private DataRow dataRow;
+    private DataSet dataSet;
 
     public SsrTemplate(String templateText) {
         super();
@@ -54,8 +54,20 @@ public class SsrTemplate implements SsrTemplateImpl {
         compressNodes(nodes, SsrDatasetNode.StartFlag, SsrDatasetNode.EndFlag, (text) -> new SsrDatasetNode(text));
     }
 
+    public SsrTemplate addParam(String text) {
+        if (this.params == null)
+            this.params = new ArrayList<>();
+        this.params.add(text);
+        return this;
+    }
+
     public SsrTemplate setParams(String... params) {
-        this.params = params;
+        if (this.params == null)
+            this.params = new ArrayList<>();
+        else
+            this.params.clear();
+        for (String param : params)
+            this.params.add(param);
         return this;
     }
 
@@ -90,8 +102,7 @@ public class SsrTemplate implements SsrTemplateImpl {
         return sb.toString();
     }
 
-    private void compressNodes(ArrayList<SsrNodeImpl> nodes, String startFlag, String endFlag,
-            SsrForeachImpl supper) {
+    private void compressNodes(ArrayList<SsrNodeImpl> nodes, String startFlag, String endFlag, SsrForeachImpl supper) {
         // 先复制到 temp 变量中
         var temp = new ArrayList<SsrNodeImpl>();
         temp.addAll(nodes);
@@ -143,7 +154,7 @@ public class SsrTemplate implements SsrTemplateImpl {
 
     @Override
     public String[] getParams() {
-        return params;
+        return params.toArray(new String[params.size()]);
     }
 
     @Override
