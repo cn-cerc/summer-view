@@ -23,7 +23,8 @@ public class UIValueNode implements UISsrNodeImpl {
     public String getSourceText() {
         return "${" + this.text + "}";
     }
-
+    
+    @Override
     public String getValue() {
         var field = this.getText();
         var params = this.getTemplate().getParams();

@@ -6,6 +6,8 @@ public interface UISsrNodeImpl {
     
     String getText();
     
+    String getValue();
+    
     String getSourceText();
 
 }

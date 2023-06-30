@@ -21,4 +21,9 @@ public class UITextNode implements UISsrNodeImpl {
     public void setTemplate(UITemplateImpl template) {
     }
 
+    @Override
+    public String getValue() {
+        return this.text.trim();
+    }
+
 }

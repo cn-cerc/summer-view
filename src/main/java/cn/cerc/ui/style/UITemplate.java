@@ -85,21 +85,8 @@ public class UITemplate implements UITemplateImpl {
 
     public String html() {
         var sb = new StringBuffer();
-        for (var node : this.nodes) {
-            if (node instanceof UIListNode items)
-                sb.append(items.getValue());
-            else if (node instanceof UIMapNode items)
-                sb.append(items.getValue());
-            else if (node instanceof UIDatasetNode items)
-                sb.append(items.getValue());
-            else if (node instanceof UIIfNode iif)
-                sb.append(iif.getValue());
-            else if (node instanceof UIValueNode item) {
-                sb.append(item.getValue());
-            } else
-                sb.append(node.getText());
-
-        }
+        for (var node : this.nodes)
+            sb.append(node.getValue());
         return sb.toString();
     }
 
