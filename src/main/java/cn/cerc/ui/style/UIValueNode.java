@@ -43,7 +43,7 @@ public class UIValueNode implements UISsrNodeImpl {
             }
         } else if (dataRow != null) {
             if (dataRow.exists(field)) {
-                return dataRow.getString(field);
+                return dataRow.getText(field);
             } else {
                 log.error("not find field: {}", field);
                 return this.getSourceText();
