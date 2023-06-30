@@ -27,15 +27,15 @@ public class SsrValueNode implements SsrNodeImpl {
     @Override
     public String getValue() {
         var field = this.getField();
-        var params = this.getTemplate().getParams();
+        var list = this.getTemplate().getList();
         var dataRow = this.getTemplate().getDataRow();
         if (Utils.isNumeric(field)) {
-            if (params != null) {
+            if (list != null) {
                 var index = Integer.parseInt(field);
-                if (index >= 0 && index < params.length) {
-                    return params[index];
+                if (index >= 0 && index < list.size()) {
+                    return list.get(index);
                 } else {
-                    log.error("not find index: {}", field);
+                    log.error("not find index of list: {}", field);
                     return this.getSourceText();
                 }
             } else {
