@@ -23,7 +23,7 @@ public class SsrValueNode implements SsrNodeImpl {
     public String getSourceText() {
         return "${" + this.text + "}";
     }
-    
+
     @Override
     public String getValue() {
         var field = this.getField();
@@ -34,9 +34,11 @@ public class SsrValueNode implements SsrNodeImpl {
                 var index = Integer.parseInt(field);
                 if (index >= 0 && index < list.size()) {
                     return list.get(index);
-                } else {
+                } else if (this.getTemplate().isStrict()) {
                     log.error("not find index of list: {}", field);
                     return this.getSourceText();
+                } else {
+                    return "";
                 }
             } else {
                 return this.getSourceText();
@@ -44,9 +46,11 @@ public class SsrValueNode implements SsrNodeImpl {
         } else if (dataRow != null) {
             if (dataRow.exists(field)) {
                 return dataRow.getText(field);
-            } else {
+            } else if (this.getTemplate().isStrict()) {
                 log.error("not find field: {}", field);
                 return this.getSourceText();
+            } else {
+                return "";
             }
         } else
             return this.getSourceText();

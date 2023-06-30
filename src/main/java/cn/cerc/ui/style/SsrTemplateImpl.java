@@ -8,12 +8,13 @@ import cn.cerc.db.core.DataSet;
 
 public interface SsrTemplateImpl {
 
-    public DataRow getDataRow();
+    DataRow getDataRow();
 
-    public List<String> getList();
+    List<String> getList();
 
-    public Map<String, String> getMap();
+    Map<String, String> getMap();
 
-    public DataSet getDataSet();
+    DataSet getDataSet();
 
+    boolean isStrict();
 }
