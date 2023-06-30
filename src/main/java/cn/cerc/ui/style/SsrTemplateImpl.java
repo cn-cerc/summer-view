@@ -8,8 +8,6 @@ import cn.cerc.db.core.DataSet;
 
 public interface SsrTemplateImpl {
 
-    public String[] getParams();
-
     public DataRow getDataRow();
 
     public List<String> getList();

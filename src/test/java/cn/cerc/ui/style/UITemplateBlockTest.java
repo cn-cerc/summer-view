@@ -9,7 +9,7 @@ public class UITemplateBlockTest {
     @Test
     public void test() {
         var block = new UITemplateBlock(null, "<a href=${0}>${1}</a>");
-        block.getTemplate().addParam("url").addParam("name");
+        block.getTemplate().addItems("url", "name");
         assertEquals("<a href=url>name</a>", block.toString());
     }
 
