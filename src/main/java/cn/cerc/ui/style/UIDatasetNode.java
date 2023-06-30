@@ -26,7 +26,7 @@ public class UIDatasetNode extends UIForeachNode {
                     if (item instanceof UIIfNode child) {
                         sb.append(child.getValue());
                     } else if (item instanceof UIValueNode child) {
-                        if ("dataset.rec".equals(item.getText()))
+                        if ("dataset.rec".equals(item.getField()))
                             sb.append(dataSet.recNo());
                         else
                             sb.append(child.getValue());

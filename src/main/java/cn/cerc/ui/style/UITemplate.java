@@ -100,12 +100,12 @@ public class UITemplate implements UITemplateImpl {
         UIForeachNode container = null;
         for (var node : temp) {
             if (node instanceof UIValueNode item) {
-                if (item.getText().startsWith(startFlag)) {
-                    container = supper.createObject(item.getText());
+                if (item.getField().startsWith(startFlag)) {
+                    container = supper.createObject(item.getField());
                     container.setTemplate(this);
                     nodes.add(container);
                     continue;
-                } else if (item.getText().startsWith(endFlag)) {
+                } else if (item.getField().startsWith(endFlag)) {
                     container = null;
                     continue;
                 }

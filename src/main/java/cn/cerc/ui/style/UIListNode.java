@@ -18,7 +18,7 @@ public class UIListNode extends UIForeachNode {
         for (var param : list) {
             for (var item : this.getItems()) {
                 if (item instanceof UIValueNode value) {
-                    if ("list.item".equals(item.getText()))
+                    if ("list.item".equals(item.getField()))
                         sb.append(param);
                     else
                         sb.append(value.getSourceText());

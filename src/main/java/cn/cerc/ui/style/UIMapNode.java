@@ -19,9 +19,9 @@ public class UIMapNode extends UIForeachNode {
             var value = params.get(key);
             for (var item : this.getItems()) {
                 if (item instanceof UIValueNode child) {
-                    if ("map.key".equals(item.getText()))
+                    if ("map.key".equals(item.getField()))
                         sb.append(key);
-                    else if ("map.value".equals(item.getText()))
+                    else if ("map.value".equals(item.getField()))
                         sb.append(value);
                     else
                         sb.append(child.getSourceText());

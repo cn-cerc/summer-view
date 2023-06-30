@@ -21,26 +21,26 @@ public class UITemplateTest {
     @Test
     public void testDecodeString1() {
         var template = new UITemplate("<div></div>");
-        assertEquals("<div></div>,", margeList(template.getNodes()));
+        assertEquals(",", margeList(template.getNodes()));
     }
 
     @Test
     public void testDecodeString2() {
         var template = new UITemplate("<div>${code.begin}aa${code.end}</div>");
-        assertEquals("<div>,code.begin,aa,code.end,</div>,", margeList(template.getNodes()));
+        assertEquals(",code.begin,,code.end,,", margeList(template.getNodes()));
     }
 
     @Test
     public void testDecodeString3() {
         var template = new UITemplate("<div>${if year_}<span>${Code_}</span>${endif}</div>");
-        assertEquals("<div>,if year_,</div>,", margeList(template.getNodes()));
+        assertEquals(",if year_,,", margeList(template.getNodes()));
     }
 
     @Test
     public void testDecodeString4() {
         var template = new UITemplate("${a}{abc}<div>${if year_}<span>${Code_}</span>${endif}</div>");
         assertEquals(4, template.getNodes().size());
-        assertEquals("a,{abc}<div>,if year_,</div>,", margeList(template.getNodes()));
+        assertEquals("a,,if year_,,", margeList(template.getNodes()));
     }
 
     @Test
@@ -237,7 +237,7 @@ public class UITemplateTest {
     private String margeList(List<UISsrNodeImpl> list) {
         var sb = new StringBuffer();
         for (var item : list)
-            sb.append(item.getText()).append(",");
+            sb.append(item.getField()).append(",");
         return sb.toString();
     }
 

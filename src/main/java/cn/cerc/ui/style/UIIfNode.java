@@ -50,7 +50,7 @@ public class UIIfNode extends UIForeachNode {
             return this.getSourceText();
 
         Variant status = new Variant();
-        var text = this.getText().substring(3, this.getText().length());
+        var text = this.getField().substring(3, this.getField().length());
         if (check(dataRow, status, text, "==", (left, right) -> left.equals(right))
                 || check(dataRow, status, text, "<>", (left, right) -> !left.equals(right))
                 || check(dataRow, status, text, "!=", (left, right) -> !left.equals(right))
@@ -78,7 +78,7 @@ public class UIIfNode extends UIForeachNode {
         var sb = new StringBuffer();
         for (var item : this.getItems()) {
             if (item instanceof UIValueNode value) {
-                String field = value.getText();
+                String field = value.getField();
                 if (dataRow.exists(field))
                     sb.append(dataRow.getString(field));
                 else

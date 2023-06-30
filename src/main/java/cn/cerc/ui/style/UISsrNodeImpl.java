@@ -14,11 +14,11 @@ public interface UISsrNodeImpl {
      * 
      * @return 预处理过的字符串
      */
-    String getText();
+    String getField();
 
     /**
      * 
-     * @return 返回处理过的字符串
+     * @return 若为特殊字段，则返回字段名
      */
     String getValue();
 

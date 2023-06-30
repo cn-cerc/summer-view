@@ -11,7 +11,7 @@ public class UIValueNode implements UISsrNodeImpl {
     private String text;
 
     @Override
-    public String getText() {
+    public String getField() {
         return text;
     }
 
@@ -26,7 +26,7 @@ public class UIValueNode implements UISsrNodeImpl {
     
     @Override
     public String getValue() {
-        var field = this.getText();
+        var field = this.getField();
         var params = this.getTemplate().getParams();
         var dataRow = this.getTemplate().getDataRow();
         if (Utils.isNumeric(field)) {

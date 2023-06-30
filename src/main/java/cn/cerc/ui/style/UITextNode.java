@@ -4,8 +4,8 @@ public class UITextNode implements UISsrNodeImpl {
     private String text;
 
     @Override
-    public String getText() {
-        return text;
+    public String getField() {
+        return "";
     }
 
     public UITextNode(String text) {
