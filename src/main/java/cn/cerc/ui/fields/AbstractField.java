@@ -79,6 +79,16 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
     private boolean showEllipsis = false;
     // 名词id
     private Integer wordId;
+    // 生成的div携带的样式
+    private String contentClass = "";
+
+    public String getContentClass() {
+        return contentClass;
+    }
+
+    public void setContentClass(String contentClass) {
+        this.contentClass = contentClass;
+    }
 
     public AbstractField(UIComponent owner, String name, String field) {
         this(owner, name, field, 0);
@@ -337,7 +347,10 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
         }
         if (!this.hidden) {
             this.title.output(html);
-            html.print("<div>");
+            html.print("<div");
+            if (!"".equals(this.getContentClass()))
+                html.print(" class=\"%s\"", this.getContentClass());
+            html.print(">");
         }
     }
 
