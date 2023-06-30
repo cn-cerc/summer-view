@@ -6,7 +6,7 @@ import java.util.Map;
 import cn.cerc.db.core.DataRow;
 import cn.cerc.db.core.DataSet;
 
-public interface UITemplateImpl {
+public interface SsrTemplateImpl {
 
     public String[] getParams();
 

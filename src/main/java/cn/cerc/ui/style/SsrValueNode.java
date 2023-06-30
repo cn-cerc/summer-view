@@ -5,9 +5,9 @@ import org.slf4j.LoggerFactory;
 
 import cn.cerc.db.core.Utils;
 
-public class UIValueNode implements UISsrNodeImpl {
-    private static final Logger log = LoggerFactory.getLogger(UIValueNode.class);
-    private UITemplateImpl template;
+public class SsrValueNode implements SsrNodeImpl {
+    private static final Logger log = LoggerFactory.getLogger(SsrValueNode.class);
+    private SsrTemplateImpl template;
     private String text;
 
     @Override
@@ -15,7 +15,7 @@ public class UIValueNode implements UISsrNodeImpl {
         return text;
     }
 
-    public UIValueNode(String text) {
+    public SsrValueNode(String text) {
         this.text = text;
     }
 
@@ -52,12 +52,12 @@ public class UIValueNode implements UISsrNodeImpl {
             return this.getSourceText();
     }
 
-    protected UITemplateImpl getTemplate() {
+    protected SsrTemplateImpl getTemplate() {
         return template;
     }
 
     @Override
-    public void setTemplate(UITemplateImpl template) {
+    public void setTemplate(SsrTemplateImpl template) {
         this.template = template;
     }
 }
