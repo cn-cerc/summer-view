@@ -21,7 +21,7 @@ public abstract class UIForeachNode extends UIValueNode {
     @Override
     public String getSourceText() {
         var sb = new StringBuffer();
-        sb.append("${").append(this.getText()).append("}");
+        sb.append("${").append(this.getField()).append("}");
         for (var item : this.getItems())
             sb.append(item.getSourceText());
         sb.append("${").append(getEndFlag()).append("}");

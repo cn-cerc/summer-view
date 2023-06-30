@@ -21,33 +21,168 @@ public class UITemplateTest {
     @Test
     public void testDecodeString1() {
         var template = new UITemplate("<div></div>");
-        assertEquals("<div></div>,", margeList(template.getNodes()));
+        assertEquals(",", margeList(template.getNodes()));
     }
 
     @Test
     public void testDecodeString2() {
         var template = new UITemplate("<div>${code.begin}aa${code.end}</div>");
-        assertEquals("<div>,code.begin,aa,code.end,</div>,", margeList(template.getNodes()));
+        assertEquals(",code.begin,,code.end,,", margeList(template.getNodes()));
     }
 
     @Test
     public void testDecodeString3() {
         var template = new UITemplate("<div>${if year_}<span>${Code_}</span>${endif}</div>");
-        assertEquals("<div>,if year_,</div>,", margeList(template.getNodes()));
+        assertEquals(",if year_,,", margeList(template.getNodes()));
+    }
+
+    @Test
+    public void testDecodeString4() {
+        var template = new UITemplate("${a}{abc}<div>${if year_}<span>${Code_}</span>${endif}</div>");
+        assertEquals(4, template.getNodes().size());
+        assertEquals("a,,if year_,,", margeList(template.getNodes()));
     }
 
     @Test
     public void testDecode_array() {
         var template = new UITemplate("<div><span>${0},${1}</span></div>");
-        var result = template.setArray("001", "002").html();
+        var result = template.setParams("001", "002").html();
         assertEquals("<div><span>001,002</span></div>", result);
     }
 
     @Test
-    public void testDecode_row() {
-        var template = new UITemplate("<div><span>${Code_}</span></div>");
+    public void testDecode_if1() {
+        var template = new UITemplate("""
+                <div>
+                    ${if Code_==001}
+                    yes
+                    ${else}
+                    no
+                    ${endif}
+                </div>
+                """);
+        var result1 = template.setDataRow(DataRow.of("Code_", "001")).html();
+        assertEquals("<div>yes</div>", result1);
+        var result2 = template.setDataRow(DataRow.of("Code_", "002")).html();
+        assertEquals("<div>no</div>", result2);
+    }
+
+    @Test
+    public void testDecode_if3() {
+        var template = new UITemplate("""
+                <div>
+                    ${if Code_!=002}
+                    <span>${Code_}</span>
+                    ${endif}
+                </div>
+                """);
         var result = template.setDataRow(DataRow.of("Code_", "001")).html();
         assertEquals("<div><span>001</span></div>", result);
+    }
+
+    @Test
+    public void testDecode_if4() {
+        var template = new UITemplate("""
+                <div>
+                    ${if Code_<>002}
+                    <span>${Code_}</span>
+                    ${endif}
+                </div>
+                """);
+        var result = template.setDataRow(DataRow.of("Code_", "001")).html();
+        assertEquals("<div><span>001</span></div>", result);
+    }
+
+    @Test
+    public void testDecode_if5() {
+        var template = new UITemplate("""
+                <div>
+                    ${if Code_>=000}
+                    <span></span>
+                    ${endif}
+                </div>
+                """);
+        var result = template.setDataRow(DataRow.of("Code_", "001")).html();
+        assertEquals("<div><span></span></div>", result);
+    }
+
+    @Test
+    public void testDecode_if6() {
+        var template = new UITemplate("""
+                <div>
+                    ${if Code_<=002}
+                    <span></span>
+                    ${endif}
+                </div>
+                """);
+        var result = template.setDataRow(DataRow.of("Code_", "001")).html();
+        assertEquals("<div><span></span></div>", result);
+    }
+
+    @Test
+    public void testDecode_if7() {
+        var template = new UITemplate("""
+                <div>
+                    ${if Code_<002}
+                    <span></span>
+                    ${endif}
+                </div>
+                """);
+        var result = template.setDataRow(DataRow.of("Code_", "001")).html();
+        assertEquals("<div><span></span></div>", result);
+    }
+
+    @Test
+    public void testDecode_if8() {
+        var template = new UITemplate("""
+                <div>
+                    ${if Code_>0}
+                    <span></span>
+                    ${endif}
+                </div>
+                """);
+        var result = template.setDataRow(DataRow.of("Code_", "001")).html();
+        assertEquals("<div><span></span></div>", result);
+    }
+
+    @Test
+    public void testDecode_if9() {
+        var template = new UITemplate("""
+                <div>
+                    ${if Code_ is empty}
+                    <span></span>
+                    ${endif}
+                </div>
+                """);
+        var result = template.setDataRow(DataRow.of("Code_", "")).html();
+        assertEquals("<div><span></span></div>", result);
+    }
+
+    @Test
+    public void testDecode_if10() {
+        var template = new UITemplate("""
+                <div>
+                    ${if Code_ is not empty}
+                    <span></span>
+                    ${endif}
+                </div>
+                """);
+        var result = template.setDataRow(DataRow.of("Code_", "001")).html();
+        assertEquals("<div><span></span></div>", result);
+    }
+
+    @Test
+    public void testDecode_if_true() {
+        var template = new UITemplate("<div>${if final_}<span>${code_}</span>${endif}</div>");
+        var result = template.setDataRow(DataRow.of("final_", true, "code_", "001")).html();
+        assertEquals("<div><span>001</span></div>", result);
+    }
+
+    @Test
+    public void testDecode_if_false() {
+        var template = new UITemplate("<div>${if final_}<span>ok</span>${endif}</div>");
+        var result = template.setDataRow(DataRow.of("final_", false)).html();
+        assertEquals("<div></div>", result);
     }
 
     @Test
@@ -66,41 +201,47 @@ public class UITemplateTest {
 
     @Test
     public void testDecode_dataset() {
-        var template = new UITemplate("<div>${dataset.begin}<span>${Code_}</span>${dataset.end}</div>");
+        var template = new UITemplate("""
+                <div>${dataset.begin}
+                ${if Final_}
+                    <span>${Code_}</span>
+                ${else}
+                    <span>else</span>
+                ${endif}
+                ${dataset.end}</div>
+                """);
         var ds = new DataSet();
-        ds.append().setValue("Code_", "001");
-        ds.append().setValue("Code_", "002");
+        ds.append().setValue("Code_", "001").setValue("Final_", true);
+        ds.append().setValue("Code_", "002").setValue("Final_", true);
+        ds.append().setValue("Code_", "003");
         var result = template.setDataSet(ds).html();
-        assertEquals("<div><span>001</span><span>002</span></div>", result);
-    }
-
-    @Test
-    public void testDecode_if_true() {
-        var template = new UITemplate("<div>${if final_}<span>${code_}</span>${endif}</div>");
-        var result = template.setDataRow(DataRow.of("final_", true, "code_", "001")).html();
-        assertEquals("<div><span>001</span></div>", result);
-    }
-
-    @Test
-    public void testDecode_if_false() {
-        var template = new UITemplate("<div>${if final_}<span>ok</span>${endif}</div>");
-        var result = template.setDataRow(DataRow.of("final_", false)).html();
-        assertEquals("<div></div>", result);
+        assertEquals("<div><span>001</span><span>002</span><span>else</span></div>", result);
     }
 
     @Test
     public void testDecode_combo() {
-        var template = new UITemplate("<div>${0}${code_}${if final_}<span></span>${endif}${1}</div>");
-        template.setArray("aaa", "bbb");
+        var template = new UITemplate("""
+                <div>
+                ${0}${code_}
+                ${if Ready_}
+                    <span>from map</span>
+                ${endif}
+                ${if final_}
+                    <span>from row</span>
+                ${endif}
+                ${1}
+                </div>""");
+        template.setParams("aaa", "bbb");
+        template.setMap(Map.of("Ready_", "true"));
         template.setDataRow(DataRow.of("code_", "001", "final_", true));
         var result = template.html();
-        assertEquals("<div>aaa001<span></span>bbb</div>", result);
+        assertEquals("<div>aaa001<span>from map</span><span>from row</span>bbb</div>", result);
     }
 
     private String margeList(List<UISsrNodeImpl> list) {
         var sb = new StringBuffer();
         for (var item : list)
-            sb.append(item.getText()).append(",");
+            sb.append(item.getField()).append(",");
         return sb.toString();
     }
 
