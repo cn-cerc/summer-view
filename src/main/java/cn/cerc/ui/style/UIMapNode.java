@@ -1,7 +1,5 @@
 package cn.cerc.ui.style;
 
-import java.util.Map;
-
 public class UIMapNode extends UIForeachNode {
     public static final String StartFlag = "map.begin";
     public static final String EndFlag = "map.end";
@@ -10,18 +8,20 @@ public class UIMapNode extends UIForeachNode {
         super(text);
     }
 
-    public String getValue(Map<String, String> params) {
-        if(params == null)
+    @Override
+    public String getValue() {
+        var params = this.getTemplate().getMap();
+        if (params == null)
             return this.getSourceText();
-        
+
         var sb = new StringBuffer();
         for (var key : params.keySet()) {
             var value = params.get(key);
             for (var item : this.getItems()) {
                 if (item instanceof UIValueNode child) {
-                    if ("map.key".equals(item.getText()))
+                    if ("map.key".equals(item.getField()))
                         sb.append(key);
-                    else if ("map.value".equals(item.getText()))
+                    else if ("map.value".equals(item.getField()))
                         sb.append(value);
                     else
                         sb.append(child.getSourceText());

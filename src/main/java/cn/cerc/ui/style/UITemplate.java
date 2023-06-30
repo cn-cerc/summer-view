@@ -8,15 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import cn.cerc.db.core.DataRow;
 import cn.cerc.db.core.DataSet;
-import cn.cerc.db.core.Utils;
 
-public class UITemplate {
-    private static final Logger log = LoggerFactory.getLogger(UITemplate.class);
+public class UITemplate implements UITemplateImpl {
     private ArrayList<UISsrNodeImpl> nodes;
     private DataRow dataRow;
     private DataSet dataSet;
@@ -54,12 +49,12 @@ public class UITemplate {
     private void initNodes(String templateText) {
         this.nodes = this.createNodes(templateText);
         compressNodes(nodes, UIIfNode.StartFlag, UIIfNode.EndFlag, (text) -> new UIIfNode(text));
-        compressNodes(nodes, UIMapNode.StartFlag, UIMapNode.EndFlag, (text) -> new UIMapNode(text));
         compressNodes(nodes, UIListNode.StartFlag, UIListNode.EndFlag, (text) -> new UIListNode(text));
+        compressNodes(nodes, UIMapNode.StartFlag, UIMapNode.EndFlag, (text) -> new UIMapNode(text));
         compressNodes(nodes, UIDatasetNode.StartFlag, UIDatasetNode.EndFlag, (text) -> new UIDatasetNode(text));
     }
 
-    public UITemplate setArray(String... params) {
+    public UITemplate setParams(String... params) {
         this.params = params;
         return this;
     }
@@ -75,53 +70,23 @@ public class UITemplate {
     }
 
     public UITemplate setDataRow(DataRow dataRow) {
+        if (dataSet != null)
+            throw new RuntimeException("dataSet is not null");
         this.dataRow = dataRow;
         return this;
     }
 
     public UITemplate setDataSet(DataSet dataSet) {
+        if (dataRow != null)
+            throw new RuntimeException("dataRow is not null");
         this.dataSet = dataSet;
         return this;
     }
 
     public String html() {
         var sb = new StringBuffer();
-        for (var node : this.nodes) {
-            if (node instanceof UIListNode items)
-                sb.append(items.getValue(list));
-            else if (node instanceof UIMapNode items)
-                sb.append(items.getValue(map));
-            else if (node instanceof UIDatasetNode items)
-                sb.append(items.getValue(dataSet));
-            else if (node instanceof UIIfNode iif)
-                sb.append(iif.getValue(dataRow));
-            else if (node instanceof UIValueNode item) {
-                var field = item.getText();
-                if (Utils.isNumeric(field)) {
-                    if (params != null) {
-                        var index = Integer.parseInt(item.getText());
-                        if (index >= 0 && index < params.length) {
-                            sb.append(params[index]);
-                        } else {
-                            log.error("not find index: {}", item.getText());
-                            sb.append(node.getSourceText());
-                        }
-                    } else {
-                        sb.append(item.getSourceText());
-                    }
-                } else if (dataRow != null) {
-                    if (dataRow.exists(field)) {
-                        sb.append(dataRow.getString(field));
-                    } else {
-                        log.error("not find field: {}", field);
-                        sb.append(node.getSourceText());
-                    }
-                } else
-                    sb.append(item.getSourceText());
-            } else
-                sb.append(node.getText());
-
-        }
+        for (var node : this.nodes)
+            sb.append(node.getValue());
         return sb.toString();
     }
 
@@ -135,11 +100,12 @@ public class UITemplate {
         UIForeachNode container = null;
         for (var node : temp) {
             if (node instanceof UIValueNode item) {
-                if (item.getText().startsWith(startFlag)) {
-                    container = supper.createObject(item.getText());
+                if (item.getField().startsWith(startFlag)) {
+                    container = supper.createObject(item.getField());
+                    container.setTemplate(this);
                     nodes.add(container);
                     continue;
-                } else if (item.getText().startsWith(endFlag)) {
+                } else if (item.getField().startsWith(endFlag)) {
                     container = null;
                     continue;
                 }
@@ -167,11 +133,37 @@ public class UITemplate {
                 break;
             }
         }
+        list.forEach(item -> item.setTemplate(this));
         return list;
     }
 
     public List<UISsrNodeImpl> getNodes() {
         return nodes;
+    }
+
+    @Override
+    public String[] getParams() {
+        return params;
+    }
+
+    @Override
+    public DataRow getDataRow() {
+        return dataSet != null ? dataSet.currentRow().get() : dataRow;
+    }
+
+    @Override
+    public List<String> getList() {
+        return list;
+    }
+
+    @Override
+    public Map<String, String> getMap() {
+        return map;
+    }
+
+    @Override
+    public DataSet getDataSet() {
+        return dataSet;
     }
 
 }
