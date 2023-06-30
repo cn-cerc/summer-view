@@ -1,10 +1,10 @@
 package cn.cerc.ui.style;
 
-public class UIMapNode extends UIForeachNode {
+public class SsrMapNode extends SsrForeachNode {
     public static final String StartFlag = "map.begin";
     public static final String EndFlag = "map.end";
 
-    public UIMapNode(String text) {
+    public SsrMapNode(String text) {
         super(text);
     }
 
@@ -18,7 +18,7 @@ public class UIMapNode extends UIForeachNode {
         for (var key : params.keySet()) {
             var value = params.get(key);
             for (var item : this.getItems()) {
-                if (item instanceof UIValueNode child) {
+                if (item instanceof SsrValueNode child) {
                     if ("map.key".equals(item.getField()))
                         sb.append(key);
                     else if ("map.value".equals(item.getField()))

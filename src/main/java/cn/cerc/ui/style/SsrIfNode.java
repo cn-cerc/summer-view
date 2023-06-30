@@ -8,12 +8,12 @@ import org.slf4j.LoggerFactory;
 import cn.cerc.db.core.DataRow;
 import cn.cerc.db.core.Variant;
 
-public class UIIfNode extends UIForeachNode {
-    private static final Logger log = LoggerFactory.getLogger(UIIfNode.class);
+public class SsrIfNode extends SsrForeachNode {
+    private static final Logger log = LoggerFactory.getLogger(SsrIfNode.class);
     public static final String StartFlag = "if ";
     public static final String EndFlag = "endif";
 
-    public UIIfNode(String text) {
+    public SsrIfNode(String text) {
         super(text);
     }
 
@@ -86,8 +86,8 @@ public class UIIfNode extends UIForeachNode {
         var sb = new StringBuffer();
 
         // 将子项依据else分离成2组
-        var items1 = new ArrayList<UISsrNodeImpl>();
-        var items2 = new ArrayList<UISsrNodeImpl>();
+        var items1 = new ArrayList<SsrNodeImpl>();
+        var items2 = new ArrayList<SsrNodeImpl>();
         var elseFlag = false;
         for (var item : this.getItems()) {
             if ("else".equals(item.getField())) {
@@ -103,7 +103,7 @@ public class UIIfNode extends UIForeachNode {
         // 根据参数决定是执行1还是执行2
         var items = ifValue ? items1 : items2;
         for (var item : items) {
-            if (item instanceof UIValueNode value) {
+            if (item instanceof SsrValueNode value) {
                 String field = value.getField();
                 if (dataRow.exists(field))
                     sb.append(dataRow.getString(field));

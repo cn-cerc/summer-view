@@ -1,8 +1,8 @@
 package cn.cerc.ui.style;
 
-public interface UISsrNodeImpl {
+public interface SsrNodeImpl {
 
-    void setTemplate(UITemplateImpl template);
+    void setTemplate(SsrTemplateImpl template);
 
     /**
      * 
