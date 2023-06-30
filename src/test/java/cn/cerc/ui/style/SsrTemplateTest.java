@@ -10,49 +10,49 @@ import org.junit.Test;
 import cn.cerc.db.core.DataRow;
 import cn.cerc.db.core.DataSet;
 
-public class UITemplateTest {
+public class SsrTemplateTest {
 
     @Test
     public void testDecodeString0() {
-        var template = new UITemplate("");
+        var template = new SsrTemplate("");
         assertEquals("", margeList(template.getNodes()));
     }
 
     @Test
     public void testDecodeString1() {
-        var template = new UITemplate("<div></div>");
+        var template = new SsrTemplate("<div></div>");
         assertEquals(",", margeList(template.getNodes()));
     }
 
     @Test
     public void testDecodeString2() {
-        var template = new UITemplate("<div>${code.begin}aa${code.end}</div>");
+        var template = new SsrTemplate("<div>${code.begin}aa${code.end}</div>");
         assertEquals(",code.begin,,code.end,,", margeList(template.getNodes()));
     }
 
     @Test
     public void testDecodeString3() {
-        var template = new UITemplate("<div>${if year_}<span>${Code_}</span>${endif}</div>");
+        var template = new SsrTemplate("<div>${if year_}<span>${Code_}</span>${endif}</div>");
         assertEquals(",if year_,,", margeList(template.getNodes()));
     }
 
     @Test
     public void testDecodeString4() {
-        var template = new UITemplate("${a}{abc}<div>${if year_}<span>${Code_}</span>${endif}</div>");
+        var template = new SsrTemplate("${a}{abc}<div>${if year_}<span>${Code_}</span>${endif}</div>");
         assertEquals(4, template.getNodes().size());
         assertEquals("a,,if year_,,", margeList(template.getNodes()));
     }
 
     @Test
     public void testDecode_array() {
-        var template = new UITemplate("<div><span>${0},${1}</span></div>");
+        var template = new SsrTemplate("<div><span>${0},${1}</span></div>");
         var result = template.setParams("001", "002").html();
         assertEquals("<div><span>001,002</span></div>", result);
     }
 
     @Test
     public void testDecode_if1() {
-        var template = new UITemplate("""
+        var template = new SsrTemplate("""
                 <div>
                     ${if Code_==001}
                     yes
@@ -69,7 +69,7 @@ public class UITemplateTest {
 
     @Test
     public void testDecode_if3() {
-        var template = new UITemplate("""
+        var template = new SsrTemplate("""
                 <div>
                     ${if Code_!=002}
                     <span>${Code_}</span>
@@ -82,7 +82,7 @@ public class UITemplateTest {
 
     @Test
     public void testDecode_if4() {
-        var template = new UITemplate("""
+        var template = new SsrTemplate("""
                 <div>
                     ${if Code_<>002}
                     <span>${Code_}</span>
@@ -95,7 +95,7 @@ public class UITemplateTest {
 
     @Test
     public void testDecode_if5() {
-        var template = new UITemplate("""
+        var template = new SsrTemplate("""
                 <div>
                     ${if Code_>=000}
                     <span></span>
@@ -108,7 +108,7 @@ public class UITemplateTest {
 
     @Test
     public void testDecode_if6() {
-        var template = new UITemplate("""
+        var template = new SsrTemplate("""
                 <div>
                     ${if Code_<=002}
                     <span></span>
@@ -121,7 +121,7 @@ public class UITemplateTest {
 
     @Test
     public void testDecode_if7() {
-        var template = new UITemplate("""
+        var template = new SsrTemplate("""
                 <div>
                     ${if Code_<002}
                     <span></span>
@@ -134,7 +134,7 @@ public class UITemplateTest {
 
     @Test
     public void testDecode_if8() {
-        var template = new UITemplate("""
+        var template = new SsrTemplate("""
                 <div>
                     ${if Code_>0}
                     <span></span>
@@ -147,7 +147,7 @@ public class UITemplateTest {
 
     @Test
     public void testDecode_if9() {
-        var template = new UITemplate("""
+        var template = new SsrTemplate("""
                 <div>
                     ${if Code_ is empty}
                     <span></span>
@@ -160,7 +160,7 @@ public class UITemplateTest {
 
     @Test
     public void testDecode_if10() {
-        var template = new UITemplate("""
+        var template = new SsrTemplate("""
                 <div>
                     ${if Code_ is not empty}
                     <span></span>
@@ -173,35 +173,35 @@ public class UITemplateTest {
 
     @Test
     public void testDecode_if_true() {
-        var template = new UITemplate("<div>${if final_}<span>${code_}</span>${endif}</div>");
+        var template = new SsrTemplate("<div>${if final_}<span>${code_}</span>${endif}</div>");
         var result = template.setDataRow(DataRow.of("final_", true, "code_", "001")).html();
         assertEquals("<div><span>001</span></div>", result);
     }
 
     @Test
     public void testDecode_if_false() {
-        var template = new UITemplate("<div>${if final_}<span>ok</span>${endif}</div>");
+        var template = new SsrTemplate("<div>${if final_}<span>ok</span>${endif}</div>");
         var result = template.setDataRow(DataRow.of("final_", false)).html();
         assertEquals("<div></div>", result);
     }
 
     @Test
     public void testDecode_list() {
-        var template = new UITemplate("<div>${list.begin}<span>${list.item}</span>${list.end}</div>");
+        var template = new SsrTemplate("<div>${list.begin}<span>${list.item}</span>${list.end}</div>");
         var result = template.setList(List.of("a1", "a2")).html();
         assertEquals("<div><span>a1</span><span>a2</span></div>", result);
     }
 
     @Test
     public void testDecode_map() {
-        var template = new UITemplate("<div>${map.begin}<span>${map.key}:${map.value}</span>${map.end}</div>");
+        var template = new SsrTemplate("<div>${map.begin}<span>${map.key}:${map.value}</span>${map.end}</div>");
         var result = template.setMap(Map.of("a", "b")).html();
         assertEquals("<div><span>a:b</span></div>", result);
     }
 
     @Test
     public void testDecode_dataset() {
-        var template = new UITemplate("""
+        var template = new SsrTemplate("""
                 <div>${dataset.begin}
                 ${if Final_}
                     <span>${Code_}</span>
@@ -220,7 +220,7 @@ public class UITemplateTest {
 
     @Test
     public void testDecode_combo() {
-        var template = new UITemplate("""
+        var template = new SsrTemplate("""
                 <div>
                 ${0}${code_}
                 ${if Ready_}
@@ -238,7 +238,7 @@ public class UITemplateTest {
         assertEquals("<div>aaa001<span>from map</span><span>from row</span>bbb</div>", result);
     }
 
-    private String margeList(List<UISsrNodeImpl> list) {
+    private String margeList(List<SsrNodeImpl> list) {
         var sb = new StringBuffer();
         for (var item : list)
             sb.append(item.getField()).append(",");

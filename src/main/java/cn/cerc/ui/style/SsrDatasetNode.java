@@ -1,10 +1,10 @@
 package cn.cerc.ui.style;
 
-public class UIDatasetNode extends UIForeachNode {
+public class SsrDatasetNode extends SsrForeachNode {
     public static final String StartFlag = "dataset.begin";
     public static final String EndFlag = "dataset.end";
 
-    public UIDatasetNode(String text) {
+    public SsrDatasetNode(String text) {
         super(text);
     }
 
@@ -23,9 +23,9 @@ public class UIDatasetNode extends UIForeachNode {
             dataSet.first();
             while (dataSet.fetch()) {
                 for (var item : this.getItems()) {
-                    if (item instanceof UIIfNode child) {
+                    if (item instanceof SsrIfNode child) {
                         sb.append(child.getValue());
-                    } else if (item instanceof UIValueNode child) {
+                    } else if (item instanceof SsrValueNode child) {
                         if ("dataset.rec".equals(item.getField()))
                             sb.append(dataSet.recNo());
                         else
