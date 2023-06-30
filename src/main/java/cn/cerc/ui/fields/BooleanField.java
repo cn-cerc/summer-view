@@ -42,6 +42,7 @@ public class BooleanField extends AbstractField implements SearchItem, IFormatCo
 
     @Override
     public void output(HtmlWriter html) {
+        this.beginOutput(html);
         UIInput input = new UIInput(null);
         input.setId(this.getId());
         input.setName(this.getId());
