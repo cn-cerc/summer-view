@@ -17,6 +17,7 @@ public class SsrTemplate implements SsrTemplateImpl {
     private Map<String, String> map;
     private DataRow dataRow;
     private DataSet dataSet;
+    private boolean strict = true;
 
     public SsrTemplate(String templateText) {
         super();
@@ -160,6 +161,25 @@ public class SsrTemplate implements SsrTemplateImpl {
     @Override
     public DataSet getDataSet() {
         return dataSet;
+    }
+
+    /**
+     * 返回当前解析模式设置
+     * 
+     * @return 严格格式还是宽松模式，默认为严格模式
+     */
+    public boolean isStrict() {
+        return strict;
+    }
+
+    /**
+     * 严格模式：所填写的参数必须存在<br>
+     * 宽松模式：若参数不存在，则显示为空
+     * 
+     * @param strict 是否为严格模式
+     */
+    public void setStrict(boolean strict) {
+        this.strict = strict;
     }
 
 }
