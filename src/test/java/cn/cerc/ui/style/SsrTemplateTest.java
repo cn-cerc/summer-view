@@ -46,7 +46,7 @@ public class SsrTemplateTest {
     @Test
     public void testDecode_array() {
         var template = new SsrTemplate("<div><span>${0},${1}</span></div>");
-        var result = template.setParams("001", "002").html();
+        var result = template.addItems("001", "002").html();
         assertEquals("<div><span>001,002</span></div>", result);
     }
 
@@ -231,7 +231,7 @@ public class SsrTemplateTest {
                 ${endif}
                 ${1}
                 </div>""");
-        template.setParams("aaa", "bbb");
+        template.addItems("aaa", "bbb");
         template.setMap(Map.of("Ready_", "true"));
         template.setDataRow(DataRow.of("code_", "001", "final_", true));
         var result = template.html();
