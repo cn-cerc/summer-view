@@ -54,6 +54,7 @@ public class SsrTemplate implements SsrTemplateImpl {
         return this;
     }
 
+    @Override
     public SsrTemplate setMap(Map<String, String> map) {
         this.map = map;
         return this;
