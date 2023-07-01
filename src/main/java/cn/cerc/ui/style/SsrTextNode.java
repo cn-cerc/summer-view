@@ -13,7 +13,7 @@ public class SsrTextNode implements SsrNodeImpl {
     }
 
     @Override
-    public String getSourceText() {
+    public String getText() {
         return text;
     }
 
@@ -22,7 +22,7 @@ public class SsrTextNode implements SsrNodeImpl {
     }
 
     @Override
-    public String getValue() {
+    public String getHtml() {
         return this.text.trim();
     }
 

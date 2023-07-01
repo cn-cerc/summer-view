@@ -9,10 +9,10 @@ public class SsrDatasetNode extends SsrForeachNode {
     }
 
     @Override
-    public String getValue() {
+    public String getHtml() {
         var dataSet = this.getTemplate().getDataSet();
         if (dataSet == null)
-            return this.getSourceText();
+            return this.getText();
 
         if (dataSet.size() == 0)
             return "";
@@ -24,14 +24,14 @@ public class SsrDatasetNode extends SsrForeachNode {
             while (dataSet.fetch()) {
                 for (var item : this.getItems()) {
                     if (item instanceof SsrIfNode child) {
-                        sb.append(child.getValue());
+                        sb.append(child.getHtml());
                     } else if (item instanceof SsrValueNode child) {
                         if ("dataset.rec".equals(item.getField()))
                             sb.append(dataSet.recNo());
                         else
-                            sb.append(child.getValue());
+                            sb.append(child.getHtml());
                     } else
-                        sb.append(item.getSourceText());
+                        sb.append(item.getText());
                 }
             }
             return sb.toString();
