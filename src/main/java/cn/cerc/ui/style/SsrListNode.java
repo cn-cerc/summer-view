@@ -9,10 +9,10 @@ public class SsrListNode extends SsrForeachNode {
     }
 
     @Override
-    public String getValue() {
+    public String getHtml() {
         var list = this.getTemplate().getList();
         if (list == null)
-            return this.getSourceText();
+            return this.getText();
 
         var sb = new StringBuffer();
         for (var param : list) {
@@ -21,9 +21,9 @@ public class SsrListNode extends SsrForeachNode {
                     if ("list.item".equals(item.getField()))
                         sb.append(param);
                     else
-                        sb.append(value.getSourceText());
+                        sb.append(value.getText());
                 } else
-                    sb.append(item.getSourceText());
+                    sb.append(item.getText());
             }
         }
         return sb.toString();

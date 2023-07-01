@@ -46,7 +46,7 @@ public class SsrTemplateTest {
     @Test
     public void testDecode_array() {
         var template = new SsrTemplate("<div><span>${0},${1}</span></div>");
-        var result = template.addItems("001", "002").html();
+        var result = template.setList(List.of("001", "002")).getHtml();
         assertEquals("<div><span>001,002</span></div>", result);
     }
 
@@ -61,9 +61,9 @@ public class SsrTemplateTest {
                     ${endif}
                 </div>
                 """);
-        var result1 = template.setDataRow(DataRow.of("Code_", "001")).html();
+        var result1 = template.setDataRow(DataRow.of("Code_", "001")).getHtml();
         assertEquals("<div>yes</div>", result1);
-        var result2 = template.setDataRow(DataRow.of("Code_", "002")).html();
+        var result2 = template.setDataRow(DataRow.of("Code_", "002")).getHtml();
         assertEquals("<div>no</div>", result2);
     }
 
@@ -76,7 +76,7 @@ public class SsrTemplateTest {
                     ${endif}
                 </div>
                 """);
-        var result = template.setDataRow(DataRow.of("Code_", "001")).html();
+        var result = template.setDataRow(DataRow.of("Code_", "001")).getHtml();
         assertEquals("<div><span>001</span></div>", result);
     }
 
@@ -89,7 +89,7 @@ public class SsrTemplateTest {
                     ${endif}
                 </div>
                 """);
-        var result = template.setDataRow(DataRow.of("Code_", "001")).html();
+        var result = template.setDataRow(DataRow.of("Code_", "001")).getHtml();
         assertEquals("<div><span>001</span></div>", result);
     }
 
@@ -102,7 +102,7 @@ public class SsrTemplateTest {
                     ${endif}
                 </div>
                 """);
-        var result = template.setDataRow(DataRow.of("Code_", "001")).html();
+        var result = template.setDataRow(DataRow.of("Code_", "001")).getHtml();
         assertEquals("<div><span></span></div>", result);
     }
 
@@ -115,7 +115,7 @@ public class SsrTemplateTest {
                     ${endif}
                 </div>
                 """);
-        var result = template.setDataRow(DataRow.of("Code_", "001")).html();
+        var result = template.setDataRow(DataRow.of("Code_", "001")).getHtml();
         assertEquals("<div><span></span></div>", result);
     }
 
@@ -128,7 +128,7 @@ public class SsrTemplateTest {
                     ${endif}
                 </div>
                 """);
-        var result = template.setDataRow(DataRow.of("Code_", "001")).html();
+        var result = template.setDataRow(DataRow.of("Code_", "001")).getHtml();
         assertEquals("<div><span></span></div>", result);
     }
 
@@ -141,7 +141,7 @@ public class SsrTemplateTest {
                     ${endif}
                 </div>
                 """);
-        var result = template.setDataRow(DataRow.of("Code_", "001")).html();
+        var result = template.setDataRow(DataRow.of("Code_", "001")).getHtml();
         assertEquals("<div><span></span></div>", result);
     }
 
@@ -154,7 +154,7 @@ public class SsrTemplateTest {
                     ${endif}
                 </div>
                 """);
-        var result = template.setDataRow(DataRow.of("Code_", "")).html();
+        var result = template.setDataRow(DataRow.of("Code_", "")).getHtml();
         assertEquals("<div><span></span></div>", result);
     }
 
@@ -167,35 +167,35 @@ public class SsrTemplateTest {
                     ${endif}
                 </div>
                 """);
-        var result = template.setDataRow(DataRow.of("Code_", "001")).html();
+        var result = template.setDataRow(DataRow.of("Code_", "001")).getHtml();
         assertEquals("<div><span></span></div>", result);
     }
 
     @Test
     public void testDecode_if_true() {
         var template = new SsrTemplate("<div>${if final_}<span>${code_}</span>${endif}</div>");
-        var result = template.setDataRow(DataRow.of("final_", true, "code_", "001")).html();
+        var result = template.setDataRow(DataRow.of("final_", true, "code_", "001")).getHtml();
         assertEquals("<div><span>001</span></div>", result);
     }
 
     @Test
     public void testDecode_if_false() {
         var template = new SsrTemplate("<div>${if final_}<span>ok</span>${endif}</div>");
-        var result = template.setDataRow(DataRow.of("final_", false)).html();
+        var result = template.setDataRow(DataRow.of("final_", false)).getHtml();
         assertEquals("<div></div>", result);
     }
 
     @Test
     public void testDecode_list() {
         var template = new SsrTemplate("<div>${list.begin}<span>${list.item}</span>${list.end}</div>");
-        var result = template.setList(List.of("a1", "a2")).html();
+        var result = template.setList(List.of("a1", "a2")).getHtml();
         assertEquals("<div><span>a1</span><span>a2</span></div>", result);
     }
 
     @Test
     public void testDecode_map() {
         var template = new SsrTemplate("<div>${map.begin}<span>${map.key}:${map.value}</span>${map.end}</div>");
-        var result = template.setMap(Map.of("a", "b")).html();
+        var result = template.setMap(Map.of("a", "b")).getHtml();
         assertEquals("<div><span>a:b</span></div>", result);
     }
 
@@ -214,7 +214,7 @@ public class SsrTemplateTest {
         ds.append().setValue("Code_", "001").setValue("Final_", true);
         ds.append().setValue("Code_", "002").setValue("Final_", true);
         ds.append().setValue("Code_", "003");
-        var result = template.setDataSet(ds).html();
+        var result = template.setDataSet(ds).getHtml();
         assertEquals("<div><span>001</span><span>002</span><span>else</span></div>", result);
     }
 
@@ -231,17 +231,17 @@ public class SsrTemplateTest {
                 ${endif}
                 ${1}
                 </div>""");
-        template.addItems("aaa", "bbb");
+        template.setList(List.of("aaa", "bbb"));
         template.setMap(Map.of("Ready_", "true"));
         template.setDataRow(DataRow.of("code_", "001", "final_", true));
-        var result = template.html();
+        var result = template.getHtml();
         assertEquals("<div>aaa001<span>from map</span><span>from row</span>bbb</div>", result);
     }
 
     @Test
     public void test_Strict_1() {
         var block1 = new UITemplateBlock(null, "${0}${1}");
-        block1.getTemplate().addItems("a");
+        block1.getTemplate().setList(List.of("a"));
         assertEquals("a${1}", block1.toString());
 
         var block2 = new UITemplateBlock(null, "${code}${name}");
@@ -252,7 +252,7 @@ public class SsrTemplateTest {
     @Test
     public void test_Strict_2() {
         var block1 = new UITemplateBlock(null, "${0}${1}");
-        block1.getTemplate().addItems("a").setStrict(false);
+        block1.getTemplate().setList(List.of("a")).setStrict(false);
         assertEquals("a", block1.toString());
 
         var block2 = new UITemplateBlock(null, "${code}${name}");

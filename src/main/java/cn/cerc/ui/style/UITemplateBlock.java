@@ -10,7 +10,7 @@ import cn.cerc.ui.core.UIComponent;
 
 public class UITemplateBlock extends UIComponent {
     private static final Logger log = LoggerFactory.getLogger(UITemplateBlock.class);
-    private SsrTemplate template;
+    private SsrTemplateImpl template;
 
     public UITemplateBlock(UIComponent owner) {
         super(owner);
@@ -37,17 +37,17 @@ public class UITemplateBlock extends UIComponent {
     @Override
     public void output(HtmlWriter html) {
         if (template != null)
-            html.print(template.html());
+            html.print(template.getHtml());
         else
             log.warn("template is null");
     }
 
-    public SsrTemplate getTemplate() {
+    public SsrTemplateImpl getTemplate() {
         Objects.requireNonNull(template);
         return template;
     }
 
-    public void setTemplate(SsrTemplate template) {
+    public void setTemplate(SsrTemplateImpl template) {
         this.template = template;
     }
 
