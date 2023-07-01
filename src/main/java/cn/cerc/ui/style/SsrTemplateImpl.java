@@ -28,6 +28,14 @@ public interface SsrTemplateImpl {
      */
     List<String> getList();
 
+
+    /**
+     * 
+     * @param map 设置 map 数据源
+     * @return 返回对象本身
+     */
+    SsrTemplateImpl setMap(Map<String, String> map);
+
     /**
      * 
      * @return 返回 map 数据源
