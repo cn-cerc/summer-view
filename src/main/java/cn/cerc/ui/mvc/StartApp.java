@@ -97,8 +97,7 @@ public class StartApp implements Filter {
                 if (class1 != null) {
                     try {
                         if (AopUtils.isAopProxy(class1)) {
-                            Object oriclass = null;
-                            oriclass = AopTargetUtils.getTarget(class1);
+                            Object oriclass = AopTargetUtils.getTarget(class1);
                             outputJsFile(response, oriclass);
                         } else
                             outputJsFile(response, class1);
