@@ -111,7 +111,6 @@ public class StartApp implements Filter {
             }
             return;
         }
-
         chain.doFilter(req, resp);
     }
 
@@ -122,10 +121,14 @@ public class StartApp implements Filter {
             throw new RuntimeException("not find file: " + fileName);
         // 读取文件内容并输出
         var list = new BufferedReader(new InputStreamReader(file, StandardCharsets.UTF_8));
-        String line;
-        var writer = response.getWriter();
-        while ((line = list.readLine()) != null)
-            writer.println(line);
+        try {
+            var writer = response.getWriter();
+            String line;
+            while ((line = list.readLine()) != null)
+                writer.println(line);
+        } finally {
+            list.close();
+        }
     }
 
     @Override
