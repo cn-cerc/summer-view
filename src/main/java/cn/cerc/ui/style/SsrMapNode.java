@@ -9,10 +9,10 @@ public class SsrMapNode extends SsrForeachNode {
     }
 
     @Override
-    public String getValue() {
+    public String getHtml() {
         var params = this.getTemplate().getMap();
         if (params == null)
-            return this.getSourceText();
+            return this.getText();
 
         var sb = new StringBuffer();
         for (var key : params.keySet()) {
@@ -24,9 +24,9 @@ public class SsrMapNode extends SsrForeachNode {
                     else if ("map.value".equals(item.getField()))
                         sb.append(value);
                     else
-                        sb.append(child.getSourceText());
+                        sb.append(child.getText());
                 } else
-                    sb.append(item.getSourceText());
+                    sb.append(item.getText());
             }
         }
         return sb.toString();

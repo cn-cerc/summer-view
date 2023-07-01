@@ -46,10 +46,10 @@ public class SsrIfNode extends SsrForeachNode {
     }
 
     @Override
-    public String getValue() {
+    public String getHtml() {
         var dataRow = this.getTemplate().getDataRow();
         if (dataRow == null)
-            return this.getSourceText();
+            return this.getText();
 
         Variant status = new Variant();
         var text = this.getField().substring(3, this.getField().length());
@@ -63,7 +63,7 @@ public class SsrIfNode extends SsrForeachNode {
                 || check(dataRow, status, text, " is empty", (left, right) -> left.equals(right))
                 || check(dataRow, status, text, " is not empty", (left, right) -> !left.equals(right))) {
             if (status.getInt() == -1)
-                return this.getSourceText();
+                return this.getText();
             return getChildren(status.getInt() == 1);
         } else {
             // 直接使用boolean字段
@@ -75,7 +75,7 @@ public class SsrIfNode extends SsrForeachNode {
             }
             if (!dataRow.exists(field)) {
                 log.error("not find field: {}", field);
-                return this.getSourceText();
+                return this.getText();
             }
             return getChildren(dataRow.getBoolean(field));
         }
@@ -108,9 +108,9 @@ public class SsrIfNode extends SsrForeachNode {
                 if (dataRow.exists(field))
                     sb.append(dataRow.getString(field));
                 else
-                    sb.append(value.getSourceText());
+                    sb.append(value.getText());
             } else
-                sb.append(item.getSourceText());
+                sb.append(item.getText());
         }
         return sb.toString();
     }

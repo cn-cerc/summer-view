@@ -20,12 +20,12 @@ public class SsrValueNode implements SsrNodeImpl {
     }
 
     @Override
-    public String getSourceText() {
+    public String getText() {
         return "${" + this.text + "}";
     }
 
     @Override
-    public String getValue() {
+    public String getHtml() {
         var field = this.getField();
         var list = this.getTemplate().getList();
         var map = this.getTemplate().getMap();
@@ -37,12 +37,12 @@ public class SsrValueNode implements SsrNodeImpl {
                     return list.get(index);
                 } else if (this.getTemplate().isStrict()) {
                     log.error("not find index of list: {}", field);
-                    return this.getSourceText();
+                    return this.getText();
                 } else {
                     return "";
                 }
             } else {
-                return this.getSourceText();
+                return this.getText();
             }
         } else if (map != null || dataRow != null) {
             if (map != null && map.containsKey(field))
@@ -51,12 +51,12 @@ public class SsrValueNode implements SsrNodeImpl {
                 return dataRow.getText(field);
             } else if (this.getTemplate().isStrict()) {
                 log.error("not find field: {}", field);
-                return this.getSourceText();
+                return this.getText();
             } else {
                 return "";
             }
         } else
-            return this.getSourceText();
+            return this.getText();
     }
 
     protected SsrTemplateImpl getTemplate() {

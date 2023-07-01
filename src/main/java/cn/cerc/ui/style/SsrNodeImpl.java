@@ -8,7 +8,7 @@ public interface SsrNodeImpl {
      * 
      * @return 原始字符串
      */
-    String getSourceText();
+    String getText();
 
     /**
      * 
@@ -20,6 +20,6 @@ public interface SsrNodeImpl {
      * 
      * @return 若为特殊字段，则返回字段名
      */
-    String getValue();
+    String getHtml();
 
 }
