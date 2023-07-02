@@ -44,11 +44,11 @@ public class BooleanField extends AbstractField implements SearchItem, IFormatCo
     @Override
     public void output(HtmlWriter html) {
         UIText switchBox = new UIText(null);
-        switchBox.setRootLabel("switch");
+        switchBox.setRootLabel("div");
+        switchBox.setCssProperty("role", "switch");
         UIInput input = new UIInput(switchBox);
         input.setId(this.getId());
         input.setName(this.getId());
-        input.setCssProperty("role", "switch");
         input.setValue("1");
         input.setInputType(UIInput.TYPE_CHECKBOX);
         if (current() != null)
