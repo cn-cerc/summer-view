@@ -82,11 +82,11 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
     // 生成的div携带的样式
     private String contentClass = "";
 
-    public String getContentClass() {
+    protected String getContentClass() {
         return contentClass;
     }
 
-    public void setContentClass(String contentClass) {
+    protected void setContentClass(String contentClass) {
         this.contentClass = contentClass;
     }
 
