@@ -51,10 +51,27 @@ public class SsrTemplateTest {
     }
 
     @Test
+    public void testDecode_if0() {
+        var template = new SsrTemplate("""
+                <div>
+                    ${if Code_==1}
+                    yes
+                    ${else}
+                    no
+                    ${endif}
+                </div>
+                """);
+        var result1 = template.setDataRow(DataRow.of("Code_", 1)).getHtml();
+        assertEquals("<div>yes</div>", result1);
+        var result2 = template.setDataRow(DataRow.of("Code_", 2)).getHtml();
+        assertEquals("<div>no</div>", result2);
+    }
+
+    @Test
     public void testDecode_if1() {
         var template = new SsrTemplate("""
                 <div>
-                    ${if Code_==001}
+                    ${if Code_=='001'}
                     yes
                     ${else}
                     no
@@ -71,7 +88,7 @@ public class SsrTemplateTest {
     public void testDecode_if3() {
         var template = new SsrTemplate("""
                 <div>
-                    ${if Code_!=002}
+                    ${if Code_!='002'}
                     <span>${Code_}</span>
                     ${endif}
                 </div>
@@ -84,7 +101,7 @@ public class SsrTemplateTest {
     public void testDecode_if4() {
         var template = new SsrTemplate("""
                 <div>
-                    ${if Code_<>002}
+                    ${if Code_<>'002'}
                     <span>${Code_}</span>
                     ${endif}
                 </div>
@@ -97,7 +114,7 @@ public class SsrTemplateTest {
     public void testDecode_if5() {
         var template = new SsrTemplate("""
                 <div>
-                    ${if Code_>=000}
+                    ${if Code_>='000'}
                     <span></span>
                     ${endif}
                 </div>
@@ -110,7 +127,7 @@ public class SsrTemplateTest {
     public void testDecode_if6() {
         var template = new SsrTemplate("""
                 <div>
-                    ${if Code_<=002}
+                    ${if Code_<='002'}
                     <span></span>
                     ${endif}
                 </div>
@@ -123,7 +140,7 @@ public class SsrTemplateTest {
     public void testDecode_if7() {
         var template = new SsrTemplate("""
                 <div>
-                    ${if Code_<002}
+                    ${if Code_<'002'}
                     <span></span>
                     ${endif}
                 </div>
@@ -136,7 +153,7 @@ public class SsrTemplateTest {
     public void testDecode_if8() {
         var template = new SsrTemplate("""
                 <div>
-                    ${if Code_>0}
+                    ${if Code_>'0'}
                     <span></span>
                     ${endif}
                 </div>
