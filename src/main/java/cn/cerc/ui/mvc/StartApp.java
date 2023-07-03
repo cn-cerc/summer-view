@@ -1,9 +1,6 @@
 package cn.cerc.ui.mvc;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 import javax.servlet.Filter;
@@ -17,7 +14,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.aop.support.AopUtils;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import cn.cerc.db.core.ClassConfig;
@@ -86,49 +82,7 @@ public class StartApp implements Filter {
             }
             return;
         }
-        if (uri.endsWith(".js")) {
-            var args = uri.substring(0, uri.length() - 3).split("/");
-            var beanName = args[args.length - 1];
-            request.setCharacterEncoding("utf-8");
-            response.setCharacterEncoding("utf-8");
-            var context = Application.getContext();
-            if (context.containsBean(beanName)) {
-                var class1 = context.getBean(beanName);
-                if (class1 != null) {
-                    try {
-                        if (AopUtils.isAopProxy(class1)) {
-                            Object oriclass = AopTargetUtils.getTarget(class1);
-                            outputJsFile(response, oriclass);
-                        } else
-                            outputJsFile(response, class1);
-                    } catch (Exception e1) {
-                        log.error(e1.getMessage(), e1);
-                        response.getWriter().println("alert(\"read file " + beanName + ".js error\")");
-                    }
-                } else {
-                    response.getWriter().println("alert(\"not find file " + beanName + ".js\")");
-                }
-            }
-            return;
-        }
         chain.doFilter(req, resp);
-    }
-
-    private void outputJsFile(ServletResponse response, Object class1) throws IOException {
-        var fileName = class1.getClass().getSimpleName() + ".js";
-        var file = class1.getClass().getResourceAsStream(fileName);
-        if (file == null)
-            throw new RuntimeException("not find file: " + fileName);
-        // 读取文件内容并输出
-        var list = new BufferedReader(new InputStreamReader(file, StandardCharsets.UTF_8));
-        try {
-            var writer = response.getWriter();
-            String line;
-            while ((line = list.readLine()) != null)
-                writer.println(line);
-        } finally {
-            list.close();
-        }
     }
 
     @Override

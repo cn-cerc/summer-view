@@ -11,7 +11,6 @@ public class StaticFile {
     private String bucket = "/";
     @Deprecated
     private String device = "";
-    private boolean special;
 
     public StaticFile(StaticFileType fileType, String object) {
         this.fileType = fileType;
@@ -24,9 +23,6 @@ public class StaticFile {
 
     @Override
     public String toString() {
-        if (this.special)
-            return object;
-
         // 文件自带 HTTP 网址则直接返回
         if (object.toLowerCase().startsWith("http"))
             return object;
@@ -157,14 +153,4 @@ public class StaticFile {
         System.out.println(StaticFile.replace("https://vinetest.oss-cn-hangzhou.aliyuncs.com/static/"));
         System.out.println(StaticFile.replace("https://vinetest.oss-cn-hangzhou.aliyuncs.com/static-fpl/"));
     }
-
-    public boolean isSpecial() {
-        return special;
-    }
-
-    public StaticFile setSpecial(boolean special) {
-        this.special = special;
-        return this;
-    }
-
 }
