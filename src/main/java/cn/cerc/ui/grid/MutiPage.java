@@ -13,7 +13,24 @@ import cn.cerc.db.core.DataSet;
 public class MutiPage {
     private static final Logger log = LoggerFactory.getLogger(MutiPage.class);
 
-    public static final int PAGE_SIZE = 500;
+    public enum PageSizeEnum {
+        pageSize100(100),
+        pageSize500(500),
+        pageSize1000(1000),
+        pageSize3000(3000);
+
+        private int pageSize;
+
+        private PageSizeEnum(int pageSize) {
+            this.pageSize = pageSize;
+        }
+
+        public int getPageSize() {
+            return pageSize;
+        }
+    }
+
+    public static final int PAGE_SIZE = PageSizeEnum.pageSize500.getPageSize();
 
     // 数据源
     private DataSet dataSet;
