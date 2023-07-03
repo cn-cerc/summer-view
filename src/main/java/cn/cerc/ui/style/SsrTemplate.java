@@ -13,15 +13,17 @@ import cn.cerc.db.core.DataSet;
 
 public class SsrTemplate implements SsrTemplateImpl {
     private ArrayList<SsrNodeImpl> nodes;
-    private List<String> params;
     private List<String> list;
     private Map<String, String> map;
     private DataRow dataRow;
     private DataSet dataSet;
+    private boolean strict = true;
+    private String templateText;
+    private SsrCallbackImpl callback;
 
     public SsrTemplate(String templateText) {
         super();
-        initNodes(templateText);
+        setTemplateText(templateText);
     }
 
     public SsrTemplate(Class<?> class1, String id) {
@@ -43,44 +45,22 @@ public class SsrTemplate implements SsrTemplateImpl {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        initNodes(sb.toString());
+        setTemplateText(sb.toString());
     }
 
-    private void initNodes(String templateText) {
-        this.nodes = this.createNodes(templateText);
-        compressNodes(nodes, SsrIfNode.StartFlag, SsrIfNode.EndFlag, (text) -> new SsrIfNode(text));
-        compressNodes(nodes, SsrListNode.StartFlag, SsrListNode.EndFlag, (text) -> new SsrListNode(text));
-        compressNodes(nodes, SsrMapNode.StartFlag, SsrMapNode.EndFlag, (text) -> new SsrMapNode(text));
-        compressNodes(nodes, SsrDatasetNode.StartFlag, SsrDatasetNode.EndFlag, (text) -> new SsrDatasetNode(text));
-    }
-
-    public SsrTemplate addParam(String text) {
-        if (this.params == null)
-            this.params = new ArrayList<>();
-        this.params.add(text);
-        return this;
-    }
-
-    public SsrTemplate setParams(String... params) {
-        if (this.params == null)
-            this.params = new ArrayList<>();
-        else
-            this.params.clear();
-        for (String param : params)
-            this.params.add(param);
-        return this;
-    }
-
+    @Override
     public SsrTemplate setList(List<String> list) {
         this.list = list;
         return this;
     }
 
+    @Override
     public SsrTemplate setMap(Map<String, String> map) {
         this.map = map;
         return this;
     }
 
+    @Override
     public SsrTemplate setDataRow(DataRow dataRow) {
         if (dataSet != null)
             throw new RuntimeException("dataSet is not null");
@@ -88,6 +68,7 @@ public class SsrTemplate implements SsrTemplateImpl {
         return this;
     }
 
+    @Override
     public SsrTemplate setDataSet(DataSet dataSet) {
         if (dataRow != null)
             throw new RuntimeException("dataRow is not null");
@@ -95,10 +76,11 @@ public class SsrTemplate implements SsrTemplateImpl {
         return this;
     }
 
-    public String html() {
+    @Override
+    public String getHtml() {
         var sb = new StringBuffer();
         for (var node : this.nodes)
-            sb.append(node.getValue());
+            sb.append(node.getHtml());
         return sb.toString();
     }
 
@@ -137,7 +119,12 @@ public class SsrTemplate implements SsrTemplateImpl {
             if ((start = line.indexOf("${")) > -1 && (end = line.indexOf("}", start)) > -1) {
                 if (start > 0)
                     list.add(new SsrTextNode(line.substring(0, start)));
-                list.add(new SsrValueNode(line.substring(start + 2, end)));
+                var text = line.substring(start + 2, end);
+                if (text.startsWith("callback"))
+                    list.add(new SsrCallbackNode(text));
+                else
+                    list.add(new SsrValueNode(text));
+
                 line = line.substring(end + 1, line.length());
             } else {
                 list.add(new SsrTextNode(line));
@@ -150,11 +137,6 @@ public class SsrTemplate implements SsrTemplateImpl {
 
     public List<SsrNodeImpl> getNodes() {
         return nodes;
-    }
-
-    @Override
-    public String[] getParams() {
-        return params != null ? params.toArray(new String[params.size()]) : null;
     }
 
     @Override
@@ -175,6 +157,54 @@ public class SsrTemplate implements SsrTemplateImpl {
     @Override
     public DataSet getDataSet() {
         return dataSet;
+    }
+
+    /**
+     * 返回当前解析模式设置
+     * 
+     * @return 严格格式还是宽松模式，默认为严格模式
+     */
+    @Override
+    public boolean isStrict() {
+        return strict;
+    }
+
+    /**
+     * 严格模式：所填写的参数必须存在<br>
+     * 宽松模式：若参数不存在，则显示为空
+     * 
+     * @param strict 是否为严格模式
+     */
+    @Override
+    public SsrTemplate setStrict(boolean strict) {
+        this.strict = strict;
+        return this;
+    }
+
+    @Override
+    public SsrTemplate setTemplateText(String templateText) {
+        this.templateText = templateText;
+        this.nodes = this.createNodes(templateText);
+        compressNodes(nodes, SsrIfNode.StartFlag, SsrIfNode.EndFlag, (text) -> new SsrIfNode(text));
+        compressNodes(nodes, SsrListNode.StartFlag, SsrListNode.EndFlag, (text) -> new SsrListNode(text));
+        compressNodes(nodes, SsrMapNode.StartFlag, SsrMapNode.EndFlag, (text) -> new SsrMapNode(text));
+        compressNodes(nodes, SsrDatasetNode.StartFlag, SsrDatasetNode.EndFlag, (text) -> new SsrDatasetNode(text));
+        return this;
+    }
+
+    protected String getTemplateText() {
+        return templateText;
+    }
+
+    @Override
+    public SsrTemplateImpl setCallback(SsrCallbackImpl callback) {
+        this.callback = callback;
+        return this;
+    }
+
+    @Override
+    public SsrCallbackImpl getCallback() {
+        return callback;
     }
 
 }

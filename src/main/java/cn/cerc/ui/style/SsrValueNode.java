@@ -20,36 +20,43 @@ public class SsrValueNode implements SsrNodeImpl {
     }
 
     @Override
-    public String getSourceText() {
+    public String getText() {
         return "${" + this.text + "}";
     }
-    
+
     @Override
-    public String getValue() {
+    public String getHtml() {
         var field = this.getField();
-        var params = this.getTemplate().getParams();
+        var list = this.getTemplate().getList();
+        var map = this.getTemplate().getMap();
         var dataRow = this.getTemplate().getDataRow();
         if (Utils.isNumeric(field)) {
-            if (params != null) {
+            if (list != null) {
                 var index = Integer.parseInt(field);
-                if (index >= 0 && index < params.length) {
-                    return params[index];
+                if (index >= 0 && index < list.size()) {
+                    return list.get(index);
+                } else if (this.getTemplate().isStrict()) {
+                    log.error("not find index of list: {}", field);
+                    return this.getText();
                 } else {
-                    log.error("not find index: {}", field);
-                    return this.getSourceText();
+                    return "";
                 }
             } else {
-                return this.getSourceText();
+                return this.getText();
             }
-        } else if (dataRow != null) {
-            if (dataRow.exists(field)) {
+        } else if (map != null || dataRow != null) {
+            if (map != null && map.containsKey(field))
+                return map.get(field);
+            else if (dataRow != null && dataRow.exists(field)) {
                 return dataRow.getText(field);
-            } else {
+            } else if (this.getTemplate().isStrict()) {
                 log.error("not find field: {}", field);
-                return this.getSourceText();
+                return this.getText();
+            } else {
+                return "";
             }
         } else
-            return this.getSourceText();
+            return this.getText();
     }
 
     protected SsrTemplateImpl getTemplate() {

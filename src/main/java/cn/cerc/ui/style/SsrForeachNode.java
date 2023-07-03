@@ -19,11 +19,11 @@ public abstract class SsrForeachNode extends SsrValueNode {
     }
 
     @Override
-    public String getSourceText() {
+    public String getText() {
         var sb = new StringBuffer();
         sb.append("${").append(this.getField()).append("}");
         for (var item : this.getItems())
-            sb.append(item.getSourceText());
+            sb.append(item.getText());
         sb.append("${").append(getEndFlag()).append("}");
         return sb.toString();
     }
