@@ -8,10 +8,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import cn.cerc.db.core.DataRow;
 import cn.cerc.db.core.DataSet;
 
 public class SsrTemplate implements SsrTemplateImpl {
+    private static final Logger log = LoggerFactory.getLogger(SsrTemplate.class);
     private ArrayList<SsrNodeImpl> nodes;
     private List<String> list;
     private Map<String, String> map;
@@ -28,6 +32,7 @@ public class SsrTemplate implements SsrTemplateImpl {
 
     public SsrTemplate(Class<?> class1, String id) {
         var fileName = class1.getSimpleName() + "_" + id + ".html";
+        log.warn("ssr filename: {}", fileName);
         var file = class1.getResourceAsStream(fileName);
         var list = new BufferedReader(new InputStreamReader(file, StandardCharsets.UTF_8));
         String line;
