@@ -23,10 +23,11 @@ public class SsrIfNode extends SsrForeachNode {
     }
 
     public boolean check(Variant status, String text, String flag, LeftRightEquals lrEquals) {
+        var template = this.getTemplate();
         var arr = text.split(flag);
         if (arr.length == 1 && text.endsWith(flag)) {
             var field = arr[0];
-            var value = getValue(field);
+            var value = template.getValue(field);
             if (value.isEmpty()) {
                 log.error("not find field: {}", field);
                 status.setValue(-1);
@@ -35,7 +36,7 @@ public class SsrIfNode extends SsrForeachNode {
             return true;
         } else if (arr.length == 2 && (arr[0].length()) > 0) {
             var leftField = arr[0];
-            var leftValue = getValue(leftField);
+            var leftValue = template.getValue(leftField);
             if (leftValue.isEmpty()) {
                 log.error("not find field: {}", leftField);
                 status.setValue(-1);
@@ -49,7 +50,7 @@ public class SsrIfNode extends SsrForeachNode {
             } else if (Utils.isNumeric(value))
                 rightValue = Optional.of(value);
             else {
-                rightValue = getValue(value);
+                rightValue = template.getValue(value);
                 if (rightValue.isEmpty()) {
                     log.error("not find field: {}", value);
                     status.setValue(-1);
@@ -64,21 +65,10 @@ public class SsrIfNode extends SsrForeachNode {
         }
     }
 
-    private Optional<String> getValue(String field) {
-        var dataRow = this.getTemplate().getDataRow();
-        var map = this.getTemplate().getMap();
-        if (map != null && map.containsKey(field))
-            return Optional.of(map.get(field));
-
-        if (dataRow.exists(field))
-            return Optional.of(dataRow.getString(field));
-        else
-            return Optional.empty();
-    }
-
     @Override
     public String getHtml() {
-        if (this.getTemplate().getDataRow() == null && this.getTemplate().getMap() == null)
+        var template = this.getTemplate();
+        if (template.getDataRow() == null && template.getMap() == null)
             return this.getText();
 
         Variant status = new Variant();
@@ -98,7 +88,7 @@ public class SsrIfNode extends SsrForeachNode {
         } else {
             // 直接使用boolean字段
             String field = text;
-            var value = this.getValue(field);
+            var value = template.getValue(field);
             if (value.isEmpty()) {
                 log.error("not find field: {}", field);
                 return this.getText();
