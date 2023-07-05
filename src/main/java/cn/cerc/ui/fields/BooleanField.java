@@ -7,6 +7,7 @@ import cn.cerc.ui.grid.lines.AbstractGridLine.IOutputOfGridLine;
 import cn.cerc.ui.other.SearchItem;
 import cn.cerc.ui.vcl.UIInput;
 import cn.cerc.ui.vcl.UILabel;
+import cn.cerc.ui.vcl.UIText;
 
 public class BooleanField extends AbstractField implements SearchItem, IFormatColumn, IOutputOfGridLine {
     private String trueText = "是";
@@ -42,18 +43,19 @@ public class BooleanField extends AbstractField implements SearchItem, IFormatCo
 
     @Override
     public void output(HtmlWriter html) {
-        this.beginOutput(html);
-        UIInput input = new UIInput(null);
+        UIText switchBox = new UIText(null);
+        switchBox.setRootLabel("div");
+        switchBox.setCssProperty("role", "switch");
+        UIInput input = new UIInput(switchBox);
         input.setId(this.getId());
         input.setName(this.getId());
-        input.setCssProperty("role", "switch");
         input.setValue("1");
         input.setInputType(UIInput.TYPE_CHECKBOX);
         if (current() != null)
             input.setSignProperty("checked", current().getBoolean(this.getField()));
         input.setSignProperty("disabled", this.readonly());
         input.setCssProperty("onclick", this.getOnclick());
-        input.output(html);
+        switchBox.output(html);
         this.endOutput(html);
     }
 
