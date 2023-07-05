@@ -7,6 +7,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import cn.cerc.db.core.DataRow;
 import cn.cerc.db.core.DataSet;
@@ -205,6 +206,20 @@ public class SsrTemplate implements SsrTemplateImpl {
     @Override
     public SsrCallbackImpl getCallback() {
         return callback;
+    }
+
+    @Override
+    public Optional<String> getValue(String field) {
+        var dataRow = this.getDataRow();
+        var map = this.getMap();
+        if (map != null && map.containsKey(field)) {
+            Object val = map.get(field);
+            return Optional.ofNullable(val != null ? val.toString() : "");
+        }
+        if (dataRow.exists(field))
+            return Optional.of(dataRow.getText(field));
+        else
+            return Optional.empty();
     }
 
 }
