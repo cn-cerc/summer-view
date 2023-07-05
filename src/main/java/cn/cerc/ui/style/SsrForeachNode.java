@@ -3,27 +3,27 @@ package cn.cerc.ui.style;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class UIForeachNode extends UIValueNode {
-    private List<UISsrNodeImpl> items = new ArrayList<UISsrNodeImpl>();
+public abstract class SsrForeachNode extends SsrValueNode {
+    private List<SsrNodeImpl> items = new ArrayList<SsrNodeImpl>();
 
-    public UIForeachNode(String text) {
+    public SsrForeachNode(String text) {
         super(text);
     }
 
-    public void addItem(UISsrNodeImpl child) {
+    public void addItem(SsrNodeImpl child) {
         items.add(child);
     }
 
-    public List<UISsrNodeImpl> getItems() {
+    public List<SsrNodeImpl> getItems() {
         return items;
     }
 
     @Override
-    public String getSourceText() {
+    public String getText() {
         var sb = new StringBuffer();
         sb.append("${").append(this.getField()).append("}");
         for (var item : this.getItems())
-            sb.append(item.getSourceText());
+            sb.append(item.getText());
         sb.append("${").append(getEndFlag()).append("}");
         return sb.toString();
     }

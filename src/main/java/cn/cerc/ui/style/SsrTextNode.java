@@ -1,6 +1,6 @@
 package cn.cerc.ui.style;
 
-public class UITextNode implements UISsrNodeImpl {
+public class SsrTextNode implements SsrNodeImpl {
     private String text;
 
     @Override
@@ -8,21 +8,21 @@ public class UITextNode implements UISsrNodeImpl {
         return "";
     }
 
-    public UITextNode(String text) {
+    public SsrTextNode(String text) {
         this.text = text.trim();
     }
 
     @Override
-    public String getSourceText() {
+    public String getText() {
         return text;
     }
 
     @Override
-    public void setTemplate(UITemplateImpl template) {
+    public void setTemplate(SsrTemplateImpl template) {
     }
 
     @Override
-    public String getValue() {
+    public String getHtml() {
         return this.text.trim();
     }
 

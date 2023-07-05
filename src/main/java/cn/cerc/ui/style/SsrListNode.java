@@ -1,29 +1,29 @@
 package cn.cerc.ui.style;
 
-public class UIListNode extends UIForeachNode {
+public class SsrListNode extends SsrForeachNode {
     public static final String StartFlag = "list.begin";
     public static final String EndFlag = "list.end";
 
-    public UIListNode(String text) {
+    public SsrListNode(String text) {
         super(text);
     }
 
     @Override
-    public String getValue() {
+    public String getHtml() {
         var list = this.getTemplate().getList();
         if (list == null)
-            return this.getSourceText();
+            return this.getText();
 
         var sb = new StringBuffer();
         for (var param : list) {
             for (var item : this.getItems()) {
-                if (item instanceof UIValueNode value) {
+                if (item instanceof SsrValueNode value) {
                     if ("list.item".equals(item.getField()))
                         sb.append(param);
                     else
-                        sb.append(value.getSourceText());
+                        sb.append(value.getText());
                 } else
-                    sb.append(item.getSourceText());
+                    sb.append(item.getText());
             }
         }
         return sb.toString();

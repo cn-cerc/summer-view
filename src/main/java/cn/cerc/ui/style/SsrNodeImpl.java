@@ -1,14 +1,14 @@
 package cn.cerc.ui.style;
 
-public interface UISsrNodeImpl {
+public interface SsrNodeImpl {
 
-    void setTemplate(UITemplateImpl template);
+    void setTemplate(SsrTemplateImpl template);
 
     /**
      * 
      * @return 原始字符串
      */
-    String getSourceText();
+    String getText();
 
     /**
      * 
@@ -20,6 +20,6 @@ public interface UISsrNodeImpl {
      * 
      * @return 若为特殊字段，则返回字段名
      */
-    String getValue();
+    String getHtml();
 
 }
