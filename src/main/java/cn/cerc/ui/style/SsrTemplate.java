@@ -208,6 +208,7 @@ public class SsrTemplate implements SsrTemplateImpl {
         return callback;
     }
 
+    @Override
     public Optional<String> getValue(String field) {
         var dataRow = this.getDataRow();
         var map = this.getMap();
@@ -216,7 +217,7 @@ public class SsrTemplate implements SsrTemplateImpl {
             return Optional.ofNullable(val != null ? val.toString() : "");
         }
         if (dataRow.exists(field))
-            return Optional.of(dataRow.getString(field));
+            return Optional.of(dataRow.getText(field));
         else
             return Optional.empty();
     }

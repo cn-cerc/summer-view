@@ -98,7 +98,6 @@ public class SsrIfNode extends SsrForeachNode {
     }
 
     private String getChildren(boolean ifValue) {
-        var dataRow = this.getTemplate().getDataRow();
         var sb = new StringBuffer();
 
         // 将子项依据else分离成2组
@@ -119,12 +118,12 @@ public class SsrIfNode extends SsrForeachNode {
         // 根据参数决定是执行1还是执行2
         var items = ifValue ? items1 : items2;
         for (var item : items) {
-            if (item instanceof SsrValueNode value) {
-                String field = value.getField();
-                if (dataRow.exists(field))
-                    sb.append(dataRow.getString(field));
+            if (item instanceof SsrValueNode valueNode) {
+                Optional<String> value = valueNode.getTemplate().getValue(valueNode.getField());
+                if (!value.isEmpty())
+                    sb.append(value.get());
                 else
-                    sb.append(value.getText());
+                    sb.append(valueNode.getText());
             } else
                 sb.append(item.getText());
         }
