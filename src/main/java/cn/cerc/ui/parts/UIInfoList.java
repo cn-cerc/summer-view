@@ -7,7 +7,7 @@ import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.vcl.UIImage;
 import cn.cerc.ui.vcl.UISpan;
-import cn.cerc.ui.vcl.ext.UIBottom;
+import cn.cerc.ui.vcl.UIUrl;
 
 /**
  * ·提示信息列表
@@ -140,15 +140,15 @@ public class UIInfoList extends UIComponent {
         }
 
         public Line addOpera(String text, String href) {
-            UIBottom bottom = new UIBottom(this);
-            bottom.setCaption(text).setUrl(href).setTarget(href).setCssClass("commonlyMenu");
+            UIUrl bottom = new UIUrl(this);
+            bottom.setText(text).setHref(href).setTarget(href).setCssClass("commonlyMenu");
             return this;
         }
 
         public Line setRightOpera(String text, String href) {
-            UIBottom bottom = new UIBottom(this);
-            bottom.setCaption(text);
-            bottom.setUrl(href);
+            UIUrl bottom = new UIUrl(this);
+            bottom.setText(text);
+            bottom.setHref(href);
             return this;
         }
 
