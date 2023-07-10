@@ -14,7 +14,6 @@ import cn.cerc.db.core.DataSet;
 import cn.cerc.db.core.Utils;
 
 public class SsrTemplate implements SsrTemplateImpl {
-    private static final Logger log = LoggerFactory.getLogger(SsrTemplate.class);
     private ArrayList<SsrNodeImpl> nodes;
     private List<String> list;
     private Map<String, String> map;
