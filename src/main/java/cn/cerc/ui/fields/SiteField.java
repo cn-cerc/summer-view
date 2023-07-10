@@ -78,8 +78,8 @@ public class SiteField extends AbstractField {
         String placeholder = "";
         if (this.getPlaceholder() != null)
             placeholder = this.getPlaceholder();
-        html.print("<input autocomplete='off' id=\"%s\" type=\"text\" name=\"%s\" value=\"%s\" placeholder=\"%s\" ", this.getId(),
-                this.getId(), initialValue, placeholder);
+        html.print("<input autocomplete='off' id=\"%s\" type=\"text\" name=\"%s\" value=\"%s\" placeholder=\"%s\" ",
+                this.getId(), this.getId(), initialValue, placeholder);
         if (this.size > 0) {
             html.print(" size=\"%s\"", this.getSize());
         }
