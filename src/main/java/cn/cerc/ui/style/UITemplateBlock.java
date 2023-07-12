@@ -10,7 +10,11 @@ import cn.cerc.ui.core.UIComponent;
 
 public class UITemplateBlock extends UIComponent {
     private static final Logger log = LoggerFactory.getLogger(UITemplateBlock.class);
-    private SsrTemplateImpl template;
+    protected SsrTemplateImpl template;
+
+    public UITemplateBlock() {
+        super(null);
+    }
 
     public UITemplateBlock(UIComponent owner) {
         super(owner);
