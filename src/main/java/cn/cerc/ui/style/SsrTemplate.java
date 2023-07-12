@@ -11,6 +11,7 @@ import java.util.Optional;
 
 import cn.cerc.db.core.DataRow;
 import cn.cerc.db.core.DataSet;
+import cn.cerc.db.core.Utils;
 
 public class SsrTemplate implements SsrTemplateImpl {
     private ArrayList<SsrNodeImpl> nodes;
@@ -28,7 +29,9 @@ public class SsrTemplate implements SsrTemplateImpl {
     }
 
     public SsrTemplate(Class<?> class1, String id) {
-        var fileName = class1.getSimpleName() + "_" + id + ".html";
+        var fileName = class1.getSimpleName() + ".html";
+        if (!Utils.isEmpty(id))
+            fileName = class1.getSimpleName() + "_" + id + ".html";
         var file = class1.getResourceAsStream(fileName);
         var list = new BufferedReader(new InputStreamReader(file, StandardCharsets.UTF_8));
         String line;
