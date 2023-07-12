@@ -100,4 +100,11 @@ public class SelectField extends AbstractField implements IFormatColumn, IOutput
     public void setOnChange(String onChange) {
         this.onChange = onChange;
     }
+
+    @Override
+    public void updateField() {
+        if (!this.readonly()) {
+            super.updateField();
+        }
+    }
 }

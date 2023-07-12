@@ -121,4 +121,11 @@ public class BooleanField extends AbstractField implements SearchItem, IFormatCo
         this.falseText = falseText;
     }
 
+    @Override
+    public void updateField() {
+        if (!this.readonly()) {
+            super.updateField();
+        }
+    }
+
 }
