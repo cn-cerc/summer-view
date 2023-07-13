@@ -20,6 +20,11 @@ public class SsrCallbackNode implements SsrNodeImpl {
 
     @Override
     public String getText() {
+        if (this.template != null) {
+            var callback = this.template.getCallback();
+            if (callback != null)
+                return callback.onGetHtml(this);
+        }
         return "${" + this.text + "}";
     }
 
@@ -32,7 +37,7 @@ public class SsrCallbackNode implements SsrNodeImpl {
     public String getHtml() {
         var callback = template.getCallback();
         if (callback != null && field != null)
-            return callback.onGetHtml(field);
+            return callback.onGetHtml(this);
         else
             return this.getText();
     }
