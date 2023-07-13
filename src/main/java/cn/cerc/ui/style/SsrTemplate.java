@@ -219,7 +219,7 @@ public class SsrTemplate implements SsrTemplateImpl {
             Object val = map.get(field);
             return Optional.ofNullable(val != null ? val.toString() : "");
         }
-        if (dataRow.exists(field))
+        if (dataRow != null && dataRow.exists(field))
             return Optional.of(dataRow.getText(field));
         else
             return Optional.empty();
