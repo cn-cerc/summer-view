@@ -24,6 +24,8 @@ public class SsrIfNode extends SsrForeachNode {
 
     public boolean check(Variant status, String text, String flag, LeftRightEquals lrEquals) {
         var template = this.getTemplate();
+        if (template == null)
+            return false;
         var arr = text.split(flag);
         if (arr.length == 1 && text.endsWith(flag)) {
             var field = arr[0];
@@ -67,10 +69,6 @@ public class SsrIfNode extends SsrForeachNode {
 
     @Override
     public String getHtml() {
-        var template = this.getTemplate();
-        if (template.getDataRow() == null && template.getMap() == null)
-            return this.getText();
-
         Variant status = new Variant();
         var text = this.getField().substring(3, this.getField().length());
         if (check(status, text, "==", (left, right) -> left.equals(right))
@@ -85,16 +83,21 @@ public class SsrIfNode extends SsrForeachNode {
             if (status.getInt() == -1)
                 return this.getText();
             return getChildren(status.getInt() == 1);
-        } else {
-            // 直接使用boolean字段
-            String field = text;
-            var value = template.getValue(field);
-            if (value.isEmpty()) {
-                log.error("not find field: {}", field);
+        } else { // 直接使用 boolean 字段
+            var template = this.getTemplate();
+            if (template != null) {
+                String field = text;
+                var value = template.getValue(field);
+                if (value.isEmpty()) {
+                    log.error("not find field: {}", field);
+                    return this.getText();
+                } else
+                    return getChildren(new Variant(value.get()).getBoolean());
+            } else {
                 return this.getText();
-            } else
-                return getChildren(new Variant(value.get()).getBoolean());
+            }
         }
+
     }
 
     private String getChildren(boolean ifValue) {

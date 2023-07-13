@@ -221,6 +221,7 @@ public class SsrTemplateTest {
         var template = new SsrTemplate("""
                 <div>${dataset.begin}
                 ${if Final_}
+                    ${TBNo_}
                     <span>${Code_}</span>
                 ${else}
                     <span>else</span>
@@ -231,8 +232,9 @@ public class SsrTemplateTest {
         ds.append().setValue("Code_", "001").setValue("Final_", true);
         ds.append().setValue("Code_", "002").setValue("Final_", true);
         ds.append().setValue("Code_", "003");
+        template.setDataRow(DataRow.of("TBNo_", "OD001"));
         var result = template.setDataSet(ds).getHtml();
-        assertEquals("<div><span>001</span><span>002</span><span>else</span></div>", result);
+        assertEquals("<div>OD001<span>001</span>OD001<span>002</span><span>else</span></div>", result);
     }
 
     @Test

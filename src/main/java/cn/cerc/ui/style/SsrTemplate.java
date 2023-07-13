@@ -53,9 +53,19 @@ public class SsrTemplate implements SsrTemplateImpl {
     }
 
     @Override
+    public List<String> getList() {
+        return list;
+    }
+
+    @Override
     public SsrTemplate setList(List<String> list) {
         this.list = list;
         return this;
+    }
+
+    @Override
+    public Map<String, String> getMap() {
+        return map;
     }
 
     @Override
@@ -65,19 +75,25 @@ public class SsrTemplate implements SsrTemplateImpl {
     }
 
     @Override
+    public DataRow getDataRow() {
+        return dataRow;
+    }
+
+    @Override
     public SsrTemplate setDataRow(DataRow dataRow) {
-        if (dataSet != null)
-            throw new RuntimeException("dataSet is not null");
         this.dataRow = dataRow;
         return this;
     }
 
     @Override
     public SsrTemplate setDataSet(DataSet dataSet) {
-        if (dataRow != null)
-            throw new RuntimeException("dataRow is not null");
         this.dataSet = dataSet;
         return this;
+    }
+
+    @Override
+    public DataSet getDataSet() {
+        return dataSet;
     }
 
     @Override
@@ -143,26 +159,6 @@ public class SsrTemplate implements SsrTemplateImpl {
         return nodes;
     }
 
-    @Override
-    public DataRow getDataRow() {
-        return dataSet != null ? dataSet.currentRow().get() : dataRow;
-    }
-
-    @Override
-    public List<String> getList() {
-        return list;
-    }
-
-    @Override
-    public Map<String, String> getMap() {
-        return map;
-    }
-
-    @Override
-    public DataSet getDataSet() {
-        return dataSet;
-    }
-
     /**
      * 返回当前解析模式设置
      * 
@@ -213,14 +209,15 @@ public class SsrTemplate implements SsrTemplateImpl {
 
     @Override
     public Optional<String> getValue(String field) {
-        var dataRow = this.getDataRow();
         var map = this.getMap();
         if (map != null && map.containsKey(field)) {
             Object val = map.get(field);
             return Optional.ofNullable(val != null ? val.toString() : "");
         }
-        if (dataRow.exists(field))
+        if (dataRow != null && dataRow.exists(field))
             return Optional.of(dataRow.getText(field));
+        if (dataSet != null && dataSet.exists(field))
+            return Optional.of(dataSet.current().getText(field));
         else
             return Optional.empty();
     }
