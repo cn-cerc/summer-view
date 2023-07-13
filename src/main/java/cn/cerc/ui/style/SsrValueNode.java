@@ -47,13 +47,19 @@ public class SsrValueNode implements SsrNodeImpl {
             var dataRow = this.getTemplate().getDataRow();
             var dataSet = this.getTemplate().getDataSet();
             if (map != null || dataRow != null || dataSet != null) {
-                if (map != null && map.containsKey(field))
+                if (map != null && map.containsKey(field)) {
+                    if (dataRow != null && dataRow.exists(field))
+                        log.warn("map and dataRow exists field: {}", field);
+                    if (dataSet != null && dataSet.exists(field))
+                        log.warn("map and dataSet exists field: {}", field);
                     return map.get(field);
-                else if (dataRow != null && dataRow.exists(field))
+                } else if (dataRow != null && dataRow.exists(field)) {
+                    if (dataSet != null && dataSet.exists(field))
+                        log.warn("dataRow and dataSet exists field: {}", field);
                     return dataRow.getText(field);
-                else if (dataSet != null && dataSet.exists(field))
+                } else if (dataSet != null && dataSet.exists(field)) {
                     return dataSet.current().getText(field);
-                else if (this.getTemplate().isStrict()) {
+                } else if (this.getTemplate().isStrict()) {
                     log.error("not find field: {}", field);
                     return this.getText();
                 } else {

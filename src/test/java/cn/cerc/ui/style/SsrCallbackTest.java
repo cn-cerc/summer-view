@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.junit.Test;
 
-public class SsrCallbackNodeTest {
+public class SsrCallbackTest {
 
     @Test
     public void test_error() {

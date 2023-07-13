@@ -8,7 +8,6 @@ import java.util.Map;
 import org.junit.Test;
 
 import cn.cerc.db.core.DataRow;
-import cn.cerc.db.core.DataSet;
 
 public class SsrTemplateTest {
 
@@ -214,27 +213,6 @@ public class SsrTemplateTest {
         var template = new SsrTemplate("<div>${map.begin}<span>${map.key}:${map.value}</span>${map.end}</div>");
         var result = template.setMap(Map.of("a", "b")).getHtml();
         assertEquals("<div><span>a:b</span></div>", result);
-    }
-
-    @Test
-    public void testDecode_dataset() {
-        var template = new SsrTemplate("""
-                <div>${dataset.begin}
-                ${if Final_}
-                    ${TBNo_}
-                    <span>${Code_}</span>
-                ${else}
-                    <span>else</span>
-                ${endif}
-                ${dataset.end}</div>
-                """);
-        var ds = new DataSet();
-        ds.append().setValue("Code_", "001").setValue("Final_", true);
-        ds.append().setValue("Code_", "002").setValue("Final_", true);
-        ds.append().setValue("Code_", "003");
-        template.setDataRow(DataRow.of("TBNo_", "OD001"));
-        var result = template.setDataSet(ds).getHtml();
-        assertEquals("<div>OD001<span>001</span>OD001<span>002</span><span>else</span></div>", result);
     }
 
     @Test

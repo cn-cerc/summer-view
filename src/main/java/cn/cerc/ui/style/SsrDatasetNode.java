@@ -23,13 +23,8 @@ public class SsrDatasetNode extends SsrForeachNode {
             dataSet.first();
             while (dataSet.fetch()) {
                 for (var item : this.getItems()) {
-                    if (item instanceof SsrIfNode child) {
-                        sb.append(child.getHtml());
-                    } else if (item instanceof SsrValueNode child) {
-                        if ("dataset.rec".equals(item.getField()))
-                            sb.append(dataSet.recNo());
-                        else
-                            sb.append(child.getHtml());
+                    if (item instanceof SsrValueNode child) {
+                        sb.append(item.getHtml());
                     } else
                         sb.append(item.getText());
                 }
@@ -43,6 +38,10 @@ public class SsrDatasetNode extends SsrForeachNode {
     @Override
     protected String getEndFlag() {
         return EndFlag;
+    }
+
+    public static boolean is(String text) {
+        return text.equals(StartFlag) || text.equals(EndFlag);
     }
 
 }

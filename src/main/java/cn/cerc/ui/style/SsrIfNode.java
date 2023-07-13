@@ -29,7 +29,7 @@ public class SsrIfNode extends SsrForeachNode {
         var arr = text.split(flag);
         if (arr.length == 1 && text.endsWith(flag)) {
             var field = arr[0];
-            var value = template.getValue(field);
+            var value = this.getValue(field);
             if (value.isEmpty()) {
                 log.error("not find field: {}", field);
                 status.setValue(-1);
@@ -38,7 +38,7 @@ public class SsrIfNode extends SsrForeachNode {
             return true;
         } else if (arr.length == 2 && (arr[0].length()) > 0) {
             var leftField = arr[0];
-            var leftValue = template.getValue(leftField);
+            var leftValue = this.getValue(leftField);
             if (leftValue.isEmpty()) {
                 log.error("not find field: {}", leftField);
                 status.setValue(-1);
@@ -52,7 +52,7 @@ public class SsrIfNode extends SsrForeachNode {
             } else if (Utils.isNumeric(value))
                 rightValue = Optional.of(value);
             else {
-                rightValue = template.getValue(value);
+                rightValue = this.getValue(value);
                 if (rightValue.isEmpty()) {
                     log.error("not find field: {}", value);
                     status.setValue(-1);
@@ -87,7 +87,7 @@ public class SsrIfNode extends SsrForeachNode {
             var template = this.getTemplate();
             if (template != null) {
                 String field = text;
-                var value = template.getValue(field);
+                var value = this.getValue(field);
                 if (value.isEmpty()) {
                     log.error("not find field: {}", field);
                     return this.getText();
@@ -122,12 +122,35 @@ public class SsrIfNode extends SsrForeachNode {
         var items = ifValue ? items1 : items2;
         for (var item : items) {
             if (item instanceof SsrValueNode valueNode) {
-                Optional<String> value = valueNode.getTemplate().getValue(valueNode.getField());
-                sb.append(value.orElseGet(() -> valueNode.getText()));
+                sb.append(valueNode.getHtml());
             } else
                 sb.append(item.getText());
         }
         return sb.toString();
+    }
+
+    private Optional<String> getValue(String field) {
+        var map = this.getTemplate().getMap();
+        var dataRow = this.getTemplate().getDataRow();
+        var dataSet = this.getTemplate().getDataSet();
+        if (map != null && map.containsKey(field)) {
+            if (dataRow != null && dataRow.exists(field))
+                log.warn("map and dataRow exists field: {}", field);
+            if (dataSet != null && dataSet.exists(field))
+                log.warn("map and dataSet exists field: {}", field);
+            Object val = map.get(field);
+            return Optional.ofNullable(val != null ? val.toString() : "");
+        }
+        if (dataRow != null && dataRow.exists(field)) {
+            if (dataSet != null && dataSet.exists(field))
+                log.warn("dataRow and dataSet exists field: {}", field);
+            return Optional.of(dataRow.getText(field));
+        }
+
+        if (dataSet != null && dataSet.exists(field))
+            return Optional.of(dataSet.current().getText(field));
+        else
+            return Optional.empty();
     }
 
     @Override
