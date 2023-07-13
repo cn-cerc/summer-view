@@ -28,8 +28,6 @@ public class SsrValueNode implements SsrNodeImpl {
     public String getHtml() {
         var field = this.getField();
         var list = this.getTemplate().getList();
-        var map = this.getTemplate().getMap();
-        var dataRow = this.getTemplate().getDataRow();
         if (Utils.isNumeric(field)) {
             if (list != null) {
                 var index = Integer.parseInt(field);
@@ -44,19 +42,26 @@ public class SsrValueNode implements SsrNodeImpl {
             } else {
                 return this.getText();
             }
-        } else if (map != null || dataRow != null) {
-            if (map != null && map.containsKey(field))
-                return map.get(field);
-            else if (dataRow != null && dataRow.exists(field)) {
-                return dataRow.getText(field);
-            } else if (this.getTemplate().isStrict()) {
-                log.error("not find field: {}", field);
+        } else {
+            var map = this.getTemplate().getMap();
+            var dataRow = this.getTemplate().getDataRow();
+            var dataSet = this.getTemplate().getDataSet();
+            if (map != null || dataRow != null || dataSet != null) {
+                if (map != null && map.containsKey(field))
+                    return map.get(field);
+                else if (dataRow != null && dataRow.exists(field))
+                    return dataRow.getText(field);
+                else if (dataSet != null && dataSet.exists(field))
+                    return dataSet.current().getText(field);
+                else if (this.getTemplate().isStrict()) {
+                    log.error("not find field: {}", field);
+                    return this.getText();
+                } else {
+                    return "";
+                }
+            } else
                 return this.getText();
-            } else {
-                return "";
-            }
-        } else
-            return this.getText();
+        }
     }
 
     protected SsrTemplateImpl getTemplate() {
