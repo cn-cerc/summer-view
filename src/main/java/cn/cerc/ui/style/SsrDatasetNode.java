@@ -9,11 +9,6 @@ public class SsrDatasetNode extends SsrForeachNode {
     }
 
     @Override
-    public void addItem(SsrNodeImpl child) {
-        super.addItem(child);
-    }
-
-    @Override
     public String getHtml() {
         var dataSet = this.getTemplate().getDataSet();
         if (dataSet == null)
