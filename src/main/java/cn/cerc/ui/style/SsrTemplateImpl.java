@@ -2,7 +2,6 @@ package cn.cerc.ui.style;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import cn.cerc.db.core.DataRow;
 import cn.cerc.db.core.DataSet;
@@ -99,12 +98,5 @@ public interface SsrTemplateImpl {
      * @return 返回模版的解析结果
      */
     String getHtml();
-
-    /**
-     * 
-     * @param field
-     * @return 根据字段从 map 或 dataRow 取值
-     */
-    Optional<String> getValue(String field);
 
 }

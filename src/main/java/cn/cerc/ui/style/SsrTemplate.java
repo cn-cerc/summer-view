@@ -7,7 +7,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import cn.cerc.db.core.DataRow;
 import cn.cerc.db.core.DataSet;
@@ -137,8 +136,12 @@ public class SsrTemplate implements SsrTemplateImpl {
                 if (start > 0)
                     list.add(new SsrTextNode(line.substring(0, start)));
                 var text = line.substring(start + 2, end);
-                if (text.startsWith("callback"))
+                if (SsrCallbackNode.is(text))
                     list.add(new SsrCallbackNode(text));
+                else if(SsrDataSetRecNode.is(text))
+                    list.add(new SsrDataSetItemNode(text));
+                else if(SsrDataSetItemNode.is(text))
+                    list.add(new SsrDataSetItemNode(text));
                 else
                     list.add(new SsrValueNode(text));
 
@@ -202,21 +205,6 @@ public class SsrTemplate implements SsrTemplateImpl {
     @Override
     public SsrCallbackImpl getCallback() {
         return callback;
-    }
-
-    @Override
-    public Optional<String> getValue(String field) {
-        var map = this.getMap();
-        if (map != null && map.containsKey(field)) {
-            Object val = map.get(field);
-            return Optional.ofNullable(val != null ? val.toString() : "");
-        }
-        if (dataRow != null && dataRow.exists(field))
-            return Optional.of(dataRow.getText(field));
-        if (dataSet != null && dataSet.exists(field))
-            return Optional.of(dataSet.current().getText(field));
-        else
-            return Optional.empty();
     }
 
 }

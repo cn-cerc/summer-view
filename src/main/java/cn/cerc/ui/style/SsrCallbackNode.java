@@ -1,6 +1,7 @@
 package cn.cerc.ui.style;
 
 public class SsrCallbackNode implements SsrNodeImpl {
+    public static final String FirstFlag = "callback";
     private SsrTemplateImpl template;
     private String text;
     private String field = null;
@@ -40,6 +41,10 @@ public class SsrCallbackNode implements SsrNodeImpl {
             return callback.onGetHtml(this);
         else
             return this.getText();
+    }
+
+    public static boolean is(String text) {
+        return text.startsWith(FirstFlag);
     }
 
 }
