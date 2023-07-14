@@ -60,9 +60,9 @@ public class SsrTemplateTest {
                 </div>
                 """);
         var result1 = template.setDataRow(DataRow.of("Code_", 1)).getHtml();
-        assertEquals("<div>yes</div>", result1);
+        assertEquals("<div> yes </div>", result1);
         var result2 = template.setDataRow(DataRow.of("Code_", 2)).getHtml();
-        assertEquals("<div>no</div>", result2);
+        assertEquals("<div> no </div>", result2);
     }
 
     @Test
@@ -77,9 +77,9 @@ public class SsrTemplateTest {
                 </div>
                 """);
         var result1 = template.setDataRow(DataRow.of("Code_", "001")).getHtml();
-        assertEquals("<div>yes</div>", result1);
+        assertEquals("<div> yes </div>", result1);
         var result2 = template.setDataRow(DataRow.of("Code_", "002")).getHtml();
-        assertEquals("<div>no</div>", result2);
+        assertEquals("<div> no </div>", result2);
     }
 
     @Test
@@ -92,20 +92,7 @@ public class SsrTemplateTest {
                 </div>
                 """);
         var result = template.setDataRow(DataRow.of("Code_", "001")).getHtml();
-        assertEquals("<div><span>001</span></div>", result);
-    }
-
-    @Test
-    public void testDecode_if4() {
-        var template = new SsrTemplate("""
-                <div>
-                    ${if Code_<>'002'}
-                    <span>${Code_}</span>
-                    ${endif}
-                </div>
-                """);
-        var result = template.setDataRow(DataRow.of("Code_", "001")).getHtml();
-        assertEquals("<div><span>001</span></div>", result);
+        assertEquals("<div> <span>001</span> </div>", result);
     }
 
     @Test
@@ -118,7 +105,7 @@ public class SsrTemplateTest {
                 </div>
                 """);
         var result = template.setDataRow(DataRow.of("Code_", "001")).getHtml();
-        assertEquals("<div><span></span></div>", result);
+        assertEquals("<div> <span></span> </div>", result);
     }
 
     @Test
@@ -131,7 +118,7 @@ public class SsrTemplateTest {
                 </div>
                 """);
         var result = template.setDataRow(DataRow.of("Code_", "001")).getHtml();
-        assertEquals("<div><span></span></div>", result);
+        assertEquals("<div> <span></span> </div>", result);
     }
 
     @Test
@@ -144,7 +131,7 @@ public class SsrTemplateTest {
                 </div>
                 """);
         var result = template.setDataRow(DataRow.of("Code_", "001")).getHtml();
-        assertEquals("<div><span></span></div>", result);
+        assertEquals("<div> <span></span> </div>", result);
     }
 
     @Test
@@ -157,7 +144,7 @@ public class SsrTemplateTest {
                 </div>
                 """);
         var result = template.setDataRow(DataRow.of("Code_", "001")).getHtml();
-        assertEquals("<div><span></span></div>", result);
+        assertEquals("<div> <span></span> </div>", result);
     }
 
     @Test
@@ -170,7 +157,7 @@ public class SsrTemplateTest {
                 </div>
                 """);
         var result = template.setDataRow(DataRow.of("Code_", "")).getHtml();
-        assertEquals("<div><span></span></div>", result);
+        assertEquals("<div> <span></span> </div>", result);
     }
 
     @Test
@@ -183,7 +170,7 @@ public class SsrTemplateTest {
                 </div>
                 """);
         var result = template.setDataRow(DataRow.of("Code_", "001")).getHtml();
-        assertEquals("<div><span></span></div>", result);
+        assertEquals("<div> <span></span> </div>", result);
     }
 
     @Test

@@ -27,7 +27,7 @@ public class SsrDatasetTest {
         ds.append().setValue("Code_", "003");
         template.setDataRow(DataRow.of("TBNo_", "OD001"));
         var result = template.setDataSet(ds).getHtml();
-        assertEquals("<div>OD001<span>001</span>OD001<span>002</span><span>else</span></div>", result);
+        assertEquals("<div> OD001<span>001</span> OD001<span>002</span><span>else</span></div>", result);
     }
 
     @Test
@@ -48,7 +48,7 @@ public class SsrDatasetTest {
         ds.append().setValue("Code_", "003");
         template.setDataRow(DataRow.of("TBNo_", "OD001"));
         var result = template.setDataSet(ds).getHtml();
-        assertEquals("<div>OD001<span>001</span>OD001<span>002</span><span>else</span></div>", result);
+        assertEquals("<div> OD001<span>001</span> OD001<span>002</span><span>else</span></div>", result);
     }
 
 }

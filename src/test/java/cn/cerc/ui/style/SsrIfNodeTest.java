@@ -25,7 +25,7 @@ public class SsrIfNodeTest {
                 """);
         block.getTemplate().setDataSet(ds);
         block.getTemplate().toMap("field_", "1");
-        assertEquals("<span>第一个判断</span><span>第二个判断</span>", block.toString());
+        assertEquals(" <span>第一个判断</span>  <span>第二个判断</span> ", block.toString());
     }
 
 }

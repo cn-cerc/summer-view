@@ -182,7 +182,7 @@ public class SsrTemplate implements SsrTemplateImpl {
                     list.add(new SsrDataSetItemNode(text));
                 else
                     list.add(new SsrValueNode(text));
-                line = line.substring(end + 1, line.length()).trim();
+                line = line.substring(end + 1, line.length());
             } else {
                 list.add(new SsrTextNode(line));
                 break;
