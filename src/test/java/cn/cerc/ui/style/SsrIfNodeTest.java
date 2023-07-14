@@ -10,7 +10,22 @@ import cn.cerc.db.core.DataSet;
 public class SsrIfNodeTest {
 
     @Test
-    public void test() {
+    public void test_not_if() {
+        var template = new SsrTemplate("""
+                ${if not final}
+                ok
+                ${endif}
+                ${if ready}
+                yes
+                ${endif}
+                """);
+        template.toMap("final", "false");
+        template.toMap("ready", "true");
+        assertEquals("okyes", template.getHtml());
+    }
+
+    @Test
+    public void test_1() {
         DataSet ds = new DataSet();
         ds.append().setValue("type", "1");
         ds.append().setValue("type", "2");
