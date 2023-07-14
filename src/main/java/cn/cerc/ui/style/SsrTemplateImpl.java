@@ -17,22 +17,37 @@ public interface SsrTemplateImpl {
     SsrTemplateImpl setTemplateText(String templateText);
 
     /**
+     * 请改使用 toList 函数
      * 
      * @param list 设置 list 数据源
      * @return 返回对象本身
      */
+    @Deprecated
     SsrTemplateImpl setList(List<String> list);
 
     /**
+     * 
+     * @param value 添加到list对象
+     * @return 返回对象本身
+     */
+    SsrTemplateImpl toList(String... value);
+
+    /**
+     * 
+     * 
      * @return 返回 list 数据源
      */
     List<String> getList();
 
+    SsrTemplateImpl toMap(String Key, String value);
+
     /**
+     * 请改使用 toMap
      * 
      * @param map 设置 map 数据源
      * @return 返回对象本身
      */
+    @Deprecated
     SsrTemplateImpl setMap(Map<String, String> map);
 
     /**

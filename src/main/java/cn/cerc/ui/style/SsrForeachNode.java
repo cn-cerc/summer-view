@@ -29,4 +29,5 @@ public abstract class SsrForeachNode extends SsrValueNode {
     }
 
     protected abstract String getEndFlag();
+
 }

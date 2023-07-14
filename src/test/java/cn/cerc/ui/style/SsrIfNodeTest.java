@@ -2,8 +2,6 @@ package cn.cerc.ui.style;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.Map;
-
 import org.junit.Test;
 
 import cn.cerc.db.core.DataSet;
@@ -26,7 +24,7 @@ public class SsrIfNodeTest {
                 ${dataset.end}
                 """);
         block.getTemplate().setDataSet(ds);
-        block.getTemplate().setMap(Map.of("field_", "1"));
+        block.getTemplate().toMap("field_", "1");
         assertEquals("<span>第一个判断</span><span>第二个判断</span>", block.toString());
     }
 

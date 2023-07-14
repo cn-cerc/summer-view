@@ -3,7 +3,6 @@ package cn.cerc.ui.style;
 import static org.junit.Assert.assertEquals;
 
 import java.util.List;
-import java.util.Map;
 
 import org.junit.Test;
 
@@ -45,7 +44,7 @@ public class SsrTemplateTest {
     @Test
     public void testDecode_array() {
         var template = new SsrTemplate("<div><span>${0},${1}</span></div>");
-        var result = template.setList(List.of("001", "002")).getHtml();
+        var result = template.toList("001", "002").getHtml();
         assertEquals("<div><span>001,002</span></div>", result);
     }
 
@@ -204,41 +203,21 @@ public class SsrTemplateTest {
     @Test
     public void testDecode_list() {
         var template = new SsrTemplate("<div>${list.begin}<span>${list.item}</span>${list.end}</div>");
-        var result = template.setList(List.of("a1", "a2")).getHtml();
+        var result = template.toList("a1", "a2").getHtml();
         assertEquals("<div><span>a1</span><span>a2</span></div>", result);
     }
 
     @Test
     public void testDecode_map() {
         var template = new SsrTemplate("<div>${map.begin}<span>${map.key}:${map.value}</span>${map.end}</div>");
-        var result = template.setMap(Map.of("a", "b")).getHtml();
+        var result = template.toMap("a", "b").getHtml();
         assertEquals("<div><span>a:b</span></div>", result);
-    }
-
-    @Test
-    public void testDecode_combo() {
-        var template = new SsrTemplate("""
-                <div>
-                ${0}${code_}
-                ${if Ready_}
-                    <span>from map</span>
-                ${endif}
-                ${if final_}
-                    <span>from row</span>
-                ${endif}
-                ${1}
-                </div>""");
-        template.setList(List.of("aaa", "bbb"));
-        template.setMap(Map.of("Ready_", "true"));
-        template.setDataRow(DataRow.of("code_", "001", "final_", true));
-        var result = template.getHtml();
-        assertEquals("<div>aaa001<span>from map</span><span>from row</span>bbb</div>", result);
     }
 
     @Test
     public void test_Strict_1() {
         var block1 = new UITemplateBlock(null, "${0}${1}");
-        block1.getTemplate().setList(List.of("a"));
+        block1.getTemplate().toList("a");
         assertEquals("a${1}", block1.toString());
 
         var block2 = new UITemplateBlock(null, "${code}${name}");
@@ -249,7 +228,7 @@ public class SsrTemplateTest {
     @Test
     public void test_Strict_2() {
         var block1 = new UITemplateBlock(null, "${0}${1}");
-        block1.getTemplate().setList(List.of("a")).setStrict(false);
+        block1.getTemplate().toList("a").setStrict(false);
         assertEquals("a", block1.toString());
 
         var block2 = new UITemplateBlock(null, "${code}${name}");

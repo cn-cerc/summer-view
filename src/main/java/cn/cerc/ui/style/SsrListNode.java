@@ -1,8 +1,8 @@
 package cn.cerc.ui.style;
 
 public class SsrListNode extends SsrForeachNode {
-    public static final String StartFlag = "list.begin";
-    public static final String EndFlag = "list.end";
+    public static final ForeachSignRecord Sign = new ForeachSignRecord("list.begin", "list.end",
+            (text) -> new SsrListNode(text));
 
     public SsrListNode(String text) {
         super(text);
@@ -31,7 +31,7 @@ public class SsrListNode extends SsrForeachNode {
 
     @Override
     protected String getEndFlag() {
-        return EndFlag;
+        return Sign.endFlag();
     }
 
 }
