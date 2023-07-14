@@ -35,7 +35,7 @@ public class SsrCallbackTest {
         master.toMap("createMode", "" + true);
         master.setCallback(sender -> child.getHtml());
 
-        assertEquals("<a href='http://www.baidu.com'>百度</a>", master.getHtml());
+        assertEquals(" <a href='http://www.baidu.com'>百度</a>", master.getHtml());
     }
 
 }

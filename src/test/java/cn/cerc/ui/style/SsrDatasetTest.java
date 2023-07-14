@@ -13,6 +13,7 @@ public class SsrDatasetTest {
     public void testDecode_dataset1() {
         var template = new SsrTemplate("""
                 <div>${dataset.begin}
+                ${dataset.rec}
                 ${if Final_}
                     ${TBNo_}
                     <span>${Code_}</span>
@@ -27,7 +28,7 @@ public class SsrDatasetTest {
         ds.append().setValue("Code_", "003");
         template.setDataRow(DataRow.of("TBNo_", "OD001"));
         var result = template.setDataSet(ds).getHtml();
-        assertEquals("<div>OD001<span>001</span>OD001<span>002</span><span>else</span></div>", result);
+        assertEquals("<div>1 OD001<span>001</span>2 OD001<span>002</span>3<span>else</span></div>", result);
     }
 
     @Test
@@ -48,7 +49,7 @@ public class SsrDatasetTest {
         ds.append().setValue("Code_", "003");
         template.setDataRow(DataRow.of("TBNo_", "OD001"));
         var result = template.setDataSet(ds).getHtml();
-        assertEquals("<div>OD001<span>001</span>OD001<span>002</span><span>else</span></div>", result);
+        assertEquals("<div> OD001<span>001</span> OD001<span>002</span><span>else</span></div>", result);
     }
 
 }
