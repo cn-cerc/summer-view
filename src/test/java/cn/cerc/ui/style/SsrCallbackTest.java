@@ -2,16 +2,14 @@ package cn.cerc.ui.style;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.Map;
-
 import org.junit.Test;
 
 public class SsrCallbackTest {
 
     @Test
     public void test_error() {
-        SsrTemplate ssr = new SsrTemplate("begin:${callback}:end");
-        assertEquals("begin:${callback}:end", ssr.getHtml());
+        SsrTemplate ssr = new SsrTemplate("begin${callback}end");
+        assertEquals("begin${callback}end", ssr.getHtml());
     }
 
     @Test
@@ -31,13 +29,13 @@ public class SsrCallbackTest {
                 """);
 
         // 子级
-        SsrTemplate child = new SsrTemplate("<a href='${url}'>${title}</a>")
-                .setMap(Map.of("url", "http://www.baidu.com", "title", "百度"));
+        SsrTemplateImpl child = new SsrTemplate("<a href='${url}'>${title}</a>").toMap("url", "http://www.baidu.com")
+                .toMap("title", "百度");
 
-        master.setMap(Map.of("createMode", "" + true));
+        master.toMap("createMode", "" + true);
         master.setCallback(sender -> child.getHtml());
 
-        assertEquals("<a href='http://www.baidu.com'>百度</a>", master.getHtml());
+        assertEquals(" <a href='http://www.baidu.com'>百度</a>", master.getHtml());
     }
 
 }

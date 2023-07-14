@@ -11,8 +11,7 @@ import cn.cerc.db.core.Variant;
 
 public class SsrIfNode extends SsrForeachNode {
     private static final Logger log = LoggerFactory.getLogger(SsrIfNode.class);
-    public static final String StartFlag = "if ";
-    public static final String EndFlag = "endif";
+    public static final ForeachSignRecord Sign = new ForeachSignRecord("if ", "endif", (text) -> new SsrIfNode(text));
 
     public SsrIfNode(String text) {
         super(text);
@@ -87,12 +86,21 @@ public class SsrIfNode extends SsrForeachNode {
             var template = this.getTemplate();
             if (template != null) {
                 String field = text;
+                var tmp = false;
+                if (field.startsWith("not ")) {
+                    field = field.substring(4, field.length());
+                    tmp = true;
+                }
                 var value = this.getValue(field);
                 if (value.isEmpty()) {
                     log.error("not find field: {}", field);
                     return this.getText();
-                } else
-                    return getChildren(new Variant(value.get()).getBoolean());
+                } else {
+                    if (tmp)
+                        return getChildren(!(new Variant(value.get()).getBoolean()));
+                    else
+                        return getChildren(new Variant(value.get()).getBoolean());
+                }
             } else {
                 return this.getText();
             }
@@ -120,12 +128,8 @@ public class SsrIfNode extends SsrForeachNode {
 
         // 根据参数决定是执行1还是执行2
         var items = ifValue ? items1 : items2;
-        for (var item : items) {
-            if (item instanceof SsrValueNode valueNode) {
-                sb.append(valueNode.getHtml());
-            } else
-                sb.append(item.getText());
-        }
+        for (var item : items)
+            sb.append(item.getHtml());
         return sb.toString();
     }
 
@@ -155,7 +159,7 @@ public class SsrIfNode extends SsrForeachNode {
 
     @Override
     protected String getEndFlag() {
-        return EndFlag;
+        return Sign.endFlag();
     }
 
 }
