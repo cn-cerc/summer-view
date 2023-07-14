@@ -27,7 +27,7 @@ public class SsrIfNode extends SsrForeachNode {
             return false;
         var arr = text.split(flag);
         if (arr.length == 1 && text.endsWith(flag)) {
-            var field = arr[0];
+            var field = arr[0].trim();
             var value = this.getValue(field);
             if (value.isEmpty()) {
                 log.error("not find field: {}", field);
@@ -44,7 +44,7 @@ public class SsrIfNode extends SsrForeachNode {
                 return false;
             }
 
-            var value = arr[1];
+            var value = arr[1].trim();
             Optional<String> rightValue;
             if ((value.startsWith("\"") && value.endsWith("\"")) || (value.startsWith("'") && value.endsWith("'"))) {
                 rightValue = Optional.of(value.substring(1, value.length() - 1));
@@ -85,7 +85,7 @@ public class SsrIfNode extends SsrForeachNode {
         } else { // 直接使用 boolean 字段
             var template = this.getTemplate();
             if (template != null) {
-                String field = text;
+                String field = text.trim();
                 var tmp = false;
                 if (field.startsWith("not ")) {
                     field = field.substring(4, field.length());

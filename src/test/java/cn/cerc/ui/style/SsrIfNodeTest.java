@@ -48,7 +48,7 @@ public class SsrIfNodeTest {
     public void testDecode_if0() {
         var template = new SsrTemplate("""
                 <div>
-                    ${if Code_==1}
+                    ${if Code_==1 }
                     yes
                     ${else}
                     no
@@ -65,7 +65,7 @@ public class SsrIfNodeTest {
     public void testDecode_if1() {
         var template = new SsrTemplate("""
                 <div>
-                    ${if Code_=='001'}
+                    ${if Code_=='001' }
                     yes
                     ${else}
                     no
