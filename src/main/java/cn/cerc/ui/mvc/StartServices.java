@@ -110,10 +110,12 @@ public class StartServices extends HttpServlet {
                 dataOut = new DataSet().setMessage("service return empty");
             response.getWriter().write(RecordFilter.execute(dataIn, dataOut).toString());
         } catch (DataValidateException e) {
+            log.error(e.getMessage(), e);
             dataOut.setState(ServiceState.ERROR);
             dataOut.setMessage(e.getMessage());
             response.getWriter().write(dataOut.toString());
         } catch (ClassNotFoundException e) {
+            log.error(e.getMessage(), e);
             dataOut.setState(ServiceState.NOT_FIND_SERVICE);
             dataOut.setMessage(e.getMessage());
             response.getWriter().write(dataOut.toString());
