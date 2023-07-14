@@ -18,7 +18,7 @@ public interface SsrNodeImpl {
 
     /**
      * 
-     * @return 若为特殊字段，则返回字段名
+     * @return 取得经过转换后的字符串
      */
     String getHtml();
 

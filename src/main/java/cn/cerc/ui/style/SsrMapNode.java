@@ -1,8 +1,8 @@
 package cn.cerc.ui.style;
 
 public class SsrMapNode extends SsrForeachNode {
-    public static final String StartFlag = "map.begin";
-    public static final String EndFlag = "map.end";
+    public static final ForeachSignRecord Sign = new ForeachSignRecord("map.begin", "map.end",
+            (text) -> new SsrMapNode(text));
 
     public SsrMapNode(String text) {
         super(text);
@@ -34,7 +34,7 @@ public class SsrMapNode extends SsrForeachNode {
 
     @Override
     protected String getEndFlag() {
-        return EndFlag;
+        return Sign.endFlag();
     }
 
 }

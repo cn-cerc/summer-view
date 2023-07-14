@@ -1,8 +1,8 @@
 package cn.cerc.ui.style;
 
 public class SsrDatasetNode extends SsrForeachNode {
-    public static final String StartFlag = "dataset.begin";
-    public static final String EndFlag = "dataset.end";
+    public static final ForeachSignRecord Sign = new ForeachSignRecord("dataset.begin", "dataset.end",
+            (text) -> new SsrDatasetNode(text));
 
     public SsrDatasetNode(String text) {
         super(text);
@@ -22,12 +22,8 @@ public class SsrDatasetNode extends SsrForeachNode {
             var sb = new StringBuffer();
             dataSet.first();
             while (dataSet.fetch()) {
-                for (var item : this.getItems()) {
-                    if (item instanceof SsrValueNode child) {
-                        sb.append(item.getHtml());
-                    } else
-                        sb.append(item.getText());
-                }
+                for (var item : this.getItems())
+                    sb.append(item.getHtml());
             }
             return sb.toString();
         } finally {
@@ -37,11 +33,11 @@ public class SsrDatasetNode extends SsrForeachNode {
 
     @Override
     protected String getEndFlag() {
-        return EndFlag;
+        return Sign.endFlag();
     }
 
     public static boolean is(String text) {
-        return text.equals(StartFlag) || text.equals(EndFlag);
+        return text.equals(Sign.beginFlag()) || text.equals(Sign.endFlag());
     }
 
 }
