@@ -180,12 +180,12 @@ public class SsrTemplate implements SsrTemplateImpl {
                 if (SsrCallbackNode.is(text))
                     list.add(new SsrCallbackNode(text));
                 else if (SsrDataSetRecNode.is(text))
-                    list.add(new SsrDataSetItemNode(text));
+                    list.add(new SsrDataSetRecNode(text));
                 else if (SsrDataSetItemNode.is(text))
                     list.add(new SsrDataSetItemNode(text));
                 else
                     list.add(new SsrValueNode(text));
-                line = line.substring(end + 1, line.length()).trim();
+                line = line.substring(end + 1, line.length());
             } else {
                 list.add(new SsrTextNode(line));
                 break;

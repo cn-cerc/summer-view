@@ -1,7 +1,7 @@
 package cn.cerc.ui.style;
 
 public class SsrDataSetRecNode extends SsrValueNode {
-    public static final String FirstFlag = "dataset.rec";
+    private static final String Flag = "dataset.rec";
 
     public SsrDataSetRecNode(String text) {
         super(text);
@@ -18,7 +18,7 @@ public class SsrDataSetRecNode extends SsrValueNode {
     }
 
     public static boolean is(String text) {
-        return text.equals(FirstFlag);
+        return text.equals(Flag);
     }
 
 }
