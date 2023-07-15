@@ -1,9 +1,8 @@
 package cn.cerc.ui.style;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import org.slf4j.Logger;
@@ -19,9 +18,8 @@ public class UITemplateGrid extends UIComponent {
     private DataSet dataSet;
     private SsrDefine define;
     private List<String> fields;
-    private Map<String, OnAddFieldImpl> events = new HashMap<>();
-    private OnAddFieldImpl onGetBody;
-    private OnAddFieldImpl onGetHead;
+    private Consumer<SsrTemplateImpl> onGetBody;
+    private Consumer<SsrTemplateImpl> onGetHead;
     // 表样式 id
     public static final String TableBegin = "table.begin";
     public static final String TableEnd = "table.end";
@@ -31,10 +29,6 @@ public class UITemplateGrid extends UIComponent {
     // 表身样式id
     public static final String BodyBegin = "body.begin";
     public static final String BodyEnd = "body.end";
-
-    public interface OnAddFieldImpl {
-        void setTemplateData(UITemplateGrid sender, String field, SsrTemplateImpl template);
-    }
 
     public UITemplateGrid(UIComponent owner) {
         super(owner);
@@ -78,8 +72,12 @@ public class UITemplateGrid extends UIComponent {
         addBlock(HeadBegin, getDefault_HeadBegin()).ifPresent(value -> html.print(value.getHtml()));
         for (var field : fields) {
             var block = addBlock("head." + field, getDefault_HeadCell(field));
-            if (block.isPresent() && onGetHead != null)
-                onGetHead.setTemplateData(this, field, block.get());
+            if (block.isPresent()) {
+                if (onGetHead != null) {
+                    block.get().setId(field);
+                    onGetHead.accept(block.get());
+                }
+            }
             block.ifPresent(value -> html.print(value.getHtml()));
         }
         addBlock(HeadEnd, () -> new SsrTemplate("</tr>")).ifPresent(value -> html.print(value.getHtml()));
@@ -94,11 +92,10 @@ public class UITemplateGrid extends UIComponent {
                     for (var field : fields) {
                         var block = addBlock("body." + field, getDefault_BodyCell(field));
                         if (block.isPresent()) {
-                            var event = this.events.get(field);
-                            if (event != null)
-                                event.setTemplateData(this, field, block.get());
-                            if (onGetBody != null)
-                                onGetBody.setTemplateData(this, field, block.get());
+                            if (onGetBody != null) {
+                                block.get().setId(field);
+                                onGetBody.accept(block.get());
+                            }
                         }
                         block.ifPresent(value -> html.print(value.getHtml()));
                     }
@@ -108,6 +105,7 @@ public class UITemplateGrid extends UIComponent {
                 dataSet.setRecNo(save_rec);
             }
         }
+
         addBlock(TableEnd, () -> new SsrTemplate("</table>")).ifPresent(value -> html.print(value.getHtml()));
     }
 
@@ -127,11 +125,11 @@ public class UITemplateGrid extends UIComponent {
         return Optional.ofNullable(template);
     }
 
-    public void onGetHead(OnAddFieldImpl onAddItem) {
+    public void onGetHead(Consumer<SsrTemplateImpl> onAddItem) {
         this.onGetHead = onAddItem;
     }
 
-    public void onGetBody(OnAddFieldImpl onAddColumn) {
+    public void onGetBody(Consumer<SsrTemplateImpl> onAddColumn) {
         this.onGetBody = onAddColumn;
     }
 
@@ -147,8 +145,17 @@ public class UITemplateGrid extends UIComponent {
         return define;
     }
 
-    public void putDefine(String id, String templateText) {
+    public UITemplateGrid putDefine(String id, String templateText) {
         this.define.items().put(id, new SsrTemplate(templateText));
+        return this;
+    }
+
+    public UITemplateGrid putHead(String field, String templateText) {
+        return this.putDefine("head." + field, templateText);
+    }
+
+    public UITemplateGrid putBody(String field, String templateText) {
+        return this.putDefine("body." + field, templateText);
     }
 
     /**
@@ -195,12 +202,6 @@ public class UITemplateGrid extends UIComponent {
      */
     private Supplier<SsrTemplateImpl> getDefault_BodyCell(String field) {
         return () -> new SsrTemplate(String.format("<td>${%s}</td>", field));
-    }
-
-    public void putField(String field, String templateText, OnAddFieldImpl consumer) {
-        this.putDefine("body." + field, templateText);
-        if (consumer != null)
-            this.events.put(field, consumer);
     }
 
 }

@@ -18,13 +18,13 @@ public class UITemplateGridTest {
 
         var grid = new UITemplateGrid(null, "");
         grid.putDefine(UITemplateGrid.TableBegin, "<table class='a'>");
-
-        grid.putField("code_", "<td><a href=\"${url}\">${code_}</a></td>",
-                (sender, field, template) -> template.toMap("url", "http://xxx"));
-
+        grid.putHead("code_", "<th width=${width}>${title}</td>");
+        grid.onGetHead(ssr -> ssr.toMap("width", "30").toMap("title", "xxx"));
+        grid.putBody("code_", "<td><a href=\"${url}\">${code_}</a></td>");
+        grid.onGetBody(ssr -> ssr.toMap("url", "http://" + ds.getString(ssr.id())));
         grid.setDataSet(ds);
         assertEquals(
-                "<table class='a'><tr><th>code_</th><th>name_</th></tr><tr><td><a href=\"http://xxx\">001</a></td><td>a01</td></tr><tr><td><a href=\"http://xxx\">002</a></td><td>b01</td></tr></table>",
+                "<table class='a'><tr><th width=30>xxx</td><th>name_</th></tr><tr><td><a href=\"http://001\">001</a></td><td>a01</td></tr><tr><td><a href=\"http://002\">002</a></td><td>b01</td></tr></table>",
                 grid.toString());
     }
 
@@ -70,13 +70,13 @@ public class UITemplateGridTest {
         ds.append().setValue("code", "002").setValue("name", "李四");
         grid.setDataSet(ds);
         grid.setFields(List.of("name", "code"));
-        grid.onGetHead((sender, field, template) -> {
-            if ("code".equals(field))
-                template.toMap("title", "代码");
+        grid.onGetHead(ssr -> {
+            if ("code".equals(ssr.id()))
+                ssr.toMap("title", "代码");
         });
-        grid.onGetBody((sender, field, template) -> {
-            if ("name".equals(field))
-                template.toMap("url", "http://127.0.0.1");
+        grid.onGetBody(ssr -> {
+            if ("name".equals(ssr.id()))
+                ssr.toMap("url", "http://127.0.0.1");
         });
 
         assertEquals(

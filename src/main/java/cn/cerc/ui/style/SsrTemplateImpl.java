@@ -2,7 +2,6 @@ package cn.cerc.ui.style;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import cn.cerc.db.core.DataRow;
 import cn.cerc.db.core.DataSet;
@@ -111,5 +110,5 @@ public interface SsrTemplateImpl {
 
     Object setId(String id);
 
-    Optional<String> getId();
+    String id();
 }

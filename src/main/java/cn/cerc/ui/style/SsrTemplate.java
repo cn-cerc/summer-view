@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import cn.cerc.db.core.DataRow;
 import cn.cerc.db.core.DataSet;
@@ -181,8 +180,8 @@ public class SsrTemplate implements SsrTemplateImpl {
     }
 
     @Override
-    public Optional<String> getId() {
-        return Optional.ofNullable(this.id);
+    public String id() {
+        return this.id;
     }
 
 }

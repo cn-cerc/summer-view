@@ -32,8 +32,8 @@ public class SsrIfNode extends SsrForeachNode {
             if (value.isEmpty()) {
                 log.error("not find field: {}", field);
                 status.setValue(-1);
-            }
-            status.setValue(lrEquals.execute(value.get(), "") ? 1 : 0);
+            } else
+                status.setValue(lrEquals.execute(value.get(), "") ? 1 : 0);
             return true;
         } else if (arr.length == 2 && (arr[0].length()) > 0) {
             var leftField = arr[0];
