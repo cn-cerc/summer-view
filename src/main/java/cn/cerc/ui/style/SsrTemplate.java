@@ -1,13 +1,10 @@
 package cn.cerc.ui.style;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import cn.cerc.db.core.DataRow;
 import cn.cerc.db.core.DataSet;
@@ -21,33 +18,20 @@ public class SsrTemplate implements SsrTemplateImpl {
     private DataSet dataSet;
     private boolean strict = true;
     private SsrCallbackImpl callback;
+    private String templateText;
+    private String id;
 
     public SsrTemplate(String templateText) {
         super();
-        setTemplateText(templateText);
+        this.templateText = templateText;
+        this.nodes = createNodes(templateText);
+        CompressNodes.run(nodes);
     }
 
     public SsrTemplate(Class<?> class1, String id) {
-        var fileName = class1.getSimpleName() + "_" + id + ".html";
-        var file = class1.getResourceAsStream(fileName);
-        var list = new BufferedReader(new InputStreamReader(file, StandardCharsets.UTF_8));
-        String line;
-        var sb = new StringBuffer();
-        boolean start = false;
-        try {
-            while ((line = list.readLine()) != null) {
-                var text = line.trim();
-                if ("<body>".equals(text))
-                    start = true;
-                else if ("</body>".equals(text))
-                    break;
-                else if (start)
-                    sb.append(text);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        setTemplateText(sb.toString());
+        this.templateText = SsrUtils.getTempateFileText(class1, id);
+        this.nodes = createNodes(templateText);
+        CompressNodes.run(nodes);
     }
 
     @Override
@@ -148,13 +132,6 @@ public class SsrTemplate implements SsrTemplateImpl {
     }
 
     @Override
-    public SsrTemplate setTemplateText(String templateText) {
-        this.nodes = this.createNodes(templateText);
-        CompressNodes.run(nodes);
-        return this;
-    }
-
-    @Override
     public SsrTemplateImpl setCallback(SsrCallbackImpl callback) {
         this.callback = callback;
         return this;
@@ -190,6 +167,22 @@ public class SsrTemplate implements SsrTemplateImpl {
         }
         list.forEach(item -> item.setTemplate(this));
         return list;
+    }
+
+    @Override
+    public String templateText() {
+        return this.templateText;
+    }
+
+    @Override
+    public SsrTemplate setId(String id) {
+        this.id = id;
+        return this;
+    }
+
+    @Override
+    public Optional<String> getId() {
+        return Optional.ofNullable(this.id);
     }
 
 }
