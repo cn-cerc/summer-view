@@ -9,7 +9,7 @@ public class SsrValueNode implements SsrNodeImpl {
     private static final Logger log = LoggerFactory.getLogger(SsrValueNode.class);
     private SsrTemplateImpl template;
     private String text;
-    
+
     public SsrValueNode(String text) {
         this.text = text;
     }
@@ -58,7 +58,8 @@ public class SsrValueNode implements SsrNodeImpl {
                         log.warn("dataRow and dataSet exists field: {}", field);
                     return dataRow.getText(field);
                 } else if (dataSet != null && dataSet.exists(field)) {
-                    return dataSet.current().getText(field);
+                    var row = dataSet.currentRow();
+                    return row.isPresent() ? row.get().getText(field) : "";
                 } else if (this.getTemplate().isStrict()) {
                     log.error("not find field: {}", field);
                     return this.getText();

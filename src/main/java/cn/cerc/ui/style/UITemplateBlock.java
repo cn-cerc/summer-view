@@ -51,8 +51,9 @@ public class UITemplateBlock extends UIComponent {
         return template;
     }
 
-    public void setTemplate(SsrTemplateImpl template) {
+    public UITemplateBlock setTemplate(SsrTemplateImpl template) {
         this.template = template;
+        return this;
     }
 
 }

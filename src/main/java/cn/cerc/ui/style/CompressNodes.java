@@ -28,7 +28,7 @@ public class CompressNodes {
     }
 
     private void execute(List<SsrNodeImpl> nodes) {
-        if (nodes.size() == 0)
+        if (nodes.size() < 2)
             return;
         while (compress(nodes, SsrIfNode.Sign))
             continue;

@@ -2,19 +2,12 @@ package cn.cerc.ui.style;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import cn.cerc.db.core.DataRow;
 import cn.cerc.db.core.DataSet;
 
 public interface SsrTemplateImpl {
-
-    /**
-     * 设置模版文本
-     * 
-     * @param templateText
-     * @return 返回对象本身
-     */
-    SsrTemplateImpl setTemplateText(String templateText);
 
     /**
      * 请改使用 toList 函数
@@ -114,4 +107,9 @@ public interface SsrTemplateImpl {
      */
     String getHtml();
 
+    String templateText();
+
+    Object setId(String id);
+
+    Optional<String> getId();
 }
