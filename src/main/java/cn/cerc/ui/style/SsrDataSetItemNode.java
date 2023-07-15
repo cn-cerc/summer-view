@@ -30,7 +30,8 @@ public class SsrDataSetItemNode extends SsrValueNode {
     }
 
     public static boolean is(String text) {
-        return text.startsWith(FirstFlag) && !SsrDatasetNode.is(text) && !SsrDataSetRecNode.is(text);
+        return text.startsWith(FirstFlag) && !SsrDataSetRecNode.is(text) && !SsrDatasetNode.is(text)
+                && !SsrDataSetRecNode.is(text);
     }
 
 }
