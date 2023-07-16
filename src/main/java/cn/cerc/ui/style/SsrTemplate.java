@@ -20,6 +20,8 @@ public class SsrTemplate implements SsrTemplateImpl {
     private SsrCallbackImpl callback;
     private String templateText;
     private String id;
+    private ForeachMap foreachMap;
+    private ForeachList foreachList;
 
     public SsrTemplate(String templateText) {
         super();
@@ -153,6 +155,12 @@ public class SsrTemplate implements SsrTemplateImpl {
                 var text = line.substring(start + 2, end);
                 if (SsrCallbackNode.is(text))
                     list.add(new SsrCallbackNode(text));
+                else if (SsrListItemNode.is(text))
+                    list.add(new SsrListItemNode(text));
+                else if (SsrMapKeyNode.is(text))
+                    list.add(new SsrMapKeyNode(text));
+                else if (SsrMapValueNode.is(text))
+                    list.add(new SsrMapValueNode(text));
                 else if (SsrDataSetRecNode.is(text))
                     list.add(new SsrDataSetRecNode(text));
                 else if (SsrDataSetItemNode.is(text))
@@ -183,6 +191,92 @@ public class SsrTemplate implements SsrTemplateImpl {
     @Override
     public String id() {
         return this.id;
+    }
+
+    public class ForeachMap {
+        private Map<String, String> map;
+        private int rec;
+
+        public ForeachMap(Map<String, String> map) {
+            this.map = map;
+            rec = -1;
+        }
+
+        public void reset() {
+            rec = -1;
+        }
+
+        public boolean fetch() {
+            rec++;
+            return map != null && rec > -1 && rec < map.size();
+        }
+
+        public String key() {
+            if (map != null) {
+                var i = 0;
+                for (var key : map.keySet()) {
+                    if (i == rec)
+                        return key;
+                    i++;
+                }
+            }
+            return null;
+        }
+
+        public String value() {
+            if (map != null) {
+                var i = 0;
+                for (var key : map.keySet()) {
+                    if (i == rec)
+                        return map.get(key);
+                    i++;
+                }
+            }
+            return null;
+        }
+    }
+
+    public class ForeachList {
+        private List<String> list;
+        private int rec;
+
+        public ForeachList(List<String> list) {
+            this.list = list;
+        }
+
+        public void reset() {
+            rec = -1;
+        }
+
+        public boolean fetch() {
+            rec++;
+            return list != null && rec > -1 && rec < list.size();
+        }
+
+        public String item() {
+            if (list != null && rec > -1 && rec < list.size())
+                return list.get(rec);
+            else
+                return null;
+        }
+    }
+
+    @Override
+    public ForeachMap getForeachMap() {
+        if (this.map == null)
+            return null;
+        if (this.foreachMap == null)
+            this.foreachMap = new ForeachMap(this.map);
+        return foreachMap;
+    }
+
+    @Override
+    public ForeachList getForeachList() {
+        if (this.list == null)
+            return null;
+        if (this.foreachList == null)
+            this.foreachList = new ForeachList(this.list);
+        return foreachList;
     }
 
 }

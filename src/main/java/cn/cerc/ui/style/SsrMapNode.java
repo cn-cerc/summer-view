@@ -15,19 +15,12 @@ public class SsrMapNode extends SsrForeachNode {
             return this.getText();
 
         var sb = new StringBuffer();
-        for (var key : params.keySet()) {
-            var value = params.get(key);
-            for (var item : this.getItems()) {
-                if (item instanceof SsrValueNode child) {
-                    if ("map.key".equals(item.getField()))
-                        sb.append(key);
-                    else if ("map.value".equals(item.getField()))
-                        sb.append(value);
-                    else
-                        sb.append(child.getText());
-                } else
-                    sb.append(item.getText());
-            }
+
+        var map = this.getTemplate().getForeachMap();
+        map.reset();
+        while (map.fetch()) {
+            for (var item : this.getItems())
+                sb.append(item.getHtml());
         }
         return sb.toString();
     }

@@ -1,6 +1,10 @@
 package cn.cerc.ui.style;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -18,8 +22,8 @@ public class UITemplateGrid extends UIComponent {
     private DataSet dataSet;
     private SsrDefine define;
     private List<String> fields;
-    private Consumer<SsrTemplateImpl> onGetBody;
-    private Consumer<SsrTemplateImpl> onGetHead;
+    private Map<String, Consumer<SsrTemplateImpl>> onGetBody = new HashMap<>();
+    private Map<String, Consumer<SsrTemplateImpl>> onGetHead = new HashMap<>();
     // 表样式 id
     public static final String TableBegin = "table.begin";
     public static final String TableEnd = "table.end";
@@ -73,10 +77,10 @@ public class UITemplateGrid extends UIComponent {
         for (var field : fields) {
             var block = addBlock("head." + field, getDefault_HeadCell(field));
             if (block.isPresent()) {
-                if (onGetHead != null) {
-                    block.get().setId(field);
-                    onGetHead.accept(block.get());
-                }
+                this.onGetHead.forEach((key, value) -> {
+                    if (key.equals(field))
+                        value.accept(block.get().setId(field));
+                });
             }
             block.ifPresent(value -> html.print(value.getHtml()));
         }
@@ -92,10 +96,10 @@ public class UITemplateGrid extends UIComponent {
                     for (var field : fields) {
                         var block = addBlock("body." + field, getDefault_BodyCell(field));
                         if (block.isPresent()) {
-                            if (onGetBody != null) {
-                                block.get().setId(field);
-                                onGetBody.accept(block.get());
-                            }
+                            this.onGetBody.forEach((key, value) -> {
+                                if (key.equals(field))
+                                    value.accept(block.get().setId(field));
+                            });
                         }
                         block.ifPresent(value -> html.print(value.getHtml()));
                     }
@@ -125,12 +129,12 @@ public class UITemplateGrid extends UIComponent {
         return Optional.ofNullable(template);
     }
 
-    public void onGetHead(Consumer<SsrTemplateImpl> onAddItem) {
-        this.onGetHead = onAddItem;
+    public void addGetHead(String field, Consumer<SsrTemplateImpl> consumer) {
+        this.onGetHead.put(field, consumer);
     }
 
-    public void onGetBody(Consumer<SsrTemplateImpl> onAddColumn) {
-        this.onGetBody = onAddColumn;
+    public void addGetBody(String field, Consumer<SsrTemplateImpl> consumer) {
+        this.onGetBody.put(field, consumer);
     }
 
     public List<String> getFields() {
@@ -156,6 +160,10 @@ public class UITemplateGrid extends UIComponent {
 
     public UITemplateGrid putBody(String field, String templateText) {
         return this.putDefine("body." + field, templateText);
+    }
+
+    public SsrDefaultGridStyle createDefaultStyle() {
+        return new SsrDefaultGridStyle(this);
     }
 
     /**
@@ -202,6 +210,17 @@ public class UITemplateGrid extends UIComponent {
      */
     private Supplier<SsrTemplateImpl> getDefault_BodyCell(String field) {
         return () -> new SsrTemplate(String.format("<td>${%s}</td>", field));
+    }
+
+    public void addField(SsrGridColumn column) {
+        Objects.requireNonNull(column);
+        if (fields == null)
+            fields = new ArrayList<>();
+        if (column != null) {
+            fields.add(column.field());
+            putDefine("head." + column.field(), column.headStyle());
+            putDefine("body." + column.field(), column.bodyStyle());
+        }
     }
 
 }

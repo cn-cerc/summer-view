@@ -19,9 +19,9 @@ public class UITemplateGridTest {
         var grid = new UITemplateGrid(null, "");
         grid.putDefine(UITemplateGrid.TableBegin, "<table class='a'>");
         grid.putHead("code_", "<th width=${width}>${title}</td>");
-        grid.onGetHead(ssr -> ssr.toMap("width", "30").toMap("title", "xxx"));
+        grid.addGetHead("code_", ssr -> ssr.toMap("width", "30").toMap("title", "xxx"));
         grid.putBody("code_", "<td><a href=\"${url}\">${code_}</a></td>");
-        grid.onGetBody(ssr -> ssr.toMap("url", "http://" + ds.getString(ssr.id())));
+        grid.addGetBody("code_", ssr -> ssr.toMap("url", "http://" + ds.getString(ssr.id())));
         grid.setDataSet(ds);
         assertEquals(
                 "<table class='a'><tr><th width=30>xxx</td><th>name_</th></tr><tr><td><a href=\"http://001\">001</a></td><td>a01</td></tr><tr><td><a href=\"http://002\">002</a></td><td>b01</td></tr></table>",
@@ -70,14 +70,8 @@ public class UITemplateGridTest {
         ds.append().setValue("code", "002").setValue("name", "李四");
         grid.setDataSet(ds);
         grid.setFields(List.of("name", "code"));
-        grid.onGetHead(ssr -> {
-            if ("code".equals(ssr.id()))
-                ssr.toMap("title", "代码");
-        });
-        grid.onGetBody(ssr -> {
-            if ("name".equals(ssr.id()))
-                ssr.toMap("url", "http://127.0.0.1");
-        });
+        grid.addGetHead("code", ssr -> ssr.toMap("title", "代码"));
+        grid.addGetBody("name", ssr -> ssr.toMap("url", "http://127.0.0.1"));
 
         assertEquals(
                 "<table><tr class=\"head\"><th>姓名</th><th>代码</th></tr><tr><td><a href=\"http://127.0.0.1\">张三</a><td><td>001<td></tr><tr><td><a href=\"http://127.0.0.1\">李四</a><td><td>002<td></tr></table>",
