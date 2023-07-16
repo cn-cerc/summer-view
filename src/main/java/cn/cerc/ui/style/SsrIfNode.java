@@ -134,16 +134,25 @@ public class SsrIfNode extends SsrForeachNode {
     }
 
     private Optional<String> getValue(String field) {
+        var list = this.getTemplate().getList();
         var map = this.getTemplate().getMap();
         var dataRow = this.getTemplate().getDataRow();
         var dataSet = this.getTemplate().getDataSet();
-        if (map != null && map.containsKey(field)) {
-            if (dataRow != null && dataRow.exists(field))
-                log.warn("map and dataRow exists field: {}", field);
-            if (dataSet != null && dataSet.exists(field))
-                log.warn("map and dataSet exists field: {}", field);
-            Object val = map.get(field);
-            return Optional.ofNullable(val != null ? val.toString() : "");
+        if (list != null && SsrListItemNode.is(field))
+            return Optional.ofNullable(this.getTemplate().getForeachList().item());
+        if (map != null) {
+            if (SsrMapKeyNode.is(field))
+                return Optional.ofNullable(this.getTemplate().getForeachMap().key());
+            else if (SsrMapValueNode.is(field))
+                return Optional.ofNullable(this.getTemplate().getForeachMap().value());
+            else if (map.containsKey(field)) {
+                if (dataRow != null && dataRow.exists(field))
+                    log.warn("map and dataRow exists field: {}", field);
+                if (dataSet != null && dataSet.exists(field))
+                    log.warn("map and dataSet exists field: {}", field);
+                Object val = map.get(field);
+                return Optional.ofNullable(val != null ? val.toString() : "");
+            }
         }
         if (dataRow != null && dataRow.exists(field)) {
             if (dataSet != null && dataSet.exists(field))

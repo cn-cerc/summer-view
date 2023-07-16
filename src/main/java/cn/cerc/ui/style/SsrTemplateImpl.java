@@ -5,6 +5,8 @@ import java.util.Map;
 
 import cn.cerc.db.core.DataRow;
 import cn.cerc.db.core.DataSet;
+import cn.cerc.ui.style.SsrTemplate.ForeachList;
+import cn.cerc.ui.style.SsrTemplate.ForeachMap;
 
 public interface SsrTemplateImpl {
 
@@ -108,7 +110,11 @@ public interface SsrTemplateImpl {
 
     String templateText();
 
-    Object setId(String id);
+    SsrTemplateImpl setId(String id);
 
     String id();
+
+    ForeachMap getForeachMap();
+
+    ForeachList getForeachList();
 }

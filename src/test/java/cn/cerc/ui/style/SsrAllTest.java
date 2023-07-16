@@ -8,7 +8,8 @@ import org.junit.runners.Suite.SuiteClasses;
 
 @SuiteClasses({ SsrTemplateTest.class, SsrCallbackTest.class, SsrComboTest.class, SsrDataRowTest.class,
         SsrDatasetTest.class, SsrIfNodeTest.class, SsrTextNodeTest.class, UITemplateBlockTest.class,
-        SsrDefineTest.class, UITemplateGridTest.class })
+        SsrDefineTest.class, UITemplateGridTest.class, SsrDefaultGridStyleTest.class, SsrMapNodeTest.class,
+        SsrListNodeTest.class})
 
 public class SsrAllTest {
 
