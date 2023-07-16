@@ -30,7 +30,7 @@ public class SsrIfNodeTest {
         ds.append().setValue("type", "1");
         ds.append().setValue("type", "2");
 
-        var block = new UITemplateBlock(null, """
+        var block = new UISsrBlock(null, """
                 ${dataset.begin}
                     ${if type==field_}
                         <span>第一个判断</span>

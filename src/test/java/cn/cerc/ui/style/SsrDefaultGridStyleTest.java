@@ -16,7 +16,7 @@ public class SsrDefaultGridStyleTest {
         ds.append().setValue("Name_", "研发部").setValue("Code_", "001").setValue("Type_", "a");
         ds.append().setValue("Name_", "生产部").setValue("Code_", "002").setValue("Final_", true);
 
-        var grid = new UITemplateGrid(null, "");
+        var grid = new UISsrGrid(null, "");
         grid.setDataSet(ds);
 
         var map = new LinkedHashMap<String, String>();

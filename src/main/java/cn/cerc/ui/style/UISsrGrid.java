@@ -17,8 +17,8 @@ import cn.cerc.db.core.Utils;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 
-public class UITemplateGrid extends UIComponent {
-    private static final Logger log = LoggerFactory.getLogger(UITemplateGrid.class);
+public class UISsrGrid extends UIComponent {
+    private static final Logger log = LoggerFactory.getLogger(UISsrGrid.class);
     private DataSet dataSet;
     private SsrDefine define;
     private List<String> fields;
@@ -34,16 +34,16 @@ public class UITemplateGrid extends UIComponent {
     public static final String BodyBegin = "body.begin";
     public static final String BodyEnd = "body.end";
 
-    public UITemplateGrid(UIComponent owner) {
+    public UISsrGrid(UIComponent owner) {
         super(owner);
     }
 
-    public UITemplateGrid(UIComponent owner, String templateText) {
+    public UISsrGrid(UIComponent owner, String templateText) {
         super(owner);
         define = new SsrDefine(templateText);
     }
 
-    public UITemplateGrid(UIComponent owner, Class<?> class1, String id) {
+    public UISsrGrid(UIComponent owner, Class<?> class1, String id) {
         super(owner);
         define = new SsrDefine(class1, id);
     }
@@ -62,14 +62,11 @@ public class UITemplateGrid extends UIComponent {
             log.error("dataSet is null");
             return;
         }
-        this.getComponents().clear();
 
         if (this.fields == null)
             this.fields = this.dataSet.fields().names();
 
-        if (define.items().containsKey(SsrDefine.TopFlag))
-            addBlock(SsrDefine.TopFlag, null).ifPresent(value -> html.print(value.getHtml()));
-
+        addBlock(SsrDefine.BeginFlag).ifPresent(value -> html.print(value.getHtml()));
         addBlock(TableBegin, getDefault_TableBegin()).ifPresent(value -> html.print(value.getHtml()));
 
         // 输出标题
@@ -111,16 +108,20 @@ public class UITemplateGrid extends UIComponent {
         }
 
         addBlock(TableEnd, () -> new SsrTemplate("</table>")).ifPresent(value -> html.print(value.getHtml()));
+        addBlock(SsrDefine.EndFlag).ifPresent(value -> html.print(value.getHtml()));
+    }
+
+    private Optional<SsrTemplateImpl> addBlock(String id) {
+        SsrTemplateImpl template = define.get(id).orElse(null);
+        if (template != null) {
+            template.setId(id);
+            template.setDataSet(dataSet);
+        }
+        return Optional.ofNullable(template);
     }
 
     private Optional<SsrTemplateImpl> addBlock(String id, Supplier<SsrTemplateImpl> supplier) {
-        var item = define.get(id);
-        SsrTemplateImpl template = item.orElse(null);
-        if (template == null && supplier != null) {
-            template = supplier.get();
-            if (template != null)
-                define.items().put(id, template);
-        }
+        SsrTemplateImpl template = define.getOrAdd(id, supplier).orElse(null);
         if (template != null) {
             template.setId(id);
             template.setDataSet(dataSet);
@@ -149,16 +150,16 @@ public class UITemplateGrid extends UIComponent {
         return define;
     }
 
-    public UITemplateGrid putDefine(String id, String templateText) {
+    public UISsrGrid putDefine(String id, String templateText) {
         this.define.items().put(id, new SsrTemplate(templateText));
         return this;
     }
 
-    public UITemplateGrid putHead(String field, String templateText) {
+    public UISsrGrid putHead(String field, String templateText) {
         return this.putDefine("head." + field, templateText);
     }
 
-    public UITemplateGrid putBody(String field, String templateText) {
+    public UISsrGrid putBody(String field, String templateText) {
         return this.putDefine("body." + field, templateText);
     }
 
@@ -210,6 +211,13 @@ public class UITemplateGrid extends UIComponent {
      */
     private Supplier<SsrTemplateImpl> getDefault_BodyCell(String field) {
         return () -> new SsrTemplate(String.format("<td>${%s}</td>", field));
+    }
+
+    public void addField(String... field) {
+        if (fields == null)
+            fields = new ArrayList<>();
+        for (var item : field)
+            fields.add(item);
     }
 
     public void addField(SsrGridColumn column) {
