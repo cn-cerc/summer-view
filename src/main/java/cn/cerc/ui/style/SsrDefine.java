@@ -2,7 +2,9 @@ package cn.cerc.ui.style;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,7 +12,8 @@ import org.slf4j.LoggerFactory;
 public class SsrDefine {
     private static final Logger log = LoggerFactory.getLogger(SsrDefine.class);
     private Map<String, SsrTemplateImpl> items = new LinkedHashMap<>();
-    public static final String TopFlag = "top";
+    public static final String BeginFlag = "begin";
+    public static final String EndFlag = "end";
     private String templateText;
 
     public SsrDefine(String templateText) {
@@ -22,7 +25,7 @@ public class SsrDefine {
         int start, end;
         var line = templateText.trim();
         StringBuffer sb = new StringBuffer();
-        String define = TopFlag;
+        String define = BeginFlag;
         while (line.length() > 0) {
             if ((start = line.indexOf("${define")) > -1 && (end = line.indexOf("}", start)) > -1) {
                 // 第1个字符不是大括号
@@ -83,8 +86,23 @@ public class SsrDefine {
         return Optional.ofNullable(this.items.get(id));
     }
 
-    public Optional<SsrTemplateImpl> getTop() {
-        return this.get(TopFlag);
+    public Optional<SsrTemplateImpl> getOrAdd(String id, Supplier<SsrTemplateImpl> supplier) {
+        Objects.requireNonNull(supplier);
+        SsrTemplateImpl template = this.get(id).orElse(null);
+        if (template == null) {
+            template = supplier.get();
+            if (template != null)
+                this.items().put(id, template);
+        }
+        return Optional.ofNullable(template);
+    }
+
+    public Optional<SsrTemplateImpl> getBegin() {
+        return this.get(BeginFlag);
+    }
+
+    public Optional<SsrTemplateImpl> getEnd() {
+        return this.get(EndFlag);
     }
 
     public String templateText() {

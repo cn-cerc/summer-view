@@ -8,24 +8,24 @@ import org.slf4j.LoggerFactory;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 
-public class UITemplateBlock extends UIComponent {
-    private static final Logger log = LoggerFactory.getLogger(UITemplateBlock.class);
-    protected SsrTemplateImpl template;
+public class UISsrBlock extends UIComponent {
+    private static final Logger log = LoggerFactory.getLogger(UISsrBlock.class);
+    private SsrTemplateImpl template;
 
-    public UITemplateBlock() {
+    public UISsrBlock() {
         super(null);
     }
 
-    public UITemplateBlock(UIComponent owner) {
+    public UISsrBlock(UIComponent owner) {
         super(owner);
     }
 
-    public UITemplateBlock(UIComponent owner, String templateText) {
+    public UISsrBlock(UIComponent owner, String templateText) {
         super(owner);
         this.template = new SsrTemplate(templateText);
     }
 
-    public UITemplateBlock(UIComponent owner, Class<?> class1, String id) {
+    public UISsrBlock(UIComponent owner, Class<?> class1, String id) {
         super(owner);
         this.template = new SsrTemplate(class1, id);
     }
@@ -51,7 +51,7 @@ public class UITemplateBlock extends UIComponent {
         return template;
     }
 
-    public UITemplateBlock setTemplate(SsrTemplateImpl template) {
+    public UISsrBlock setTemplate(SsrTemplateImpl template) {
         this.template = template;
         return this;
     }

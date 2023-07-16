@@ -4,9 +4,9 @@ import java.util.Map;
 
 public class SsrDefaultGridStyle {
 
-    private UITemplateGrid grid;
+    private UISsrGrid grid;
 
-    public SsrDefaultGridStyle(UITemplateGrid grid) {
+    public SsrDefaultGridStyle(UISsrGrid grid) {
         this.grid = grid;
     }
 

@@ -8,7 +8,19 @@ import org.junit.Test;
 
 import cn.cerc.db.core.DataSet;
 
-public class UITemplateGridTest {
+public class UISsrGridTest {
+
+    @Test
+    public void test_base() {
+        var ds = new DataSet();
+        ds.append().setValue("code_", "001").setValue("name_", "a01");
+        ds.append().setValue("code_", "002").setValue("name_", "b01");
+        var grid = new UISsrGrid(null, "");
+        grid.setDataSet(ds);
+        grid.addField("name_");
+        assertEquals("<table><tr><th>name_</th></tr><tr><td>a01</td></tr><tr><td>b01</td></tr></table>",
+                grid.toString());
+    }
 
     @Test
     public void test_default() {
@@ -16,8 +28,8 @@ public class UITemplateGridTest {
         ds.append().setValue("code_", "001").setValue("name_", "a01");
         ds.append().setValue("code_", "002").setValue("name_", "b01");
 
-        var grid = new UITemplateGrid(null, "");
-        grid.putDefine(UITemplateGrid.TableBegin, "<table class='a'>");
+        var grid = new UISsrGrid(null, "");
+        grid.putDefine(UISsrGrid.TableBegin, "<table class='a'>");
         grid.putHead("code_", "<th width=${width}>${title}</td>");
         grid.addGetHead("code_", ssr -> ssr.toMap("width", "30").toMap("title", "xxx"));
         grid.putBody("code_", "<td><a href=\"${url}\">${code_}</a></td>");
@@ -30,7 +42,7 @@ public class UITemplateGridTest {
 
     @Test
     public void test_sample() {
-        var grid = new UITemplateGrid(null, """
+        var grid = new UISsrGrid(null, """
                 ${define table.begin}
                 <table>
 
