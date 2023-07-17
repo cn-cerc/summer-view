@@ -49,7 +49,7 @@ public class UISsrForm extends UIComponent {
     @Override
     public void output(HtmlWriter html) {
         if (this.dataRow == null) {
-            log.error("dataSet is null");
+            log.error("dataRow is null");
             return;
         }
 
