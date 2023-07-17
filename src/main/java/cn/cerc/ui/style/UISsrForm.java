@@ -8,6 +8,8 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -126,6 +128,24 @@ public class UISsrForm extends UIComponent {
 
     public SsrDefine getDefine() {
         return define;
+    }
+
+    public boolean readAll(HttpServletRequest request, String submitId) {
+        var submit = request.getParameter(submitId);
+        if (submit == null)
+            return false;
+
+        define.items().forEach((block, ssr) -> {
+            var map = ssr.getMap();
+            if (map != null) {
+                var fields = ssr.getMap().get("fields");
+                if (fields != null) {
+                    for (var field : fields.split(","))
+                        dataRow.setValue(field, request.getParameter(field));
+                }
+            }
+        });
+        return true;
     }
 
 }
