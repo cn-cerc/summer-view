@@ -21,6 +21,11 @@ public class SsrDefine {
         this.createItems(this, templateText);
     }
 
+    public SsrDefine(Class<?> class1, String id) {
+        this.templateText = SsrUtils.getTempateFileText(class1, id);
+        this.createItems(this, templateText);
+    }
+
     private void createItems(SsrDefine ssrDefine, String templateText) {
         int start, end;
         var line = templateText.trim();
@@ -72,10 +77,6 @@ public class SsrDefine {
         } else {
             log.warn("参数必须以等于符号进行定义与赋值");
         }
-    }
-
-    public SsrDefine(Class<?> class1, String id) {
-        this.templateText = SsrUtils.getTempateFileText(class1, id);
     }
 
     public Map<String, SsrTemplateImpl> items() {
