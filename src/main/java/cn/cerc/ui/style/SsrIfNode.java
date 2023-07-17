@@ -93,8 +93,11 @@ public class SsrIfNode extends SsrContainerNode {
                 }
                 var value = this.getValue(field);
                 if (value.isEmpty()) {
-                    log.error("not find field: {}", field);
-                    return this.getText();
+                    if (template.isStrict()) {
+                        log.error("not find field: {}", field);
+                        return this.getText();
+                    } else
+                        return getChildren(false);
                 } else {
                     if (tmp)
                         return getChildren(!(new Variant(value.get()).getBoolean()));
