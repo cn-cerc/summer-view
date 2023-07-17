@@ -3,10 +3,10 @@ package cn.cerc.ui.style;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class SsrForeachNode extends SsrValueNode {
+public abstract class SsrContainerNode extends SsrValueNode {
     private List<SsrNodeImpl> items = new ArrayList<SsrNodeImpl>();
 
-    public SsrForeachNode(String text) {
+    public SsrContainerNode(String text) {
         super(text);
     }
 

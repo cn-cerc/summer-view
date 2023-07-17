@@ -9,9 +9,9 @@ import org.slf4j.LoggerFactory;
 import cn.cerc.db.core.Utils;
 import cn.cerc.db.core.Variant;
 
-public class SsrIfNode extends SsrForeachNode {
+public class SsrIfNode extends SsrContainerNode {
     private static final Logger log = LoggerFactory.getLogger(SsrIfNode.class);
-    public static final ForeachSignRecord Sign = new ForeachSignRecord("if ", "endif", (text) -> new SsrIfNode(text));
+    public static final SsrContainerSignRecord Sign = new SsrContainerSignRecord("if ", "endif", (text) -> new SsrIfNode(text));
 
     public SsrIfNode(String text) {
         super(text);

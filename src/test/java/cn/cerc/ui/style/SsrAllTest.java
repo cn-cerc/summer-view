@@ -7,9 +7,9 @@ import org.junit.runners.Suite.SuiteClasses;
 @RunWith(Suite.class)
 
 @SuiteClasses({ SsrTemplateTest.class, SsrCallbackTest.class, SsrComboTest.class, SsrDataRowTest.class,
-        SsrDatasetTest.class, SsrIfNodeTest.class, SsrTextNodeTest.class, UISsrBlockTest.class,
-        SsrDefineTest.class, UISsrGridTest.class, SsrDefaultGridStyleTest.class, SsrMapNodeTest.class,
-        SsrListNodeTest.class})
+        SsrDatasetTest.class, SsrIfNodeTest.class, SsrTextNodeTest.class, UISsrBlockTest.class, SsrDefineTest.class,
+        UISsrGridTest.class, SsrDefaultGridStyleTest.class, SsrMapNodeTest.class, SsrListNodeTest.class,
+        UISsrFormTest.class })
 
 public class SsrAllTest {
 

@@ -1,7 +1,7 @@
 package cn.cerc.ui.style;
 
-public class SsrDatasetNode extends SsrForeachNode {
-    public static final ForeachSignRecord Sign = new ForeachSignRecord("dataset.begin", "dataset.end",
+public class SsrDatasetNode extends SsrContainerNode {
+    public static final SsrContainerSignRecord Sign = new SsrContainerSignRecord("dataset.begin", "dataset.end",
             (text) -> new SsrDatasetNode(text));
 
     public SsrDatasetNode(String text) {
