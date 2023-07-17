@@ -52,12 +52,10 @@ public class UISsrForm extends UIComponent {
             log.error("dataRow is null");
             return;
         }
-
         if (this.fields == null)
             this.fields = this.dataRow.fields().names();
 
         addBlock(SsrDefine.BeginFlag).ifPresent(value -> html.print(value.getHtml()));
-
         // 输出内容
         addBlock(FormBegin, getDefault_FormBegin()).ifPresent(value -> html.print(value.getHtml()));
         for (var field : fields) {
@@ -72,7 +70,6 @@ public class UISsrForm extends UIComponent {
             block.ifPresent(value -> html.print(value.getHtml()));
         }
         addBlock(FormEnd, () -> new SsrTemplate("</form>")).ifPresent(value -> html.print(value.getHtml()));
-
         addBlock(SsrDefine.EndFlag).ifPresent(value -> html.print(value.getHtml()));
     }
 
@@ -111,6 +108,9 @@ public class UISsrForm extends UIComponent {
     }
 
     public UISsrForm addField(String id, String templateText, Consumer<SsrTemplateImpl> onGetItem) {
+        if (fields == null)
+            fields = new ArrayList<>();
+        this.fields.add(id);
         this.define.items().put(id, new SsrTemplate(templateText));
         this.onGetItem.put(id, onGetItem);
         return this;
