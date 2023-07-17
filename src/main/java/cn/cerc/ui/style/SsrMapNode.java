@@ -1,7 +1,7 @@
 package cn.cerc.ui.style;
 
-public class SsrMapNode extends SsrForeachNode {
-    public static final ForeachSignRecord Sign = new ForeachSignRecord("map.begin", "map.end",
+public class SsrMapNode extends SsrContainerNode {
+    public static final SsrContainerSignRecord Sign = new SsrContainerSignRecord("map.begin", "map.end",
             (text) -> new SsrMapNode(text));
 
     public SsrMapNode(String text) {

@@ -39,12 +39,12 @@ public class CompressNodes {
         while (compress(nodes, SsrDatasetNode.Sign))
             continue;
         for (var node : nodes) {
-            if (node instanceof SsrForeachNode item)
+            if (node instanceof SsrContainerNode item)
                 this.execute(item.getItems());
         }
     }
 
-    private boolean compress(List<SsrNodeImpl> nodes, ForeachSignRecord sign) {
+    private boolean compress(List<SsrNodeImpl> nodes, SsrContainerSignRecord sign) {
         this.total++;
         // 查找开头与结尾
         var start = -1;
@@ -52,11 +52,11 @@ public class CompressNodes {
         // 是否成对指示器
         var count = 0;
         var first = -1;
-        SsrForeachNode container = null;
+        SsrContainerNode container = null;
         for (var i = 0; i < nodes.size(); i++) {
             var node = nodes.get(i);
             if (node instanceof SsrValueNode item) {
-                if (item instanceof SsrForeachNode)
+                if (item instanceof SsrContainerNode)
                     continue;
                 var field = item.getField();
                 if (field.startsWith(sign.beginFlag())) {
@@ -106,7 +106,7 @@ public class CompressNodes {
 
     private static void listNode(SsrNodeImpl root, int level) {
         System.out.print("" + level);
-        if (root instanceof SsrForeachNode item) {
+        if (root instanceof SsrContainerNode item) {
             System.out.println("-- " + item.getText() + " size: " + item.getItems().size());
             for (var child : item.getItems())
                 listNode(child, level + 1);

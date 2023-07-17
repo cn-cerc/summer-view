@@ -1,7 +1,7 @@
 package cn.cerc.ui.style;
 
-public class SsrListNode extends SsrForeachNode {
-    public static final ForeachSignRecord Sign = new ForeachSignRecord("list.begin", "list.end",
+public class SsrListNode extends SsrContainerNode {
+    public static final SsrContainerSignRecord Sign = new SsrContainerSignRecord("list.begin", "list.end",
             (text) -> new SsrListNode(text));
 
     public SsrListNode(String text) {

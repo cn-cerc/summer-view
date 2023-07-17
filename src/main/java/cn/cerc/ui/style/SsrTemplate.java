@@ -50,13 +50,6 @@ public class SsrTemplate implements SsrTemplateImpl {
     }
 
     @Override
-    @Deprecated
-    public SsrTemplate setList(List<String> list) {
-        this.list = list;
-        return this;
-    }
-
-    @Override
     public Map<String, String> getMap() {
         return map;
     }
@@ -70,7 +63,6 @@ public class SsrTemplate implements SsrTemplateImpl {
     }
 
     @Override
-    @Deprecated
     public SsrTemplate setMap(Map<String, String> map) {
         this.map = map;
         return this;

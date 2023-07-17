@@ -81,7 +81,7 @@ public class UISsrForm extends UIComponent {
     }
 
     private Supplier<SsrTemplateImpl> getDefault_FormBegin() {
-        return () -> new SsrTemplate("<form>");
+        return () -> new SsrTemplate("<form method='post'>");
     }
 
     private Optional<SsrTemplateImpl> addBlock(String id) {
