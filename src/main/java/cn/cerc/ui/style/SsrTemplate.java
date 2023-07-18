@@ -1,6 +1,7 @@
 package cn.cerc.ui.style;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,7 @@ public class SsrTemplate implements SsrTemplateImpl {
     private ArrayList<SsrNodeImpl> nodes;
     private List<String> list;
     private Map<String, String> map;
+    private Map<String, String> options = new HashMap<>();
     private DataRow dataRow;
     private DataSet dataSet;
     private boolean strict = true;
@@ -55,6 +57,12 @@ public class SsrTemplate implements SsrTemplateImpl {
     }
 
     @Override
+    public SsrTemplate setMap(Map<String, String> map) {
+        this.map = map;
+        return this;
+    }
+
+    @Override
     public SsrTemplate toMap(String Key, String value) {
         if (map == null)
             map = new LinkedHashMap<>();
@@ -63,9 +71,8 @@ public class SsrTemplate implements SsrTemplateImpl {
     }
 
     @Override
-    public SsrTemplate setMap(Map<String, String> map) {
-        this.map = map;
-        return this;
+    public Map<String, String> getOptions() {
+        return options;
     }
 
     @Override
@@ -268,6 +275,13 @@ public class SsrTemplate implements SsrTemplateImpl {
         if (this.listProxy == null)
             this.listProxy = new ListProxy(this.list);
         return listProxy;
+    }
+
+    public static void main(String[] args) {
+        var template = new SsrTemplate("${a}");
+        template.getOptions().put("a", "001");
+        for (var node : template.nodes)
+            System.out.println(node.getHtml());
     }
 
 }

@@ -44,30 +44,30 @@ public class SsrValueNode implements SsrNodeImpl {
             }
         } else {
             var map = this.getTemplate().getMap();
+            var options = this.getTemplate().getOptions();
             var dataRow = this.getTemplate().getDataRow();
             var dataSet = this.getTemplate().getDataSet();
-            if (map != null || dataRow != null || dataSet != null) {
-                if (map != null && map.containsKey(field)) {
-                    if (dataRow != null && dataRow.exists(field))
-                        log.warn("map and dataRow exists field: {}", field);
-                    if (dataSet != null && dataSet.exists(field))
-                        log.warn("map and dataSet exists field: {}", field);
-                    return map.get(field);
-                } else if (dataRow != null && dataRow.exists(field)) {
-                    if (dataSet != null && dataSet.exists(field))
-                        log.warn("dataRow and dataSet exists field: {}", field);
-                    return dataRow.getText(field);
-                } else if (dataSet != null && dataSet.exists(field)) {
-                    var row = dataSet.currentRow();
-                    return row.isPresent() ? row.get().getText(field) : "";
-                } else if (this.getTemplate().isStrict()) {
-                    log.error("not find field: {}", field);
-                    return this.getText();
-                } else {
-                    return "";
-                }
-            } else
+            if (map != null && map.containsKey(field)) {
+                if (dataRow != null && dataRow.exists(field))
+                    log.warn("map and dataRow exists field: {}", field);
+                if (dataSet != null && dataSet.exists(field))
+                    log.warn("map and dataSet exists field: {}", field);
+                return map.get(field);
+            } else if (options != null && options.containsKey(field)) {
+                return options.get(field);
+            } else if (dataRow != null && dataRow.exists(field)) {
+                if (dataSet != null && dataSet.exists(field))
+                    log.warn("dataRow and dataSet exists field: {}", field);
+                return dataRow.getText(field);
+            } else if (dataSet != null && dataSet.exists(field)) {
+                var row = dataSet.currentRow();
+                return row.isPresent() ? row.get().getText(field) : "";
+            } else if (this.getTemplate().isStrict()) {
+                log.error("not find field: {}", field);
                 return this.getText();
+            } else {
+                return "";
+            }
         }
     }
 

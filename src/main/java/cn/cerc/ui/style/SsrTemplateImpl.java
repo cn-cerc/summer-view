@@ -107,4 +107,6 @@ public interface SsrTemplateImpl {
     MapProxy getMapProxy();
 
     ListProxy getListProxy();
+
+    Map<String, String> getOptions();
 }

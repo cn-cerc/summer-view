@@ -17,6 +17,14 @@ public class SsrTemplateTest {
     }
 
     @Test
+    public void testDecodeString01() {
+        var template = new SsrTemplate("${a}");
+        template.getOptions().put("a", "001");
+        assertEquals("a,", margeList(template.getNodes()));
+        assertEquals("001", template.getNodes().get(0).getHtml());
+    }
+
+    @Test
     public void testDecodeString1() {
         var template = new SsrTemplate("<div></div>");
         assertEquals(",", margeList(template.getNodes()));
