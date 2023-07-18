@@ -26,6 +26,7 @@ public class UISsrForm extends UIComponent {
     public static final String FormBegin = "form.begin";
     public static final String FormEnd = "form.end";
     private Map<String, Consumer<SsrTemplateImpl>> onGetItem = new HashMap<>();
+    private boolean strict = true;
 
     public UISsrForm(UIComponent owner) {
         super(owner);
@@ -154,6 +155,22 @@ public class UISsrForm extends UIComponent {
             }
         }
         return true;
+    }
+
+    public boolean isStrict() {
+        return strict;
+    }
+
+    public UISsrForm setStrict(boolean strict) {
+        this.strict = strict;
+        for (var block : define.items().values())
+            block.setStrict(strict);
+        return this;
+    }
+
+    public UISsrForm setAll(Consumer<SsrTemplateImpl> consumer) {
+        this.define.items().values().forEach(consumer);
+        return this;
     }
 
 }
