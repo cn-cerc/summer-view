@@ -1,6 +1,5 @@
 package cn.cerc.ui.style;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -15,7 +14,6 @@ import cn.cerc.db.core.Utils;
 public class SsrDefine {
     private static final Logger log = LoggerFactory.getLogger(SsrDefine.class);
     private Map<String, SsrTemplateImpl> items = new LinkedHashMap<>();
-    private Map<String, Map<String, String>> options = new HashMap<>();
     public static final String BeginFlag = "begin";
     public static final String EndFlag = "end";
     private String templateText;
@@ -62,6 +60,7 @@ public class SsrDefine {
                 addParam(key, template, param);
         } else
             key = blockText;
+        template.setId(key);
         items.put(key, template);
     }
 
@@ -72,16 +71,8 @@ public class SsrDefine {
             var right = param.substring(site + 1, param.length()).trim();
             if ((right.startsWith("'") && right.endsWith("'")) || ((right.startsWith("\"") && right.endsWith("\""))))
                 right = right.substring(1, right.length() - 1);
-            // 读取配置参数
-            if (!left.startsWith("_"))
-                template.toMap(left, right);
             // 存入到选项参数
-            var option = options.get(blockId);
-            if (option == null) {
-                option = new HashMap<>();
-                options.put(blockId, option);
-            }
-            option.put(left, right);
+            template.getOptions().put(left, right);
         } else {
             log.warn("参数必须以等于符号进行定义与赋值");
         }
@@ -116,13 +107,6 @@ public class SsrDefine {
 
     public String templateText() {
         return templateText;
-    }
-
-    public Map<String, String> getOption(String block) {
-        var map = this.options.get(block);
-        if (map == null)
-            map = new HashMap<>();
-        return map;
     }
 
 }
