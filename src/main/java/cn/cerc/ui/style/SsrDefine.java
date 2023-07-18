@@ -1,5 +1,6 @@
 package cn.cerc.ui.style;
 
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -11,12 +12,13 @@ import org.slf4j.LoggerFactory;
 
 import cn.cerc.db.core.Utils;
 
-public class SsrDefine {
+public class SsrDefine implements Iterable<SsrTemplateImpl> {
     private static final Logger log = LoggerFactory.getLogger(SsrDefine.class);
     private Map<String, SsrTemplateImpl> items = new LinkedHashMap<>();
     public static final String BeginFlag = "begin";
     public static final String EndFlag = "end";
     private String templateText;
+    private String id;
 
     public SsrDefine(String templateText) {
         this.templateText = templateText;
@@ -24,6 +26,7 @@ public class SsrDefine {
     }
 
     public SsrDefine(Class<?> class1, String id) {
+        this.id = class1.getSimpleName() + "_" + id;
         this.templateText = SsrUtils.getTempateFileText(class1, id);
         this.createItems(this, templateText);
     }
@@ -107,6 +110,19 @@ public class SsrDefine {
 
     public String templateText() {
         return templateText;
+    }
+
+    public String id() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    @Override
+    public Iterator<SsrTemplateImpl> iterator() {
+        return this.items.values().iterator();
     }
 
 }
