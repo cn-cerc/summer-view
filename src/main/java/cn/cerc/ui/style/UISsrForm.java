@@ -168,9 +168,4 @@ public class UISsrForm extends UIComponent {
         return this;
     }
 
-    public UISsrForm setAll(Consumer<SsrTemplateImpl> consumer) {
-        this.define.items().values().forEach(consumer);
-        return this;
-    }
-
 }
