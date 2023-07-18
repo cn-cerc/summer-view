@@ -53,8 +53,6 @@ public class SsrValueNode implements SsrNodeImpl {
                 if (dataSet != null && dataSet.exists(field))
                     log.warn("map and dataSet exists field: {}", field);
                 return map.get(field);
-            } else if (options != null && options.containsKey(field)) {
-                return options.get(field);
             } else if (dataRow != null && dataRow.exists(field)) {
                 if (dataSet != null && dataSet.exists(field))
                     log.warn("dataRow and dataSet exists field: {}", field);
@@ -62,6 +60,8 @@ public class SsrValueNode implements SsrNodeImpl {
             } else if (dataSet != null && dataSet.exists(field)) {
                 var row = dataSet.currentRow();
                 return row.isPresent() ? row.get().getText(field) : "";
+            } else if (options != null && options.containsKey(field)) {
+                return options.get(field);
             } else if (this.getTemplate().isStrict()) {
                 log.error("not find field: {}", field);
                 return this.getText();

@@ -11,7 +11,8 @@ import cn.cerc.db.core.Variant;
 
 public class SsrIfNode extends SsrContainerNode {
     private static final Logger log = LoggerFactory.getLogger(SsrIfNode.class);
-    public static final SsrContainerSignRecord Sign = new SsrContainerSignRecord("if ", "endif", (text) -> new SsrIfNode(text));
+    public static final SsrContainerSignRecord Sign = new SsrContainerSignRecord("if ", "endif",
+            (text) -> new SsrIfNode(text));
 
     public SsrIfNode(String text) {
         super(text);
@@ -139,6 +140,7 @@ public class SsrIfNode extends SsrContainerNode {
     private Optional<String> getValue(String field) {
         var list = this.getTemplate().getList();
         var map = this.getTemplate().getMap();
+        var options = this.getTemplate().getOptions();
         var dataRow = this.getTemplate().getDataRow();
         var dataSet = this.getTemplate().getDataSet();
         if (list != null && SsrListItemNode.is(field))
@@ -165,6 +167,8 @@ public class SsrIfNode extends SsrContainerNode {
 
         if (dataSet != null && dataSet.exists(field))
             return Optional.of(dataSet.current().getText(field));
+        else if (options != null && options.containsKey(field))
+            return Optional.of(options.get(field));
         else
             return Optional.empty();
     }
