@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import cn.cerc.db.core.DataRow;
 import cn.cerc.mis.core.HtmlWriter;
-import cn.cerc.mis.core.IForm;
+import cn.cerc.mis.core.IPage;
 import cn.cerc.ui.core.UIComponent;
 
 public class UISsrForm extends UIComponent {
@@ -34,19 +34,19 @@ public class UISsrForm extends UIComponent {
     public UISsrForm(UIComponent owner, String templateText) {
         super(owner);
         define = new SsrDefine(templateText);
-        init(findOwner(IForm.class));
+        init(findOwner(IPage.class));
     }
 
     public UISsrForm(UIComponent owner, Class<?> class1, String id) {
         super(owner);
         define = new SsrDefine(class1, id);
-        init(findOwner(IForm.class));
+        init(findOwner(IPage.class));
     }
 
-    private UISsrForm init(IForm form) {
-        if (form != null) {
+    private UISsrForm init(IPage page) {
+        if (page != null) {
             for (var block : define.items().keySet())
-                define.get(block).get().getOptions().put("isPhone", "" + form.getClient().isPhone());
+                define.get(block).get().getOptions().put("isPhone", "" + page.getForm().getClient().isPhone());
         }
         return this;
     }
