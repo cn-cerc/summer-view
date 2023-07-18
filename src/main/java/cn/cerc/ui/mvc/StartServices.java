@@ -110,16 +110,18 @@ public class StartServices extends HttpServlet {
                 dataOut = new DataSet().setMessage("service return empty");
             response.getWriter().write(RecordFilter.execute(dataIn, dataOut).toString());
         } catch (DataValidateException e) {
+            log.error("service {}, dataIn {}, error {}", service, text, e.getMessage(), e);
             dataOut.setState(ServiceState.ERROR);
             dataOut.setMessage(e.getMessage());
             response.getWriter().write(dataOut.toString());
         } catch (ClassNotFoundException e) {
+            log.error("service {}, dataIn {}, error {}", service, text, e.getMessage(), e);
             dataOut.setState(ServiceState.NOT_FIND_SERVICE);
             dataOut.setMessage(e.getMessage());
             response.getWriter().write(dataOut.toString());
         } catch (ServiceException e) {
             Throwable err = e.getCause() != null ? e.getCause() : e;
-            log.error(err.getMessage(), err);
+            log.error("service {}, dataIn {}, error {}", service, text, err.getMessage(), err);
             dataOut.setState(ServiceState.ERROR).setMessage(err.getMessage());
             e.printStackTrace();
             response.getWriter().write(dataOut.toString());
