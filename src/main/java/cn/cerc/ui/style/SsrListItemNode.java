@@ -9,7 +9,7 @@ public class SsrListItemNode extends SsrValueNode {
 
     @Override
     public String getHtml() {
-        var list = this.getTemplate().getForeachList();
+        var list = this.getTemplate().getListProxy();
         if (list != null) {
             return list.item();
         } else {

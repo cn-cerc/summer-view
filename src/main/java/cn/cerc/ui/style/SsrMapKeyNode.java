@@ -11,7 +11,7 @@ public class SsrMapKeyNode extends SsrValueNode {
     public String getHtml() {
         var map = this.getTemplate().getMap();
         if (map != null) {
-            return this.getTemplate().getForeachMap().key();
+            return this.getTemplate().getMapProxy().key();
         } else {
             return this.getText();
         }

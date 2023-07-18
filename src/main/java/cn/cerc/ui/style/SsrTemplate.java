@@ -19,8 +19,8 @@ public class SsrTemplate implements SsrTemplateImpl {
     private SsrCallbackImpl callback;
     private String templateText;
     private String id;
-    private ForeachMap foreachMap;
-    private ForeachList foreachList;
+    private MapProxy mapProxy;
+    private ListProxy listProxy;
 
     public SsrTemplate(String templateText) {
         super();
@@ -98,7 +98,7 @@ public class SsrTemplate implements SsrTemplateImpl {
         return sb.toString();
     }
 
-    public List<SsrNodeImpl> getNodes() {
+    protected List<SsrNodeImpl> getNodes() {
         return nodes;
     }
 
@@ -184,11 +184,11 @@ public class SsrTemplate implements SsrTemplateImpl {
         return this.id;
     }
 
-    public class ForeachMap {
+    public class MapProxy {
         private Map<String, String> map;
         private int rec;
 
-        public ForeachMap(Map<String, String> map) {
+        public MapProxy(Map<String, String> map) {
             this.map = map;
             rec = -1;
         }
@@ -227,11 +227,11 @@ public class SsrTemplate implements SsrTemplateImpl {
         }
     }
 
-    public class ForeachList {
+    public class ListProxy {
         private List<String> list;
         private int rec;
 
-        public ForeachList(List<String> list) {
+        public ListProxy(List<String> list) {
             this.list = list;
         }
 
@@ -253,21 +253,21 @@ public class SsrTemplate implements SsrTemplateImpl {
     }
 
     @Override
-    public ForeachMap getForeachMap() {
+    public MapProxy getMapProxy() {
         if (this.map == null)
             return null;
-        if (this.foreachMap == null)
-            this.foreachMap = new ForeachMap(this.map);
-        return foreachMap;
+        if (this.mapProxy == null)
+            this.mapProxy = new MapProxy(this.map);
+        return mapProxy;
     }
 
     @Override
-    public ForeachList getForeachList() {
+    public ListProxy getListProxy() {
         if (this.list == null)
             return null;
-        if (this.foreachList == null)
-            this.foreachList = new ForeachList(this.list);
-        return foreachList;
+        if (this.listProxy == null)
+            this.listProxy = new ListProxy(this.list);
+        return listProxy;
     }
 
 }

@@ -142,12 +142,12 @@ public class SsrIfNode extends SsrContainerNode {
         var dataRow = this.getTemplate().getDataRow();
         var dataSet = this.getTemplate().getDataSet();
         if (list != null && SsrListItemNode.is(field))
-            return Optional.ofNullable(this.getTemplate().getForeachList().item());
+            return Optional.ofNullable(this.getTemplate().getListProxy().item());
         if (map != null) {
             if (SsrMapKeyNode.is(field))
-                return Optional.ofNullable(this.getTemplate().getForeachMap().key());
+                return Optional.ofNullable(this.getTemplate().getMapProxy().key());
             else if (SsrMapValueNode.is(field))
-                return Optional.ofNullable(this.getTemplate().getForeachMap().value());
+                return Optional.ofNullable(this.getTemplate().getMapProxy().value());
             else if (map.containsKey(field)) {
                 if (dataRow != null && dataRow.exists(field))
                     log.warn("map and dataRow exists field: {}", field);

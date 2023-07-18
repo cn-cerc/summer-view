@@ -9,6 +9,23 @@ import cn.cerc.ui.core.UIComponent;
 public class SsrDefineTest {
 
     @Test
+    public void test_option() {
+        var define = new SsrDefine("""
+                ${define a _fields="code_,name_" width="10"}
+                """);
+
+        assertEquals(1, define.get("a").get().getMap().size());
+        assertEquals(2, define.getOption("a").size());
+
+        assertEquals("10", define.get("a").get().getMap().get("width"));
+        assertEquals("10", define.getOption("a").get("width"));
+
+        // 带下划线的只会进入到 option 中
+        assertEquals(null, define.get("a").get().getMap().get("_fields"));
+        assertEquals("code_,name_", define.getOption("a").get("_fields"));
+    }
+
+    @Test
     public void test_base() {
         var define = new SsrDefine("""
                 grid sample
@@ -34,11 +51,11 @@ public class SsrDefineTest {
 
         var root = new UIComponent(null);
         for (var key : define.items().keySet()) {
-            var value = define.get(key);
-            if (value.isPresent()) {
-                new UISsrBlock(root).setTemplate(value.get());
-            }
+            var ssr = define.get(key).get();
+            System.out.println(ssr.id());
+            new UISsrBlock(root).setTemplate(ssr);
         }
+
         assertEquals("grid sample<table><tr><th>title</td></tr><tr><td>data<td></tr></table>--end--", root.toString());
     }
 
