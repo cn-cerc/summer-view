@@ -11,6 +11,7 @@ public class UIBottom extends UIComponent {
 
     public UIBottom(UIComponent owner) {
         super(owner);
+        super.setCssClass("bottomBotton");
     }
 
     public String getName() {
