@@ -1,8 +1,8 @@
 package cn.cerc.ui.style;
 
-public class SsrDatasetNode extends SsrForeachNode {
-    public static final String StartFlag = "dataset.begin";
-    public static final String EndFlag = "dataset.end";
+public class SsrDatasetNode extends SsrContainerNode {
+    public static final SsrContainerSignRecord Sign = new SsrContainerSignRecord("dataset.begin", "dataset.end",
+            (text) -> new SsrDatasetNode(text));
 
     public SsrDatasetNode(String text) {
         super(text);
@@ -22,17 +22,8 @@ public class SsrDatasetNode extends SsrForeachNode {
             var sb = new StringBuffer();
             dataSet.first();
             while (dataSet.fetch()) {
-                for (var item : this.getItems()) {
-                    if (item instanceof SsrIfNode child) {
-                        sb.append(child.getHtml());
-                    } else if (item instanceof SsrValueNode child) {
-                        if ("dataset.rec".equals(item.getField()))
-                            sb.append(dataSet.recNo());
-                        else
-                            sb.append(child.getHtml());
-                    } else
-                        sb.append(item.getText());
-                }
+                for (var item : this.getItems())
+                    sb.append(item.getHtml());
             }
             return sb.toString();
         } finally {
@@ -42,7 +33,11 @@ public class SsrDatasetNode extends SsrForeachNode {
 
     @Override
     protected String getEndFlag() {
-        return EndFlag;
+        return Sign.endFlag();
+    }
+
+    public static boolean is(String text) {
+        return text.equals(Sign.beginFlag()) || text.equals(Sign.endFlag());
     }
 
 }

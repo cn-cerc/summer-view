@@ -2,34 +2,32 @@ package cn.cerc.ui.style;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import cn.cerc.db.core.DataRow;
 import cn.cerc.db.core.DataSet;
+import cn.cerc.ui.style.SsrTemplate.ListProxy;
+import cn.cerc.ui.style.SsrTemplate.MapProxy;
 
 public interface SsrTemplateImpl {
 
     /**
-     * 设置模版文本
      * 
-     * @param templateText
+     * @param value 添加到list对象
      * @return 返回对象本身
      */
-    SsrTemplateImpl setTemplateText(String templateText);
+    SsrTemplateImpl toList(String... value);
 
     /**
      * 
-     * @param list 设置 list 数据源
-     * @return 返回对象本身
-     */
-    SsrTemplateImpl setList(List<String> list);
-
-    /**
+     * 
      * @return 返回 list 数据源
      */
     List<String> getList();
 
+    SsrTemplateImpl toMap(String Key, String value);
+
     /**
+     * 请改使用 toMap
      * 
      * @param map 设置 map 数据源
      * @return 返回对象本身
@@ -100,11 +98,15 @@ public interface SsrTemplateImpl {
      */
     String getHtml();
 
-    /**
-     * 
-     * @param field
-     * @return 根据字段从 map 或 dataRow 取值
-     */
-    Optional<String> getValue(String field);
+    String templateText();
 
+    SsrTemplateImpl setId(String id);
+
+    String id();
+
+    MapProxy getMapProxy();
+
+    ListProxy getListProxy();
+
+    Map<String, String> getOptions();
 }

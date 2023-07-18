@@ -57,6 +57,7 @@ public class StartForms implements Filter {
         paths.add("static/");
         paths.add("service/");
         paths.add("services/");
+        paths.add("services-csp/");
         paths.add("services-std/");
         paths.add("services-obm/");
         paths.add("services-oem/");

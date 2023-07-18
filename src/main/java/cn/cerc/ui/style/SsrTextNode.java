@@ -3,13 +3,13 @@ package cn.cerc.ui.style;
 public class SsrTextNode implements SsrNodeImpl {
     private String text;
 
+    public SsrTextNode(String text) {
+        this.text = text;
+    }
+
     @Override
     public String getField() {
         return "";
-    }
-
-    public SsrTextNode(String text) {
-        this.text = text.trim();
     }
 
     @Override
@@ -18,12 +18,13 @@ public class SsrTextNode implements SsrNodeImpl {
     }
 
     @Override
-    public void setTemplate(SsrTemplateImpl template) {
+    public String getHtml() {
+        var val = this.text.trim();
+        return (text.startsWith(" ") ? " " : "") + val + (text.endsWith(" ") ? " " : "");
     }
 
     @Override
-    public String getHtml() {
-        return this.text.trim();
+    public void setTemplate(SsrTemplateImpl template) {
     }
 
 }

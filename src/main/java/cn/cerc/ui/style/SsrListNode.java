@@ -1,8 +1,8 @@
 package cn.cerc.ui.style;
 
-public class SsrListNode extends SsrForeachNode {
-    public static final String StartFlag = "list.begin";
-    public static final String EndFlag = "list.end";
+public class SsrListNode extends SsrContainerNode {
+    public static final SsrContainerSignRecord Sign = new SsrContainerSignRecord("list.begin", "list.end",
+            (text) -> new SsrListNode(text));
 
     public SsrListNode(String text) {
         super(text);
@@ -10,28 +10,22 @@ public class SsrListNode extends SsrForeachNode {
 
     @Override
     public String getHtml() {
-        var list = this.getTemplate().getList();
+        var list = this.getTemplate().getListProxy();
         if (list == null)
             return this.getText();
 
+        list.reset();
         var sb = new StringBuffer();
-        for (var param : list) {
-            for (var item : this.getItems()) {
-                if (item instanceof SsrValueNode value) {
-                    if ("list.item".equals(item.getField()))
-                        sb.append(param);
-                    else
-                        sb.append(value.getText());
-                } else
-                    sb.append(item.getText());
-            }
+        while (list.fetch()) {
+            for (var item : this.getItems())
+                sb.append(item.getHtml());
         }
         return sb.toString();
     }
 
     @Override
     protected String getEndFlag() {
-        return EndFlag;
+        return Sign.endFlag();
     }
 
 }
