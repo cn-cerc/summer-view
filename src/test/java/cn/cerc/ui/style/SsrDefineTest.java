@@ -46,8 +46,7 @@ public class SsrDefineTest {
                 """);
 
         var root = new UIComponent(null);
-        for (var key : define.items().keySet()) {
-            var ssr = define.get(key).get();
+        for (var ssr : define) {
             System.out.println(ssr.id());
             new UISsrBlock(root).setTemplate(ssr);
         }
@@ -80,12 +79,8 @@ public class SsrDefineTest {
                 """);
 
         var root = new UIComponent(null);
-        for (var key : define.items().keySet()) {
-            var value = define.get(key);
-            if (value.isPresent()) {
-                new UISsrBlock(root).setTemplate(value.get());
-            }
-        }
+        for (var ssr : define) 
+            new UISsrBlock(root).setTemplate(ssr);
         assertEquals("grid sample<table v-data=\"1\"><tr><th>title</td></tr><tr><td>data<td></tr></table>--end--",
                 root.toString());
     }

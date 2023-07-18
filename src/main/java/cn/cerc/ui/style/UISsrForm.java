@@ -45,8 +45,8 @@ public class UISsrForm extends UIComponent {
 
     private UISsrForm init(IPage page) {
         if (page != null) {
-            for (var block : define.items().keySet())
-                define.get(block).get().getOptions().put("isPhone", "" + page.getForm().getClient().isPhone());
+            for (var ssr : define)
+                ssr.getOptions().put("isPhone", "" + page.getForm().getClient().isPhone());
         }
         return this;
     }
@@ -143,7 +143,7 @@ public class UISsrForm extends UIComponent {
         if (submit == null)
             return false;
 
-        define.items().forEach((block, ssr) -> {
+        for (var ssr : define) {
             var map = ssr.getOptions();
             if (map != null) {
                 var fields = map.get("fields");
@@ -152,7 +152,7 @@ public class UISsrForm extends UIComponent {
                         dataRow.setValue(field, request.getParameter(field));
                 }
             }
-        });
+        }
         return true;
     }
 
