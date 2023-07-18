@@ -10,7 +10,7 @@ public class SsrListNode extends SsrContainerNode {
 
     @Override
     public String getHtml() {
-        var list = this.getTemplate().getForeachList();
+        var list = this.getTemplate().getListProxy();
         if (list == null)
             return this.getText();
 

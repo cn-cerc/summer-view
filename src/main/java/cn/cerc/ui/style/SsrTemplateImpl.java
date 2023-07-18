@@ -5,8 +5,8 @@ import java.util.Map;
 
 import cn.cerc.db.core.DataRow;
 import cn.cerc.db.core.DataSet;
-import cn.cerc.ui.style.SsrTemplate.ForeachList;
-import cn.cerc.ui.style.SsrTemplate.ForeachMap;
+import cn.cerc.ui.style.SsrTemplate.ListProxy;
+import cn.cerc.ui.style.SsrTemplate.MapProxy;
 
 public interface SsrTemplateImpl {
 
@@ -104,7 +104,7 @@ public interface SsrTemplateImpl {
 
     String id();
 
-    ForeachMap getForeachMap();
+    MapProxy getMapProxy();
 
-    ForeachList getForeachList();
+    ListProxy getListProxy();
 }
