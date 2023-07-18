@@ -37,7 +37,7 @@ public class SsrDefine {
         while (line.length() > 0) {
             if ((start = line.indexOf("${define")) > -1 && (end = line.indexOf("}", start)) > -1) {
                 var buff = line.substring(0, start).trim();
-                if (buff.length() > ０)
+                if (buff.length() > 0)
                     addItem(define, buff);
                 // 取大括号中间
                 define = line.substring(start + 9, end).trim();

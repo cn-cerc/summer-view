@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import cn.cerc.db.core.DataRow;
 import cn.cerc.mis.core.HtmlWriter;
+import cn.cerc.mis.core.IForm;
 import cn.cerc.ui.core.UIComponent;
 
 public class UISsrForm extends UIComponent {
@@ -33,11 +34,21 @@ public class UISsrForm extends UIComponent {
     public UISsrForm(UIComponent owner, String templateText) {
         super(owner);
         define = new SsrDefine(templateText);
+        init(findOwner(IForm.class));
     }
 
     public UISsrForm(UIComponent owner, Class<?> class1, String id) {
         super(owner);
         define = new SsrDefine(class1, id);
+        init(findOwner(IForm.class));
+    }
+
+    private UISsrForm init(IForm form) {
+        if (form != null) {
+            for (var block : define.items().keySet())
+                define.get(block).get().getOptions().put("isPhone", "" + form.getClient().isPhone());
+        }
+        return this;
     }
 
     public DataRow getDataRow() {
@@ -109,11 +120,8 @@ public class UISsrForm extends UIComponent {
             fields.add(item);
     }
 
-    public UISsrForm addField(String id, String templateText, Consumer<SsrTemplateImpl> onGetItem) {
-        if (fields == null)
-            fields = new ArrayList<>();
-        this.fields.add(id);
-        this.define.items().put(id, new SsrTemplate(templateText));
+    public UISsrForm addField(String id, Consumer<SsrTemplateImpl> onGetItem) {
+        this.addField(id);
         this.onGetItem.put(id, onGetItem);
         return this;
     }
