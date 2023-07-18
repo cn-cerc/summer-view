@@ -144,9 +144,9 @@ public class UISsrForm extends UIComponent {
             return false;
 
         define.items().forEach((block, ssr) -> {
-            var map = ssr.getMap();
+            var map = ssr.getOptions();
             if (map != null) {
-                var fields = ssr.getMap().get("fields");
+                var fields = map.get("fields");
                 if (fields != null) {
                     for (var field : fields.split(","))
                         dataRow.setValue(field, request.getParameter(field));
