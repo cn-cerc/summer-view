@@ -199,8 +199,11 @@ public class UISsrGrid extends UIComponent {
     private Supplier<SsrTemplateImpl> getDefault_HeadCell(String field) {
         return () -> {
             var def = dataSet.fields(field);
-            var templateText = String.format("<th>%s</th>", Utils.isEmpty(def.name()) ? def.code() : def.name());
-            return new SsrTemplate(templateText);
+            if (def != null)
+                return new SsrTemplate(
+                        String.format("<th>%s</th>", Utils.isEmpty(def.name()) ? def.code() : def.name()));
+            else
+                return new SsrTemplate(String.format("<th>%s</th>", field));
         };
     }
 
