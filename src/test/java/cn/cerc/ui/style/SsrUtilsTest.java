@@ -7,38 +7,41 @@ import org.junit.Test;
 public class SsrUtilsTest {
 
     @Test
-    public void test_aa() {
-        var text = """
-                    ${if  CreateMode}
-                    ${if output}
-                        ok
-                    ${endif}
-                ${endif}
-                """;
-        var ssr = new SsrTemplate("");
-        var nodes = SsrUtils.createNodes(text);
-        nodes.forEach(node -> node.setTemplate(ssr));
-        System.out.println(nodes.size());
-        for (var node : nodes) {
-            System.out.println(String.format("%s: %s", node.getClass().getSimpleName(), node.getHtml()));
-        }
+    public void test_clearSpace() {
+        assertEquals("", SsrUtils.fixSpace(""));
+        assertEquals(" ", SsrUtils.fixSpace(" "));
+        assertEquals(" ", SsrUtils.fixSpace("  "));
+        assertEquals(" ", SsrUtils.fixSpace("   "));
+        assertEquals("a", SsrUtils.fixSpace("a"));
+        assertEquals("a", SsrUtils.fixSpace(" a"));
+        assertEquals("a", SsrUtils.fixSpace("  a"));
+        assertEquals("a ", SsrUtils.fixSpace("a "));
+        assertEquals("a ", SsrUtils.fixSpace("a  "));
+        assertEquals("a b", SsrUtils.fixSpace("a  b"));
+        assertEquals("a b ", SsrUtils.fixSpace("  a  b  "));
+        assertEquals("a\nb\nc ", SsrUtils.fixSpace(" \n a \n  b \n  c  \n "));
     }
 
     @Test
     public void test_empty() {
         var nodes = SsrUtils.createNodes("""
-
-                """);
-        assertEquals(0, nodes.size());
+                       ${a}
+                       abc
+                       a
+                       b
+                ${b}
+                       """);
+        assertEquals(3, nodes.size());
     }
 
     @Test
     public void test_a() {
         var nodes = SsrUtils.createNodes("""
                 a
+                ok
                 """);
         assertEquals(1, nodes.size());
-        assertEquals("a", nodes.get(0).getText());
+        assertEquals("a\nok", nodes.get(0).getText());
     }
 
     @Test
