@@ -17,6 +17,6 @@ public class SsrDataRowTest {
                 </div>
                 """);
         var result = template.setDataRow(DataRow.of("Code_", "001")).getHtml();
-        assertEquals("<div> <span 001>a</span> </div>", result);
+        assertEquals("<div><span 001>a</span> </div>", result);
     }
 }

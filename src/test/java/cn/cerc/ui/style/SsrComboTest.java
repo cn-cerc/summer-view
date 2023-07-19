@@ -11,14 +11,14 @@ public class SsrComboTest {
     @Test
     public void test_empty() {
         SsrTemplate ssr = new SsrTemplate("""
-                ${if CreateMode}
+                a  ${if CreateMode}
                     ${if output}
                         ok
                     ${endif}
                 ${endif}
                 """);
         ssr.toMap("CreateMode", "true").toMap("output", "true");
-        assertEquals("  ok ", ssr.getHtml());
+        assertEquals("a  ok ", ssr.getHtml());
     }
 
     @Test
@@ -42,7 +42,7 @@ public class SsrComboTest {
         template.toMap("status_", "true");
         template.setDataRow(DataRow.of("code_", "001", "final_", true));
         var result = template.getHtml();
-        assertEquals("<div>aaa001 <span>from map</span> <span>from row</span>  3- bbb</div>", result);
+        assertEquals("<div>aaa001<span>from map</span><span>from row</span> 3- bbb</div>", result);
     }
 
 }

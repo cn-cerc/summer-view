@@ -17,18 +17,32 @@ public class SsrUtils {
     public static String fixSpace(String text) {
         if (text.length() == 0)
             return "";
+        var value = text.trim();
+        if (value.length() == 0)
+            return " ";
+
         boolean find = false;
         StringBuffer sb = new StringBuffer();
-        for (var i = 0; i < text.length(); i++) {
-            char tmp = text.charAt(i);
+        for (var i = 0; i < value.length(); i++) {
+            char tmp = value.charAt(i);
             if (tmp == ' ') {
                 if (find)
                     continue;
                 find = true;
-            } else
+                sb.append(tmp);
+            } else if (tmp == '\n') {
+                if (find)
+                    sb.deleteCharAt(sb.length() - 1);
+                sb.append(tmp);
+                find = true;
+            } else {
                 find = false;
-            sb.append(tmp);
+                sb.append(tmp);
+            }
         }
+        var tmp = text.charAt(text.length() - 1);
+        if (tmp == '\n' || tmp == ' ')
+            sb.append(tmp);
         return sb.toString();
     }
 
@@ -44,10 +58,13 @@ public class SsrUtils {
         while (line.length() > 0) {
             if ((start = line.indexOf("${")) > -1 && (end = line.indexOf("}", start)) > -1) {
                 if (start > 0) {
+                    var text = "";
                     if (line.charAt(start - 1) == '\n')
-                        nodes.add(new SsrTextNode(line.substring(0, start - 1)));
+                        text = line.substring(0, start - 1);
                     else
-                        nodes.add(new SsrTextNode(line.substring(0, start)));
+                        text = line.substring(0, start);
+                    if (text.length() > 0)
+                        nodes.add(new SsrTextNode(fixSpace(text)));
                 }
                 var text = line.substring(start + 2, end);
                 if (SsrCallbackNode.is(text))
@@ -69,7 +86,9 @@ public class SsrUtils {
                     end++;
                 line = line.substring(end + 1, line.length());
             } else {
-                nodes.add(new SsrTextNode(line));
+                var text = fixSpace(line);
+                if (text.length() > 0)
+                    nodes.add(new SsrTextNode(line));
                 break;
             }
         }
