@@ -113,7 +113,7 @@ public class SsrUtils {
         boolean start = false;
         try {
             while ((line = list.readLine()) != null) {
-                var text = line.trim();
+                var text = line;
                 if ("<body>".equals(text))
                     start = true;
                 else if ("</body>".equals(text))
