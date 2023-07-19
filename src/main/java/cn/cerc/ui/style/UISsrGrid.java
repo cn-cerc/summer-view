@@ -22,8 +22,8 @@ public class UISsrGrid extends UIComponent {
     private DataSet dataSet;
     private SsrDefine define;
     private List<String> fields;
-    private Map<String, Consumer<SsrTemplateImpl>> onGetBody = new HashMap<>();
-    private Map<String, Consumer<SsrTemplateImpl>> onGetHead = new HashMap<>();
+    private Map<String, Consumer<SsrTemplateImpl>> onGetBodyHtml = new HashMap<>();
+    private Map<String, Consumer<SsrTemplateImpl>> onGetHeadHtml = new HashMap<>();
     // 表样式 id
     public static final String TableBegin = "table.begin";
     public static final String TableEnd = "table.end";
@@ -74,7 +74,7 @@ public class UISsrGrid extends UIComponent {
         for (var field : fields) {
             var block = addBlock("head." + field, getDefault_HeadCell(field));
             if (block.isPresent()) {
-                this.onGetHead.forEach((key, value) -> {
+                this.onGetHeadHtml.forEach((key, value) -> {
                     if (key.equals(field))
                         value.accept(block.get().setId(field));
                 });
@@ -93,7 +93,7 @@ public class UISsrGrid extends UIComponent {
                     for (var field : fields) {
                         var block = addBlock("body." + field, getDefault_BodyCell(field));
                         if (block.isPresent()) {
-                            this.onGetBody.forEach((key, value) -> {
+                            this.onGetBodyHtml.forEach((key, value) -> {
                                 if (key.equals(field))
                                     value.accept(block.get().setId(field));
                             });
@@ -130,12 +130,34 @@ public class UISsrGrid extends UIComponent {
         return Optional.ofNullable(template);
     }
 
+    /**
+     * 请改使用 onGetHeadHtml
+     * 
+     * @param field
+     * @param consumer
+     */
+    @Deprecated
     public void addGetHead(String field, Consumer<SsrTemplateImpl> consumer) {
-        this.onGetHead.put(field, consumer);
+        this.onGetHeadHtml(field, consumer);
     }
 
+    public void onGetHeadHtml(String field, Consumer<SsrTemplateImpl> consumer) {
+        this.onGetHeadHtml.put(field, consumer);
+    }
+
+    /**
+     * 请改使用 onGetBody
+     * 
+     * @param field
+     * @param consumer
+     */
+    @Deprecated
     public void addGetBody(String field, Consumer<SsrTemplateImpl> consumer) {
-        this.onGetBody.put(field, consumer);
+        this.onGetBodyHtml(field, consumer);
+    }
+
+    public void onGetBodyHtml(String field, Consumer<SsrTemplateImpl> consumer) {
+        this.onGetBodyHtml.put(field, consumer);
     }
 
     public List<String> getFields() {

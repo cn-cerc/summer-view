@@ -15,7 +15,7 @@ public class SsrCallbackTest {
     @Test
     public void test() {
         SsrTemplate ssr = new SsrTemplate("begin:${callback(child)}:end");
-        ssr.setCallback((sender) -> sender.getField() + " ok");
+        ssr.onCallback("child", () -> "child ok");
         assertEquals("begin:child ok:end", ssr.getHtml());
     }
 
@@ -33,7 +33,7 @@ public class SsrCallbackTest {
                 .toMap("title", "百度");
 
         master.toMap("createMode", "" + true);
-        master.setCallback(sender -> child.getHtml());
+        master.onCallback("child", () -> child.getHtml());
 
         assertEquals(" <a href='http://www.baidu.com'>百度</a>", master.getHtml());
     }

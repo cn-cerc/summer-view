@@ -20,11 +20,6 @@ public class SsrCallbackNode extends SsrTextNode {
 
     @Override
     public String getText() {
-        if (this.template != null) {
-            var callback = this.template.getCallback();
-            if (callback != null)
-                return callback.onGetHtml(this);
-        }
         return "${" + super.getText() + "}";
     }
 
@@ -36,10 +31,12 @@ public class SsrCallbackNode extends SsrTextNode {
     @Override
     public String getHtml() {
         var callback = template.getCallback();
-        if (callback != null && field != null)
-            return callback.onGetHtml(this);
-        else
-            return this.getText();
+        if (callback != null && field != null) {
+            var supplier = callback.get(field);
+            if (supplier != null)
+                return supplier.get();
+        }
+        return template.isStrict() ? this.getText() : "";
     }
 
     public static boolean is(String text) {

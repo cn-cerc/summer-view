@@ -2,6 +2,7 @@ package cn.cerc.ui.style;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 
 import cn.cerc.db.core.DataRow;
 import cn.cerc.db.core.DataSet;
@@ -71,13 +72,13 @@ public interface SsrTemplateImpl {
      * @param callback 赋值回调函数
      * @return 设置回调函数
      */
-    SsrTemplateImpl setCallback(SsrCallbackImpl callback);
+    SsrTemplateImpl onCallback(String nodeId, Supplier<String> supplier);
 
     /**
      * 
      * @return 返回回调函数
      */
-    SsrCallbackImpl getCallback();
+    Map<String, Supplier<String>> getCallback();
 
     /**
      * 
