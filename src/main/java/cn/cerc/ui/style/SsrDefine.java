@@ -85,8 +85,8 @@ public class SsrDefine implements Iterable<SsrTemplateImpl> {
         return this.items;
     }
 
-    public Optional<SsrTemplateImpl> get(String id) {
-        return Optional.ofNullable(this.items.get(id));
+    public Optional<SsrTemplateImpl> get(String blockId) {
+        return Optional.ofNullable(this.items.get(blockId));
     }
 
     public Optional<SsrTemplateImpl> getOrAdd(String blockId, Supplier<SsrTemplateImpl> supplier) {

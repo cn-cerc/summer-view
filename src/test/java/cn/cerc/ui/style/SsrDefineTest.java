@@ -8,7 +8,7 @@ import cn.cerc.ui.core.UIComponent;
 
 public class SsrDefineTest {
 
-//    @Test
+    @Test
     public void test_option() {
         var define = new SsrDefine("""
                 ${define a _fields="code_,name_" width="10"}
@@ -21,7 +21,7 @@ public class SsrDefineTest {
         assertEquals("code_,name_", ssr.getOptions().get("_fields"));
     }
 
-//    @Test
+    @Test
     public void test_base() {
         var define = new SsrDefine("""
                 grid sample

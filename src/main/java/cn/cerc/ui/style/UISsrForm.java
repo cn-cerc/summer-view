@@ -25,7 +25,7 @@ public class UISsrForm extends UIComponent {
     private List<String> fields;
     public static final String FormBegin = "form.begin";
     public static final String FormEnd = "form.end";
-    private Map<String, Consumer<SsrTemplateImpl>> onGetItem = new HashMap<>();
+    private Map<String, Consumer<SsrTemplateImpl>> onGetHtml = new HashMap<>();
     private boolean strict = true;
 
     public UISsrForm(UIComponent owner) {
@@ -76,7 +76,7 @@ public class UISsrForm extends UIComponent {
             var block = addBlock(field, () -> new SsrTemplate(
                     String.format("%s: <input type=\"text\" name=\"%s\" value=\"${%s}\">", field, field, field)));
             if (block.isPresent()) {
-                this.onGetItem.forEach((key, value) -> {
+                this.onGetHtml.forEach((key, value) -> {
                     if (key.equals(field))
                         value.accept(block.get().setId(field));
                 });
@@ -87,8 +87,19 @@ public class UISsrForm extends UIComponent {
         addBlock(SsrDefine.EndFlag).ifPresent(value -> html.print(value.getHtml()));
     }
 
+    /**
+     * 请改使用 onGetHtml
+     * 
+     * @param field
+     * @param consumer
+     */
+    @Deprecated
     public void addGetItem(String field, Consumer<SsrTemplateImpl> consumer) {
-        this.onGetItem.put(field, consumer);
+        this.onGetHtml(field, consumer);
+    }
+
+    public void onGetHtml(String field, Consumer<SsrTemplateImpl> consumer) {
+        this.onGetHtml.put(field, consumer);
     }
 
     private Supplier<SsrTemplateImpl> getDefault_FormBegin() {
@@ -121,9 +132,9 @@ public class UISsrForm extends UIComponent {
             fields.add(item);
     }
 
-    public UISsrForm addField(String id, Consumer<SsrTemplateImpl> onGetItem) {
+    public UISsrForm addField(String id, Consumer<SsrTemplateImpl> onGetHtml) {
         this.addField(id);
-        this.onGetItem.put(id, onGetItem);
+        this.onGetHtml.put(id, onGetHtml);
         return this;
     }
 
@@ -137,6 +148,17 @@ public class UISsrForm extends UIComponent {
 
     public SsrDefine getDefine() {
         return define;
+    }
+
+    public boolean isStrict() {
+        return strict;
+    }
+
+    public UISsrForm setStrict(boolean strict) {
+        this.strict = strict;
+        for (var block : define.items().values())
+            block.setStrict(strict);
+        return this;
     }
 
     public boolean readAll(HttpServletRequest request, String submitId) {
@@ -155,17 +177,6 @@ public class UISsrForm extends UIComponent {
             }
         }
         return true;
-    }
-
-    public boolean isStrict() {
-        return strict;
-    }
-
-    public UISsrForm setStrict(boolean strict) {
-        this.strict = strict;
-        for (var block : define.items().values())
-            block.setStrict(strict);
-        return this;
     }
 
 }

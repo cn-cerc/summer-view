@@ -2,38 +2,44 @@ package cn.cerc.ui.style;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 
 import cn.cerc.db.core.DataRow;
 import cn.cerc.db.core.DataSet;
 
-public class SsrTemplate implements SsrTemplateImpl {
+public class SsrTemplate implements SsrTemplateImpl, Iterable<SsrNodeImpl> {
 //    private static final Logger log = LoggerFactory.getLogger(SsrTemplate.class);
     private ArrayList<SsrNodeImpl> nodes;
     private List<String> list;
+    private ListProxy listProxy;
     private Map<String, String> map;
-    private Map<String, String> options = new HashMap<>();
+    private MapProxy mapProxy;
     private DataRow dataRow;
     private DataSet dataSet;
+    private Map<String, String> options = new HashMap<>();
+    private Map<String, Supplier<String>> callback;
     private boolean strict = true;
-    private SsrCallbackImpl callback;
     private String templateText;
     private String id;
-    private MapProxy mapProxy;
-    private ListProxy listProxy;
 
     public SsrTemplate(String templateText) {
         super();
         this.templateText = templateText;
-        this.nodes = createNodes(templateText);
+        this.nodes = SsrUtils.createNodes(templateText);
+        for (var node : nodes)
+            node.setTemplate(this);
         CompressNodes.run(nodes);
     }
 
     public SsrTemplate(Class<?> class1, String id) {
         this.templateText = SsrUtils.getTempateFileText(class1, id);
-        this.nodes = createNodes(templateText);
+        this.nodes = SsrUtils.createNodes(templateText);
+        for (var node : nodes)
+            node.setTemplate(this);
         CompressNodes.run(nodes);
     }
 
@@ -105,7 +111,7 @@ public class SsrTemplate implements SsrTemplateImpl {
         return sb.toString();
     }
 
-    protected List<SsrNodeImpl> getNodes() {
+    protected List<SsrNodeImpl> nodes() {
         return nodes;
     }
 
@@ -129,50 +135,6 @@ public class SsrTemplate implements SsrTemplateImpl {
     public SsrTemplate setStrict(boolean strict) {
         this.strict = strict;
         return this;
-    }
-
-    @Override
-    public SsrTemplateImpl setCallback(SsrCallbackImpl callback) {
-        this.callback = callback;
-        return this;
-    }
-
-    @Override
-    public SsrCallbackImpl getCallback() {
-        return callback;
-    }
-
-    private ArrayList<SsrNodeImpl> createNodes(String templateText) {
-        var list = new ArrayList<SsrNodeImpl>();
-        int start, end;
-        var line = templateText.trim();
-        while (line.length() > 0) {
-            if ((start = line.indexOf("${")) > -1 && (end = line.indexOf("}", start)) > -1) {
-                if (start > 0)
-                    list.add(new SsrTextNode(line.substring(0, start)));
-                var text = line.substring(start + 2, end);
-                if (SsrCallbackNode.is(text))
-                    list.add(new SsrCallbackNode(text));
-                else if (SsrListItemNode.is(text))
-                    list.add(new SsrListItemNode(text));
-                else if (SsrMapKeyNode.is(text))
-                    list.add(new SsrMapKeyNode(text));
-                else if (SsrMapValueNode.is(text))
-                    list.add(new SsrMapValueNode(text));
-                else if (SsrDataSetRecNode.is(text))
-                    list.add(new SsrDataSetRecNode(text));
-                else if (SsrDataSetItemNode.is(text))
-                    list.add(new SsrDataSetItemNode(text));
-                else
-                    list.add(new SsrValueNode(text));
-                line = line.substring(end + 1, line.length());
-            } else {
-                list.add(new SsrTextNode(line));
-                break;
-            }
-        }
-        list.forEach(item -> item.setTemplate(this));
-        return list;
     }
 
     @Override
@@ -277,11 +239,22 @@ public class SsrTemplate implements SsrTemplateImpl {
         return listProxy;
     }
 
-    public static void main(String[] args) {
-        var template = new SsrTemplate("${a}");
-        template.getOptions().put("a", "001");
-        for (var node : template.nodes)
-            System.out.println(node.getHtml());
+    @Override
+    public SsrTemplateImpl onCallback(String nodeId, Supplier<String> supplier) {
+        if (this.callback == null)
+            callback = new HashMap<>();
+        callback.put(nodeId, supplier);
+        return this;
+    }
+
+    @Override
+    public Map<String, Supplier<String>> getCallback() {
+        return callback;
+    }
+
+    @Override
+    public Iterator<SsrNodeImpl> iterator() {
+        return nodes.iterator();
     }
 
 }
