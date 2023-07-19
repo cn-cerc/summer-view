@@ -27,13 +27,16 @@ public class SsrValueNode implements SsrNodeImpl {
     @Override
     public String getHtml() {
         var field = this.getField();
-        var list = this.getTemplate().getList();
+        var template = this.getTemplate();
+        if (template == null)
+            return "template is null";
+        var list = template.getList();
         if (Utils.isNumeric(field)) {
             if (list != null) {
                 var index = Integer.parseInt(field);
                 if (index >= 0 && index < list.size()) {
                     return list.get(index);
-                } else if (this.getTemplate().isStrict()) {
+                } else if (template.isStrict()) {
                     log.error("not find index of list: {}", field);
                     return this.getText();
                 } else {
@@ -43,10 +46,10 @@ public class SsrValueNode implements SsrNodeImpl {
                 return this.getText();
             }
         } else {
-            var map = this.getTemplate().getMap();
-            var options = this.getTemplate().getOptions();
-            var dataRow = this.getTemplate().getDataRow();
-            var dataSet = this.getTemplate().getDataSet();
+            var map = template.getMap();
+            var options = template.getOptions();
+            var dataRow = template.getDataRow();
+            var dataSet = template.getDataSet();
             if (map != null && map.containsKey(field)) {
                 if (dataRow != null && dataRow.exists(field))
                     log.warn("map and dataRow exists field: {}", field);

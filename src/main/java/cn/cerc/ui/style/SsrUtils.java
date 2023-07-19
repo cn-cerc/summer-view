@@ -14,14 +14,41 @@ import cn.cerc.db.core.Utils;
 public class SsrUtils {
     private static final Logger log = LoggerFactory.getLogger(SsrUtils.class);
 
+    public static String fixSpace(String text) {
+        if (text.length() == 0)
+            return "";
+        boolean find = false;
+        StringBuffer sb = new StringBuffer();
+        for (var i = 0; i < text.length(); i++) {
+            char tmp = text.charAt(i);
+            if (tmp == ' ') {
+                if (find)
+                    continue;
+                find = true;
+            } else
+                find = false;
+            sb.append(tmp);
+        }
+        return sb.toString();
+    }
+
+    /**
+     * 
+     * @param templateText
+     * @return 根据模版创建 ssr 节点
+     */
     public static ArrayList<SsrNodeImpl> createNodes(String templateText) {
         var nodes = new ArrayList<SsrNodeImpl>();
         int start, end;
         var line = templateText.trim();
         while (line.length() > 0) {
             if ((start = line.indexOf("${")) > -1 && (end = line.indexOf("}", start)) > -1) {
-                if (start > 0)
-                    nodes.add(new SsrTextNode(line.substring(0, start)));
+                if (start > 0) {
+                    if (line.charAt(start - 1) == '\n')
+                        nodes.add(new SsrTextNode(line.substring(0, start - 1)));
+                    else
+                        nodes.add(new SsrTextNode(line.substring(0, start)));
+                }
                 var text = line.substring(start + 2, end);
                 if (SsrCallbackNode.is(text))
                     nodes.add(new SsrCallbackNode(text));
@@ -37,6 +64,9 @@ public class SsrUtils {
                     nodes.add(new SsrDataSetItemNode(text));
                 else
                     nodes.add(new SsrValueNode(text));
+                // 解决上一行的最后一个字符为换行符
+                if (end + 1 < line.length() && line.charAt(end + 1) == '\n')
+                    end++;
                 line = line.substring(end + 1, line.length());
             } else {
                 nodes.add(new SsrTextNode(line));
@@ -46,6 +76,12 @@ public class SsrUtils {
         return nodes;
     }
 
+    /**
+     * 
+     * @param class1
+     * @param id
+     * @return 查找类所在目录下的同名文件，并返回相应的html文件内容
+     */
     public static String getTempateFileText(Class<?> class1, String id) {
         var fileName = class1.getSimpleName() + ".html";
         if (!Utils.isEmpty(id))

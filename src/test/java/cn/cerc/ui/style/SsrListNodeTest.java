@@ -16,8 +16,8 @@ public class SsrListNodeTest {
                 ${list.end}
                 """);
         ssr.setDataRow(DataRow.of("Code_", "a"));
-        ssr.toList("a","b");
-       assertEquals("selected", ssr.getHtml());
+        ssr.toList("a", "b");
+        assertEquals("selected", ssr.getHtml());
     }
 
 }

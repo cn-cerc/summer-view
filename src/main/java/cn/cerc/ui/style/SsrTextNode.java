@@ -4,7 +4,7 @@ public class SsrTextNode implements SsrNodeImpl {
     private String text;
 
     public SsrTextNode(String text) {
-        this.text = text;
+        this.text = SsrUtils.fixSpace(text);
     }
 
     @Override
@@ -20,7 +20,10 @@ public class SsrTextNode implements SsrNodeImpl {
     @Override
     public String getHtml() {
         var val = this.text.trim();
-        return (text.startsWith(" ") ? " " : "") + val + (text.endsWith(" ") ? " " : "");
+        if (text.length() > 0 && "".equals(val))
+            return " ";
+        else
+            return (text.startsWith(" ") ? " " : "") + val + (text.endsWith(" ") ? " " : "");
     }
 
     @Override
