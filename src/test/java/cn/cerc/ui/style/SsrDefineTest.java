@@ -79,7 +79,7 @@ public class SsrDefineTest {
                 """);
 
         var root = new UIComponent(null);
-        for (var ssr : define) 
+        for (var ssr : define)
             new UISsrBlock(root).setTemplate(ssr);
         assertEquals("grid sample<table v-data=\"1\"><tr><th>title</td></tr><tr><td>data<td></tr></table>--end--",
                 root.toString());
