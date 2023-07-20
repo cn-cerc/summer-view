@@ -69,8 +69,8 @@ public interface SsrTemplateImpl {
     DataSet getDataSet();
 
     /**
-     * 
-     * @param callback 赋值回调函数
+     * @param nodeId   节点id
+     * @param supplier 赋值回调函数
      * @return 设置回调函数
      */
     SsrTemplateImpl onCallback(String nodeId, Supplier<String> supplier);
