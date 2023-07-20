@@ -14,12 +14,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cn.cerc.db.core.DataRow;
+import cn.cerc.db.core.DataSet;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.mis.core.IPage;
 import cn.cerc.mis.other.MemoryBuffer;
 import cn.cerc.ui.core.UIComponent;
 
-public class UISsrForm extends UIComponent {
+public class UISsrForm extends UIComponent implements SsrComponentImpl {
     private static final Logger log = LoggerFactory.getLogger(UISsrForm.class);
     private SsrDefine define;
     private DataRow dataRow;
@@ -130,6 +131,7 @@ public class UISsrForm extends UIComponent {
         return Optional.ofNullable(template);
     }
 
+    @Override
     public void addField(String... field) {
         if (fields == null)
             fields = new ArrayList<>();
@@ -198,6 +200,19 @@ public class UISsrForm extends UIComponent {
                 dataRow.setValue(field, buff.getString(field));
             }
         }
+    }
+
+    @Override
+    public DataSet getDefaultOptions() {
+        DataSet ds = new DataSet();
+        for (var ssr : define) {
+            var map = ssr.getOptions();
+            if (map != null && map.containsKey("option")) {
+                ds.append().setValue("column_name_", ssr.id()).setValue("option_", map.get("option"));
+            }
+        }
+        ds.head().setValue("template_id_", define.id());
+        return ds;
     }
 
 }

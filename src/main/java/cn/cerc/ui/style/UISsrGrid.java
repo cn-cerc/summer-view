@@ -13,11 +13,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cn.cerc.db.core.DataSet;
-import cn.cerc.db.core.Utils;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 
-public class UISsrGrid extends UIComponent {
+public class UISsrGrid extends UIComponent implements SsrComponentImpl {
     private static final Logger log = LoggerFactory.getLogger(UISsrGrid.class);
     private DataSet dataSet;
     private SsrDefine define;
@@ -219,11 +218,7 @@ public class UISsrGrid extends UIComponent {
      * @return 返回默认的表头单元格样式
      */
     private Supplier<SsrTemplateImpl> getDefault_HeadCell(String field) {
-        return () -> {
-            var def = dataSet.fields(field);
-            var templateText = String.format("<th>%s</th>", Utils.isEmpty(def.name()) ? def.code() : def.name());
-            return new SsrTemplate(templateText);
-        };
+        return () -> new SsrTemplate(String.format("<th>%s</th>", field));
     }
 
     /**
@@ -235,6 +230,7 @@ public class UISsrGrid extends UIComponent {
         return () -> new SsrTemplate(String.format("<td>${%s}</td>", field));
     }
 
+    @Override
     public void addField(String... field) {
         if (fields == null)
             fields = new ArrayList<>();
@@ -251,6 +247,23 @@ public class UISsrGrid extends UIComponent {
             putDefine("head." + column.field(), column.headStyle());
             putDefine("body." + column.field(), column.bodyStyle());
         }
+    }
+
+    @Override
+    public DataSet getDefaultOptions() {
+        DataSet ds = new DataSet();
+        for (var ssr : define) {
+            var map = ssr.getOptions();
+            String id = ssr.id();
+            if (map != null && map.containsKey("option")) {
+                if (id.startsWith("body.") || id.startsWith("head."))
+                    id = id.substring(5, id.length());
+                if (!ds.locate("column_name_", id))
+                    ds.append().setValue("column_name_", id).setValue("option_", map.get("option"));
+            }
+        }
+        ds.head().setValue("template_id_", define.id());
+        return ds;
     }
 
 }
