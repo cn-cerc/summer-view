@@ -47,7 +47,6 @@ public class SsrDefineTest {
 
         var root = new UIComponent(null);
         for (var ssr : define) {
-            System.out.println(ssr.id());
             new UISsrBlock(root).setTemplate(ssr);
         }
 
