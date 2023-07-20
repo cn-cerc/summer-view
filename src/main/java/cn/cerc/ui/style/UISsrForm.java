@@ -215,4 +215,12 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
         return ds;
     }
 
+    @Override
+    public void setConfig(DataSet configs) {
+        configs.forEach(item -> {
+            if (item.getEnum("option_", TemplateConfigOptionEnum.class) != TemplateConfigOptionEnum.不显示)
+                addField(item.getString("column_name_"));
+        });
+    }
+
 }

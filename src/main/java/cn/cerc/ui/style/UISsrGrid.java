@@ -73,6 +73,7 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl {
         for (var field : fields) {
             var block = addBlock("head." + field, getDefault_HeadCell(field));
             if (block.isPresent()) {
+                block.get().getOptions().put("templateId", this.define.id());
                 this.onGetHeadHtml.forEach((key, value) -> {
                     if (key.equals(field))
                         value.accept(block.get().setId(field));
@@ -264,6 +265,14 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl {
         }
         ds.head().setValue("template_id_", define.id());
         return ds;
+    }
+
+    @Override
+    public void setConfig(DataSet configs) {
+        configs.forEach(item -> {
+            if (item.getEnum("option_", TemplateConfigOptionEnum.class) != TemplateConfigOptionEnum.不显示)
+                addField(item.getString("column_name_"));
+        });
     }
 
 }

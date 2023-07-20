@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cn.cerc.db.core.DataSet;
 import cn.cerc.db.core.Utils;
 
 public class SsrUtils {
@@ -127,13 +126,6 @@ public class SsrUtils {
             log.error(e.getMessage(), e);
             return "";
         }
-    }
-
-    public static void setConfig(SsrComponentImpl search, DataSet configs) {
-        configs.forEach(item -> {
-            if (item.getEnum("option_", TemplateConfigOptionEnum.class) != TemplateConfigOptionEnum.不显示)
-                search.addField(item.getString("column_name_"));
-        });
     }
 
 }
