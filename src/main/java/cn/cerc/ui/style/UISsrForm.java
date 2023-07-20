@@ -14,11 +14,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cn.cerc.db.core.DataRow;
+import cn.cerc.db.core.DataSet;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.mis.core.IPage;
+import cn.cerc.mis.other.MemoryBuffer;
 import cn.cerc.ui.core.UIComponent;
 
-public class UISsrForm extends UIComponent {
+public class UISsrForm extends UIComponent implements SsrComponentImpl {
     private static final Logger log = LoggerFactory.getLogger(UISsrForm.class);
     private SsrDefine define;
     private DataRow dataRow;
@@ -27,6 +29,7 @@ public class UISsrForm extends UIComponent {
     public static final String FormEnd = "form.end";
     private Map<String, Consumer<SsrTemplateImpl>> onGetHtml = new HashMap<>();
     private boolean strict = true;
+    private MemoryBuffer buff;
 
     public UISsrForm(UIComponent owner) {
         super(owner);
@@ -70,8 +73,11 @@ public class UISsrForm extends UIComponent {
             this.fields = this.dataRow.fields().names();
 
         addBlock(SsrDefine.BeginFlag).ifPresent(value -> html.print(value.getHtml()));
-        // 输出内容
-        addBlock(FormBegin, getDefault_FormBegin()).ifPresent(value -> html.print(value.getHtml()));
+        var top = addBlock(FormBegin);
+        if (top.isPresent()) {
+            top.get().getOptions().put("templateId", this.define.id());
+            html.print(top.get().getHtml());
+        }
         for (var field : fields) {
             var block = addBlock(field, () -> new SsrTemplate(
                     String.format("%s: <input type=\"text\" name=\"%s\" value=\"${%s}\">", field, field, field)));
@@ -125,6 +131,7 @@ public class UISsrForm extends UIComponent {
         return Optional.ofNullable(template);
     }
 
+    @Override
     public void addField(String... field) {
         if (fields == null)
             fields = new ArrayList<>();
@@ -161,22 +168,59 @@ public class UISsrForm extends UIComponent {
         return this;
     }
 
-    public boolean readAll(HttpServletRequest request, String submitId) {
-        var submit = request.getParameter(submitId);
-        if (submit == null)
-            return false;
+    public void setBuffer(MemoryBuffer buff) {
+        this.buff = buff;
+    }
 
+    public boolean readAll(HttpServletRequest request, String submitId) {
+        boolean submit = request.getParameter(submitId) != null;
         for (var ssr : define) {
             var map = ssr.getOptions();
-            if (map != null) {
+            if (map != null && map.containsKey("fields")) {
                 var fields = map.get("fields");
-                if (fields != null) {
-                    for (var field : fields.split(","))
-                        dataRow.setValue(field, request.getParameter(field));
+                for (var field : fields.split(",")) {
+                    String val = request.getParameter(field);
+                    updateValue(field, val, submit);
                 }
             }
         }
         return true;
+    }
+
+    private void updateValue(String field, String val, boolean submit) {
+        if (submit) {
+            dataRow.setValue(field, val == null ? "" : val);
+            if (buff != null) {
+                buff.setValue(field, val);
+            }
+        } else {
+            if (val != null) {
+                dataRow.setValue(field, val);
+            } else if (buff != null && !buff.isNull() && buff.getRecord().exists(field)) {
+                dataRow.setValue(field, buff.getString(field));
+            }
+        }
+    }
+
+    @Override
+    public DataSet getDefaultOptions() {
+        DataSet ds = new DataSet();
+        for (var ssr : define) {
+            var map = ssr.getOptions();
+            if (map != null && map.containsKey("option")) {
+                ds.append().setValue("column_name_", ssr.id()).setValue("option_", map.get("option"));
+            }
+        }
+        ds.head().setValue("template_id_", define.id());
+        return ds;
+    }
+
+    @Override
+    public void setConfig(DataSet configs) {
+        configs.forEach(item -> {
+            if (item.getEnum("option_", TemplateConfigOptionEnum.class) != TemplateConfigOptionEnum.不显示)
+                addField(item.getString("column_name_"));
+        });
     }
 
 }
