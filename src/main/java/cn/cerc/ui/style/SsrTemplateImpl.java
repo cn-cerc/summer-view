@@ -2,6 +2,7 @@ package cn.cerc.ui.style;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 import cn.cerc.db.core.DataRow;
@@ -110,4 +111,6 @@ public interface SsrTemplateImpl {
     ListProxy getListProxy();
 
     Map<String, String> getOptions();
+
+    Optional<String> getValue(String field);
 }

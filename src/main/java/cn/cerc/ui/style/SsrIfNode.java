@@ -18,18 +18,18 @@ public class SsrIfNode extends SsrContainerNode {
         super(text);
     }
 
-    public interface LeftRightEquals {
+    private interface LeftRightEquals {
         boolean execute(String left, String right);
     }
 
-    public boolean check(Variant status, String text, String flag, LeftRightEquals lrEquals) {
+    private boolean check(Variant status, String text, String flag, LeftRightEquals lrEquals) {
         var template = this.getTemplate();
         if (template == null)
             return false;
         var arr = text.split(flag);
         if (arr.length == 1 && text.endsWith(flag)) {
             var field = arr[0].trim();
-            var value = this.getValue(field);
+            var value = template.getValue(field);
             if (value.isEmpty()) {
                 log.error("not find field: {}", field);
                 status.setValue(-1);
@@ -38,7 +38,7 @@ public class SsrIfNode extends SsrContainerNode {
             return true;
         } else if (arr.length == 2 && (arr[0].length()) > 0) {
             var leftField = arr[0];
-            var leftValue = this.getValue(leftField);
+            var leftValue = template.getValue(leftField);
             if (leftValue.isEmpty()) {
                 log.error("not find field: {}", leftField);
                 status.setValue(-1);
@@ -52,7 +52,7 @@ public class SsrIfNode extends SsrContainerNode {
             } else if (Utils.isNumeric(value))
                 rightValue = Optional.of(value);
             else {
-                rightValue = this.getValue(value);
+                rightValue = template.getValue(value);
                 if (rightValue.isEmpty()) {
                     log.error("not find field: {}", value);
                     status.setValue(-1);
@@ -92,7 +92,7 @@ public class SsrIfNode extends SsrContainerNode {
                     field = field.substring(4, field.length());
                     tmp = true;
                 }
-                var value = this.getValue(field);
+                var value = template.getValue(field);
                 if (value.isEmpty()) {
                     if (template.isStrict()) {
                         log.error("not find field: {}", field);
@@ -135,42 +135,6 @@ public class SsrIfNode extends SsrContainerNode {
         for (var item : items)
             sb.append(item.getHtml());
         return sb.toString();
-    }
-
-    private Optional<String> getValue(String field) {
-        var list = this.getTemplate().getList();
-        var map = this.getTemplate().getMap();
-        var options = this.getTemplate().getOptions();
-        var dataRow = this.getTemplate().getDataRow();
-        var dataSet = this.getTemplate().getDataSet();
-        if (list != null && SsrListItemNode.is(field))
-            return Optional.ofNullable(this.getTemplate().getListProxy().item());
-        if (map != null) {
-            if (SsrMapKeyNode.is(field))
-                return Optional.ofNullable(this.getTemplate().getMapProxy().key());
-            else if (SsrMapValueNode.is(field))
-                return Optional.ofNullable(this.getTemplate().getMapProxy().value());
-            else if (map.containsKey(field)) {
-                if (dataRow != null && dataRow.exists(field))
-                    log.warn("map and dataRow exists field: {}", field);
-                if (dataSet != null && dataSet.exists(field))
-                    log.warn("map and dataSet exists field: {}", field);
-                Object val = map.get(field);
-                return Optional.ofNullable(val != null ? val.toString() : "");
-            }
-        }
-        if (dataRow != null && dataRow.exists(field)) {
-            if (dataSet != null && dataSet.exists(field))
-                log.warn("dataRow and dataSet exists field: {}", field);
-            return Optional.of(dataRow.getText(field));
-        }
-
-        if (dataSet != null && dataSet.exists(field))
-            return Optional.of(dataSet.current().getText(field));
-        else if (options != null && options.containsKey(field))
-            return Optional.of(options.get(field));
-        else
-            return Optional.empty();
     }
 
     @Override

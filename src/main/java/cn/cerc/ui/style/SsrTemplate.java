@@ -6,13 +6,18 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Supplier;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import cn.cerc.db.core.DataRow;
 import cn.cerc.db.core.DataSet;
+import cn.cerc.db.core.Utils;
 
 public class SsrTemplate implements SsrTemplateImpl, Iterable<SsrNodeImpl> {
-//    private static final Logger log = LoggerFactory.getLogger(SsrTemplate.class);
+    private static final Logger log = LoggerFactory.getLogger(SsrTemplate.class);
     private ArrayList<SsrNodeImpl> nodes;
     private List<String> list;
     private ListProxy listProxy;
@@ -255,6 +260,57 @@ public class SsrTemplate implements SsrTemplateImpl, Iterable<SsrNodeImpl> {
     @Override
     public Iterator<SsrNodeImpl> iterator() {
         return nodes.iterator();
+    }
+
+    @Override
+    public Optional<String> getValue(String field) {
+        // 先查找list
+        if (list != null) {
+            if (SsrListItemNode.is(field))
+                return Optional.ofNullable(this.getListProxy().item());
+            else if (Utils.isNumeric(field)) {
+                var index = Integer.parseInt(field);
+                if (index >= 0 && index < list.size()) {
+                    return Optional.ofNullable(list.get(index));
+                } else if (!this.strict) {
+                    return Optional.ofNullable("");
+                } else {
+                    log.error("not find index of list: {}", field);
+                    return Optional.empty();
+                }
+            }
+        }
+        // 再查找map
+        if (map != null) {
+            if (SsrMapKeyNode.is(field))
+                return Optional.ofNullable(this.getMapProxy().key());
+            else if (SsrMapValueNode.is(field))
+                return Optional.ofNullable(this.getMapProxy().value());
+            else if (map.containsKey(field)) {
+                if (dataRow != null && dataRow.exists(field))
+                    log.warn("map and dataRow exists field: {}", field);
+                if (dataSet != null && dataSet.exists(field))
+                    log.warn("map and dataSet exists field: {}", field);
+                return Optional.ofNullable(map.get(field));
+            }
+        }
+
+        // 再查找其它
+        if (dataRow != null && dataRow.exists(field)) {
+            if (dataSet != null && dataSet.exists(field))
+                log.warn("dataRow and dataSet exists field: {}", field);
+            return Optional.ofNullable(dataRow.getText(field));
+        } else if (dataSet != null && dataSet.exists(field)) {
+            var row = dataSet.currentRow();
+            return Optional.ofNullable(row.isPresent() ? row.get().getText(field) : "");
+        } else if (options != null && options.containsKey(field)) {
+            return Optional.ofNullable(options.get(field));
+        } else if (!strict) {
+            return Optional.ofNullable("");
+        } else {
+            log.error("not find field: {}", field);
+            return Optional.empty();
+        }
     }
 
 }
