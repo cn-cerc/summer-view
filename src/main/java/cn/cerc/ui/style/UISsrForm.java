@@ -72,8 +72,11 @@ public class UISsrForm extends UIComponent {
             this.fields = this.dataRow.fields().names();
 
         addBlock(SsrDefine.BeginFlag).ifPresent(value -> html.print(value.getHtml()));
-        // 输出内容
-        addBlock(FormBegin, getDefault_FormBegin()).ifPresent(value -> html.print(value.getHtml()));
+        var top = addBlock(FormBegin);
+        if (top.isPresent()) {
+            top.get().getOptions().put("templateId", this.define.id());
+            html.print(top.get().getHtml());
+        }
         for (var field : fields) {
             var block = addBlock(field, () -> new SsrTemplate(
                     String.format("%s: <input type=\"text\" name=\"%s\" value=\"${%s}\">", field, field, field)));
