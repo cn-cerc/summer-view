@@ -18,7 +18,7 @@ import cn.cerc.db.core.Utils;
 
 public class SsrTemplate implements SsrTemplateImpl {
     private static final Logger log = LoggerFactory.getLogger(SsrTemplate.class);
-    private SsrStyle block;
+    private SsrStyle style;
     private List<String> list;
     private ListProxy listProxy;
     private Map<String, String> map;
@@ -34,14 +34,14 @@ public class SsrTemplate implements SsrTemplateImpl {
     public SsrTemplate(String templateText) {
         super();
         this.templateText = templateText;
-        this.block = new SsrStyle(templateText);
-        block.setTemplate(this);
+        this.style = new SsrStyle(templateText);
+        style.setTemplate(this);
     }
 
     public SsrTemplate(Class<?> class1, String id) {
         this.templateText = SsrUtils.getTempateFileText(class1, id);
-        this.block = new SsrStyle(templateText);
-        block.setTemplate(this);
+        this.style = new SsrStyle(templateText);
+        style.setTemplate(this);
     }
 
     @Override
@@ -125,7 +125,7 @@ public class SsrTemplate implements SsrTemplateImpl {
     @Override
     public String getHtml() {
         var sb = new StringBuffer();
-        for (var node : this.block.nodes)
+        for (var node : this.style.nodes)
             sb.append(node.getHtml(this));
         return sb.toString();
     }
@@ -267,14 +267,14 @@ public class SsrTemplate implements SsrTemplateImpl {
         return callback;
     }
 
-    public SsrStyle block() {
-        return block;
+    public SsrStyle style() {
+        return style;
     }
 
-    public SsrTemplate setBlock(SsrStyle block) {
-        Objects.requireNonNull(block);
-        this.block = block;
-        block.setTemplate(this);
+    public SsrTemplate setStyle(SsrStyle style) {
+        Objects.requireNonNull(style);
+        this.style = style;
+        style.setTemplate(this);
         return this;
     }
 
