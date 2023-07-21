@@ -11,40 +11,40 @@ public class SsrTemplateTest {
     @Test
     public void testDecodeString0() {
         var template = new SsrTemplate("");
-        assertEquals("", margeList(template.block()));
+        assertEquals("", margeList(template.style()));
     }
 
     @Test
     public void testDecodeString01() {
         var template = new SsrTemplate("${a}");
         template.setOption("a", "001");
-        assertEquals("a,", margeList(template.block()));
-        assertEquals("001", template.block().get(0).getHtml(template));
+        assertEquals("a,", margeList(template.style()));
+        assertEquals("001", template.style().get(0).getHtml(template));
     }
 
     @Test
     public void testDecodeString1() {
         var template = new SsrTemplate("<div></div>");
-        assertEquals(",", margeList(template.block()));
+        assertEquals(",", margeList(template.style()));
     }
 
     @Test
     public void testDecodeString2() {
         var template = new SsrTemplate("<div>${code.begin}aa${code.end}</div>");
-        assertEquals(",code.begin,,code.end,,", margeList(template.block()));
+        assertEquals(",code.begin,,code.end,,", margeList(template.style()));
     }
 
     @Test
     public void testDecodeString3() {
         var template = new SsrTemplate("<div>${if year_}<span>${Code_}</span>${endif}</div>");
-        assertEquals(",if year_,,", margeList(template.block()));
+        assertEquals(",if year_,,", margeList(template.style()));
     }
 
     @Test
     public void testDecodeString4() {
         var template = new SsrTemplate("${a}{abc}<div>${if year_}<span>${Code_}</span>${endif}</div>");
-        assertEquals(4, template.block().size());
-        assertEquals("a,,if year_,,", margeList(template.block()));
+        assertEquals(4, template.style().size());
+        assertEquals("a,,if year_,,", margeList(template.style()));
     }
 
     @Test
