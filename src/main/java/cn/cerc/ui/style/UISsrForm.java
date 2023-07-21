@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -72,14 +73,17 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
         if (this.fields == null)
             this.fields = this.dataRow.fields().names();
 
-        addBlock(SsrDefine.BeginFlag).ifPresent(value -> html.print(value.getHtml()));
+        getTemplate(SsrDefine.BeginFlag).ifPresent(template -> {
+            template.setDataRow(dataRow);
+            html.print(template.getHtml());
+        });
 
-        var top = addBlock(FormBegin, getDefault_FormBegin()).get();
+        var top = getTemplate(FormBegin, getDefault_FormBegin()).get();
         top.setOption("templateId", this.define.id());
         html.print(top.getHtml());
 
         for (var field : fields) {
-            var block = addBlock(field, () -> new SsrTemplate(
+            var block = getTemplate(field, () -> new SsrTemplate(
                     String.format("%s: <input type=\"text\" name=\"%s\" value=\"${%s}\">", field, field, field)));
             if (block.isPresent()) {
                 this.onGetHtml.forEach((key, value) -> {
@@ -89,8 +93,11 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
             }
             block.ifPresent(value -> html.print(value.getHtml()));
         }
-        addBlock(FormEnd, () -> new SsrTemplate("</form>")).ifPresent(value -> html.print(value.getHtml()));
-        addBlock(SsrDefine.EndFlag).ifPresent(value -> html.print(value.getHtml()));
+        getTemplate(FormEnd, () -> new SsrTemplate("</form>")).ifPresent(value -> html.print(value.getHtml()));
+        getTemplate(SsrDefine.EndFlag).ifPresent(template -> {
+            template.setDataRow(dataRow);
+            html.print(template.getHtml());
+        });
     }
 
     /**
@@ -104,6 +111,7 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
         this.onGetHtml(field, consumer);
     }
 
+    @Override
     public void onGetHtml(String field, Consumer<SsrTemplateImpl> consumer) {
         this.onGetHtml.put(field, consumer);
     }
@@ -112,16 +120,7 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
         return () -> new SsrTemplate("<form method='post'>");
     }
 
-    private Optional<SsrTemplateImpl> addBlock(String id) {
-        SsrTemplateImpl template = define.get(id).orElse(null);
-        if (template != null) {
-            template.setId(id);
-            template.setDataRow(dataRow);
-        }
-        return Optional.ofNullable(template);
-    }
-
-    private Optional<SsrTemplateImpl> addBlock(String id, Supplier<SsrTemplateImpl> supplier) {
+    private Optional<SsrTemplateImpl> getTemplate(String id, Supplier<SsrTemplateImpl> supplier) {
         SsrTemplateImpl template = define.getOrAdd(id, supplier).orElse(null);
         if (template != null) {
             template.setId(id);
@@ -228,6 +227,26 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
     public UISsrForm addTemplate(String id, String templateText) {
         this.define.items().put(id, new SsrTemplate(templateText));
         return this;
+    }
+
+    public SsrDefaultFormStyle createDefaultStyle() {
+        return new SsrDefaultFormStyle(this);
+    }
+
+    /**
+     * 请改使用 getTemplate 或 addTemplate
+     * 
+     * @return
+     */
+    @Deprecated
+    public SsrDefine getDefine() {
+        return this.define;
+    }
+
+    @Override
+    public void addField(Consumer<SsrComponentImpl> consumer) {
+        Objects.requireNonNull(consumer);
+        consumer.accept(this);
     }
 
 }

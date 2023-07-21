@@ -158,6 +158,16 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl {
         this.onGetBodyHtml.put(field, consumer);
     }
 
+    @Override
+    public void onGetHtml(String field, Consumer<SsrTemplateImpl> consumer) {
+        if (field.startsWith("head."))
+            this.onGetHeadHtml(field.substring(5, field.length()), consumer);
+        else if (field.startsWith("body."))
+            this.onGetBodyHtml(field.substring(5, field.length()), consumer);
+        else
+            throw new RuntimeException("只支持以head.或body.开头的事件");
+    }
+
     public List<String> getFields() {
         return fields;
     }
@@ -180,10 +190,6 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl {
     @Deprecated
     public UISsrGrid putDefine(String id, String templateText) {
         return addTemplate(id, templateText);
-    }
-
-    public SsrDefaultGridStyle createDefaultStyle() {
-        return new SsrDefaultGridStyle(this);
     }
 
     /**
@@ -236,15 +242,10 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl {
             fields.add(item);
     }
 
-    public void addField(SsrGridColumn column) {
-        Objects.requireNonNull(column);
-        if (fields == null)
-            fields = new ArrayList<>();
-        if (column != null) {
-            fields.add(column.field());
-            addTemplate("head." + column.field(), column.headStyle());
-            addTemplate("body." + column.field(), column.bodyStyle());
-        }
+    @Override
+    public void addField(Consumer<SsrComponentImpl> consumer) {
+        Objects.requireNonNull(consumer);
+        consumer.accept(this);
     }
 
     @Override
