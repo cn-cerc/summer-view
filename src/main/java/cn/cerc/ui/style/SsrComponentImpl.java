@@ -1,5 +1,7 @@
 package cn.cerc.ui.style;
 
+import java.util.Optional;
+
 import cn.cerc.db.core.DataSet;
 
 public interface SsrComponentImpl {
@@ -9,5 +11,9 @@ public interface SsrComponentImpl {
     DataSet getDefaultOptions();
 
     void setConfig(DataSet configs);
+
+    Object addTemplate(String id, String templateText);
+
+    Optional<SsrTemplateImpl> getTemplate(String templateId);
 
 }

@@ -85,17 +85,17 @@ public class SsrDefine implements Iterable<SsrTemplateImpl> {
         return this.items;
     }
 
-    public Optional<SsrTemplateImpl> get(String blockId) {
-        return Optional.ofNullable(this.items.get(blockId));
+    public Optional<SsrTemplateImpl> get(String templateId) {
+        return Optional.ofNullable(this.items.get(templateId));
     }
 
-    public Optional<SsrTemplateImpl> getOrAdd(String blockId, Supplier<SsrTemplateImpl> supplier) {
+    public Optional<SsrTemplateImpl> getOrAdd(String templateId, Supplier<SsrTemplateImpl> supplier) {
         Objects.requireNonNull(supplier);
-        SsrTemplateImpl template = this.get(blockId).orElse(null);
+        SsrTemplateImpl template = this.get(templateId).orElse(null);
         if (template == null) {
             template = supplier.get();
             if (template != null)
-                this.items().put(blockId, template);
+                this.items().put(templateId, template);
         }
         return Optional.ofNullable(template);
     }
