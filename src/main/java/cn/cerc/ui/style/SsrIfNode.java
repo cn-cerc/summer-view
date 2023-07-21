@@ -22,8 +22,8 @@ public class SsrIfNode extends SsrContainerNode {
         boolean execute(String left, String right);
     }
 
-    private boolean check(Variant status, String text, String flag, LeftRightEquals lrEquals) {
-        var template = this.getTemplate();
+    private boolean check(SsrTemplateImpl template, Variant status, String text, String flag,
+            LeftRightEquals lrEquals) {
         if (template == null)
             return false;
         var arr = text.split(flag);
@@ -68,51 +68,49 @@ public class SsrIfNode extends SsrContainerNode {
     }
 
     @Override
-    public String getHtml() {
+    public String getHtml(SsrTemplateImpl template) {
+        if (template == null)
+            return this.getText();
+
         Variant status = new Variant();
         var text = this.getField().substring(3, this.getField().length());
-        if (check(status, text, "==", (left, right) -> left.equals(right))
-                || check(status, text, "<>", (left, right) -> !left.equals(right))
-                || check(status, text, "!=", (left, right) -> !left.equals(right))
-                || check(status, text, ">=", (left, right) -> left.compareTo(right) >= 0)
-                || check(status, text, "<=", (left, right) -> left.compareTo(right) <= 0)
-                || check(status, text, ">", (left, right) -> left.compareTo(right) > 0)
-                || check(status, text, "<", (left, right) -> left.compareTo(right) < 0)
-                || check(status, text, " is empty", (left, right) -> left.equals(right))
-                || check(status, text, " is not empty", (left, right) -> !left.equals(right))) {
+        if (check(template, status, text, "==", (left, right) -> left.equals(right))
+                || check(template, status, text, "<>", (left, right) -> !left.equals(right))
+                || check(template, status, text, "!=", (left, right) -> !left.equals(right))
+                || check(template, status, text, ">=", (left, right) -> left.compareTo(right) >= 0)
+                || check(template, status, text, "<=", (left, right) -> left.compareTo(right) <= 0)
+                || check(template, status, text, ">", (left, right) -> left.compareTo(right) > 0)
+                || check(template, status, text, "<", (left, right) -> left.compareTo(right) < 0)
+                || check(template, status, text, " is empty", (left, right) -> left.equals(right))
+                || check(template, status, text, " is not empty", (left, right) -> !left.equals(right))) {
             if (status.getInt() == -1)
                 return this.getText();
-            return getChildren(status.getInt() == 1);
+            return getChildren(template, status.getInt() == 1);
         } else { // 直接使用 boolean 字段
-            var template = this.getTemplate();
-            if (template != null) {
-                String field = text.trim();
-                var tmp = false;
-                if (field.startsWith("not ")) {
-                    field = field.substring(4, field.length());
-                    tmp = true;
-                }
-                var value = template.getValue(field);
-                if (value.isEmpty()) {
-                    if (template.isStrict()) {
-                        log.error("not find field: {}", field);
-                        return this.getText();
-                    } else
-                        return getChildren(false);
-                } else {
-                    if (tmp)
-                        return getChildren(!(new Variant(value.get()).getBoolean()));
-                    else
-                        return getChildren(new Variant(value.get()).getBoolean());
-                }
+            String field = text.trim();
+            var tmp = false;
+            if (field.startsWith("not ")) {
+                field = field.substring(4, field.length());
+                tmp = true;
+            }
+            var value = template.getValue(field);
+            if (value.isEmpty()) {
+                if (template.isStrict()) {
+                    log.error("not find field: {}", field);
+                    return this.getText();
+                } else
+                    return getChildren(template, false);
             } else {
-                return this.getText();
+                if (tmp)
+                    return getChildren(template, !(new Variant(value.get()).getBoolean()));
+                else
+                    return getChildren(template, new Variant(value.get()).getBoolean());
             }
         }
 
     }
 
-    private String getChildren(boolean ifValue) {
+    private String getChildren(SsrTemplateImpl template, boolean ifValue) {
         var sb = new StringBuffer();
 
         // 将子项依据else分离成2组
@@ -133,7 +131,7 @@ public class SsrIfNode extends SsrContainerNode {
         // 根据参数决定是执行1还是执行2
         var items = ifValue ? items1 : items2;
         for (var item : items)
-            sb.append(item.getHtml());
+            sb.append(item.getHtml(template));
         return sb.toString();
     }
 

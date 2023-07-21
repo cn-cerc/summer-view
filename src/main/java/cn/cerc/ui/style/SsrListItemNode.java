@@ -8,8 +8,8 @@ public class SsrListItemNode extends SsrValueNode {
     }
 
     @Override
-    public String getHtml() {
-        var list = this.getTemplate().getListProxy();
+    public String getHtml(SsrTemplateImpl template) {
+        var list = template.getListProxy();
         if (list != null) {
             return list.item();
         } else {

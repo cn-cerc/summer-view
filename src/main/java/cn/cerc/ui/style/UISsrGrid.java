@@ -73,7 +73,7 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl {
         for (var field : fields) {
             var block = addBlock("head." + field, getDefault_HeadCell(field));
             if (block.isPresent()) {
-                block.get().getOptions().put("templateId", this.define.id());
+                block.get().setOption("templateId", this.define.id());
                 this.onGetHeadHtml.forEach((key, value) -> {
                     if (key.equals(field))
                         value.accept(block.get().setId(field));
@@ -254,13 +254,13 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl {
     public DataSet getDefaultOptions() {
         DataSet ds = new DataSet();
         for (var ssr : define) {
-            var map = ssr.getOptions();
+            var option = ssr.getOption("option");
             String id = ssr.id();
-            if (map != null && map.containsKey("option")) {
+            if (option.isPresent()) {
                 if (id.startsWith("body.") || id.startsWith("head."))
                     id = id.substring(5, id.length());
                 if (!ds.locate("column_name_", id))
-                    ds.append().setValue("column_name_", id).setValue("option_", map.get("option"));
+                    ds.append().setValue("column_name_", id).setValue("option_", option.get());
             }
         }
         ds.head().setValue("template_id_", define.id());

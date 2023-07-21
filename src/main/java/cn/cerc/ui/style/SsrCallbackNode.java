@@ -2,7 +2,6 @@ package cn.cerc.ui.style;
 
 public class SsrCallbackNode extends SsrTextNode {
     public static final String FirstFlag = "callback";
-    private SsrTemplateImpl template;
     private String field = null;
 
     public SsrCallbackNode(String text) {
@@ -11,11 +10,6 @@ public class SsrCallbackNode extends SsrTextNode {
         var end = text.indexOf(")", start);
         if (start > -1 && end > -1)
             this.field = text.substring(start + 1, end);
-    }
-
-    @Override
-    public void setTemplate(SsrTemplateImpl template) {
-        this.template = template;
     }
 
     @Override
@@ -29,7 +23,7 @@ public class SsrCallbackNode extends SsrTextNode {
     }
 
     @Override
-    public String getHtml() {
+    public String getHtml(SsrTemplateImpl template) {
         var callback = template.getCallback();
         if (callback != null && field != null) {
             var supplier = callback.get(field);

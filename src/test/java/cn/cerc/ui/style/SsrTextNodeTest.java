@@ -10,7 +10,7 @@ public class SsrTextNodeTest {
     public void test_1() {
         var text = "   a ";
         var node = new SsrTextNode(text);
-        assertEquals("a ", node.getHtml());
+        assertEquals("a ", node.getHtml(null));
         assertEquals("a ", node.getText());
     }
 
@@ -18,7 +18,7 @@ public class SsrTextNodeTest {
     public void test_2() {
         var text = "a  ";
         var node = new SsrTextNode(text);
-        assertEquals("a ", node.getHtml());
+        assertEquals("a ", node.getHtml(null));
         assertEquals("a ", node.getText());
     }
 }

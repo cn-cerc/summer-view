@@ -2,8 +2,6 @@ package cn.cerc.ui.style;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.List;
-
 import org.junit.Test;
 
 import cn.cerc.db.core.DataRow;
@@ -13,40 +11,40 @@ public class SsrTemplateTest {
     @Test
     public void testDecodeString0() {
         var template = new SsrTemplate("");
-        assertEquals("", margeList(template.nodes()));
+        assertEquals("", margeList(template.block()));
     }
 
     @Test
     public void testDecodeString01() {
         var template = new SsrTemplate("${a}");
-        template.getOptions().put("a", "001");
-        assertEquals("a,", margeList(template.nodes()));
-        assertEquals("001", template.nodes().get(0).getHtml());
+        template.setOption("a", "001");
+        assertEquals("a,", margeList(template.block()));
+        assertEquals("001", template.block().get(0).getHtml(template));
     }
 
     @Test
     public void testDecodeString1() {
         var template = new SsrTemplate("<div></div>");
-        assertEquals(",", margeList(template.nodes()));
+        assertEquals(",", margeList(template.block()));
     }
 
     @Test
     public void testDecodeString2() {
         var template = new SsrTemplate("<div>${code.begin}aa${code.end}</div>");
-        assertEquals(",code.begin,,code.end,,", margeList(template.nodes()));
+        assertEquals(",code.begin,,code.end,,", margeList(template.block()));
     }
 
     @Test
     public void testDecodeString3() {
         var template = new SsrTemplate("<div>${if year_}<span>${Code_}</span>${endif}</div>");
-        assertEquals(",if year_,,", margeList(template.nodes()));
+        assertEquals(",if year_,,", margeList(template.block()));
     }
 
     @Test
     public void testDecodeString4() {
         var template = new SsrTemplate("${a}{abc}<div>${if year_}<span>${Code_}</span>${endif}</div>");
-        assertEquals(4, template.nodes().size());
-        assertEquals("a,,if year_,,", margeList(template.nodes()));
+        assertEquals(4, template.block().size());
+        assertEquals("a,,if year_,,", margeList(template.block()));
     }
 
     @Test
@@ -92,9 +90,9 @@ public class SsrTemplateTest {
         assertEquals("a", block2.toString());
     }
 
-    private String margeList(List<SsrNodeImpl> list) {
+    private String margeList(SsrStyle block) {
         var sb = new StringBuffer();
-        for (var item : list)
+        for (var item : block)
             sb.append(item.getField()).append(",");
         return sb.toString();
     }

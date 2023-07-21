@@ -2,10 +2,10 @@ package cn.cerc.ui.style;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -16,16 +16,16 @@ import cn.cerc.db.core.DataRow;
 import cn.cerc.db.core.DataSet;
 import cn.cerc.db.core.Utils;
 
-public class SsrTemplate implements SsrTemplateImpl, Iterable<SsrNodeImpl> {
+public class SsrTemplate implements SsrTemplateImpl {
     private static final Logger log = LoggerFactory.getLogger(SsrTemplate.class);
-    private ArrayList<SsrNodeImpl> nodes;
+    private SsrStyle block;
     private List<String> list;
     private ListProxy listProxy;
     private Map<String, String> map;
     private MapProxy mapProxy;
     private DataRow dataRow;
     private DataSet dataSet;
-    private Map<String, String> options = new HashMap<>();
+    private Map<String, String> options;
     private Map<String, Supplier<String>> callback;
     private boolean strict = true;
     private String templateText;
@@ -34,18 +34,14 @@ public class SsrTemplate implements SsrTemplateImpl, Iterable<SsrNodeImpl> {
     public SsrTemplate(String templateText) {
         super();
         this.templateText = templateText;
-        this.nodes = SsrUtils.createNodes(templateText);
-        for (var node : nodes)
-            node.setTemplate(this);
-        CompressNodes.run(nodes);
+        this.block = new SsrStyle(templateText);
+        block.setTemplate(this);
     }
 
     public SsrTemplate(Class<?> class1, String id) {
         this.templateText = SsrUtils.getTempateFileText(class1, id);
-        this.nodes = SsrUtils.createNodes(templateText);
-        for (var node : nodes)
-            node.setTemplate(this);
-        CompressNodes.run(nodes);
+        this.block = new SsrStyle(templateText);
+        block.setTemplate(this);
     }
 
     @Override
@@ -82,7 +78,25 @@ public class SsrTemplate implements SsrTemplateImpl, Iterable<SsrNodeImpl> {
     }
 
     @Override
+    public SsrTemplateImpl setOption(String key, String value) {
+        if (options == null)
+            options = new HashMap<>();
+        options.put(key, value);
+        return this;
+    }
+
+    @Override
+    public Optional<String> getOption(String key) {
+        if (options == null)
+            return Optional.empty();
+        return Optional.ofNullable(options.get(key));
+    }
+
+    @Override
+    @Deprecated
     public Map<String, String> getOptions() {
+        if (options == null)
+            options = new HashMap<>();
         return options;
     }
 
@@ -111,13 +125,9 @@ public class SsrTemplate implements SsrTemplateImpl, Iterable<SsrNodeImpl> {
     @Override
     public String getHtml() {
         var sb = new StringBuffer();
-        for (var node : this.nodes)
-            sb.append(node.getHtml());
+        for (var node : this.block.nodes)
+            sb.append(node.getHtml(this));
         return sb.toString();
-    }
-
-    protected List<SsrNodeImpl> nodes() {
-        return nodes;
     }
 
     /**
@@ -257,9 +267,15 @@ public class SsrTemplate implements SsrTemplateImpl, Iterable<SsrNodeImpl> {
         return callback;
     }
 
-    @Override
-    public Iterator<SsrNodeImpl> iterator() {
-        return nodes.iterator();
+    public SsrStyle block() {
+        return block;
+    }
+
+    public SsrTemplate setBlock(SsrStyle block) {
+        Objects.requireNonNull(block);
+        this.block = block;
+        block.setTemplate(this);
+        return this;
     }
 
     @Override

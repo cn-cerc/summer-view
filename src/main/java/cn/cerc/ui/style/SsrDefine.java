@@ -75,7 +75,7 @@ public class SsrDefine implements Iterable<SsrTemplateImpl> {
             if ((right.startsWith("'") && right.endsWith("'")) || ((right.startsWith("\"") && right.endsWith("\""))))
                 right = right.substring(1, right.length() - 1);
             // 存入到选项参数
-            template.getOptions().put(left, right);
+            template.setOption(left, right);
         } else {
             log.warn("参数必须以等于符号进行定义与赋值");
         }

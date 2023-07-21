@@ -62,7 +62,6 @@ public class CompressNodes {
                 if (field.startsWith(sign.beginFlag())) {
                     if (container == null) {
                         container = sign.supper().createObject(field);
-                        container.setTemplate(item.getTemplate());
                         start = i;
                         first = count;
                     }
