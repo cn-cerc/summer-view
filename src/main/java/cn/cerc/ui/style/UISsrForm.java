@@ -153,17 +153,13 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
         this.fields = fields;
     }
 
-    public SsrDefine getDefine() {
-        return define;
-    }
-
     public boolean isStrict() {
         return strict;
     }
 
     public UISsrForm setStrict(boolean strict) {
         this.strict = strict;
-        for (var block : define.items().values())
+        for (var block : define)
             block.setStrict(strict);
         return this;
     }
@@ -221,6 +217,17 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
             if (item.getEnum("option_", TemplateConfigOptionEnum.class) != TemplateConfigOptionEnum.不显示)
                 addField(item.getString("column_name_"));
         });
+    }
+
+    @Override
+    public Optional<SsrTemplateImpl> getTemplate(String templateId) {
+        return define.get(templateId);
+    }
+
+    @Override
+    public UISsrForm addTemplate(String id, String templateText) {
+        this.define.items().put(id, new SsrTemplate(templateText));
+        return this;
     }
 
 }

@@ -29,10 +29,10 @@ public class UISsrGridTest {
         ds.append().setValue("code_", "002").setValue("name_", "b01");
 
         var grid = new UISsrGrid(null, "");
-        grid.putDefine(UISsrGrid.TableBegin, "<table class='a'>");
-        grid.putHead("code_", "<th width=${width}>${title}</td>");
+        grid.addTemplate(UISsrGrid.TableBegin, "<table class='a'>");
+        grid.addTemplate("head.code_", "<th width=${width}>${title}</td>");
         grid.onGetHeadHtml("code_", ssr -> ssr.toMap("width", "30").toMap("title", "xxx"));
-        grid.putBody("code_", "<td><a href=\"${url}\">${code_}</a></td>");
+        grid.addTemplate("body.code_", "<td><a href=\"${url}\">${code_}</a></td>");
         grid.onGetBodyHtml("code_", ssr -> ssr.toMap("url", "http://" + ds.getString(ssr.id())));
         grid.setDataSet(ds);
         assertEquals(

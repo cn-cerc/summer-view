@@ -65,13 +65,16 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl {
         if (this.fields == null)
             this.fields = this.dataSet.fields().names();
 
-        addBlock(SsrDefine.BeginFlag).ifPresent(value -> html.print(value.getHtml()));
-        addBlock(TableBegin, getDefault_TableBegin()).ifPresent(value -> html.print(value.getHtml()));
+        getTemplate(SsrDefine.BeginFlag).ifPresent(template -> {
+            template.setDataSet(dataSet);
+            html.print(template.getHtml());
+        });
+        getTemplate(TableBegin, getDefault_TableBegin()).ifPresent(value -> html.print(value.getHtml()));
 
         // 输出标题
-        addBlock(HeadBegin, getDefault_HeadBegin()).ifPresent(value -> html.print(value.getHtml()));
+        getTemplate(HeadBegin, getDefault_HeadBegin()).ifPresent(value -> html.print(value.getHtml()));
         for (var field : fields) {
-            var block = addBlock("head." + field, getDefault_HeadCell(field));
+            var block = getTemplate("head." + field, getDefault_HeadCell(field));
             if (block.isPresent()) {
                 block.get().setOption("templateId", this.define.id());
                 this.onGetHeadHtml.forEach((key, value) -> {
@@ -81,7 +84,7 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl {
             }
             block.ifPresent(value -> html.print(value.getHtml()));
         }
-        addBlock(HeadEnd, () -> new SsrTemplate("</tr>")).ifPresent(value -> html.print(value.getHtml()));
+        getTemplate(HeadEnd, () -> new SsrTemplate("</tr>")).ifPresent(value -> html.print(value.getHtml()));
 
         // 输出内容
         if (dataSet.size() > 0) {
@@ -89,9 +92,9 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl {
             try {
                 dataSet.first();
                 while (dataSet.fetch()) {
-                    addBlock(BodyBegin, getDefault_BodyBegin()).ifPresent(value -> html.print(value.getHtml()));
+                    getTemplate(BodyBegin, getDefault_BodyBegin()).ifPresent(value -> html.print(value.getHtml()));
                     for (var field : fields) {
-                        var block = addBlock("body." + field, getDefault_BodyCell(field));
+                        var block = getTemplate("body." + field, getDefault_BodyCell(field));
                         if (block.isPresent()) {
                             this.onGetBodyHtml.forEach((key, value) -> {
                                 if (key.equals(field))
@@ -100,27 +103,22 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl {
                         }
                         block.ifPresent(value -> html.print(value.getHtml()));
                     }
-                    addBlock(BodyEnd, () -> new SsrTemplate("</tr>")).ifPresent(value -> html.print(value.getHtml()));
+                    getTemplate(BodyEnd, () -> new SsrTemplate("</tr>"))
+                            .ifPresent(value -> html.print(value.getHtml()));
                 }
             } finally {
                 dataSet.setRecNo(save_rec);
             }
         }
 
-        addBlock(TableEnd, () -> new SsrTemplate("</table>")).ifPresent(value -> html.print(value.getHtml()));
-        addBlock(SsrDefine.EndFlag).ifPresent(value -> html.print(value.getHtml()));
-    }
-
-    private Optional<SsrTemplateImpl> addBlock(String id) {
-        SsrTemplateImpl template = define.get(id).orElse(null);
-        if (template != null) {
-            template.setId(id);
+        getTemplate(TableEnd, () -> new SsrTemplate("</table>")).ifPresent(value -> html.print(value.getHtml()));
+        getTemplate(SsrDefine.EndFlag).ifPresent(template -> {
             template.setDataSet(dataSet);
-        }
-        return Optional.ofNullable(template);
+            html.print(template.getHtml());
+        });
     }
 
-    private Optional<SsrTemplateImpl> addBlock(String id, Supplier<SsrTemplateImpl> supplier) {
+    private Optional<SsrTemplateImpl> getTemplate(String id, Supplier<SsrTemplateImpl> supplier) {
         SsrTemplateImpl template = define.getOrAdd(id, supplier).orElse(null);
         if (template != null) {
             template.setId(id);
@@ -172,17 +170,16 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl {
         return define;
     }
 
+    /**
+     * 请改使用 addTemplate
+     * 
+     * @param id
+     * @param templateText
+     * @return
+     */
+    @Deprecated
     public UISsrGrid putDefine(String id, String templateText) {
-        this.define.items().put(id, new SsrTemplate(templateText));
-        return this;
-    }
-
-    public UISsrGrid putHead(String field, String templateText) {
-        return this.putDefine("head." + field, templateText);
-    }
-
-    public UISsrGrid putBody(String field, String templateText) {
-        return this.putDefine("body." + field, templateText);
+        return addTemplate(id, templateText);
     }
 
     public SsrDefaultGridStyle createDefaultStyle() {
@@ -245,8 +242,8 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl {
             fields = new ArrayList<>();
         if (column != null) {
             fields.add(column.field());
-            putDefine("head." + column.field(), column.headStyle());
-            putDefine("body." + column.field(), column.bodyStyle());
+            addTemplate("head." + column.field(), column.headStyle());
+            addTemplate("body." + column.field(), column.bodyStyle());
         }
     }
 
@@ -273,6 +270,17 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl {
             if (item.getEnum("option_", TemplateConfigOptionEnum.class) != TemplateConfigOptionEnum.不显示)
                 addField(item.getString("column_name_"));
         });
+    }
+
+    @Override
+    public UISsrGrid addTemplate(String id, String templateText) {
+        this.define.items().put(id, new SsrTemplate(templateText));
+        return this;
+    }
+
+    @Override
+    public Optional<SsrTemplateImpl> getTemplate(String templateId) {
+        return define.get(templateId);
     }
 
 }
