@@ -24,7 +24,7 @@ public class SsrDefaultGridStyleTest {
         map.put("b", "李四");
         map.put("c", "王五");
 
-        var style = new SsrDefaultGridStyle(grid);
+        var style = new SsrDefaultGridStyle();
         grid.addField(style.getIt(2));
         grid.addField(style.getString("Name_", "部门名称", 10));
         grid.addField(style.getBoolean("Final_", "状态", 4, "已审核"));
