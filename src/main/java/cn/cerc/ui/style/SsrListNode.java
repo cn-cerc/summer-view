@@ -9,8 +9,8 @@ public class SsrListNode extends SsrContainerNode {
     }
 
     @Override
-    public String getHtml() {
-        var list = this.getTemplate().getListProxy();
+    public String getHtml(SsrTemplateImpl template) {
+        var list = template.getListProxy();
         if (list == null)
             return this.getText();
 
@@ -18,7 +18,7 @@ public class SsrListNode extends SsrContainerNode {
         var sb = new StringBuffer();
         while (list.fetch()) {
             for (var item : this.getItems())
-                sb.append(item.getHtml());
+                sb.append(item.getHtml(template));
         }
         return sb.toString();
     }

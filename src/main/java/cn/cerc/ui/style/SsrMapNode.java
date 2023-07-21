@@ -9,18 +9,18 @@ public class SsrMapNode extends SsrContainerNode {
     }
 
     @Override
-    public String getHtml() {
-        var params = this.getTemplate().getMap();
+    public String getHtml(SsrTemplateImpl template) {
+        var params = template.getMap();
         if (params == null)
             return this.getText();
 
         var sb = new StringBuffer();
 
-        var map = this.getTemplate().getMapProxy();
+        var map = template.getMapProxy();
         map.reset();
         while (map.fetch()) {
             for (var item : this.getItems())
-                sb.append(item.getHtml());
+                sb.append(item.getHtml(template));
         }
         return sb.toString();
     }

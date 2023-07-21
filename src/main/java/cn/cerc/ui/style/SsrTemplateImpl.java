@@ -110,7 +110,16 @@ public interface SsrTemplateImpl {
 
     ListProxy getListProxy();
 
+    /**
+     * 
+     * @return 请改使用 setOption 与 getOption
+     */
+    @Deprecated
     Map<String, String> getOptions();
+
+    SsrTemplateImpl setOption(String key, String value);
+
+    Optional<String> getOption(String key);
 
     Optional<String> getValue(String field);
 }

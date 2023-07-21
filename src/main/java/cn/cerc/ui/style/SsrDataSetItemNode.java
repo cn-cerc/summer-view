@@ -12,13 +12,13 @@ public class SsrDataSetItemNode extends SsrValueNode {
     }
 
     @Override
-    public String getHtml() {
+    public String getHtml(SsrTemplateImpl template) {
         var field = this.getField().substring(FirstFlag.length(), this.getField().length());
-        var dataSet = this.getTemplate().getDataSet();
+        var dataSet = template.getDataSet();
         if (dataSet != null) {
             if (dataSet.exists(field))
                 return dataSet.current().getText(field);
-            else if (this.getTemplate().isStrict()) {
+            else if (template.isStrict()) {
                 log.error("not find field: {}", field);
                 return this.getText();
             } else {

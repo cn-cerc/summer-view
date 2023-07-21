@@ -18,16 +18,12 @@ public class SsrTextNode implements SsrNodeImpl {
     }
 
     @Override
-    public String getHtml() {
+    public String getHtml(SsrTemplateImpl template) {
         var val = this.text.trim();
         if (text.length() > 0 && "".equals(val))
             return " ";
         else
             return (text.startsWith(" ") ? " " : "") + val + (text.endsWith(" ") ? " " : "");
-    }
-
-    @Override
-    public void setTemplate(SsrTemplateImpl template) {
     }
 
 }

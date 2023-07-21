@@ -9,8 +9,8 @@ public class SsrDatasetNode extends SsrContainerNode {
     }
 
     @Override
-    public String getHtml() {
-        var dataSet = this.getTemplate().getDataSet();
+    public String getHtml(SsrTemplateImpl template) {
+        var dataSet = template.getDataSet();
         if (dataSet == null)
             return this.getText();
 
@@ -23,7 +23,7 @@ public class SsrDatasetNode extends SsrContainerNode {
             dataSet.first();
             while (dataSet.fetch()) {
                 for (var item : this.getItems())
-                    sb.append(item.getHtml());
+                    sb.append(item.getHtml(template));
             }
             return sb.toString();
         } finally {

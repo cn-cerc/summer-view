@@ -50,7 +50,7 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
     private UISsrForm init(IPage page) {
         if (page != null) {
             for (var ssr : define)
-                ssr.getOptions().put("isPhone", "" + page.getForm().getClient().isPhone());
+                ssr.setOption("isPhone", "" + page.getForm().getClient().isPhone());
         }
         return this;
     }
@@ -73,11 +73,11 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
             this.fields = this.dataRow.fields().names();
 
         addBlock(SsrDefine.BeginFlag).ifPresent(value -> html.print(value.getHtml()));
-        var top = addBlock(FormBegin);
-        if (top.isPresent()) {
-            top.get().getOptions().put("templateId", this.define.id());
-            html.print(top.get().getHtml());
-        }
+
+        var top = addBlock(FormBegin, getDefault_FormBegin()).get();
+        top.setOption("templateId", this.define.id());
+        html.print(top.getHtml());
+
         for (var field : fields) {
             var block = addBlock(field, () -> new SsrTemplate(
                     String.format("%s: <input type=\"text\" name=\"%s\" value=\"${%s}\">", field, field, field)));
@@ -175,9 +175,9 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
     public boolean readAll(HttpServletRequest request, String submitId) {
         boolean submit = request.getParameter(submitId) != null;
         for (var ssr : define) {
-            var map = ssr.getOptions();
-            if (map != null && map.containsKey("fields")) {
-                var fields = map.get("fields");
+            var option = ssr.getOption("fields");
+            if (option.isPresent()) {
+                var fields = option.get();
                 for (var field : fields.split(",")) {
                     String val = request.getParameter(field);
                     updateValue(field, val, submit);
@@ -206,9 +206,9 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
     public DataSet getDefaultOptions() {
         DataSet ds = new DataSet();
         for (var ssr : define) {
-            var map = ssr.getOptions();
-            if (map != null && map.containsKey("option")) {
-                ds.append().setValue("column_name_", ssr.id()).setValue("option_", map.get("option"));
+            var option = ssr.getOption("option");
+            if (option.isPresent()) {
+                ds.append().setValue("column_name_", ssr.id()).setValue("option_", option.get());
             }
         }
         ds.head().setValue("template_id_", define.id());

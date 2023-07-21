@@ -8,8 +8,8 @@ public class SsrDataSetRecNode extends SsrValueNode {
     }
 
     @Override
-    public String getHtml() {
-        var dataSet = this.getTemplate().getDataSet();
+    public String getHtml(SsrTemplateImpl template) {
+        var dataSet = template.getDataSet();
         if (dataSet != null) {
             return "" + dataSet.recNo();
         } else {

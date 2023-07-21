@@ -8,10 +8,10 @@ public class SsrMapKeyNode extends SsrValueNode {
     }
 
     @Override
-    public String getHtml() {
-        var map = this.getTemplate().getMap();
+    public String getHtml(SsrTemplateImpl template) {
+        var map = template.getMap();
         if (map != null) {
-            return this.getTemplate().getMapProxy().key();
+            return template.getMapProxy().key();
         } else {
             return this.getText();
         }

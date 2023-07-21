@@ -56,17 +56,17 @@ public class SsrUtilsTest {
         var node = nodes.get(0);
         assertEquals("abc", node.getField());
         assertEquals("${abc}", node.getText());
-        assertEquals("template is null", node.getHtml());
+        assertEquals("template is null", node.getHtml(null));
 
         node = nodes.get(1);
         assertEquals("", node.getField());
         assertEquals("a", node.getText());
-        assertEquals("a", node.getHtml());
+        assertEquals("a", node.getHtml(null));
 
         node = nodes.get(2);
         assertEquals("bbb", node.getField());
         assertEquals("${bbb}", node.getText());
-        assertEquals("template is null", node.getHtml());
+        assertEquals("template is null", node.getHtml(null));
     }
 
 }

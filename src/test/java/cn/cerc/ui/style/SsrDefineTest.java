@@ -15,10 +15,9 @@ public class SsrDefineTest {
                 """);
 
         var ssr = define.get("a").get();
-        assertEquals(2, ssr.getOptions().size());
 
-        assertEquals("10", ssr.getOptions().get("width"));
-        assertEquals("code_,name_", ssr.getOptions().get("_fields"));
+        assertEquals("10", ssr.getOption("width").orElse(""));
+        assertEquals("code_,name_", ssr.getOption("_fields").orElse(""));
     }
 
     @Test
