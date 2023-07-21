@@ -230,7 +230,7 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
     }
 
     public SsrDefaultFormStyle createDefaultStyle() {
-        return new SsrDefaultFormStyle(this);
+        return new SsrDefaultFormStyle();
     }
 
     /**
