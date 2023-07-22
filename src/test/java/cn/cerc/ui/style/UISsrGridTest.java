@@ -34,6 +34,8 @@ public class UISsrGridTest {
         grid.onGetHeadHtml("code_", ssr -> ssr.toMap("width", "30").toMap("title", "xxx"));
         grid.addTemplate("body.code_", "<td><a href=\"${url}\">${code_}</a></td>");
         grid.onGetBodyHtml("code_", ssr -> ssr.toMap("url", "http://" + ds.getString(ssr.id())));
+        grid.addField("code_", "name_");
+
         grid.setDataSet(ds);
         assertEquals(
                 "<table class='a'><tr><th width=30>xxx</td><th>name_</th></tr><tr><td><a href=\"http://001\">001</a></td><td>a01</td></tr><tr><td><a href=\"http://002\">002</a></td><td>b01</td></tr></table>",

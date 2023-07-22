@@ -12,13 +12,17 @@ import org.slf4j.LoggerFactory;
 
 import cn.cerc.db.core.Utils;
 
-public class SsrDefine implements Iterable<SsrTemplateImpl> {
+public class SsrDefine implements Iterable<SsrTemplateImpl>, SsrStrictImpl {
     private static final Logger log = LoggerFactory.getLogger(SsrDefine.class);
     private Map<String, SsrTemplateImpl> items = new LinkedHashMap<>();
     public static final String BeginFlag = "begin";
     public static final String EndFlag = "end";
     private String templateText;
     private String id;
+    private boolean strict;
+
+    public SsrDefine() {
+    }
 
     public SsrDefine(String templateText) {
         this.templateText = templateText;
@@ -64,7 +68,7 @@ public class SsrDefine implements Iterable<SsrTemplateImpl> {
         } else
             key = blockText;
         template.setId(key);
-        items.put(key, template);
+        this.addItem(key, template);
     }
 
     private void addParam(String blockId, SsrTemplate template, String param) {
@@ -123,6 +127,22 @@ public class SsrDefine implements Iterable<SsrTemplateImpl> {
     @Override
     public Iterator<SsrTemplateImpl> iterator() {
         return this.items.values().iterator();
+    }
+
+    public void addItem(String id, SsrTemplate template) {
+        template.setDefine(this);
+        this.items.put(id, template);
+    }
+
+    @Override
+    public boolean isStrict() {
+        return strict;
+    }
+
+    @Override
+    public SsrDefine setStrict(boolean strict) {
+        this.strict = strict;
+        return this;
     }
 
 }

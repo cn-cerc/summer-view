@@ -30,9 +30,10 @@ public class SsrTemplate implements SsrTemplateImpl {
     private boolean strict = true;
     private String templateText;
     private String id;
+    private OnGetValueEvent onGetValue;
+    private SsrDefine define;
 
     public SsrTemplate(String templateText) {
-        super();
         this.templateText = templateText;
         this.style = new SsrStyle(templateText);
         style.setTemplate(this);
@@ -137,7 +138,7 @@ public class SsrTemplate implements SsrTemplateImpl {
      */
     @Override
     public boolean isStrict() {
-        return strict;
+        return define != null ? define.isStrict() : strict;
     }
 
     /**
@@ -149,6 +150,8 @@ public class SsrTemplate implements SsrTemplateImpl {
     @Override
     public SsrTemplate setStrict(boolean strict) {
         this.strict = strict;
+        if (define != null)
+            define.setStrict(strict);
         return this;
     }
 
@@ -280,53 +283,60 @@ public class SsrTemplate implements SsrTemplateImpl {
 
     @Override
     public Optional<String> getValue(String field) {
+        String result = null;
         // 先查找list
-        if (list != null) {
-            if (SsrListItemNode.is(field))
-                return Optional.ofNullable(this.getListProxy().item());
-            else if (Utils.isNumeric(field)) {
-                var index = Integer.parseInt(field);
-                if (index >= 0 && index < list.size()) {
-                    return Optional.ofNullable(list.get(index));
-                } else if (!this.strict) {
-                    return Optional.ofNullable("");
-                } else {
-                    log.error("not find index of list: {}", field);
-                    return Optional.empty();
-                }
+        if (list != null && SsrListItemNode.is(field))
+            result = this.getListProxy().item();
+        else if (list != null && Utils.isNumeric(field)) {
+            var index = Integer.parseInt(field);
+            if (index >= 0 && index < list.size()) {
+                result = list.get(index);
+            } else if (!this.isStrict()) {
+                result = "";
+            } else {
+                log.error("not find index of list: {}", field);
             }
         }
         // 再查找map
-        if (map != null) {
-            if (SsrMapKeyNode.is(field))
-                return Optional.ofNullable(this.getMapProxy().key());
-            else if (SsrMapValueNode.is(field))
-                return Optional.ofNullable(this.getMapProxy().value());
-            else if (map.containsKey(field)) {
-                if (dataRow != null && dataRow.exists(field))
-                    log.warn("map and dataRow exists field: {}", field);
-                if (dataSet != null && dataSet.exists(field))
-                    log.warn("map and dataSet exists field: {}", field);
-                return Optional.ofNullable(map.get(field));
-            }
+        else if (map != null && SsrMapKeyNode.is(field))
+            result = this.getMapProxy().key();
+        else if (map != null && SsrMapValueNode.is(field))
+            result = this.getMapProxy().value();
+        else if (map != null && map.containsKey(field)) {
+            if (dataRow != null && dataRow.exists(field))
+                log.warn("map and dataRow exists field: {}", field);
+            if (dataSet != null && dataSet.exists(field))
+                log.warn("map and dataSet exists field: {}", field);
+            result = map.get(field);
         }
-
         // 再查找其它
-        if (dataRow != null && dataRow.exists(field)) {
+        else if (dataRow != null && dataRow.exists(field)) {
             if (dataSet != null && dataSet.exists(field))
                 log.warn("dataRow and dataSet exists field: {}", field);
-            return Optional.ofNullable(dataRow.getText(field));
+            result = dataRow.getText(field);
         } else if (dataSet != null && dataSet.exists(field)) {
             var row = dataSet.currentRow();
-            return Optional.ofNullable(row.isPresent() ? row.get().getText(field) : "");
+            result = row.isPresent() ? row.get().getText(field) : "";
         } else if (options != null && options.containsKey(field)) {
-            return Optional.ofNullable(options.get(field));
-        } else if (!strict) {
-            return Optional.ofNullable("");
-        } else {
+            result = options.get(field);
+        } else if (!isStrict()) {
+            result = "";
+        } else if (onGetValue == null) {
             log.error("not find field: {}", field);
-            return Optional.empty();
         }
+        if (onGetValue != null)
+            result = onGetValue.getValue(field, result);
+        return Optional.ofNullable(result);
+    }
+
+    @Override
+    public SsrTemplateImpl onGetValue(OnGetValueEvent onGetValue) {
+        this.onGetValue = onGetValue;
+        return this;
+    }
+
+    protected void setDefine(SsrDefine define) {
+        this.define = define;
     }
 
 }
