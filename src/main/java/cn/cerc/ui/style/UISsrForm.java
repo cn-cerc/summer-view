@@ -169,13 +169,16 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
 
     public boolean readAll(HttpServletRequest request, String submitId) {
         boolean submit = request.getParameter(submitId) != null;
-        for (var ssr : define) {
-            var option = ssr.getOption("fields");
-            if (option.isPresent()) {
-                var fields = option.get();
-                for (var field : fields.split(",")) {
-                    String val = request.getParameter(field);
-                    updateValue(field, val, submit);
+        for (var column : fields) {
+            var template = getTemplate(column);
+            if (template.isPresent()) {
+                var option = template.get().getOption("fields");
+                if (option.isPresent()) {
+                    var fields = option.get();
+                    for (var field : fields.split(",")) {
+                        String val = request.getParameter(field);
+                        updateValue(field, val, submit);
+                    }
                 }
             }
         }
