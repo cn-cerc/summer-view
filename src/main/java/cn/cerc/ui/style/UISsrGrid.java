@@ -17,7 +17,6 @@ import cn.cerc.ui.core.UIComponent;
 
 public class UISsrGrid extends UIComponent implements SsrComponentImpl {
     private static final Logger log = LoggerFactory.getLogger(UISsrGrid.class);
-    private DataSet dataSet;
     private SsrDefine define;
     private List<String> fields;
     private Map<String, Consumer<SsrTemplateImpl>> onGetBodyHtml = new HashMap<>();
@@ -48,31 +47,29 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl {
     }
 
     public DataSet getDataSet() {
-        return dataSet;
+        return define.getDataSet();
     }
 
-    public void setDataSet(DataSet dataSet) {
-        this.dataSet = dataSet;
+    public UISsrGrid setDataSet(DataSet dataSet) {
+        define.setDataSet(dataSet);
+        return this;
     }
 
     @Override
     public void output(HtmlWriter html) {
-        if (this.dataSet == null) {
+        if (this.getDataSet() == null) {
             log.error("dataSet is null");
             return;
         }
         if (this.fields == null) {
             if (this.emptyText == null)
-                html.print(String.format("dataSet.size=%d, fields is null, emptyText is null", dataSet.size()));
+                html.print(String.format("dataSet.size=%d, fields is null, emptyText is null", getDataSet().size()));
             else
                 html.print(this.emptyText);
             return;
         }
 
-        getTemplate(SsrDefine.BeginFlag).ifPresent(template -> {
-            template.setDataSet(dataSet);
-            html.print(template.getHtml());
-        });
+        getTemplate(SsrDefine.BeginFlag).ifPresent(template -> html.print(template.getHtml()));
         getTemplate(TableBegin, getDefault_TableBegin()).ifPresent(value -> html.print(value.getHtml()));
 
         // 输出标题
@@ -88,14 +85,15 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl {
             }
             block.ifPresent(value -> html.print(value.getHtml()));
         }
-        getTemplate(HeadEnd, () -> new SsrTemplate("</tr>")).ifPresent(value -> html.print(value.getHtml()));
+        getTemplate(HeadEnd, () -> new SsrTemplate("</tr>").setDefine(define))
+                .ifPresent(value -> html.print(value.getHtml()));
 
         // 输出内容
-        if (dataSet.size() > 0) {
-            var save_rec = dataSet.recNo();
+        if (getDataSet().size() > 0) {
+            var save_rec = getDataSet().recNo();
             try {
-                dataSet.first();
-                while (dataSet.fetch()) {
+                getDataSet().first();
+                while (getDataSet().fetch()) {
                     getTemplate(BodyBegin, getDefault_BodyBegin()).ifPresent(value -> html.print(value.getHtml()));
                     for (var field : fields) {
                         var block = getTemplate("body." + field, getDefault_BodyCell(field));
@@ -107,27 +105,25 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl {
                         }
                         block.ifPresent(value -> html.print(value.getHtml()));
                     }
-                    getTemplate(BodyEnd, () -> new SsrTemplate("</tr>"))
+                    getTemplate(BodyEnd, () -> new SsrTemplate("</tr>").setDefine(define))
                             .ifPresent(value -> html.print(value.getHtml()));
                 }
             } finally {
-                dataSet.setRecNo(save_rec);
+                getDataSet().setRecNo(save_rec);
             }
         }
 
-        getTemplate(TableEnd, () -> new SsrTemplate("</table>")).ifPresent(value -> html.print(value.getHtml()));
-        getTemplate(SsrDefine.EndFlag).ifPresent(template -> {
-            template.setDataSet(dataSet);
-            html.print(template.getHtml());
-        });
+        getTemplate(TableEnd, () -> new SsrTemplate("</table>").setDefine(define))
+                .ifPresent(value -> html.print(value.getHtml()));
+        getTemplate(SsrDefine.EndFlag).ifPresent(template -> html.print(template.getHtml()));
+
     }
 
     private Optional<SsrTemplateImpl> getTemplate(String id, Supplier<SsrTemplateImpl> supplier) {
         SsrTemplateImpl template = define.getOrAdd(id, supplier).orElse(null);
-        if (template != null) {
+        if (template != null)
             template.setId(id);
-            template.setDataSet(dataSet);
-        } else
+        else
             log.error("表格模版中缺失定义：{}", id);
         return Optional.ofNullable(template);
     }
@@ -202,7 +198,7 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl {
      * @return 返回默认的表头样式
      */
     private Supplier<SsrTemplateImpl> getDefault_TableBegin() {
-        return () -> new SsrTemplate("<table>");
+        return () -> new SsrTemplate("<table>").setDefine(define);
     }
 
     /**
@@ -210,7 +206,7 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl {
      * @return 返回表头行
      */
     private Supplier<SsrTemplateImpl> getDefault_HeadBegin() {
-        return () -> new SsrTemplate("<tr>");
+        return () -> new SsrTemplate("<tr>").setDefine(define);
     }
 
     /**
@@ -218,7 +214,7 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl {
      * @return 返回表身行
      */
     private Supplier<SsrTemplateImpl> getDefault_BodyBegin() {
-        return () -> new SsrTemplate("<tr>");
+        return () -> new SsrTemplate("<tr>").setDefine(define);
     }
 
     /**
@@ -227,7 +223,7 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl {
      * @return 返回默认的表头单元格样式
      */
     private Supplier<SsrTemplateImpl> getDefault_HeadCell(String field) {
-        return () -> new SsrTemplate(String.format("<th>%s</th>", field));
+        return () -> new SsrTemplate(String.format("<th>%s</th>", field)).setDefine(define);
     }
 
     /**
@@ -236,7 +232,7 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl {
      * @return 返回默认的表身单元格样式
      */
     private Supplier<SsrTemplateImpl> getDefault_BodyCell(String field) {
-        return () -> new SsrTemplate(String.format("<td>${%s}</td>", field));
+        return () -> new SsrTemplate(String.format("<td>${%s}</td>", field)).setDefine(define);
     }
 
     @Override
@@ -274,7 +270,7 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl {
 
     @Override
     public UISsrGrid addTemplate(String id, String templateText) {
-        this.define.items().put(id, new SsrTemplate(templateText));
+        this.define.addItem(id, new SsrTemplate(templateText).setDefine(define));
         return this;
     }
 

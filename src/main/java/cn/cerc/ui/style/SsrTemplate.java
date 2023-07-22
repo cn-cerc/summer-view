@@ -20,14 +20,14 @@ public class SsrTemplate implements SsrTemplateImpl {
     private static final Logger log = LoggerFactory.getLogger(SsrTemplate.class);
     private SsrStyle style;
     private List<String> list;
-    private ListProxy listProxy;
+    private SsrListProxy listProxy;
     private Map<String, String> map;
-    private MapProxy mapProxy;
+    private SsrMapProxy mapProxy;
     private DataRow dataRow;
     private DataSet dataSet;
     private Map<String, String> options;
     private Map<String, Supplier<String>> callback;
-    private boolean strict = true;
+    private Boolean strict;
     private String templateText;
     private String id;
     private OnGetValueEvent onGetValue;
@@ -88,9 +88,12 @@ public class SsrTemplate implements SsrTemplateImpl {
 
     @Override
     public Optional<String> getOption(String key) {
-        if (options == null)
-            return Optional.empty();
-        return Optional.ofNullable(options.get(key));
+        Optional<String> result = Optional.empty();
+        if (options != null)
+            result = Optional.ofNullable(options.get(key));
+        if (result.isEmpty() && define != null)
+            result = define.getOption(key);
+        return result;
     }
 
     @Override
@@ -103,7 +106,12 @@ public class SsrTemplate implements SsrTemplateImpl {
 
     @Override
     public DataRow getDataRow() {
-        return dataRow;
+        if (dataRow != null)
+            return dataRow;
+        if (define != null)
+            return define.getDataRow();
+        else
+            return null;
     }
 
     @Override
@@ -120,7 +128,12 @@ public class SsrTemplate implements SsrTemplateImpl {
 
     @Override
     public DataSet getDataSet() {
-        return dataSet;
+        if (dataSet != null)
+            return dataSet;
+        if (define != null)
+            return define.getDataSet();
+        else
+            return null;
     }
 
     @Override
@@ -138,7 +151,12 @@ public class SsrTemplate implements SsrTemplateImpl {
      */
     @Override
     public boolean isStrict() {
-        return define != null ? define.isStrict() : strict;
+        if (strict != null)
+            return strict.booleanValue();
+        if (define != null)
+            return define.isStrict();
+        else
+            return true;
     }
 
     /**
@@ -150,8 +168,6 @@ public class SsrTemplate implements SsrTemplateImpl {
     @Override
     public SsrTemplate setStrict(boolean strict) {
         this.strict = strict;
-        if (define != null)
-            define.setStrict(strict);
         return this;
     }
 
@@ -171,89 +187,21 @@ public class SsrTemplate implements SsrTemplateImpl {
         return this.id;
     }
 
-    public class MapProxy {
-        private Map<String, String> map;
-        private int rec;
-
-        public MapProxy(Map<String, String> map) {
-            this.map = map;
-            rec = -1;
-        }
-
-        public void reset() {
-            rec = -1;
-        }
-
-        public boolean fetch() {
-            rec++;
-            return map != null && rec > -1 && rec < map.size();
-        }
-
-        public String key() {
-            if (map != null) {
-                var i = 0;
-                for (var key : map.keySet()) {
-                    if (i == rec)
-                        return key;
-                    i++;
-                }
-            }
-            return null;
-        }
-
-        public String value() {
-            if (map != null) {
-                var i = 0;
-                for (var key : map.keySet()) {
-                    if (i == rec)
-                        return map.get(key);
-                    i++;
-                }
-            }
-            return null;
-        }
-    }
-
-    public class ListProxy {
-        private List<String> list;
-        private int rec;
-
-        public ListProxy(List<String> list) {
-            this.list = list;
-        }
-
-        public void reset() {
-            rec = -1;
-        }
-
-        public boolean fetch() {
-            rec++;
-            return list != null && rec > -1 && rec < list.size();
-        }
-
-        public String item() {
-            if (list != null && rec > -1 && rec < list.size())
-                return list.get(rec);
-            else
-                return null;
-        }
-    }
-
     @Override
-    public MapProxy getMapProxy() {
+    public SsrMapProxy getMapProxy() {
         if (this.map == null)
             return null;
         if (this.mapProxy == null)
-            this.mapProxy = new MapProxy(this.map);
+            this.mapProxy = new SsrMapProxy(this.map);
         return mapProxy;
     }
 
     @Override
-    public ListProxy getListProxy() {
+    public SsrListProxy getListProxy() {
         if (this.list == null)
             return null;
         if (this.listProxy == null)
-            this.listProxy = new ListProxy(this.list);
+            this.listProxy = new SsrListProxy(this.list);
         return listProxy;
     }
 
@@ -284,9 +232,13 @@ public class SsrTemplate implements SsrTemplateImpl {
     @Override
     public Optional<String> getValue(String field) {
         String result = null;
+        var dataRow = this.getDataRow();
+        var dataSet = this.getDataSet();
         // 先查找list
-        if (list != null && SsrListItemNode.is(field))
-            result = this.getListProxy().item();
+        if (list != null && SsrListIndexNode.is(field))
+            result = this.getListProxy().index();
+        else if (list != null && SsrListValueNode.is(field))
+            result = this.getListProxy().value();
         else if (list != null && Utils.isNumeric(field)) {
             var index = Integer.parseInt(field);
             if (index >= 0 && index < list.size()) {
@@ -298,6 +250,8 @@ public class SsrTemplate implements SsrTemplateImpl {
             }
         }
         // 再查找map
+        else if (map != null && SsrMapIndexNode.is(field))
+            result = this.getMapProxy().index();
         else if (map != null && SsrMapKeyNode.is(field))
             result = this.getMapProxy().key();
         else if (map != null && SsrMapValueNode.is(field))
@@ -335,8 +289,9 @@ public class SsrTemplate implements SsrTemplateImpl {
         return this;
     }
 
-    protected void setDefine(SsrDefine define) {
+    protected SsrTemplate setDefine(SsrDefine define) {
         this.define = define;
+        return this;
     }
 
 }

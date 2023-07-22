@@ -7,10 +7,8 @@ import java.util.function.Supplier;
 
 import cn.cerc.db.core.DataRow;
 import cn.cerc.db.core.DataSet;
-import cn.cerc.ui.style.SsrTemplate.ListProxy;
-import cn.cerc.ui.style.SsrTemplate.MapProxy;
 
-public interface SsrTemplateImpl extends SsrStrictImpl {
+public interface SsrTemplateImpl extends SsrOptionImpl {
 
     /**
      * 
@@ -93,9 +91,9 @@ public interface SsrTemplateImpl extends SsrStrictImpl {
 
     String id();
 
-    MapProxy getMapProxy();
+    SsrMapProxy getMapProxy();
 
-    ListProxy getListProxy();
+    SsrListProxy getListProxy();
 
     /**
      * 
@@ -104,12 +102,8 @@ public interface SsrTemplateImpl extends SsrStrictImpl {
     @Deprecated
     Map<String, String> getOptions();
 
-    SsrTemplateImpl setOption(String key, String value);
-
-    Optional<String> getOption(String key);
-
     Optional<String> getValue(String field);
 
     SsrTemplateImpl onGetValue(OnGetValueEvent onGetValue);
-    
+
 }

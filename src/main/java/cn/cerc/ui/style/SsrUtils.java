@@ -69,8 +69,12 @@ public class SsrUtils {
                 var text = line.substring(start + 2, end);
                 if (SsrCallbackNode.is(text))
                     nodes.add(new SsrCallbackNode(text));
-                else if (SsrListItemNode.is(text))
-                    nodes.add(new SsrListItemNode(text));
+                else if (SsrListIndexNode.is(text))
+                    nodes.add(new SsrListIndexNode(text));
+                else if (SsrListValueNode.is(text))
+                    nodes.add(new SsrListValueNode(text));
+                else if (SsrMapIndexNode.is(text))
+                    nodes.add(new SsrMapIndexNode(text));
                 else if (SsrMapKeyNode.is(text))
                     nodes.add(new SsrMapKeyNode(text));
                 else if (SsrMapValueNode.is(text))

@@ -23,7 +23,6 @@ import cn.cerc.ui.core.UIComponent;
 public class UISsrForm extends UIComponent implements SsrComponentImpl {
     private static final Logger log = LoggerFactory.getLogger(UISsrForm.class);
     private SsrDefine define;
-    private DataRow dataRow;
     private List<String> fields;
     public static final String FormBegin = "form.begin";
     public static final String FormEnd = "form.end";
@@ -57,34 +56,34 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
     }
 
     public DataRow getDataRow() {
-        return dataRow;
+        return define.getDataRow();
     }
 
-    public void setDataRow(DataRow dataRow) {
-        this.dataRow = dataRow;
+    public UISsrForm setDataRow(DataRow dataRow) {
+        this.define.setDataRow(dataRow);
+        return this;
     }
 
     @Override
     public void output(HtmlWriter html) {
-        if (this.dataRow == null) {
+        if (this.getDataRow() == null) {
             log.error("dataRow is null");
             return;
         }
         if (this.fields == null)
-            this.fields = this.dataRow.fields().names();
+            this.fields = this.getDataRow().fields().names();
 
-        getTemplate(SsrDefine.BeginFlag).ifPresent(template -> {
-            template.setDataRow(dataRow);
-            html.print(template.getHtml());
-        });
+        getTemplate(SsrDefine.BeginFlag).ifPresent(template -> html.print(template.getHtml()));
 
         var top = getTemplate(FormBegin, getDefault_FormBegin()).get();
         top.setOption("templateId", this.define.id());
         html.print(top.getHtml());
 
         for (var field : fields) {
-            var block = getTemplate(field, () -> new SsrTemplate(
-                    String.format("%s: <input type=\"text\" name=\"%s\" value=\"${%s}\">", field, field, field)));
+            var block = getTemplate(field,
+                    () -> new SsrTemplate(
+                            String.format("%s: <input type=\"text\" name=\"%s\" value=\"${%s}\">", field, field, field))
+                            .setDefine(define));
             if (block.isPresent()) {
                 this.onGetHtml.forEach((key, value) -> {
                     if (key.equals(field))
@@ -93,11 +92,9 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
             }
             block.ifPresent(value -> html.print(value.getHtml()));
         }
-        getTemplate(FormEnd, () -> new SsrTemplate("</form>")).ifPresent(value -> html.print(value.getHtml()));
-        getTemplate(SsrDefine.EndFlag).ifPresent(template -> {
-            template.setDataRow(dataRow);
-            html.print(template.getHtml());
-        });
+        getTemplate(FormEnd, () -> new SsrTemplate("</form>").setDefine(define))
+                .ifPresent(value -> html.print(value.getHtml()));
+        getTemplate(SsrDefine.EndFlag).ifPresent(template -> html.print(template.getHtml()));
     }
 
     /**
@@ -117,15 +114,15 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
     }
 
     private Supplier<SsrTemplateImpl> getDefault_FormBegin() {
-        return () -> new SsrTemplate("<form method='post'>");
+        var action = this.getDefine().getOption("action").orElse("");
+        return () -> new SsrTemplate(String.format("<form method='post' action='%s'>", action)).setDefine(define);
     }
 
     private Optional<SsrTemplateImpl> getTemplate(String id, Supplier<SsrTemplateImpl> supplier) {
         SsrTemplateImpl template = define.getOrAdd(id, supplier).orElse(null);
-        if (template != null) {
+        if (template != null)
             template.setId(id);
-            template.setDataRow(dataRow);
-        } else
+        else
             log.error("表单模版中缺失定义：{}", id);
         return Optional.ofNullable(template);
     }
@@ -177,15 +174,15 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
 
     private void updateValue(String field, String val, boolean submit) {
         if (submit) {
-            dataRow.setValue(field, val == null ? "" : val);
+            getDataRow().setValue(field, val == null ? "" : val);
             if (buff != null) {
                 buff.setValue(field, val);
             }
         } else {
             if (val != null) {
-                dataRow.setValue(field, val);
+                getDataRow().setValue(field, val);
             } else if (buff != null && !buff.isNull() && buff.getRecord().exists(field)) {
-                dataRow.setValue(field, buff.getString(field));
+                getDataRow().setValue(field, buff.getString(field));
             }
         }
     }
@@ -223,6 +220,12 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
     @Override
     public SsrDefine getDefine() {
         return this.define;
+    }
+
+    @Override
+    public UISsrForm addTemplate(String id, String templateText) {
+        this.define.addItem(id, new SsrTemplate(templateText).setDefine(define));
+        return this;
     }
 
 }

@@ -5,7 +5,7 @@ import java.util.function.Consumer;
 
 import cn.cerc.db.core.DataSet;
 
-public interface SsrComponentImpl extends SsrStrictImpl {
+public interface SsrComponentImpl extends SsrOptionImpl {
 
     public SsrDefine getDefine();
 
@@ -17,10 +17,7 @@ public interface SsrComponentImpl extends SsrStrictImpl {
 
     void onGetHtml(String field, Consumer<SsrTemplateImpl> consumer);
 
-    default SsrComponentImpl addTemplate(String id, String templateText) {
-        getDefine().addItem(id, new SsrTemplate(templateText));
-        return this;
-    }
+    SsrComponentImpl addTemplate(String id, String templateText);
 
     default Object addTemplate(Consumer<SsrComponentImpl> consumer) {
         if (consumer != null)
@@ -41,6 +38,17 @@ public interface SsrComponentImpl extends SsrStrictImpl {
     default SsrComponentImpl setStrict(boolean strict) {
         getDefine().setStrict(strict);
         return this;
+    }
+
+    @Override
+    default SsrComponentImpl setOption(String key, String value) {
+        getDefine().setOption(key, value);
+        return this;
+    }
+
+    @Override
+    default Optional<String> getOption(String key) {
+        return getDefine().getOption(key);
     }
 
 }

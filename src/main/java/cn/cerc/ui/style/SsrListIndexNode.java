@@ -1,17 +1,17 @@
 package cn.cerc.ui.style;
 
-public class SsrMapValueNode extends SsrValueNode {
-    private static final String Flag = "map.value";
+public class SsrListIndexNode extends SsrValueNode {
+    private static final String Flag = "list.index";
 
-    public SsrMapValueNode(String text) {
+    public SsrListIndexNode(String text) {
         super(text);
     }
 
     @Override
     public String getHtml(SsrTemplateImpl template) {
-        var map = template.getMap();
-        if (map != null) {
-            return template.getMapProxy().value();
+        var list = template.getListProxy();
+        if (list != null) {
+            return list.index();
         } else {
             return this.getText();
         }

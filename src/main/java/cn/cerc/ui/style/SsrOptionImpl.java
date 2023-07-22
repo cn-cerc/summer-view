@@ -1,6 +1,8 @@
 package cn.cerc.ui.style;
 
-public interface SsrStrictImpl {
+import java.util.Optional;
+
+public interface SsrOptionImpl {
 
     /**
      * 
@@ -14,5 +16,9 @@ public interface SsrStrictImpl {
      * @return 返回解析模式，默认为严格模式
      */
     boolean isStrict();
+
+    Object setOption(String key, String value);
+
+    Optional<String> getOption(String key);
 
 }

@@ -19,7 +19,7 @@ public class SsrListNode extends SsrContainerNode {
             }
         }
 
-        list.reset();
+        list.first();
         var sb = new StringBuffer();
         while (list.fetch()) {
             for (var item : this.getItems())

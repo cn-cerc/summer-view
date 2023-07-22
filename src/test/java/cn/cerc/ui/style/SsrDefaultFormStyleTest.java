@@ -24,7 +24,7 @@ public class SsrDefaultFormStyleTest {
 
         assertEquals(
                 """
-                        <form method='post'>姓名: <input type="text" name="Name_" value="jason" /><input type="checkbox" name="Man_" value="true" checked/>男性<select name="Xl_"><option value="小学" >小学</option><option value="初中" selected>初中</option><option value="高中" >高中</option></select></form>
+                        <form method='post' action=''>姓名: <input type="text" name="Name_" value="jason" /><input type="checkbox" name="Man_" value="true" checked/>男性<select name="Xl_"><option value="小学" >小学</option><option value="初中" selected>初中</option><option value="高中" >高中</option></select></form>
                         """
                         .trim(),
                 form.toString());

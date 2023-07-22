@@ -1,9 +1,9 @@
 package cn.cerc.ui.style;
 
-public class SsrMapValueNode extends SsrValueNode {
-    private static final String Flag = "map.value";
+public class SsrMapIndexNode extends SsrValueNode {
+    private static final String Flag = "map.index";
 
-    public SsrMapValueNode(String text) {
+    public SsrMapIndexNode(String text) {
         super(text);
     }
 
@@ -11,7 +11,7 @@ public class SsrMapValueNode extends SsrValueNode {
     public String getHtml(SsrTemplateImpl template) {
         var map = template.getMap();
         if (map != null) {
-            return template.getMapProxy().value();
+            return template.getMapProxy().index();
         } else {
             return this.getText();
         }
