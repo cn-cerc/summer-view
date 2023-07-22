@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -29,11 +28,12 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
     public static final String FormBegin = "form.begin";
     public static final String FormEnd = "form.end";
     private Map<String, Consumer<SsrTemplateImpl>> onGetHtml = new HashMap<>();
-    private boolean strict = true;
     private MemoryBuffer buff;
 
     public UISsrForm(UIComponent owner) {
         super(owner);
+        define = new SsrDefine("");
+        init(findOwner(IPage.class));
     }
 
     public UISsrForm(UIComponent owner, String templateText) {
@@ -138,6 +138,7 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
             fields.add(item);
     }
 
+    @Deprecated
     public UISsrForm addField(String id, Consumer<SsrTemplateImpl> onGetHtml) {
         this.addField(id);
         this.onGetHtml.put(id, onGetHtml);
@@ -150,17 +151,6 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
 
     public void setFields(List<String> fields) {
         this.fields = fields;
-    }
-
-    public boolean isStrict() {
-        return strict;
-    }
-
-    public UISsrForm setStrict(boolean strict) {
-        this.strict = strict;
-        for (var block : define)
-            block.setStrict(strict);
-        return this;
     }
 
     public void setBuffer(MemoryBuffer buff) {
@@ -221,17 +211,6 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
         });
     }
 
-    @Override
-    public Optional<SsrTemplateImpl> getTemplate(String templateId) {
-        return define.get(templateId);
-    }
-
-    @Override
-    public UISsrForm addTemplate(String id, String templateText) {
-        this.define.items().put(id, new SsrTemplate(templateText));
-        return this;
-    }
-
     public SsrDefaultFormStyle createDefaultStyle() {
         return new SsrDefaultFormStyle();
     }
@@ -241,15 +220,9 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
      * 
      * @return
      */
-    @Deprecated
+    @Override
     public SsrDefine getDefine() {
         return this.define;
-    }
-
-    @Override
-    public void addField(Consumer<SsrComponentImpl> consumer) {
-        Objects.requireNonNull(consumer);
-        consumer.accept(this);
     }
 
 }

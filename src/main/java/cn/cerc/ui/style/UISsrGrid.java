@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -32,6 +31,7 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl {
     // 表身样式id
     public static final String BodyBegin = "body.begin";
     public static final String BodyEnd = "body.end";
+    private String emptyText;
 
     public UISsrGrid(UIComponent owner) {
         super(owner);
@@ -61,9 +61,13 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl {
             log.error("dataSet is null");
             return;
         }
-
-        if (this.fields == null)
-            this.fields = this.dataSet.fields().names();
+        if (this.fields == null) {
+            if (this.emptyText == null)
+                html.print(String.format("dataSet.size=%d, fields is null, emptyText is null", dataSet.size()));
+            else
+                html.print(this.emptyText);
+            return;
+        }
 
         getTemplate(SsrDefine.BeginFlag).ifPresent(template -> {
             template.setDataSet(dataSet);
@@ -176,6 +180,7 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl {
         this.fields = fields;
     }
 
+    @Override
     public SsrDefine getDefine() {
         return define;
     }
@@ -243,12 +248,6 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl {
     }
 
     @Override
-    public void addField(Consumer<SsrComponentImpl> consumer) {
-        Objects.requireNonNull(consumer);
-        consumer.accept(this);
-    }
-
-    @Override
     public DataSet getDefaultOptions() {
         DataSet ds = new DataSet();
         for (var ssr : define) {
@@ -282,6 +281,18 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl {
     @Override
     public Optional<SsrTemplateImpl> getTemplate(String templateId) {
         return define.get(templateId);
+    }
+
+    public String getEmptyText() {
+        return emptyText;
+    }
+
+    public void setEmptyText(String emptyText) {
+        this.emptyText = emptyText;
+    }
+
+    public SsrDefaultGridStyle createDefaultStyle() {
+        return new SsrDefaultGridStyle();
     }
 
 }

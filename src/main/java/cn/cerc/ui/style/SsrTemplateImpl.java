@@ -10,7 +10,7 @@ import cn.cerc.db.core.DataSet;
 import cn.cerc.ui.style.SsrTemplate.ListProxy;
 import cn.cerc.ui.style.SsrTemplate.MapProxy;
 
-public interface SsrTemplateImpl {
+public interface SsrTemplateImpl extends SsrStrictImpl {
 
     /**
      * 
@@ -83,19 +83,6 @@ public interface SsrTemplateImpl {
 
     /**
      * 
-     * @param strict 是否执行严格模式，默认为 true
-     * @return 返回对象本身
-     */
-    SsrTemplateImpl setStrict(boolean strict);
-
-    /**
-     * 
-     * @return 返回解析模式，默认为严格模式
-     */
-    boolean isStrict();
-
-    /**
-     * 
      * @return 返回模版的解析结果
      */
     String getHtml();
@@ -122,4 +109,7 @@ public interface SsrTemplateImpl {
     Optional<String> getOption(String key);
 
     Optional<String> getValue(String field);
+
+    SsrTemplateImpl onGetValue(OnGetValueEvent onGetValue);
+    
 }
