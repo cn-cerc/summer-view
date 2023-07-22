@@ -1,9 +1,9 @@
 package cn.cerc.ui.style;
 
-public class SsrListItemNode extends SsrValueNode {
-    public static final String Flag = "list.item";
+public class SsrListValueNode extends SsrValueNode {
+    private static final String Flag = "list.value";
 
-    public SsrListItemNode(String text) {
+    public SsrListValueNode(String text) {
         super(text);
     }
 
@@ -11,13 +11,13 @@ public class SsrListItemNode extends SsrValueNode {
     public String getHtml(SsrTemplateImpl template) {
         var list = template.getListProxy();
         if (list != null) {
-            return list.item();
+            return list.value();
         } else {
             return this.getText();
         }
     }
 
     public static boolean is(String text) {
-        return Flag.equals(text);
+        return Flag.equals(text) || "list.item".equals(text);
     }
 }

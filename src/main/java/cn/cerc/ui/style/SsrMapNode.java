@@ -17,7 +17,7 @@ public class SsrMapNode extends SsrContainerNode {
         var sb = new StringBuffer();
 
         var map = template.getMapProxy();
-        map.reset();
+        map.first();
         while (map.fetch()) {
             for (var item : this.getItems())
                 sb.append(item.getHtml(template));

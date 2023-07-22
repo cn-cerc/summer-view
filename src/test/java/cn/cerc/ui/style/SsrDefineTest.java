@@ -1,6 +1,8 @@
 package cn.cerc.ui.style;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -16,7 +18,23 @@ public class SsrDefineTest {
 
         var ssr = define.get("a").get();
 
+        assertEquals("", define.getOption("width").orElse(""));
+        define.setOption("width", "30");
         assertEquals("10", ssr.getOption("width").orElse(""));
+        assertEquals("30", define.getOption("width").orElse(""));
+
+        assertTrue(define.isStrict());
+        assertTrue(ssr.isStrict());
+        ssr.setStrict(false);
+        assertFalse(ssr.isStrict());
+        assertTrue(define.isStrict());
+
+        ssr.setOption("width", "20");
+        assertEquals("20", ssr.getOption("width").orElse(""));
+        assertEquals("30", define.getOption("width").orElse(""));
+
+        assertEquals("a", ssr.id());
+
         assertEquals("code_,name_", ssr.getOption("_fields").orElse(""));
     }
 
