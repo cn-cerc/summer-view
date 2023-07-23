@@ -194,7 +194,8 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl, IGridSty
      */
     @Deprecated
     public UISsrGrid putDefine(String id, String templateText) {
-        return addTemplate(id, templateText);
+        addTemplate(id, templateText);
+        return this;
     }
 
     /**
@@ -273,12 +274,6 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl, IGridSty
     }
 
     @Override
-    public UISsrGrid addTemplate(String id, String templateText) {
-        this.define.addItem(id, new SsrTemplate(templateText).setDefine(define));
-        return this;
-    }
-
-    @Override
     public Optional<SsrTemplateImpl> getTemplate(String templateId) {
         return define.get(templateId);
     }
@@ -291,8 +286,8 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl, IGridSty
         this.emptyText = emptyText;
     }
 
-    public SsrDefaultGridStyle createDefaultStyle() {
-        return new SsrDefaultGridStyle();
+    public SsrGridStyleDefault createDefaultStyle() {
+        return new SsrGridStyleDefault();
     }
 
 }

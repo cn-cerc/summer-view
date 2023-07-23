@@ -17,7 +17,12 @@ public interface SsrComponentImpl extends SsrOptionImpl {
 
     void onGetHtml(String field, Consumer<SsrTemplateImpl> consumer);
 
-    SsrComponentImpl addTemplate(String id, String templateText);
+    default SsrTemplateImpl addTemplate(String id, String templateText) {
+        var define = getDefine();
+        var ssr = new SsrTemplate(templateText).setDefine(define);
+        define.addItem(id, ssr);
+        return ssr;
+    }
 
     default Object addTemplate(Consumer<SsrComponentImpl> consumer) {
         if (consumer != null)

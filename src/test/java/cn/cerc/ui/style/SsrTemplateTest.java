@@ -8,8 +8,11 @@ public class SsrTemplateTest {
 
     @Test
     public void testDecodeString0() {
-        var template = new SsrTemplate("");
-        assertEquals("", margeList(template.style()));
+        var ssr = new SsrTemplate("");
+        assertEquals("", ssr.getHtml());
+        ssr.setStyle(new SsrStyle("${0}-${list.index}"));
+        ssr.toList("a");
+        assertEquals("a-0", ssr.getHtml());
     }
 
     @Test
