@@ -16,7 +16,6 @@ import cn.cerc.db.core.FieldMeta;
 import cn.cerc.db.core.FieldMeta.FieldKind;
 import cn.cerc.db.core.Utils;
 import cn.cerc.db.editor.OnGetText;
-import cn.cerc.mis.ado.UsedEnum;
 import cn.cerc.ui.vcl.UIInput;
 
 public class UIDataStyle implements UIDataStyleImpl {
@@ -24,7 +23,6 @@ public class UIDataStyle implements UIDataStyleImpl {
     private DataSet dataSet;
     private boolean readonly = true;
     private HashMap<String, FieldStyleDefine> items = new LinkedHashMap<>();
-    private OnOutput onOutput;
     private Class<?> entityClass;
     private boolean inGrid;
 
@@ -115,7 +113,7 @@ public class UIDataStyle implements UIDataStyleImpl {
         return getEnum(clazz, false);
     }
 
-    @SuppressWarnings("rawtypes")
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public OnGetText getEnum(Class<? extends Enum> clazz, boolean addAll) {
         return data -> {
             String result = data.getEnum(clazz).name();
@@ -167,15 +165,6 @@ public class UIDataStyle implements UIDataStyleImpl {
         return getMap(items, false);
     }
 
-    public interface OnOutput {
-        OnGetText execute(FieldStyleDefine styleData);
-    }
-
-    public UIDataStyle onOutput(OnOutput onOutput) {
-        this.onOutput = onOutput;
-        return this;
-    }
-
     @Override
     public boolean setDefault(FieldMeta meta) {
         boolean result = false;
@@ -197,19 +186,6 @@ public class UIDataStyle implements UIDataStyleImpl {
      * @return 返回新的OnGetText事件函数
      */
     public OnGetText getDefault(FieldMeta fieldMeta) {
-        // 若有自定输出事件，为第一优先
-        OnGetText result = null;
-        if (onOutput != null) {
-            var style = items.get(fieldMeta.code());
-            if (style == null) {
-                style = new FieldStyleDefine(fieldMeta);
-                items.put(fieldMeta.code(), style);
-            }
-            result = onOutput.execute(style);
-        }
-        if (result != null)
-            return result;
-
         // 根据数据类型输出
         var dataType = fieldMeta.dataType().dataType();
         if (dataType == null)
@@ -327,11 +303,6 @@ public class UIDataStyle implements UIDataStyleImpl {
         DataRow row = DataRow.of("code", 1);
         var code = row.fields().get("code");
         var data = new DataCell(row, code.code());
-
-        style.onOutput(styleData -> switch (styleData.code()) {
-        case "code" -> style.getEnum(UsedEnum.class);
-        default -> styleData.onGetText();
-        });
 
         System.out.println("output:" + style.getDefault(code).getText(data));
     }

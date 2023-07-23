@@ -25,6 +25,10 @@ import cn.cerc.ui.style.IGridStyle;
 import cn.cerc.ui.style.SsrTemplate;
 import cn.cerc.ui.vcl.UIForm;
 
+/**
+ * 第1代 SSR UI表格
+ *
+ */
 public class DataGrid extends UIComponent implements DataSetSource, IGridStyle {
     private static final Logger log = LoggerFactory.getLogger(DataGrid.class);
     private static final ClassResource res = new ClassResource(DataGrid.class, SummerUI.ID);

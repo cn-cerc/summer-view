@@ -42,8 +42,6 @@ public class UIBooleanDataStyle extends UIAbstractDataStyle {
             input.setPlaceholder(define.placeholder());
             input.setInputType(UIInput.TYPE_CHECKBOX);
             input.setChecked(data.getBoolean());
-            // 允许外部更改input组件的属性
-            define.output(input);
             //
             if (!Utils.isEmpty(define.dialog()))
                 new UISelectDialog(box).setDialog(define.dialog()).setInputId(data.key());

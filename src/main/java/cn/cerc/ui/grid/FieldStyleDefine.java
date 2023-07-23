@@ -3,7 +3,6 @@ package cn.cerc.ui.grid;
 import cn.cerc.db.core.DataType;
 import cn.cerc.db.core.FieldMeta;
 import cn.cerc.db.editor.OnGetText;
-import cn.cerc.ui.core.UIComponent;
 
 /**
  * 字段显示样式数据定义
@@ -13,8 +12,6 @@ import cn.cerc.ui.core.UIComponent;
  */
 public class FieldStyleDefine {
     private final FieldMeta field;
-    private UIComponent executant;
-    private OnOutput onOutput;
     // 默认显示宽度
     private int width;
     // 是否为必填项目
@@ -107,29 +104,8 @@ public class FieldStyleDefine {
         return this;
     }
 
-    public UIComponent executant() {
-        return executant;
-    }
-
     public interface OnOutput {
         void execute(FieldStyleDefine styleData);
-    }
-
-    /**
-     * 设置在修改模式下，响应对输入组件的特殊处理
-     * 
-     * @param onOutput 响应输出事件，可在此设置如UIInput的属性
-     * @return 自身
-     */
-    public FieldStyleDefine onOutput(OnOutput onOutput) {
-        this.onOutput = onOutput;
-        return this;
-    }
-
-    public void output(UIComponent executant) {
-        this.executant = executant;
-        if (onOutput != null)
-            onOutput.execute(this);
     }
 
     public String dialog() {
