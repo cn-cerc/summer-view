@@ -98,6 +98,7 @@ public class JayunAPI {
         try {
             String reqUrl = String.format("%s/api/%s", JayunAPI.jayunHost, serviceUrl);
             String result = curl.doPost(reqUrl);
+            // TODO 应废弃掉 net.json 改为使用 jackson 进行解析
             JSONObject json = JSONObject.fromObject(result);
             if (json.has("data")) {
                 this.data = json.get("data");
