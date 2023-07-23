@@ -25,6 +25,10 @@ import cn.cerc.ui.vcl.UITd;
 import cn.cerc.ui.vcl.UITh;
 import cn.cerc.ui.vcl.UITr;
 
+/**
+ * 第2代 SSR UI表格
+ *
+ */
 public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyle, UIFormGatherImpl {
     private static final Logger log = LoggerFactory.getLogger(UIGridView.class);
     private DataSet dataSet;

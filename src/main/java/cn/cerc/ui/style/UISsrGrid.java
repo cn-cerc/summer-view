@@ -15,7 +15,11 @@ import cn.cerc.db.core.DataSet;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 
-public class UISsrGrid extends UIComponent implements SsrComponentImpl {
+/**
+ * 第3代 SSR UI表格
+ *
+ */
+public class UISsrGrid extends UIComponent implements SsrComponentImpl, IGridStyle {
     private static final Logger log = LoggerFactory.getLogger(UISsrGrid.class);
     private SsrDefine define;
     private List<String> fields;

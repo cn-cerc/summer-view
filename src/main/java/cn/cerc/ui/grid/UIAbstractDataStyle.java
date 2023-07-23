@@ -32,8 +32,6 @@ public abstract class UIAbstractDataStyle {
         } else
             input.setCssStyle(null);
         input.setReadonly(true);
-        // 允许外部更改input组件的属性
-        define.output(input);
         return box.toString();
     }
 

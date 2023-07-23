@@ -26,8 +26,6 @@ public class UISelectDataStyle extends UIAbstractDataStyle {
             input.setId(data.key());
             input.getOptions().putAll(items);
             input.setSelected(this.selected);
-            // 允许外部更改input组件的属性
-            define.output(input);
             //
             if (!Utils.isEmpty(define.dialog()))
                 new UISelectDialog(box).setDialog(define.dialog()).setInputId(data.key());

@@ -14,7 +14,6 @@ public class RowCell extends UIComponent {
 
     private int colSpan = 1;
     private String align;
-    private String role;
     private String style;
 
     public String getAlign() {

@@ -30,8 +30,6 @@ public class UIStringDataStyle extends UIAbstractDataStyle {
             input.setPlaceholder(define.placeholder());
             if (inputType != null)
                 input.setInputType(inputType);
-            // 允许外部更改input组件的属性
-            define.output(input);
             //
             if (!Utils.isEmpty(define.dialog()))
                 new UISelectDialog(box).setDialog(define.dialog()).setInputId(data.key());
