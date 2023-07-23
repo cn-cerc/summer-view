@@ -3,7 +3,7 @@ package cn.cerc.ui.style;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class SsrDefaultFormStyle implements SsrFormStyleImpl {
+public class SsrFormStyleDefault implements SsrFormStyleImpl {
 
     @Override
     public Consumer<SsrComponentImpl> getTextBox(String title, String field) {
@@ -26,18 +26,16 @@ public class SsrDefaultFormStyle implements SsrFormStyleImpl {
     @Override
     public Consumer<SsrComponentImpl> getListBox(String title, String field, List<String> list, String selected) {
         return form -> {
-            form.addTemplate(title, String.format("""
+            var ssr = form.addTemplate(title, String.format("""
                     <select name="%s">
                     ${list.begin}
                     <option value="${list.item}" ${if list.item==selected}selected${endif}>${list.item}</option>
                     ${list.end}
                     </select>
                     """, field));
-            form.onGetHtml(title, ssr -> {
-                for (var item : list)
-                    ssr.toList(item);
-                ssr.toMap("selected", selected);
-            });
+            for (var item : list)
+                ssr.toList(item);
+            ssr.toMap("selected", selected);
         };
     }
 

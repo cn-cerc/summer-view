@@ -18,7 +18,7 @@ public class SsrListProxy {
         index++;
         return list != null && index > -1 && index < list.size();
     }
-    
+
     public String index() {
         return "" + index;
     }

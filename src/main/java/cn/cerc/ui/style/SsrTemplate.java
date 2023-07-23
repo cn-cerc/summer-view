@@ -139,7 +139,7 @@ public class SsrTemplate implements SsrTemplateImpl {
     @Override
     public String getHtml() {
         var sb = new StringBuffer();
-        for (var node : this.style.nodes)
+        for (var node : this.style)
             sb.append(node.getHtml(this));
         return sb.toString();
     }
@@ -218,10 +218,12 @@ public class SsrTemplate implements SsrTemplateImpl {
         return callback;
     }
 
+    @Override
     public SsrStyle style() {
         return style;
     }
 
+    @Override
     public SsrTemplate setStyle(SsrStyle style) {
         Objects.requireNonNull(style);
         this.style = style;

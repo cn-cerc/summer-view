@@ -10,6 +10,10 @@ import cn.cerc.db.core.DataSet;
 
 public interface SsrTemplateImpl extends SsrOptionImpl {
 
+    SsrStyle style();
+
+    SsrTemplate setStyle(SsrStyle style);
+
     /**
      * 
      * @param value 添加到list对象

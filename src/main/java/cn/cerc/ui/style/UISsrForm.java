@@ -208,8 +208,8 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
         });
     }
 
-    public SsrDefaultFormStyle createDefaultStyle() {
-        return new SsrDefaultFormStyle();
+    public SsrFormStyleDefault createDefaultStyle() {
+        return new SsrFormStyleDefault();
     }
 
     /**
@@ -220,12 +220,6 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
     @Override
     public SsrDefine getDefine() {
         return this.define;
-    }
-
-    @Override
-    public UISsrForm addTemplate(String id, String templateText) {
-        this.define.addItem(id, new SsrTemplate(templateText).setDefine(define));
-        return this;
     }
 
 }
