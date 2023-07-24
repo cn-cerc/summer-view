@@ -1,97 +1,272 @@
+
 package cn.cerc.ui.style;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
+
+import cn.cerc.db.core.ClassConfig;
+import cn.cerc.mis.core.Application;
+import cn.cerc.ui.SummerUI;
+import cn.cerc.ui.fields.AbstractField;
+import cn.cerc.ui.fields.DateField;
+import cn.cerc.ui.fields.ImageConfigImpl;
 
 public class SsrFormStyleDefault implements SsrFormStyleImpl {
+    private static final ClassConfig FieldConfig = new ClassConfig(AbstractField.class, SummerUI.ID);
+    private static final ClassConfig DateConfig = new ClassConfig(DateField.class, SummerUI.ID);
 
     private List<String> items = new ArrayList<>();
 
+    private String dateDialogIcon;
+    private String fieldDialogIcon;
+
+    public SsrFormStyleDefault() {
+        var impl = Application.getBean(ImageConfigImpl.class);
+        if (impl != null) {
+            this.dateDialogIcon = impl.getClassProperty(DateField.class, SummerUI.ID, "icon", "");
+            this.fieldDialogIcon = impl.getClassProperty(AbstractField.class, SummerUI.ID, "icon", "");
+        } else {
+            this.dateDialogIcon = DateConfig.getClassProperty("icon", "");
+            this.fieldDialogIcon = FieldConfig.getClassProperty("icon", "");
+        }
+    }
+
     @Override
-    public Consumer<SsrComponentImpl> getTextBox(String title, String field) {
-        items.add(title);
+    public SupplierTemplateImpl getSubmitButton() {
         return form -> {
-            form.addTemplate(title, String.format("""
-                    %s: <input type="text" name="%s" value="${%s}" />
-                    """, title, field, field));
+            var title = UISsrForm.FormBegin;
+            var ssr = form.addTemplate(title,
+                    """
+                            <form method='post' action='${action}' role='${role}'>
+                                <div>
+                                    <span onclick="toggleSearch(this)">查询条件</span>
+                                    <div class="searchFormButtonDiv">
+                                        <button name="submit" value="search">查询</button>
+                                        <button role="configTemplate" type="button" onclick="showSsrConfigDialog('${templateId}')">配置</button>
+                                    </div>
+                                </div>
+                                <ul>
+                            """);
+            ssr.setOption("action", "").setOption("role", "search");
+            return ssr;
         };
     }
 
     @Override
-    public Consumer<SsrComponentImpl> getCheckBox(String title, String field) {
+    public SupplierTemplateImpl getString(String title, String field) {
         items.add(title);
         return form -> {
-            form.addTemplate(title, String.format("""
-                    <input type="checkbox" name="%s" value="${%s}" ${if %s}checked${endif} />%s
-                    """, field, field, field, title));
+            var ssr = form.addTemplate(title,
+                    String.format(
+                            """
+                                    <li class="">
+                                        <label for="%s"><em>%s</em></label>
+                                        <div>
+                                            <input autocomplete="off" name="%s" id="%s" type="text" value="${%s}" ${if readonly}readonly${endif} />
+                                        </div>
+                                    </li>
+                                    """,
+                            field, title, field, field, field));
+            ssr.setOption("readonly", "false");
+            ssr.setOption("fields", field).setOption("option", "1");
+            ssr.setId(title);
+            return ssr;
         };
     }
 
     @Override
-    public Consumer<SsrComponentImpl> getListBox(String title, String field, List<String> list, String selected) {
+    public SupplierTemplateImpl getString(String title, String field, String... dialogFunc) {
+        items.add(title);
+        return form -> {
+            var dialogText = getDialogText(field, dialogFunc);
+            var ssr = form.addTemplate(title,
+                    String.format(
+                            """
+                                    <li>
+                                        <label for="%s"><em>%s</em></label>
+                                        <div>
+                                            <input type="text" name="%s" id="%s" value="${%s}" autocomplete="off" placeholder="请点击获取%s" ${if readonly}readonly${endif}>
+                                            <span role="suffix-icon">
+                                                <a href="javascript:%s">
+                                                    <img src="${dialogIcon}">
+                                                </a>
+                                            </span>
+                                        </div>
+                                    </li>
+                                    """,
+                            field, title, field, field, field, title, dialogText));
+            ssr.setOption("dialogIcon", fieldDialogIcon);
+            ssr.onGetValue((option, defaultValue) -> {
+                if ("readonly".equals(option))
+                    return "" + ssr.getDataRow().readonly();
+                else
+                    return defaultValue;
+            });
+            ssr.setOption("fields", field).setOption("option", "1");
+            ssr.setId(title);
+            return ssr;
+        };
+    }
+
+    @Override
+    public SupplierTemplateImpl getBoolean(String title, String field) {
+        items.add(title);
+        return form -> {
+            var ssr = form.addTemplate(title,
+                    String.format(
+                            """
+                                    <li>
+                                        <div role="switch">
+                                            <input autocomplete="off" name="%s" id="%s" type="checkbox" value="1" ${if %s}checked ${endif}/>
+                                        </div>
+                                        <label for="%s"><em>%s</em></label>
+                                    </li>
+                                            """,
+                            field, field, field, field, title));
+            ssr.setOption("fields", field).setOption("option", "1");
+            ssr.setId(title);
+            return ssr;
+        };
+    }
+
+    @Override
+    public SupplierTemplateImpl getMap(String title, String field) {
         items.add(title);
         return form -> {
             var ssr = form.addTemplate(title, String.format("""
-                    <select name="%s">
-                    ${list.begin}
-                    <option value="${list.item}" ${if list.item==selected}selected${endif}>${list.item}</option>
-                    ${list.end}
-                    </select>
-                    """, field));
-            for (var item : list)
-                ssr.toList(item);
-            ssr.toMap("selected", selected);
+                    <li>
+                        <label for="%s"><em>%s</em></label>
+                        <div>
+                            <select id="%s" name="%s">
+                            ${map.begin}
+                                <option value="${map.key}" ${if map.key==%s}selected${endif}>${map.value}</option>
+                            ${map.end}
+                            </select>
+                        </div>
+                    </li>
+                    """, field, title, field, field, field));
+            ssr.setOption("fields", field).setOption("option", "1");
+            ssr.setId(title);
+            return ssr;
         };
     }
 
     @Override
-    public Consumer<SsrComponentImpl> getDate(String title, String field) {
+    public SupplierTemplateImpl getCodeName(String title, String field, String... dialogFunc) {
         items.add(title);
         return form -> {
-            form.addTemplate(title, String.format("""
-                    %s: <input type="text" name="%s" value="${%s}" />
-                    """, title, field, field));
+            var dialogText = getDialogText(String.format("%s,%s_name", field, field), dialogFunc);
+            var ssr = form.addTemplate(title,
+                    String.format(
+                            """
+                                    <li>
+                                        <label for="%s_name"><em>%s</em></label>
+                                        <div>
+                                            <input type="hidden" name="%s" id="%s" value="${%s}">
+                                            <input type="text" name="%s_name" id="%s_name" value="${%s_name}" autocomplete="off" placeholder="请点击获取%s" readonly>
+                                            <span role="suffix-icon">
+                                                <a href="javascript:%s">
+                                                    <img src="${dialogIcon}">
+                                                </a>
+                                            </span>
+                                        </div>
+                                    </li>
+                                    """,
+                            field, title, field, field, field, field, field, field, title, dialogText));
+            ssr.setOption("dialogIcon", fieldDialogIcon);
+            ssr.setOption("fields", String.format("%s,%s_name", field, field)).setOption("option", "1");
+            ssr.setId(title);
+            return ssr;
+        };
+    }
+
+    protected String getDialogText(String field, String... dialogFunc) {
+        var sb = new StringBuffer();
+        sb.append(dialogFunc[0]);
+        sb.append("('").append(field).append("'");
+        if (dialogFunc.length > 1) {
+            for (var i = 1; i < dialogFunc.length; i++)
+                sb.append(",'").append(dialogFunc[i]).append("'");
+        }
+        sb.append(")");
+        return sb.toString();
+    }
+
+    @Override
+    public SupplierTemplateImpl getDate(String title, String field) {
+        items.add(title);
+        return form -> {
+            var ssr = form.addTemplate(title, String.format("""
+                    <li class="">
+                        <label for="%s"><em>%s</em></label>
+                        <div>
+                            <input autocomplete="off" name="%s" id="%s" type="text" value="${%s}" />
+                            <span role="suffix-icon">
+                                <a href="javascript:showDateDialog('%s')">
+                                    <img src="${dialogIcon}" />
+                                </a>
+                            </span>
+                        </div>
+                    </li>
+                    """, field, title, field, field, field, field));
+            ssr.setOption("dialogIcon", dateDialogIcon);
+            ssr.setOption("fields", field).setOption("option", "1");
+            ssr.setId(title);
+            return ssr;
         };
     }
 
     @Override
-    public Consumer<SsrComponentImpl> getDatetime(String title, String field) {
+    public SupplierTemplateImpl getDatetime(String title, String field) {
         items.add(title);
         return form -> {
-            form.addTemplate(title, String.format("""
-                    %s: <input type="text" name="%s" value="${%s}" />
-                    """, title, field, field));
+            var ssr = form.addTemplate(title, String.format("""
+                    <li>
+                        <label for="%s"><em>%s</em></label>
+                        <div>
+                            <input autocomplete="off" name="%s" id="%s" type="text" value="${%s}" />
+                            <span role="suffix-icon">
+                                <a href="javascript:showDateTimeDialog('%s')">
+                                    <img src="${dialogIcon}">
+                                </a>
+                            </span>
+                        </div>
+                    </li>
+                    """, field, title, field, field, field, field));
+            ssr.setOption("fields", field);
+            ssr.setOption("dialogIcon", dateDialogIcon).setOption("option", "1");
+            ssr.setId(title);
+            return ssr;
         };
     }
 
     @Override
-    public Consumer<SsrComponentImpl> getDateRange(String title, String field) {
+    public SupplierTemplateImpl getDateRange(String title, String beginDate, String endDate) {
         items.add(title);
         return form -> {
-            form.addTemplate(title, String.format("""
-                    %s: <input type="text" name="%s" value="${%s}" />
-                    """, title, field, field));
-        };
-    }
+            var ssr = form.addTemplate(title,
+                    String.format(
+                            """
+                                    <li>
+                                        <label for="start_date_"><em>%s</em></label>
+                                        <div class="dateArea">
+                                            <input autocomplete="off" name="%s" id="%s" type="text" class="dateAreaInput" value="${%s}" />
+                                            <span>/</span>
+                                            <input autocomplete="off" name="%s" id="%s" type="text" class="dateAreaInput" value="${%s}" />
+                                            <span role="suffix-icon">
+                                                <a href="javascript:showDateAreaDialog('%s', '%s')">
+                                                <img src="${dialogIcon}" />
+                                                </a>
+                                            </span>
+                                        </div>
+                                    </li>
+                                    """,
+                            title, beginDate, beginDate, beginDate, endDate, endDate, endDate, beginDate, endDate));
 
-    @Override
-    public Consumer<SsrComponentImpl> getRadioButton(String title, String field) {
-        items.add(title);
-        return form -> {
-            form.addTemplate(title, String.format("""
-                    %s: <input type="text" name="%s" value="${%s}" />
-                    """, title, field, field));
-        };
-    }
-
-    @Override
-    public Consumer<SsrComponentImpl> getTabs(String title, String field) {
-        items.add(title);
-        return form -> {
-            form.addTemplate(title, String.format("""
-                    %s: <input type="text" name="%s" value="${%s}" />
-                    """, title, field, field));
+            ssr.setOption("dialogIcon", dateDialogIcon);
+            ssr.setOption("fields", String.format("%s,%s", beginDate, endDate)).setOption("option", "1");
+            ssr.setId(title);
+            return ssr;
         };
     }
 

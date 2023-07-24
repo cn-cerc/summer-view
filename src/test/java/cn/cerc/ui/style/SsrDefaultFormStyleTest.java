@@ -2,8 +2,6 @@ package cn.cerc.ui.style;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.List;
-
 import org.junit.Test;
 
 import cn.cerc.db.core.DataRow;
@@ -14,18 +12,36 @@ public class SsrDefaultFormStyleTest {
     public void test() {
         var form = new UISsrForm(null);
         form.setStrict(false);
-        form.setDataRow(DataRow.of("Name_", "jason", "Man_", true));
+        form.setDataRow(DataRow.of("Name_", "jason", "Man_", true, "Xl_", "初中"));
 
         var style = form.createDefaultStyle();
-        form.addTemplate(style.getTextBox("姓名", "Name_"));
-        form.addTemplate(style.getCheckBox("男性", "Man_"));
-        form.addTemplate(style.getListBox("学历", "Xl_", List.of("小学", "初中", "高中"), "初中"));
+        form.addTemplate(style.getString("姓名", "Name_"));
+        form.addTemplate(style.getBoolean("男性", "Man_"));
+        var ssr = form.addTemplate(style.getMap("学历", "Xl_"));
+        ssr.toMap("小学", "小学");
+        ssr.toMap("初中", "初中");
+        ssr.toMap("高中", "高中");
         form.addField("姓名", "男性", "学历");
 
         assertEquals(
                 """
-                        <form method='post' action=''>姓名: <input type="text" name="Name_" value="jason" /><input type="checkbox" name="Man_" value="true" checked/>男性<select name="Xl_"><option value="小学" >小学</option><option value="初中" selected>初中</option><option value="高中" >高中</option></select></form>
-                        """
+                        <form method='post' action=''><ul><li class="">
+                        <label for="Name_"><em>姓名</em></label>
+                        <div>
+                        <input autocomplete="off" name="Name_" id="Name_" type="text" value="jason" />
+                        </div>
+                        </li><li>
+                        <div role="switch">
+                        <input autocomplete="off" name="Man_" id="Man_" type="checkbox" value="1" checked />
+                        </div>
+                        <label for="Man_"><em>男性</em></label>
+                        </li><li>
+                        <label for="Xl_"><em>学历</em></label>
+                        <div>
+                        <select id="Xl_" name="Xl_"> <option value="小学" >小学</option> <option value="初中" selected>初中</option> <option value="高中" >高中</option> </select>
+                        </div>
+                        </li></ul></form>
+                                                """
                         .trim(),
                 form.toString());
     }
