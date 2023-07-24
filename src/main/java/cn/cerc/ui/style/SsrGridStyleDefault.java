@@ -1,12 +1,17 @@
 package cn.cerc.ui.style;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
 public class SsrGridStyleDefault implements SsrGridStyleImpl {
 
+    private List<String> items = new ArrayList<>();
+
     @Override
     public Consumer<SsrComponentImpl> getIt(String title, int fieldWidth) {
+        items.add(title);
         return grid -> {
             var ssr = grid.addTemplate("head." + title, "<th width=${_width}>序</th>");
             ssr.toMap("_width", "" + fieldWidth);
@@ -16,6 +21,7 @@ public class SsrGridStyleDefault implements SsrGridStyleImpl {
 
     @Override
     public Consumer<SsrComponentImpl> getOpera(String title, String field, int fieldWidth, String url) {
+        items.add(title);
         return grid -> {
             var ssr = grid.addTemplate("head." + title, "<th width=${_width}>操作</th>");
             ssr.toMap("_width", "" + fieldWidth);
@@ -36,6 +42,7 @@ public class SsrGridStyleDefault implements SsrGridStyleImpl {
 
     @Override
     public Consumer<SsrComponentImpl> getBoolean(String title, String field, int fieldWidth, String labelText) {
+        items.add(title);
         return grid -> {
             var ssr = grid.addTemplate("head." + title, String.format("<th width=${_width}>%s</th>", labelText));
             ssr.toMap("_width", "" + fieldWidth);
@@ -46,6 +53,7 @@ public class SsrGridStyleDefault implements SsrGridStyleImpl {
 
     @Override
     public Consumer<SsrComponentImpl> getOption(String title, String field, int fieldWidth, Map<String, String> map) {
+        items.add(title);
         return grid -> {
             var head = grid.addTemplate("head." + title, String.format("<th width=${_width}>%s</th>", title));
             head.toMap("_width", "" + fieldWidth);
@@ -58,5 +66,9 @@ public class SsrGridStyleDefault implements SsrGridStyleImpl {
                     """, field));
             map.forEach((key, value) -> body.toMap(key, value));
         };
+    }
+
+    public List<String> items() {
+        return items;
     }
 }

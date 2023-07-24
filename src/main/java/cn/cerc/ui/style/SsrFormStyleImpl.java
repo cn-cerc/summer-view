@@ -17,8 +17,10 @@ public interface SsrFormStyleImpl {
 
     Consumer<SsrComponentImpl> getRadioButton(String title, String field);
 
-    Consumer<SsrComponentImpl> getTabButton(String title, String field);
+    Consumer<SsrComponentImpl> getTabs(String title, String field);
 
     Consumer<SsrComponentImpl> getListBox(String title, String field, List<String> list, String selected);
+
+    List<String> items();
 
 }
