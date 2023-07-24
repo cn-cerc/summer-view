@@ -82,7 +82,10 @@ public class SsrTemplate implements SsrTemplateImpl {
     public SsrTemplateImpl setOption(String key, String value) {
         if (options == null)
             options = new HashMap<>();
-        options.put(key, value);
+        if (value == null)
+            options.remove(key);
+        else
+            options.put(key, value);
         return this;
     }
 
@@ -293,6 +296,13 @@ public class SsrTemplate implements SsrTemplateImpl {
 
     protected SsrTemplate setDefine(SsrDefine define) {
         this.define = define;
+        return this;
+    }
+
+    @Override
+    public SsrTemplateImpl fixed(SsrComponentImpl form) {
+        this.setOption("option", null);
+        form.addField(this.id);
         return this;
     }
 

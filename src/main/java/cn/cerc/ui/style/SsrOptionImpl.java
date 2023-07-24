@@ -17,7 +17,7 @@ public interface SsrOptionImpl {
      */
     boolean isStrict();
 
-    Object setOption(String key, String value);
+    SsrOptionImpl setOption(String key, String value);
 
     Optional<String> getOption(String key);
 
