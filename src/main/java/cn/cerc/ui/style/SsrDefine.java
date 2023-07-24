@@ -152,10 +152,13 @@ public class SsrDefine implements Iterable<SsrTemplateImpl>, SsrOptionImpl {
     }
 
     @Override
-    public SsrDefine setOption(String key, String value) {
+    public SsrOptionImpl setOption(String key, String value) {
         if (options == null)
             options = new HashMap<>();
-        options.put(key, value);
+        if (value == null)
+            options.remove(key);
+        else
+            options.put(key, value);
         return this;
     }
 

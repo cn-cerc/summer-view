@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import cn.cerc.db.core.DataRow;
 import cn.cerc.db.core.DataSet;
+import cn.cerc.db.core.Utils;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.mis.core.IPage;
 import cn.cerc.mis.other.MemoryBuffer;
@@ -92,7 +93,7 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
             }
             block.ifPresent(value -> html.print(value.getHtml()));
         }
-        getTemplate(FormEnd, () -> new SsrTemplate("</form>").setDefine(define))
+        getTemplate(FormEnd, () -> new SsrTemplate("</ul></form>").setDefine(define))
                 .ifPresent(value -> html.print(value.getHtml()));
         getTemplate(SsrDefine.EndFlag).ifPresent(template -> html.print(template.getHtml()));
     }
@@ -115,7 +116,7 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
 
     private Supplier<SsrTemplateImpl> getDefault_FormBegin() {
         var action = this.getDefine().getOption("action").orElse("");
-        return () -> new SsrTemplate(String.format("<form method='post' action='%s'>", action)).setDefine(define);
+        return () -> new SsrTemplate(String.format("<form method='post' action='%s'><ul>", action)).setDefine(define);
     }
 
     private Optional<SsrTemplateImpl> getTemplate(String id, Supplier<SsrTemplateImpl> supplier) {
@@ -189,14 +190,17 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
 
     @Override
     public DataSet getDefaultOptions() {
+        return getDefaultOptions(define.id());
+    }
+
+    public DataSet getDefaultOptions(String template_id) {
         DataSet ds = new DataSet();
         for (var ssr : define) {
             var option = ssr.getOption("option");
-            if (option.isPresent()) {
+            if (option.isPresent() && !Utils.isEmpty(ssr.id()))
                 ds.append().setValue("column_name_", ssr.id()).setValue("option_", option.get());
-            }
         }
-        ds.head().setValue("template_id_", define.id());
+        ds.head().setValue("template_id_", template_id);
         return ds;
     }
 
@@ -208,7 +212,7 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
         });
     }
 
-    public SsrFormStyleDefault createDefaultStyle() {
+    public SsrFormStyleImpl createDefaultStyle() {
         return new SsrFormStyleDefault();
     }
 
@@ -220,6 +224,16 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
     @Override
     public SsrDefine getDefine() {
         return this.define;
+    }
+
+    public UISsrForm setAction(String action) {
+        setOption("action", action);
+        return this;
+    }
+
+    public UISsrForm setTemplateId(String id) {
+        define.setId(id);
+        return this;
     }
 
 }

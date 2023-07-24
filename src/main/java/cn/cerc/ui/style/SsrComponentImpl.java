@@ -24,10 +24,8 @@ public interface SsrComponentImpl extends SsrOptionImpl {
         return ssr;
     }
 
-    default Object addTemplate(Consumer<SsrComponentImpl> consumer) {
-        if (consumer != null)
-            consumer.accept(this);
-        return this;
+    default SsrTemplateImpl addTemplate(SupplierTemplateImpl consumer) {
+        return consumer.request(this);
     }
 
     default Optional<SsrTemplateImpl> getTemplate(String templateId) {
@@ -46,9 +44,9 @@ public interface SsrComponentImpl extends SsrOptionImpl {
     }
 
     @Override
-    default SsrComponentImpl setOption(String key, String value) {
+    default SsrOptionImpl setOption(String key, String value) {
         getDefine().setOption(key, value);
-        return this;
+        return getDefine();
     }
 
     @Override

@@ -1,25 +1,26 @@
 package cn.cerc.ui.style;
 
 import java.util.List;
-import java.util.function.Consumer;
 
 public interface SsrFormStyleImpl {
 
-    Consumer<SsrComponentImpl> getTextBox(String title, String field);
+    SupplierTemplateImpl getString(String title, String field);
 
-    Consumer<SsrComponentImpl> getCheckBox(String title, String field);
+    SupplierTemplateImpl getString(String title, String field, String... dialogFunc);
 
-    Consumer<SsrComponentImpl> getDate(String title, String field);
+    SupplierTemplateImpl getCodeName(String title, String field, String... dialogFunc);
 
-    Consumer<SsrComponentImpl> getDatetime(String title, String field);
+    SupplierTemplateImpl getBoolean(String title, String field);
 
-    Consumer<SsrComponentImpl> getDateRange(String title, String field);
+    SupplierTemplateImpl getDate(String title, String field);
 
-    Consumer<SsrComponentImpl> getRadioButton(String title, String field);
+    SupplierTemplateImpl getDatetime(String title, String field);
 
-    Consumer<SsrComponentImpl> getTabs(String title, String field);
+    SupplierTemplateImpl getDateRange(String title, String beginDate, String endDate);
 
-    Consumer<SsrComponentImpl> getListBox(String title, String field, List<String> list, String selected);
+    SupplierTemplateImpl getMap(String title, String field);
+
+    SupplierTemplateImpl getSubmitButton();
 
     List<String> items();
 

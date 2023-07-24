@@ -110,4 +110,12 @@ public interface SsrTemplateImpl extends SsrOptionImpl {
 
     SsrTemplateImpl onGetValue(OnGetValueEvent onGetValue);
 
+    /**
+     * 固定当前查询字段（不会出现在配置列表中）
+     * 
+     * @param form
+     * @return
+     */
+    SsrTemplateImpl fixed(SsrComponentImpl form);
+
 }
