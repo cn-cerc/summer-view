@@ -1,5 +1,6 @@
 package cn.cerc.ui.style;
 
+import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -15,4 +16,5 @@ public interface SsrGridStyleImpl {
 
     Consumer<SsrComponentImpl> getOption(String title, String field, int fieldWidth, Map<String, String> map);
 
+    List<String> items();
 }
