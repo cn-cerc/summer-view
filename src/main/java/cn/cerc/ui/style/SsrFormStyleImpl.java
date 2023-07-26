@@ -21,6 +21,8 @@ public interface SsrFormStyleImpl {
     SupplierTemplateImpl getMap(String title, String field);
 
     SupplierTemplateImpl getSubmitButton();
+    
+    SupplierTemplateImpl getTabs(String field);
 
     List<String> items();
 
