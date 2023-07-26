@@ -21,7 +21,7 @@ public class Block305 extends UICustomPhone {
     public Block305(UIComponent owner) {
         super(owner);
         icon = new UIImage();
-        icon.setSrc("jui/phone/block305-icon.png");
+        icon.setSrc(getImage("jui/phone/block305-icon.png"));
     }
 
     @Override

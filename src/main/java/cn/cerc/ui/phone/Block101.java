@@ -19,7 +19,7 @@ public class Block101 extends UICustomPhone {
     public Block101(UIComponent owner) {
         super(owner);
         title.setText("(title)");
-        image.setSrc("jui/phone/block101-go.png");
+        image.setSrc(getImage("jui/phone/block101-go.png"));
     }
 
     @Override

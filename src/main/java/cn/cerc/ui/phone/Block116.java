@@ -23,7 +23,7 @@ public class Block116 extends UICustomPhone {
         super(owner);
         title.setText("(title)");
         image.setRole("image");
-        image.setSrc("jui/phone/block401_003.png");
+        image.setSrc(getImage("jui/phone/block401_003.png"));
         button.setText("(button)");
     }
 

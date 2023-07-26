@@ -18,7 +18,7 @@ public class Block603 extends UICustomPhone {
     public Block603(UIComponent owner) {
         super(owner);
         image.setAlt("(image)");
-        image.setSrc("jui/phone/block603_image.png");
+        image.setSrc(getImage("jui/phone/block603_image.png"));
     }
 
     @Override

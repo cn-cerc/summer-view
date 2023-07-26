@@ -25,7 +25,7 @@ public class Block201 extends UICustomPhone {
     public Block201(UIComponent owner) {
         super(owner);
         url = new UrlRecord();
-        icon.setSrc("jui/phone/block301-rightIcon.png");
+        icon.setSrc(getImage("jui/phone/block301-rightIcon.png"));
         icon.setRole("right");
     }
 
