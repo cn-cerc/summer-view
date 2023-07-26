@@ -22,7 +22,7 @@ public interface SsrFormStyleImpl {
 
     SupplierTemplateImpl getSubmitButton();
     
-    SupplierTemplateImpl getSearchTabs(String field);
+    SupplierTemplateImpl getTabs(String field);
 
     List<String> items();
 

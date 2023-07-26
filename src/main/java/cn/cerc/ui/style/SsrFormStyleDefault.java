@@ -53,7 +53,7 @@ public class SsrFormStyleDefault implements SsrFormStyleImpl {
     }
     
     @Override
-    public SupplierTemplateImpl getSearchTabs(String field) {
+    public SupplierTemplateImpl getTabs(String field) {
         return form -> {
             var title = UISsrForm.FormBegin;
             var ssr = form.addTemplate(title,
