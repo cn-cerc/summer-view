@@ -21,7 +21,7 @@ public class Block127 extends UICustomPhone {
         url = new UrlRecord();
         text = "(text)";
         number = 20;
-        icon.setSrc("jui/phone/block301-rightIcon.png");
+        icon.setSrc(getImage("jui/phone/block301-rightIcon.png"));
         icon.setRole("right");
     }
 

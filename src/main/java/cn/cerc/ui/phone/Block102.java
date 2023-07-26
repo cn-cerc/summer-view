@@ -20,10 +20,11 @@ public class Block102 extends UICustomPhone {
      */
     public Block102(UIComponent owner) {
         super(owner);
+
         title.setText("(title)");
         image.setRole("image");
         onclick = "block102Fold(this)";
-        image.setSrc("jui/phone/block102-expand.png");
+        image.setSrc(getImage("jui/phone/block102-expand.png"));
     }
 
     @Override

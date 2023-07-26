@@ -19,7 +19,7 @@ public class Block109 extends UICustomPhone {
     public Block109(UIComponent owner) {
         super(owner);
         label.setText("(label)");
-        select.setSrc("jui/phone/block109-select.png");
+        select.setSrc(getImage("jui/phone/block109-select.png"));
     }
 
     @Override

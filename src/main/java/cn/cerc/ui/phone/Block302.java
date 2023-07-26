@@ -22,7 +22,7 @@ public class Block302 extends UICustomPhone {
     public Block302(UIComponent owner) {
         super(owner);
         url = new UrlRecord();
-        rightIcon.setSrc("jui/phone/block301-rightIcon.png");
+        rightIcon.setSrc(getImage("jui/phone/block301-rightIcon.png"));
         rightIcon.setRole("right");
     }
 
