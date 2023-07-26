@@ -59,10 +59,11 @@ public class SsrFormStyleDefault implements SsrFormStyleImpl {
             var ssr = form.addTemplate(title,
                     String.format(
                             """
-                                    <li class="">
+                                    <li>
                                         <label for="%s"><em>%s</em></label>
                                         <div>
                                             <input autocomplete="off" name="%s" id="%s" type="text" value="${%s}" ${if readonly}readonly${endif} />
+                                            <span role="suffix-icon"></span>
                                         </div>
                                     </li>
                                     """,
@@ -192,7 +193,7 @@ public class SsrFormStyleDefault implements SsrFormStyleImpl {
         items.add(title);
         return form -> {
             var ssr = form.addTemplate(title, String.format("""
-                    <li class="">
+                    <li>
                         <label for="%s"><em>%s</em></label>
                         <div>
                             <input autocomplete="off" name="%s" id="%s" type="text" value="${%s}" />
