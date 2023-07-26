@@ -62,13 +62,16 @@ public class SsrFormStyleDefault implements SsrFormStyleImpl {
                                     <li>
                                         <label for="%s"><em>%s</em></label>
                                         <div>
-                                            <input autocomplete="off" name="%s" id="%s" type="text" value="${%s}" ${if readonly}readonly${endif} />
+                                            <input autocomplete="off" name="%s" id="%s" type="text" value="${%s}" ${if readonly}readonly${endif}
+                                            ${if autofocus}autofocus${endif} ${if placeholder}placeholder="${placeholder}"${endif} />
                                             <span role="suffix-icon"></span>
                                         </div>
                                     </li>
                                     """,
                             field, title, field, field, field));
             ssr.setOption("readonly", "false");
+            ssr.setOption("autofocus", "false");
+            ssr.setOption("placeholder", "false");
             ssr.setOption("fields", field).setOption("option", "1");
             ssr.setId(title);
             return ssr;
