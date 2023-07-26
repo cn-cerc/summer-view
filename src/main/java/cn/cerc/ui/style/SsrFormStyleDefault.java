@@ -51,6 +51,35 @@ public class SsrFormStyleDefault implements SsrFormStyleImpl {
             return ssr;
         };
     }
+    
+    @Override
+    public SupplierTemplateImpl getTabs(String field) {
+        return form -> {
+            var title = UISsrForm.FormBegin;
+            var ssr = form.addTemplate(title,
+                    String.format(
+                            """
+                                        <form method='post' action='${action}' role='${role}'>
+                                        <div>
+                                            <nav>
+                                            <input type="hidden" name="%s" value="${%s}">
+                                            ${map.begin}
+                                            <span ${if map.key==%s}class="checked"${endif} onclick="updateTab(this, ${map.key})">${map.value}</span>
+                                            ${map.end}
+                                            </nav>
+                                            <div class="searchFormButtonDiv">
+                                                <button name="submit" value="search">查询</button>
+                                                <button role="configTemplate" type="button" onclick="showSsrConfigDialog('${templateId}')">配置</button>
+                                            </div>
+                                        </div>
+                                        <ul>
+                                    """,
+                            field, field, field));
+            ssr.setOption("action", "").setOption("role", "search");
+            ssr.setOption("fields", field);
+            return ssr;
+        };
+    }
 
     @Override
     public SupplierTemplateImpl getString(String title, String field) {
