@@ -76,6 +76,7 @@ public class SsrFormStyleDefault implements SsrFormStyleImpl {
                                     """,
                             field, field, field));
             ssr.setOption("action", "").setOption("role", "search");
+            ssr.setOption("fields", field);
             return ssr;
         };
     }
