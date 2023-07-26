@@ -29,7 +29,7 @@ public class Block129 extends UICustomPhone {
         super(owner);
         input.setReadonly(true);
         input.setType("hidden");
-        image.setSrc("jui/phone/block107-expand.png");
+        image.setSrc(getImage("jui/phone/block107-expand.png"));
     }
 
     @Override

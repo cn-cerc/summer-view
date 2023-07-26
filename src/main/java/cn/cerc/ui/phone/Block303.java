@@ -34,7 +34,7 @@ public class Block303 extends UICustomPhone {
                 url.setName("(名称)");
                 url.setSite("#");
                 UIImage img = new UIImage();
-                img.setSrc("jui/phone/block301-leftIcon.png");
+                img.setSrc(getImage("jui/phone/block301-leftIcon.png"));
                 this.addItem(url, img);
             }
         }

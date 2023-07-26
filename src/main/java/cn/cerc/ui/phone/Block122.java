@@ -28,7 +28,7 @@ public class Block122 extends UICustomPhone {
         super(owner);
         input.setReadonly(true);
         input.setType("hidden");
-        image.setSrc("jui/phone/block107-expand.png");
+        image.setSrc(getImage("jui/phone/block107-expand.png"));
     }
 
     public static void outputChoiceItem(HtmlWriter html, String key, String value, String choiceId) {

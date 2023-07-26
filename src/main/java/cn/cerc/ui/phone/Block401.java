@@ -28,7 +28,7 @@ public class Block401 extends UICustomPhone {
         super(owner);
         product.setRole("product");
         product.setAlt("(product)");
-        product.setSrc("jui/phone/block401-product.png");
+        product.setSrc(getImage("jui/phone/block401-product.png"));
         button.setText("(button)");
 
         remark.setRole("remark");

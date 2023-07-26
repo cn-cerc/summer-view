@@ -29,8 +29,8 @@ public class Block120 extends UICustomPhone {
         title.setText("item");
         leftText.setText(res.getString(1, "修改"));
         rightText.setText(res.getString(2, "删除"));
-        rightImage.setSrc("jui/phone/block120_delete.png");
-        leftImage.setSrc("jui/phone/block120_edit.png");
+        rightImage.setSrc(getImage("jui/phone/block120_delete.png"));
+        leftImage.setSrc(getImage("jui/phone/block120_edit.png"));
     }
 
     @Override

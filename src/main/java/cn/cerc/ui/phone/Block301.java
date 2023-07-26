@@ -13,7 +13,7 @@ import cn.cerc.ui.vcl.UIImage;
 /**
  * 用于生成厂商、客户、帐套选择
  */
-public class Block301 extends UIComponent {
+public class Block301 extends UICustomPhone {
     List<UIImage> list = new ArrayList<>();
     private UIImage leftIcon = new UIImage();
     private String title = "(title)";
@@ -25,10 +25,10 @@ public class Block301 extends UIComponent {
         super(owner);
         this.setCssClass("block301");
         operator = new UrlRecord();
-        leftIcon.setProductSrc("images/logo/logo_default.png");
+        leftIcon.setSrc(getProductImage("images/logo/logo_default.png"));
         leftIcon.setRole("icon");
 
-        rightIcon.setSrc("jui/phone/block301-rightIcon.png");
+        rightIcon.setSrc(getImage("jui/phone/block301-rightIcon.png"));
         rightIcon.setRole("right");
     }
 
