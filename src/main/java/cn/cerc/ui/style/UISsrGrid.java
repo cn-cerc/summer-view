@@ -38,6 +38,7 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl, IGridSty
 
     public UISsrGrid(UIComponent owner) {
         super(owner);
+        define = new SsrDefine("");
     }
 
     public UISsrGrid(UIComponent owner, String templateText) {

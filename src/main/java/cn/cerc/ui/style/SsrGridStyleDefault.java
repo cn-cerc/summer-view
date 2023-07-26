@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import cn.cerc.ui.core.UrlRecord;
+
 public class SsrGridStyleDefault implements SsrGridStyleImpl {
 
     private List<String> items = new ArrayList<>();
@@ -42,14 +44,31 @@ public class SsrGridStyleDefault implements SsrGridStyleImpl {
         };
     }
 
-    @Override
     public SupplierTemplateImpl getBoolean(String title, String field, int fieldWidth, String labelText) {
         items.add(title);
         return grid -> {
             var ssr = grid.addTemplate("head." + title, String.format("<th width=${_width}>%s</th>", labelText));
             ssr.toMap("_width", "" + fieldWidth);
-            grid.addTemplate("body." + title,
-                    String.format("<td><input type='checkbox' value='${dataset.%s}'>%s</input></td>", field, title));
+            grid.addTemplate("body." + title, String.format("""
+                        <td>
+                            <span><input type='checkbox' value='${dataset.%s}'>%s</input></span>
+                        </td>
+                    """, field, title));
+            return ssr;
+        };
+    }
+
+    @Override
+    public SupplierTemplateImpl getBoolean(String title, String field, int fieldWidth) {
+        items.add(title);
+        return grid -> {
+            var ssr = grid.addTemplate("head." + title, String.format("<th width=${_width}>%s</th>", title));
+            ssr.toMap("_width", "" + fieldWidth);
+            grid.addTemplate("body." + title, String.format("""
+                        <td>
+                            <span><input type='checkbox' value='${dataset.%s}'></input></span>
+                        </td>
+                    """, field));
             return ssr;
         };
     }
@@ -75,5 +94,17 @@ public class SsrGridStyleDefault implements SsrGridStyleImpl {
     @Override
     public List<String> items() {
         return items;
+    }
+
+    @Override
+    public SupplierTemplateImpl getUrl(String title, int fieldWidth) {
+        items.add(title);
+        UrlRecord url = new UrlRecord();
+        return grid -> {
+            var ssr = grid.addTemplate("head." + title, String.format("<th width=${_width}>%s</th>", title));
+            ssr.setOption("_width", "" + fieldWidth);
+            grid.addTemplate("body." + title, String.format("<td><a href='${href}'>${text}</a></td>", url));
+            return ssr;
+        };
     }
 }
