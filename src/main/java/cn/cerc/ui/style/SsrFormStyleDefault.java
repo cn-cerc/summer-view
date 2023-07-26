@@ -3,6 +3,7 @@ package cn.cerc.ui.style;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import cn.cerc.db.core.ClassConfig;
 import cn.cerc.mis.core.Application;
@@ -47,6 +48,36 @@ public class SsrFormStyleDefault implements SsrFormStyleImpl {
                                 </div>
                                 <ul>
                             """);
+            ssr.setOption("action", "").setOption("role", "search");
+            return ssr;
+        };
+    }
+    
+    @Override
+    public SupplierTemplateImpl getStatusButton(Map<String, Map<String, String>> statusButtons) {
+        return form -> {
+            var templateHtml = "";
+            for(String key : statusButtons.keySet()) {
+                Map<String, String> map = statusButtons.get(key);
+                var attrHtml = "";
+                for(String attr : map.keySet()) {
+                    // 标签属性 attr=name 为按钮名
+                    if(attr != "name") {
+                        attrHtml += String.format(" %s=\"%s\" ", attr, map.get(attr));
+                    }
+                }
+                templateHtml += String.format("<button name=\"status\" value=\"%s\" %s >%s</button>", key, attrHtml, map.get("name"));
+            }
+            var title = UISsrForm.FormBegin;
+            var ssr = form.addTemplate(title, String.format(
+                    """
+                                <form method='post' action='${action}' role='${role}'>
+                                <div>
+                                    <span onclick="toggleSearch(this)">查询条件</span>
+                                    <div class="searchFormButtonDiv">%s</div>
+                                </div>
+                                <ul>
+                            """, templateHtml));
             ssr.setOption("action", "").setOption("role", "search");
             return ssr;
         };

@@ -1,6 +1,7 @@
 package cn.cerc.ui.style;
 
 import java.util.List;
+import java.util.Map;
 
 public interface SsrFormStyleImpl {
 
@@ -21,6 +22,8 @@ public interface SsrFormStyleImpl {
     SupplierTemplateImpl getMap(String title, String field);
 
     SupplierTemplateImpl getSubmitButton();
+    
+    SupplierTemplateImpl getStatusButton(Map<String, Map<String, String>> statusButtons);
 
     List<String> items();
 
