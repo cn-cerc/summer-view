@@ -121,7 +121,9 @@ public class SsrFormStyleDefault implements SsrFormStyleImpl {
                                     <li>
                                         <label for="%s"><em>%s</em></label>
                                         <div>
-                                            <input type="text" name="%s" id="%s" value="${%s}" autocomplete="off" placeholder="请点击获取%s" ${if readonly}readonly${endif} />
+                                            <input type="text" name="%s" id="%s" value="${%s}" autocomplete="off" ${if readonly}readonly${endif}
+                                            ${if placeholder}placeholder="${placeholder}" ${else} placeholder="请点击获取%s" ${endif} ${if pattern}pattern="${pattern}"${endif}
+                                            ${if required}required${endif} />
                                             <span role="suffix-icon">
                                                 <a href="javascript:%s">
                                                     <img src="${dialogIcon}">
@@ -133,6 +135,9 @@ public class SsrFormStyleDefault implements SsrFormStyleImpl {
                             field, title, field, field, field, title, dialogText));
             ssr.setOption("dialogIcon", fieldDialogIcon);
             ssr.setOption("readonly", "false");
+            ssr.setOption("placeholder", "false");
+            ssr.setOption("pattern", "false");
+            ssr.setOption("required", "false");
             ssr.setOption("fields", field).setOption("option", "1");
             ssr.setId(title);
             return ssr;
