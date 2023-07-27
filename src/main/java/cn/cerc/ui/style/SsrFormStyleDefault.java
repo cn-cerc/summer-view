@@ -51,7 +51,7 @@ public class SsrFormStyleDefault implements SsrFormStyleImpl {
             return ssr;
         };
     }
-    
+
     @Override
     public SupplierTemplateImpl getString(String title, String field) {
         items.add(title);
@@ -92,7 +92,8 @@ public class SsrFormStyleDefault implements SsrFormStyleImpl {
                                     <li>
                                         <label for="%s"><em>%s</em></label>
                                         <div>
-                                            <input type="text" name="%s" id="%s" value="${%s}" autocomplete="off" placeholder="请点击获取%s" ${if readonly}readonly${endif} />
+                                            <input type="text" name="%s" id="%s" value="${%s}" autocomplete="off" ${if readonly}readonly${endif}
+                                            ${if placeholder}placeholder="${placeholder}" ${else} placeholder="请点击获取%s" ${endif} ${if pattern}pattern="${pattern}"${endif} ${if required}required${endif} />
                                             <span role="suffix-icon">
                                                 <a href="javascript:%s">
                                                     <img src="${dialogIcon}">
@@ -104,6 +105,9 @@ public class SsrFormStyleDefault implements SsrFormStyleImpl {
                             field, title, field, field, field, title, dialogText));
             ssr.setOption("dialogIcon", fieldDialogIcon);
             ssr.setOption("readonly", "false");
+            ssr.setOption("placeholder", "false");
+            ssr.setOption("pattern", "false");
+            ssr.setOption("required", "false");
             ssr.setOption("fields", field).setOption("option", "1");
             ssr.setId(title);
             return ssr;
@@ -203,7 +207,8 @@ public class SsrFormStyleDefault implements SsrFormStyleImpl {
                         <label for="%s"><em>%s</em></label>
                         <div>
                             <input autocomplete="off" name="%s" id="%s" type="text" value="${%s}"
-                            ${if pattern}pattern="${pattern}"${endif} ${if required}required${endif} />
+                            ${if pattern}pattern="${pattern}"${endif} ${if required}required${endif}
+                            ${if placeholder}placeholder="${placeholder}"${endif} />
                             <span role="suffix-icon">
                                 <a href="javascript:showDateDialog('%s')">
                                     <img src="${dialogIcon}" />
@@ -215,6 +220,7 @@ public class SsrFormStyleDefault implements SsrFormStyleImpl {
             ssr.setOption("dialogIcon", dateDialogIcon);
             ssr.setOption("pattern", "false");
             ssr.setOption("required", "false");
+            ssr.setOption("placeholder", "false");
             ssr.setOption("fields", field).setOption("option", "1");
             ssr.setId(title);
             return ssr;
@@ -254,10 +260,12 @@ public class SsrFormStyleDefault implements SsrFormStyleImpl {
                         <label for="start_date_"><em>%s</em></label>
                         <div class="dateArea">
                             <input autocomplete="off" name="%s" id="%s" type="text" class="dateAreaInput" value="${%s}"
-                            ${if pattern}pattern="${pattern}"${endif} ${if required}required${endif} />
+                            ${if pattern}pattern="${pattern}"${endif} ${if required}required${endif}
+                            ${if placeholder}placeholder="${placeholder}"${endif} />
                             <span>/</span>
                             <input autocomplete="off" name="%s" id="%s" type="text" class="dateAreaInput" value="${%s}"
-                            ${if pattern}pattern="${pattern}"${endif} ${if required}required${endif} />
+                            ${if pattern}pattern="${pattern}"${endif} ${if required}required${endif}
+                            ${if placeholder}placeholder="${placeholder}"${endif} />
                             <span role="suffix-icon">
                                 <a href="javascript:showDateAreaDialog('%s', '%s')">
                                 <img src="${dialogIcon}" />
@@ -270,6 +278,7 @@ public class SsrFormStyleDefault implements SsrFormStyleImpl {
             ssr.setOption("dialogIcon", dateDialogIcon);
             ssr.setOption("pattern", "false");
             ssr.setOption("required", "false");
+            ssr.setOption("placeholder", "false");
             ssr.setOption("fields", String.format("%s,%s", beginDate, endDate)).setOption("option", "1");
             ssr.setId(title);
             return ssr;
