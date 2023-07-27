@@ -224,6 +224,34 @@ public class SsrFormStyleDefault implements SsrFormStyleImpl {
     }
 
     @Override
+    public SupplierTemplateImpl getYearMonth(String title, String field) {
+        items.add(title);
+        return form -> {
+            var ssr = form.addTemplate(title, String.format("""
+                    <li>
+                        <label for="%s"><em>%s</em></label>
+                        <div>
+                            <input autocomplete="off" name="%s" id="%s" type="text" value="${%s}"
+                            ${if pattern}pattern="${pattern}"${endif} ${if required}required${endif} ${if readonly}readonly${endif}/>
+                            <span role="suffix-icon">
+                                <a href="javascript:showYMDialog('%s')">
+                                    <img src="${dialogIcon}" />
+                                </a>
+                            </span>
+                        </div>
+                    </li>
+                    """, field, title, field, field, field, field));
+            ssr.setOption("dialogIcon", dateDialogIcon);
+            ssr.setOption("pattern", "\\d{4}\\d{2}");
+            ssr.setOption("required", "false");
+            ssr.setOption("readonly", "true");
+            ssr.setOption("fields", field).setOption("option", "1");
+            ssr.setId(title);
+            return ssr;
+        };
+    }
+
+    @Override
     public SupplierTemplateImpl getDate(String title, String field) {
         items.add(title);
         return form -> {
