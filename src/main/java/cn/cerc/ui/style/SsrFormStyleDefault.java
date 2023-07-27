@@ -194,7 +194,8 @@ public class SsrFormStyleDefault implements SsrFormStyleImpl {
                                         <label for="%s_name"><em>%s</em></label>
                                         <div>
                                             <input type="hidden" name="%s" id="%s" value="${%s}">
-                                            <input type="text" name="%s_name" id="%s_name" value="${%s_name}" autocomplete="off" placeholder="请点击获取%s" ${if readonly}readonly${endif} >
+                                            <input type="text" name="%s_name" id="%s_name" value="${%s_name}" autocomplete="off" placeholder="请点击获取%s" 
+                                            ${if readonly}readonly${endif} >
                                             <span role="suffix-icon">
                                                 <a href="javascript:%s">
                                                     <img src="${dialogIcon}">
