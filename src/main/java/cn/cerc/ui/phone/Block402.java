@@ -28,8 +28,9 @@ public class Block402 extends UICustomPhone {
      */
     public Block402(UIComponent owner) {
         super(owner);
+
         product.setRole("product");
-        product.setSrc("jui/phone/block402-product.png");
+        product.setSrc(getImage("jui/phone/block402-product.png"));
 
         describe.setRole("describe");
         describe.setText("(describe)");
@@ -38,11 +39,11 @@ public class Block402 extends UICustomPhone {
         remark.setText("(remark)");
         // 减号
         diff.setRole("diff");
-        diff.setSrc("jui/phone/block402_diff.png");
+        diff.setSrc(getImage("jui/phone/block402_diff.png"));
         diff.setOnclick("diffClick()");
         // 加号
         add.setRole("add");
-        add.setSrc("jui/phone/block402_add.png");
+        add.setSrc(getImage("jui/phone/block402_add.png"));
         add.setOnclick("addClick()");
         // 输入框
         input.setType("number");

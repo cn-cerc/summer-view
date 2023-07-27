@@ -21,7 +21,7 @@ public class Block991 extends UICustomPhone {
      */
     public Block991(UIComponent owner) {
         super(owner);
-        image.setSrc("jui/phone/block991_back.png");
+        image.setSrc(getImage("jui/phone/block991_back.png"));
         button.setText("(button)");
         remark.setText("(remark)");
     }

@@ -35,7 +35,7 @@ public class Block307 extends UICustomPhone {
         url = new UrlRecord();
         url.setName("(url)");
 
-        icon.setSrc("jui/phone/block301-rightIcon.png");
+        icon.setSrc(getImage("jui/phone/block301-rightIcon.png"));
         icon.setRole("right");
     }
 

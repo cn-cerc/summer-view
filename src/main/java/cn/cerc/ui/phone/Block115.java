@@ -8,7 +8,7 @@ import cn.cerc.ui.vcl.UISpan;
 /**
  * @author 善贵
  */
-public class Block115 extends UIComponent {
+public class Block115 extends UICustomPhone {
     private UISpan title = new UISpan();
     private UIImage image = new UIImage();
 
@@ -21,7 +21,7 @@ public class Block115 extends UIComponent {
         super(owner);
         title.setText("(title)");
         image.setRole("image");
-        image.setSrc("jui/phone/block401_004.png");
+        image.setSrc(getImage("jui/phone/block401_004.png"));
     }
 
     @Override

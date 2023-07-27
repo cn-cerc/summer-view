@@ -32,7 +32,7 @@ public class Block107 extends UICustomPhone {
         super(owner);
         input.setPlaceholder(res.getString(1, "当前条件："));
         input.setReadonly(true);
-        image.setSrc("jui/phone/block107-expand.png");
+        image.setSrc(getImage("jui/phone/block107-expand.png"));
     }
 
     public static void outputChoiceItem(HtmlWriter html, String value, String choiceId, String childPage,
