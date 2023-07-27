@@ -34,18 +34,15 @@ public class SsrFormStyleDefault implements SsrFormStyleImpl {
     @Override
     public SupplierTemplateImpl getSubmitButton() {
         return form -> {
-            var title = UISsrForm.FormBegin;
-            var ssr = form.addTemplate(title,
+            var ssr = form.addTemplate("formFirst",
                     """
-                            <form method='post' action='${action}' role='${role}'>
-                                <div>
+                               <div>
                                     <span onclick="toggleSearch(this)">查询条件</span>
                                     <div class="searchFormButtonDiv">
                                         <button name="submit" value="search">查询</button>
                                         <button role="configTemplate" type="button" onclick="showSsrConfigDialog('${templateId}')">配置</button>
                                     </div>
                                 </div>
-                                <ul>
                             """);
             ssr.setOption("action", "").setOption("role", "search");
             return ssr;

@@ -116,7 +116,16 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
 
     private Supplier<SsrTemplateImpl> getDefault_FormBegin() {
         var action = this.getDefine().getOption("action").orElse("");
-        return () -> new SsrTemplate(String.format("<form method='post' action='%s'><ul>", action)).setDefine(define);
+        return () -> {
+            var ssr = new SsrTemplate(
+                    String.format("<form method='post' action='%s'>${callback('formFirst')}<ul>", action))
+                    .setDefine(define);
+            ssr.onCallback("formFirst", () -> {
+                var formFirst = this.getTemplate("formFirst");
+                return formFirst.isPresent() ? formFirst.get().getHtml() : "";
+            });
+            return ssr;
+        };
     }
 
     private Optional<SsrTemplateImpl> getTemplate(String id, Supplier<SsrTemplateImpl> supplier) {
