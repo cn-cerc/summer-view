@@ -12,6 +12,8 @@ public interface SsrFormStyleImpl {
 
     SupplierTemplateImpl getBoolean(String title, String field);
 
+    SupplierTemplateImpl getYearMonth(String title, String field);
+
     SupplierTemplateImpl getDate(String title, String field);
 
     SupplierTemplateImpl getDatetime(String title, String field);
