@@ -51,7 +51,7 @@ public class SsrFormStyleDefault implements SsrFormStyleImpl {
             return ssr;
         };
     }
-    
+
     @Override
     public SupplierTemplateImpl getTabs(String field) {
         return form -> {
@@ -194,7 +194,7 @@ public class SsrFormStyleDefault implements SsrFormStyleImpl {
                                         <label for="%s_name"><em>%s</em></label>
                                         <div>
                                             <input type="hidden" name="%s" id="%s" value="${%s}">
-                                            <input type="text" name="%s_name" id="%s_name" value="${%s_name}" autocomplete="off" placeholder="请点击获取%s" readonly>
+                                            <input type="text" name="%s_name" id="%s_name" value="${%s_name}" autocomplete="off" placeholder="请点击获取%s" ${if readonly}readonly${endif} >
                                             <span role="suffix-icon">
                                                 <a href="javascript:%s">
                                                     <img src="${dialogIcon}">
@@ -205,6 +205,7 @@ public class SsrFormStyleDefault implements SsrFormStyleImpl {
                                     """,
                             field, title, field, field, field, field, field, field, title, dialogText));
             ssr.setOption("dialogIcon", fieldDialogIcon);
+            ssr.setOption("readonly", "true");
             ssr.setOption("fields", String.format("%s,%s_name", field, field)).setOption("option", "1");
             ssr.setId(title);
             return ssr;
