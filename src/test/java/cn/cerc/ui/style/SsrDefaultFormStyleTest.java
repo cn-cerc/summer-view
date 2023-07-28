@@ -11,7 +11,7 @@ public class SsrDefaultFormStyleTest {
     @Test
     public void test() {
         var form = new UISsrForm(null);
-        form.setStrict(false);
+        form.strict(false);
         form.setDataRow(DataRow.of("Name_", "jason", "Man_", true, "Xl_", "初中"));
 
         var style = form.createDefaultStyle();
@@ -28,7 +28,7 @@ public class SsrDefaultFormStyleTest {
                         <form method='post' action='' role='search'><ul><li>
                         <label for="Name_"><em>姓名</em></label>
                         <div>
-                        <input autocomplete="off" name="Name_" id="Name_" type="text" value="jason"     />
+                        <input type="text" name="Name_" id="Name_" value="jason" autocomplete="off" placeholder="请输入姓名"/>
                         <span role="suffix-icon"></span>
                         </div>
                         </li><li>

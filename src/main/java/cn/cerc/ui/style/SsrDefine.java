@@ -85,7 +85,7 @@ public class SsrDefine implements Iterable<SsrTemplateImpl>, SsrOptionImpl {
             if ((right.startsWith("'") && right.endsWith("'")) || ((right.startsWith("\"") && right.endsWith("\""))))
                 right = right.substring(1, right.length() - 1);
             // 存入到选项参数
-            template.setOption(left, right);
+            template.option(left, right);
         } else {
             log.warn("参数必须以等于符号进行定义与赋值");
         }
@@ -141,18 +141,18 @@ public class SsrDefine implements Iterable<SsrTemplateImpl>, SsrOptionImpl {
     }
 
     @Override
-    public boolean isStrict() {
+    public boolean strict() {
         return strict;
     }
 
     @Override
-    public SsrDefine setStrict(boolean strict) {
+    public SsrDefine strict(boolean strict) {
         this.strict = strict;
         return this;
     }
 
     @Override
-    public SsrOptionImpl setOption(String key, String value) {
+    public SsrOptionImpl option(String key, String value) {
         if (options == null)
             options = new HashMap<>();
         if (value == null)
@@ -163,7 +163,7 @@ public class SsrDefine implements Iterable<SsrTemplateImpl>, SsrOptionImpl {
     }
 
     @Override
-    public Optional<String> getOption(String key) {
+    public Optional<String> option(String key) {
         if (options == null)
             return Optional.empty();
         return Optional.ofNullable(options.get(key));

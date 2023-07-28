@@ -29,11 +29,11 @@ public class UISsrBlockTest {
     @Test
     public void test_Strict_2() {
         var block1 = new UISsrBlock(null, "${0}${1}");
-        block1.getTemplate().toList("a").setStrict(false);
+        block1.getTemplate().toList("a").strict(false);
         assertEquals("a", block1.toString());
 
         var block2 = new UISsrBlock(null, "${code}${name}");
-        block2.getTemplate().setDataRow(DataRow.of("code", "a")).setStrict(false);
+        block2.getTemplate().setDataRow(DataRow.of("code", "a")).strict(false);
         assertEquals("a", block2.toString());
     }
 

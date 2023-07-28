@@ -18,24 +18,24 @@ public class SsrDefineTest {
 
         var ssr = define.get("a").get();
 
-        assertEquals("", define.getOption("width").orElse(""));
-        define.setOption("width", "30");
-        assertEquals("10", ssr.getOption("width").orElse(""));
-        assertEquals("30", define.getOption("width").orElse(""));
+        assertEquals("", define.option("width").orElse(""));
+        define.option("width", "30");
+        assertEquals("10", ssr.option("width").orElse(""));
+        assertEquals("30", define.option("width").orElse(""));
 
-        assertTrue(define.isStrict());
-        assertTrue(ssr.isStrict());
-        ssr.setStrict(false);
-        assertFalse(ssr.isStrict());
-        assertTrue(define.isStrict());
+        assertTrue(define.strict());
+        assertTrue(ssr.strict());
+        ssr.strict(false);
+        assertFalse(ssr.strict());
+        assertTrue(define.strict());
 
-        ssr.setOption("width", "20");
-        assertEquals("20", ssr.getOption("width").orElse(""));
-        assertEquals("30", define.getOption("width").orElse(""));
+        ssr.option("width", "20");
+        assertEquals("20", ssr.option("width").orElse(""));
+        assertEquals("30", define.option("width").orElse(""));
 
         assertEquals("a", ssr.id());
 
-        assertEquals("code_,name_", ssr.getOption("_fields").orElse(""));
+        assertEquals("code_,name_", ssr.option("_fields").orElse(""));
     }
 
     @Test

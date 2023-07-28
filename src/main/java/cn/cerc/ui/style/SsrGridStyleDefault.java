@@ -17,11 +17,11 @@ public class SsrGridStyleDefault implements SsrGridStyleImpl {
             String bodyTitle = "body." + title;
             var ssr = grid.addTemplate(headTitle, "<th width=${_width}>序</th>");
             ssr.setId(headTitle);
-            ssr.setOption("option", "1");
+            ssr.display(1);
             ssr.toMap("_width", "" + fieldWidth);
             ssr = grid.addTemplate(bodyTitle, "<td align='center'>${dataset.rec}</td>");
             ssr.setId(bodyTitle);
-            ssr.setOption("option", "1");
+            ssr.display(1);
             return ssr;
         };
     }
@@ -36,10 +36,10 @@ public class SsrGridStyleDefault implements SsrGridStyleImpl {
             var ssr = grid.addTemplate(headTitle, String.format("<th width=${_width}>%s</th>", title));
             ssr.toMap("_width", "" + fieldWidth);
             ssr.setId(headTitle);
-            ssr.setOption("option", "1");
+            ssr.display(1);
             ssr = grid.addTemplate(bodyTitle, "<td><a href='${callback(url)}'>内容</a></td>");
             ssr.setId(bodyTitle);
-            ssr.setOption("option", "1");
+            ssr.display(1);
             return ssr;
         };
     }
@@ -62,7 +62,7 @@ public class SsrGridStyleDefault implements SsrGridStyleImpl {
             var head = grid.addTemplate(headTitle, String.format("<th width=${_width}>%s</th>", title));
             head.toMap("_width", "" + fieldWidth);
             head.setId(headTitle);
-            head.setOption("option", "1");
+            head.display(1);
             var body = grid.addTemplate(bodyTitle, String.format("""
                     <td>${if readonly}${map.begin}${if map.key==%s}${map.value}${endif}${map.end}${else}
                     <select>
@@ -72,9 +72,9 @@ public class SsrGridStyleDefault implements SsrGridStyleImpl {
                     </select>
                     ${endif}</td>
                     """, field, field));
-            body.setOption("readonly", "true");
+            body.option("readonly", "true");
             body.setId(bodyTitle);
-            body.setOption("option", "1");
+            body.display(1);
             map.forEach((key, value) -> body.toMap(key, value));
             return body;
         };
@@ -89,7 +89,7 @@ public class SsrGridStyleDefault implements SsrGridStyleImpl {
             var ssr = grid.addTemplate(headTitle, String.format("<th width=${_width}>%s</th>", title));
             ssr.toMap("_width", "" + fieldWidth);
             ssr.setId(headTitle);
-            ssr.setOption("option", "1");
+            ssr.display(1);
             ssr = grid.addTemplate(bodyTitle, String.format("""
                         <td>
                             <span><input type='checkbox' value='1' ${if %s}checked ${endif}/></span>
@@ -97,7 +97,7 @@ public class SsrGridStyleDefault implements SsrGridStyleImpl {
                     """, field));
             ssr.setId(bodyTitle);
             ssr.setId(bodyTitle);
-            ssr.setOption("option", "1");
+            ssr.display(1);
             return ssr;
         };
     }
@@ -119,15 +119,15 @@ public class SsrGridStyleDefault implements SsrGridStyleImpl {
                 var ssr = grid.addTemplate(headTitle, String.format("<th width=${_width}>%s</th>", title));
                 ssr.toMap("_width", "" + fieldWidth);
                 ssr.setId(headTitle);
-                ssr.setOption("option", "1");
+                ssr.display(1);
                 ssr = grid.addTemplate(bodyTitle, String.format(
                         "<td align='left'>${if _enabled_url}<a href='${callback(url)}'>${endif}${dataset.%s}${if _enabled_url}</a>${endif}</td>",
                         field));
                 ssr.setId(bodyTitle);
-                ssr.setOption("option", "1");
-                ssr.setStrict(false);
+                ssr.display(1);
+                ssr.strict(false);
                 if (url != null) {
-                    ssr.setOption("_enabled_url", "1");
+                    ssr.option("_enabled_url", "1");
                     ssr.onCallback(field, url);
                 }
                 return ssr;
@@ -148,11 +148,11 @@ public class SsrGridStyleDefault implements SsrGridStyleImpl {
             var ssr = grid.addTemplate(headTitle, String.format("<th width=${_width}>%s</th>", title));
             ssr.toMap("_width", "" + fieldWidth);
             ssr.setId(headTitle);
-            ssr.setOption("option", "1");
+            ssr.display(1);
             ssr = grid.addTemplate(bodyTitle, String.format("<td align='${align}'>${dataset.%s}</td>", field));
-            ssr.setOption("align", align);
+            ssr.option("align", align);
             ssr.setId(bodyTitle);
-            ssr.setOption("option", "1");
+            ssr.display(1);
             return ssr;
         };
     }

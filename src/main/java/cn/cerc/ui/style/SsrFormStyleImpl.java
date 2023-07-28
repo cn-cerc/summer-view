@@ -6,8 +6,6 @@ public interface SsrFormStyleImpl {
 
     SupplierTemplateImpl getString(String title, String field);
 
-    SupplierTemplateImpl getString(String title, String field, String... dialogFunc);
-
     SupplierTemplateImpl getCodeName(String title, String field, String... dialogFunc);
 
     SupplierTemplateImpl getBoolean(String title, String field);

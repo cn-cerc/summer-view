@@ -33,25 +33,25 @@ public interface SsrComponentImpl extends SsrOptionImpl {
     }
 
     @Override
-    default boolean isStrict() {
-        return getDefine().isStrict();
+    default boolean strict() {
+        return getDefine().strict();
     }
 
     @Override
-    default SsrComponentImpl setStrict(boolean strict) {
-        getDefine().setStrict(strict);
+    default SsrComponentImpl strict(boolean strict) {
+        getDefine().strict(strict);
         return this;
     }
 
     @Override
-    default SsrOptionImpl setOption(String key, String value) {
-        getDefine().setOption(key, value);
+    default SsrOptionImpl option(String key, String value) {
+        getDefine().option(key, value);
         return getDefine();
     }
 
     @Override
-    default Optional<String> getOption(String key) {
-        return getDefine().getOption(key);
+    default Optional<String> option(String key) {
+        return getDefine().option(key);
     }
 
 }

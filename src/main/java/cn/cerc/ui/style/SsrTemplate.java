@@ -79,7 +79,7 @@ public class SsrTemplate implements SsrTemplateImpl {
     }
 
     @Override
-    public SsrTemplateImpl setOption(String key, String value) {
+    public SsrTemplateImpl option(String key, String value) {
         if (options == null)
             options = new HashMap<>();
         if (value == null)
@@ -90,12 +90,12 @@ public class SsrTemplate implements SsrTemplateImpl {
     }
 
     @Override
-    public Optional<String> getOption(String key) {
+    public Optional<String> option(String key) {
         Optional<String> result = Optional.empty();
         if (options != null)
             result = Optional.ofNullable(options.get(key));
         if (result.isEmpty() && define != null)
-            result = define.getOption(key);
+            result = define.option(key);
         return result;
     }
 
@@ -153,11 +153,11 @@ public class SsrTemplate implements SsrTemplateImpl {
      * @return 严格格式还是宽松模式，默认为严格模式
      */
     @Override
-    public boolean isStrict() {
+    public boolean strict() {
         if (strict != null)
             return strict.booleanValue();
         if (define != null)
-            return define.isStrict();
+            return define.strict();
         else
             return true;
     }
@@ -169,7 +169,7 @@ public class SsrTemplate implements SsrTemplateImpl {
      * @param strict 是否为严格模式
      */
     @Override
-    public SsrTemplate setStrict(boolean strict) {
+    public SsrTemplate strict(boolean strict) {
         this.strict = strict;
         return this;
     }
@@ -248,7 +248,7 @@ public class SsrTemplate implements SsrTemplateImpl {
             var index = Integer.parseInt(field);
             if (index >= 0 && index < list.size()) {
                 result = list.get(index);
-            } else if (!this.isStrict()) {
+            } else if (!this.strict()) {
                 result = "";
             } else {
                 log.error("not find index of list: {}", field);
@@ -278,7 +278,7 @@ public class SsrTemplate implements SsrTemplateImpl {
             result = row.isPresent() ? row.get().getText(field) : "";
         } else if (options != null && options.containsKey(field)) {
             result = options.get(field);
-        } else if (!isStrict()) {
+        } else if (!strict()) {
             result = "";
         } else if (onGetValue == null) {
             log.error("not find field: {}", field);
@@ -301,7 +301,7 @@ public class SsrTemplate implements SsrTemplateImpl {
 
     @Override
     public SsrTemplateImpl fixed(SsrComponentImpl form) {
-        this.setOption("option", null);
+        this.option("option", null);
         form.addField(this.id);
         return this;
     }
