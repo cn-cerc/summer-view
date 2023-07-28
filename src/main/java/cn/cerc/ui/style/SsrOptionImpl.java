@@ -11,16 +11,12 @@ public interface SsrOptionImpl {
     public static final String Readonly = "readonly";
 
     /**
-     * 
-     * @param strict 是否执行严格模式，默认为 true
-     * @return 返回对象本身
+     * 是否启用严格模式
      */
     boolean strict();
 
     /**
-     * 
-     * @param display 取值范围：0=必选但可以调整次数；1=默认选中；2=默认不选中
-     * @return 返回自身
+     * @param strict 是否开启严格模式
      */
     SsrOptionImpl strict(boolean strict);
 
