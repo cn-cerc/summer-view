@@ -176,6 +176,7 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
                 }
             });
         }
+        return submit;
     }
 
     private void updateValue(String field, String val, boolean submit) {
