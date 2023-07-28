@@ -47,7 +47,7 @@ public class SsrFormStyleDefault implements SsrFormStyleImpl {
                                 </div>
                                 <ul>
                             """);
-            ssr.setOption("action", "").setOption("role", "search");
+            ssr.option("action", "").option("role", "search");
             return ssr;
         };
     }

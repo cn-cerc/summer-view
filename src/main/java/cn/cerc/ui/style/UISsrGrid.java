@@ -81,7 +81,7 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl, IGridSty
         for (var field : fields) {
             var block = getTemplate("head." + field, getDefault_HeadCell(field));
             if (block.isPresent()) {
-                block.get().setOption("templateId", this.define.id());
+                block.get().option(SsrOptionImpl.TemplateId, this.define.id());
                 this.onGetHeadHtml.forEach((key, value) -> {
                     if (key.equals(field))
                         value.accept(block.get().setId(field));
@@ -252,7 +252,7 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl, IGridSty
     public DataSet getDefaultOptions() {
         DataSet ds = new DataSet();
         for (var ssr : define) {
-            var option = ssr.getOption("option");
+            var option = ssr.option(SsrOptionImpl.Display);
             String id = ssr.id();
             if (option.isPresent()) {
                 if (id.startsWith("body.") || id.startsWith("head."))

@@ -12,7 +12,7 @@ public class SsrListNode extends SsrContainerNode {
     public String getHtml(SsrTemplateImpl template) {
         var list = template.getListProxy();
         if (list == null) {
-            if (!template.isStrict()) {
+            if (!template.strict()) {
                 return "";
             } else {
                 return this.getText();

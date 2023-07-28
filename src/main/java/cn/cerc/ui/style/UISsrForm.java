@@ -51,7 +51,7 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
     private UISsrForm init(IPage page) {
         if (page != null) {
             for (var ssr : define)
-                ssr.setOption("isPhone", "" + page.getForm().getClient().isPhone());
+                ssr.option(SsrOptionImpl.Phone, "" + page.getForm().getClient().isPhone());
         }
         return this;
     }
@@ -77,7 +77,7 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
         getTemplate(SsrDefine.BeginFlag).ifPresent(template -> html.print(template.getHtml()));
 
         var top = getTemplate(FormBegin, getDefault_FormBegin()).get();
-        top.setOption("templateId", this.define.id());
+        top.option(SsrOptionImpl.TemplateId, this.define.id());
         html.print(top.getHtml());
 
         for (var field : fields) {
@@ -169,7 +169,7 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
     private void updateField(HttpServletRequest request, boolean submit, String column) {
         var template = getTemplate(column);
         if (template.isPresent()) {
-            var option = template.get().getOption("fields");
+            var option = template.get().option("fields");
             if (option.isPresent()) {
                 var fields = option.get();
                 for (var field : fields.split(",")) {
@@ -203,7 +203,7 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
     public DataSet getDefaultOptions(String template_id) {
         DataSet ds = new DataSet();
         for (var ssr : define) {
-            var option = ssr.getOption("option");
+            var option = ssr.option(SsrOptionImpl.Display);
             if (option.isPresent() && !Utils.isEmpty(ssr.id()))
                 ds.append().setValue("column_name_", ssr.id()).setValue("option_", option.get());
         }
