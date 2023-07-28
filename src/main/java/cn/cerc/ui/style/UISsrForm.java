@@ -116,16 +116,17 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
     }
 
     private Supplier<SsrTemplateImpl> getDefault_FormBegin() {
-        var action = this.getDefine().getOption("action").orElse("");
+        var action = this.getDefine().option("action").orElse("");
         return () -> {
             var ssr = new SsrTemplate(String.format(
                     "<form method='post' action='%s' role='${role}'>${callback(%s)}<ul>", action, UISsrForm.FormStart))
                     .setDefine(define);
             ssr.onCallback(UISsrForm.FormStart, () -> {
                 var formFirst = this.getTemplate(UISsrForm.FormStart);
+                formFirst.ifPresent(template -> template.option(SsrOptionImpl.TemplateId, this.define.id()));
                 return formFirst.isPresent() ? formFirst.get().getHtml() : "";
             });
-            ssr.setOption("role", "search");
+            ssr.option("role", "search");
             return ssr;
         };
     }
@@ -169,7 +170,7 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
     public boolean readAll(HttpServletRequest request, String submitId) {
         boolean submit = request.getParameter(submitId) != null;
         for (var ssr : this.define) {
-            ssr.getOption("fields").ifPresent(fields -> {
+            ssr.option("fields").ifPresent(fields -> {
                 for (var field : fields.split(",")) {
                     String val = request.getParameter(field);
                     updateValue(field, val, submit);
@@ -233,12 +234,17 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
     }
 
     public UISsrForm setAction(String action) {
-        setOption("action", action);
+        option("action", action);
         return this;
     }
 
     public UISsrForm setTemplateId(String id) {
         define.setId(id);
+        return this;
+    }
+
+    public UISsrForm modify() {
+        option("role", "modify");
         return this;
     }
 

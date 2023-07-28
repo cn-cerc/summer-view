@@ -123,7 +123,6 @@ public class StartServices extends HttpServlet {
             Throwable err = e.getCause() != null ? e.getCause() : e;
             log.error("service {}, dataIn {}, error {}", service, text, err.getMessage(), err);
             dataOut.setState(ServiceState.ERROR).setMessage(err.getMessage());
-            e.printStackTrace();
             response.getWriter().write(dataOut.toString());
         }
     }

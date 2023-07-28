@@ -18,7 +18,7 @@ public class SsrTemplateTest {
     @Test
     public void testDecodeString01() {
         var template = new SsrTemplate("${a}");
-        template.setOption("a", "001");
+        template.option("a", "001");
         assertEquals("a,", margeList(template.style()));
         assertEquals("001", template.style().get(0).getHtml(template));
     }

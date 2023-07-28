@@ -9,68 +9,21 @@ public interface SsrOptionImpl {
     public static final String Phone = "isPhone";
     public static final String Fields = "fields";
     public static final String Readonly = "readonly";
-    
 
     /**
-     * 请改用 strict
-     * 
-     * @return
+     * 是否启用严格模式
      */
-    @Deprecated
-    boolean isStrict();
+    boolean strict();
 
     /**
-     * 请改用 strict
-     * 
+     * @param strict 是否开启严格模式
      */
-    @Deprecated
-    SsrOptionImpl setStrict(boolean strict);
+    SsrOptionImpl strict(boolean strict);
 
-    /**
-     * 请改使用 option
-     */
-    @Deprecated
-    SsrOptionImpl setOption(String key, String value);
+    SsrOptionImpl option(String key, String value);
 
-    /**
-     * 请改使用 option
-     */
-    @Deprecated
-    Optional<String> getOption(String key);
+    Optional<String> option(String key);
 
-    default SsrOptionImpl option(String key, String value) {
-        return setOption(key, value);
-    }
-
-    default Optional<String> option(String key) {
-        return getOption(key);
-    }
-
-    /**
-     * 
-     * @param strict 是否执行严格模式，默认为 true
-     * @return 返回对象本身
-     */
-    default SsrOptionImpl strict(boolean strict) {
-//        this.option(Strict, strict ? "1" : "");
-        this.setStrict(strict);
-        return this;
-    }
-
-    /**
-     * 
-     * @return 返回解析模式，默认为严格模式
-     */
-    default boolean strict() {
-//        return !"".equals(this.option(Strict).orElse("1"));
-        return this.isStrict();
-    }
-
-    /**
-     * 
-     * @param display 取值范围：0=必选但可以调整次数；1=默认选中；2=默认不选中
-     * @return 返回自身
-     */
     default SsrOptionImpl display(int display) {
         this.option(Display, String.valueOf(display));
         return this;
@@ -83,16 +36,6 @@ public interface SsrOptionImpl {
      */
     default SsrOptionImpl fields(String... fields) {
         this.option(Fields, String.join(",", fields));
-        return this;
-    }
-
-    /**
-     * 
-     * @param readonly 取值范围：true/false
-     * @return 返回自身
-     */
-    default SsrOptionImpl readonly(boolean readonly) {
-        this.option(Readonly, readonly ? "1" : "");
         return this;
     }
 

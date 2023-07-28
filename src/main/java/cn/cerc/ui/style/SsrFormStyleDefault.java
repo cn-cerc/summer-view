@@ -17,18 +17,19 @@ public class SsrFormStyleDefault implements SsrFormStyleImpl {
 
     private List<String> items = new ArrayList<>();
 
-    private String dateDialogIcon;
     private String fieldDialogIcon;
+    private String dateDialogIcon;
 
     public SsrFormStyleDefault() {
         var impl = Application.getBean(ImageConfigImpl.class);
         if (impl != null) {
-            this.dateDialogIcon = impl.getClassProperty(DateField.class, SummerUI.ID, "icon", "");
             this.fieldDialogIcon = impl.getClassProperty(AbstractField.class, SummerUI.ID, "icon", "");
+            this.dateDialogIcon = impl.getClassProperty(DateField.class, SummerUI.ID, "icon", "");
         } else {
-            this.dateDialogIcon = DateConfig.getClassProperty("icon", "");
             this.fieldDialogIcon = FieldConfig.getClassProperty("icon", "");
+            this.dateDialogIcon = DateConfig.getClassProperty("icon", "");
         }
+
     }
 
     @Override
@@ -50,86 +51,15 @@ public class SsrFormStyleDefault implements SsrFormStyleImpl {
     }
 
     @Override
-    public SupplierTemplateImpl getString(String title, String field) {
+    public SupplierField getString(String title, String field) {
         items.add(title);
-        return form -> {
-            var ssr = form.addTemplate(title,
-                    String.format(
-                            """
-                                    <li>
-                                        <label for="%s"><em>%s</em></label>
-                                        <div>
-                                            <input autocomplete="off" name="%s" id="%s" type="text" value="${%s}" ${if readonly}readonly${endif}
-                                            ${if autofocus}autofocus${endif} ${if placeholder}placeholder="${placeholder}"${endif}
-                                            ${if pattern}pattern="${pattern}"${endif} ${if required}required${endif} />
-                                            <span role="suffix-icon"></span>
-                                        </div>
-                                    </li>
-                                    """,
-                            field, title, field, field, field));
-            ssr.setOption("readonly", "false");
-            ssr.setOption("autofocus", "false");
-            ssr.setOption("placeholder", "false");
-            ssr.setOption("pattern", "false");
-            ssr.setOption("required", "false");
-            ssr.setOption("fields", field).setOption("option", "1");
-            ssr.setId(title);
-            return ssr;
-        };
-    }
-
-    @Override
-    public SupplierTemplateImpl getString(String title, String field, String... dialogFunc) {
-        items.add(title);
-        return form -> {
-            var dialogText = getDialogText(field, dialogFunc);
-            var ssr = form.addTemplate(title,
-                    String.format(
-                            """
-                                    <li>
-                                        <label for="%s"><em>%s</em></label>
-                                        <div>
-                                            <input type="text" name="%s" id="%s" value="${%s}" autocomplete="off" ${if readonly}readonly${endif}
-                                            ${if placeholder}placeholder="${placeholder}" ${else} placeholder="请点击获取%s" ${endif} ${if pattern}pattern="${pattern}"${endif} ${if required}required${endif} />
-                                            <span role="suffix-icon">
-                                                <a href="javascript:%s">
-                                                    <img src="${dialogIcon}">
-                                                </a>
-                                            </span>
-                                        </div>
-                                    </li>
-                                    """,
-                            field, title, field, field, field, title, dialogText));
-            ssr.setOption("dialogIcon", fieldDialogIcon);
-            ssr.setOption("readonly", "false");
-            ssr.setOption("placeholder", "false");
-            ssr.setOption("pattern", "false");
-            ssr.setOption("required", "false");
-            ssr.setOption("fields", field).setOption("option", "1");
-            ssr.setId(title);
-            return ssr;
-        };
+        return new SupplierField(title, field);
     }
 
     @Override
     public SupplierTemplateImpl getBoolean(String title, String field) {
         items.add(title);
-        return form -> {
-            var ssr = form.addTemplate(title,
-                    String.format(
-                            """
-                                    <li>
-                                        <div role="switch">
-                                            <input autocomplete="off" name="%s" id="%s" type="checkbox" value="1" ${if %s}checked ${endif}/>
-                                        </div>
-                                        <label for="%s"><em>%s</em></label>
-                                    </li>
-                                            """,
-                            field, field, field, field, title));
-            ssr.setOption("fields", field).setOption("option", "1");
-            ssr.setId(title);
-            return ssr;
-        };
+        return new SupplierBooleanField(title, field);
     }
 
     @Override
@@ -148,138 +78,46 @@ public class SsrFormStyleDefault implements SsrFormStyleImpl {
                         </div>
                     </li>
                     """, field, title, field, field, field));
-            ssr.setOption("fields", field).setOption("option", "1");
+            ssr.fields(field).display(1);
             ssr.setId(title);
             return ssr;
         };
     }
 
     @Override
-    public SupplierTemplateImpl getCodeName(String title, String field, String... dialogFunc) {
+    public SupplierCodeNameField getCodeName(String title, String field, String... dialogFunc) {
         items.add(title);
-        return form -> {
-            var dialogText = getDialogText(String.format("%s,%s_name", field, field), dialogFunc);
-            var ssr = form.addTemplate(title,
-                    String.format(
-                            """
-                                    <li>
-                                        <label for="%s_name"><em>%s</em></label>
-                                        <div>
-                                            <input type="hidden" name="%s" id="%s" value="${%s}">
-                                            <input type="text" name="%s_name" id="%s_name" value="${%s_name}" autocomplete="off" placeholder="请点击获取%s" readonly>
-                                            <span role="suffix-icon">
-                                                <a href="javascript:%s">
-                                                    <img src="${dialogIcon}">
-                                                </a>
-                                            </span>
-                                        </div>
-                                    </li>
-                                    """,
-                            field, title, field, field, field, field, field, field, title, dialogText));
-            ssr.setOption("dialogIcon", fieldDialogIcon);
-            ssr.setOption("fields", String.format("%s,%s_name", field, field)).setOption("option", "1");
-            ssr.setId(title);
-            return ssr;
-        };
+        var ssr = new SupplierCodeNameField(title, field, dialogFunc);
+        ssr.options("dialogIcon", fieldDialogIcon);
+        return ssr;
     }
 
     protected String getDialogText(String field, String... dialogFunc) {
-        var sb = new StringBuffer();
-        sb.append(dialogFunc[0]);
-        sb.append("('").append(field).append("'");
-        if (dialogFunc.length > 1) {
-            for (var i = 1; i < dialogFunc.length; i++)
-                sb.append(",'").append(dialogFunc[i]).append("'");
-        }
-        sb.append(")");
-        return sb.toString();
+        return SupplierField.getDialogText(field, dialogFunc);
     }
 
     @Override
-    public SupplierTemplateImpl getDate(String title, String field) {
+    public SupplierField getDate(String title, String field) {
         items.add(title);
-        return form -> {
-            var ssr = form.addTemplate(title, String.format("""
-                    <li>
-                        <label for="%s"><em>%s</em></label>
-                        <div>
-                            <input autocomplete="off" name="%s" id="%s" type="text" value="${%s}"
-                            ${if pattern}pattern="${pattern}"${endif} ${if required}required${endif}
-                            ${if placeholder}placeholder="${placeholder}"${endif} />
-                            <span role="suffix-icon">
-                                <a href="javascript:showDateDialog('%s')">
-                                    <img src="${dialogIcon}" />
-                                </a>
-                            </span>
-                        </div>
-                    </li>
-                    """, field, title, field, field, field, field));
-            ssr.setOption("dialogIcon", dateDialogIcon);
-            ssr.setOption("pattern", "false");
-            ssr.setOption("required", "false");
-            ssr.setOption("placeholder", "false");
-            ssr.setOption("fields", field).setOption("option", "1");
-            ssr.setId(title);
-            return ssr;
-        };
+        var ssr = getString(title, field);
+        ssr.dialog("showDateDialog").options("dialogIcon", dateDialogIcon);
+        return ssr;
     }
 
     @Override
     public SupplierTemplateImpl getDatetime(String title, String field) {
         items.add(title);
-        return form -> {
-            var ssr = form.addTemplate(title, String.format("""
-                    <li>
-                        <label for="%s"><em>%s</em></label>
-                        <div>
-                            <input autocomplete="off" name="%s" id="%s" type="text" value="${%s}" />
-                            <span role="suffix-icon">
-                                <a href="javascript:showDateTimeDialog('%s')">
-                                    <img src="${dialogIcon}">
-                                </a>
-                            </span>
-                        </div>
-                    </li>
-                    """, field, title, field, field, field, field));
-            ssr.setOption("fields", field);
-            ssr.setOption("dialogIcon", dateDialogIcon).setOption("option", "1");
-            ssr.setId(title);
-            return ssr;
-        };
+        var ssr = getString(title, field);
+        ssr.dialog("showDateTimeDialog").options("dialogIcon", dateDialogIcon);
+        return ssr;
     }
 
     @Override
-    public SupplierTemplateImpl getDateRange(String title, String beginDate, String endDate) {
+    public SupplierDateRangeField getDateRange(String title, String beginDate, String endDate) {
         items.add(title);
-        return form -> {
-            var ssr = form.addTemplate(title, String.format("""
-                    <li>
-                        <label for="start_date_"><em>%s</em></label>
-                        <div class="dateArea">
-                            <input autocomplete="off" name="%s" id="%s" type="text" class="dateAreaInput" value="${%s}"
-                            ${if pattern}pattern="${pattern}"${endif} ${if required}required${endif}
-                            ${if placeholder}placeholder="${placeholder}"${endif} />
-                            <span>/</span>
-                            <input autocomplete="off" name="%s" id="%s" type="text" class="dateAreaInput" value="${%s}"
-                            ${if pattern}pattern="${pattern}"${endif} ${if required}required${endif}
-                            ${if placeholder}placeholder="${placeholder}"${endif} />
-                            <span role="suffix-icon">
-                                <a href="javascript:showDateAreaDialog('%s', '%s')">
-                                <img src="${dialogIcon}" />
-                                </a>
-                            </span>
-                        </div>
-                    </li>
-                    """, title, beginDate, beginDate, beginDate, endDate, endDate, endDate, beginDate, endDate));
-
-            ssr.setOption("dialogIcon", dateDialogIcon);
-            ssr.setOption("pattern", "false");
-            ssr.setOption("required", "false");
-            ssr.setOption("placeholder", "false");
-            ssr.setOption("fields", String.format("%s,%s", beginDate, endDate)).setOption("option", "1");
-            ssr.setId(title);
-            return ssr;
-        };
+        var ssr = new SupplierDateRangeField(title, beginDate, endDate);
+        ssr.options("dialogIcon", dateDialogIcon);
+        return ssr;
     }
 
     @Override
