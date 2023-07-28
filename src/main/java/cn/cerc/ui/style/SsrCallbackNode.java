@@ -30,7 +30,7 @@ public class SsrCallbackNode extends SsrTextNode {
             if (supplier != null)
                 return supplier.get();
         }
-        return template.isStrict() ? this.getText() : "";
+        return template.strict() ? this.getText() : "";
     }
 
     public static boolean is(String text) {

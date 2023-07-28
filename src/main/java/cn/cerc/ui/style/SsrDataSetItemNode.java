@@ -18,7 +18,7 @@ public class SsrDataSetItemNode extends SsrValueNode {
         if (dataSet != null) {
             if (dataSet.exists(field))
                 return dataSet.current().getText(field);
-            else if (template.isStrict()) {
+            else if (template.strict()) {
                 log.error("not find field: {}", field);
                 return this.getText();
             } else {

@@ -95,7 +95,7 @@ public class SsrIfNode extends SsrContainerNode {
             }
             var value = template.getValue(field);
             if (value.isEmpty()) {
-                if (template.isStrict()) {
+                if (template.strict()) {
                     log.error("not find field: {}", field);
                     return this.getText();
                 } else
