@@ -7,11 +7,13 @@ public interface SsrGridStyleImpl {
 
     SupplierTemplateImpl getIt(String title, int fieldWidth);
 
-    SupplierTemplateImpl getOpera(String title, String field, int fieldWidth, String url);
+    SupplierTemplateImpl getOpera(int fieldWidth);
 
     SupplierTemplateImpl getString(String title, String field, int fieldWidth);
 
-    SupplierTemplateImpl getBoolean(String title, String field, int fieldWidth, String labelText);
+    SupplierTemplateImpl getDate(String title, String field);
+
+    SupplierTemplateImpl getBoolean(String title, String field, int fieldWidth);
 
     SupplierTemplateImpl getOption(String title, String field, int fieldWidth, Map<String, String> map);
 

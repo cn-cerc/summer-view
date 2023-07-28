@@ -18,7 +18,8 @@ public class UISsrGridTest {
         var grid = new UISsrGrid(null, "");
         grid.setDataSet(ds);
         grid.addField("name_");
-        assertEquals("<table><tr><th>name_</th></tr><tr><td>a01</td></tr><tr><td>b01</td></tr></table>",
+        assertEquals(
+                "<div id='grid' class='scrollArea'><table class='dbgrid'><tr><th>name_</th></tr><tr><td>a01</td></tr><tr><td>b01</td></tr></table></div>",
                 grid.toString());
     }
 
@@ -29,7 +30,7 @@ public class UISsrGridTest {
         ds.append().setValue("code_", "002").setValue("name_", "b01");
 
         var grid = new UISsrGrid(null, "");
-        grid.addTemplate(UISsrGrid.TableBegin, "<table class='a'>");
+        grid.addTemplate(UISsrGrid.TableBegin, "<div><table class='a'>");
         grid.addTemplate("head.code_", "<th width=${width}>${title}</td>");
         grid.onGetHeadHtml("code_", ssr -> ssr.toMap("width", "30").toMap("title", "xxx"));
         grid.addTemplate("body.code_", "<td><a href=\"${url}\">${code_}</a></td>");
@@ -38,7 +39,7 @@ public class UISsrGridTest {
 
         grid.setDataSet(ds);
         assertEquals(
-                "<table class='a'><tr><th width=30>xxx</td><th>name_</th></tr><tr><td><a href=\"http://001\">001</a></td><td>a01</td></tr><tr><td><a href=\"http://002\">002</a></td><td>b01</td></tr></table>",
+                "<div><table class='a'><tr><th width=30>xxx</td><th>name_</th></tr><tr><td><a href=\"http://001\">001</a></td><td>a01</td></tr><tr><td><a href=\"http://002\">002</a></td><td>b01</td></tr></table></div>",
                 grid.toString());
     }
 

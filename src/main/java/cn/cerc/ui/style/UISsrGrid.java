@@ -38,6 +38,7 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl, IGridSty
 
     public UISsrGrid(UIComponent owner) {
         super(owner);
+        define = new SsrDefine("");
     }
 
     public UISsrGrid(UIComponent owner, String templateText) {
@@ -117,7 +118,7 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl, IGridSty
             }
         }
 
-        getTemplate(TableEnd, () -> new SsrTemplate("</table>").setDefine(define))
+        getTemplate(TableEnd, () -> new SsrTemplate("</table></div>").setDefine(define))
                 .ifPresent(value -> html.print(value.getHtml()));
         getTemplate(SsrDefine.EndFlag).ifPresent(template -> html.print(template.getHtml()));
 
@@ -203,7 +204,7 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl, IGridSty
      * @return 返回默认的表头样式
      */
     private Supplier<SsrTemplateImpl> getDefault_TableBegin() {
-        return () -> new SsrTemplate("<table>").setDefine(define);
+        return () -> new SsrTemplate("<div id='grid' class='scrollArea'><table class='dbgrid'>").setDefine(define);
     }
 
     /**
