@@ -27,6 +27,7 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
     private List<String> fields;
     public static final String FormBegin = "form.begin";
     public static final String FormEnd = "form.end";
+    public static final String FormStart = "formStart";
     private Map<String, Consumer<SsrTemplateImpl>> onGetHtml = new HashMap<>();
     private MemoryBuffer buff;
 
@@ -116,7 +117,17 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
 
     private Supplier<SsrTemplateImpl> getDefault_FormBegin() {
         var action = this.getDefine().getOption("action").orElse("");
-        return () -> new SsrTemplate(String.format("<form method='post' action='%s'><ul>", action)).setDefine(define);
+        return () -> {
+            var ssr = new SsrTemplate(String.format(
+                    "<form method='post' action='%s' role='${role}'>${callback(%s)}<ul>", action, UISsrForm.FormStart))
+                    .setDefine(define);
+            ssr.onCallback(UISsrForm.FormStart, () -> {
+                var formFirst = this.getTemplate(UISsrForm.FormStart);
+                return formFirst.isPresent() ? formFirst.get().getHtml() : "";
+            });
+            ssr.setOption("role", "search");
+            return ssr;
+        };
     }
 
     private Optional<SsrTemplateImpl> getTemplate(String id, Supplier<SsrTemplateImpl> supplier) {
@@ -157,27 +168,15 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
 
     public boolean readAll(HttpServletRequest request, String submitId) {
         boolean submit = request.getParameter(submitId) != null;
-        updateField(request, submit, SsrDefine.BeginFlag);
-        updateField(request, submit, FormBegin);
-        for (var column : fields)
-            updateField(request, submit, column);
-        updateField(request, submit, FormEnd);
-        updateField(request, submit, SsrDefine.EndFlag);
-        return submit;
-    }
-
-    private void updateField(HttpServletRequest request, boolean submit, String column) {
-        var template = getTemplate(column);
-        if (template.isPresent()) {
-            var option = template.get().option("fields");
-            if (option.isPresent()) {
-                var fields = option.get();
+        for (var ssr : this.define) {
+            ssr.getOption("fields").ifPresent(fields -> {
                 for (var field : fields.split(",")) {
                     String val = request.getParameter(field);
                     updateValue(field, val, submit);
                 }
-            }
+            });
         }
+        return submit;
     }
 
     private void updateValue(String field, String val, boolean submit) {
@@ -219,7 +218,7 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
         });
     }
 
-    public SsrFormStyleImpl createDefaultStyle() {
+    public SsrFormStyleDefault createDefaultStyle() {
         return new SsrFormStyleDefault();
     }
 
