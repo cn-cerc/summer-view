@@ -52,11 +52,11 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl, IGridSty
     }
 
     public DataSet getDataSet() {
-        return define.getDataSet();
+        return define.dataSet();
     }
 
     public UISsrGrid setDataSet(DataSet dataSet) {
-        define.setDataSet(dataSet);
+        define.dataSet(dataSet);
         return this;
     }
 
@@ -292,7 +292,7 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl, IGridSty
     }
     
     public UISsrGrid setTemplateId(String id) {
-        define.setId(id);
+        define.id(id);
         return this;
     }
 }

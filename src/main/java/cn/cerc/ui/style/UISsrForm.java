@@ -29,7 +29,7 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
     public static final String FormEnd = "form.end";
     public static final String FormStart = "formStart";
     private Map<String, Consumer<SsrTemplateImpl>> onGetHtml = new HashMap<>();
-    private MemoryBuffer buff;
+    private MemoryBuffer buffer;
 
     public UISsrForm(UIComponent owner) {
         super(owner);
@@ -50,6 +50,7 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
     }
 
     private UISsrForm init(IPage page) {
+        this.setId("form1");
         if (page != null) {
             for (var ssr : define)
                 ssr.option(SsrOptionImpl.Phone, "" + page.getForm().getClient().isPhone());
@@ -57,12 +58,34 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
         return this;
     }
 
+    /**
+     * 请改使用 dataRow 函数
+     * 
+     * @return
+     */
+    @Deprecated
     public DataRow getDataRow() {
-        return define.getDataRow();
+        return dataRow();
     }
 
+    public DataRow dataRow() {
+        return define.dataRow();
+    }
+
+    /**
+     * 请改使用 dataRow 函数
+     * 
+     * @param dataRow
+     * @return
+     */
+    @Deprecated
     public UISsrForm setDataRow(DataRow dataRow) {
-        this.define.setDataRow(dataRow);
+        dataRow(dataRow);
+        return this;
+    }
+
+    public UISsrForm dataRow(DataRow dataRow) {
+        this.define.dataRow(dataRow);
         return this;
     }
 
@@ -78,7 +101,8 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
         getTemplate(SsrDefine.BeginFlag).ifPresent(template -> html.print(template.getHtml()));
 
         var top = getTemplate(FormBegin, getDefault_FormBegin()).get();
-        top.option(SsrOptionImpl.TemplateId, this.define.id());
+        if (this.define.id() != null)
+            top.option(SsrOptionImpl.TemplateId, this.define.id());
         html.print(top.getHtml());
 
         for (var field : fields) {
@@ -123,7 +147,10 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
                     .setDefine(define);
             ssr.onCallback(UISsrForm.FormStart, () -> {
                 var formFirst = this.getTemplate(UISsrForm.FormStart);
-                formFirst.ifPresent(template -> template.option(SsrOptionImpl.TemplateId, this.define.id()));
+                formFirst.ifPresent(template -> {
+                    if (this.define.id() != null)
+                        template.option(SsrOptionImpl.TemplateId, this.define.id());
+                });
                 return formFirst.isPresent() ? formFirst.get().getHtml() : "";
             });
             ssr.option("role", "search");
@@ -141,11 +168,15 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
     }
 
     @Override
-    public void addField(String... field) {
-        if (fields == null)
-            fields = new ArrayList<>();
-        for (var item : field)
-            fields.add(item);
+    public void addField(String... fields) {
+        if (this.fields == null)
+            this.fields = new ArrayList<>();
+        for (var field : fields) {
+            if (Utils.isEmpty(field))
+                throw new RuntimeException("field 不允许为空");
+            if (!this.fields.contains(field))
+                this.fields.add(field);
+        }
     }
 
     @Deprecated
@@ -155,23 +186,46 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
         return this;
     }
 
+    /**
+     * 请改使用 fields 函数
+     * 
+     * @return
+     */
+    @Deprecated
     public List<String> getFields() {
         return fields;
     }
 
+    public List<String> fields() {
+        return fields;
+    }
+
+    @Deprecated
     public void setFields(List<String> fields) {
         this.fields = fields;
     }
 
-    public void setBuffer(MemoryBuffer buff) {
-        this.buff = buff;
+    /**
+     * 请改使用 buffer 函数
+     * 
+     * @param buffer
+     */
+    public void setBuffer(MemoryBuffer buffer) {
+        buffer(buffer);
+    }
+
+    public UISsrForm buffer(MemoryBuffer buffer) {
+        this.buffer = buffer;
+        return this;
     }
 
     public boolean readAll(HttpServletRequest request, String submitId) {
+        if (dataRow() == null)
+            this.dataRow(new DataRow());
         boolean submit = request.getParameter(submitId) != null;
         for (var ssr : this.define) {
-            ssr.option("fields").ifPresent(fields -> {
-                for (var field : fields.split(",")) {
+            ssr.option("fields").ifPresent(fields1 -> {
+                for (var field : fields1.split(",")) {
                     String val = request.getParameter(field);
                     updateValue(field, val, submit);
                 }
@@ -182,15 +236,15 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
 
     private void updateValue(String field, String val, boolean submit) {
         if (submit) {
-            getDataRow().setValue(field, val == null ? "" : val);
-            if (buff != null) {
-                buff.setValue(field, val);
+            dataRow().setValue(field, val == null ? "" : val);
+            if (buffer != null) {
+                buffer.setValue(field, val);
             }
         } else {
             if (val != null) {
-                getDataRow().setValue(field, val);
-            } else if (buff != null && !buff.isNull() && buff.getRecord().exists(field)) {
-                getDataRow().setValue(field, buff.getString(field));
+                dataRow().setValue(field, val);
+            } else if (buffer != null && !buffer.isNull() && buffer.getRecord().exists(field)) {
+                dataRow().setValue(field, buffer.getString(field));
             }
         }
     }
@@ -224,27 +278,54 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
     }
 
     /**
-     * 请改使用 getTemplate 或 addTemplate
+     * 请改使用 define 函数
      * 
      * @return
      */
     @Override
+    @Deprecated
     public SsrDefine getDefine() {
+        return this.define();
+    }
+
+    public SsrDefine define() {
         return this.define;
     }
 
+    /**
+     * 请改使用 action 函数
+     * 
+     * @param action
+     * @return
+     */
+    @Deprecated
     public UISsrForm setAction(String action) {
+        return action(action);
+    }
+
+    public UISsrForm action(String action) {
         option("action", action);
         return this;
     }
 
     public UISsrForm setTemplateId(String id) {
-        define.setId(id);
+        define.id(id);
         return this;
     }
 
+    /**
+     * 请改使用 role 函数
+     * 
+     * @return
+     */
+    @Deprecated
     public UISsrForm modify() {
-        option("role", "modify");
+        role("modify");
+        return this;
+    }
+
+    public UISsrForm role(String role) {
+        this.option("role", role);
         return this;
     }
 

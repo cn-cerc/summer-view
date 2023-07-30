@@ -112,7 +112,7 @@ public class SsrTemplate implements SsrTemplateImpl {
         if (dataRow != null)
             return dataRow;
         if (define != null)
-            return define.getDataRow();
+            return define.dataRow();
         else
             return null;
     }
@@ -134,7 +134,7 @@ public class SsrTemplate implements SsrTemplateImpl {
         if (dataSet != null)
             return dataSet;
         if (define != null)
-            return define.getDataSet();
+            return define.dataSet();
         else
             return null;
     }
