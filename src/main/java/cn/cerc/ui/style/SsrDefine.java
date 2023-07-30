@@ -126,7 +126,7 @@ public class SsrDefine implements Iterable<SsrTemplateImpl>, SsrOptionImpl {
         return id;
     }
 
-    public void setId(String id) {
+    public void id(String id) {
         this.id = id;
     }
 
@@ -169,21 +169,21 @@ public class SsrDefine implements Iterable<SsrTemplateImpl>, SsrOptionImpl {
         return Optional.ofNullable(options.get(key));
     }
 
-    protected SsrDefine setDataRow(DataRow dataRow) {
+    protected SsrDefine dataRow(DataRow dataRow) {
         this.dataRow = dataRow;
         return this;
     }
 
-    protected DataRow getDataRow() {
+    protected DataRow dataRow() {
         return dataRow;
     }
 
-    protected SsrDefine setDataSet(DataSet dataSet) {
+    protected SsrDefine dataSet(DataSet dataSet) {
         this.dataSet = dataSet;
         return this;
     }
 
-    protected DataSet getDataSet() {
+    protected DataSet dataSet() {
         return dataSet;
     }
 
