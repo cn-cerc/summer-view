@@ -290,5 +290,9 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl, IGridSty
     public SsrGridStyleDefault createDefaultStyle() {
         return new SsrGridStyleDefault();
     }
-
+    
+    public UISsrGrid setTemplateId(String id) {
+        define.setId(id);
+        return this;
+    }
 }
