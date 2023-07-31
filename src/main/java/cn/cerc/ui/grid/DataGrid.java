@@ -21,8 +21,8 @@ import cn.cerc.ui.grid.lines.AbstractGridLine;
 import cn.cerc.ui.grid.lines.ChildGridLine;
 import cn.cerc.ui.grid.lines.ExpenderGridLine;
 import cn.cerc.ui.grid.lines.MasterGridLine;
+import cn.cerc.ui.ssr.SsrBlock;
 import cn.cerc.ui.style.IGridStyle;
-import cn.cerc.ui.style.SsrTemplate;
 import cn.cerc.ui.vcl.UIForm;
 
 /**
@@ -55,7 +55,7 @@ public class DataGrid extends UIComponent implements DataSetSource, IGridStyle {
     private boolean widthInNum = false;
     // 表格的标题
     private String gridTitle = "";
-    private SsrTemplate template;
+    private SsrBlock block;
 
     public DataGrid(UIComponent owner) {
         super(owner);
@@ -192,9 +192,9 @@ public class DataGrid extends UIComponent implements DataSetSource, IGridStyle {
             return;
         }
 
-        if (this.template != null) {
-            template.setDataSet(dataSet);
-            html.print(template.getHtml());
+        if (this.block != null) {
+            block.setDataSet(dataSet);
+            html.print(block.getHtml());
             return;
         }
 
@@ -366,12 +366,12 @@ public class DataGrid extends UIComponent implements DataSetSource, IGridStyle {
         return line;
     }
 
-    public void setTemplate(SsrTemplate template) {
-        this.template = template;
+    public void setBlock(SsrBlock block) {
+        this.block = block;
     }
 
-    public SsrTemplate getTemplate() {
-        return template;
+    public SsrBlock getBlock() {
+        return block;
     }
 
 }
