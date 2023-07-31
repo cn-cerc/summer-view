@@ -209,6 +209,7 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
      * 
      * @param buffer
      */
+    @Deprecated
     public void setBuffer(MemoryBuffer buffer) {
         buffer(buffer);
     }
@@ -297,9 +298,25 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
         return this;
     }
 
+    /**
+     * 请使用 templateId 函数
+     * 
+     * @param id
+     * @return
+     */
+    @Deprecated
     public UISsrForm setTemplateId(String id) {
         template.id(id);
         return this;
+    }
+
+    public UISsrForm templateId(String id) {
+        template.id(id);
+        return this;
+    }
+
+    public String templateId() {
+        return template.id();
     }
 
     public UISsrForm role(String role) {

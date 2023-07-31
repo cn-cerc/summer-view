@@ -2,8 +2,6 @@ package cn.cerc.ui.ssr;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.List;
-
 import org.junit.Test;
 
 import cn.cerc.db.core.DataSet;
@@ -84,7 +82,7 @@ public class UISsrGridTest {
         ds.append().setValue("code", "001").setValue("name", "张三");
         ds.append().setValue("code", "002").setValue("name", "李四");
         grid.setDataSet(ds);
-        grid.setFields(List.of("name", "code"));
+        grid.addField("name", "code");
         grid.onGetHeadHtml("code", ssr -> ssr.toMap("title", "代码"));
         grid.onGetBodyHtml("name", ssr -> ssr.toMap("url", "http://127.0.0.1"));
 
