@@ -178,6 +178,7 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl, IGridSty
         return fields;
     }
 
+    @Deprecated
     public void setFields(List<String> fields) {
         this.fields = fields;
     }
@@ -280,20 +281,55 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl, IGridSty
         return template.get(blockId);
     }
 
+    /**
+     * 请改使用 emptyText函数
+     * 
+     * @return
+     */
     public String getEmptyText() {
+        return emptyText();
+    }
+
+    public String emptyText() {
         return emptyText;
     }
 
+    /**
+     * 请改使用 emptyText 函数
+     * 
+     * @param emptyText
+     */
+    @Deprecated
     public void setEmptyText(String emptyText) {
+        this.emptyText(emptyText);
+    }
+
+    public void emptyText(String emptyText) {
         this.emptyText = emptyText;
     }
 
     public SsrGridStyleDefault createDefaultStyle() {
         return new SsrGridStyleDefault();
     }
-    
+
+    /**
+     * 请使用 templateId 函数
+     * 
+     * @param id
+     * @return
+     */
+    @Deprecated
     public UISsrGrid setTemplateId(String id) {
         template.id(id);
         return this;
+    }
+
+    public UISsrGrid templateId(String id) {
+        template.id(id);
+        return this;
+    }
+
+    public String templateId() {
+        return template.id();
     }
 }
