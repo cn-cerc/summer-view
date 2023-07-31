@@ -142,9 +142,8 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
     private Supplier<SsrBlockImpl> getDefault_FormBegin() {
         var action = this.template().option("action").orElse("");
         return () -> {
-            var ssr = new SsrBlock(String.format(
-                    "<form method='post' action='%s' role='${role}'>${callback(%s)}<ul>", action, UISsrForm.FormStart))
-                    .setTemplate(template);
+            var ssr = new SsrBlock(String.format("<form method='post' action='%s' role='${role}'>${callback(%s)}<ul>",
+                    action, UISsrForm.FormStart)).setTemplate(template);
             ssr.onCallback(UISsrForm.FormStart, () -> {
                 var formFirst = this.getBlock(UISsrForm.FormStart);
                 formFirst.ifPresent(template -> {
@@ -303,6 +302,11 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
         return this;
     }
 
+    public UISsrForm role(String role) {
+        this.option("role", role);
+        return this;
+    }
+
     /**
      * 请改使用 role 函数
      * 
@@ -314,9 +318,29 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
         return this;
     }
 
-    public UISsrForm role(String role) {
-        this.option("role", role);
-        return this;
+    @Deprecated
+    public Optional<SsrBlockImpl> getTemplate(String blockId) {
+        return this.getBlock(blockId);
+    }
+
+    @Deprecated
+    public SsrBlockImpl addTemplate(SupplierBlockImpl supplier) {
+        return addBlock(supplier);
+    }
+
+    @Deprecated
+    public SsrTemplate getDefine() {
+        return template();
+    }
+
+    @Deprecated
+    public SsrTemplate define() {
+        return template();
+    }
+
+    @Deprecated
+    public void addTemplate(String id, String templateText) {
+        this.addBlock(id, templateText);
     }
 
 }

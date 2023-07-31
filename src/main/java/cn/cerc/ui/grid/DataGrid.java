@@ -374,4 +374,9 @@ public class DataGrid extends UIComponent implements DataSetSource, IGridStyle {
         return block;
     }
 
+    @Deprecated
+    public void setTemplate(SsrBlock block) {
+        this.setBlock(block);
+    }
+
 }
