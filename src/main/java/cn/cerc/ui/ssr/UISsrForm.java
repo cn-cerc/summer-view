@@ -339,8 +339,8 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
     }
 
     @Deprecated
-    public void addTemplate(String id, String templateText) {
-        this.addBlock(id, templateText);
+    public SsrBlockImpl addTemplate(String id, String templateText) {
+        return this.addBlock(id, templateText);
     }
 
 }
