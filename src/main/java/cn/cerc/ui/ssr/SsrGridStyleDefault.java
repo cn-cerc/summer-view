@@ -20,11 +20,11 @@ public class SsrGridStyleDefault implements SsrGridStyleImpl {
             String headTitle = "head." + title;
             String bodyTitle = "body." + title;
             var ssr = grid.addBlock(headTitle, "<th style='width: ${_width}em'>序</th>");
-            ssr.setId(headTitle);
+            ssr.id(headTitle);
             ssr.display(1);
             ssr.toMap("_width", "" + fieldWidth);
             ssr = grid.addBlock(bodyTitle, "<td align='center'>${dataset.rec}</td>");
-            ssr.setId(bodyTitle);
+            ssr.id(bodyTitle);
             ssr.display(1);
             return ssr;
         };
@@ -40,9 +40,9 @@ public class SsrGridStyleDefault implements SsrGridStyleImpl {
             var ssr = grid.addBlock(headTitle, String.format("<th style='width: ${_width}em'>%s</th>", title));
             ssr.toMap("_width", "" + fieldWidth);
             ssr = grid.addBlock(bodyTitle, "<td><a href='${callback(url)}'>内容</a></td>");
-            ssr.setId(headTitle);
+            ssr.id(headTitle);
             ssr.display(1);
-            ssr.setId(bodyTitle);
+            ssr.id(bodyTitle);
             ssr.display(1);
             return ssr;
         };
@@ -65,7 +65,7 @@ public class SsrGridStyleDefault implements SsrGridStyleImpl {
             String bodyTitle = "body." + title;
             var head = grid.addBlock(headTitle, String.format("<th style='width: ${_width}em'>%s</th>", title));
             head.toMap("_width", "" + fieldWidth);
-            head.setId(headTitle);
+            head.id(headTitle);
             head.display(1);
             var body = grid.addBlock(bodyTitle, String.format("""
                     <td>${if readonly}${map.begin}${if map.key==%s}${map.value}${endif}${map.end}${else}
@@ -77,7 +77,7 @@ public class SsrGridStyleDefault implements SsrGridStyleImpl {
                     ${endif}</td>
                     """, field, field));
             body.option("readonly", "true");
-            body.setId(bodyTitle);
+            body.id(bodyTitle);
             body.display(1);
             map.forEach((key, value) -> body.toMap(key, value));
             return body;
@@ -92,15 +92,15 @@ public class SsrGridStyleDefault implements SsrGridStyleImpl {
             String bodyTitle = "body." + title;
             var ssr = grid.addBlock(headTitle, String.format("<th style='width: ${_width}em'>%s</th>", title));
             ssr.toMap("_width", "" + fieldWidth);
-            ssr.setId(headTitle);
+            ssr.id(headTitle);
             ssr.display(1);
             ssr = grid.addBlock(bodyTitle, String.format("""
                         <td>
                             <span><input type='checkbox' value='1' ${if %s}checked ${endif}/></span>
                         </td>
                     """, field));
-            ssr.setId(bodyTitle);
-            ssr.setId(bodyTitle);
+            ssr.id(bodyTitle);
+            ssr.id(bodyTitle);
             ssr.display(1);
             return ssr;
         };
@@ -122,12 +122,12 @@ public class SsrGridStyleDefault implements SsrGridStyleImpl {
                 String bodyTitle = "body." + title;
                 var ssr = grid.addBlock(headTitle, String.format("<th style='width: ${_width}em'>%s</th>", title));
                 ssr.toMap("_width", "" + fieldWidth);
-                ssr.setId(headTitle);
+                ssr.id(headTitle);
                 ssr.display(1);
                 ssr = grid.addBlock(bodyTitle, String.format(
                         "<td align='left'>${if _enabled_url}<a href='${callback(url)}'>${endif}${dataset.%s}${if _enabled_url}</a>${endif}</td>",
                         field));
-                ssr.setId(bodyTitle);
+                ssr.id(bodyTitle);
                 ssr.display(1);
                 ssr.strict(false);
                 if (url != null) {
@@ -151,11 +151,11 @@ public class SsrGridStyleDefault implements SsrGridStyleImpl {
             String bodyTitle = "body." + title;
             var ssr = grid.addBlock(headTitle, String.format("<th style='width: ${_width}em'>%s</th>", title));
             ssr.toMap("_width", "" + fieldWidth);
-            ssr.setId(headTitle);
+            ssr.id(headTitle);
             ssr.display(1);
             ssr = grid.addBlock(bodyTitle, String.format("<td align='${align}'>${dataset.%s}</td>", field));
             ssr.option("align", align);
-            ssr.setId(bodyTitle);
+            ssr.id(bodyTitle);
             ssr.display(1);
             return ssr;
         };

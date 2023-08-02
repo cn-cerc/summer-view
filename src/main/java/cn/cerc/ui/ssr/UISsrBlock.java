@@ -43,7 +43,7 @@ public class UISsrBlock extends UIComponent {
         if (block != null)
             html.print(block.getHtml());
         else
-            log.warn("template is null");
+            log.warn("block is null");
     }
 
     public SsrBlockImpl block() {

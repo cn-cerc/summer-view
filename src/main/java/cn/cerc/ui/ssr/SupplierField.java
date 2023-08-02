@@ -132,7 +132,7 @@ public class SupplierField implements SupplierFieldImpl {
         block.option("dialog", dialog);
         block.option("autofocus", "" + autofocus);
         block.fields(field).display(1);
-        block.setId(title);
+        block.id(title);
     }
 
 }

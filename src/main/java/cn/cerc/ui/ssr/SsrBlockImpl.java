@@ -91,7 +91,7 @@ public interface SsrBlockImpl extends SsrOptionImpl {
 
     String templateText();
 
-    SsrBlockImpl setId(String id);
+    SsrBlockImpl id(String id);
 
     String id();
 

@@ -3,10 +3,8 @@ package cn.cerc.ui.ssr;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Consumer;
 
 import cn.cerc.db.core.DataRow;
-import cn.cerc.db.core.DataSet;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 
@@ -65,7 +63,7 @@ public class UISsrBoard extends UIComponent implements SsrComponentImpl {
         items.set(index, slot);
         if (slot instanceof SsrBlock block)
             block.setTemplate(this.template);
-        slot.setId("slot" + index);
+        slot.id("slot" + index);
         return this;
     }
 
@@ -145,21 +143,6 @@ public class UISsrBoard extends UIComponent implements SsrComponentImpl {
     @Override
     public void addField(String... fields) {
         throw new RuntimeException("不再使用");
-    }
-
-    @Override
-    public DataSet getDefaultOptions() {
-        throw new RuntimeException("不再使用");
-    }
-
-    @Override
-    public void setConfig(DataSet configs) {
-        throw new RuntimeException("不再使用");
-    }
-
-    @Override
-    public void onGetHtml(String field, Consumer<SsrBlockImpl> consumer) {
-
     }
 
     public UISsrBoard template(SsrTemplate template) {

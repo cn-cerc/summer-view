@@ -1,7 +1,6 @@
 package cn.cerc.ui.ssr;
 
 import java.util.Optional;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import org.slf4j.Logger;
@@ -19,7 +18,7 @@ public class UISsrChunk extends UIComponent implements SsrComponentImpl {
 
     public UISsrChunk(UIComponent owner) {
         super(owner);
-        template = new SsrTemplate("");
+        template = new SsrTemplate();
     }
 
     public UISsrChunk(UIComponent owner, String templateText) {
@@ -57,8 +56,8 @@ public class UISsrChunk extends UIComponent implements SsrComponentImpl {
                     getBlock(ListBegin, () -> new SsrBlock("<ul role='chunkBoxItem'>").setTemplate(template))
                             .ifPresent(template -> html.print(template.getHtml()));
                     for (var component : getComponents()) {
-                        if (component instanceof UISsrBoard block)
-                            block.template(template);
+                        if (component instanceof UISsrBoard board)
+                            board.template(template);
                         component.output(html);
                     }
                     getBlock(ListEnd, () -> new SsrBlock("</ul>").setTemplate(template))
@@ -75,7 +74,7 @@ public class UISsrChunk extends UIComponent implements SsrComponentImpl {
     private Optional<SsrBlockImpl> getBlock(String id, Supplier<SsrBlockImpl> supplier) {
         SsrBlockImpl block = template.getOrAdd(id, supplier).orElse(null);
         if (template != null)
-            block.setId(id);
+            block.id(id);
         return Optional.ofNullable(block);
     }
 
@@ -90,18 +89,8 @@ public class UISsrChunk extends UIComponent implements SsrComponentImpl {
     }
 
     @Override
-    public DataSet getDefaultOptions() {
-        throw new RuntimeException("不再使用");
-    }
-
-    @Override
-    public void setConfig(DataSet configs) {
-        throw new RuntimeException("不再使用");
-    }
-
-    @Override
     public Optional<SsrBlockImpl> getBlock(String templateId) {
-        return null;
+        return template.get(templateId);
     }
 
     public SsrBlockStyleDefault createDefaultStyle() {
@@ -113,8 +102,4 @@ public class UISsrChunk extends UIComponent implements SsrComponentImpl {
         return this;
     }
 
-    @Override
-    public void onGetHtml(String field, Consumer<SsrBlockImpl> consumer) {
-
-    }
 }

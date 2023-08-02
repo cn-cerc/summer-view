@@ -79,7 +79,7 @@ public class SsrFormStyleDefault implements SsrFormStyleImpl {
                     </li>
                     """, field, title, field, field, field));
             ssr.fields(field).display(1);
-            ssr.setId(title);
+            ssr.id(title);
             return ssr;
         };
     }

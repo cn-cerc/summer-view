@@ -180,7 +180,7 @@ public class SsrBlock implements SsrBlockImpl {
     }
 
     @Override
-    public SsrBlock setId(String id) {
+    public SsrBlock id(String id) {
         this.id = id;
         return this;
     }

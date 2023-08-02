@@ -84,10 +84,9 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl, IGridSty
             var block = getTemplate("head." + field, getDefault_HeadCell(field));
             if (block.isPresent()) {
                 block.get().option(SsrOptionImpl.TemplateId, this.template.id());
-                this.onGetHeadHtml.forEach((key, value) -> {
-                    if (key.equals(field))
-                        value.accept(block.get().setId(field));
-                });
+                var value = onGetHeadHtml.get(field);
+                if (value != null)
+                    value.accept(block.get().id(field));
             }
             block.ifPresent(value -> html.print(value.getHtml()));
         }
@@ -104,10 +103,9 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl, IGridSty
                     for (var field : fields) {
                         var block = getTemplate("body." + field, getDefault_BodyCell(field));
                         if (block.isPresent()) {
-                            this.onGetBodyHtml.forEach((key, value) -> {
-                                if (key.equals(field))
-                                    value.accept(block.get().setId(field));
-                            });
+                            var value = onGetBodyHtml.get(field);
+                            if (value != null)
+                                value.accept(block.get().id(field));
                         }
                         block.ifPresent(value -> html.print(value.getHtml()));
                     }
@@ -128,7 +126,7 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl, IGridSty
     private Optional<SsrBlockImpl> getTemplate(String id, Supplier<SsrBlockImpl> supplier) {
         SsrBlockImpl block = template.getOrAdd(id, supplier).orElse(null);
         if (block != null)
-            block.setId(id);
+            block.id(id);
         else
             log.error("表格模版中缺失定义：{}", id);
         return Optional.ofNullable(block);
@@ -164,7 +162,6 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl, IGridSty
         this.onGetBodyHtml.put(field, consumer);
     }
 
-    @Override
     public void onGetHtml(String field, Consumer<SsrBlockImpl> consumer) {
         if (field.startsWith("head."))
             this.onGetHeadHtml(field.substring(5, field.length()), consumer);
@@ -251,7 +248,6 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl, IGridSty
             fields.add(item);
     }
 
-    @Override
     public DataSet getDefaultOptions() {
         DataSet ds = new DataSet();
         for (var ssr : template) {
@@ -268,7 +264,6 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl, IGridSty
         return ds;
     }
 
-    @Override
     public void setConfig(DataSet configs) {
         configs.forEach(item -> {
             if (item.getEnum("option_", TemplateConfigOptionEnum.class) != TemplateConfigOptionEnum.不显示)

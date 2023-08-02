@@ -111,10 +111,9 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
                             String.format("%s: <input type=\"text\" name=\"%s\" value=\"${%s}\">", field, field, field))
                             .setTemplate(template));
             if (block.isPresent()) {
-                this.onGetHtml.forEach((key, value) -> {
-                    if (key.equals(field))
-                        value.accept(block.get().setId(field));
-                });
+                var value = onGetHtml.get(field);
+                if (value != null)
+                    value.accept(block.get().id(field));
             }
             block.ifPresent(value -> html.print(value.getHtml()));
         }
@@ -134,7 +133,6 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
         this.onGetHtml(field, consumer);
     }
 
-    @Override
     public void onGetHtml(String field, Consumer<SsrBlockImpl> consumer) {
         this.onGetHtml.put(field, consumer);
     }
@@ -160,7 +158,7 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
     private Optional<SsrBlockImpl> getBlock(String id, Supplier<SsrBlockImpl> supplier) {
         SsrBlockImpl block = template.getOrAdd(id, supplier).orElse(null);
         if (block != null)
-            block.setId(id);
+            block.id(id);
         else
             log.error("表单模版中缺失定义：{}", id);
         return Optional.ofNullable(block);
@@ -249,12 +247,8 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
         }
     }
 
-    @Override
     public DataSet getDefaultOptions() {
-        return getDefaultOptions(template.id());
-    }
-
-    public DataSet getDefaultOptions(String template_id) {
+        var template_id = template.id();
         DataSet ds = new DataSet();
         for (var ssr : template) {
             var option = ssr.option(SsrOptionImpl.Display);
@@ -265,7 +259,6 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
         return ds;
     }
 
-    @Override
     public void setConfig(DataSet configs) {
         configs.forEach(item -> {
             if (item.getEnum("option_", TemplateConfigOptionEnum.class) != TemplateConfigOptionEnum.不显示)
