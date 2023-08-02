@@ -36,7 +36,7 @@ public class SsrDefaultGridStyleTest {
         grid.addField("序", "部门名称", "状态", "类别", "操作");
         assertEquals(
                 """
-                        <div id='grid' class='scrollArea'><table class='dbgrid'><tr><th width=2>序</th><th width=10>部门名称</th><th width=4>状态</th><th width=10>类别</th><th width=4>操作</th></tr><tr><td align='center'>1</td><td align='left'>研发部</td><td>
+                        <div id='grid' class='scrollArea'><table class='dbgrid'><tr><th style='width: 2em'>序</th><th style='width: 10em'>部门名称</th><th style='width: 4em'>状态</th><th style='width: 10em'>类别</th><th style='width: 4em'>操作</th></tr><tr><td align='center'>1</td><td align='left'>研发部</td><td>
                         <span><input type='checkbox' value='1' /></span>
                         </td><td>张三</td><td><a href='FrmView?code=001'>内容</a></td></tr><tr><td align='center'>2</td><td align='left'>生产部</td><td>
                         <span><input type='checkbox' value='1' checked /></span>

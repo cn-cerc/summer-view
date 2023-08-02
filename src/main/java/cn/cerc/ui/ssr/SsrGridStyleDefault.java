@@ -9,13 +9,17 @@ public class SsrGridStyleDefault implements SsrGridStyleImpl {
 
     private List<String> items = new ArrayList<>();
 
+    public SupplierBlockImpl getIt() {
+        return getIt("序", 2);
+    }
+
     @Override
     public SupplierBlockImpl getIt(String title, int fieldWidth) {
         items.add(title);
         return grid -> {
             String headTitle = "head." + title;
             String bodyTitle = "body." + title;
-            var ssr = grid.addBlock(headTitle, "<th width=${_width}>序</th>");
+            var ssr = grid.addBlock(headTitle, "<th style='width: ${_width}em'>序</th>");
             ssr.setId(headTitle);
             ssr.display(1);
             ssr.toMap("_width", "" + fieldWidth);
@@ -33,11 +37,11 @@ public class SsrGridStyleDefault implements SsrGridStyleImpl {
         return grid -> {
             String headTitle = "head." + title;
             String bodyTitle = "body." + title;
-            var ssr = grid.addBlock(headTitle, String.format("<th width=${_width}>%s</th>", title));
+            var ssr = grid.addBlock(headTitle, String.format("<th style='width: ${_width}em'>%s</th>", title));
             ssr.toMap("_width", "" + fieldWidth);
+            ssr = grid.addBlock(bodyTitle, "<td><a href='${callback(url)}'>内容</a></td>");
             ssr.setId(headTitle);
             ssr.display(1);
-            ssr = grid.addBlock(bodyTitle, "<td><a href='${callback(url)}'>内容</a></td>");
             ssr.setId(bodyTitle);
             ssr.display(1);
             return ssr;
@@ -59,7 +63,7 @@ public class SsrGridStyleDefault implements SsrGridStyleImpl {
         return grid -> {
             String headTitle = "head." + title;
             String bodyTitle = "body." + title;
-            var head = grid.addBlock(headTitle, String.format("<th width=${_width}>%s</th>", title));
+            var head = grid.addBlock(headTitle, String.format("<th style='width: ${_width}em'>%s</th>", title));
             head.toMap("_width", "" + fieldWidth);
             head.setId(headTitle);
             head.display(1);
@@ -86,7 +90,7 @@ public class SsrGridStyleDefault implements SsrGridStyleImpl {
         return grid -> {
             String headTitle = "head." + title;
             String bodyTitle = "body." + title;
-            var ssr = grid.addBlock(headTitle, String.format("<th width=${_width}>%s</th>", title));
+            var ssr = grid.addBlock(headTitle, String.format("<th style='width: ${_width}em'>%s</th>", title));
             ssr.toMap("_width", "" + fieldWidth);
             ssr.setId(headTitle);
             ssr.display(1);
@@ -116,7 +120,7 @@ public class SsrGridStyleDefault implements SsrGridStyleImpl {
             public SsrBlockImpl request(SsrComponentImpl grid) {
                 String headTitle = "head." + title;
                 String bodyTitle = "body." + title;
-                var ssr = grid.addBlock(headTitle, String.format("<th width=${_width}>%s</th>", title));
+                var ssr = grid.addBlock(headTitle, String.format("<th style='width: ${_width}em'>%s</th>", title));
                 ssr.toMap("_width", "" + fieldWidth);
                 ssr.setId(headTitle);
                 ssr.display(1);
@@ -145,7 +149,7 @@ public class SsrGridStyleDefault implements SsrGridStyleImpl {
         return grid -> {
             String headTitle = "head." + title;
             String bodyTitle = "body." + title;
-            var ssr = grid.addBlock(headTitle, String.format("<th width=${_width}>%s</th>", title));
+            var ssr = grid.addBlock(headTitle, String.format("<th style='width: ${_width}em'>%s</th>", title));
             ssr.toMap("_width", "" + fieldWidth);
             ssr.setId(headTitle);
             ssr.display(1);
