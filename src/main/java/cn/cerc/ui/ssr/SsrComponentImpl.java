@@ -1,21 +1,12 @@
 package cn.cerc.ui.ssr;
 
 import java.util.Optional;
-import java.util.function.Consumer;
-
-import cn.cerc.db.core.DataSet;
 
 public interface SsrComponentImpl extends SsrOptionImpl {
 
-    public SsrTemplate template();
+    SsrTemplate template();
 
     void addField(String... fields);
-
-    DataSet getDefaultOptions();
-
-    void setConfig(DataSet configs);
-
-    void onGetHtml(String field, Consumer<SsrBlockImpl> consumer);
 
     default SsrBlockImpl addBlock(String id, String templateText) {
         var define = template();

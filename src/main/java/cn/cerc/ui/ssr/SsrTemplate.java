@@ -73,7 +73,7 @@ public class SsrTemplate implements Iterable<SsrBlockImpl>, SsrOptionImpl {
                 addParam(key, template, param);
         } else
             key = blockText;
-        template.setId(key);
+        template.id(key);
         this.addItem(key, template);
     }
 
