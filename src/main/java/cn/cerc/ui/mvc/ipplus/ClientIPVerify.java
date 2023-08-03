@@ -46,7 +46,7 @@ public class ClientIPVerify {
                 return false;
             }
         } catch (IpTypeException | IOException e) {
-            log.error(e.getMessage(), e);
+            log.error("IP {} 解析地址失败 => {}", ip, e.getMessage(), e);
             return true;
         }
 
