@@ -127,8 +127,8 @@ public class SsrTemplate implements Iterable<SsrBlockImpl>, SsrOptionImpl {
     }
 
     public void id(String id) {
-        if (id != null && id.length() > 30)
-            throw new RuntimeException("template id 不得超过30位长度");
+        if (id != null && id.length() > 50)
+            throw new RuntimeException("template id 不得超过50位长度");
         this.id = id;
     }
 
