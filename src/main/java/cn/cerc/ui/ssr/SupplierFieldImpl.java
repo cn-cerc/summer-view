@@ -1,5 +1,6 @@
 package cn.cerc.ui.ssr;
 
+@Deprecated
 public interface SupplierFieldImpl extends SupplierCustomBlockImpl {
     SupplierFieldImpl readonly(boolean readonly);
 

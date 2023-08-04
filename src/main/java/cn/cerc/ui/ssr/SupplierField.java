@@ -9,6 +9,7 @@ import cn.cerc.ui.SummerUI;
 import cn.cerc.ui.fields.AbstractField;
 import cn.cerc.ui.fields.ImageConfigImpl;
 
+@Deprecated
 public class SupplierField implements SupplierFieldImpl {
     protected boolean readonly = false;
     protected boolean required = false;
