@@ -19,6 +19,7 @@ public class SsrFormStyleDefault implements SsrFormStyleImpl {
 
     private String fieldDialogIcon;
     private String dateDialogIcon;
+    private ImageConfigImpl imageConfig;
 
     public SsrFormStyleDefault() {
         var impl = Application.getBean(ImageConfigImpl.class);
@@ -32,19 +33,27 @@ public class SsrFormStyleDefault implements SsrFormStyleImpl {
 
     }
 
+    protected String getImage(String imgSrc) {
+        if (imageConfig == null)
+            imageConfig = Application.getBean(ImageConfigImpl.class);
+        return imageConfig == null ? imgSrc : imageConfig.getCommonFile(imgSrc);
+    }
+
     @Override
     public SupplierBlockImpl getSubmitButton() {
         return form -> {
-            var ssr = form.addBlock(UISsrForm.FormStart,
-                    """
-                               <div>
-                                    <span onclick="toggleSearch(this)">查询条件</span>
-                                    <div class="searchFormButtonDiv">
-                                        <button name="submit" value="search">查询</button>${if templateId}
-                                        <a role="configTemplate" type="button" onclick="showSsrConfigDialog('${templateId}')"></a>${endif}
-                                    </div>
-                                </div>
-                            """);
+            var ssr = form.addBlock(UISsrForm.FormStart, String.format("""
+                            <div>
+                            <span onclick="toggleSearch(this)">查询条件</span>
+                            <div class="searchFormButtonDiv">
+                                <button name="submit" value="search">查询</button>${if templateId}
+                                <a role="configTemplate" type="button" onclick="showSsrConfigDialog('${templateId}')">
+                                    <img class="default" src="%s" />
+                                    <img class="hover" src="%s" />
+                                </a>${endif}
+                            </div>
+                        </div>
+                    """, getImage("images/icon/templateConfig.png"), getImage("images/icon/templateConfig_hover.png")));
             ssr.option("action", "").option("role", "search").option("templateId", "");
             return ssr;
         };
