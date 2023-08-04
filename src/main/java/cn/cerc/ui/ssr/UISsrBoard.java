@@ -114,31 +114,31 @@ public class UISsrBoard extends UIComponent implements SsrComponentImpl {
     }
 
     protected SsrBlockImpl slot1() {
-        return items.get(0);
+        return items.get(1);
     }
 
     protected SsrBlockImpl slot2() {
-        return items.get(0);
+        return items.get(2);
     }
 
     protected SsrBlockImpl slot3() {
-        return items.get(0);
+        return items.get(3);
     }
 
     protected SsrBlockImpl slot4() {
-        return items.get(0);
+        return items.get(4);
     }
 
     protected SsrBlockImpl slot5() {
-        return items.get(0);
+        return items.get(5);
     }
 
     protected SsrBlockImpl slot6() {
-        return items.get(0);
+        return items.get(6);
     }
 
     protected SsrBlockImpl slot7() {
-        return items.get(0);
+        return items.get(7);
     }
 
     protected void dataRow(DataRow dataRow) {

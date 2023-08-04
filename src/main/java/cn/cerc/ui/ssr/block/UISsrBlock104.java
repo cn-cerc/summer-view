@@ -23,17 +23,23 @@ public class UISsrBlock104 extends UISsrBoard {
 
     @Override
     public UISsrBoard slot0(SupplierBlockImpl slot) {
-        return super.slot0(slot);
+        UISsrBoard slot0 = super.slot0(slot);
+        super.slot0().option("_hasColon", "1");
+        return slot0;
     }
 
     @Override
     public UISsrBoard slot1(SupplierBlockImpl slot) {
-        return super.slot1(slot);
+        UISsrBoard slot1 = super.slot1(slot);
+        super.slot1().option("_hasColon", "1");
+        return slot1;
     }
 
     @Override
     public UISsrBoard slot2(SupplierBlockImpl slot) {
-        return super.slot2(slot);
+        UISsrBoard slot2 = super.slot2(slot);
+        super.slot2().option("_hasColon", "1");
+        return slot2;
     }
 
 }

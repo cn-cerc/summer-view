@@ -17,29 +17,27 @@ public class UISsrBlock102 extends UISsrBoard {
         this.cpu(new SsrBlock(String.format("""
                         <li role='title'>
                         <div>
-                            <input type="checkbox" name="%s" value="${%s}" ${if %s}checked ${endif}/>
+                            <input type="checkbox" name="%s" value="${%s}"/>
                             <span role="gridIt">${dataset.rec}</span>
                         </div>
                         ${callback(slot0)}
                         ${callback(slot1)}
                     </li>
-                """, checkboxField, checkboxValueField, checkboxField)).strict(false));
+                """, checkboxField, checkboxValueField)));
     }
 
     public UISsrBlock102(UIComponent owner, String checkboxField, Supplier<String> checkboxValue) {
         super(owner);
-        this.cpu(new SsrBlock(String.format(
-                """
-                                <li role='title'>
-                                <div>
-                                    <input type="checkbox" name="%s" value="${callback(checkboxValue)}" ${if %s}checked ${endif}/>
-                                    <span role="gridIt">${dataset.rec}</span>
-                                </div>
-                                ${callback(slot0)}
-                                ${callback(slot1)}
-                            </li>
-                        """,
-                checkboxField, checkboxField)).strict(false).onCallback("checkboxValue", checkboxValue));
+        this.cpu(new SsrBlock(String.format("""
+                        <li role='title'>
+                        <div>
+                            <input type="checkbox" name="%s" value="${callback(checkboxValue)}"/>
+                            <span role="gridIt">${dataset.rec}</span>
+                        </div>
+                        ${callback(slot0)}
+                        ${callback(slot1)}
+                    </li>
+                """, checkboxField)).onCallback("checkboxValue", checkboxValue));
     }
 
     @Override
