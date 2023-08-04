@@ -25,7 +25,7 @@ import cn.cerc.ui.style.IGridStyle;
 public class UISsrGrid extends UIComponent implements SsrComponentImpl, IGridStyle {
     private static final Logger log = LoggerFactory.getLogger(UISsrGrid.class);
     private SsrTemplate template;
-    private List<String> fields;
+    private List<String> columns = new ArrayList<>();
     private Map<String, Consumer<SsrBlockImpl>> onGetBodyHtml = new HashMap<>();
     private Map<String, Consumer<SsrBlockImpl>> onGetHeadHtml = new HashMap<>();
     // 表样式 id
@@ -54,11 +54,21 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl, IGridSty
         template = new SsrTemplate(class1, id);
     }
 
+    @Deprecated
     public DataSet getDataSet() {
         return template.dataSet();
     }
 
+    public DataSet dataSet() {
+        return template.dataSet();
+    }
+
+    @Deprecated
     public UISsrGrid setDataSet(DataSet dataSet) {
+        return this.dataSet(dataSet);
+    }
+
+    public UISsrGrid dataSet(DataSet dataSet) {
         template.dataSet(dataSet);
         return this;
     }
@@ -69,7 +79,7 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl, IGridSty
             log.error("dataSet is null");
             return;
         }
-        if (this.fields == null) {
+        if (this.columns == null) {
             if (this.emptyText == null)
                 html.print(String.format("dataSet.size=%d, fields is null, emptyText is null", getDataSet().size()));
             else
@@ -82,7 +92,7 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl, IGridSty
 
         // 输出标题
         getTemplate(HeadBegin, getDefault_HeadBegin()).ifPresent(value -> html.print(value.getHtml()));
-        for (var field : fields) {
+        for (var field : columns) {
             var block = getTemplate("head." + field, getDefault_HeadCell(field));
             if (block.isPresent()) {
                 if (this.template.id() != null)
@@ -103,7 +113,7 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl, IGridSty
                 getDataSet().first();
                 while (getDataSet().fetch()) {
                     getTemplate(BodyBegin, getDefault_BodyBegin()).ifPresent(value -> html.print(value.getHtml()));
-                    for (var field : fields) {
+                    for (var field : columns) {
                         var block = getTemplate("body." + field, getDefault_BodyCell(field));
                         if (block.isPresent()) {
                             var value = onGetBodyHtml.get(field);
@@ -174,13 +184,24 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl, IGridSty
             throw new RuntimeException("只支持以head.或body.开头的事件");
     }
 
+    /**
+     * 请改使用 columns
+     * 
+     * @return
+     */
+    @Deprecated
     public List<String> getFields() {
-        return fields;
+        return columns();
+    }
+
+    @Override
+    public List<String> columns() {
+        return columns;
     }
 
     @Deprecated
-    public void setFields(List<String> fields) {
-        this.fields = fields;
+    public void setFields(List<String> columns) {
+        this.columns = columns;
     }
 
     @Override
@@ -243,12 +264,9 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl, IGridSty
         return () -> new SsrBlock(String.format("<td>${%s}</td>", field)).setTemplate(template);
     }
 
-    @Override
-    public void addField(String... field) {
-        if (fields == null)
-            fields = new ArrayList<>();
-        for (var item : field)
-            fields.add(item);
+    @Deprecated
+    public void addField(String... fields) {
+        this.addColumn(fields);
     }
 
     /**

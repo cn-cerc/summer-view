@@ -307,7 +307,7 @@ public class SsrBlock implements SsrBlockImpl {
     @Override
     public SsrBlockImpl fixed(SsrComponentImpl form) {
         this.option("option", null);
-        form.addField(this.id);
+        form.addColumn(this.id);
         return this;
     }
 

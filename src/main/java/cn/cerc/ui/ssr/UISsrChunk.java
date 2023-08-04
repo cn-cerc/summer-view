@@ -1,5 +1,6 @@
 package cn.cerc.ui.ssr;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -84,11 +85,6 @@ public class UISsrChunk extends UIComponent implements SsrComponentImpl {
     }
 
     @Override
-    public void addField(String... field) {
-        throw new RuntimeException("不再使用");
-    }
-
-    @Override
     public Optional<SsrBlockImpl> getBlock(String templateId) {
         return template.get(templateId);
     }
@@ -100,6 +96,11 @@ public class UISsrChunk extends UIComponent implements SsrComponentImpl {
     public UISsrChunk setTemplateId(String id) {
         template.id(id);
         return this;
+    }
+
+    @Override
+    public List<String> columns() {
+        throw new RuntimeException("不再使用");
     }
 
 }

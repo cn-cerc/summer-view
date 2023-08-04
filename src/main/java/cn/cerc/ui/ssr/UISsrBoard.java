@@ -11,7 +11,6 @@ import cn.cerc.ui.core.UIComponent;
 public class UISsrBoard extends UIComponent implements SsrComponentImpl {
 //    private static final Logger log = LoggerFactory.getLogger(UISsrBoard.class);
     private static final int Max_slot = 8;
-    private List<String> fields;
     private SsrBlockImpl cpu;
     private List<SsrBlockImpl> items = new ArrayList<>();
     private SsrTemplate template = new SsrTemplate("");
@@ -47,8 +46,19 @@ public class UISsrBoard extends UIComponent implements SsrComponentImpl {
         html.print(cpu.getHtml());
     }
 
+    /**
+     * 请改使用 columns
+     * 
+     * @return
+     */
+    @Deprecated
     public List<String> fields() {
-        return fields;
+        return columns();
+    }
+
+    @Override
+    public List<String> columns() {
+        throw new RuntimeException("此对象不支持此功能");
     }
 
     public UISsrBoard cpu(SsrBlockImpl cpu) {
@@ -138,11 +148,6 @@ public class UISsrBoard extends UIComponent implements SsrComponentImpl {
     @Override
     public SsrTemplate template() {
         return template;
-    }
-
-    @Override
-    public void addField(String... fields) {
-        throw new RuntimeException("不再使用");
     }
 
     public UISsrBoard template(SsrTemplate template) {

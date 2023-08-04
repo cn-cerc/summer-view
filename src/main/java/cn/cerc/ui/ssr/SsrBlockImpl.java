@@ -9,6 +9,7 @@ import cn.cerc.db.core.DataRow;
 import cn.cerc.db.core.DataSet;
 
 public interface SsrBlockImpl extends SsrOptionImpl {
+    public static final String Fields = "fields";
 
     SsrNodes nodes();
 
@@ -134,5 +135,15 @@ public interface SsrBlockImpl extends SsrOptionImpl {
      * @return
      */
     SsrBlockImpl fixed(SsrComponentImpl form);
+
+    /**
+     * 
+     * @param fields 设置字段列表，以逗号隔开
+     * @return 返回自身
+     */
+    default SsrBlockImpl fields(String... fields) {
+        this.option(Fields, String.join(",", fields));
+        return this;
+    }
 
 }

@@ -2,6 +2,7 @@ package cn.cerc.ui.plugins;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +16,7 @@ public class PluginsFactory {
     private static final Logger log = LoggerFactory.getLogger(PluginsFactory.class);
 
     public static <T> List<T> get(Object owner, Class<T> requiredType) {
+        Objects.requireNonNull(owner);
         var list = new ArrayList<T>();
         var item1 = getPluginsByCorp(owner, requiredType);
         if (item1 != null)

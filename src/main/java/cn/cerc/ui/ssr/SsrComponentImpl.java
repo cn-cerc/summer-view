@@ -1,12 +1,25 @@
 package cn.cerc.ui.ssr;
 
+import java.util.List;
 import java.util.Optional;
+
+import cn.cerc.db.core.Utils;
 
 public interface SsrComponentImpl extends SsrOptionImpl {
 
     SsrTemplate template();
 
-    void addField(String... fields);
+    List<String> columns();
+
+    default SsrComponentImpl addColumn(String... columns) {
+        for (var field : columns) {
+            if (Utils.isEmpty(field))
+                throw new RuntimeException("field 不允许为空");
+            if (!this.columns().contains(field))
+                this.columns().add(field);
+        }
+        return this;
+    }
 
     default SsrBlockImpl addBlock(String id, String templateText) {
         var define = template();

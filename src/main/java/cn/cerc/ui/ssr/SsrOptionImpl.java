@@ -7,7 +7,6 @@ public interface SsrOptionImpl {
     public static final String Strict = "strict";
     public static final String Display = "option";
     public static final String Phone = "isPhone";
-    public static final String Fields = "fields";
     public static final String Readonly = "readonly";
 
     /**
@@ -26,16 +25,6 @@ public interface SsrOptionImpl {
 
     default SsrOptionImpl display(int display) {
         this.option(Display, String.valueOf(display));
-        return this;
-    }
-
-    /**
-     * 
-     * @param fields 返回字段列表，以逗号隔开
-     * @return 返回自身
-     */
-    default SsrOptionImpl fields(String... fields) {
-        this.option(Fields, String.join(",", fields));
         return this;
     }
 

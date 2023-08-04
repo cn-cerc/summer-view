@@ -26,7 +26,7 @@ import cn.cerc.ui.core.UIComponent;
 public class UISsrForm extends UIComponent implements SsrComponentImpl {
     private static final Logger log = LoggerFactory.getLogger(UISsrForm.class);
     private SsrTemplate template;
-    private List<String> fields;
+    private List<String> columns = new ArrayList<>();
     public static final String FormBegin = "form.begin";
     public static final String FormEnd = "form.end";
     public static final String FormStart = "formStart";
@@ -97,8 +97,8 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
             log.error("dataRow is null");
             return;
         }
-        if (this.fields == null)
-            this.fields = this.dataRow().fields().names();
+        if (this.columns == null)
+            this.columns = this.dataRow().fields().names();
 
         getBlock(SsrTemplate.BeginFlag).ifPresent(template -> html.print(template.getHtml()));
 
@@ -107,7 +107,7 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
             top.option(SsrOptionImpl.TemplateId, this.template.id());
         html.print(top.getHtml());
 
-        for (var field : fields) {
+        for (var field : columns) {
             var block = getBlock(field,
                     () -> new SsrBlock(
                             String.format("%s: <input type=\"text\" name=\"%s\" value=\"${%s}\">", field, field, field))
@@ -166,21 +166,9 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
         return Optional.ofNullable(block);
     }
 
-    @Override
-    public void addField(String... fields) {
-        if (this.fields == null)
-            this.fields = new ArrayList<>();
-        for (var field : fields) {
-            if (Utils.isEmpty(field))
-                throw new RuntimeException("field 不允许为空");
-            if (!this.fields.contains(field))
-                this.fields.add(field);
-        }
-    }
-
     @Deprecated
     public UISsrForm addField(String id, Consumer<SsrBlockImpl> onGetHtml) {
-        this.addField(id);
+        this.addColumn(id);
         this.onGetHtml.put(id, onGetHtml);
         return this;
     }
@@ -192,16 +180,17 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
      */
     @Deprecated
     public List<String> getFields() {
-        return fields;
+        return columns;
     }
 
+    @Deprecated
     public List<String> fields() {
-        return fields;
+        return columns();
     }
 
     @Deprecated
     public void setFields(List<String> fields) {
-        this.fields = fields;
+        this.columns = fields;
     }
 
     /**
@@ -274,7 +263,7 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
         var context = Application.getContext();
         var bean = context.getBean(SsrConfigImpl.class);
         for (var field : bean.getFields(handle, this.getDefaultOptions()))
-            this.addField(field);
+            this.addColumn(field);
     }
 
     /**
@@ -286,7 +275,7 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
     public void setConfig(DataSet configs) {
         configs.forEach(item -> {
             if (item.getEnum("option_", TemplateConfigOptionEnum.class) != TemplateConfigOptionEnum.不显示)
-                addField(item.getString("column_name_"));
+                addColumn(item.getString("column_name_"));
         });
     }
 
@@ -375,6 +364,21 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
     @Deprecated
     public SsrBlockImpl addTemplate(String id, String templateText) {
         return this.addBlock(id, templateText);
+    }
+
+    @Deprecated
+    public void addField(String name) {
+        this.addColumn(name);
+    }
+
+    @Deprecated
+    public void addField(String... fields) {
+        this.addColumn(fields);
+    }
+
+    @Override
+    public List<String> columns() {
+        return columns;
     }
 
 }

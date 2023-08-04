@@ -6,7 +6,14 @@ package cn.cerc.ui.plugins;
  */
 public interface IPlugins {
 
-    void setOwner(Object owner);
+    /**
+     * 在非单例模式下时，可以使用函数
+     * 
+     * @param owner
+     */
+    default void setOwner(Object owner) {
+
+    }
 
     default String getFuncCode() {
         StackTraceElement[] stacktrace = Thread.currentThread().getStackTrace();

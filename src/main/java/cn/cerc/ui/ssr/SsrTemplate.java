@@ -3,7 +3,6 @@ package cn.cerc.ui.ssr;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -17,7 +16,7 @@ import cn.cerc.db.core.Utils;
 
 public class SsrTemplate implements Iterable<SsrBlockImpl>, SsrOptionImpl {
     private static final Logger log = LoggerFactory.getLogger(SsrTemplate.class);
-    private Map<String, SsrBlockImpl> items = new LinkedHashMap<>();
+    private LinkedHashMap<String, SsrBlockImpl> items = new LinkedHashMap<>();
     public static final String BeginFlag = "begin";
     public static final String EndFlag = "end";
     private String templateText;
@@ -91,7 +90,7 @@ public class SsrTemplate implements Iterable<SsrBlockImpl>, SsrOptionImpl {
         }
     }
 
-    public Map<String, SsrBlockImpl> items() {
+    public LinkedHashMap<String, SsrBlockImpl> items() {
         return this.items;
     }
 
