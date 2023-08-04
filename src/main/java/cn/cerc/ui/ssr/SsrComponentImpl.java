@@ -15,6 +15,13 @@ public interface SsrComponentImpl extends SsrOptionImpl {
         return ssr;
     }
 
+    default SsrComponentImpl addBlock(String id, SsrBlock block) {
+        var define = template();
+        block.setTemplate(define);
+        define.addItem(id, block);
+        return this;
+    }
+
     default SsrBlockImpl addBlock(SupplierBlockImpl consumer) {
         return consumer.request(this);
     }

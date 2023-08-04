@@ -1,6 +1,6 @@
 package cn.cerc.ui.ssr;
 
-public interface SupplierFieldImpl extends SupplierBlockImpl {
+public interface SupplierFieldImpl extends SupplierCustomBlockImpl {
     SupplierFieldImpl readonly(boolean readonly);
 
     SupplierFieldImpl required(boolean required);

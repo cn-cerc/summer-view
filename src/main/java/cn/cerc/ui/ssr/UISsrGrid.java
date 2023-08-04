@@ -85,7 +85,8 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl, IGridSty
         for (var field : fields) {
             var block = getTemplate("head." + field, getDefault_HeadCell(field));
             if (block.isPresent()) {
-                block.get().option(SsrOptionImpl.TemplateId, this.template.id());
+                if (this.template.id() != null)
+                    block.get().option(SsrOptionImpl.TemplateId, this.template.id());
                 var value = onGetHeadHtml.get(field);
                 if (value != null)
                     value.accept(block.get().id(field));

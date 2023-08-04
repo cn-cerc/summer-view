@@ -31,8 +31,9 @@ public class SsrNodes implements Iterable<SsrNodeImpl> {
         return items.iterator();
     }
 
-    public void block(SsrBlock block) {
+    public SsrNodes block(SsrBlock block) {
         this.block = block;
+        return this;
     }
 
     public SsrBlock block() {

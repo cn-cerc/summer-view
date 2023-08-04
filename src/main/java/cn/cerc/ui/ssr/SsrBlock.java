@@ -33,16 +33,21 @@ public class SsrBlock implements SsrBlockImpl {
     private OnGetValueEvent onGetValue;
     private SsrTemplate template;
 
+    public SsrBlock() {
+    }
+
     public SsrBlock(String templateText) {
-        this.templateText = templateText;
-        this.style = new SsrNodes(templateText);
-        style.block(this);
+        this.templateText(templateText);
     }
 
     public SsrBlock(Class<?> class1, String id) {
-        this.templateText = SsrUtils.getTempateFileText(class1, id);
-        this.style = new SsrNodes(templateText);
-        style.block(this);
+        this.templateText(SsrUtils.getTempateFileText(class1, id));
+    }
+
+    public SsrBlock templateText(String templateText) {
+        this.templateText = templateText;
+        this.style = new SsrNodes(templateText).block(this);
+        return this;
     }
 
     @Override

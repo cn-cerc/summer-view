@@ -21,32 +21,35 @@ public class SupplierField implements SupplierFieldImpl {
     protected String title;
     protected String field;
     protected Map<String, String> options = new LinkedHashMap<String, String>();
+    private SsrBlock block;
     private static final ClassConfig FieldConfig = new ClassConfig(AbstractField.class, SummerUI.ID);
 
     public SupplierField(String title, String field) {
         this.title = title;
         this.field = field;
+        block = new SsrBlock();
     }
 
     @Override
     public SsrBlockImpl request(SsrComponentImpl form) {
-        var ssr = form.addBlock(title,
-                String.format(
-                        """
-                                <li>
-                                    <label for="%s"><em>%s</em></label>
-                                    <div>
-                                        %s<input type="%s" name="%s" id="%s" value="${%s}" autocomplete="off"${if readonly} readonly${endif}${if autofocus} autofocus${endif}
-                                        ${if placeholder} placeholder="${placeholder}"${else} placeholder="请${if dialog}点击获取${else}输入${endif}%s"${endif}${if pattern} pattern="${pattern}"${endif}${if required} required${endif} />
-                                        <span role="suffix-icon">${if dialog}<a href="javascript:%s">
-                                                <img src="${dialogIcon}" />
-                                            </a>${endif}</span>
-                                    </div>
-                                </li>
-                                """,
-                        field, title, fieldBefore, type, field, field, field, title, dialog));
-        initProperty(ssr);
-        return ssr;
+        block.templateText(String.format(
+                """
+                        <li>
+                            <label for="%s"><em>%s</em></label>
+                            <div>
+                                %s<input type="%s" name="%s" id="%s" value="${%s}" autocomplete="off"${if readonly} readonly${endif}${if autofocus} autofocus${endif}
+                                ${if placeholder} placeholder="${placeholder}"${else} placeholder="请${if dialog}点击获取${else}输入${endif}%s"${endif}${if pattern} pattern="${pattern}"${endif}${if required} required${endif} />
+                                <span role="suffix-icon">${if dialog}<a href="javascript:%s">
+                                        <img src="${dialogIcon}" />
+                                    </a>${endif}</span>
+                            </div>
+                        </li>
+                        """,
+                field, title, fieldBefore, type, field, field, field, title, dialog));
+
+        form.addBlock(title, block);
+        initProperty(block);
+        return block;
     }
 
     @Override
@@ -62,7 +65,7 @@ public class SupplierField implements SupplierFieldImpl {
     }
 
     @Override
-    public SupplierFieldImpl placeholder(String placeholder) {
+    public SupplierField placeholder(String placeholder) {
         this.placeholder = placeholder;
         return this;
     }
@@ -128,7 +131,7 @@ public class SupplierField implements SupplierFieldImpl {
     }
 
     protected void initProperty(SsrBlockImpl block) {
-        for (String key : options.keySet()) 
+        for (String key : options.keySet())
             block.option(key, options.get(key));
         block.option("readonly", "" + readonly);
         block.option("required", "" + required);
@@ -138,6 +141,11 @@ public class SupplierField implements SupplierFieldImpl {
         block.option("autofocus", "" + autofocus);
         block.fields(field).display(1);
         block.id(title);
+    }
+
+    @Override
+    public SsrBlockImpl block() {
+        return block;
     }
 
 }

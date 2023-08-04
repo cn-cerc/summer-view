@@ -37,7 +37,7 @@ public class SsrGridStyleDefault implements SsrGridStyleImpl {
         return grid -> {
             String headTitle = "head." + title;
             String bodyTitle = "body." + title;
-            var ssr = grid.addBlock(headTitle, String.format("""
+            var ssr1 = grid.addBlock(headTitle, String.format("""
                     <th style='width: ${_width}em'>
                     ${if templateId}
                     <a href="javascript:showSsrConfigDialog('${templateId}')">%s</a>
@@ -46,13 +46,15 @@ public class SsrGridStyleDefault implements SsrGridStyleImpl {
                     ${endif}
                     </th>
                     """, title, title));
-            ssr.toMap("_width", "" + fieldWidth);
-            ssr = grid.addBlock(bodyTitle, "<td><a href='${callback(url)}'>内容</a></td>");
-            ssr.id(headTitle);
-            ssr.display(1);
-            ssr.id(bodyTitle);
-            ssr.display(1);
-            return ssr;
+            ssr1.toMap("_width", "" + fieldWidth);
+            ssr1.option("templateId", "");
+            ssr1.id(headTitle);
+
+            var ssr2 = grid.addBlock(bodyTitle, "<td><a href='${callback(url)}'>内容</a></td>");
+            ssr2.display(1);
+            ssr2.id(bodyTitle);
+            ssr2.display(1);
+            return ssr2;
         };
     }
 
