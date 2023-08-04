@@ -5,6 +5,9 @@ import cn.cerc.ui.ssr.SsrBlock;
 import cn.cerc.ui.ssr.SupplierBlockImpl;
 import cn.cerc.ui.ssr.UISsrBoard;
 
+/**
+ * 手机端UISsrChunk列表组件，头部标题区域
+ */
 public class UISsrBlock101 extends UISsrBoard {
 
     public UISsrBlock101(UIComponent owner) {
@@ -15,7 +18,7 @@ public class UISsrBlock101 extends UISsrBoard {
                             <span role="gridIt">${dataset.rec}</span>
                         </div>
                         ${callback(slot0)}
-                        <div role='titleRight'>${callback(slot1)}</div>
+                        ${callback(slot1)}
                     </li>
                 """));
     }

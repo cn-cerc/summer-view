@@ -59,4 +59,27 @@ public class SsrBlockStyleDefault {
         };
     }
 
+    public SupplierBlockImpl getOpera(String field) {
+        return chunk -> {
+            var block = new SsrBlock(String.format("""
+                    <div role='opera'>
+                        <a href='${%s}'>内容</a>
+                    </div>
+                    """, field)).strict(false);
+            return block;
+        };
+    }
+
+    public SupplierBlockImpl getOpera(Supplier<String> url) {
+        return chunk -> {
+            var block = new SsrBlock("""
+                    <div role='opera'>
+                        <a href='${callback(href)}'>内容</a>
+                    </div>
+                    """).strict(false);
+            block.onCallback("href", url);
+            return block;
+        };
+    }
+
 }

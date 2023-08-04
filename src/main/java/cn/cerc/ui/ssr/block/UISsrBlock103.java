@@ -5,6 +5,9 @@ import cn.cerc.ui.ssr.SsrBlock;
 import cn.cerc.ui.ssr.SupplierBlockImpl;
 import cn.cerc.ui.ssr.UISsrBoard;
 
+/**
+ * 手机端UISsrChunk列表组件， 一行三列，每一列纵向展示
+ */
 public class UISsrBlock103 extends UISsrBoard {
 
     public UISsrBlock103(UIComponent owner) {
