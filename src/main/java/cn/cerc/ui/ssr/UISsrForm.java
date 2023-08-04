@@ -15,7 +15,9 @@ import org.slf4j.LoggerFactory;
 
 import cn.cerc.db.core.DataRow;
 import cn.cerc.db.core.DataSet;
+import cn.cerc.db.core.IHandle;
 import cn.cerc.db.core.Utils;
+import cn.cerc.mis.core.Application;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.mis.core.IPage;
 import cn.cerc.mis.other.MemoryBuffer;
@@ -217,6 +219,10 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
         return this;
     }
 
+    public MemoryBuffer buffer() {
+        return buffer;
+    }
+
     public boolean readAll(HttpServletRequest request, String submitId) {
         if (dataRow() == null)
             this.dataRow(new DataRow());
@@ -247,6 +253,11 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
         }
     }
 
+    /**
+     * 请改使用 loadConfig
+     * 
+     * @return
+     */
     public DataSet getDefaultOptions() {
         var template_id = template.id();
         DataSet ds = new DataSet();
@@ -259,6 +270,19 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
         return ds;
     }
 
+    public void loadConfig(IHandle handle) {
+        var context = Application.getContext();
+        var bean = context.getBean(SsrConfigImpl.class);
+        for (var field : bean.getFields(handle, this.getDefaultOptions()))
+            this.addField(field);
+    }
+
+    /**
+     * 请改使用 loadConfig
+     * 
+     * @param configs
+     */
+    @Deprecated
     public void setConfig(DataSet configs) {
         configs.forEach(item -> {
             if (item.getEnum("option_", TemplateConfigOptionEnum.class) != TemplateConfigOptionEnum.不显示)

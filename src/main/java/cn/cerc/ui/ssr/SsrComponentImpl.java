@@ -19,8 +19,8 @@ public interface SsrComponentImpl extends SsrOptionImpl {
         return consumer.request(this);
     }
 
-    default Optional<SsrBlockImpl> getBlock(String templateId) {
-        return template().get(templateId);
+    default Optional<SsrBlockImpl> getBlock(String blockId) {
+        return template().get(blockId);
     }
 
     @Override

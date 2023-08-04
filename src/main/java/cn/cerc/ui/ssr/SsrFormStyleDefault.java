@@ -88,7 +88,7 @@ public class SsrFormStyleDefault implements SsrFormStyleImpl {
     public SupplierCodeNameField getCodeName(String title, String field, String... dialogFunc) {
         items.add(title);
         var ssr = new SupplierCodeNameField(title, field, dialogFunc);
-        ssr.options("dialogIcon", fieldDialogIcon);
+        ssr.option("dialogIcon", fieldDialogIcon);
         return ssr;
     }
 
@@ -100,7 +100,7 @@ public class SsrFormStyleDefault implements SsrFormStyleImpl {
     public SupplierField getDate(String title, String field) {
         items.add(title);
         var ssr = getString(title, field);
-        ssr.dialog("showDateDialog").options("dialogIcon", dateDialogIcon);
+        ssr.dialog("showDateDialog").option("dialogIcon", dateDialogIcon);
         return ssr;
     }
 
@@ -108,7 +108,7 @@ public class SsrFormStyleDefault implements SsrFormStyleImpl {
     public SupplierBlockImpl getDatetime(String title, String field) {
         items.add(title);
         var ssr = getString(title, field);
-        ssr.dialog("showDateTimeDialog").options("dialogIcon", dateDialogIcon);
+        ssr.dialog("showDateTimeDialog").option("dialogIcon", dateDialogIcon);
         return ssr;
     }
 
@@ -116,7 +116,7 @@ public class SsrFormStyleDefault implements SsrFormStyleImpl {
     public SupplierDateRangeField getDateRange(String title, String beginDate, String endDate) {
         items.add(title);
         var ssr = new SupplierDateRangeField(title, beginDate, endDate);
-        ssr.options("dialogIcon", dateDialogIcon);
+        ssr.option("dialogIcon", dateDialogIcon);
         return ssr;
     }
 

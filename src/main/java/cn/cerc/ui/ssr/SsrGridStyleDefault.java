@@ -37,7 +37,15 @@ public class SsrGridStyleDefault implements SsrGridStyleImpl {
         return grid -> {
             String headTitle = "head." + title;
             String bodyTitle = "body." + title;
-            var ssr = grid.addBlock(headTitle, String.format("<th style='width: ${_width}em'>%s</th>", title));
+            var ssr = grid.addBlock(headTitle, String.format("""
+                    <th style='width: ${_width}em'>
+                    ${if templateId}
+                    <a href="javascript:showSsrConfigDialog('${templateId}')">%s</a>
+                    ${else}
+                    %s
+                    ${endif}
+                    </th>
+                    """, title, title));
             ssr.toMap("_width", "" + fieldWidth);
             ssr = grid.addBlock(bodyTitle, "<td><a href='${callback(url)}'>内容</a></td>");
             ssr.id(headTitle);
@@ -51,6 +59,10 @@ public class SsrGridStyleDefault implements SsrGridStyleImpl {
     @Override
     public SupplierBlockImpl getDate(String title, String field) {
         return getString(title, field, 5, "center");
+    }
+
+    public SupplierBlockImpl getDatetime(String title, String field) {
+        return getString(title, field, 10, "center");
     }
 
     public SupplierBlockImpl getDouble(String title, String field) {
@@ -165,4 +177,5 @@ public class SsrGridStyleDefault implements SsrGridStyleImpl {
     public List<String> items() {
         return items;
     }
+
 }

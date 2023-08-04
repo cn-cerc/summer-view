@@ -21,6 +21,11 @@ public interface SsrBlockImpl extends SsrOptionImpl {
      */
     SsrBlockImpl toList(String... value);
 
+    default SsrBlockImpl toList(List<String> list) {
+        toList(list.toArray(new String[list.size()]));
+        return this;
+    }
+
     /**
      * 
      * 
@@ -29,6 +34,18 @@ public interface SsrBlockImpl extends SsrOptionImpl {
     List<String> getList();
 
     SsrBlockImpl toMap(String Key, String value);
+
+    default SsrBlockImpl toMap(Map<String, String> map) {
+        for (var key : map.keySet())
+            toMap(key, map.get(key));
+        return this;
+    }
+
+    default SsrBlockImpl toMap(Enum<?>[] enums) {
+        for (var item : enums)
+            toMap("" + item.ordinal(), item.name());
+        return this;
+    }
 
     /**
      * 请改使用 toMap

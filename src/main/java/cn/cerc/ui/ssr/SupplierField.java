@@ -83,7 +83,7 @@ public class SupplierField implements SupplierFieldImpl {
         } else {
             fieldDialogIcon = FieldConfig.getClassProperty("icon", "");
         }
-        options("dialogIcon", fieldDialogIcon);
+        option("dialogIcon", fieldDialogIcon);
         return this;
     }
 
@@ -117,7 +117,12 @@ public class SupplierField implements SupplierFieldImpl {
         return sb.toString();
     }
 
+    @Deprecated
     public SupplierField options(String key, String value) {
+        return option(key, value);
+    }
+
+    public SupplierField option(String key, String value) {
         this.options.put(key, value);
         return this;
     }
