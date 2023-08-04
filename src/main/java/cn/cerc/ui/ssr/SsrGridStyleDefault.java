@@ -128,32 +128,30 @@ public class SsrGridStyleDefault implements SsrGridStyleImpl {
     public SupplierStringImpl getString(String title, String field, int fieldWidth) {
         items.add(title);
         return new SupplierStringImpl() {
-            private Supplier<String> url;
+            private SsrBlock block = new SsrBlock();
 
             @Override
             public SsrBlockImpl request(SsrComponentImpl grid) {
                 String headTitle = "head." + title;
-                String bodyTitle = "body." + title;
                 var ssr = grid.addBlock(headTitle, String.format("<th style='width: ${_width}em'>%s</th>", title));
                 ssr.toMap("_width", "" + fieldWidth);
                 ssr.id(headTitle);
                 ssr.display(1);
-                ssr = grid.addBlock(bodyTitle, String.format(
+
+                String bodyTitle = "body." + title;
+                grid.addBlock(bodyTitle, block.templateText(String.format(
                         "<td align='left'>${if _enabled_url}<a href='${callback(url)}'>${endif}${dataset.%s}${if _enabled_url}</a>${endif}</td>",
-                        field));
-                ssr.id(bodyTitle);
-                ssr.display(1);
-                ssr.strict(false);
-                if (url != null) {
-                    ssr.option("_enabled_url", "1");
-                    ssr.onCallback(field, url);
-                }
-                return ssr;
+                        field)));
+                block.id(bodyTitle);
+                block.display(1);
+                block.strict(false);
+                return block;
             }
 
             @Override
             public SupplierStringImpl url(Supplier<String> url) {
-                this.url = url;
+                block.option("_enabled_url", "1");
+                block.onCallback("url", url);
                 return this;
             }
         };

@@ -87,18 +87,20 @@ public class PluginsFactory {
             return null;
         if (!context.containsBean(customName))
             return null;
-        T result = context.getBean(customName, requiredType);
-        if (result != null) {
-            // 要求必须继承IPlugins
-            if (result instanceof IPlugins) {
-                ((IPlugins) result).setOwner(owner);
-            } else {
-                log.warn("{} not supports IPlugins.", customName);
-                return null;
-            }
-            if (result instanceof IHandle && owner instanceof IHandle) {
-                ((IHandle) result).setSession(((IHandle) owner).getSession());
-            }
+        var obj = context.getBean(customName);
+        if (!requiredType.isAssignableFrom(obj.getClass()))
+            return null;
+        @SuppressWarnings("unchecked")
+        T result = (T) obj;
+        // 要求必须继承IPlugins
+        if (result instanceof IPlugins) {
+            ((IPlugins) result).setOwner(owner);
+        } else {
+            log.warn("{} not supports IPlugins.", customName);
+            return null;
+        }
+        if (result instanceof IHandle && owner instanceof IHandle) {
+            ((IHandle) result).setSession(((IHandle) owner).getSession());
         }
         return result;
     }
