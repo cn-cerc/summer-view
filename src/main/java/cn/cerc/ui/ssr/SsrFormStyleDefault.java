@@ -85,7 +85,7 @@ public class SsrFormStyleDefault implements SsrFormStyleImpl {
                                         <div>
                                             <input type="text" name="%s" id="%s" value="${%s}" autocomplete="off"${if _readonly} readonly${endif}${if _autofocus} autofocus${endif}
                                             ${if _placeholder} placeholder="${_placeholder}"${else} placeholder="请${if _dialog}点击获取${else}输入${endif}%s"${endif}${if _pattern} pattern="${_pattern}"${endif}${if _required} required${endif} />
-                                            <span role="suffix-icon">${if _dialog}<a href="javascript:${dialog}">
+                                            <span role="suffix-icon">${if _dialog}<a href="javascript:${_dialog}">
                                                     <img src="%s" />
                                                 </a>${endif}</span>
                                         </div>
