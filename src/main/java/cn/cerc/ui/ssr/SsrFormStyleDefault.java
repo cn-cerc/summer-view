@@ -293,6 +293,8 @@ public class SsrFormStyleDefault implements SsrFormStyleImpl {
         private SsrBlock block = new SsrBlock();
         private String title;
         private String field;
+        // TODO 等dialog方法移除之后需要将此属性移除掉
+        private String dialog = "showDateDialog";
 
         public SupplierFastDateFormField(String title, String field) {
             this.title = title;
@@ -315,13 +317,13 @@ public class SsrFormStyleDefault implements SsrFormStyleImpl {
                                         <div>
                                             <input type="text" name="%s" id="%s" value="${%s}" autocomplete="off"${if _readonly} readonly${endif}${if _autofocus} autofocus${endif}
                                             ${if _placeholder} placeholder="${_placeholder}"${else} placeholder="请${if _dialog}点击获取${else}输入${endif}%s"${endif}${if _pattern} pattern="${_pattern}"${endif}${if _required} required${endif} />
-                                            <span role="suffix-icon"><a href="javascript:showDateDialog('%s')">
+                                            <span role="suffix-icon"><a href="javascript:%s('%s')">
                                                     <img src="%s" />
                                                 </a></span>
                                         </div>
                                     </li>
                                     """,
-                            field, title, field, field, field, title, field, dateDialogIcon)));
+                            field, title, field, field, field, title, dialog, field, dateDialogIcon)));
             return block;
         }
 
@@ -346,6 +348,12 @@ public class SsrFormStyleDefault implements SsrFormStyleImpl {
         @Override
         public SupplierFastDateFormField patten(String patten) {
             SupplierFastDateFormFieldImpl.super.patten(patten);
+            return this;
+        }
+
+        @Deprecated
+        public SupplierFastDateFormField dialog(String dialog) {
+            this.dialog = dialog;
             return this;
         }
 
