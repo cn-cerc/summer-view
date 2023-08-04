@@ -220,7 +220,8 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
     public boolean readAll(HttpServletRequest request, String submitId) {
         if (dataRow() == null)
             this.dataRow(new DataRow());
-        boolean submit = request.getParameter(submitId) != null;
+        String submitVal = request.getParameter(submitId);
+        boolean submit = (submitVal != null && "search".equals(submitVal));
         for (var ssr : this.template) {
             ssr.option("fields").ifPresent(fields1 -> {
                 for (var field : fields1.split(",")) {
