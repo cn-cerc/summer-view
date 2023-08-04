@@ -41,7 +41,7 @@ public class SsrFormStyleDefault implements SsrFormStyleImpl {
                                     <span onclick="toggleSearch(this)">查询条件</span>
                                     <div class="searchFormButtonDiv">
                                         <button name="submit" value="search">查询</button>${if templateId}
-                                        <button role="configTemplate" type="button" onclick="showSsrConfigDialog('${templateId}')">配置</button>${endif}
+                                        <a role="configTemplate" type="button" onclick="showSsrConfigDialog('${templateId}')"></a>${endif}
                                     </div>
                                 </div>
                             """);
