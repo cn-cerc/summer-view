@@ -21,7 +21,7 @@ public class SsrDefaultFormStyleTest {
         ssr.toMap("小学", "小学");
         ssr.toMap("初中", "初中");
         ssr.toMap("高中", "高中");
-        form.addField("姓名", "男性", "学历");
+        form.addColumn("姓名", "男性", "学历");
 
         assertEquals(
                 """

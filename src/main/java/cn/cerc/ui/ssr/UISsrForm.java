@@ -32,6 +32,7 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
     public static final String FormStart = "formStart";
     private Map<String, Consumer<SsrBlockImpl>> onGetHtml = new HashMap<>();
     private MemoryBuffer buffer;
+    private SsrFormStyleDefault defaultStle;
 
     public UISsrForm(UIComponent owner) {
         super(owner);
@@ -285,8 +286,20 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
         });
     }
 
+    /**
+     * 请改使用 defaultStyle()
+     * 
+     * @return
+     */
+    @Deprecated
     public SsrFormStyleDefault createDefaultStyle() {
-        return new SsrFormStyleDefault();
+        return defaultStyle();
+    }
+
+    public SsrFormStyleDefault defaultStyle() {
+        if (defaultStle == null)
+            defaultStle = new SsrFormStyleDefault();
+        return defaultStle;
     }
 
     @Override

@@ -79,7 +79,6 @@ public class CorpPlugins {
      * @param defaultService 默认服务名称
      * @return 返回自定义 service 或 defaultService
      */
-    @Deprecated
     public static ServiceSign getServiceSign(AbstractForm form, ServiceSign defaultService) {
         IPlugins plugins = PluginsFactory.getPluginsByCorp(form, IPlugins.class);
         if (plugins == null)

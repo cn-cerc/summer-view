@@ -14,6 +14,7 @@ import cn.cerc.ui.core.UIComponent;
 public class UISsrChunk extends UIComponent implements SsrComponentImpl {
     private static final Logger log = LoggerFactory.getLogger(UISsrChunk.class);
     private SsrTemplate template;
+    private SsrBlockStyleDefault defaultStle;
     public static final String ListBegin = "list.begin";
     public static final String ListEnd = "list.end";
 
@@ -89,8 +90,20 @@ public class UISsrChunk extends UIComponent implements SsrComponentImpl {
         return template.get(templateId);
     }
 
+    /**
+     * 请改使用 defaultStyle()
+     * 
+     * @return
+     */
+    @Deprecated
     public SsrBlockStyleDefault createDefaultStyle() {
-        return new SsrBlockStyleDefault();
+        return defaultStyle();
+    }
+
+    public SsrBlockStyleDefault defaultStyle() {
+        if (defaultStle == null)
+            defaultStle = new SsrBlockStyleDefault();
+        return defaultStle;
     }
 
     public UISsrChunk setTemplateId(String id) {

@@ -14,7 +14,7 @@ public class UISsrFormTest {
         row.setValue("code_", "001").setValue("name_", "a01");
         var form = new UISsrForm(null, "");
         form.dataRow(row);
-        form.addField("name_", "code_");
+        form.addColumn("name_", "code_");
         assertEquals(
                 "<form method='post' action='' id='form1' role='search'><ul>name_: <input type=\"text\" name=\"name_\" value=\"a01\">code_: <input type=\"text\" name=\"code_\" value=\"001\"></ul></form>",
                 form.toString());

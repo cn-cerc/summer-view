@@ -38,6 +38,7 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl, IGridSty
     public static final String BodyBegin = "body.begin";
     public static final String BodyEnd = "body.end";
     private String emptyText;
+    private SsrGridStyleDefault defaultStle;
 
     public UISsrGrid(UIComponent owner) {
         super(owner);
@@ -342,8 +343,20 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl, IGridSty
         this.emptyText = emptyText;
     }
 
+    /**
+     * 请改使用 defaultStyle()
+     * 
+     * @return
+     */
+    @Deprecated
     public SsrGridStyleDefault createDefaultStyle() {
-        return new SsrGridStyleDefault();
+        return defaultStyle();
+    }
+
+    public SsrGridStyleDefault defaultStyle() {
+        if (defaultStle == null)
+            defaultStle = new SsrGridStyleDefault();
+        return defaultStle;
     }
 
     /**
