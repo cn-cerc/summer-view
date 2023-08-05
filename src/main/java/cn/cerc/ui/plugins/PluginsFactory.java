@@ -15,7 +15,20 @@ import cn.cerc.mis.core.Application;
 public class PluginsFactory {
     private static final Logger log = LoggerFactory.getLogger(PluginsFactory.class);
 
+    /**
+     * 请改使用 getPluginsList
+     * 
+     * @param <T>
+     * @param owner
+     * @param requiredType
+     * @return
+     */
+    @Deprecated
     public static <T> List<T> get(Object owner, Class<T> requiredType) {
+        return getPluginsList(owner, requiredType);
+    }
+
+    public static <T> List<T> getPluginsList(Object owner, Class<T> requiredType) {
         Objects.requireNonNull(owner);
         var list = new ArrayList<T>();
         var item1 = getPluginsByCorp(owner, requiredType);
