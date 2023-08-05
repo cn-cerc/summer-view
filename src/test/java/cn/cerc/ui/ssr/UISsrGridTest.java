@@ -14,8 +14,8 @@ public class UISsrGridTest {
         ds.append().setValue("code_", "001").setValue("name_", "a01");
         ds.append().setValue("code_", "002").setValue("name_", "b01");
         var grid = new UISsrGrid(null, "");
-        grid.setDataSet(ds);
-        grid.addField("name_");
+        grid.dataSet(ds);
+        grid.addColumn("name_");
         assertEquals(
                 "<div id='grid' class='scrollArea'><table class='dbgrid'><tr><th>name_</th></tr><tr><td>a01</td></tr><tr><td>b01</td></tr></table></div>",
                 grid.toString());
@@ -33,9 +33,9 @@ public class UISsrGridTest {
         grid.onGetHeadHtml("code_", ssr -> ssr.toMap("width", "30").toMap("title", "xxx"));
         grid.addBlock("body.code_", "<td><a href=\"${url}\">${code_}</a></td>");
         grid.onGetBodyHtml("code_", ssr -> ssr.toMap("url", "http://" + ds.getString(ssr.id())));
-        grid.addField("code_", "name_");
+        grid.addColumn("code_", "name_");
 
-        grid.setDataSet(ds);
+        grid.dataSet(ds);
         assertEquals(
                 "<div><table class='a'><tr><th width=30>xxx</td><th>name_</th></tr><tr><td><a href=\"http://001\">001</a></td><td>a01</td></tr><tr><td><a href=\"http://002\">002</a></td><td>b01</td></tr></table></div>",
                 grid.toString());
@@ -81,8 +81,8 @@ public class UISsrGridTest {
         ds.fields().add("name").setName("姓名");
         ds.append().setValue("code", "001").setValue("name", "张三");
         ds.append().setValue("code", "002").setValue("name", "李四");
-        grid.setDataSet(ds);
-        grid.addField("name", "code");
+        grid.dataSet(ds);
+        grid.addColumn("name", "code");
         grid.onGetHeadHtml("code", ssr -> ssr.toMap("title", "代码"));
         grid.onGetBodyHtml("name", ssr -> ssr.toMap("url", "http://127.0.0.1"));
 

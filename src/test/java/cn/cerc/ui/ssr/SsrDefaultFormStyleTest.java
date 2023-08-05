@@ -14,7 +14,7 @@ public class SsrDefaultFormStyleTest {
         form.strict(false);
         form.dataRow(DataRow.of("Name_", "jason", "Man_", true, "Xl_", "初中"));
 
-        var style = form.createDefaultStyle();
+        var style = form.defaultStyle();
         form.addBlock(style.getString("姓名", "Name_"));
         form.addBlock(style.getBoolean("男性", "Man_"));
         var ssr = form.addBlock(style.getMap("学历", "Xl_"));

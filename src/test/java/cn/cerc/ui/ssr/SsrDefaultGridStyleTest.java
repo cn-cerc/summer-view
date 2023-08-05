@@ -17,14 +17,14 @@ public class SsrDefaultGridStyleTest {
         ds.append().setValue("Name_", "生产部").setValue("Code_", "002").setValue("Final_", true);
 
         var grid = new UISsrGrid(null, "");
-        grid.setDataSet(ds);
+        grid.dataSet(ds);
 
         var map = new LinkedHashMap<String, String>();
         map.put("a", "张三");
         map.put("b", "李四");
         map.put("c", "王五");
 
-        var style = grid.createDefaultStyle();
+        var style = grid.defaultStyle();
         grid.addBlock(style.getIt("序", 2));
         grid.addBlock(style.getString("部门名称", "Name_", 10));
         grid.addBlock(style.getBoolean("状态", "Final_", 4));
@@ -33,7 +33,7 @@ public class SsrDefaultGridStyleTest {
             return "FrmView?code=" + ds.getString("Code_");
         });
 
-        grid.addField("序", "部门名称", "状态", "类别", "操作");
+        grid.addColumn("序", "部门名称", "状态", "类别", "操作");
         assertEquals(
                 """
                         <div id='grid' class='scrollArea'><table class='dbgrid'><tr><th style='width: 2em'>序</th><th style='width: 10em'>部门名称</th><th style='width: 4em'>状态</th><th style='width: 10em'>类别</th><th style='width: 4em'>操作</th></tr><tr><td align='center'>1</td><td align='left'>研发部</td><td>
