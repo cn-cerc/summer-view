@@ -17,8 +17,8 @@ public class SupplierField implements SupplierFieldImpl {
     protected String patten = "false";
     protected String dialog = "false";
     protected boolean autofocus = false;
+    protected String mark = "";
     private String type = "text";
-    private String fieldBefore = "";
     protected String title;
     protected String field;
     protected Map<String, String> options = new LinkedHashMap<String, String>();
@@ -33,24 +33,28 @@ public class SupplierField implements SupplierFieldImpl {
 
     @Override
     public SsrBlockImpl request(SsrComponentImpl form) {
-        block.templateText(String.format(
-                """
-                        <li>
-                            <label for="%s"><em>%s</em></label>
-                            <div>
-                                %s<input type="%s" name="%s" id="%s" value="${%s}" autocomplete="off"${if readonly} readonly${endif}${if autofocus} autofocus${endif}
-                                ${if placeholder} placeholder="${placeholder}"${else} placeholder="请${if dialog}点击获取${else}输入${endif}%s"${endif}${if pattern} pattern="${pattern}"${endif}${if required} required${endif} />
-                                <span role="suffix-icon">${if dialog}<a href="javascript:%s">
-                                        <img src="${dialogIcon}" />
-                                    </a>${endif}</span>
-                            </div>
-                        </li>
-                        """,
-                field, title, fieldBefore, type, field, field, field, title, dialog));
-
-        form.addBlock(title, block);
-        initProperty(block);
-        return block;
+        var ssr = form.addBlock(title,
+                String.format(
+                        """
+                                <li>
+                                    <label for="%s"${if _mark} class='formMark'${endif}>${if required}<font role="require">*</font>${endif}<em>%s</em></label>
+                                    <div>
+                                        <input type="%s" name="%s" id="%s" value="${%s}" autocomplete="off"${if readonly} readonly${endif}${if autofocus} autofocus${endif}
+                                        ${if placeholder} placeholder="${placeholder}"${else} placeholder="请${if dialog}点击获取${else}输入${endif}%s"${endif}${if pattern} pattern="${pattern}"${endif}${if required} required${endif} />
+                                        <span role="suffix-icon">${if dialog}<a href="javascript:%s">
+                                                <img src="${dialogIcon}" />
+                                            </a>${endif}</span>
+                                    </div>
+                                </li>
+                                ${if _mark}
+                                <li role="%s" class="liWord" style="display: none;">
+                                    <mark>%s</mark>
+                                </li>
+                                ${endif}
+                                """,
+                        field, title, type, field, field, field, title, dialog, field, mark));
+        initProperty(ssr);
+        return ssr;
     }
 
     @Override
@@ -104,8 +108,8 @@ public class SupplierField implements SupplierFieldImpl {
     }
 
     @Override
-    public SupplierField fieldBefore(String fieldBefore) {
-        this.fieldBefore = fieldBefore;
+    public SupplierField mark(String mark) {
+        this.mark = mark;
         return this;
     }
 
@@ -135,6 +139,7 @@ public class SupplierField implements SupplierFieldImpl {
         for (String key : options.keySet())
             block.option(key, options.get(key));
         block.option("readonly", "" + readonly);
+        block.option("_mark", mark);
         block.option("required", "" + required);
         block.option("placeholder", placeholder);
         block.option("pattern", patten);

@@ -16,5 +16,5 @@ public interface SupplierFieldImpl extends SupplierCustomBlockImpl {
 
     SupplierFieldImpl type(String type);
 
-    SupplierFieldImpl fieldBefore(String fieldBefore);
+    SupplierFieldImpl mark(String mark);
 }

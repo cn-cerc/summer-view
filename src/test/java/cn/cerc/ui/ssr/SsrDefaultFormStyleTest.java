@@ -25,7 +25,7 @@ public class SsrDefaultFormStyleTest {
 
         assertEquals(
                 """
-                        <form method='post' action='' role='search'><ul><li>
+                        <form method='post' action='' id='form1' role='search'><ul><li>
                         <label for="Name_"><em>姓名</em></label>
                         <div>
                         <input type="text" name="Name_" id="Name_" value="jason" autocomplete="off" placeholder="请输入姓名"/>

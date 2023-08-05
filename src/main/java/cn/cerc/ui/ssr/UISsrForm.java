@@ -142,8 +142,9 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
     private Supplier<SsrBlockImpl> getDefault_FormBegin() {
         var action = this.template().option("action").orElse("");
         return () -> {
-            var ssr = new SsrBlock(String.format("<form method='post' action='%s' role='${role}'>${callback(%s)}<ul>",
-                    action, UISsrForm.FormStart)).setTemplate(template);
+            var ssr = new SsrBlock(String.format("<form method='post' action='%s'%s role='${role}'>${callback(%s)}<ul>",
+                    action, !Utils.isEmpty(getId()) ? " id='" + getId() + "'" : "", UISsrForm.FormStart))
+                    .setTemplate(template);
             ssr.onCallback(UISsrForm.FormStart, () -> {
                 var formFirst = this.getBlock(UISsrForm.FormStart);
                 formFirst.ifPresent(template -> {

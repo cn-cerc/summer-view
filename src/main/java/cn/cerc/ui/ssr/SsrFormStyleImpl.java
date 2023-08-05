@@ -18,6 +18,8 @@ public interface SsrFormStyleImpl {
 
     SupplierBlockImpl getMap(String title, String field);
 
+    SupplierBlockImpl getTextarea(String title, String field);
+
     SupplierBlockImpl getSubmitButton();
 
     List<String> items();

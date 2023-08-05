@@ -81,7 +81,7 @@ public class SsrFormStyleDefault implements SsrFormStyleImpl {
                     block.templateText(String.format(
                             """
                                     <li>
-                                        <label for="%s"><em>%s</em></label>
+                                        <label for="%s"${if _mark} class='formMark'${endif}>${if required}<font role="require">*</font>${endif}<em>%s</em></label>
                                         <div>
                                             <input type="text" name="%s" id="%s" value="${%s}" autocomplete="off"${if _readonly} readonly${endif}${if _autofocus} autofocus${endif}
                                             ${if _placeholder} placeholder="${_placeholder}"${else} placeholder="请${if _dialog}点击获取${else}输入${endif}%s"${endif}${if _pattern} pattern="${_pattern}"${endif}${if _required} required${endif} />
@@ -90,8 +90,13 @@ public class SsrFormStyleDefault implements SsrFormStyleImpl {
                                                 </a>${endif}</span>
                                         </div>
                                     </li>
+                                    ${if _mark}
+                                    <li role="%s" class="liWord" style="display: none;">
+                                        <mark>${_mark}</mark>
+                                    </li>
+                                    ${endif}
                                     """,
-                            field, title, field, field, field, title, fieldDialogIcon)));
+                            field, title, field, field, field, title, fieldDialogIcon, field)));
             return block;
         }
 
@@ -130,11 +135,16 @@ public class SsrFormStyleDefault implements SsrFormStyleImpl {
             return this;
         }
 
+        @Override
+        public SupplierStringFormField mark(String mark) {
+            SupplierStringFormFieldImpl.super.mark(mark);
+            return this;
+        }
+
     }
 
     @Override
     public SupplierStringFormField getString(String title, String field) {
-        items.add(title);
         return new SupplierStringFormField(title, field);
     }
 
@@ -163,11 +173,17 @@ public class SsrFormStyleDefault implements SsrFormStyleImpl {
                                         <div role="switch">
                                             <input autocomplete="off" name="%s" id="%s" type="checkbox" value="1" ${if %s}checked ${endif}/>
                                         </div>
-                                        <label for="%s"><em>%s</em></label>
+                                        <label for="%s"${if _mark} class='formMark'${endif}><em>%s</em></label>
                                     </li>
                                             """,
                             field, field, field, field, title));
             return block;
+        }
+
+        @Override
+        public SupplierBooleanFormField mark(String mark) {
+            SupplierBooleanFormImpl.super.mark(mark);
+            return this;
         }
 
     }
@@ -178,25 +194,71 @@ public class SsrFormStyleDefault implements SsrFormStyleImpl {
         return new SupplierBooleanFormField(title, field);
     }
 
+    public class SupplierMapFormField implements SupplierMapFormFieldImpl {
+        private SsrBlock block = new SsrBlock();
+        private String title;
+        private String field;
+
+        public SupplierMapFormField(String title, String field) {
+            this.title = title;
+            this.field = field;
+            block.id(title).fields(field).display(1);
+        }
+
+        @Override
+        public SsrBlockImpl block() {
+            return block;
+        }
+
+        @Override
+        public SsrBlockImpl request(SsrComponentImpl form) {
+            form.addBlock(title,
+                    block.templateText(String.format(
+                            """
+                                    <li>
+                                        <label for="%s"${if _mark} class='formMark'${endif}>${if required}<font role="require">*</font>${endif}<em>%s</em></label>
+                                        <div>
+                                            <select id="%s" name="%s"${if _readonly} disabled${endif}>
+                                            ${map.begin}
+                                                <option value="${map.key}" ${if map.key==%s}selected${endif}>${map.value}</option>
+                                            ${map.end}
+                                            </select>
+                                        </div>
+                                    </li>
+                                    ${if _mark}
+                                    <li role="%s" class="liWord" style="display: none;">
+                                        <mark>${_mark}</mark>
+                                    </li>
+                                    ${endif}
+                                    """,
+                            field, title, field, field, field, field)));
+            return block;
+        }
+
+        @Override
+        public SupplierMapFormField readonly(boolean readonly) {
+            SupplierMapFormFieldImpl.super.readonly(readonly);
+            return this;
+        }
+
+        @Override
+        public SupplierMapFormField required(boolean required) {
+            SupplierMapFormFieldImpl.super.required(required);
+            return this;
+        }
+
+        @Override
+        public SupplierMapFormField mark(String mark) {
+            SupplierMapFormFieldImpl.super.mark(mark);
+            return this;
+        }
+
+    }
+
     @Override
-    public SupplierBlockImpl getMap(String title, String field) {
+    public SupplierMapFormField getMap(String title, String field) {
         items.add(title);
-        return form -> {
-            var ssr = form.addBlock(title, String.format("""
-                    <li>
-                        <label for="%s"><em>%s</em></label>
-                        <div>
-                            <select id="%s" name="%s">
-                            ${map.begin}
-                                <option value="${map.key}" ${if map.key==%s}selected${endif}>${map.value}</option>
-                            ${map.end}
-                            </select>
-                        </div>
-                    </li>
-                    """, field, title, field, field, field));
-            ssr.id(title).fields(field).display(1);
-            return ssr;
-        };
+        return new SupplierMapFormField(title, field);
     }
 
     public class SupplierCodeNameField implements SupplierStringFormFieldImpl {
@@ -505,6 +567,68 @@ public class SsrFormStyleDefault implements SsrFormStyleImpl {
     public SupplierDateRangeFormField getDateRange(String title, String beginDate, String endDate) {
         items.add(title);
         return new SupplierDateRangeFormField(title, beginDate, endDate);
+    }
+
+    public class SupplierTextareaFormField implements SupplierTextareaFormFieldImpl {
+        private SsrBlock block = new SsrBlock();
+        private String title;
+        private String field;
+
+        public SupplierTextareaFormField(String title, String field) {
+            this.title = title;
+            this.field = field;
+            block.id(title).fields(field).display(1);
+        }
+
+        @Override
+        public SsrBlockImpl block() {
+            return block;
+        }
+
+        @Override
+        public SsrBlockImpl request(SsrComponentImpl form) {
+            form.addBlock(title, block.templateText(String.format("""
+                        <li>
+                        <label for="%s">${if _required}<font role="require">*</font>${endif}<em>%s</em></label>
+                        <div>
+                            <textarea name="%s" id="%s">${%s}</textarea>
+                            <span role="suffix-icon"></span>
+                        </div>
+                    </li>
+                    """, field, title, field, field, field)));
+            return block;
+        }
+
+        @Override
+        public SupplierTextareaFormField placeholder(String placeholder) {
+            SupplierTextareaFormFieldImpl.super.placeholder(placeholder);
+            return this;
+        }
+
+        @Override
+        public SupplierTextareaFormField readonly(boolean readonly) {
+            SupplierTextareaFormFieldImpl.super.readonly(readonly);
+            return this;
+        }
+
+        @Override
+        public SupplierTextareaFormField required(boolean required) {
+            SupplierTextareaFormFieldImpl.super.required(required);
+            return this;
+        }
+
+        @Override
+        public SupplierTextareaFormField mark(String mark) {
+            SupplierTextareaFormFieldImpl.super.mark(mark);
+            return this;
+        }
+
+    }
+
+    @Override
+    public SupplierTextareaFormField getTextarea(String title, String field) {
+        items.add(title);
+        return new SupplierTextareaFormField(title, field);
     }
 
     @Override

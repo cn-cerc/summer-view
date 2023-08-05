@@ -28,4 +28,9 @@ public interface SupplierStringFormFieldImpl extends SupplierStringImpl {
         return this;
     };
 
+    default SupplierStringFormFieldImpl mark(String mark) {
+        block().option("_mark", mark);
+        return this;
+    };
+
 }
