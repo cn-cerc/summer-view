@@ -1,7 +1,10 @@
 package cn.cerc.ui.plugins;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 
+import cn.cerc.mis.client.ServiceSign;
 import cn.cerc.mis.core.AbstractForm;
 import cn.cerc.mis.core.Application;
 import cn.cerc.mis.core.IPage;
@@ -13,6 +16,7 @@ import cn.cerc.mis.core.IPage;
  *
  */
 public class CorpPlugins {
+    private static final Logger log = LoggerFactory.getLogger(CorpPlugins.class);
 //    private static final Logger log = LoggerFactory.getLogger(CorpPlugins.class);
 
     /**
@@ -63,6 +67,11 @@ public class CorpPlugins {
         return plugins != null ? ((IRedirectPage) plugins).getPage() : null;
     }
 
+    @Deprecated
+    public static String getService(AbstractForm form, String defaultService) {
+        return getServiceSign(form, new ServiceSign(defaultService)).id();
+    }
+
     /**
      * 用于自定义服务场影
      *
@@ -70,15 +79,19 @@ public class CorpPlugins {
      * @param defaultService 默认服务名称
      * @return 返回自定义 service 或 defaultService
      */
-    public static String getService(AbstractForm form, String defaultService) {
+    @Deprecated
+    public static ServiceSign getServiceSign(AbstractForm form, ServiceSign defaultService) {
         IPlugins plugins = PluginsFactory.getPluginsByCorp(form, IPlugins.class);
         if (plugins == null)
             return defaultService;
-        if (!(plugins instanceof IServiceDefine)) {
+        if (!(plugins instanceof IServiceDefine))
             return defaultService;
-        }
         String result = ((IServiceDefine) plugins).getService();
-        return result != null ? result : defaultService;
+        if (result == null)
+            return defaultService;
+        if (defaultService.server() != null)
+            log.error("{} 非普通服务，不支持客制化，需要修正！", defaultService.id());
+        return new ServiceSign(result);
     }
 
     public static IPlugins getBean(AbstractForm form, Class<IPlugins> class1) {
