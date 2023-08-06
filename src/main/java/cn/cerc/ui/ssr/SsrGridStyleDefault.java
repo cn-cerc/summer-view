@@ -40,12 +40,18 @@ public class SsrGridStyleDefault implements SsrGridStyleImpl {
             var ssr1 = grid.addBlock(headTitle, String.format("""
                     <th style='width: ${_width}em'>
                     ${if templateId}
-                    <a href="javascript:showSsrConfigDialog('${templateId}')">%s</a>
+                        <a href="javascript:showSsrConfigDialog('${templateId}')">
+                            ${if templateConfigImg}
+                                <img src="${templateConfigImg}" style="width: 1rem;">
+                            ${else}
+                                %s
+                            ${endif}
+                        </a>
                     ${else}
                     %s
                     ${endif}
                     </th>
-                    """, title, title));
+                    """, title,title));
             ssr1.toMap("_width", "" + fieldWidth);
             ssr1.option("templateId", "");
             ssr1.id(headTitle);
@@ -98,6 +104,7 @@ public class SsrGridStyleDefault implements SsrGridStyleImpl {
         };
     }
 
+    // TODO 要支持自定义 checkbox 的value
     @Override
     public SupplierBlockImpl getBoolean(String title, String field, int fieldWidth) {
         items.add(title);
@@ -108,11 +115,14 @@ public class SsrGridStyleDefault implements SsrGridStyleImpl {
             ssr.toMap("_width", "" + fieldWidth);
             ssr.id(headTitle);
             ssr.display(1);
-            ssr = grid.addBlock(bodyTitle, String.format("""
-                        <td>
-                            <span><input type='checkbox' value='1' ${if %s}checked ${endif}/></span>
-                        </td>
-                    """, field));
+            ssr = grid.addBlock(bodyTitle,
+                    String.format(
+                            """
+                                <td align='center'>
+                                    <span><input type='checkbox' name='checkBoxName' value='${checkbox_value_}' ${if %s}checked ${endif}/></span>
+                                </td>
+                            """,
+                            field));
             ssr.id(bodyTitle);
             ssr.id(bodyTitle);
             ssr.display(1);
