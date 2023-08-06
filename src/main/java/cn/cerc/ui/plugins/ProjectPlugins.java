@@ -9,11 +9,13 @@ import cn.cerc.db.core.IHandle;
 import cn.cerc.mis.core.Application;
 
 /**
- * 用于项目级客制化需求
+ * 用于项目级客制化需求<br/>
+ * 请改使用PluginsFactory
  * 
  * @author 张弓
  *
  */
+@Deprecated
 public class ProjectPlugins {
     private static final Logger log = LoggerFactory.getLogger(ProjectPlugins.class);
     private static final ClassConfig config = new ClassConfig(ProjectPlugins.class, null);

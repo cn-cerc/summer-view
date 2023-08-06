@@ -1,9 +1,11 @@
 package cn.cerc.ui.plugins;
 
 /**
- * 为系统提供客制化支持
+ * 为系统提供客制化支持<br/>
+ * 请改使用PluginsImpl
  *
  */
+@Deprecated
 public interface IPlugins {
 
     /**
