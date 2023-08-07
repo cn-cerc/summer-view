@@ -283,7 +283,10 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl, IGridSty
             if (option.isPresent()) {
                 if (id.startsWith("body.") || id.startsWith("head."))
                     id = id.substring(5, id.length());
-                if (!ds.locate("column_name_", id))
+                if (ds.locate("column_name_", id)) {
+                    if (ssr.id().startsWith("body."))
+                        ds.edit().setValue("column_name_", id).setValue("option_", option.get());
+                } else
                     ds.append().setValue("column_name_", id).setValue("option_", option.get());
             }
         }
