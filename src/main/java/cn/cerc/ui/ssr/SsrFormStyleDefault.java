@@ -167,16 +167,16 @@ public class SsrFormStyleDefault implements SsrFormStyleImpl {
         @Override
         public SsrBlockImpl request(SsrComponentImpl form) {
             form.addBlock(title,
-                    String.format(
+                    block.templateText(String.format(
                             """
-                                    <li>
+                                        <li>
                                         <div role="switch">
                                             <input autocomplete="off" name="%s" id="%s" type="checkbox" value="1" ${if %s}checked ${endif}/>
                                         </div>
                                         <label for="%s"${if _mark} class='formMark'${endif}><em>%s</em></label>
                                     </li>
                                             """,
-                            field, field, field, field, title));
+                            field, field, field, field, title)));
             return block;
         }
 
