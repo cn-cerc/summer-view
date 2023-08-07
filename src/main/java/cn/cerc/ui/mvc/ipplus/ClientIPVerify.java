@@ -37,6 +37,12 @@ public class ClientIPVerify {
         if (!file.exists())
             return true;
 
+        // 检查地址合法性
+        if (!isIPv4(ip)) {
+            log.warn("{} 非法地址", ip);
+            return false;
+        }
+
         JsonNode record;
         try (AWReader awReader = new AWReader(file)) {
             InetAddress address = InetAddress.getByName(ip);
@@ -79,8 +85,31 @@ public class ClientIPVerify {
         return true;
     }
 
+    /**
+     * 检查IPv4合法性
+     */
+    public static boolean isIPv4(String ip) {
+        // 检查是否有4个地址部分
+        String[] parts = ip.split("\\.");
+        if (parts.length != 4) {
+            return false;
+        }
+
+        // 检查每个部分是否是有效的数字
+        for (String part : parts) {
+            try {
+                int num = Integer.parseInt(part);
+                if (num < 0 || num > 255)
+                    return false;
+            } catch (NumberFormatException e) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public static void main(String[] args) {
-        String ip = "178.173.225.155";
+        String ip = "193.111.250.21";
         try (AWReader awReader = new AWReader(file)) {
             InetAddress address = InetAddress.getByName(ip);
             JsonNode record = awReader.get(address);
