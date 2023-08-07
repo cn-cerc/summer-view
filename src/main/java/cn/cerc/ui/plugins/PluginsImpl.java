@@ -16,7 +16,7 @@ public interface PluginsImpl {
         if (owner instanceof IHandle handle) {
             List<String> supportCorpList = getSupportCorpList();
             if (supportCorpList == null)
-                return false;
+                return true;
             return supportCorpList.contains(handle.getCorpNo());
         } else
             return false;
