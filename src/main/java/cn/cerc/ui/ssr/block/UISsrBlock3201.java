@@ -1,0 +1,49 @@
+package cn.cerc.ui.ssr.block;
+
+import cn.cerc.ui.core.UIComponent;
+import cn.cerc.ui.ssr.SsrBlock;
+import cn.cerc.ui.ssr.SupplierBlockImpl;
+import cn.cerc.ui.ssr.UISsrBoard;
+
+/**
+ * 手机端UISsrChunk列表的内容组件，三个插槽，一行三列，标题和内容纵向展示，默认每列宽度占比为1:1:1，支持ratio方法设置比例
+ * 0000000000000000000000000000000000000
+ * 00    111       111       111      00
+ * 00    22222     22222     22222    00
+ * 0000000000000000000000000000000000000
+ */
+public class UISsrBlock3201 extends UISsrBoard {
+
+    public UISsrBlock3201(UIComponent owner) {
+        super(owner);
+        this.cpu(new SsrBlock("""
+                    <li role='UISsrBlock3201'>
+                        ${callback(slot0)}
+                        ${callback(slot1)}
+                        ${callback(slot2)}
+                    </li>
+                """));
+    }
+
+    @Override
+    public UISsrBoard slot0(SupplierBlockImpl slot) {
+        return super.slot0(slot);
+    }
+
+    @Override
+    public UISsrBoard slot1(SupplierBlockImpl slot) {
+        return super.slot1(slot);
+    }
+
+    @Override
+    public UISsrBoard slot2(SupplierBlockImpl slot) {
+        return super.slot2(slot);
+    }
+
+    public UISsrBlock3201 ratio(int slot0Ratio, int slot1Ratio, int slot2Ratio) {
+        super.slot0().option("_ratio", String.valueOf(slot0Ratio));
+        super.slot1().option("_ratio", String.valueOf(slot1Ratio));
+        super.slot2().option("_ratio", String.valueOf(slot2Ratio));
+        return this;
+    }
+}

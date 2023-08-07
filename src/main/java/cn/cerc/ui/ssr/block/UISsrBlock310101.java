@@ -6,19 +6,20 @@ import cn.cerc.ui.ssr.SupplierBlockImpl;
 import cn.cerc.ui.ssr.UISsrBoard;
 
 /**
- * 手机端UISsrChunk列表组件，头部标题区域
+ * 手机端UISsrChunk列表的标题组件，三个插槽，一行三列，序号、标题和内容横向展示
+ * 0000000000000000000000000000000000000
+ * 00  111    111 2222222        111  00
+ * 0000000000000000000000000000000000000
  */
-public class UISsrBlock101 extends UISsrBoard {
+public class UISsrBlock310101 extends UISsrBoard {
 
-    public UISsrBlock101(UIComponent owner) {
+    public UISsrBlock310101(UIComponent owner) {
         super(owner);
         this.cpu(new SsrBlock("""
-                    <li role='title'>
-                        <div>
-                            <span role="gridIt">${dataset.rec}</span>
-                        </div>
+                    <li role='UISsrBlock310101'>
                         ${callback(slot0)}
                         ${callback(slot1)}
+                        ${callback(slot2)}
                     </li>
                 """));
     }
@@ -31,6 +32,11 @@ public class UISsrBlock101 extends UISsrBoard {
     @Override
     public UISsrBoard slot1(SupplierBlockImpl slot) {
         return super.slot1(slot);
+    }
+
+    @Override
+    public UISsrBoard slot2(SupplierBlockImpl slot) {
+        return super.slot2(slot);
     }
 
 }

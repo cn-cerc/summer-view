@@ -8,7 +8,6 @@ public class SsrBlockStyleDefault {
 
     public class SupplierString implements SupplierBlockImpl {
         private Supplier<String> url;
-        private Supplier<String> value;
         private String title;
         private String field;
 
@@ -20,8 +19,8 @@ public class SsrBlockStyleDefault {
         @Override
         public SsrBlockImpl request(SsrComponentImpl owner) {
             var block = new SsrBlock(String.format("""
-                    <div>
-                        <label for='%s'>%s${if _hasColon}：${endif}</label>
+                    <div style='flex: ${_ratio};'>
+                        <label for='%s'>%s</label>
                         ${if _enabled_%s}
                             <a id='%s' href='${callback(%s)}'>${%s}</a>
                         ${else}
@@ -29,7 +28,7 @@ public class SsrBlockStyleDefault {
                         ${endif}
                     </div>
                     """, field, title, field, field, field, field, field, field));
-            block.option("_hasColon", "");
+            block.option("_ratio", "1");
             if (url != null) {
                 block.option(String.format("_enabled_%s", field), "1");
                 block.onCallback(field, url);
@@ -49,6 +48,64 @@ public class SsrBlockStyleDefault {
         return new SupplierString(title, field);
     }
 
+    public SupplierString getRowString(String title, String field) {
+        return new SupplierString(title + "：", field);
+    }
+
+    public SupplierBlockImpl getIt() {
+        return chunk -> {
+            var block = new SsrBlock("""
+                    <div role='gridIt'>
+                        <span>${dataset.rec}</span>
+                    </div>""");
+            return block;
+        };
+    }
+
+    public SupplierBlockImpl getCheckbox(String checkboxField, String checkboxValueField) {
+        return chunk -> {
+            var block = new SsrBlock(String.format("""
+                    <div role='checkbox'>
+                        <input type="checkbox" name="%s" value="${%s}"/>
+                    </div>""", checkboxField, checkboxValueField));
+            return block;
+        };
+    }
+
+    public SupplierBlockImpl getCheckbox(String checkboxField, Supplier<String> checkboxValue) {
+        return chunk -> {
+            var block = new SsrBlock(String.format("""
+                    <div role='checkbox'>
+                        <input type="checkbox" name="%s" value="${callback(%s)}"/>
+                    </div>""", checkboxField, checkboxField));
+            block.onCallback(checkboxField, checkboxValue);
+            return block;
+        };
+    }
+
+    public SupplierBlockImpl getCheckboxIt(String checkboxField, String checkboxValueField) {
+        return chunk -> {
+            var block = new SsrBlock(String.format("""
+                    <div role='checkboxIt'>
+                        <input type="checkbox" name="%s" value="${%s}"/>
+                        <span>${dataset.rec}</span>
+                    </div>""", checkboxField, checkboxValueField));
+            return block;
+        };
+    }
+
+    public SupplierBlockImpl getCheckboxIt(String checkboxField, Supplier<String> checkboxValue) {
+        return chunk -> {
+            var block = new SsrBlock(String.format("""
+                    <div role='checkboxIt'>
+                        <input type="checkbox" name="%s" value="${callback(%s)}"/>
+                        <span>${dataset.rec}</span>
+                    </div>""", checkboxField, checkboxField));
+            block.onCallback(checkboxField, checkboxValue);
+            return block;
+        };
+    }
+
     public SupplierBlockImpl getOption(String title, String field, Enum<?>[] enums) {
         Map<String, String> map = new LinkedHashMap<String, String>();
         for (Enum<?> item : enums) {
@@ -60,11 +117,12 @@ public class SsrBlockStyleDefault {
     public SupplierBlockImpl getOption(String title, String field, Map<String, String> map) {
         return chunk -> {
             var block = new SsrBlock(String.format("""
-                    <div>
+                    <div style='flex: ${_ratio};'>
                         <label for='%s'>%s</label>
                         <span id='%s'>${map.begin}${if map.key==%s}${map.value}${endif}${map.end}</span>
                     </div>
                     """, field, title, field, field, field, field, field));
+            block.option("_ratio", "1");
             block.setMap(map);
             return block;
         };
