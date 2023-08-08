@@ -272,6 +272,7 @@ public class SsrFormStyleDefault implements SsrFormStyleImpl {
             this.field = field;
             block.option("_dialog", getDialogText(String.format("%s,%s_name", field, field), dialogFunc)).display(1);
             block.id(title).fields(String.format("%s,%s_name", field, field)).display(1);
+            readonly(true);
         }
 
         @Override

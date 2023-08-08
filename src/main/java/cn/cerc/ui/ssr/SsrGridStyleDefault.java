@@ -5,12 +5,22 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
+import cn.cerc.mis.core.Application;
+import cn.cerc.ui.fields.ImageConfigImpl;
+
 public class SsrGridStyleDefault implements SsrGridStyleImpl {
 
     private List<String> items = new ArrayList<>();
+    private ImageConfigImpl imageConfig;
 
     public SupplierBlockImpl getIt() {
         return getIt("序", 2);
+    }
+
+    protected String getImage(String imgSrc) {
+        if (imageConfig == null)
+            imageConfig = Application.getBean(ImageConfigImpl.class);
+        return imageConfig == null ? imgSrc : imageConfig.getCommonFile(imgSrc);
     }
 
     @Override
@@ -41,17 +51,13 @@ public class SsrGridStyleDefault implements SsrGridStyleImpl {
                     <th style='width: ${_width}em'>
                     ${if templateId}
                         <a href="javascript:showSsrConfigDialog('${templateId}')">
-                            ${if templateConfigImg}
-                                <img src="${templateConfigImg}" style="width: 1rem;">
-                            ${else}
-                                %s
-                            ${endif}
+                            <img src="%s" style="width: 1rem;" />
                         </a>
                     ${else}
                     %s
                     ${endif}
                     </th>
-                    """, title,title));
+                    """, getImage("images/icon/templateConfig_hover.png"), title));
             ssr1.toMap("_width", "" + fieldWidth);
             ssr1.option("templateId", "");
             ssr1.id(headTitle);
