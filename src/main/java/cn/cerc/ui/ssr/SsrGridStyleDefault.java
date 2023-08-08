@@ -119,13 +119,13 @@ public class SsrGridStyleDefault implements SsrGridStyleImpl {
                     String.format(
                             """
                                 <td align='center'>
-                                    <span><input type='checkbox' name='checkBoxName' value='${checkbox_value_}' ${if %s}checked ${endif}/></span>
+                                    <span><input type='checkbox' name='checkBoxName' value='${if checkbox_value_}${checkbox_value_}${else}1${endif}' ${if %s}checked ${endif}/></span>
                                 </td>
                             """,
                             field));
             ssr.id(bodyTitle);
             ssr.id(bodyTitle);
-            ssr.display(1);
+            ssr.display(1).strict(false);
             return ssr;
         };
     }

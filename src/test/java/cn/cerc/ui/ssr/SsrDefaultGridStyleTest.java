@@ -36,10 +36,10 @@ public class SsrDefaultGridStyleTest {
         grid.addColumn("序", "部门名称", "状态", "类别", "操作");
         assertEquals(
                 """
-                        <div id='grid' class='scrollArea'><table class='dbgrid'><tr><th style='width: 2em'>序</th><th style='width: 10em'>部门名称</th><th style='width: 4em'>状态</th><th style='width: 10em'>类别</th><th style='width: 4em'>操作</th></tr><tr><td align='center'>1</td><td align='left'>研发部</td><td>
-                        <span><input type='checkbox' value='1' /></span>
-                        </td><td>张三</td><td><a href='FrmView?code=001'>内容</a></td></tr><tr><td align='center'>2</td><td align='left'>生产部</td><td>
-                        <span><input type='checkbox' value='1' checked /></span>
+                        <div id='grid' class='scrollArea'><table class='dbgrid'><tr><th style='width: 2em'>序</th><th style='width: 10em'>部门名称</th><th style='width: 4em'>状态</th><th style='width: 10em'>类别</th><th style='width: 4em'>操作</th></tr><tr><td align='center'>1</td><td align='left'>研发部</td><td align='center'>
+                        <span><input type='checkbox' name='checkBoxName' value='1' /></span>
+                        </td><td>张三</td><td><a href='FrmView?code=001'>内容</a></td></tr><tr><td align='center'>2</td><td align='left'>生产部</td><td align='center'>
+                        <span><input type='checkbox' name='checkBoxName' value='1' checked /></span>
                         </td><td></td><td><a href='FrmView?code=002'>内容</a></td></tr></table></div>""",
                 grid.toString());
     }
