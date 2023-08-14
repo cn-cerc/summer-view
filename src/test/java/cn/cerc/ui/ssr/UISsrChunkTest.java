@@ -371,4 +371,39 @@ public class UISsrChunkTest {
                 <span id='sex_'>女</span>
                 </div></li></ul></div>""", chunk.toString());
     }
+
+    @Test
+    public void test_cpu115() {
+        DataSet ds = new DataSet();
+        ds.append().setValue("name_", "zhangsan").setValue("age_", "15").setValue("adult_", "false");
+        ds.append().setValue("name_", "lisi").setValue("age_", "18").setValue("adult_", "true");
+        ds.append().setValue("name_", "wangwu").setValue("age_", "0");
+
+        UISsrChunk chunk = new UISsrChunk(null);
+        SsrBlockStyleDefault style = chunk.defaultStyle();
+
+        UISsrBlock3101 board = new UISsrBlock3101(chunk);
+        board.slot0(style.getString("姓名", "name_"));
+        board.slot1(style.getString("年龄", "age_"));
+        board.slot2(style.getBoolean("是否成年", "adult_"));
+        board.ratio(2, 1, 1);
+        chunk.dataSet(ds);
+        assertEquals("""
+                <div role='chunkBox'><ul role='chunkBoxItem'><li role='UISsrBlock3101'> <div style='flex: 2;'>
+                <label for='name_'>姓名</label> <span id='name_'>zhangsan</span> </div> <div style='flex: 1;'>
+                <label for='age_'>年龄</label> <span id='age_'>15</span> </div> <div style='flex: 1;'>
+                <label for='adult_'>是否成年</label>
+                <span id='adult_'> 否 </span>
+                </div></li></ul><ul role='chunkBoxItem'><li role='UISsrBlock3101'> <div style='flex: 2;'>
+                <label for='name_'>姓名</label> <span id='name_'>lisi</span> </div> <div style='flex: 1;'>
+                <label for='age_'>年龄</label> <span id='age_'>18</span> </div> <div style='flex: 1;'>
+                <label for='adult_'>是否成年</label>
+                <span id='adult_'> 是 </span>
+                </div></li></ul><ul role='chunkBoxItem'><li role='UISsrBlock3101'> <div style='flex: 2;'>
+                <label for='name_'>姓名</label> <span id='name_'>wangwu</span> </div> <div style='flex: 1;'>
+                <label for='age_'>年龄</label> <span id='age_'>0</span> </div> <div style='flex: 1;'>
+                <label for='adult_'>是否成年</label>
+                <span id='adult_'> 否 </span>
+                </div></li></ul></div>""", chunk.toString());
+    }
 }

@@ -1,6 +1,7 @@
 package cn.cerc.ui.ssr;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
@@ -33,7 +34,7 @@ public class SsrGridStyleDefault implements SsrGridStyleImpl {
             ssr.id(headTitle);
             ssr.display(1);
             ssr.toMap("_width", "" + fieldWidth);
-            ssr = grid.addBlock(bodyTitle, "<td align='center'>${dataset.rec}</td>");
+            ssr = grid.addBlock(bodyTitle, "<td align='center' role='_it_'>${dataset.rec}</td>");
             ssr.id(bodyTitle);
             ssr.display(1);
             return ssr;
@@ -62,8 +63,8 @@ public class SsrGridStyleDefault implements SsrGridStyleImpl {
             ssr1.option("templateId", "");
             ssr1.id(headTitle);
 
-            var ssr2 = grid.addBlock(bodyTitle, "<td><a href='${callback(url)}'>内容</a></td>");
-            ssr2.display(1);
+            var ssr2 = grid.addBlock(bodyTitle,
+                    "<td align='center' role='_opera_'><a href='${callback(url)}'>内容</a></td>");
             ssr2.id(bodyTitle);
             ssr2.display(1);
             return ssr2;
@@ -94,20 +95,28 @@ public class SsrGridStyleDefault implements SsrGridStyleImpl {
             head.id(headTitle);
             head.display(1);
             var body = grid.addBlock(bodyTitle, String.format("""
-                    <td>${if readonly}${map.begin}${if map.key==%s}${map.value}${endif}${map.end}${else}
+                    <td role='%s'>${if readonly}${map.begin}${if map.key==%s}${map.value}${endif}${map.end}${else}
                     <select>
                     ${map.begin}
                     <option value ="${map.key}" ${if map.key==%s}selected${endif}>${map.value}</option>
                     ${map.end}
                     </select>
                     ${endif}</td>
-                    """, field, field));
+                    """, field, field, field));
             body.option("readonly", "true");
             body.id(bodyTitle);
             body.display(1);
             map.forEach((key, value) -> body.toMap(key, value));
             return body;
         };
+    }
+
+    public SupplierBlockImpl getOption(String title, String field, int fieldWidth, Enum<?>[] enums) {
+        Map<String, String> map = new LinkedHashMap<String, String>();
+        for (Enum<?> item : enums) {
+            map.put(String.valueOf(item.ordinal()), item.name());
+        }
+        return getOption(title, field, fieldWidth, map);
     }
 
     // TODO 要支持自定义 checkbox 的value
@@ -124,12 +133,11 @@ public class SsrGridStyleDefault implements SsrGridStyleImpl {
             ssr = grid.addBlock(bodyTitle,
                     String.format(
                             """
-                                <td align='center'>
-                                    <span><input type='checkbox' name='checkBoxName' value='${if checkbox_value_}${checkbox_value_}${else}1${endif}' ${if %s}checked ${endif}/></span>
-                                </td>
-                            """,
-                            field));
-            ssr.id(bodyTitle);
+                                        <td align='center' role='%s'>
+                                            <span><input type='checkbox' name='checkBoxName' value='${if checkbox_value_}${checkbox_value_}${else}1${endif}' ${if %s}checked ${endif}/></span>
+                                        </td>
+                                    """,
+                            field, field));
             ssr.id(bodyTitle);
             ssr.display(1).strict(false);
             return ssr;
@@ -156,8 +164,8 @@ public class SsrGridStyleDefault implements SsrGridStyleImpl {
 
                 String bodyTitle = "body." + title;
                 grid.addBlock(bodyTitle, block.templateText(String.format(
-                        "<td align='left'>${if _enabled_url}<a href='${callback(url)}'>${endif}${dataset.%s}${if _enabled_url}</a>${endif}</td>",
-                        field)));
+                        "<td align='left' role='%s'>${if _enabled_url}<a href='${callback(url)}'>${endif}${dataset.%s}${if _enabled_url}</a>${endif}</td>",
+                        field, field)));
                 block.id(bodyTitle);
                 block.display(1);
                 block.strict(false);
@@ -173,7 +181,7 @@ public class SsrGridStyleDefault implements SsrGridStyleImpl {
         };
     }
 
-    private SupplierBlockImpl getString(String title, String field, int fieldWidth, String align) {
+    public SupplierBlockImpl getString(String title, String field, int fieldWidth, String align) {
         return grid -> {
             String headTitle = "head." + title;
             String bodyTitle = "body." + title;
@@ -181,7 +189,8 @@ public class SsrGridStyleDefault implements SsrGridStyleImpl {
             ssr.toMap("_width", "" + fieldWidth);
             ssr.id(headTitle);
             ssr.display(1);
-            ssr = grid.addBlock(bodyTitle, String.format("<td align='${align}'>${dataset.%s}</td>", field));
+            ssr = grid.addBlock(bodyTitle,
+                    String.format("<td align='${align}' role='%s'>${dataset.%s}</td>", field, field));
             ssr.option("align", align);
             ssr.id(bodyTitle);
             ssr.display(1);

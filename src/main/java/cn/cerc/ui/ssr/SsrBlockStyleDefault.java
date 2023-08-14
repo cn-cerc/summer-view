@@ -52,6 +52,28 @@ public class SsrBlockStyleDefault {
         return new SupplierString(title + "：", field);
     }
 
+    public SupplierBlockImpl getBoolean(String title, String field) {
+        return chunk -> {
+            var block = new SsrBlock(String.format("""
+                    <div style='flex: ${_ratio};'>
+                        <label for='%s'>%s</label>
+                        <span id='%s'>
+                            ${if %s}
+                            是
+                            ${else}
+                            否
+                            ${endif}
+                        </span>
+                    </div>""", field, title, field, field));
+            block.option("_ratio", "1");
+            return block;
+        };
+    }
+
+    public SupplierBlockImpl getRowBoolean(String title, String field) {
+        return getBoolean(title + "：", field);
+    }
+
     public SupplierBlockImpl getIt() {
         return chunk -> {
             var block = new SsrBlock("""
