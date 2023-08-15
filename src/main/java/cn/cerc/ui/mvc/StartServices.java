@@ -96,7 +96,8 @@ public class StartServices extends HttpServlet {
             if (token != null && session.getProperty(token) != null) {
                 int state = (int) session.getProperty(token);
                 if (state == ServiceState.TOKEN_INVALID) {
-                    dataOut.setState(ServiceState.TOKEN_INVALID).setMessage("token is invalid, please login again.");
+                    dataOut.setState(ServiceState.TOKEN_INVALID)
+                            .setMessage(String.format("%s token is invalid, please login again.", token));
                     response.getWriter().write(dataOut.toString());
                     return;
                 }
