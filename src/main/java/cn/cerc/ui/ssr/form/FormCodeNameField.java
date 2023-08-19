@@ -13,8 +13,8 @@ import cn.cerc.ui.SummerUI;
 import cn.cerc.ui.core.RequestReader;
 import cn.cerc.ui.fields.AbstractField;
 import cn.cerc.ui.fields.ImageConfigImpl;
-import cn.cerc.ui.ssr.SsrBlock;
 import cn.cerc.ui.ssr.ISsrBlock;
+import cn.cerc.ui.ssr.SsrBlock;
 import cn.cerc.ui.ssr.core.SsrControl;
 import cn.cerc.ui.ssr.editor.ISsrBoard;
 import cn.cerc.ui.ssr.editor.SsrMessage;
@@ -36,6 +36,8 @@ public class FormCodeNameField extends SsrControl implements ISupportForm {
     String dialog = "";
     @Column
     boolean readonly = true;
+    @Column
+    private String placeholder;
 
     public FormCodeNameField() {
         super();
@@ -160,6 +162,11 @@ public class FormCodeNameField extends SsrControl implements ISupportForm {
     @Override
     public String getIdPrefix() {
         return "field";
+    }
+
+    public FormCodeNameField placeholder(String placeholder) {
+        this.placeholder = placeholder;
+        return this;
     }
 
 }

@@ -197,7 +197,7 @@ public abstract class VisualPage implements ISupplierClassList {
                         node.put("title", title);
 
                         boolean isContainer = false;
-                        boolean isVisual = true;
+                        boolean isVisual = false;
                         for (var field : item.getDeclaredFields()) {
                             if (Modifier.isStatic(field.getModifiers())) {
                                 if ("container".equals(field.getName()))
