@@ -46,39 +46,15 @@ public class SsrBlock implements ISsrOption {
         this.text(SsrUtils.getTempateFileText(class1, id));
     }
 
-    public SsrBlock toList(String... values) {
-        if (list == null)
-            list = new ArrayList<>();
-        for (var value : values)
-            list.add(value);
-        return this;
-    }
-
-    public Map<String, String> map() {
-        return map;
-    }
-
+    /**
+     * 请改使用 toMap
+     * 
+     * @param map
+     * @return
+     */
     @Deprecated
     public SsrBlock setMap(Map<String, String> map) {
         this.map = map;
-        return this;
-    }
-
-    public SsrBlock toMap(String Key, String value) {
-        if (map == null)
-            map = new LinkedHashMap<>();
-        map.put(Key, value);
-        return this;
-    }
-
-    @Override
-    public SsrBlock option(String key, String value) {
-        if (options == null)
-            options = new HashMap<>();
-        if (value == null)
-            options.remove(key);
-        else
-            options.put(key, value);
         return this;
     }
 
@@ -90,6 +66,17 @@ public class SsrBlock implements ISsrOption {
         if (result.isEmpty() && template != null)
             result = template.option(key);
         return result;
+    }
+
+    @Override
+    public SsrBlock option(String key, String value) {
+        if (options == null)
+            options = new HashMap<>();
+        if (value == null)
+            options.remove(key);
+        else
+            options.put(key, value);
+        return this;
     }
 
     public DataRow dataRow() {
@@ -106,11 +93,6 @@ public class SsrBlock implements ISsrOption {
         return this;
     }
 
-    public SsrBlock dataSet(DataSet dataSet) {
-        this.dataSet = dataSet;
-        return this;
-    }
-
     public DataSet dataSet() {
         if (dataSet != null)
             return dataSet;
@@ -118,6 +100,11 @@ public class SsrBlock implements ISsrOption {
             return template.dataSet();
         else
             return null;
+    }
+
+    public SsrBlock dataSet(DataSet dataSet) {
+        this.dataSet = dataSet;
+        return this;
     }
 
     /**
@@ -301,8 +288,39 @@ public class SsrBlock implements ISsrOption {
         return this;
     }
 
+    public List<String> list() {
+        return this.list;
+    }
+
+    public SsrBlock toList(String... values) {
+        if (list == null)
+            list = new ArrayList<>();
+        for (var value : values)
+            list.add(value);
+        return this;
+    }
+
     public SsrBlock toList(List<String> list) {
         toList(list.toArray(new String[list.size()]));
+        return this;
+    }
+
+    public SsrBlock toList(Enum<?>[] enums) {
+        if (list == null)
+            list = new ArrayList<>();
+        for (var item : enums)
+            list.add(item.name());
+        return this;
+    }
+
+    public Map<String, String> map() {
+        return map;
+    }
+
+    public SsrBlock toMap(String Key, String value) {
+        if (map == null)
+            map = new LinkedHashMap<>();
+        map.put(Key, value);
         return this;
     }
 
@@ -312,6 +330,13 @@ public class SsrBlock implements ISsrOption {
         return this;
     }
 
+    /**
+     * 请改使用 toList
+     * 
+     * @param enums
+     * @return
+     */
+    @Deprecated
     public SsrBlock toMap(Enum<?>[] enums) {
         for (var item : enums)
             toMap("" + item.ordinal(), item.name());
