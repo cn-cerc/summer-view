@@ -6,8 +6,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import cn.cerc.ui.ssr.SsrBlock;
-import cn.cerc.ui.ssr.ISsrBlock;
+import cn.cerc.ui.ssr.core.SsrBlock;
 import cn.cerc.ui.ssr.core.SsrControl;
 import cn.cerc.ui.ssr.editor.ISsrBoard;
 
@@ -34,12 +33,12 @@ public class GridItField extends SsrControl implements ISupportGrid {
     }
 
     @Override
-    public ISsrBlock block() {
+    public SsrBlock block() {
         return body;
     }
 
     @Override
-    public ISsrBlock request(ISsrBoard grid) {
+    public SsrBlock request(ISsrBoard grid) {
         String headTitle = "head." + this.title;
         grid.addBlock(headTitle, head.templateText("<th style='width: ${_width}em'>序</th>"));
         head.id(headTitle);

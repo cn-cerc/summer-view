@@ -7,6 +7,8 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import cn.cerc.ui.core.UIComponent;
+import cn.cerc.ui.ssr.core.SsrTemplate;
+import cn.cerc.ui.ssr.other.UISsrBlock;
 
 public class SsrTemplateTest {
 

@@ -9,8 +9,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import cn.cerc.mis.core.HtmlWriter;
-import cn.cerc.ui.ssr.SsrBlock;
 import cn.cerc.ui.ssr.core.AlignEnum;
+import cn.cerc.ui.ssr.core.SsrBlock;
 import cn.cerc.ui.ssr.core.SsrControl;
 import cn.cerc.ui.ssr.editor.SsrMessage;
 import cn.cerc.ui.ssr.form.SsrDataRowSourceImpl;

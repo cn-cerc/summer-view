@@ -7,6 +7,7 @@ import java.util.LinkedHashMap;
 import org.junit.Test;
 
 import cn.cerc.db.core.DataSet;
+import cn.cerc.ui.ssr.grid.UISsrGrid;
 
 public class SsrDefaultGridStyleTest {
 

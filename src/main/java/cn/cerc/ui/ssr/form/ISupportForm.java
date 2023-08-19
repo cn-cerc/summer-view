@@ -1,10 +1,10 @@
 package cn.cerc.ui.ssr.form;
 
-import cn.cerc.ui.ssr.ISsrBlock;
-import cn.cerc.ui.ssr.ISupplierBlock;
+import cn.cerc.ui.ssr.core.ISupplierBlock;
+import cn.cerc.ui.ssr.core.SsrBlock;
 
 public interface ISupportForm extends ISupplierBlock {
-    ISsrBlock block();
+    SsrBlock block();
 
     public String fields();
 

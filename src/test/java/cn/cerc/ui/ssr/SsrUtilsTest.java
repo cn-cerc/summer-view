@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
+import cn.cerc.ui.ssr.core.SsrUtils;
+
 public class SsrUtilsTest {
 
     @Test

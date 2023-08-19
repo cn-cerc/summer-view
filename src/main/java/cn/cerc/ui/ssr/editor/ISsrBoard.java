@@ -5,11 +5,10 @@ import java.util.Optional;
 
 import cn.cerc.db.core.Utils;
 import cn.cerc.ui.core.UIComponent;
-import cn.cerc.ui.ssr.SsrBlock;
-import cn.cerc.ui.ssr.ISsrBlock;
-import cn.cerc.ui.ssr.ISsrOption;
-import cn.cerc.ui.ssr.SsrTemplate;
-import cn.cerc.ui.ssr.ISupplierBlock;
+import cn.cerc.ui.ssr.core.ISsrOption;
+import cn.cerc.ui.ssr.core.ISupplierBlock;
+import cn.cerc.ui.ssr.core.SsrBlock;
+import cn.cerc.ui.ssr.core.SsrTemplate;
 
 public interface ISsrBoard extends ISsrOption {
 
@@ -27,21 +26,21 @@ public interface ISsrBoard extends ISsrOption {
         return this;
     }
 
-    default ISsrBlock addBlock(String id, String templateText) {
+    default SsrBlock addBlock(String id, String templateText) {
         var define = template();
         var ssr = new SsrBlock(templateText).setTemplate(define);
         define.addItem(id, ssr);
         return ssr;
     }
 
-    default ISsrBoard addBlock(String id, ISsrBlock block) {
+    default ISsrBoard addBlock(String id, SsrBlock block) {
         var define = template();
         block.setTemplate(define);
         define.addItem(id, block);
         return this;
     }
 
-    default ISsrBlock addBlock(ISupplierBlock supplier) {
+    default SsrBlock addBlock(ISupplierBlock supplier) {
         var block = supplier.request(this);
         if (supplier instanceof UIComponent item) {
             if (this instanceof UIComponent self)
@@ -50,7 +49,7 @@ public interface ISsrBoard extends ISsrOption {
         return block;
     }
 
-    default Optional<ISsrBlock> getBlock(String blockId) {
+    default Optional<SsrBlock> getBlock(String blockId) {
         return template().get(blockId);
     }
 

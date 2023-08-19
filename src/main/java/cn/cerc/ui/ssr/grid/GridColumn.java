@@ -8,9 +8,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import cn.cerc.ui.ssr.SsrBlock;
-import cn.cerc.ui.ssr.ISsrBlock;
-import cn.cerc.ui.ssr.UISsrGrid;
+import cn.cerc.ui.ssr.core.SsrBlock;
 import cn.cerc.ui.ssr.core.SsrContainer;
 import cn.cerc.ui.ssr.editor.ISsrBoard;
 
@@ -30,7 +28,7 @@ public class GridColumn extends SsrContainer<ISupportGridColumn> implements ISup
     }
 
     @Override
-    public ISsrBlock request(ISsrBoard grid) {
+    public SsrBlock request(ISsrBoard grid) {
         String headTitle = "head." + this.title;
         grid.addBlock(headTitle, head.templateText("<th style='width: ${_width}em'>${_title}</th>"));
         head.toMap("_width", "" + this.fieldWidth);
@@ -66,7 +64,7 @@ public class GridColumn extends SsrContainer<ISupportGridColumn> implements ISup
     }
 
     @Override
-    public ISsrBlock block() {
+    public SsrBlock block() {
         return body;
     }
 

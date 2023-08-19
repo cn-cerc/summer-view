@@ -9,9 +9,8 @@ import org.springframework.stereotype.Component;
 
 import cn.cerc.mis.core.Application;
 import cn.cerc.ui.fields.ImageConfigImpl;
-import cn.cerc.ui.ssr.ISsrBlock;
-import cn.cerc.ui.ssr.ISupplierBlock;
-import cn.cerc.ui.ssr.UISsrForm;
+import cn.cerc.ui.ssr.core.ISupplierBlock;
+import cn.cerc.ui.ssr.core.SsrBlock;
 import cn.cerc.ui.ssr.core.SsrControl;
 import cn.cerc.ui.ssr.editor.ISsrBoard;
 
@@ -20,7 +19,7 @@ import cn.cerc.ui.ssr.editor.ISsrBoard;
 @Description("提交按钮")
 public class FormSubmitButton extends SsrControl implements ISupplierBlock {
     private ImageConfigImpl imageConfig;
-    private ISsrBlock block;
+    private SsrBlock block;
     @Column
     String title = "查询";
     @Column
@@ -29,7 +28,7 @@ public class FormSubmitButton extends SsrControl implements ISupplierBlock {
     boolean searchButton = true;
 
     @Override
-    public ISsrBlock request(ISsrBoard owner) {
+    public SsrBlock request(ISsrBoard owner) {
         block = owner.addBlock(UISsrForm.FormStart, String.format("""
                     <div>
                         ${if _searchButton}

@@ -21,7 +21,7 @@ import cn.cerc.ui.grid.lines.AbstractGridLine;
 import cn.cerc.ui.grid.lines.ChildGridLine;
 import cn.cerc.ui.grid.lines.ExpenderGridLine;
 import cn.cerc.ui.grid.lines.MasterGridLine;
-import cn.cerc.ui.ssr.SsrBlock;
+import cn.cerc.ui.ssr.core.SsrBlock;
 import cn.cerc.ui.style.IGridStyle;
 import cn.cerc.ui.vcl.UIForm;
 

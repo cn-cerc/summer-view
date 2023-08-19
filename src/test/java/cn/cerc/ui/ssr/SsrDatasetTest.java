@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import cn.cerc.db.core.DataRow;
 import cn.cerc.db.core.DataSet;
+import cn.cerc.ui.ssr.core.SsrBlock;
 
 public class SsrDatasetTest {
 

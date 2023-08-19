@@ -13,8 +13,7 @@ import cn.cerc.ui.SummerUI;
 import cn.cerc.ui.core.RequestReader;
 import cn.cerc.ui.fields.DateField;
 import cn.cerc.ui.fields.ImageConfigImpl;
-import cn.cerc.ui.ssr.SsrBlock;
-import cn.cerc.ui.ssr.ISsrBlock;
+import cn.cerc.ui.ssr.core.SsrBlock;
 import cn.cerc.ui.ssr.core.SsrControl;
 import cn.cerc.ui.ssr.editor.ISsrBoard;
 import cn.cerc.ui.ssr.editor.SsrMessage;
@@ -66,12 +65,12 @@ public class FormDateRangeField extends SsrControl implements ISupportForm {
     }
 
     @Override
-    public ISsrBlock block() {
+    public SsrBlock block() {
         return block;
     }
 
     @Override
-    public ISsrBlock request(ISsrBoard form) {
+    public SsrBlock request(ISsrBoard form) {
         String title = this.title;
         String beginDate = this.beginField;
         String endDate = this.endField;

@@ -1,9 +1,8 @@
 package cn.cerc.ui.ssr.block;
 
 import cn.cerc.ui.core.UIComponent;
-import cn.cerc.ui.ssr.SsrBlock;
-import cn.cerc.ui.ssr.ISupplierBlock;
-import cn.cerc.ui.ssr.UISsrBoard;
+import cn.cerc.ui.ssr.core.ISupplierBlock;
+import cn.cerc.ui.ssr.core.SsrBlock;
 
 /**
  * 手机端UISsrChunk列表的内容组件，两个插槽，一行两列，标题和内容纵向展示，默认每列宽度占比为1:1，支持ratio方法设置比例

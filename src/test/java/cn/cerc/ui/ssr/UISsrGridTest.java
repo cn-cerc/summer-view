@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 import cn.cerc.db.core.DataSet;
+import cn.cerc.ui.ssr.grid.UISsrGrid;
 
 public class UISsrGridTest {
 

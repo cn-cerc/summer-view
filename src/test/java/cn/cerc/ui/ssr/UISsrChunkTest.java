@@ -7,6 +7,7 @@ import java.util.Map;
 import org.junit.Test;
 
 import cn.cerc.db.core.DataSet;
+import cn.cerc.ui.ssr.block.SsrBlockStyleDefault;
 import cn.cerc.ui.ssr.block.UISsrBlock1101;
 import cn.cerc.ui.ssr.block.UISsrBlock1201;
 import cn.cerc.ui.ssr.block.UISsrBlock2101;
@@ -14,6 +15,7 @@ import cn.cerc.ui.ssr.block.UISsrBlock2201;
 import cn.cerc.ui.ssr.block.UISsrBlock3101;
 import cn.cerc.ui.ssr.block.UISsrBlock310101;
 import cn.cerc.ui.ssr.block.UISsrBlock3201;
+import cn.cerc.ui.ssr.block.UISsrChunk;
 
 public class UISsrChunkTest {
 

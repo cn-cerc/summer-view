@@ -6,8 +6,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import cn.cerc.ui.ssr.SsrBlock;
-import cn.cerc.ui.ssr.ISsrBlock;
+import cn.cerc.ui.ssr.core.SsrBlock;
 import cn.cerc.ui.ssr.core.SsrControl;
 import cn.cerc.ui.ssr.editor.ISsrBoard;
 
@@ -35,12 +34,12 @@ public class GridCheckBoxField extends SsrControl implements ISupportGrid {
     }
 
     @Override
-    public ISsrBlock block() {
+    public SsrBlock block() {
         return block;
     }
 
     @Override
-    public ISsrBlock request(ISsrBoard grid) {
+    public SsrBlock request(ISsrBoard grid) {
         var title = this.title;
         var field = this.field;
         var fieldWidth = this.fieldWidth;

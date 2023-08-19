@@ -7,6 +7,8 @@ import org.junit.Test;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import cn.cerc.db.core.DataRow;
+import cn.cerc.ui.ssr.core.PropertiesWriter;
+import cn.cerc.ui.ssr.form.UISsrForm;
 
 public class UISsrFormTest {
 

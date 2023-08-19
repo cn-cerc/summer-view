@@ -12,14 +12,13 @@ import org.slf4j.LoggerFactory;
 import cn.cerc.db.core.Utils;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.mvc.AbstractPage;
-import cn.cerc.ui.ssr.ISsrMessage;
-import cn.cerc.ui.ssr.PropertiesReader;
-import cn.cerc.ui.ssr.PropertiesWriter;
+import cn.cerc.ui.ssr.core.ISsrMessage;
+import cn.cerc.ui.ssr.core.PropertiesReader;
+import cn.cerc.ui.ssr.core.PropertiesWriter;
 import cn.cerc.ui.ssr.core.SsrComponent;
 import cn.cerc.ui.ssr.core.SsrContainer;
 import cn.cerc.ui.ssr.editor.EditorGrid;
 import cn.cerc.ui.ssr.editor.SsrMessage;
-import cn.cerc.ui.ssr.other.IHeader;
 
 public class VisualContainer extends SsrContainer<ISupportVisualContainer> {
     private static final Logger log = LoggerFactory.getLogger(VisualContainer.class);

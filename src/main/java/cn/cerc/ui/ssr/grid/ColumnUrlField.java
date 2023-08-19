@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import cn.cerc.db.core.DataSet;
 import cn.cerc.db.core.Utils;
 import cn.cerc.mis.core.HtmlWriter;
-import cn.cerc.ui.ssr.SsrBlock;
+import cn.cerc.ui.ssr.core.SsrBlock;
 import cn.cerc.ui.ssr.core.SsrControl;
 
 @Component

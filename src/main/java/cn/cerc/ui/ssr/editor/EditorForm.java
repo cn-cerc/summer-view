@@ -12,10 +12,10 @@ import org.slf4j.LoggerFactory;
 import cn.cerc.db.core.DataRow;
 import cn.cerc.db.core.Utils;
 import cn.cerc.ui.core.UIComponent;
-import cn.cerc.ui.ssr.SsrUtils;
-import cn.cerc.ui.ssr.UISsrForm;
 import cn.cerc.ui.ssr.core.SsrComponent;
+import cn.cerc.ui.ssr.core.SsrUtils;
 import cn.cerc.ui.ssr.form.FormMapField;
+import cn.cerc.ui.ssr.form.UISsrForm;
 import cn.cerc.ui.ssr.source.Binder;
 
 public class EditorForm extends UIComponent {

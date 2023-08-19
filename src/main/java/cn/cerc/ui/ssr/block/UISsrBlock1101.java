@@ -1,9 +1,8 @@
 package cn.cerc.ui.ssr.block;
 
 import cn.cerc.ui.core.UIComponent;
-import cn.cerc.ui.ssr.SsrBlock;
-import cn.cerc.ui.ssr.ISupplierBlock;
-import cn.cerc.ui.ssr.UISsrBoard;
+import cn.cerc.ui.ssr.core.ISupplierBlock;
+import cn.cerc.ui.ssr.core.SsrBlock;
 
 /**
  * 手机端UISsrChunk列表的内容组件，一个插槽，一行一列，标题和内容横向展示

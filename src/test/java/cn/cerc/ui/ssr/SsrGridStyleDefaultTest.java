@@ -3,6 +3,7 @@ package cn.cerc.ui.ssr;
 import static org.junit.Assert.assertEquals;
 
 import cn.cerc.db.core.DataSet;
+import cn.cerc.ui.ssr.grid.UISsrGrid;
 
 public class SsrGridStyleDefaultTest {
 

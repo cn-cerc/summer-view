@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
+import cn.cerc.ui.ssr.core.SsrBlock;
+
 public class SsrCallbackTest {
 
     @Test
@@ -29,7 +31,7 @@ public class SsrCallbackTest {
                 """);
 
         // 子级
-        ISsrBlock child = new SsrBlock("<a href='${url}'>${title}</a>").toMap("url", "http://www.baidu.com")
+        SsrBlock child = new SsrBlock("<a href='${url}'>${title}</a>").toMap("url", "http://www.baidu.com")
                 .toMap("title", "百度");
 
         master.toMap("createMode", "" + true);

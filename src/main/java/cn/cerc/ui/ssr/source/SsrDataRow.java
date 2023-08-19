@@ -9,14 +9,14 @@ import cn.cerc.db.core.DataRow;
 import cn.cerc.db.core.Utils;
 import cn.cerc.ui.core.RequestReader;
 import cn.cerc.ui.core.UIComponent;
-import cn.cerc.ui.ssr.PropertiesReader;
-import cn.cerc.ui.ssr.PropertiesWriter;
-import cn.cerc.ui.ssr.UISsrForm;
+import cn.cerc.ui.ssr.core.PropertiesReader;
+import cn.cerc.ui.ssr.core.PropertiesWriter;
 import cn.cerc.ui.ssr.core.SsrComponent;
 import cn.cerc.ui.ssr.editor.EditorForm;
 import cn.cerc.ui.ssr.editor.SsrMessage;
 import cn.cerc.ui.ssr.form.ISupportForm;
 import cn.cerc.ui.ssr.form.SsrDataRowSourceImpl;
+import cn.cerc.ui.ssr.form.UISsrForm;
 import cn.cerc.ui.ssr.page.ISupportVisualContainer;
 
 @Component

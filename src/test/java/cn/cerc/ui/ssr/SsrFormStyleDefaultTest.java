@@ -8,6 +8,7 @@ import java.util.Map;
 import org.junit.Test;
 
 import cn.cerc.db.core.DataRow;
+import cn.cerc.ui.ssr.form.UISsrForm;
 
 public class SsrFormStyleDefaultTest {
 

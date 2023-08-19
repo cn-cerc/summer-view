@@ -20,9 +20,9 @@ import com.fasterxml.jackson.databind.node.BooleanNode;
 import com.fasterxml.jackson.databind.node.TextNode;
 
 import cn.cerc.db.core.Utils;
-import cn.cerc.ui.ssr.PropertiesReader;
-import cn.cerc.ui.ssr.SsrUtils;
+import cn.cerc.ui.ssr.core.PropertiesReader;
 import cn.cerc.ui.ssr.core.SsrComponent;
+import cn.cerc.ui.ssr.core.SsrUtils;
 import cn.cerc.ui.ssr.page.VisualContainer;
 import cn.cerc.ui.ssr.source.Binder;
 

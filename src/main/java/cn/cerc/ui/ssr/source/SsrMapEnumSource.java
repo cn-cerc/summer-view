@@ -13,10 +13,10 @@ import org.springframework.stereotype.Component;
 
 import cn.cerc.db.core.Utils;
 import cn.cerc.ui.core.UIComponent;
-import cn.cerc.ui.ssr.UISsrForm;
 import cn.cerc.ui.ssr.core.SsrComponent;
 import cn.cerc.ui.ssr.editor.EditorForm;
 import cn.cerc.ui.ssr.editor.SsrMessage;
+import cn.cerc.ui.ssr.form.UISsrForm;
 import cn.cerc.ui.ssr.page.ISupportVisualContainer;
 
 @Component

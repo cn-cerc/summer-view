@@ -6,8 +6,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import cn.cerc.mis.core.Application;
-import cn.cerc.ui.ssr.UISsrForm;
-import cn.cerc.ui.ssr.UISsrGrid;
+import cn.cerc.ui.ssr.form.UISsrForm;
+import cn.cerc.ui.ssr.grid.UISsrGrid;
 import cn.cerc.ui.ssr.source.SsrDataService;
 
 //@Configuration

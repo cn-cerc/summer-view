@@ -8,7 +8,6 @@ import javax.persistence.Column;
 import org.springframework.context.annotation.Description;
 
 import cn.cerc.ui.core.UIComponent;
-import cn.cerc.ui.ssr.SsrUtils;
 
 @Description("容器控件")
 public abstract class SsrContainer<T> extends SsrControl implements ISupportChildren {
