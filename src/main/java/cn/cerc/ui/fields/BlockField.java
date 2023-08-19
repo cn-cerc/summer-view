@@ -1,21 +1,21 @@
 package cn.cerc.ui.fields;
 
 import cn.cerc.ui.core.UIComponent;
-import cn.cerc.ui.ssr.SsrBlockImpl;
+import cn.cerc.ui.ssr.ISsrBlock;
 
 public class BlockField extends AbstractField {
-    private SsrBlockImpl block;
+    private ISsrBlock block;
 
     public BlockField(UIComponent owner, String name, String field) {
         super(owner, name, field);
     }
 
-    public BlockField setBlock(SsrBlockImpl block) {
+    public BlockField setBlock(ISsrBlock block) {
         this.block = block;
         return this;
     }
 
-    public SsrBlockImpl getBlock() {
+    public ISsrBlock getBlock() {
         return block;
     }
 

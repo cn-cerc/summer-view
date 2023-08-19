@@ -7,12 +7,13 @@ import java.util.Objects;
 import cn.cerc.db.core.DataRow;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
+import cn.cerc.ui.ssr.editor.ISsrBoard;
 
-public class UISsrBoard extends UIComponent implements SsrComponentImpl {
+public class UISsrBoard extends UIComponent implements ISsrBoard {
 //    private static final Logger log = LoggerFactory.getLogger(UISsrBoard.class);
     private static final int Max_slot = 8;
-    private SsrBlockImpl cpu;
-    private List<SsrBlockImpl> items = new ArrayList<>();
+    private ISsrBlock cpu;
+    private List<ISsrBlock> items = new ArrayList<>();
     private SsrTemplate template = new SsrTemplate("");
 
     public UISsrBoard(UIComponent owner) {
@@ -35,7 +36,7 @@ public class UISsrBoard extends UIComponent implements SsrComponentImpl {
     public void output(HtmlWriter html) {
         Objects.requireNonNull(cpu);
 
-        for (SsrBlockImpl slot : items) {
+        for (ISsrBlock slot : items) {
             if (slot instanceof SsrBlock soltBlock)
                 soltBlock.setTemplate(template);
             cpu.onCallback(slot.id(), () -> slot.getHtml());
@@ -61,7 +62,7 @@ public class UISsrBoard extends UIComponent implements SsrComponentImpl {
         throw new RuntimeException("此对象不支持此功能");
     }
 
-    public UISsrBoard cpu(SsrBlockImpl cpu) {
+    public UISsrBoard cpu(ISsrBlock cpu) {
         Objects.requireNonNull(cpu);
         this.cpu = cpu;
         for (int i = 0; i < Max_slot; i++)
@@ -69,7 +70,7 @@ public class UISsrBoard extends UIComponent implements SsrComponentImpl {
         return this;
     }
 
-    private UISsrBoard updateSlot(SsrBlockImpl slot, int index) {
+    private UISsrBoard updateSlot(ISsrBlock slot, int index) {
         items.set(index, slot);
         if (slot instanceof SsrBlock block)
             block.setTemplate(this.template);
@@ -77,67 +78,67 @@ public class UISsrBoard extends UIComponent implements SsrComponentImpl {
         return this;
     }
 
-    protected UISsrBoard slot0(SupplierBlockImpl slot) {
+    protected UISsrBoard slot0(ISupplierBlock slot) {
         return updateSlot(slot.request(this), 0);
     }
 
-    protected UISsrBoard slot1(SupplierBlockImpl slot) {
+    protected UISsrBoard slot1(ISupplierBlock slot) {
         return updateSlot(slot.request(this), 1);
     }
 
-    protected UISsrBoard slot2(SupplierBlockImpl slot) {
+    protected UISsrBoard slot2(ISupplierBlock slot) {
         return updateSlot(slot.request(this), 2);
     }
 
-    protected UISsrBoard slot3(SupplierBlockImpl slot) {
+    protected UISsrBoard slot3(ISupplierBlock slot) {
         return updateSlot(slot.request(this), 3);
     }
 
-    protected UISsrBoard slot4(SupplierBlockImpl slot) {
+    protected UISsrBoard slot4(ISupplierBlock slot) {
         return updateSlot(slot.request(this), 4);
     }
 
-    protected UISsrBoard slot5(SupplierBlockImpl slot) {
+    protected UISsrBoard slot5(ISupplierBlock slot) {
         return updateSlot(slot.request(this), 5);
     }
 
-    protected UISsrBoard slot6(SupplierBlockImpl slot) {
+    protected UISsrBoard slot6(ISupplierBlock slot) {
         return updateSlot(slot.request(this), 6);
     }
 
-    protected UISsrBoard slot7(SupplierBlockImpl slot) {
+    protected UISsrBoard slot7(ISupplierBlock slot) {
         return updateSlot(slot.request(this), 7);
     }
 
-    protected SsrBlockImpl slot0() {
+    protected ISsrBlock slot0() {
         return items.get(0);
     }
 
-    protected SsrBlockImpl slot1() {
+    protected ISsrBlock slot1() {
         return items.get(1);
     }
 
-    protected SsrBlockImpl slot2() {
+    protected ISsrBlock slot2() {
         return items.get(2);
     }
 
-    protected SsrBlockImpl slot3() {
+    protected ISsrBlock slot3() {
         return items.get(3);
     }
 
-    protected SsrBlockImpl slot4() {
+    protected ISsrBlock slot4() {
         return items.get(4);
     }
 
-    protected SsrBlockImpl slot5() {
+    protected ISsrBlock slot5() {
         return items.get(5);
     }
 
-    protected SsrBlockImpl slot6() {
+    protected ISsrBlock slot6() {
         return items.get(6);
     }
 
-    protected SsrBlockImpl slot7() {
+    protected ISsrBlock slot7() {
         return items.get(7);
     }
 

@@ -17,6 +17,6 @@ public interface SsrNodeImpl {
      * 
      * @return 取得经过转换后的字符串
      */
-    String getHtml(SsrBlockImpl block);
+    String getHtml(ISsrBlock block);
 
 }

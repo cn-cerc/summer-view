@@ -4,17 +4,21 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Supplier;
 
 import cn.cerc.mis.core.Application;
 import cn.cerc.ui.fields.ImageConfigImpl;
+import cn.cerc.ui.ssr.grid.GridBooleanField;
+import cn.cerc.ui.ssr.grid.GridCheckBoxField;
+import cn.cerc.ui.ssr.grid.GridItField;
+import cn.cerc.ui.ssr.grid.GridMapField;
+import cn.cerc.ui.ssr.grid.GridOperaField;
+import cn.cerc.ui.ssr.grid.GridStringField;
 
 public class SsrGridStyleDefault implements SsrGridStyleImpl {
-
     private List<String> items = new ArrayList<>();
     private ImageConfigImpl imageConfig;
 
-    public SupplierBlockImpl getIt() {
+    public ISupplierBlock getIt() {
         return getIt("序", 2);
     }
 
@@ -25,177 +29,77 @@ public class SsrGridStyleDefault implements SsrGridStyleImpl {
     }
 
     @Override
-    public SupplierBlockImpl getIt(String title, int fieldWidth) {
+    public GridItField getIt(String title, int fieldWidth) {
         items.add(title);
-        return grid -> {
-            String headTitle = "head." + title;
-            String bodyTitle = "body." + title;
-            var ssr = grid.addBlock(headTitle, "<th style='width: ${_width}em'>序</th>");
-            ssr.id(headTitle);
-            ssr.display(1);
-            ssr.toMap("_width", "" + fieldWidth);
-            ssr = grid.addBlock(bodyTitle, "<td align='center' role='_it_'>${dataset.rec}</td>");
-            ssr.id(bodyTitle);
-            ssr.display(1);
-            return ssr;
-        };
+        return new GridItField(title, fieldWidth);
     }
 
     @Override
-    public SupplierBlockImpl getOpera(int fieldWidth) {
+    public GridOperaField getOpera(int fieldWidth) {
         String title = "操作";
         items.add(title);
-        return grid -> {
-            String headTitle = "head." + title;
-            String bodyTitle = "body." + title;
-            var ssr1 = grid.addBlock(headTitle, String.format("""
-                    <th style='width: ${_width}em'>
-                    ${if templateId}
-                        <a href="javascript:showSsrConfigDialog('${templateId}')">
-                            <img src="%s" style="width: 1rem;" />
-                        </a>
-                    ${else}
-                    %s
-                    ${endif}
-                    </th>
-                    """, getImage("images/icon/templateConfig_hover.png"), title));
-            ssr1.toMap("_width", "" + fieldWidth);
-            ssr1.option("templateId", "");
-            ssr1.id(headTitle);
-
-            var ssr2 = grid.addBlock(bodyTitle,
-                    "<td align='center' role='_opera_'><a href='${callback(url)}'>内容</a></td>");
-            ssr2.id(bodyTitle);
-            ssr2.display(1);
-            return ssr2;
-        };
+        return new GridOperaField(fieldWidth);
     }
 
     @Override
-    public SupplierBlockImpl getDate(String title, String field) {
+    public GridStringField getDate(String title, String field) {
         return getString(title, field, 5, "center");
     }
 
-    public SupplierBlockImpl getDatetime(String title, String field) {
+    public GridStringField getDatetime(String title, String field) {
         return getString(title, field, 10, "center");
     }
 
-    public SupplierBlockImpl getDouble(String title, String field) {
+    public GridStringField getDouble(String title, String field) {
         return getString(title, field, 4, "right");
     }
 
     @Override
-    public SupplierBlockImpl getOption(String title, String field, int fieldWidth, Map<String, String> map) {
+    public GridMapField getMap(String title, String field, int fieldWidth, Map<String, String> map) {
         items.add(title);
-        return grid -> {
-            String headTitle = "head." + title;
-            String bodyTitle = "body." + title;
-            var head = grid.addBlock(headTitle, String.format("<th style='width: ${_width}em'>%s</th>", title));
-            head.toMap("_width", "" + fieldWidth);
-            head.id(headTitle);
-            head.display(1);
-            var body = grid.addBlock(bodyTitle, String.format("""
-                    <td role='%s'>${if readonly}${map.begin}${if map.key==%s}${map.value}${endif}${map.end}${else}
-                    <select>
-                    ${map.begin}
-                    <option value ="${map.key}" ${if map.key==%s}selected${endif}>${map.value}</option>
-                    ${map.end}
-                    </select>
-                    ${endif}</td>
-                    """, field, field, field));
-            body.option("readonly", "true");
-            body.id(bodyTitle);
-            body.display(1);
-            map.forEach((key, value) -> body.toMap(key, value));
-            return body;
-        };
+        return new GridMapField(title, field, fieldWidth, map);
     }
 
-    public SupplierBlockImpl getOption(String title, String field, int fieldWidth, Enum<?>[] enums) {
+    public ISupplierBlock getOption(String title, String field, int fieldWidth, Enum<?>[] enums) {
         Map<String, String> map = new LinkedHashMap<String, String>();
         for (Enum<?> item : enums) {
             map.put(String.valueOf(item.ordinal()), item.name());
         }
-        return getOption(title, field, fieldWidth, map);
+        return getMap(title, field, fieldWidth, map);
+    }
+
+    @Override
+    public GridBooleanField getBoolean(String title, String field, int fieldWidth) {
+        items.add(title);
+        return new GridBooleanField(title, field, fieldWidth);
     }
 
     // TODO 要支持自定义 checkbox 的value
     @Override
-    public SupplierBlockImpl getBoolean(String title, String field, int fieldWidth) {
+    public GridCheckBoxField getCheckBox(String title, String field, int fieldWidth) {
         items.add(title);
-        return grid -> {
-            String headTitle = "head." + title;
-            String bodyTitle = "body." + title;
-            var ssr = grid.addBlock(headTitle, String.format("<th style='width: ${_width}em'>%s</th>", title));
-            ssr.toMap("_width", "" + fieldWidth);
-            ssr.id(headTitle);
-            ssr.display(1);
-            ssr = grid.addBlock(bodyTitle,
-                    String.format(
-                            """
-                                        <td align='center' role='%s'>
-                                            <span><input type='checkbox' name='checkBoxName' value='${if checkbox_value_}${checkbox_value_}${else}1${endif}' ${if %s}checked ${endif}/></span>
-                                        </td>
-                                    """,
-                            field, field));
-            ssr.id(bodyTitle);
-            ssr.display(1).strict(false);
-            return ssr;
-        };
-    }
-
-    public interface SupplierStringImpl extends SupplierBlockImpl {
-        SupplierStringImpl url(Supplier<String> url);
+        return new GridCheckBoxField(title, field, fieldWidth);
     }
 
     @Override
-    public SupplierStringImpl getString(String title, String field, int fieldWidth) {
+    public GridStringField getString(String title, String field, int fieldWidth) {
         items.add(title);
-        return new SupplierStringImpl() {
-            private SsrBlock block = new SsrBlock();
-
-            @Override
-            public SsrBlockImpl request(SsrComponentImpl grid) {
-                String headTitle = "head." + title;
-                var ssr = grid.addBlock(headTitle, String.format("<th style='width: ${_width}em'>%s</th>", title));
-                ssr.toMap("_width", "" + fieldWidth);
-                ssr.id(headTitle);
-                ssr.display(1);
-
-                String bodyTitle = "body." + title;
-                grid.addBlock(bodyTitle, block.templateText(String.format(
-                        "<td align='left' role='%s'>${if _enabled_url}<a href='${callback(url)}'>${endif}${dataset.%s}${if _enabled_url}</a>${endif}</td>",
-                        field, field)));
-                block.id(bodyTitle);
-                block.display(1);
-                block.strict(false);
-                return block;
-            }
-
-            @Override
-            public SupplierStringImpl url(Supplier<String> url) {
-                block.option("_enabled_url", "1");
-                block.onCallback("url", url);
-                return this;
-            }
-        };
+        var column = new GridStringField();
+        column.title(title);
+        column.field(field);
+        column.fieldWidth = fieldWidth;
+        column.align = "left";
+        return column;
     }
 
-    public SupplierBlockImpl getString(String title, String field, int fieldWidth, String align) {
-        return grid -> {
-            String headTitle = "head." + title;
-            String bodyTitle = "body." + title;
-            var ssr = grid.addBlock(headTitle, String.format("<th style='width: ${_width}em'>%s</th>", title));
-            ssr.toMap("_width", "" + fieldWidth);
-            ssr.id(headTitle);
-            ssr.display(1);
-            ssr = grid.addBlock(bodyTitle,
-                    String.format("<td align='${align}' role='%s'>${dataset.%s}</td>", field, field));
-            ssr.option("align", align);
-            ssr.id(bodyTitle);
-            ssr.display(1);
-            return ssr;
-        };
+    public GridStringField getString(String title, String field, int fieldWidth, String align) {
+        items.add(title);
+        var column = new GridStringField();
+        column.title(title);
+        column.field(field);
+        column.fieldWidth = fieldWidth;
+        column.align = align;
+        return column;
     }
 
     @Override

@@ -10,8 +10,9 @@ import org.slf4j.LoggerFactory;
 import cn.cerc.db.core.DataSet;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
+import cn.cerc.ui.ssr.editor.ISsrBoard;
 
-public class UISsrChunk extends UIComponent implements SsrComponentImpl {
+public class UISsrChunk extends UIComponent implements ISsrBoard {
     private static final Logger log = LoggerFactory.getLogger(UISsrChunk.class);
     private SsrTemplate template;
     private SsrBlockStyleDefault defaultStle;
@@ -73,8 +74,8 @@ public class UISsrChunk extends UIComponent implements SsrComponentImpl {
         }
     }
 
-    private Optional<SsrBlockImpl> getBlock(String id, Supplier<SsrBlockImpl> supplier) {
-        SsrBlockImpl block = template.getOrAdd(id, supplier).orElse(null);
+    private Optional<ISsrBlock> getBlock(String id, Supplier<ISsrBlock> supplier) {
+        ISsrBlock block = template.getOrAdd(id, supplier).orElse(null);
         if (template != null)
             block.id(id);
         return Optional.ofNullable(block);
@@ -86,7 +87,7 @@ public class UISsrChunk extends UIComponent implements SsrComponentImpl {
     }
 
     @Override
-    public Optional<SsrBlockImpl> getBlock(String templateId) {
+    public Optional<ISsrBlock> getBlock(String templateId) {
         return template.get(templateId);
     }
 

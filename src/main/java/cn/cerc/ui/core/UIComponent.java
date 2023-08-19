@@ -12,9 +12,8 @@ import java.util.Set;
 import cn.cerc.mis.core.HtmlContent;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.mis.core.IForm;
-import cn.cerc.mis.core.IOriginOwner;
 
-public class UIComponent implements IOriginOwner, HtmlContent, Iterable<UIComponent> {
+public class UIComponent implements IComponent, HtmlContent, Iterable<UIComponent> {
     private List<UIComponent> components = new ArrayList<>();
     private Map<String, Object> propertys = new HashMap<>();
     private Set<String> signProperty = new HashSet<>();
@@ -24,6 +23,10 @@ public class UIComponent implements IOriginOwner, HtmlContent, Iterable<UICompon
     private int phone = -1;
     // 是否为客户端渲染模式
     private int clientRender = -1;
+
+    public UIComponent() {
+        super();
+    }
 
     public UIComponent(UIComponent owner) {
         super();
@@ -66,6 +69,7 @@ public class UIComponent implements IOriginOwner, HtmlContent, Iterable<UICompon
         return origin;
     }
 
+    @Override
     public final UIComponent getComponent(int index) {
         return this.components.get(index);
     }
@@ -74,6 +78,7 @@ public class UIComponent implements IOriginOwner, HtmlContent, Iterable<UICompon
      * 
      * @return 返回子组件列表
      */
+    @Override
     public final List<UIComponent> getComponents() {
         return this.components;
     }
@@ -81,10 +86,12 @@ public class UIComponent implements IOriginOwner, HtmlContent, Iterable<UICompon
     /**
      * @return 返回子组件的数量
      */
+    @Override
     public final int getComponentCount() {
         return components.size();
     }
 
+    @Override
     public UIComponent addComponent(UIComponent child) {
         if (child != null && !components.contains(child)) {
             components.add(child);
@@ -93,7 +100,8 @@ public class UIComponent implements IOriginOwner, HtmlContent, Iterable<UICompon
         return this;
     }
 
-    public UIComponent removeComponent(UIComponent component) {
+    @Override
+    public UIComponent removeComponent(IComponent component) {
         if (component != null) {
             components.remove(component);
             this.registerOwner(null);
@@ -101,7 +109,7 @@ public class UIComponent implements IOriginOwner, HtmlContent, Iterable<UICompon
         return this;
     }
 
-    protected void registerOwner(UIComponent owner) {
+    public void registerOwner(UIComponent owner) {
         this.owner = owner;
         if (owner == null)
             this.origin = null;

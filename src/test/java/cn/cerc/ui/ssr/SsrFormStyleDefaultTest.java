@@ -2,26 +2,208 @@ package cn.cerc.ui.ssr;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import org.junit.Test;
+
+import cn.cerc.db.core.DataRow;
 
 public class SsrFormStyleDefaultTest {
 
     @Test
+    public void test1() {
+        UISsrForm form = new UISsrForm(null);
+        var style = form.defaultStyle();
+        form.addBlock(style.getString("查询条件", "SearchText_"));
+        form.dataRow(DataRow.of("SearchText_", "小"));
+        form.addColumn("查询条件");
+        form.strict(false);
+        assertEquals(
+                """
+                        <form method='post' action='' id='form1' role='search'><ul><li>
+                        <label for="SearchText_"><em>查询条件</em></label>
+                        <div>
+                        <input type="text" name="SearchText_" id="SearchText_" value="小" autocomplete="off" placeholder="请输入查询条件"/>
+                        <span role="suffix-icon"></span>
+                        </div>
+                        </li></ul></form>""",
+                form.toString());
+    }
+
+    @Test
     public void test2() {
-        var obj = new SsrFormStyleDefault();
-        assertEquals("show('a')", obj.getDialogText("a", "show"));
+        UISsrForm form = new UISsrForm(null);
+        var style = form.defaultStyle();
+        form.addBlock(style.getString("查询条件", "SearchText_").dialog("showDateDialog"));
+        form.dataRow(DataRow.of("SearchText_", "小"));
+        form.addColumn("查询条件");
+        form.strict(false);
+        assertEquals(
+                """
+                        <form method='post' action='' id='form1' role='search'><ul><li>
+                        <label for="SearchText_"><em>查询条件</em></label>
+                        <div>
+                        <input type="text" name="SearchText_" id="SearchText_" value="小" autocomplete="off" placeholder="请点击获取查询条件"/>
+                        <span role="suffix-icon"><a href="javascript:showDateDialog('SearchText_')">
+                        <img src="null" />
+                        </a></span>
+                        </div>
+                        </li></ul></form>""",
+                form.toString());
     }
 
     @Test
     public void test3() {
-        var obj = new SsrFormStyleDefault();
-        assertEquals("show('a','b')", obj.getDialogText("a", "show", "b"));
+        UISsrForm form = new UISsrForm(null);
+        var style = form.defaultStyle();
+        form.addBlock(style.getBoolean("是否可为空", "null_able_"));
+        form.dataRow(DataRow.of("null_able_", ""));
+        form.addColumn("是否可为空");
+        form.strict(false);
+        assertEquals("""
+                <form method='post' action='' id='form1' role='search'><ul><li>
+                <div role="switch">
+                <input autocomplete="off" name="null_able_" id="null_able_" type="checkbox" value="1"  />
+                </div>
+                <label for="null_able_"><em>是否可为空</em></label>
+                </li></ul></form>""", form.toString());
     }
 
     @Test
     public void test4() {
-        var obj = new SsrFormStyleDefault();
-        assertEquals("show('a','b','c')", obj.getDialogText("a", "show", "b", "c"));
+        UISsrForm form = new UISsrForm(null);
+        var style = form.defaultStyle();
+        Map<String, String> statusMap = new LinkedHashMap<String, String>();
+        statusMap.put("0", "全部");
+        statusMap.put("1", "待审核");
+        statusMap.put("2", "已审核");
+        form.addBlock(style.getMap("单据状态", "status_")).setMap(statusMap);
+        form.dataRow(DataRow.of("status_", "1"));
+        form.addColumn("单据状态");
+        form.strict(false);
+        assertEquals(
+                """
+                        <form method='post' action='' id='form1' role='search'><ul><li>
+                        <label for="status_"><em>单据状态</em></label>
+                        <div>
+                        <select id="status_" name="status_"> <option value="0" >全部</option> <option value="1" selected>待审核</option> <option value="2" >已审核</option> </select>
+                        </div>
+                        </li></ul></form>""",
+                form.toString());
+    }
+
+    @Test
+    public void test5() {
+        UISsrForm form = new UISsrForm(null);
+        var style = form.defaultStyle();
+        form.addBlock(style.getCodeName("制单人员", "code_", "showCusCodeDialog"));
+        form.dataRow(DataRow.of("code_", "CW001", "code__name", "张三"));
+        form.addColumn("制单人员");
+        form.strict(false);
+        assertEquals(
+                """
+                        <form method='post' action='' id='form1' role='search'><ul><li>
+                        <label for="code__name"><em>制单人员</em></label>
+                        <div>
+                        <input type="hidden" name="code_" id="code_" value="CW001">
+                        <input type="text" name="code__name" id="code__name" value="张三" autocomplete="off" placeholder="请点击获取制单人员"readonly>
+                        <span role="suffix-icon">
+                        <a href="javascript:showCusCodeDialog('code_,code__name')">
+                        <img src="null">
+                        </a>
+                        </span>
+                        </div>
+                        </li></ul></form>""",
+                form.toString());
+    }
+
+    @Test
+    public void test6() {
+        UISsrForm form = new UISsrForm(null);
+        var style = form.defaultStyle();
+        form.addBlock(style.getDate("起始日期", "start_date_"));
+        form.dataRow(DataRow.of("start_date_", "2022-11-02"));
+        form.addColumn("起始日期");
+        form.strict(false);
+        assertEquals(
+                """
+                        <form method='post' action='' id='form1' role='search'><ul><li>
+                        <label for="start_date_"><em>起始日期</em></label>
+                        <div>
+                        <input type="text" name="start_date_" id="start_date_" value="2022-11-02" autocomplete="off" placeholder="请输入起始日期"/>
+                        <span role="suffix-icon"><a href="javascript:showDateDialog('start_date_')">
+                        <img src="null" />
+                        </a></span>
+                        </div>
+                        </li></ul></form>""",
+                form.toString());
+    }
+
+    @Test
+    public void test7() {
+        UISsrForm form = new UISsrForm(null);
+        var style = form.defaultStyle();
+        form.addBlock(style.getDatetime("起始时间", "start_time_"));
+        form.dataRow(DataRow.of("start_time_", "2022-11-02 11:23:21"));
+        form.addColumn("起始时间");
+        form.strict(false);
+        assertEquals(
+                """
+                        <form method='post' action='' id='form1' role='search'><ul><li>
+                        <label for="start_time_"><em>起始时间</em></label>
+                        <div>
+                        <input type="text" name="start_time_" id="start_time_" value="2022-11-02 11:23:21" autocomplete="off" placeholder="请输入起始时间"/>
+                        <span role="suffix-icon"><a href="javascript:showDateTimeDialog('start_time_')">
+                        <img src="null" />
+                        </a></span>
+                        </div>
+                        </li></ul></form>""",
+                form.toString());
+    }
+
+    @Test
+    public void test8() {
+        UISsrForm form = new UISsrForm(null);
+        var style = form.defaultStyle();
+        form.addBlock(style.getDateRange("单据日期", "start_date_", "end_date_"));
+        form.dataRow(DataRow.of("start_date_", "2022-11-02", "end_date_", "2023-10-22"));
+        form.addColumn("单据日期");
+        form.strict(false);
+        assertEquals(
+                """
+                        <form method='post' action='' id='form1' role='search'><ul><li>
+                        <label for="start_date_"><em>单据日期</em></label>
+                        <div class="dateArea">
+                        <input autocomplete="off" name="start_date_" id="start_date_" type="text" class="dateAreaInput" value="2022-11-02"   />
+                        <span>/</span>
+                        <input autocomplete="off" name="end_date_" id="end_date_" type="text" class="dateAreaInput" value="2023-10-22"   />
+                        <span role="suffix-icon">
+                        <a href="javascript:showDateAreaDialog('start_date_', 'end_date_')">
+                        <img src="null" />
+                        </a>
+                        </span>
+                        </div>
+                        </li></ul></form>""",
+                form.toString());
+    }
+
+    @Test
+    public void test9() {
+        UISsrForm form = new UISsrForm(null);
+        var style = form.defaultStyle();
+        form.addBlock(style.getTextarea("详细地址", "address_"));
+        form.dataRow(DataRow.of("address_", "宏宇商务大厦686"));
+        form.addColumn("详细地址");
+        form.strict(false);
+        assertEquals("""
+                <form method='post' action='' id='form1' role='search'><ul><li>
+                <label for="address_"><em>详细地址</em></label>
+                <div>
+                <textarea name="address_" id="address_">宏宇商务大厦686</textarea>
+                <span role="suffix-icon"></span>
+                </div>
+                </li></ul></form>""", form.toString());
     }
 
 }

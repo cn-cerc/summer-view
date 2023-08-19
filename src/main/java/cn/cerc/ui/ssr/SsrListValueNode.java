@@ -8,7 +8,7 @@ public class SsrListValueNode extends SsrValueNode {
     }
 
     @Override
-    public String getHtml(SsrBlockImpl block) {
+    public String getHtml(ISsrBlock block) {
         var list = block.getListProxy();
         if (list != null) {
             return list.value();

@@ -1,5 +1,6 @@
 package cn.cerc.ui.ssr;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -8,26 +9,56 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import javax.persistence.Column;
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Description;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import cn.cerc.db.core.DataSet;
+import cn.cerc.db.core.Describe;
 import cn.cerc.db.core.IHandle;
+import cn.cerc.db.core.Utils;
 import cn.cerc.mis.core.Application;
 import cn.cerc.mis.core.HtmlWriter;
+import cn.cerc.ui.core.RequestReader;
 import cn.cerc.ui.core.UIComponent;
+import cn.cerc.ui.ssr.core.AlignEnum;
+import cn.cerc.ui.ssr.core.SsrComponent;
+import cn.cerc.ui.ssr.core.SsrContainer;
+import cn.cerc.ui.ssr.editor.EditorGrid;
+import cn.cerc.ui.ssr.editor.ISsrBoard;
+import cn.cerc.ui.ssr.editor.SsrMessage;
+import cn.cerc.ui.ssr.grid.GridBooleanField;
+import cn.cerc.ui.ssr.grid.GridItField;
+import cn.cerc.ui.ssr.grid.GridStringField;
+import cn.cerc.ui.ssr.grid.ISupportGrid;
+import cn.cerc.ui.ssr.page.ISupportVisualContainer;
+import cn.cerc.ui.ssr.source.Binder;
+import cn.cerc.ui.ssr.source.Binders;
+import cn.cerc.ui.ssr.source.IBinders;
+import cn.cerc.ui.ssr.source.ISupplierFields;
+import cn.cerc.ui.ssr.source.SsrDataService;
 import cn.cerc.ui.style.IGridStyle;
 
 /**
  * 第3代 SSR UI表格
  *
  */
-public class UISsrGrid extends UIComponent implements SsrComponentImpl, IGridStyle {
+@Component
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+@Description("数据表格")
+public class UISsrGrid extends SsrContainer<ISupportGrid>
+        implements ISsrBoard, IGridStyle, IBinders, ISupportVisualContainer {
     private static final Logger log = LoggerFactory.getLogger(UISsrGrid.class);
     private SsrTemplate template;
     private List<String> columns = new ArrayList<>();
-    private Map<String, Consumer<SsrBlockImpl>> onGetBodyHtml = new HashMap<>();
-    private Map<String, Consumer<SsrBlockImpl>> onGetHeadHtml = new HashMap<>();
+    private Map<String, Consumer<ISsrBlock>> onGetBodyHtml = new HashMap<>();
+    private Map<String, Consumer<ISsrBlock>> onGetHeadHtml = new HashMap<>();
     // 表样式 id
     public static final String TableBegin = "table.begin";
     public static final String TableEnd = "table.end";
@@ -37,8 +68,21 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl, IGridSty
     // 表身样式id
     public static final String BodyBegin = "body.begin";
     public static final String BodyEnd = "body.end";
-    private String emptyText;
     private SsrGridStyleDefault defaultStle;
+    private Binders binders = new Binders();
+    private HttpServletRequest request;
+    @Column
+    AlignEnum align = AlignEnum.Center;
+    @Column(name = "当表格为空时显示内容")
+    String emptyText = "";
+    @Column
+    Binder<SsrDataService> dataSet = new Binder<>(SsrDataService.class);
+
+    public UISsrGrid() {
+        super();
+        template = new SsrTemplate("");
+        this.dataSet.owner(this);
+    }
 
     public UISsrGrid(UIComponent owner) {
         super(owner);
@@ -76,7 +120,8 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl, IGridSty
 
     @Override
     public void output(HtmlWriter html) {
-        if (this.getDataSet() == null) {
+        if (this.dataSet() == null) {
+            html.print("<div>dataSet is null</div>");
             log.error("dataSet is null");
             return;
         }
@@ -92,12 +137,12 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl, IGridSty
         getTemplate(TableBegin, getDefault_TableBegin()).ifPresent(value -> html.print(value.getHtml()));
 
         // 输出标题
-        getTemplate(HeadBegin, getDefault_HeadBegin()).ifPresent(value -> html.print(value.getHtml()));
+        getTemplate(HeadBegin, getDefault_HeadBegin()).ifPresent(value -> html.println(value.getHtml()));
         for (var field : columns) {
             var block = getTemplate("head." + field, getDefault_HeadCell(field));
             if (block.isPresent()) {
                 if (this.template.id() != null)
-                    block.get().option(SsrOptionImpl.TemplateId, this.template.id());
+                    block.get().option(ISsrOption.TemplateId, this.template.id());
                 var value = onGetHeadHtml.get(field);
                 if (value != null)
                     value.accept(block.get().id(field));
@@ -105,15 +150,15 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl, IGridSty
             block.ifPresent(value -> html.print(value.getHtml()));
         }
         getTemplate(HeadEnd, () -> new SsrBlock("</tr>").setTemplate(template))
-                .ifPresent(value -> html.print(value.getHtml()));
+                .ifPresent(value -> html.println(value.getHtml()));
 
         // 输出内容
-        if (getDataSet().size() > 0) {
-            var save_rec = getDataSet().recNo();
+        if (dataSet().size() > 0) {
+            var save_rec = dataSet().recNo();
             try {
-                getDataSet().first();
-                while (getDataSet().fetch()) {
-                    getTemplate(BodyBegin, getDefault_BodyBegin()).ifPresent(value -> html.print(value.getHtml()));
+                dataSet().first();
+                while (dataSet().fetch()) {
+                    getTemplate(BodyBegin, getDefault_BodyBegin()).ifPresent(value -> html.println(value.getHtml()));
                     for (var field : columns) {
                         var block = getTemplate("body." + field, getDefault_BodyCell(field));
                         if (block.isPresent()) {
@@ -124,10 +169,10 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl, IGridSty
                         block.ifPresent(value -> html.print(value.getHtml()));
                     }
                     getTemplate(BodyEnd, () -> new SsrBlock("</tr>").setTemplate(template))
-                            .ifPresent(value -> html.print(value.getHtml()));
+                            .ifPresent(value -> html.println(value.getHtml()));
                 }
             } finally {
-                getDataSet().setRecNo(save_rec);
+                dataSet().setRecNo(save_rec);
             }
         }
 
@@ -137,8 +182,8 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl, IGridSty
 
     }
 
-    private Optional<SsrBlockImpl> getTemplate(String id, Supplier<SsrBlockImpl> supplier) {
-        SsrBlockImpl block = template.getOrAdd(id, supplier).orElse(null);
+    private Optional<ISsrBlock> getTemplate(String id, Supplier<ISsrBlock> supplier) {
+        ISsrBlock block = template.getOrAdd(id, supplier).orElse(null);
         if (block != null)
             block.id(id);
         else
@@ -153,11 +198,11 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl, IGridSty
      * @param consumer
      */
     @Deprecated
-    public void addGetHead(String field, Consumer<SsrBlockImpl> consumer) {
+    public void addGetHead(String field, Consumer<ISsrBlock> consumer) {
         this.onGetHeadHtml(field, consumer);
     }
 
-    public void onGetHeadHtml(String field, Consumer<SsrBlockImpl> consumer) {
+    public void onGetHeadHtml(String field, Consumer<ISsrBlock> consumer) {
         this.onGetHeadHtml.put(field, consumer);
     }
 
@@ -168,15 +213,15 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl, IGridSty
      * @param consumer
      */
     @Deprecated
-    public void addGetBody(String field, Consumer<SsrBlockImpl> consumer) {
+    public void addGetBody(String field, Consumer<ISsrBlock> consumer) {
         this.onGetBodyHtml(field, consumer);
     }
 
-    public void onGetBodyHtml(String field, Consumer<SsrBlockImpl> consumer) {
+    public void onGetBodyHtml(String field, Consumer<ISsrBlock> consumer) {
         this.onGetBodyHtml.put(field, consumer);
     }
 
-    public void onGetHtml(String field, Consumer<SsrBlockImpl> consumer) {
+    public void onGetHtml(String field, Consumer<ISsrBlock> consumer) {
         if (field.startsWith("head."))
             this.onGetHeadHtml(field.substring(5, field.length()), consumer);
         else if (field.startsWith("body."))
@@ -227,7 +272,7 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl, IGridSty
      * 
      * @return 返回默认的表头样式
      */
-    private Supplier<SsrBlockImpl> getDefault_TableBegin() {
+    private Supplier<ISsrBlock> getDefault_TableBegin() {
         return () -> new SsrBlock("<div id='grid' class='scrollArea'><table class='dbgrid'>").setTemplate(template);
     }
 
@@ -235,7 +280,7 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl, IGridSty
      * 
      * @return 返回表头行
      */
-    private Supplier<SsrBlockImpl> getDefault_HeadBegin() {
+    private Supplier<ISsrBlock> getDefault_HeadBegin() {
         return () -> new SsrBlock("<tr>").setTemplate(template);
     }
 
@@ -243,7 +288,7 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl, IGridSty
      * 
      * @return 返回表身行
      */
-    private Supplier<SsrBlockImpl> getDefault_BodyBegin() {
+    private Supplier<ISsrBlock> getDefault_BodyBegin() {
         return () -> new SsrBlock("<tr>").setTemplate(template);
     }
 
@@ -252,7 +297,7 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl, IGridSty
      * @param field
      * @return 返回默认的表头单元格样式
      */
-    private Supplier<SsrBlockImpl> getDefault_HeadCell(String field) {
+    private Supplier<ISsrBlock> getDefault_HeadCell(String field) {
         return () -> new SsrBlock(String.format("<th>%s</th>", field)).setTemplate(template);
     }
 
@@ -261,7 +306,7 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl, IGridSty
      * @param field
      * @return 返回默认的表身单元格样式
      */
-    private Supplier<SsrBlockImpl> getDefault_BodyCell(String field) {
+    private Supplier<ISsrBlock> getDefault_BodyCell(String field) {
         return () -> new SsrBlock(String.format("<td>${%s}</td>", field)).setTemplate(template);
     }
 
@@ -278,7 +323,7 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl, IGridSty
     public DataSet getDefaultOptions() {
         DataSet ds = new DataSet();
         for (var ssr : template) {
-            var option = ssr.option(SsrOptionImpl.Display);
+            var option = ssr.option(ISsrOption.Display);
             String id = ssr.id();
             if (option.isPresent()) {
                 if (id.startsWith("body.") || id.startsWith("head."))
@@ -314,8 +359,15 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl, IGridSty
         });
     }
 
+    public void loadDefaultConfig() {
+        this.getDefaultOptions().forEach(item -> {
+            if (item.getEnum("option_", TemplateConfigOptionEnum.class) != TemplateConfigOptionEnum.不显示)
+                addColumn(item.getString("column_name_"));
+        });
+    }
+
     @Override
-    public Optional<SsrBlockImpl> getBlock(String blockId) {
+    public Optional<ISsrBlock> getBlock(String blockId) {
         return template.get(blockId);
     }
 
@@ -329,7 +381,7 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl, IGridSty
     }
 
     public String emptyText() {
-        return emptyText;
+        return this.emptyText;
     }
 
     /**
@@ -382,4 +434,181 @@ public class UISsrGrid extends UIComponent implements SsrComponentImpl, IGridSty
     public String templateId() {
         return template.id();
     }
+
+    @Override
+    public void readProperties(PropertiesReader reader) {
+        reader.read(this);
+        for (var item : this) {
+            var id = item.getId();
+            if (Utils.isEmpty(id))
+                log.warn("{} 没有 id，无法设置属性", item.getClass().getSimpleName());
+            else {
+                if (item instanceof ISupplierBlock supplier)
+                    this.addBlock(supplier);
+                if (item instanceof ISupportGrid impl) {
+                    if (!Utils.isEmpty(impl.title()))
+                        this.addColumn(impl.title());
+                }
+            }
+        }
+    }
+
+    public void dataSourceBindId(String dataSetBindId) {
+        this.dataSet.targetId(dataSetBindId != null ? dataSetBindId : "");
+    }
+
+    @Override
+    public void buildEditor(UIComponent content, String pageCode) {
+        super.buildEditor(content, pageCode);
+        
+        EditorGrid grid = new EditorGrid(content, this);
+        grid.build(pageCode);
+
+        DataSet dataSet = new DataSet();
+        UISsrBlock impl = new UISsrBlock(content,
+                """
+                        <form method="post" id="fieldForm">
+                            <input type="hidden" name="id" value=${id}>
+                            <div id="grid" class="scrollArea">
+                                <table class="dbgrid">
+                                    <tbody>
+                                        <tr>
+                                            <th style="width: 4em">选择</th>
+                                            <th style="width: 10em">字段</th>
+                                            <th style="width: 20em">类名</th>
+                                        </tr>
+                                        ${dataset.begin}
+                                        <tr>
+                                            <td align="center" role="check">
+                                                <span><input type="checkbox" name="components" value="${class},${field},${width},${title}"></span>
+                                            </td>
+                                            <td align="left" role="title">${title}</td>
+                                            <td align="left" role="class">${class}</td>
+                                        </tr>
+                                        ${dataset.end}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div lowcode="button"><button name="save" value="save" onclick="submitForm('fieldForm', 'submit')">保存</button>
+                            </div>
+                        </form>""");
+        impl.block().setDataSet(dataSet);
+        impl.block().option("id", this.getId());
+
+        Optional<SsrDataService> optSvr = this.dataSet.target();
+        dataSet.append()
+                .setValue("field", "it")
+                .setValue("title", "序")
+                .setValue("class", GridItField.class.getSimpleName())
+                .setValue("width", 4)
+                .setValue("check", false);
+        if (optSvr.isPresent()) {
+            List<Field> fields = optSvr.get().fields(ISupplierFields.BodyOutFields);
+            for (Field field : fields) {
+                if (dataSet.locate("field", field.getName()))
+                    continue;
+                String title = field.getName();
+                Column column = field.getAnnotation(Column.class);
+                if (column == null)
+                    continue;
+                if (!Utils.isEmpty(column.name()))
+                    title = column.name();
+                int width = 10;
+                Describe describe = field.getAnnotation(Describe.class);
+                if (describe != null) {
+                    if (!Utils.isEmpty(describe.name()))
+                        title = describe.name();
+                    if (describe.width() > 0)
+                        width = describe.width();
+                }
+                String classCode = GridStringField.class.getSimpleName();
+                if (field.getType() == Boolean.class || field.getType() == boolean.class)
+                    classCode = GridBooleanField.class.getSimpleName();
+                dataSet.append()
+                        .setValue("field", field.getName())
+                        .setValue("title", title)
+                        .setValue("class", classCode)
+                        .setValue("width", width)
+                        .setValue("check", false);
+            }
+        }
+    }
+
+    @Override
+    public boolean saveEditor(RequestReader reader) {
+        reader.saveProperties(this);
+        // 对栏位进行排序saveEditor
+        reader.sortComponent(this);
+        // 批量添加组件
+        batchAppendComponents();
+        // 处理移除组件
+        reader.removeComponent(this);
+        return true;
+    }
+
+    private void batchAppendComponents() {
+        String[] components = request.getParameterValues("components");
+        if (Utils.isEmpty(components))
+            return;
+        for (String component : components) {
+            String[] componentProperties = component.split(",");
+            String clazz = componentProperties[0];
+            String field = componentProperties[1];
+            int width = Utils.strToIntDef(componentProperties[2], 10);
+            String title = componentProperties[3];
+            Optional<SsrComponent> optBean = SsrUtils.getBean(clazz, SsrComponent.class);
+            if (optBean.isEmpty())
+                continue;
+            SsrComponent item = optBean.get();
+            item.setOwner(this);
+            item.setContainer(this.getContainer());
+            // 创建id
+            String prefix = item.getIdPrefix();
+            String nid = this.getContainer().createUid(prefix);
+            item.setId(nid);
+            if (item instanceof ISupportGrid gridField) {
+                gridField.title(title);
+                gridField.field(field);
+                gridField.width(width);
+            }
+            this.getContainer().sendMessage(this, SsrMessage.appendComponent, item, this.dataSet.targetId());
+        }
+    }
+
+    @Override
+    public String getIdPrefix() {
+        return "grid";
+    }
+
+    @Override
+    public void onMessage(Object sender, int msgType, Object msgData, String targetId) {
+        switch (msgType) {
+        case SsrMessage.InitRequest:
+            if (msgData instanceof HttpServletRequest request)
+                this.request = request;
+            break;
+        case SsrMessage.InitBinder:
+            this.dataSet.init();
+            break;
+        case SsrMessage.RefreshProperties:
+        case SsrMessage.InitProperties:
+        case SsrMessage.AfterSubmit:
+            if (this.dataSet.target().isEmpty()) {
+                log.warn("未设置数据源：dataSet");
+                break;
+            }
+            var bean = this.getContainer().getMember(this.dataSet.targetId(), SsrDataService.class);
+            if (bean.isPresent())
+                this.dataSet(bean.get().getDataSet());
+            else
+                log.warn("{} 绑定的数据源 {} 找不到", this.getId(), this.dataSet.targetId());
+            break;
+        }
+    }
+
+    @Override
+    public Binders binders() {
+        return binders;
+    }
+
 }

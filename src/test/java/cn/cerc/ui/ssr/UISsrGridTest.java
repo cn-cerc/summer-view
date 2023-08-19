@@ -16,9 +16,14 @@ public class UISsrGridTest {
         var grid = new UISsrGrid(null, "");
         grid.dataSet(ds);
         grid.addColumn("name_");
-        assertEquals(
-                "<div id='grid' class='scrollArea'><table class='dbgrid'><tr><th>name_</th></tr><tr><td>a01</td></tr><tr><td>b01</td></tr></table></div>",
-                grid.toString());
+        assertEquals("""
+                <div id='grid' class='scrollArea'><table class='dbgrid'><tr>
+                <th>name_</th></tr>
+                <tr>
+                <td>a01</td></tr>
+                <tr>
+                <td>b01</td></tr>
+                </table></div>""", grid.toString());
     }
 
     @Test
@@ -36,9 +41,14 @@ public class UISsrGridTest {
         grid.addColumn("code_", "name_");
 
         grid.dataSet(ds);
-        assertEquals(
-                "<div><table class='a'><tr><th width=30>xxx</td><th>name_</th></tr><tr><td><a href=\"http://001\">001</a></td><td>a01</td></tr><tr><td><a href=\"http://002\">002</a></td><td>b01</td></tr></table></div>",
-                grid.toString());
+        assertEquals("""
+                <div><table class='a'><tr>
+                <th width=30>xxx</td><th>name_</th></tr>
+                <tr>
+                <td><a href="http://001">001</a></td><td>a01</td></tr>
+                <tr>
+                <td><a href="http://002">002</a></td><td>b01</td></tr>
+                </table></div>""", grid.toString());
     }
 
     @Test
@@ -86,9 +96,14 @@ public class UISsrGridTest {
         grid.onGetHeadHtml("code", ssr -> ssr.toMap("title", "代码"));
         grid.onGetBodyHtml("name", ssr -> ssr.toMap("url", "http://127.0.0.1"));
 
-        assertEquals(
-                "<table><tr class=\"head\"><th>姓名</th><th>代码</th></tr><tr><td><a href=\"http://127.0.0.1\">张三</a><td><td>001<td></tr><tr><td><a href=\"http://127.0.0.1\">李四</a><td><td>002<td></tr></table>",
-                grid.toString());
+        assertEquals("""
+                <table><tr class="head">
+                <th>姓名</th><th>代码</th></tr>
+                <tr>
+                <td><a href="http://127.0.0.1">张三</a><td><td>001<td></tr>
+                <tr>
+                <td><a href="http://127.0.0.1">李四</a><td><td>002<td></tr>
+                </table>""", grid.toString());
     }
 
 }

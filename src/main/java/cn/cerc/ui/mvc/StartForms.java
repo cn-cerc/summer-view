@@ -178,7 +178,8 @@ public class StartForms implements Filter {
                         } else {
                             log.debug("key {}, origin {}", key, builder);
                             IErrorPage error = context.getBean(IErrorPage.class);
-                            error.output(req, resp, new UserRequestException(String.format("对不起您操作太快了，服务器忙不过来 %s", uri)));
+                            error.output(req, resp,
+                                    new UserRequestException(String.format("对不起您操作太快了，服务器忙不过来 %s", uri)));
                             return;
                         }
                     }

@@ -9,7 +9,7 @@ public class SsrDatasetNode extends SsrContainerNode {
     }
 
     @Override
-    public String getHtml(SsrBlockImpl block) {
+    public String getHtml(ISsrBlock block) {
         var dataSet = block.getDataSet();
         if (dataSet == null)
             return this.getText();

@@ -161,12 +161,12 @@ public class FieldStyleDefine {
         this.align = align;
         return this;
     }
-    
+
     public FieldStyleDefine setAlignCenter() {
         this.setAlign("center");
         return this;
     }
-    
+
     public FieldStyleDefine setAlignRight() {
         this.setAlign("right");
         return this;

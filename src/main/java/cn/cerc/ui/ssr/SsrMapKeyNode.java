@@ -8,7 +8,7 @@ public class SsrMapKeyNode extends SsrValueNode {
     }
 
     @Override
-    public String getHtml(SsrBlockImpl block) {
+    public String getHtml(ISsrBlock block) {
         var map = block.getMap();
         if (map != null) {
             return block.getMapProxy().key();

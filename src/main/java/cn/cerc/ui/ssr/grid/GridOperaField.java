@@ -1,0 +1,106 @@
+package cn.cerc.ui.ssr.grid;
+
+import javax.persistence.Column;
+
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
+import cn.cerc.ui.ssr.SsrBlock;
+import cn.cerc.ui.ssr.ISsrBlock;
+import cn.cerc.ui.ssr.core.SsrControl;
+import cn.cerc.ui.ssr.editor.ISsrBoard;
+
+@Component
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+public class GridOperaField extends SsrControl implements ISupportGrid {
+    private SsrBlock block = new SsrBlock();
+    private String title = "操作";
+    @Column
+    String content = "内容";
+    @Column
+    int fieldWidth = 4;
+
+    public GridOperaField() {
+        super();
+    }
+
+    public GridOperaField(int fieldWidth) {
+        super(null);
+        this.fieldWidth = fieldWidth;
+    }
+
+    @Override
+    public ISsrBlock block() {
+        return block;
+    }
+
+    @Override
+    public ISsrBlock request(ISsrBoard grid) {
+        String headTitle = "head." + title;
+        String bodyTitle = "body." + title;
+        int fieldWidth = this.fieldWidth;
+        var ssr = grid.addBlock(headTitle, String.format("""
+                <th style='width: ${_width}em'>
+                ${if templateId}
+                    <a href="javascript:showSsrConfigDialog('${templateId}')">
+                        ${if templateConfigImg}
+                            <img src="${templateConfigImg}" style="width: 1rem;">
+                        ${else}
+                            %s
+                        ${endif}
+                    </a>
+                ${else}
+                %s
+                ${endif}
+                </th>
+                """, title, title));
+        ssr.toMap("_width", "" + fieldWidth);
+        ssr.option("templateId", "");
+        ssr.id(headTitle);
+
+        grid.addBlock(bodyTitle, block
+                .templateText("<td align='center' role='_opera_'><a href='${callback(url)}'>${_content}</a></td>"));
+        block.display(1);
+        block.id(bodyTitle);
+        block.option("_content", this.content);
+        return block;
+    }
+
+    @Override
+    public String title() {
+        return this.title;
+    }
+
+    @Override
+    public ISupportGrid title(String title) {
+        return this;
+    }
+
+    @Override
+    public String getIdPrefix() {
+        return "column";
+    }
+
+    @Override
+    public String field() {
+        return "";
+    }
+
+    @Override
+    public ISupportGrid field(String field) {
+        return this;
+    }
+
+    @Override
+    public int width() {
+        return this.fieldWidth;
+    }
+
+    @Override
+    public ISupportGrid width(int width) {
+        this.fieldWidth = width;
+        return this;
+    }
+
+}

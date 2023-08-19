@@ -22,8 +22,7 @@ public class SsrIfNode extends SsrContainerNode {
         boolean execute(String left, String right);
     }
 
-    private boolean check(SsrBlockImpl block, Variant status, String text, String flag,
-            LeftRightEquals lrEquals) {
+    private boolean check(ISsrBlock block, Variant status, String text, String flag, LeftRightEquals lrEquals) {
         if (block == null)
             return false;
         var arr = text.split(flag);
@@ -68,7 +67,7 @@ public class SsrIfNode extends SsrContainerNode {
     }
 
     @Override
-    public String getHtml(SsrBlockImpl block) {
+    public String getHtml(ISsrBlock block) {
         if (block == null)
             return this.getText();
 
@@ -96,7 +95,8 @@ public class SsrIfNode extends SsrContainerNode {
             var value = block.getValue(field);
             if (value.isEmpty()) {
                 if (block.strict()) {
-                    log.error("not find field: {}", field);
+                    var e = new RuntimeException(String.format("not find field: %s", field));
+                    log.error(e.getMessage(), e);
                     return this.getText();
                 } else
                     return getChildren(block, false);
@@ -110,7 +110,7 @@ public class SsrIfNode extends SsrContainerNode {
 
     }
 
-    private String getChildren(SsrBlockImpl block, boolean ifValue) {
+    private String getChildren(ISsrBlock block, boolean ifValue) {
         var sb = new StringBuffer();
 
         // 将子项依据else分离成2组

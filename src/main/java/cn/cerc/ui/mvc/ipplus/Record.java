@@ -1,8 +1,8 @@
 package cn.cerc.ui.mvc.ipplus;
 
-import com.fasterxml.jackson.databind.JsonNode;
-
 import java.net.InetAddress;
+
+import com.fasterxml.jackson.databind.JsonNode;
 
 /**
  * Record represents the data and metadata associated with a database lookup.

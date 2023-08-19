@@ -29,7 +29,7 @@ public class SsrCallbackTest {
                 """);
 
         // 子级
-        SsrBlockImpl child = new SsrBlock("<a href='${url}'>${title}</a>").toMap("url", "http://www.baidu.com")
+        ISsrBlock child = new SsrBlock("<a href='${url}'>${title}</a>").toMap("url", "http://www.baidu.com")
                 .toMap("title", "百度");
 
         master.toMap("createMode", "" + true);

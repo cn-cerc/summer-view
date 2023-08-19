@@ -14,9 +14,9 @@ import cn.cerc.db.core.DataRow;
 import cn.cerc.db.core.DataSet;
 import cn.cerc.db.core.Utils;
 
-public class SsrTemplate implements Iterable<SsrBlockImpl>, SsrOptionImpl {
+public class SsrTemplate implements Iterable<ISsrBlock>, ISsrOption {
     private static final Logger log = LoggerFactory.getLogger(SsrTemplate.class);
-    private LinkedHashMap<String, SsrBlockImpl> items = new LinkedHashMap<>();
+    private LinkedHashMap<String, ISsrBlock> items = new LinkedHashMap<>();
     public static final String BeginFlag = "begin";
     public static final String EndFlag = "end";
     private String templateText;
@@ -90,17 +90,17 @@ public class SsrTemplate implements Iterable<SsrBlockImpl>, SsrOptionImpl {
         }
     }
 
-    public LinkedHashMap<String, SsrBlockImpl> items() {
+    public LinkedHashMap<String, ISsrBlock> items() {
         return this.items;
     }
 
-    public Optional<SsrBlockImpl> get(String templateId) {
+    public Optional<ISsrBlock> get(String templateId) {
         return Optional.ofNullable(this.items.get(templateId));
     }
 
-    public Optional<SsrBlockImpl> getOrAdd(String templateId, Supplier<SsrBlockImpl> supplier) {
+    public Optional<ISsrBlock> getOrAdd(String templateId, Supplier<ISsrBlock> supplier) {
         Objects.requireNonNull(supplier);
-        SsrBlockImpl block = this.get(templateId).orElse(null);
+        ISsrBlock block = this.get(templateId).orElse(null);
         if (block == null) {
             block = supplier.get();
             if (block != null)
@@ -109,11 +109,11 @@ public class SsrTemplate implements Iterable<SsrBlockImpl>, SsrOptionImpl {
         return Optional.ofNullable(block);
     }
 
-    public Optional<SsrBlockImpl> getBegin() {
+    public Optional<ISsrBlock> getBegin() {
         return this.get(BeginFlag);
     }
 
-    public Optional<SsrBlockImpl> getEnd() {
+    public Optional<ISsrBlock> getEnd() {
         return this.get(EndFlag);
     }
 
@@ -132,11 +132,11 @@ public class SsrTemplate implements Iterable<SsrBlockImpl>, SsrOptionImpl {
     }
 
     @Override
-    public Iterator<SsrBlockImpl> iterator() {
+    public Iterator<ISsrBlock> iterator() {
         return this.items.values().iterator();
     }
 
-    public void addItem(String id, SsrBlock block) {
+    public void addItem(String id, ISsrBlock block) {
         block.setTemplate(this);
         this.items.put(id, block);
     }
@@ -153,7 +153,7 @@ public class SsrTemplate implements Iterable<SsrBlockImpl>, SsrOptionImpl {
     }
 
     @Override
-    public SsrOptionImpl option(String key, String value) {
+    public ISsrOption option(String key, String value) {
         if (options == null)
             options = new HashMap<>();
         if (value == null)

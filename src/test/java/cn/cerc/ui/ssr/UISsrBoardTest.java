@@ -4,9 +4,11 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
+import cn.cerc.ui.ssr.editor.ISsrBoard;
+
 public class UISsrBoardTest {
 
-    public class SsrBlockTest implements SupplierCustomBlockImpl {
+    public class SsrBlockTest implements ISupplierBlock {
         private SsrBlock block;
 
         public SsrBlockTest(String text) {
@@ -14,12 +16,7 @@ public class UISsrBoardTest {
         }
 
         @Override
-        public SsrBlockImpl block() {
-            return block;
-        }
-
-        @Override
-        public SsrBlockImpl request(SsrComponentImpl owner) {
+        public ISsrBlock request(ISsrBoard owner) {
             return block;
         }
 

@@ -8,9 +8,10 @@ import cn.cerc.mis.core.Application;
 import cn.cerc.ui.SummerUI;
 import cn.cerc.ui.fields.AbstractField;
 import cn.cerc.ui.fields.ImageConfigImpl;
+import cn.cerc.ui.ssr.editor.ISsrBoard;
 
 @Deprecated
-public class SupplierField implements SupplierFieldImpl {
+public class SupplierField implements ISupplierBlock {
     protected boolean readonly = false;
     protected boolean required = false;
     protected String placeholder = "false";
@@ -32,7 +33,7 @@ public class SupplierField implements SupplierFieldImpl {
     }
 
     @Override
-    public SsrBlockImpl request(SsrComponentImpl form) {
+    public ISsrBlock request(ISsrBoard form) {
         var ssr = form.addBlock(title,
                 String.format(
                         """
@@ -57,31 +58,26 @@ public class SupplierField implements SupplierFieldImpl {
         return ssr;
     }
 
-    @Override
     public SupplierField readonly(boolean readonly) {
         this.readonly = readonly;
         return this;
     }
 
-    @Override
     public SupplierField required(boolean required) {
         this.required = required;
         return this;
     }
 
-    @Override
     public SupplierField placeholder(String placeholder) {
         this.placeholder = placeholder;
         return this;
     }
 
-    @Override
     public SupplierField patten(String patten) {
         this.patten = patten;
         return this;
     }
 
-    @Override
     public SupplierField dialog(String... dialogFunc) {
         this.dialog = getDialogText(field, dialogFunc);
         String fieldDialogIcon;
@@ -95,19 +91,16 @@ public class SupplierField implements SupplierFieldImpl {
         return this;
     }
 
-    @Override
     public SupplierField autofocus(boolean autofocus) {
         this.autofocus = autofocus;
         return this;
     }
 
-    @Override
     public SupplierField type(String type) {
         this.type = type;
         return this;
     }
 
-    @Override
     public SupplierField mark(String mark) {
         this.mark = mark;
         return this;
@@ -135,7 +128,7 @@ public class SupplierField implements SupplierFieldImpl {
         return this;
     }
 
-    protected void initProperty(SsrBlockImpl block) {
+    protected void initProperty(ISsrBlock block) {
         for (String key : options.keySet())
             block.option(key, options.get(key));
         block.option("readonly", "" + readonly);
@@ -149,8 +142,7 @@ public class SupplierField implements SupplierFieldImpl {
         block.id(title);
     }
 
-    @Override
-    public SsrBlockImpl block() {
+    public ISsrBlock block() {
         return block;
     }
 

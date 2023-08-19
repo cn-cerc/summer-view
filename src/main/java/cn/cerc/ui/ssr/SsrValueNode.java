@@ -19,7 +19,7 @@ public class SsrValueNode implements SsrNodeImpl {
     }
 
     @Override
-    public String getHtml(SsrBlockImpl block) {
+    public String getHtml(ISsrBlock block) {
         var field = this.getField();
         return block == null ? "block is null" : block.getValue(field).orElse(this.getText());
     }

@@ -33,7 +33,7 @@ public class SsrDefaultFormStyleTest {
                         </div>
                         </li><li>
                         <div role="switch">
-                        <input autocomplete="off" name="Man_" id="Man_" type="checkbox" value="1" checked />
+                        <input autocomplete="off" name="Man_" id="Man_" type="checkbox" value="1" checked  />
                         </div>
                         <label for="Man_"><em>男性</em></label>
                         </li><li>

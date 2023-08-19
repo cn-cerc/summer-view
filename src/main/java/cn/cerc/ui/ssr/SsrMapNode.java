@@ -9,7 +9,7 @@ public class SsrMapNode extends SsrContainerNode {
     }
 
     @Override
-    public String getHtml(SsrBlockImpl block) {
+    public String getHtml(ISsrBlock block) {
         var params = block.getMap();
         if (params == null)
             return this.getText();

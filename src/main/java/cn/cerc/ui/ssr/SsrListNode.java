@@ -9,7 +9,7 @@ public class SsrListNode extends SsrContainerNode {
     }
 
     @Override
-    public String getHtml(SsrBlockImpl block) {
+    public String getHtml(ISsrBlock block) {
         var list = block.getListProxy();
         if (list == null) {
             if (!block.strict()) {

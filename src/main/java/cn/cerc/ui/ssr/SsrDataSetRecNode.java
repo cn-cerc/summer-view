@@ -8,7 +8,7 @@ public class SsrDataSetRecNode extends SsrValueNode {
     }
 
     @Override
-    public String getHtml(SsrBlockImpl block) {
+    public String getHtml(ISsrBlock block) {
         var dataSet = block.getDataSet();
         if (dataSet != null) {
             return "" + dataSet.recNo();

@@ -5,17 +5,19 @@ import java.util.Map;
 
 public interface SsrGridStyleImpl {
 
-    SupplierBlockImpl getIt(String title, int fieldWidth);
+    ISupplierBlock getIt(String title, int fieldWidth);
 
-    SupplierBlockImpl getOpera(int fieldWidth);
+    ISupplierBlock getOpera(int fieldWidth);
 
-    SupplierBlockImpl getString(String title, String field, int fieldWidth);
+    ISupplierBlock getString(String title, String field, int fieldWidth);
 
-    SupplierBlockImpl getDate(String title, String field);
+    ISupplierBlock getDate(String title, String field);
 
-    SupplierBlockImpl getBoolean(String title, String field, int fieldWidth);
+    ISupplierBlock getBoolean(String title, String field, int fieldWidth);
 
-    SupplierBlockImpl getOption(String title, String field, int fieldWidth, Map<String, String> map);
+    ISupplierBlock getCheckBox(String title, String field, int fieldWidth);
+
+    ISupplierBlock getMap(String title, String field, int fieldWidth, Map<String, String> map);
 
     List<String> items();
 }

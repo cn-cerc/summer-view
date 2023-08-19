@@ -10,7 +10,7 @@ import cn.cerc.ui.core.UIComponent;
 
 public class UISsrBlock extends UIComponent {
     private static final Logger log = LoggerFactory.getLogger(UISsrBlock.class);
-    private SsrBlockImpl block;
+    private ISsrBlock block;
 
     public UISsrBlock() {
         super(null);
@@ -46,12 +46,12 @@ public class UISsrBlock extends UIComponent {
             log.warn("block is null");
     }
 
-    public SsrBlockImpl block() {
+    public ISsrBlock block() {
         Objects.requireNonNull(block);
         return block;
     }
 
-    public UISsrBlock block(SsrBlockImpl block) {
+    public UISsrBlock block(ISsrBlock block) {
         this.block = block;
         return this;
     }

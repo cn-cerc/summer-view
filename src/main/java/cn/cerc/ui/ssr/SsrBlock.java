@@ -15,8 +15,9 @@ import org.slf4j.LoggerFactory;
 import cn.cerc.db.core.DataRow;
 import cn.cerc.db.core.DataSet;
 import cn.cerc.db.core.Utils;
+import cn.cerc.ui.ssr.editor.ISsrBoard;
 
-public class SsrBlock implements SsrBlockImpl {
+public class SsrBlock implements ISsrBlock {
     private static final Logger log = LoggerFactory.getLogger(SsrBlock.class);
     private SsrNodes style;
     private List<String> list;
@@ -84,7 +85,7 @@ public class SsrBlock implements SsrBlockImpl {
     }
 
     @Override
-    public SsrBlockImpl option(String key, String value) {
+    public ISsrBlock option(String key, String value) {
         if (options == null)
             options = new HashMap<>();
         if (value == null)
@@ -214,7 +215,7 @@ public class SsrBlock implements SsrBlockImpl {
     }
 
     @Override
-    public SsrBlockImpl onCallback(String nodeId, Supplier<String> supplier) {
+    public ISsrBlock onCallback(String nodeId, Supplier<String> supplier) {
         if (this.callback == null)
             callback = new HashMap<>();
         callback.put(nodeId, supplier);
@@ -286,6 +287,8 @@ public class SsrBlock implements SsrBlockImpl {
         } else if (!strict()) {
             result = "";
         } else if (onGetValue == null) {
+//            var e = new RuntimeException();
+//            e.printStackTrace();
             log.error("not find field: {}", field);
         }
         if (onGetValue != null)
@@ -294,18 +297,19 @@ public class SsrBlock implements SsrBlockImpl {
     }
 
     @Override
-    public SsrBlockImpl onGetValue(OnGetValueEvent onGetValue) {
+    public ISsrBlock onGetValue(OnGetValueEvent onGetValue) {
         this.onGetValue = onGetValue;
         return this;
     }
 
-    protected SsrBlock setTemplate(SsrTemplate template) {
+    @Override
+    public SsrBlock setTemplate(SsrTemplate template) {
         this.template = template;
         return this;
     }
 
     @Override
-    public SsrBlockImpl fixed(SsrComponentImpl form) {
+    public ISsrBlock fixed(ISsrBoard form) {
         this.option("option", null);
         form.addColumn(this.id);
         return this;

@@ -4,9 +4,11 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
+import cn.cerc.ui.ssr.editor.ISsrBoard;
+
 public class SsrBlockStyleDefault {
 
-    public class SupplierString implements SupplierBlockImpl {
+    public class SupplierString implements ISupplierBlock {
         private Supplier<String> url;
         private String title;
         private String field;
@@ -17,7 +19,7 @@ public class SsrBlockStyleDefault {
         }
 
         @Override
-        public SsrBlockImpl request(SsrComponentImpl owner) {
+        public ISsrBlock request(ISsrBoard owner) {
             var block = new SsrBlock(String.format("""
                     <div style='flex: ${_ratio};'>
                         <label for='%s'>%s</label>
@@ -52,7 +54,7 @@ public class SsrBlockStyleDefault {
         return new SupplierString(title + "：", field);
     }
 
-    public SupplierBlockImpl getBoolean(String title, String field) {
+    public ISupplierBlock getBoolean(String title, String field) {
         return chunk -> {
             var block = new SsrBlock(String.format("""
                     <div style='flex: ${_ratio};'>
@@ -70,11 +72,11 @@ public class SsrBlockStyleDefault {
         };
     }
 
-    public SupplierBlockImpl getRowBoolean(String title, String field) {
+    public ISupplierBlock getRowBoolean(String title, String field) {
         return getBoolean(title + "：", field);
     }
 
-    public SupplierBlockImpl getIt() {
+    public ISupplierBlock getIt() {
         return chunk -> {
             var block = new SsrBlock("""
                     <div role='gridIt'>
@@ -84,7 +86,7 @@ public class SsrBlockStyleDefault {
         };
     }
 
-    public SupplierBlockImpl getCheckbox(String checkboxField, String checkboxValueField) {
+    public ISupplierBlock getCheckbox(String checkboxField, String checkboxValueField) {
         return chunk -> {
             var block = new SsrBlock(String.format("""
                     <div role='checkbox'>
@@ -94,7 +96,7 @@ public class SsrBlockStyleDefault {
         };
     }
 
-    public SupplierBlockImpl getCheckbox(String checkboxField, Supplier<String> checkboxValue) {
+    public ISupplierBlock getCheckbox(String checkboxField, Supplier<String> checkboxValue) {
         return chunk -> {
             var block = new SsrBlock(String.format("""
                     <div role='checkbox'>
@@ -105,7 +107,7 @@ public class SsrBlockStyleDefault {
         };
     }
 
-    public SupplierBlockImpl getCheckboxIt(String checkboxField, String checkboxValueField) {
+    public ISupplierBlock getCheckboxIt(String checkboxField, String checkboxValueField) {
         return chunk -> {
             var block = new SsrBlock(String.format("""
                     <div role='checkboxIt'>
@@ -116,7 +118,7 @@ public class SsrBlockStyleDefault {
         };
     }
 
-    public SupplierBlockImpl getCheckboxIt(String checkboxField, Supplier<String> checkboxValue) {
+    public ISupplierBlock getCheckboxIt(String checkboxField, Supplier<String> checkboxValue) {
         return chunk -> {
             var block = new SsrBlock(String.format("""
                     <div role='checkboxIt'>
@@ -128,7 +130,7 @@ public class SsrBlockStyleDefault {
         };
     }
 
-    public SupplierBlockImpl getOption(String title, String field, Enum<?>[] enums) {
+    public ISupplierBlock getOption(String title, String field, Enum<?>[] enums) {
         Map<String, String> map = new LinkedHashMap<String, String>();
         for (Enum<?> item : enums) {
             map.put(String.valueOf(item.ordinal()), item.name());
@@ -136,7 +138,7 @@ public class SsrBlockStyleDefault {
         return getOption(title, field, map);
     }
 
-    public SupplierBlockImpl getOption(String title, String field, Map<String, String> map) {
+    public ISupplierBlock getOption(String title, String field, Map<String, String> map) {
         return chunk -> {
             var block = new SsrBlock(String.format("""
                     <div style='flex: ${_ratio};'>
@@ -150,7 +152,7 @@ public class SsrBlockStyleDefault {
         };
     }
 
-    public SupplierBlockImpl getOpera(String field) {
+    public ISupplierBlock getOpera(String field) {
         return chunk -> {
             var block = new SsrBlock(String.format("""
                     <div role='opera'>
@@ -161,7 +163,7 @@ public class SsrBlockStyleDefault {
         };
     }
 
-    public SupplierBlockImpl getOpera(Supplier<String> url) {
+    public ISupplierBlock getOpera(Supplier<String> url) {
         return chunk -> {
             var block = new SsrBlock("""
                     <div role='opera'>

@@ -47,7 +47,7 @@ public abstract class AbstractGridLine extends UIComponent implements DataSetSou
     public Optional<DataSet> getDataSet() {
         return source.getDataSet();
     }
-    
+
     public DataSet dataSet() {
         return source.getDataSet().orElse(null);
     }

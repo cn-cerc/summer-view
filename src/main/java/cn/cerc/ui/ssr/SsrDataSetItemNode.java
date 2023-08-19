@@ -12,7 +12,7 @@ public class SsrDataSetItemNode extends SsrValueNode {
     }
 
     @Override
-    public String getHtml(SsrBlockImpl block) {
+    public String getHtml(ISsrBlock block) {
         var field = this.getField().substring(FirstFlag.length(), this.getField().length());
         var dataSet = block.getDataSet();
         if (dataSet != null) {

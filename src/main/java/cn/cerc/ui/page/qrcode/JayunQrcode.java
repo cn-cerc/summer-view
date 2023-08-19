@@ -1,19 +1,21 @@
 package cn.cerc.ui.page.qrcode;
 
-import cn.cerc.db.core.MD5;
-import cn.cerc.db.core.ServerConfig;
-import cn.cerc.security.sapi.JayunAPI;
-
-import com.google.gson.Gson;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Map;
 import java.util.TreeMap;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.gson.Gson;
+
+import cn.cerc.db.core.MD5;
+import cn.cerc.db.core.ServerConfig;
+import cn.cerc.security.sapi.JayunAPI;
 
 public class JayunQrcode {
 

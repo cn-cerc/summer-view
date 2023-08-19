@@ -2,7 +2,7 @@ package cn.cerc.ui.ssr.block;
 
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.ssr.SsrBlock;
-import cn.cerc.ui.ssr.SupplierBlockImpl;
+import cn.cerc.ui.ssr.ISupplierBlock;
 import cn.cerc.ui.ssr.UISsrBoard;
 
 /**
@@ -25,17 +25,17 @@ public class UISsrBlock3101 extends UISsrBoard {
     }
 
     @Override
-    public UISsrBoard slot0(SupplierBlockImpl slot) {
+    public UISsrBoard slot0(ISupplierBlock slot) {
         return super.slot0(slot);
     }
 
     @Override
-    public UISsrBoard slot1(SupplierBlockImpl slot) {
+    public UISsrBoard slot1(ISupplierBlock slot) {
         return super.slot1(slot);
     }
 
     @Override
-    public UISsrBoard slot2(SupplierBlockImpl slot) {
+    public UISsrBoard slot2(ISupplierBlock slot) {
         return super.slot2(slot);
     }
 

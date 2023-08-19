@@ -27,8 +27,8 @@ public class SsrDefaultGridStyleTest {
         var style = grid.defaultStyle();
         grid.addBlock(style.getIt("序", 2));
         grid.addBlock(style.getString("部门名称", "Name_", 10));
-        grid.addBlock(style.getBoolean("状态", "Final_", 4));
-        grid.addBlock(style.getOption("类别", "Type_", 10, map));
+        grid.addBlock(style.getCheckBox("状态", "Final_", 4));
+        grid.addBlock(style.getMap("类别", "Type_", 10, map));
         grid.addBlock(style.getOpera(4)).onCallback("url", () -> {
             return "FrmView?code=" + ds.getString("Code_");
         });
@@ -36,11 +36,17 @@ public class SsrDefaultGridStyleTest {
         grid.addColumn("序", "部门名称", "状态", "类别", "操作");
         assertEquals(
                 """
-                        <div id='grid' class='scrollArea'><table class='dbgrid'><tr><th style='width: 2em'>序</th><th style='width: 10em'>部门名称</th><th style='width: 4em'>状态</th><th style='width: 10em'>类别</th><th style='width: 4em'>操作</th></tr><tr><td align='center' role='_it_'>1</td><td align='left' role='Name_'>研发部</td><td align='center' role='Final_'>
+                        <div id='grid' class='scrollArea'><table class='dbgrid'><tr>
+                        <th style='width: 2em'>序</th><th style='width: 10em'>部门名称</th><th style='width: 4em'>状态</th><th style='width: 10em'>类别</th><th style='width: 4em'>操作</th></tr>
+                        <tr>
+                        <td align='center' role='_it_'>1</td><td align='left' role='Name_'>研发部</td><td align='center' role='Final_'>
                         <span><input type='checkbox' name='checkBoxName' value='1' /></span>
-                        </td><td role='Type_'>张三</td><td align='center' role='_opera_'><a href='FrmView?code=001'>内容</a></td></tr><tr><td align='center' role='_it_'>2</td><td align='left' role='Name_'>生产部</td><td align='center' role='Final_'>
+                        </td><td role='Type_'>张三</td><td align='center' role='_opera_'><a href='FrmView?code=001'>内容</a></td></tr>
+                        <tr>
+                        <td align='center' role='_it_'>2</td><td align='left' role='Name_'>生产部</td><td align='center' role='Final_'>
                         <span><input type='checkbox' name='checkBoxName' value='1' checked /></span>
-                        </td><td role='Type_'></td><td align='center' role='_opera_'><a href='FrmView?code=002'>内容</a></td></tr></table></div>""",
+                        </td><td role='Type_'></td><td align='center' role='_opera_'><a href='FrmView?code=002'>内容</a></td></tr>
+                        </table></div>""",
                 grid.toString());
     }
 
@@ -60,7 +66,7 @@ public class SsrDefaultGridStyleTest {
         var style = grid.defaultStyle();
         grid.addBlock(style.getIt());
         grid.addBlock(style.getString("车辆名称", "Name_", 10, "right"));
-        grid.addBlock(style.getOption("类别", "Type_", 10, map));
+        grid.addBlock(style.getMap("类别", "Type_", 10, map));
         grid.addBlock(style.getOpera(4)).onCallback("url", () -> {
             return "FrmView?code=" + ds.getString("Code_");
         });
@@ -68,7 +74,13 @@ public class SsrDefaultGridStyleTest {
         grid.addColumn("序", "车辆名称", "类别", "操作");
         assertEquals(
                 """
-                        <div id='grid' class='scrollArea'><table class='dbgrid'><tr><th style='width: 2em'>序</th><th style='width: 10em'>车辆名称</th><th style='width: 10em'>类别</th><th style='width: 4em'>操作</th></tr><tr><td align='center' role='_it_'>1</td><td align='right' role='Name_'>货车</td><td role='Type_'>自有</td><td align='center' role='_opera_'><a href='FrmView?code=001'>内容</a></td></tr><tr><td align='center' role='_it_'>2</td><td align='right' role='Name_'>汽车</td><td role='Type_'>租赁</td><td align='center' role='_opera_'><a href='FrmView?code=002'>内容</a></td></tr></table></div>""",
+                        <div id='grid' class='scrollArea'><table class='dbgrid'><tr>
+                        <th style='width: 2em'>序</th><th style='width: 10em'>车辆名称</th><th style='width: 10em'>类别</th><th style='width: 4em'>操作</th></tr>
+                        <tr>
+                        <td align='center' role='_it_'>1</td><td align='right' role='Name_'>货车</td><td role='Type_'>自有</td><td align='center' role='_opera_'><a href='FrmView?code=001'>内容</a></td></tr>
+                        <tr>
+                        <td align='center' role='_it_'>2</td><td align='right' role='Name_'>汽车</td><td role='Type_'>租赁</td><td align='center' role='_opera_'><a href='FrmView?code=002'>内容</a></td></tr>
+                        </table></div>""",
                 grid.toString());
     }
 

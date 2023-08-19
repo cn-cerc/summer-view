@@ -1,11 +1,11 @@
 package cn.cerc.ui.other;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+
 import cn.cerc.mis.config.ApplicationConfig;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
-
-import java.math.BigDecimal;
-import java.text.DecimalFormat;
 
 public class StrongItem extends UIComponent {
     private String name;
