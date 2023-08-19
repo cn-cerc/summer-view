@@ -52,27 +52,27 @@ public class UISsrChunk extends UIComponent implements ISsrBoard {
             return;
         }
         if (dataSet().size() > 0) {
-            getBlock(SsrTemplate.BeginFlag, () -> new SsrBlock("<div role='chunkBox'>").setTemplate(template))
-                    .ifPresent(template -> html.print(template.getHtml()));
+            getBlock(SsrTemplate.BeginFlag, () -> new SsrBlock("<div role='chunkBox'>").template(template))
+                    .ifPresent(template -> html.print(template.html()));
             var save_rec = dataSet().recNo();
             try {
                 dataSet().first();
                 while (dataSet().fetch()) {
-                    getBlock(ListBegin, () -> new SsrBlock("<ul role='chunkBoxItem'>").setTemplate(template))
-                            .ifPresent(template -> html.print(template.getHtml()));
+                    getBlock(ListBegin, () -> new SsrBlock("<ul role='chunkBoxItem'>").template(template))
+                            .ifPresent(template -> html.print(template.html()));
                     for (var component : getComponents()) {
                         if (component instanceof UISsrBoard board)
                             board.template(template);
                         component.output(html);
                     }
-                    getBlock(ListEnd, () -> new SsrBlock("</ul>").setTemplate(template))
-                            .ifPresent(template -> html.print(template.getHtml()));
+                    getBlock(ListEnd, () -> new SsrBlock("</ul>").template(template))
+                            .ifPresent(template -> html.print(template.html()));
                 }
             } finally {
                 dataSet().setRecNo(save_rec);
             }
-            getBlock(SsrTemplate.EndFlag, () -> new SsrBlock("</div>").setTemplate(template))
-                    .ifPresent(template -> html.print(template.getHtml()));
+            getBlock(SsrTemplate.EndFlag, () -> new SsrBlock("</div>").template(template))
+                    .ifPresent(template -> html.print(template.html()));
         }
     }
 

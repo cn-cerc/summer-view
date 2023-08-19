@@ -42,7 +42,7 @@ public class UISsrBlock extends UIComponent {
     @Override
     public void output(HtmlWriter html) {
         if (block != null)
-            html.print(block.getHtml());
+            html.print(block.html());
         else
             log.warn("block is null");
     }

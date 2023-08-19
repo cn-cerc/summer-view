@@ -14,7 +14,7 @@ public class SsrDataSetItemNode extends SsrValueNode {
     @Override
     public String getHtml(SsrBlock block) {
         var field = this.getField().substring(FirstFlag.length(), this.getField().length());
-        var dataSet = block.getDataSet();
+        var dataSet = block.dataSet();
         if (dataSet != null) {
             if (dataSet.exists(field))
                 return dataSet.current().getText(field);

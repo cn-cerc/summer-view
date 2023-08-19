@@ -59,7 +59,7 @@ public class GridOperaField extends SsrControl implements ISupportGrid {
         ssr.id(headTitle);
 
         grid.addBlock(bodyTitle, block
-                .templateText("<td align='center' role='_opera_'><a href='${callback(url)}'>${_content}</a></td>"));
+                .text("<td align='center' role='_opera_'><a href='${callback(url)}'>${_content}</a></td>"));
         block.display(1);
         block.id(bodyTitle);
         block.option("_content", this.content);

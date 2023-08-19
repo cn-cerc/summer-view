@@ -20,7 +20,7 @@ import cn.cerc.ui.ssr.editor.ISsrBoard;
 public class SsrBlock implements ISsrOption {
     private static final Logger log = LoggerFactory.getLogger(SsrBlock.class);
     public static final String Fields = "fields";
-    private SsrNodes style;
+    private SsrNodes nodes;
     private List<String> list;
     private SsrListProxy listProxy;
     private Map<String, String> map;
@@ -30,7 +30,7 @@ public class SsrBlock implements ISsrOption {
     private Map<String, String> options;
     private Map<String, Supplier<String>> callback;
     private Boolean strict;
-    private String templateText;
+    private String text;
     private String id;
     private OnGetValueEvent onGetValue;
     private SsrTemplate template;
@@ -39,21 +39,11 @@ public class SsrBlock implements ISsrOption {
     }
 
     public SsrBlock(String templateText) {
-        this.templateText(templateText);
+        this.text(templateText);
     }
 
     public SsrBlock(Class<?> class1, String id) {
-        this.templateText(SsrUtils.getTempateFileText(class1, id));
-    }
-
-    public SsrBlock templateText(String templateText) {
-        this.templateText = templateText;
-        this.style = new SsrNodes(templateText).block(this);
-        return this;
-    }
-
-    public List<String> getList() {
-        return list;
+        this.text(SsrUtils.getTempateFileText(class1, id));
     }
 
     public SsrBlock toList(String... values) {
@@ -64,10 +54,11 @@ public class SsrBlock implements ISsrOption {
         return this;
     }
 
-    public Map<String, String> getMap() {
+    public Map<String, String> map() {
         return map;
     }
 
+    @Deprecated
     public SsrBlock setMap(Map<String, String> map) {
         this.map = map;
         return this;
@@ -101,14 +92,7 @@ public class SsrBlock implements ISsrOption {
         return result;
     }
 
-    @Deprecated
-    public Map<String, String> getOptions() {
-        if (options == null)
-            options = new HashMap<>();
-        return options;
-    }
-
-    public DataRow getDataRow() {
+    public DataRow dataRow() {
         if (dataRow != null)
             return dataRow;
         if (template != null)
@@ -117,17 +101,17 @@ public class SsrBlock implements ISsrOption {
             return null;
     }
 
-    public SsrBlock setDataRow(DataRow dataRow) {
+    public SsrBlock dataRow(DataRow dataRow) {
         this.dataRow = dataRow;
         return this;
     }
 
-    public SsrBlock setDataSet(DataSet dataSet) {
+    public SsrBlock dataSet(DataSet dataSet) {
         this.dataSet = dataSet;
         return this;
     }
 
-    public DataSet getDataSet() {
+    public DataSet dataSet() {
         if (dataSet != null)
             return dataSet;
         if (template != null)
@@ -136,14 +120,13 @@ public class SsrBlock implements ISsrOption {
             return null;
     }
 
-
     /**
      * 
      * @return 返回模版的解析结果
      */
-    public String getHtml() {
+    public String html() {
         var sb = new StringBuffer();
-        for (var node : this.style)
+        for (var node : this.nodes)
             sb.append(node.getHtml(this));
         return sb.toString();
     }
@@ -175,8 +158,14 @@ public class SsrBlock implements ISsrOption {
         return this;
     }
 
-    public String templateText() {
-        return this.templateText;
+    public String text() {
+        return this.text;
+    }
+
+    public SsrBlock text(String text) {
+        this.text = text;
+        this.nodes = new SsrNodes(text).block(this);
+        return this;
     }
 
     public SsrBlock id(String id) {
@@ -220,25 +209,25 @@ public class SsrBlock implements ISsrOption {
      * 
      * @return 返回回调函数
      */
-    public Map<String, Supplier<String>> getCallback() {
+    public Map<String, Supplier<String>> callback() {
         return callback;
     }
 
     public SsrNodes nodes() {
-        return style;
+        return nodes;
     }
 
-    public SsrBlock setNodes(SsrNodes style) {
-        Objects.requireNonNull(style);
-        this.style = style;
-        style.block(this);
+    public SsrBlock nodes(SsrNodes nodes) {
+        Objects.requireNonNull(nodes);
+        this.nodes = nodes;
+        nodes.block(this);
         return this;
     }
 
-    public Optional<String> getValue(String field) {
+    protected Optional<String> getValue(String field) {
         String result = null;
-        var dataRow = this.getDataRow();
-        var dataSet = this.getDataSet();
+        var dataRow = this.dataRow();
+        var dataSet = this.dataSet();
         // 先查找list
         if (list != null && SsrListIndexNode.is(field))
             result = this.getListProxy().index();
@@ -295,11 +284,10 @@ public class SsrBlock implements ISsrOption {
         return this;
     }
 
-    public SsrBlock setTemplate(SsrTemplate template) {
+    public SsrBlock template(SsrTemplate template) {
         this.template = template;
         return this;
     }
-
 
     /**
      * 固定当前查询字段（不会出现在配置列表中）
@@ -317,7 +305,6 @@ public class SsrBlock implements ISsrOption {
         toList(list.toArray(new String[list.size()]));
         return this;
     }
-
 
     public SsrBlock toMap(Map<String, String> map) {
         for (var key : map.keySet())

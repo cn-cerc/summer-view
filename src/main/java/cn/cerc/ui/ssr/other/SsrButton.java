@@ -34,11 +34,11 @@ public class SsrButton extends SsrControl implements ISupportPanel {
         var url = new SsrBlock(this.href);
         Optional<SsrDataRowSourceImpl> optDataRow = this.dataRow.target();
         if (optDataRow.isPresent())
-            url.setDataRow(optDataRow.get().dataRow());
-        block.templateText(String.format("""
-                <div id="%s" class="bottomBotton"><a href="%s">${_text}</a></div>""", this.getId(), url.getHtml()));
+            url.dataRow(optDataRow.get().dataRow());
+        block.text(String.format("""
+                <div id="%s" class="bottomBotton"><a href="%s">${_text}</a></div>""", this.getId(), url.html()));
         block.option("_text", this.text);
-        html.print(block.getHtml());
+        html.print(block.html());
     }
 
     @Override

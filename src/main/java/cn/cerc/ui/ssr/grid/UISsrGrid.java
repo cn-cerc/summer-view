@@ -138,11 +138,11 @@ public class UISsrGrid extends SsrContainer<ISupportGrid>
             return;
         }
 
-        getBlock(SsrTemplate.BeginFlag).ifPresent(template -> html.print(template.getHtml()));
-        getTemplate(TableBegin, getDefault_TableBegin()).ifPresent(value -> html.print(value.getHtml()));
+        getBlock(SsrTemplate.BeginFlag).ifPresent(template -> html.print(template.html()));
+        getTemplate(TableBegin, getDefault_TableBegin()).ifPresent(value -> html.print(value.html()));
 
         // 输出标题
-        getTemplate(HeadBegin, getDefault_HeadBegin()).ifPresent(value -> html.println(value.getHtml()));
+        getTemplate(HeadBegin, getDefault_HeadBegin()).ifPresent(value -> html.println(value.html()));
         for (var field : columns) {
             var block = getTemplate("head." + field, getDefault_HeadCell(field));
             if (block.isPresent()) {
@@ -152,10 +152,10 @@ public class UISsrGrid extends SsrContainer<ISupportGrid>
                 if (value != null)
                     value.accept(block.get().id(field));
             }
-            block.ifPresent(value -> html.print(value.getHtml()));
+            block.ifPresent(value -> html.print(value.html()));
         }
-        getTemplate(HeadEnd, () -> new SsrBlock("</tr>").setTemplate(template))
-                .ifPresent(value -> html.println(value.getHtml()));
+        getTemplate(HeadEnd, () -> new SsrBlock("</tr>").template(template))
+                .ifPresent(value -> html.println(value.html()));
 
         // 输出内容
         if (dataSet().size() > 0) {
@@ -163,7 +163,7 @@ public class UISsrGrid extends SsrContainer<ISupportGrid>
             try {
                 dataSet().first();
                 while (dataSet().fetch()) {
-                    getTemplate(BodyBegin, getDefault_BodyBegin()).ifPresent(value -> html.println(value.getHtml()));
+                    getTemplate(BodyBegin, getDefault_BodyBegin()).ifPresent(value -> html.println(value.html()));
                     for (var field : columns) {
                         var block = getTemplate("body." + field, getDefault_BodyCell(field));
                         if (block.isPresent()) {
@@ -171,19 +171,19 @@ public class UISsrGrid extends SsrContainer<ISupportGrid>
                             if (value != null)
                                 value.accept(block.get().id(field));
                         }
-                        block.ifPresent(value -> html.print(value.getHtml()));
+                        block.ifPresent(value -> html.print(value.html()));
                     }
-                    getTemplate(BodyEnd, () -> new SsrBlock("</tr>").setTemplate(template))
-                            .ifPresent(value -> html.println(value.getHtml()));
+                    getTemplate(BodyEnd, () -> new SsrBlock("</tr>").template(template))
+                            .ifPresent(value -> html.println(value.html()));
                 }
             } finally {
                 dataSet().setRecNo(save_rec);
             }
         }
 
-        getTemplate(TableEnd, () -> new SsrBlock("</table></div>").setTemplate(template))
-                .ifPresent(value -> html.print(value.getHtml()));
-        getBlock(SsrTemplate.EndFlag).ifPresent(template -> html.print(template.getHtml()));
+        getTemplate(TableEnd, () -> new SsrBlock("</table></div>").template(template))
+                .ifPresent(value -> html.print(value.html()));
+        getBlock(SsrTemplate.EndFlag).ifPresent(template -> html.print(template.html()));
 
     }
 
@@ -278,7 +278,7 @@ public class UISsrGrid extends SsrContainer<ISupportGrid>
      * @return 返回默认的表头样式
      */
     private Supplier<SsrBlock> getDefault_TableBegin() {
-        return () -> new SsrBlock("<div id='grid' class='scrollArea'><table class='dbgrid'>").setTemplate(template);
+        return () -> new SsrBlock("<div id='grid' class='scrollArea'><table class='dbgrid'>").template(template);
     }
 
     /**
@@ -286,7 +286,7 @@ public class UISsrGrid extends SsrContainer<ISupportGrid>
      * @return 返回表头行
      */
     private Supplier<SsrBlock> getDefault_HeadBegin() {
-        return () -> new SsrBlock("<tr>").setTemplate(template);
+        return () -> new SsrBlock("<tr>").template(template);
     }
 
     /**
@@ -294,7 +294,7 @@ public class UISsrGrid extends SsrContainer<ISupportGrid>
      * @return 返回表身行
      */
     private Supplier<SsrBlock> getDefault_BodyBegin() {
-        return () -> new SsrBlock("<tr>").setTemplate(template);
+        return () -> new SsrBlock("<tr>").template(template);
     }
 
     /**
@@ -303,7 +303,7 @@ public class UISsrGrid extends SsrContainer<ISupportGrid>
      * @return 返回默认的表头单元格样式
      */
     private Supplier<SsrBlock> getDefault_HeadCell(String field) {
-        return () -> new SsrBlock(String.format("<th>%s</th>", field)).setTemplate(template);
+        return () -> new SsrBlock(String.format("<th>%s</th>", field)).template(template);
     }
 
     /**
@@ -312,7 +312,7 @@ public class UISsrGrid extends SsrContainer<ISupportGrid>
      * @return 返回默认的表身单元格样式
      */
     private Supplier<SsrBlock> getDefault_BodyCell(String field) {
-        return () -> new SsrBlock(String.format("<td>${%s}</td>", field)).setTemplate(template);
+        return () -> new SsrBlock(String.format("<td>${%s}</td>", field)).template(template);
     }
 
     @Deprecated
@@ -497,7 +497,7 @@ public class UISsrGrid extends SsrContainer<ISupportGrid>
                             <div lowcode="button"><button name="save" value="save" onclick="submitForm('fieldForm', 'submit')">保存</button>
                             </div>
                         </form>""");
-        impl.block().setDataSet(dataSet);
+        impl.block().dataSet(dataSet);
         impl.block().option("id", this.getId());
 
         Optional<SsrDataService> optSvr = this.dataSet.target();

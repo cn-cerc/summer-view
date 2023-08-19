@@ -11,14 +11,14 @@ public class SsrCallbackTest {
     @Test
     public void test_error() {
         SsrBlock ssr = new SsrBlock("begin${callback}end");
-        assertEquals("begin${callback}end", ssr.getHtml());
+        assertEquals("begin${callback}end", ssr.html());
     }
 
     @Test
     public void test() {
         SsrBlock ssr = new SsrBlock("begin:${callback(child)}:end");
         ssr.onCallback("child", () -> "child ok");
-        assertEquals("begin:child ok:end", ssr.getHtml());
+        assertEquals("begin:child ok:end", ssr.html());
     }
 
     @Test
@@ -35,9 +35,9 @@ public class SsrCallbackTest {
                 .toMap("title", "百度");
 
         master.toMap("createMode", "" + true);
-        master.onCallback("child", () -> child.getHtml());
+        master.onCallback("child", () -> child.html());
 
-        assertEquals(" <a href='http://www.baidu.com'>百度</a>", master.getHtml());
+        assertEquals(" <a href='http://www.baidu.com'>百度</a>", master.html());
     }
 
 }

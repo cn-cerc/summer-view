@@ -78,7 +78,7 @@ public class FormStringField extends SsrControl implements ISupportForm {
         String field = this.field;
         block.id(title).fields(field).display(1);
         form.addBlock(title,
-                block.templateText(String.format(
+                block.text(String.format(
                         """
                                 <li>
                                     <label for="%s"${if _mark} class='formMark'${endif}>${if _required}<font role="require">*</font>${endif}<em>%s</em></label>

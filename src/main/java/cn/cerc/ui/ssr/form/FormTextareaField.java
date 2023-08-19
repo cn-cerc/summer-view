@@ -50,7 +50,7 @@ public class FormTextareaField extends SsrControl implements ISupportForm {
     public SsrBlock request(ISsrBoard form) {
         String title = this.title;
         String field = this.field;
-        form.addBlock(title, block.templateText(String.format("""
+        form.addBlock(title, block.text(String.format("""
                     <li>
                     <label for="%s">${if _required}<font role="require">*</font>${endif}<em>%s</em></label>
                     <div>

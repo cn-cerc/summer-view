@@ -74,7 +74,7 @@ public class FormDateRangeField extends SsrControl implements ISupportForm {
         String title = this.title;
         String beginDate = this.beginField;
         String endDate = this.endField;
-        form.addBlock(title, block.templateText(String.format("""
+        form.addBlock(title, block.text(String.format("""
                     <li>
                     <label for="start_date_"><em>%s</em></label>
                     <div class="dateArea">

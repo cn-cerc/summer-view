@@ -57,7 +57,7 @@ public class FormMapField extends SsrControl implements ISupportForm {
         String field = this.field;
         String selected = block().option("_selected").map("'%s'"::formatted).orElse(field);
         form.addBlock(title,
-                block.templateText(String.format(
+                block.text(String.format(
                         """
                                 <li>
                                     <label for="%s"${if _mark} class='formMark'${endif}>${if _required}<font role="require">*</font>${endif}<em>%s</em></label>

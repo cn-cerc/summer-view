@@ -24,7 +24,7 @@ public class SsrCallbackNode extends SsrTextNode {
 
     @Override
     public String getHtml(SsrBlock block) {
-        var callback = block.getCallback();
+        var callback = block.callback();
         if (callback != null && field != null) {
             var supplier = callback.get(field);
             if (supplier != null)

@@ -23,7 +23,7 @@ public class UISsrBlockTest {
         assertEquals("a${1}", block1.toString());
 
         var block2 = new UISsrBlock(null, "${code}${name}");
-        block2.block().setDataRow(DataRow.of("code", "a"));
+        block2.block().dataRow(DataRow.of("code", "a"));
         assertEquals("a${name}", block2.toString());
     }
 
@@ -34,7 +34,7 @@ public class UISsrBlockTest {
         assertEquals("a", block1.toString());
 
         var block2 = new UISsrBlock(null, "${code}${name}");
-        block2.block().setDataRow(DataRow.of("code", "a")).strict(false);
+        block2.block().dataRow(DataRow.of("code", "a")).strict(false);
         assertEquals("a", block2.toString());
     }
 

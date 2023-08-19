@@ -123,7 +123,7 @@ public class EditorForm extends UIComponent {
                     if (clazz.isInstance(ssr))
                         mapField.toMap(id, id);
                 });
-                if (mapField.block().getMap() == null || mapField.block().getMap().size() == 0)
+                if (mapField.block().map() == null || mapField.block().map().size() == 0)
                     mapField.toMap("", "未查找到可用数据源");
                 else
                     mapField.toMap("", "请选择数据源");

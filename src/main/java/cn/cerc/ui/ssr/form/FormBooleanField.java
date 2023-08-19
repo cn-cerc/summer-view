@@ -49,7 +49,7 @@ public class FormBooleanField extends SsrControl implements ISupportForm {
         String title = this.title;
         String field = this.field;
         form.addBlock(title,
-                block.templateText(String.format(
+                block.text(String.format(
                         """
                                     <li>
                                     <div role="switch">

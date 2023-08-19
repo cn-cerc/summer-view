@@ -51,7 +51,7 @@ public class GridCheckBoxField extends SsrControl implements ISupportGrid {
         ssr.display(1);
 
         grid.addBlock(bodyTitle,
-                block.templateText(String.format(
+                block.text(String.format(
                         """
                                     <td align='center' role='%s'>
                                         <span><input type='checkbox' name='checkBoxName' value='${if checkbox_value_}${checkbox_value_}${else}1${endif}' ${if %s}checked ${endif}/></span>

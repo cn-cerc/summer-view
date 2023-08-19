@@ -118,7 +118,7 @@ public abstract class VisualPage implements ISupplierClassList {
                         """);
                 block.toMap("class", target.getClass().getSimpleName());
                 block.toMap("id", targetId);
-                throw new RuntimeException(block.getHtml());
+                throw new RuntimeException(block.html());
             }
         } else {
             throw new RuntimeException(String.format("<div>组件id %s 没有找到！</div>", targetId));
@@ -153,7 +153,7 @@ public abstract class VisualPage implements ISupplierClassList {
                             """);
                     block.toMap("class", target.getClass().getSimpleName());
                     block.toMap("id", cid);
-                    writer.print(block.getHtml());
+                    writer.print(block.html());
                 }
             } else {
                 writer.print(String.format("<div>组件id %s 没有找到！</div>", cid));
@@ -257,7 +257,7 @@ public abstract class VisualPage implements ISupplierClassList {
             Document value = document.get("template_", Document.class);
             return value.toJson();
         }
-        return getSampleData().get().toMap("pageCode", pageCode).getHtml();
+        return getSampleData().get().toMap("pageCode", pageCode).html();
     }
 
     @Override

@@ -40,12 +40,12 @@ public class UISsrBoard extends UIComponent implements ISsrBoard {
         Objects.requireNonNull(cpu);
 
         for (SsrBlock slot : items) {
-            slot.setTemplate(template);
-            cpu.onCallback(slot.id(), () -> slot.getHtml());
+            slot.template(template);
+            cpu.onCallback(slot.id(), () -> slot.html());
         }
 
-        cpu.setTemplate(template);
-        html.print(cpu.getHtml());
+        cpu.template(template);
+        html.print(cpu.html());
     }
 
     /**
@@ -73,7 +73,7 @@ public class UISsrBoard extends UIComponent implements ISsrBoard {
 
     private UISsrBoard updateSlot(SsrBlock slot, int index) {
         items.set(index, slot);
-        slot.setTemplate(this.template);
+        slot.template(this.template);
         slot.id("slot" + index);
         return this;
     }

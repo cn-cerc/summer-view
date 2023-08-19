@@ -23,7 +23,7 @@ public class SsrIfNodeTest {
                 """);
         template.toMap("final", "false");
         template.toMap("ready", "true");
-        assertEquals("okyes", template.getHtml());
+        assertEquals("okyes", template.html());
     }
 
     @Test
@@ -41,7 +41,7 @@ public class SsrIfNodeTest {
                     ${endif}
                 ${dataset.end}
                 """);
-        block.block().setDataSet(ds);
+        block.block().dataSet(ds);
         block.block().toMap("field_", "1");
         assertEquals(" <span>第一个判断</span>  <span>第二个判断</span> ", block.toString());
     }
@@ -55,9 +55,9 @@ public class SsrIfNodeTest {
                     ${endif}
                 </div>
                 """);
-        var result1 = template.setDataRow(DataRow.of("Code_", 1)).getHtml();
+        var result1 = template.dataRow(DataRow.of("Code_", 1)).html();
         assertEquals("<div> yes </div>", result1);
-        var result2 = template.setDataRow(DataRow.of("Code_", 2)).getHtml();
+        var result2 = template.dataRow(DataRow.of("Code_", 2)).html();
         assertEquals("<div> no </div>", result2);
     }
 
@@ -72,9 +72,9 @@ public class SsrIfNodeTest {
                     ${endif}
                 </div>
                 """);
-        var result1 = template.setDataRow(DataRow.of("Code_", "001")).getHtml();
+        var result1 = template.dataRow(DataRow.of("Code_", "001")).html();
         assertEquals("<div> yes </div>", result1);
-        var result2 = template.setDataRow(DataRow.of("Code_", "002")).getHtml();
+        var result2 = template.dataRow(DataRow.of("Code_", "002")).html();
         assertEquals("<div> no </div>", result2);
     }
 
@@ -87,7 +87,7 @@ public class SsrIfNodeTest {
                     ${endif}
                 </div>
                 """);
-        var result = template.setDataRow(DataRow.of("Code_", "001")).getHtml();
+        var result = template.dataRow(DataRow.of("Code_", "001")).html();
         assertEquals("<div> <span>001</span> </div>", result);
     }
 
@@ -100,7 +100,7 @@ public class SsrIfNodeTest {
                     ${endif}
                 </div>
                 """);
-        var result = template.setDataRow(DataRow.of("Code_", "001")).getHtml();
+        var result = template.dataRow(DataRow.of("Code_", "001")).html();
         assertEquals("<div> <span></span> </div>", result);
     }
 
@@ -113,7 +113,7 @@ public class SsrIfNodeTest {
                     ${endif}
                 </div>
                 """);
-        var result = template.setDataRow(DataRow.of("Code_", "001")).getHtml();
+        var result = template.dataRow(DataRow.of("Code_", "001")).html();
         assertEquals("<div> <span></span> </div>", result);
     }
 
@@ -126,7 +126,7 @@ public class SsrIfNodeTest {
                     ${endif}
                 </div>
                 """);
-        var result = template.setDataRow(DataRow.of("Code_", "001")).getHtml();
+        var result = template.dataRow(DataRow.of("Code_", "001")).html();
         assertEquals("<div> <span></span> </div>", result);
     }
 
@@ -139,7 +139,7 @@ public class SsrIfNodeTest {
                     ${endif}
                 </div>
                 """);
-        var result = template.setDataRow(DataRow.of("Code_", "001")).getHtml();
+        var result = template.dataRow(DataRow.of("Code_", "001")).html();
         assertEquals("<div> <span></span> </div>", result);
     }
 
@@ -152,7 +152,7 @@ public class SsrIfNodeTest {
                     ${endif}
                 </div>
                 """);
-        var result = template.setDataRow(DataRow.of("Code_", "")).getHtml();
+        var result = template.dataRow(DataRow.of("Code_", "")).html();
         assertEquals("<div> <span></span> </div>", result);
     }
 
@@ -165,21 +165,21 @@ public class SsrIfNodeTest {
                     ${endif}
                 </div>
                 """);
-        var result = template.setDataRow(DataRow.of("Code_", "001")).getHtml();
+        var result = template.dataRow(DataRow.of("Code_", "001")).html();
         assertEquals("<div> <span></span> </div>", result);
     }
 
     @Test
     public void testDecode_if_true() {
         var template = new SsrBlock("<div>${if final_}<span>${code_}</span>${endif}</div>");
-        var result = template.setDataRow(DataRow.of("final_", true, "code_", "001")).getHtml();
+        var result = template.dataRow(DataRow.of("final_", true, "code_", "001")).html();
         assertEquals("<div><span>001</span></div>", result);
     }
 
     @Test
     public void testDecode_if_false() {
         var template = new SsrBlock("<div>${if final_}<span>ok</span>${endif}</div>");
-        var result = template.setDataRow(DataRow.of("final_", false)).getHtml();
+        var result = template.dataRow(DataRow.of("final_", false)).html();
         assertEquals("<div></div>", result);
     }
 }

@@ -104,7 +104,7 @@ public class FormCodeNameField extends SsrControl implements ISupportForm {
         String codeField = this.codeField;
         String nameField = this.nameField;
         form.addBlock(title,
-                block.templateText(String.format(
+                block.text(String.format(
                         """
                                 <li>
                                     <label for="%s"><em>%s</em></label>

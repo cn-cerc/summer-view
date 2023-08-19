@@ -22,8 +22,8 @@ public class BlockField extends AbstractField {
     @Override
     public String getText() {
         if (block != null) {
-            block.setDataSet(this.getDataSet().orElse(null));
-            return block.getHtml();
+            block.dataSet(this.getDataSet().orElse(null));
+            return block.html();
         } else
             return "template is null";
     }

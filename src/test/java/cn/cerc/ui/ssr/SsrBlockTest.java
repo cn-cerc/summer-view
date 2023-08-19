@@ -12,10 +12,10 @@ public class SsrBlockTest {
     @Test
     public void testDecodeString0() {
         var ssr = new SsrBlock("");
-        assertEquals("", ssr.getHtml());
-        ssr.setNodes(new SsrNodes("${0}-${list.index}"));
+        assertEquals("", ssr.html());
+        ssr.nodes(new SsrNodes("${0}-${list.index}"));
         ssr.toList("a");
-        assertEquals("a-0", ssr.getHtml());
+        assertEquals("a-0", ssr.html());
     }
 
     @Test
@@ -54,21 +54,21 @@ public class SsrBlockTest {
     @Test
     public void testDecode_array() {
         var template = new SsrBlock("<div><span>${0},${1}</span></div>");
-        var result = template.toList("001", "002").getHtml();
+        var result = template.toList("001", "002").html();
         assertEquals("<div><span>001,002</span></div>", result);
     }
 
     @Test
     public void testDecode_list() {
         var template = new SsrBlock("<div>${list.begin}<span>${list.item}</span>${list.end}</div>");
-        var result = template.toList("a1", "a2").getHtml();
+        var result = template.toList("a1", "a2").html();
         assertEquals("<div><span>a1</span><span>a2</span></div>", result);
     }
 
     @Test
     public void testDecode_map() {
         var template = new SsrBlock("<div>${map.begin}<span>${map.key}:${map.value}</span>${map.end}</div>");
-        var result = template.toMap("a", "b").getHtml();
+        var result = template.toMap("a", "b").html();
         assertEquals("<div><span>a:b</span></div>", result);
     }
 
@@ -80,7 +80,7 @@ public class SsrBlockTest {
                 b
                 """);
         ssr.onGetValue((field, defaultValue) -> "1".equals(field) ? ":" : defaultValue);
-        assertEquals("a:b", ssr.getHtml());
+        assertEquals("a:b", ssr.html());
     }
 
     private String margeList(SsrNodes block) {

@@ -30,7 +30,7 @@ public class GridUrlField extends SsrControl implements ISupportGrid {
     public SsrBlock request(ISsrBoard grid) {
         var title = this.title;
         String headTitle = "head." + title;
-        grid.addBlock(headTitle, head.templateText("<th style='width: ${_width}em'>${_title}</th>"));
+        grid.addBlock(headTitle, head.text("<th style='width: ${_width}em'>${_title}</th>"));
         head.toMap("_width", String.valueOf(this.fieldWidth));
         head.toMap("_title", this.title);
         head.id(headTitle);
@@ -38,7 +38,7 @@ public class GridUrlField extends SsrControl implements ISupportGrid {
         //
         String bodyTitle = "body." + title;
         grid.addBlock(bodyTitle,
-                body.templateText(String.format("<td align='center' role='${_role}'><a href='%s'>%s</a></td>",
+                body.text(String.format("<td align='center' role='${_role}'><a href='%s'>%s</a></td>",
                         this.href, this.context)));
         body.id(bodyTitle);
         body.display(1);

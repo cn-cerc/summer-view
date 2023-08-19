@@ -40,13 +40,13 @@ public class GridItField extends SsrControl implements ISupportGrid {
     @Override
     public SsrBlock request(ISsrBoard grid) {
         String headTitle = "head." + this.title;
-        grid.addBlock(headTitle, head.templateText("<th style='width: ${_width}em'>序</th>"));
+        grid.addBlock(headTitle, head.text("<th style='width: ${_width}em'>序</th>"));
         head.id(headTitle);
         head.display(1);
         head.toMap("_width", "" + this.fieldWidth);
 
         String bodyTitle = "body." + this.title;
-        grid.addBlock(bodyTitle, body.templateText("<td align='center' role='_it_'>${dataset.rec}</td>"));
+        grid.addBlock(bodyTitle, body.text("<td align='center' role='_it_'>${dataset.rec}</td>"));
         body.id(bodyTitle);
         body.display(1);
         return body;

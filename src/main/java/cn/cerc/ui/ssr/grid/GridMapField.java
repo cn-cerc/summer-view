@@ -57,7 +57,7 @@ public class GridMapField extends SsrControl implements ISupportGrid {
         head.id(headTitle);
         head.display(1);
 
-        grid.addBlock(bodyTitle, block.templateText(String.format("""
+        grid.addBlock(bodyTitle, block.text(String.format("""
                 <td role='%s'>${if readonly}${map.begin}${if map.key==%s}${map.value}${endif}${map.end}${else}
                 <select>
                 ${map.begin}

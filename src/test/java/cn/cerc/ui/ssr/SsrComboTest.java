@@ -19,7 +19,7 @@ public class SsrComboTest {
                 ${endif}
                 """);
         ssr.toMap("CreateMode", "true").toMap("output", "true");
-        assertEquals("a  ok ", ssr.getHtml());
+        assertEquals("a  ok ", ssr.html());
     }
 
     @Test
@@ -41,8 +41,8 @@ public class SsrComboTest {
         template.toList("aaa", "bbb");
         template.toMap("Ready_", "true");
         template.toMap("status_", "true");
-        template.setDataRow(DataRow.of("code_", "001", "final_", true));
-        var result = template.getHtml();
+        template.dataRow(DataRow.of("code_", "001", "final_", true));
+        var result = template.html();
         assertEquals("<div>aaa001<span>from map</span><span>from row</span> 3- bbb</div>", result);
     }
 

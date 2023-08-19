@@ -10,7 +10,7 @@ public class SsrMapNode extends SsrContainerNode {
 
     @Override
     public String getHtml(SsrBlock block) {
-        var params = block.getMap();
+        var params = block.map();
         if (params == null)
             return this.getText();
 

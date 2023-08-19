@@ -128,33 +128,33 @@ public class UISsrForm extends SsrContainer<ISupportForm>
         if (this.columns == null)
             this.columns = this.dataRow().fields().names();
 
-        getBlock(SsrTemplate.BeginFlag).ifPresent(template -> html.print(template.getHtml()));
+        getBlock(SsrTemplate.BeginFlag).ifPresent(template -> html.print(template.html()));
 
         var top = getBlock(FormBegin, getDefault_FormBegin()).get();
         if (this.template.id() != null)
             top.option(ISsrOption.TemplateId, this.template.id());
-        html.print(top.getHtml());
+        html.print(top.html());
 
         for (var column : columns) {
             var item = getBlock(column);
             if (item.isPresent()) {
                 var block = item.get();
-                block.setTemplate(template);
+                block.template(template);
                 Consumer<SsrBlock> value = onGetHtml.get(column);
                 if (value != null)
                     value.accept(block.id(column));
-                html.print(block.getHtml());
+                html.print(block.html());
             } else {
                 html.print(new SsrBlock(
                         String.format("%s: <input type=\"text\" name=\"%s\" value=\"${%s}\">", column, column, column))
-                        .setTemplate(template)
-                        .getHtml());
+                        .template(template)
+                        .html());
                 log.error("找不到数据列: {}", column);
             }
         }
-        getBlock(FormEnd, () -> new SsrBlock("</ul></form>").setTemplate(template))
-                .ifPresent(value -> html.print(value.getHtml()));
-        getBlock(SsrTemplate.EndFlag).ifPresent(template -> html.print(template.getHtml()));
+        getBlock(FormEnd, () -> new SsrBlock("</ul></form>").template(template))
+                .ifPresent(value -> html.print(value.html()));
+        getBlock(SsrTemplate.EndFlag).ifPresent(template -> html.print(template.html()));
     }
 
     public void onGetHtml(String field, Consumer<SsrBlock> consumer) {
@@ -166,14 +166,14 @@ public class UISsrForm extends SsrContainer<ISupportForm>
         return () -> {
             var ssr = new SsrBlock(String.format("<form method='post' action='%s'%s role='${role}'>${callback(%s)}<ul>",
                     action, !Utils.isEmpty(getId()) ? " id='" + getId() + "'" : "", UISsrForm.FormStart))
-                    .setTemplate(template);
+                    .template(template);
             ssr.onCallback(UISsrForm.FormStart, () -> {
                 var formFirst = this.getBlock(UISsrForm.FormStart);
                 formFirst.ifPresent(template -> {
                     if (this.template.id() != null)
                         template.option(ISsrOption.TemplateId, this.template.id());
                 });
-                return formFirst.isPresent() ? formFirst.get().getHtml() : "";
+                return formFirst.isPresent() ? formFirst.get().html() : "";
             });
             ssr.option("role", "search");
             return ssr;
@@ -427,7 +427,7 @@ public class UISsrForm extends SsrContainer<ISupportForm>
                             <div lowcode="button"><button name="save" value="save" onclick="submitForm('fieldForm', 'submit')">保存</button>
                             </div>
                         </form>""");
-        impl.block().setDataSet(dataSet);
+        impl.block().dataSet(dataSet);
         impl.block().option("id", this.getId());
 
         List<Field> fields = new ArrayList<>();

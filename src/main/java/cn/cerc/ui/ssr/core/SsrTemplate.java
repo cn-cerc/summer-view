@@ -63,7 +63,7 @@ public class SsrTemplate implements Iterable<SsrBlock>, ISsrOption {
     }
 
     private void addItem(String blockText, String templateText) {
-        var template = new SsrBlock(templateText).setTemplate(this);
+        var template = new SsrBlock(templateText).template(this);
         String key = null;
         int site;
         if ((site = blockText.indexOf(" ")) > 0) {
@@ -137,7 +137,7 @@ public class SsrTemplate implements Iterable<SsrBlock>, ISsrOption {
     }
 
     public void addItem(String id, SsrBlock block) {
-        block.setTemplate(this);
+        block.template(this);
         this.items.put(id, block);
     }
 

@@ -52,9 +52,9 @@ public class SsrRedirectPage extends SsrComponent implements ISupportVisualConta
                     SsrDataService svr = optSvr.get();
                     DataSet dataSet = svr.getDataSet();
                     if (!dataSet.eof())
-                        url.setDataSet(dataSet);
+                        url.dataSet(dataSet);
                 }
-                getContainer().redirectPage(url.getHtml());
+                getContainer().redirectPage(url.html());
             }
             break;
         }

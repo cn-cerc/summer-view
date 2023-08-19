@@ -73,7 +73,7 @@ public class FormFastDateField extends SsrControl implements ISupportForm {
         String title = this.title;
         String field = this.field;
         form.addBlock(title,
-                block.templateText(String.format(
+                block.text(String.format(
                         """
                                 <li>
                                     <label for="%s"><em>%s</em></label>

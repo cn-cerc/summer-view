@@ -17,7 +17,7 @@ public class SsrListNodeTest {
                 ${list.end}
                 """);
         ssr.toList("a", "b");
-        assertEquals("<span>0:a</span><span>1:b</span>", ssr.getHtml());
+        assertEquals("<span>0:a</span><span>1:b</span>", ssr.html());
     }
 
     @Test
@@ -27,9 +27,9 @@ public class SsrListNodeTest {
                 ${if list.item==Code_}selected${endif}
                 ${list.end}
                 """);
-        ssr.setDataRow(DataRow.of("Code_", "a"));
+        ssr.dataRow(DataRow.of("Code_", "a"));
         ssr.toList("a", "b");
-        assertEquals("selected", ssr.getHtml());
+        assertEquals("selected", ssr.html());
     }
 
 }

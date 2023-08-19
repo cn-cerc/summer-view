@@ -24,10 +24,10 @@ public class SsrMapNodeTest {
         var ds = new DataSet();
         ds.append().setValue("Code_", "a");
 
-        ssr.setDataSet(ds);
+        ssr.dataSet(ds);
         assertEquals(
                 "<select><option value =\"a\" selected>0:张三</option><option value =\"b\" >1:李四</option><option value =\"c\" >2:王五</option></select>",
-                ssr.getHtml());
+                ssr.html());
     }
 
 }

@@ -35,14 +35,14 @@ public class GridStringField extends SsrControl implements ISupportGrid {
     @Override
     public SsrBlock request(ISsrBoard grid) {
         String headTitle = "head." + this.title;
-        grid.addBlock(headTitle, head.templateText("<th style='width: ${_width}em'>${_title}</th>"));
+        grid.addBlock(headTitle, head.text("<th style='width: ${_width}em'>${_title}</th>"));
         head.toMap("_width", "" + this.fieldWidth);
         head.toMap("_title", this.title);
         head.id(headTitle);
         head.display(1);
 
         String bodyTitle = "body." + this.title;
-        grid.addBlock(bodyTitle, body.templateText(String.format(
+        grid.addBlock(bodyTitle, body.text(String.format(
                 "<td align='${_align}' role='${_field}'>${if _enabled_url}<a href='${callback(url)}'>${endif}${dataset.%s}${if _enabled_url}</a>${endif}</td>",
                 this.field)));
         head.toMap("_align", this.align);

@@ -28,14 +28,14 @@ public interface ISsrBoard extends ISsrOption {
 
     default SsrBlock addBlock(String id, String templateText) {
         var define = template();
-        var ssr = new SsrBlock(templateText).setTemplate(define);
+        var ssr = new SsrBlock(templateText).template(define);
         define.addItem(id, ssr);
         return ssr;
     }
 
     default ISsrBoard addBlock(String id, SsrBlock block) {
         var define = template();
-        block.setTemplate(define);
+        block.template(define);
         define.addItem(id, block);
         return this;
     }

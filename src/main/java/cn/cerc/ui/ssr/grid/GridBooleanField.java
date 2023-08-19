@@ -60,7 +60,7 @@ public class GridBooleanField extends SsrControl implements ISupportGrid {
         if (!Utils.isEmpty(this.falseText))
             falseText = this.falseText;
 
-        grid.addBlock(bodyTitle, block.templateText(String.format("""
+        grid.addBlock(bodyTitle, block.text(String.format("""
                 <td align='center' role='%s'>
                     <span>
                         ${if %s}
