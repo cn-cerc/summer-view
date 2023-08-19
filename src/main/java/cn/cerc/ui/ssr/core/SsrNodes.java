@@ -4,9 +4,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class SsrNodes implements Iterable<ISsrNode> {
-    ArrayList<ISsrNode> items;
+    private ArrayList<ISsrNode> items;
     private String templateText;
-    private SsrBlock block;
 
     public SsrNodes(String templateText) {
         this.templateText = templateText;
@@ -29,15 +28,6 @@ public class SsrNodes implements Iterable<ISsrNode> {
     @Override
     public Iterator<ISsrNode> iterator() {
         return items.iterator();
-    }
-
-    public SsrNodes block(SsrBlock block) {
-        this.block = block;
-        return this;
-    }
-
-    public SsrBlock block() {
-        return block;
     }
 
     public String templateText() {

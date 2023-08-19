@@ -16,9 +16,9 @@ import cn.cerc.db.core.Utils;
 
 public class SsrTemplate implements Iterable<SsrBlock>, ISsrOption {
     private static final Logger log = LoggerFactory.getLogger(SsrTemplate.class);
-    private LinkedHashMap<String, SsrBlock> items = new LinkedHashMap<>();
     public static final String BeginFlag = "begin";
     public static final String EndFlag = "end";
+    private LinkedHashMap<String, SsrBlock> items = new LinkedHashMap<>();
     private String templateText;
     private String id;
     private boolean strict = true;
@@ -107,14 +107,6 @@ public class SsrTemplate implements Iterable<SsrBlock>, ISsrOption {
                 this.items().put(templateId, block);
         }
         return Optional.ofNullable(block);
-    }
-
-    public Optional<SsrBlock> getBegin() {
-        return this.get(BeginFlag);
-    }
-
-    public Optional<SsrBlock> getEnd() {
-        return this.get(EndFlag);
     }
 
     public String templateText() {

@@ -151,7 +151,7 @@ public class SsrBlock implements ISsrOption {
 
     public SsrBlock text(String text) {
         this.text = text;
-        this.nodes = new SsrNodes(text).block(this);
+        this.nodes = new SsrNodes(text);
         return this;
     }
 
@@ -207,7 +207,6 @@ public class SsrBlock implements ISsrOption {
     public SsrBlock nodes(SsrNodes nodes) {
         Objects.requireNonNull(nodes);
         this.nodes = nodes;
-        nodes.block(this);
         return this;
     }
 

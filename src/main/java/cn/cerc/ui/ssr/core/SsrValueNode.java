@@ -1,7 +1,6 @@
 package cn.cerc.ui.ssr.core;
 
 public class SsrValueNode implements ISsrNode {
-//    private static final Logger log = LoggerFactory.getLogger(SsrValueNode.class);
     private String text;
 
     public SsrValueNode(String text) {

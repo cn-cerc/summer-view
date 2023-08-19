@@ -189,6 +189,7 @@ public class UISsrForm extends SsrContainer<ISupportForm>
         return Optional.ofNullable(block);
     }
 
+    /** 请改使用 columns 函数 */
     @Deprecated
     public List<String> fields() {
         return columns();
@@ -351,16 +352,19 @@ public class UISsrForm extends SsrContainer<ISupportForm>
         return this;
     }
 
+    /** 请改使用 getBlock */
     @Deprecated
     public Optional<SsrBlock> getTemplate(String blockId) {
         return this.getBlock(blockId);
     }
 
+    /** 请改使用 template 函数 */
     @Deprecated
     public SsrTemplate define() {
         return template();
     }
 
+    /** 请改使用 addColumn 函数 */
     @Deprecated
     public void addField(String name) {
         this.addColumn(name);
@@ -393,7 +397,7 @@ public class UISsrForm extends SsrContainer<ISupportForm>
     @Override
     public void buildEditor(UIComponent content, String pageCode) {
         super.buildEditor(content, pageCode);
-        
+
         EditorGrid grid = new EditorGrid(content, this);
         grid.addColumn("栏位", "cloumn", 20);
         grid.build(pageCode);
