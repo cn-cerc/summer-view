@@ -78,9 +78,9 @@ public class VisualContainer extends SsrContainer<ISupportVisualContainer> {
     @Override
     public void buildEditor(UIComponent content, String pageCode) {
         super.buildEditor(content, pageCode);
-        
+
         var grid = new EditorGrid(content, this);
-        for (var item : this) 
+        for (var item : this)
             grid.addRow().setValue("id", item.getId()).setValue("class", item.getClass().getSimpleName());
         grid.addColumn("代码", "id", 20);
         grid.addColumn("类名", "class", 30);
@@ -175,7 +175,7 @@ public class VisualContainer extends SsrContainer<ISupportVisualContainer> {
      * 取得相应的组件
      * 
      * @param <T>
-     * @param beanId
+     * @param memberId
      * @param requiredType
      * @return
      */

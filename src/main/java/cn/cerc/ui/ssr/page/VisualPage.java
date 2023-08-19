@@ -80,7 +80,6 @@ public abstract class VisualPage implements ISupplierClassList {
     /**
      * 返回搜索页范例
      * 
-     * @param pageCode
      * @return
      */
     protected abstract Supplier<SsrBlock> getSampleData();
@@ -282,7 +281,7 @@ public abstract class VisualPage implements ISupplierClassList {
     @Override
     public Map<String, Object> getAttachData(Class<? extends SsrComponent> clazz) {
         var map = sourceMap.get(clazz);
-        if(map != null)
+        if (map != null)
             return map;
         return Map.of();
     }
