@@ -13,8 +13,8 @@ import cn.cerc.ui.SummerUI;
 import cn.cerc.ui.core.RequestReader;
 import cn.cerc.ui.fields.DateField;
 import cn.cerc.ui.fields.ImageConfigImpl;
-import cn.cerc.ui.ssr.SsrBlock;
 import cn.cerc.ui.ssr.ISsrBlock;
+import cn.cerc.ui.ssr.SsrBlock;
 import cn.cerc.ui.ssr.core.SsrControl;
 import cn.cerc.ui.ssr.editor.ISsrBoard;
 import cn.cerc.ui.ssr.editor.SsrMessage;
@@ -50,6 +50,7 @@ public class FormFastDateField extends SsrControl implements ISupportForm {
         this.title = title;
         this.field = field;
         block.id(title).fields(field).display(1);
+        init();
     }
 
     private void init() {

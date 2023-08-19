@@ -22,7 +22,7 @@ public class FormSubmitButton extends SsrControl implements ISupplierBlock {
     private ImageConfigImpl imageConfig;
     private ISsrBlock block;
     @Column
-    String title = "提交";
+    String title = "查询";
     @Column
     String field = "submit";
     @Column
