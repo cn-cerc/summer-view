@@ -10,6 +10,7 @@ import java.util.function.Supplier;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -112,7 +113,7 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
             var block = getBlock(field,
                     () -> new SsrBlock(
                             String.format("%s: <input type=\"text\" name=\"%s\" value=\"${%s}\">", field, field, field))
-                            .setTemplate(template));
+                                    .setTemplate(template));
             if (block.isPresent()) {
                 var value = onGetHtml.get(field);
                 if (value != null)
@@ -145,7 +146,7 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
         return () -> {
             var ssr = new SsrBlock(String.format("<form method='post' action='%s'%s role='${role}'>${callback(%s)}<ul>",
                     action, !Utils.isEmpty(getId()) ? " id='" + getId() + "'" : "", UISsrForm.FormStart))
-                    .setTemplate(template);
+                            .setTemplate(template);
             ssr.onCallback(UISsrForm.FormStart, () -> {
                 var formFirst = this.getBlock(UISsrForm.FormStart);
                 formFirst.ifPresent(template -> {
@@ -227,6 +228,9 @@ public class UISsrForm extends UIComponent implements SsrComponentImpl {
             ssr.option("fields").ifPresent(fields1 -> {
                 for (var field : fields1.split(",")) {
                     String val = request.getParameter(field);
+                    if (StringUtils.isNotEmpty(val)) {
+                        val = val.trim();
+                    }
                     updateValue(field, val, submit);
                 }
             });
