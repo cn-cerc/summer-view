@@ -1,10 +1,8 @@
-package cn.cerc.ui.ssr;
+package cn.cerc.ui.ssr.core;
 
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
-
-import cn.cerc.ui.ssr.core.SsrBlock;
 
 public class SsrCallbackTest {
 

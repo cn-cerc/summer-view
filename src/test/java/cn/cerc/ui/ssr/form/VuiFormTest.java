@@ -1,4 +1,4 @@
-package cn.cerc.ui.ssr;
+package cn.cerc.ui.ssr.form;
 
 import static org.junit.Assert.assertEquals;
 
@@ -8,7 +8,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import cn.cerc.db.core.DataRow;
 import cn.cerc.ui.ssr.core.PropertiesWriter;
-import cn.cerc.ui.ssr.form.VuiForm;
 
 public class VuiFormTest {
 

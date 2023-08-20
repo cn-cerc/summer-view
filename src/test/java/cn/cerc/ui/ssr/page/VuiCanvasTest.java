@@ -13,7 +13,7 @@ import cn.cerc.ui.ssr.source.VuiDataService;
 
 //@Configuration
 //@ComponentScan(basePackages = { "cn.cerc.*" })
-public class VisualContainerTest {
+public class VuiCanvasTest {
     public static final String Text = """
                         {
                 "readme": null,
@@ -82,7 +82,7 @@ public class VisualContainerTest {
 
     @Before
     public void setup() {
-        Application.init(VisualContainerTest.class);
+        Application.init(VuiCanvasTest.class);
     }
 
     @Test

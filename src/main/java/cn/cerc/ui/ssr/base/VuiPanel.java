@@ -38,7 +38,7 @@ public class VuiPanel extends VuiContainer<ISupportPanel> implements ISupportCan
     @Override
     public void buildEditor(UIComponent content, String pageCode) {
         super.buildEditor(content, pageCode);
-        
+
         EditorPanel panel = new EditorPanel(content, this);
         panel.build(pageCode);
         // 显示所有可以加入的组件

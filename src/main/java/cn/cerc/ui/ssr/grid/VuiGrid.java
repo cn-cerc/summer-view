@@ -57,8 +57,7 @@ import cn.cerc.ui.style.IGridStyle;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Description("数据表格")
-public class VuiGrid extends VuiContainer<ISupportGrid>
-        implements ISsrBoard, IGridStyle, IBinders, ISupportCanvas {
+public class VuiGrid extends VuiContainer<ISupportGrid> implements ISsrBoard, IGridStyle, IBinders, ISupportCanvas {
     private static final Logger log = LoggerFactory.getLogger(VuiGrid.class);
     private SsrTemplate template;
     private List<String> columns = new ArrayList<>();
@@ -465,7 +464,7 @@ public class VuiGrid extends VuiContainer<ISupportGrid>
     @Override
     public void buildEditor(UIComponent content, String pageCode) {
         super.buildEditor(content, pageCode);
-        
+
         EditorGrid grid = new EditorGrid(content, this);
         grid.build(pageCode);
 
@@ -604,7 +603,7 @@ public class VuiGrid extends VuiContainer<ISupportGrid>
             }
             var bean = this.canvas().getMember(this.dataSet.targetId(), VuiDataService.class);
             if (bean.isPresent())
-                this.dataSet(bean.get().getDataSet());
+                this.dataSet(bean.get().dataSet());
             else
                 log.warn("{} 绑定的数据源 {} 找不到", this.getId(), this.dataSet.targetId());
             break;

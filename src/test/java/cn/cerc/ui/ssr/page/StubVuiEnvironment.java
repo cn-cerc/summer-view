@@ -25,7 +25,7 @@ import cn.cerc.ui.ssr.source.VuiDataSet;
 import cn.cerc.ui.ssr.source.VuiMapService;
 import cn.cerc.ui.ssr.source.VuiRequestRow;
 
-public class VuiEnvironmentTest extends VuiEnvironment {
+public class StubVuiEnvironment extends VuiEnvironment {
 
     @Override
     protected IPage getRuntimePage() {
@@ -512,7 +512,7 @@ public class VuiEnvironmentTest extends VuiEnvironment {
 
     @Test
     public void test() {
-        VuiEnvironmentTest env = new VuiEnvironmentTest();
+        StubVuiEnvironment env = new StubVuiEnvironment();
         var canvas = new VuiCanvas(env);
         canvas.ready();
         assertEquals(32, canvas.getMembers().size());

@@ -20,11 +20,10 @@ import cn.cerc.ui.ssr.editor.EditorForm;
 import cn.cerc.ui.ssr.editor.SsrMessage;
 import cn.cerc.ui.ssr.form.VuiForm;
 import cn.cerc.ui.ssr.page.IVuiEnvironment;
-import cn.cerc.ui.ssr.page.ISupportCanvas;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class VuiMapSupplier extends VuiComponent implements ISupplierMap, ISupportCanvas, IBinders {
+public class VuiMapSupplier extends VuiComponent implements ISupplierMap, IBinders {
     private static final Logger log = LoggerFactory.getLogger(VuiMapSupplier.class);
     private Map<String, String> items = new LinkedHashMap<>();
     private Binders binders = new Binders();

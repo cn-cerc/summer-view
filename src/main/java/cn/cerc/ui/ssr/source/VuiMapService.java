@@ -16,11 +16,10 @@ import cn.cerc.db.core.Utils;
 import cn.cerc.mis.client.ServiceSign;
 import cn.cerc.ui.ssr.core.VuiComponent;
 import cn.cerc.ui.ssr.editor.SsrMessage;
-import cn.cerc.ui.ssr.page.ISupportCanvas;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class VuiMapService extends VuiComponent implements ISupplierMap, ISupportCanvas, IBinders {
+public class VuiMapService extends VuiComponent implements ISupplierMap, IBinders {
     private Map<String, String> items = new LinkedHashMap<>();
     private String selected = "";
     private IHandle handle;

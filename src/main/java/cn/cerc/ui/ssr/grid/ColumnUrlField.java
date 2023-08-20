@@ -31,8 +31,8 @@ public class ColumnUrlField extends VuiControl implements ISupportGridColumn {
     @Override
     public void output(HtmlWriter html) {
         if (!Utils.isEmpty(this.href)) {
-            SsrBlock ssr = new SsrBlock(String.format("<a href='%s'>${if _field}${%s}${else}%s${endif}</a>",
-                    this.href, this.field, this.text));
+            SsrBlock ssr = new SsrBlock(String.format("<a href='%s'>${if _field}${%s}${else}%s${endif}</a>", this.href,
+                    this.field, this.text));
             ssr.dataSet(dataSet);
             ssr.option("_field", this.field);
             html.println(ssr.html());

@@ -58,8 +58,8 @@ public class GridOperaField extends VuiControl implements ISupportGrid {
         ssr.option("templateId", "");
         ssr.id(headTitle);
 
-        grid.addBlock(bodyTitle, block
-                .text("<td align='center' role='_opera_'><a href='${callback(url)}'>${_content}</a></td>"));
+        grid.addBlock(bodyTitle,
+                block.text("<td align='center' role='_opera_'><a href='${callback(url)}'>${_content}</a></td>"));
         block.display(1);
         block.id(bodyTitle);
         block.option("_content", this.content);

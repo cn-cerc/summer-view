@@ -1,4 +1,4 @@
-package cn.cerc.ui.ssr;
+package cn.cerc.ui.ssr.core;
 
 import static org.junit.Assert.assertEquals;
 

@@ -14,15 +14,14 @@ import cn.cerc.ui.ssr.core.PropertiesWriter;
 import cn.cerc.ui.ssr.core.VuiComponent;
 import cn.cerc.ui.ssr.editor.EditorForm;
 import cn.cerc.ui.ssr.editor.SsrMessage;
-import cn.cerc.ui.ssr.form.ISupportForm;
 import cn.cerc.ui.ssr.form.ISupplierDataRow;
+import cn.cerc.ui.ssr.form.ISupportForm;
 import cn.cerc.ui.ssr.form.VuiForm;
-import cn.cerc.ui.ssr.page.ISupportCanvas;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Description("内存数据行")
-public class VuiDataRow extends VuiComponent implements ISupplierDataRow, ISupportCanvas {
+public class VuiDataRow extends VuiComponent implements ISupplierDataRow {
     private DataRow dataRow = new DataRow();
 
     @Override

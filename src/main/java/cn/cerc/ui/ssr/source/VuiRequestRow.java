@@ -17,12 +17,11 @@ import cn.cerc.ui.ssr.core.VuiComponent;
 import cn.cerc.ui.ssr.editor.EditorForm;
 import cn.cerc.ui.ssr.editor.SsrMessage;
 import cn.cerc.ui.ssr.form.ISupplierDataRow;
-import cn.cerc.ui.ssr.page.ISupportCanvas;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Description("请求数据行")
-public class VuiRequestRow extends VuiComponent implements ISupplierDataRow, ISupportCanvas {
+public class VuiRequestRow extends VuiComponent implements ISupplierDataRow {
     private DataRow config = new DataRow();
     private DataRow dataRow = new DataRow();
     private HttpServletRequest request;

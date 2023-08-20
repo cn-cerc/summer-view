@@ -1,4 +1,4 @@
-package cn.cerc.ui.ssr;
+package cn.cerc.ui.ssr.core;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -8,7 +8,6 @@ import org.junit.Test;
 
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.ssr.base.UISsrBlock;
-import cn.cerc.ui.ssr.core.SsrTemplate;
 
 public class SsrTemplateTest {
 

@@ -3,7 +3,9 @@ package cn.cerc.ui.ssr.source;
 import java.util.Map;
 import java.util.Optional;
 
-public interface ISupplierMap {
+import cn.cerc.ui.ssr.page.ISupportCanvas;
+
+public interface ISupplierMap extends ISupportCanvas {
 
     Map<String, String> items();
 

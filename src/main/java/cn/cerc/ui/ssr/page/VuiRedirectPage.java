@@ -50,7 +50,7 @@ public class VuiRedirectPage extends VuiComponent implements ISupportCanvas {
                 SsrBlock url = new SsrBlock(this.href);
                 if (optSvr.isPresent()) {
                     VuiDataService svr = optSvr.get();
-                    DataSet dataSet = svr.getDataSet();
+                    DataSet dataSet = svr.dataSet();
                     if (!dataSet.eof())
                         url.dataSet(dataSet);
                 }

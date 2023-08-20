@@ -12,12 +12,11 @@ import cn.cerc.ui.ssr.core.PropertiesReader;
 import cn.cerc.ui.ssr.core.PropertiesWriter;
 import cn.cerc.ui.ssr.core.VuiComponent;
 import cn.cerc.ui.ssr.editor.EditorGrid;
-import cn.cerc.ui.ssr.page.ISupportCanvas;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Description("内存数据表")
-public class VuiDataSet extends VuiComponent implements ISupportCanvas, ISupplierDataSet {
+public class VuiDataSet extends VuiComponent implements ISupplierDataSet {
     private DataSet dataSet = new DataSet();
 
     public VuiDataSet() {

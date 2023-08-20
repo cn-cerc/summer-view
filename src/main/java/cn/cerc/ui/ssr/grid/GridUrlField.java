@@ -15,16 +15,16 @@ import cn.cerc.ui.ssr.editor.ISsrBoard;
 public class GridUrlField extends VuiControl implements ISupportGrid {
     private SsrBlock head = new SsrBlock();
     private SsrBlock body = new SsrBlock();
-        @Column
-        String title = "操作";
-        @Column
-        String context = "内容";
-        @Column
-        String field = "opear";
-        @Column
-        int fieldWidth = 5;
-        @Column
-        String href = "";
+    @Column
+    String title = "操作";
+    @Column
+    String context = "内容";
+    @Column
+    String field = "opear";
+    @Column
+    int fieldWidth = 5;
+    @Column
+    String href = "";
 
     @Override
     public SsrBlock request(ISsrBoard grid) {
@@ -37,9 +37,8 @@ public class GridUrlField extends VuiControl implements ISupportGrid {
         head.display(1);
         //
         String bodyTitle = "body." + title;
-        grid.addBlock(bodyTitle,
-                body.text(String.format("<td align='center' role='${_role}'><a href='%s'>%s</a></td>",
-                        this.href, this.context)));
+        grid.addBlock(bodyTitle, body.text(
+                String.format("<td align='center' role='${_role}'><a href='%s'>%s</a></td>", this.href, this.context)));
         body.id(bodyTitle);
         body.display(1);
         body.option("_role", this.field);

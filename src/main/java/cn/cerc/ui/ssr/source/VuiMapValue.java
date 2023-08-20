@@ -15,12 +15,11 @@ import org.springframework.stereotype.Component;
 import cn.cerc.db.core.Utils;
 import cn.cerc.ui.ssr.core.VuiComponent;
 import cn.cerc.ui.ssr.editor.SsrMessage;
-import cn.cerc.ui.ssr.page.ISupportCanvas;
 import cn.cerc.ui.ssr.page.IVuiEnvironment;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class VuiMapValue extends VuiComponent implements ISupplierMap, ISupportCanvas, IBinders {
+public class VuiMapValue extends VuiComponent implements ISupplierMap, IBinders {
     private static final Logger log = LoggerFactory.getLogger(VuiMapValue.class);
     private Map<String, String> items = new LinkedHashMap<>();
     private String selected = "";
