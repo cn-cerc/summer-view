@@ -6,9 +6,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 import cn.cerc.mis.core.Application;
+import cn.cerc.ui.ssr.core.PropertiesReader;
 import cn.cerc.ui.ssr.form.UISsrForm;
 import cn.cerc.ui.ssr.grid.UISsrGrid;
-import cn.cerc.ui.ssr.source.SsrDataService;
+import cn.cerc.ui.ssr.source.VuiDataService;
 
 //@Configuration
 //@ComponentScan(basePackages = { "cn.cerc.*" })
@@ -86,7 +87,7 @@ public class VisualContainerTest {
 
     @Test
     public void test_writer() {
-        var vc = new VisualContainer(null);
+        var vc = new VuiCanvas(null);
         vc.setId("FrmDept");
 
         var form1 = new UISsrForm(vc);
@@ -96,7 +97,7 @@ public class VisualContainerTest {
         form1.addBlock(style.getString("查询条件", "code_"));
         form1.addBlock(style.getString("载入笔数", "MaxRecord_"));
 
-        var dataSource1 = new SsrDataService();
+        var dataSource1 = new VuiDataService();
         dataSource1.setOwner(vc);
         dataSource1.setId("dataSource1");
         dataSource1.service("SvrDept.download");
@@ -133,8 +134,8 @@ public class VisualContainerTest {
 
     @Test
     public void test_reader() {
-        var vc = new VisualContainer(null);
-        vc.setProperties(Text);
+        var vc = new VuiCanvas(null);
+        vc.readProperties(new PropertiesReader(Text));
         assertEquals(
                 """
                         {"readme":"null","title":"null","editor":null,"class":"VisualContainer","components":[{"action":"","class":"UISsrForm","id":"form1","components":[{"class":"FormStringField","title":"查询条件","field":"code_","mark":"","placeholder":"","dialog":"","patten":"","readonly":"false","required":"false","autofocus":"false"},{"class":"FormStringField","title":"载入笔数","field":"MaxRecord_","mark":"","placeholder":"","dialog":"","patten":"","readonly":"false","required":"false","autofocus":"false"}]},{"class":"SsrDataSource","id":"dataSource1"},{"class":"UISsrGrid","id":"grid1","components":[{"class":"GridStringField","title":"代码","field":"code_","fieldWidth":"4","align":"left"},{"class":"GridStringField","title":"姓名","field":"name_","fieldWidth":"4","align":"left"}]}]}

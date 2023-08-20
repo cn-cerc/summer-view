@@ -8,12 +8,12 @@ import org.springframework.stereotype.Component;
 
 import cn.cerc.db.core.Utils;
 import cn.cerc.ui.ssr.core.SsrBlock;
-import cn.cerc.ui.ssr.core.SsrControl;
+import cn.cerc.ui.ssr.core.VuiControl;
 import cn.cerc.ui.ssr.editor.ISsrBoard;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class GridBooleanField extends SsrControl implements ISupportGrid {
+public class GridBooleanField extends VuiControl implements ISupportGrid {
     private SsrBlock block = new SsrBlock();
     @Column
     String title = "";

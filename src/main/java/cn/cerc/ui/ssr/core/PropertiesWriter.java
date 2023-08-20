@@ -30,7 +30,7 @@ public class PropertiesWriter {
     }
 
     /** 将当前组件备份到config-json */
-    public void write(SsrComponent self) {
+    public void write(VuiComponent self) {
         json.put("class", self.getClass().getSimpleName());
         if (self.getId() != null)
             json.put("id", self.getId());
@@ -44,7 +44,7 @@ public class PropertiesWriter {
         if (self.getComponentCount() > 0) {
             var items = json.putArray("components");
             for (var item : self) {
-                if (item instanceof SsrComponent impl)
+                if (item instanceof VuiComponent impl)
                     impl.writeProperties(new PropertiesWriter(items.addObject()));
             }
         }

@@ -14,14 +14,14 @@ import cn.cerc.ui.core.RequestReader;
 import cn.cerc.ui.fields.AbstractField;
 import cn.cerc.ui.fields.ImageConfigImpl;
 import cn.cerc.ui.ssr.core.SsrBlock;
-import cn.cerc.ui.ssr.core.SsrControl;
+import cn.cerc.ui.ssr.core.VuiControl;
 import cn.cerc.ui.ssr.editor.ISsrBoard;
 import cn.cerc.ui.ssr.editor.SsrMessage;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Description("代码名称块组件")
-public class FormCodeNameField extends SsrControl implements ISupportForm {
+public class FormCodeNameField extends VuiControl implements ISupportForm {
     private static final ClassConfig FieldConfig = new ClassConfig(AbstractField.class, SummerUI.ID);
     private SsrBlock block = new SsrBlock();
     private String fieldDialogIcon;
@@ -76,21 +76,20 @@ public class FormCodeNameField extends SsrControl implements ISupportForm {
     }
 
     @Override
-    public boolean saveEditor(RequestReader reader) {
+    public void saveEditor(RequestReader reader) {
         var oldCodeValue = this.codeField;
         if (oldCodeValue == null)
             oldCodeValue = "";
         var oldNameValue = this.nameField;
         if (oldNameValue == null)
             oldNameValue = "";
-        var result = super.saveEditor(reader);
+        super.saveEditor(reader);
         var codeValue = this.codeField;
         var nameValue = this.nameField;
         if (!oldCodeValue.equals(codeValue))
-            this.getContainer().sendMessage(this, SsrMessage.RenameFieldCode, codeValue, this.getOwner().getId());
+            this.canvas().sendMessage(this, SsrMessage.RenameFieldCode, codeValue, this.getOwner().getId());
         if (!oldNameValue.equals(nameValue))
-            this.getContainer().sendMessage(this, SsrMessage.RenameFieldCode, nameValue, this.getOwner().getId());
-        return result;
+            this.canvas().sendMessage(this, SsrMessage.RenameFieldCode, nameValue, this.getOwner().getId());
     }
 
     @Override

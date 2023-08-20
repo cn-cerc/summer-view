@@ -6,11 +6,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cn.cerc.db.core.Utils;
-import cn.cerc.ui.ssr.core.SsrComponent;
+import cn.cerc.ui.ssr.core.VuiComponent;
 
 public class Binder<T> {
     private static final Logger log = LoggerFactory.getLogger(Binder.class);
-    private SsrComponent owner;
+    private VuiComponent owner;
     private T target;
     private String targetId = "";
     private Class<T> targetType;
@@ -19,11 +19,11 @@ public class Binder<T> {
         this.targetType = targetType;
     }
 
-    public void owner(SsrComponent owner) {
+    public void owner(VuiComponent owner) {
         this.owner = owner;
     }
 
-    public SsrComponent owner() {
+    public VuiComponent owner() {
         return owner;
     }
 
@@ -49,7 +49,7 @@ public class Binder<T> {
         if (target != null)
             return;
         if (!Utils.isEmpty(this.targetId)) {
-            var temp = owner.getContainer().getMember(targetId, targetType());
+            var temp = owner.canvas().getMember(targetId, targetType());
             if (temp.isPresent()) {
                 this.target = temp.get();
                 if (target instanceof IBinders impl)
@@ -62,7 +62,7 @@ public class Binder<T> {
 
     public void sendMessage(int msgType, Object msgData) {
         if (target() != null)
-            owner.getContainer().sendMessage(owner, msgType, msgData, targetId);
+            owner.canvas().sendMessage(owner, msgType, msgData, targetId);
     }
 
 }

@@ -14,14 +14,14 @@ import cn.cerc.ui.core.RequestReader;
 import cn.cerc.ui.fields.DateField;
 import cn.cerc.ui.fields.ImageConfigImpl;
 import cn.cerc.ui.ssr.core.SsrBlock;
-import cn.cerc.ui.ssr.core.SsrControl;
+import cn.cerc.ui.ssr.core.VuiControl;
 import cn.cerc.ui.ssr.editor.ISsrBoard;
 import cn.cerc.ui.ssr.editor.SsrMessage;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Description("日期组件")
-public class FormFastDateField extends SsrControl implements ISupportForm {
+public class FormFastDateField extends VuiControl implements ISupportForm {
     private static final ClassConfig DateConfig = new ClassConfig(DateField.class, SummerUI.ID);
     private SsrBlock block = new SsrBlock();
     private String dateDialogIcon;
@@ -39,6 +39,8 @@ public class FormFastDateField extends SsrControl implements ISupportForm {
     boolean required = false;
     @Column
     boolean readonly = false;
+    @Column
+    boolean autofocus = false;
 
     public FormFastDateField() {
         super();
@@ -79,7 +81,7 @@ public class FormFastDateField extends SsrControl implements ISupportForm {
                                     <label for="%s"><em>%s</em></label>
                                     <div>
                                         <input type="text" name="%s" id="%s" value="${%s}" autocomplete="off"${if _readonly} readonly${endif}${if _autofocus} autofocus${endif}
-                                        ${if _placeholder} placeholder="${_placeholder}"${else} placeholder="请点击获取%s"${endif}${if _pattern} pattern="${_pattern}"${endif}${if _required} required${endif} />
+                                        ${if _placeholder} placeholder="${_placeholder}"${else} placeholder="请点击获取%s"${endif}${if _patten} pattern="${_patten}"${endif}${if _required} required${endif} />
                                         <span role="suffix-icon"><a href="javascript:%s('%s')">
                                                 <img src="%s" />
                                             </a></span>
@@ -89,6 +91,7 @@ public class FormFastDateField extends SsrControl implements ISupportForm {
                         field, title, field, field, field, title, dialog, field, dateDialogIcon)));
         block().option("_placeholder", this.placeholder);
         block().option("_readonly", this.readonly ? "1" : "");
+        block().option("_autofocus", this.autofocus ? "1" : "");
         block().option("_required", this.required ? "1" : "");
         block().option("_patten", this.patten);
         block.fields(this.field);
@@ -138,15 +141,14 @@ public class FormFastDateField extends SsrControl implements ISupportForm {
     }
 
     @Override
-    public boolean saveEditor(RequestReader reader) {
+    public void saveEditor(RequestReader reader) {
         var oldValue = this.field;
         if (oldValue == null)
             oldValue = "";
-        var result = super.saveEditor(reader);
+        super.saveEditor(reader);
         var newValue = this.field;
         if (!oldValue.equals(newValue))
-            this.getContainer().sendMessage(this, SsrMessage.RenameFieldCode, newValue, this.getOwner().getId());
-        return result;
+            this.canvas().sendMessage(this, SsrMessage.RenameFieldCode, newValue, this.getOwner().getId());
     }
 
     @Override

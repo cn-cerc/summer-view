@@ -9,14 +9,14 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import cn.cerc.ui.ssr.core.SsrBlock;
-import cn.cerc.ui.ssr.core.SsrControl;
+import cn.cerc.ui.ssr.core.VuiControl;
 import cn.cerc.ui.ssr.editor.ISsrBoard;
 import cn.cerc.ui.ssr.editor.SsrMessage;
-import cn.cerc.ui.ssr.source.SsrMapServiceSource;
+import cn.cerc.ui.ssr.source.VuiMapService;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class GridMapField extends SsrControl implements ISupportGrid {
+public class GridMapField extends VuiControl implements ISupportGrid {
     private SsrBlock block = new SsrBlock();
     private Map<String, String> map;
     @Column
@@ -94,9 +94,9 @@ public class GridMapField extends SsrControl implements ISupportGrid {
     public void onMessage(Object sender, int msgType, Object msgData, String targetId) {
         switch (msgType) {
         case SsrMessage.InitMapSourceDone:
-            var obj = this.getContainer().getMember(this.mapSource, SsrMapServiceSource.class);
+            var obj = this.canvas().getMember(this.mapSource, VuiMapService.class);
             if (obj.isPresent()) {
-                SsrMapServiceSource source = obj.get();
+                VuiMapService source = obj.get();
                 block.toMap(source.items());
             }
             break;

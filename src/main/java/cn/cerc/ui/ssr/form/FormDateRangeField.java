@@ -14,14 +14,14 @@ import cn.cerc.ui.core.RequestReader;
 import cn.cerc.ui.fields.DateField;
 import cn.cerc.ui.fields.ImageConfigImpl;
 import cn.cerc.ui.ssr.core.SsrBlock;
-import cn.cerc.ui.ssr.core.SsrControl;
+import cn.cerc.ui.ssr.core.VuiControl;
 import cn.cerc.ui.ssr.editor.ISsrBoard;
 import cn.cerc.ui.ssr.editor.SsrMessage;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Description("日期块组件")
-public class FormDateRangeField extends SsrControl implements ISupportForm {
+public class FormDateRangeField extends VuiControl implements ISupportForm {
     private static final ClassConfig DateConfig = new ClassConfig(DateField.class, SummerUI.ID);
     private SsrBlock block = new SsrBlock();
     private String dateDialogIcon;
@@ -149,21 +149,20 @@ public class FormDateRangeField extends SsrControl implements ISupportForm {
     }
 
     @Override
-    public boolean saveEditor(RequestReader reader) {
+    public void saveEditor(RequestReader reader) {
         var oldBeginValue = this.beginField;
         if (oldBeginValue == null)
             oldBeginValue = "";
         var oldEndValue = this.endField;
         if (oldEndValue == null)
             oldEndValue = "";
-        var result = super.saveEditor(reader);
+        super.saveEditor(reader);
         var beginValue = this.beginField;
         var endValue = this.endField;
         if (!oldBeginValue.equals(beginValue))
-            this.getContainer().sendMessage(this, SsrMessage.RenameFieldCode, beginValue, this.getOwner().getId());
+            this.canvas().sendMessage(this, SsrMessage.RenameFieldCode, beginValue, this.getOwner().getId());
         if (!oldEndValue.equals(endValue))
-            this.getContainer().sendMessage(this, SsrMessage.RenameFieldCode, endValue, this.getOwner().getId());
-        return result;
+            this.canvas().sendMessage(this, SsrMessage.RenameFieldCode, endValue, this.getOwner().getId());
     }
 
     @Override

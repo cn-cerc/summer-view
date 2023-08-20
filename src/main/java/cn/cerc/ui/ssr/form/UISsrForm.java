@@ -31,23 +31,23 @@ import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.mis.core.IPage;
 import cn.cerc.mis.other.MemoryBuffer;
 import cn.cerc.ui.core.RequestReader;
+import cn.cerc.ui.core.TemplateConfigOptionEnum;
 import cn.cerc.ui.core.UIComponent;
+import cn.cerc.ui.ssr.base.UISsrBlock;
 import cn.cerc.ui.ssr.core.AlignEnum;
 import cn.cerc.ui.ssr.core.ISsrOption;
 import cn.cerc.ui.ssr.core.ISsrTemplateConfig;
 import cn.cerc.ui.ssr.core.ISupplierBlock;
 import cn.cerc.ui.ssr.core.PropertiesReader;
 import cn.cerc.ui.ssr.core.SsrBlock;
-import cn.cerc.ui.ssr.core.SsrComponent;
-import cn.cerc.ui.ssr.core.SsrContainer;
 import cn.cerc.ui.ssr.core.SsrTemplate;
-import cn.cerc.ui.ssr.core.SsrUtils;
+import cn.cerc.ui.ssr.core.VuiComponent;
+import cn.cerc.ui.ssr.core.VuiContainer;
 import cn.cerc.ui.ssr.editor.EditorGrid;
 import cn.cerc.ui.ssr.editor.ISsrBoard;
 import cn.cerc.ui.ssr.editor.SsrMessage;
-import cn.cerc.ui.ssr.other.TemplateConfigOptionEnum;
-import cn.cerc.ui.ssr.other.UISsrBlock;
-import cn.cerc.ui.ssr.page.ISupportVisualContainer;
+import cn.cerc.ui.ssr.page.ISupportCanvas;
+import cn.cerc.ui.ssr.page.IVuiEnvironment;
 import cn.cerc.ui.ssr.source.Binder;
 import cn.cerc.ui.ssr.source.Binders;
 import cn.cerc.ui.ssr.source.IBinders;
@@ -56,8 +56,8 @@ import cn.cerc.ui.ssr.source.ISupplierFields;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Description("查询表单")
-public class UISsrForm extends SsrContainer<ISupportForm>
-        implements ISsrBoard, SsrDataRowSourceImpl, IBinders, ISupportVisualContainer {
+public class UISsrForm extends VuiContainer<ISupportForm>
+        implements ISsrBoard, ISupplierDataRow, IBinders, ISupportCanvas {
     private static final Logger log = LoggerFactory.getLogger(UISsrForm.class);
     private SsrTemplate template;
     private List<String> columns = new ArrayList<>();
@@ -72,7 +72,7 @@ public class UISsrForm extends SsrContainer<ISupportForm>
     @Column(name = "动作(action)")
     String action = "";
     @Column
-    Binder<SsrDataRowSourceImpl> dataRow = new Binder<>(SsrDataRowSourceImpl.class);
+    Binder<ISupplierDataRow> dataRow = new Binder<>(ISupplierDataRow.class);
     @Column
     AlignEnum align = AlignEnum.None;
 
@@ -435,7 +435,7 @@ public class UISsrForm extends SsrContainer<ISupportForm>
         impl.block().option("id", this.getId());
 
         List<Field> fields = new ArrayList<>();
-        Optional<SsrDataRowSourceImpl> optDataRow = this.dataRow.target();
+        Optional<ISupplierDataRow> optDataRow = this.dataRow.target();
         if (optDataRow.isPresent() && optDataRow.get() instanceof ISupplierFields supperli)
             fields.addAll(supperli.fields(ISupplierFields.BodyOutFields));
 
@@ -466,7 +466,7 @@ public class UISsrForm extends SsrContainer<ISupportForm>
     }
 
     @Override
-    public boolean saveEditor(RequestReader reader) {
+    public void saveEditor(RequestReader reader) {
         reader.saveProperties(this);
         // 对栏位进行排序
         reader.sortComponent(this);
@@ -475,34 +475,34 @@ public class UISsrForm extends SsrContainer<ISupportForm>
         // 处理移除组件
         var item2 = reader.removeComponent(this);
         if (item2 != null)
-            this.getContainer().sendMessage(this, SsrMessage.removeComponent, item2, this.dataRow.targetId());
-        return true;
+            this.canvas().sendMessage(this, SsrMessage.removeComponent, item2, this.dataRow.targetId());
     }
 
     private void batchAppendComponents() {
         String[] components = request.getParameterValues("components");
         if (Utils.isEmpty(components))
             return;
+        IVuiEnvironment environment = this.canvas().environment();
         for (String component : components) {
             String[] componentProperties = component.split(",");
             String clazz = componentProperties[0];
             String field = componentProperties[1];
             String title = componentProperties[2];
-            Optional<SsrComponent> optBean = SsrUtils.getBean(clazz, SsrComponent.class);
+            Optional<VuiComponent> optBean = environment.getBean(clazz, VuiComponent.class);
             if (optBean.isEmpty())
                 continue;
-            SsrComponent item = optBean.get();
+            VuiComponent item = optBean.get();
             item.setOwner(this);
-            item.setContainer(this.getContainer());
+            item.canvas(this.canvas());
             // 创建id
             String prefix = item.getIdPrefix();
-            String nid = this.getContainer().createUid(prefix);
+            String nid = this.canvas().createUid(prefix);
             item.setId(nid);
             if (item instanceof ISupportForm formField) {
                 formField.title(title);
                 formField.field(field);
             }
-            this.getContainer().sendMessage(this, SsrMessage.appendComponent, item, this.dataRow.targetId());
+            this.canvas().sendMessage(this, SsrMessage.appendComponent, item, this.dataRow.targetId());
         }
     }
 
@@ -523,6 +523,10 @@ public class UISsrForm extends SsrContainer<ISupportForm>
             break;
         case SsrMessage.InitProperties:
         case SsrMessage.RefreshProperties:
+            if (Utils.isEmpty(this.dataRow.targetId())) {
+                log.warn("{} 没有绑定数据源", this.getId());
+                break;
+            }
             var target = this.dataRow.target();
             if (target.isPresent())
                 this.template.dataRow(target.get().dataRow());
@@ -532,7 +536,7 @@ public class UISsrForm extends SsrContainer<ISupportForm>
         case SsrMessage.InitContent:
             if (request != null) {
                 if (this.readAll(request, "submit"))
-                    this.getContainer().sendMessage(this, SsrMessage.AfterSubmit, null, null);
+                    this.canvas().sendMessage(this, SsrMessage.AfterSubmit, null, null);
             } else {
                 log.error("request 为空，无法执行");
             }

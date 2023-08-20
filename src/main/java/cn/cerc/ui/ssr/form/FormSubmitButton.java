@@ -3,6 +3,7 @@ package cn.cerc.ui.ssr.form;
 import javax.persistence.Column;
 
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Description;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -11,13 +12,13 @@ import cn.cerc.mis.core.Application;
 import cn.cerc.ui.fields.ImageConfigImpl;
 import cn.cerc.ui.ssr.core.ISupplierBlock;
 import cn.cerc.ui.ssr.core.SsrBlock;
-import cn.cerc.ui.ssr.core.SsrControl;
+import cn.cerc.ui.ssr.core.VuiControl;
 import cn.cerc.ui.ssr.editor.ISsrBoard;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Description("提交按钮")
-public class FormSubmitButton extends SsrControl implements ISupplierBlock {
+public class FormSubmitButton extends VuiControl implements ISupplierBlock {
     private ImageConfigImpl imageConfig;
     private SsrBlock block;
     @Column
@@ -53,8 +54,11 @@ public class FormSubmitButton extends SsrControl implements ISupplierBlock {
     }
 
     protected String getImage(String imgSrc) {
-        if (imageConfig == null)
-            imageConfig = Application.getBean(ImageConfigImpl.class);
+        if (imageConfig == null) {
+            ApplicationContext context = Application.getContext();
+            if (context != null)
+                imageConfig = context.getBean(ImageConfigImpl.class);
+        }
         return imageConfig == null ? imgSrc : imageConfig.getCommonFile(imgSrc);
     }
 

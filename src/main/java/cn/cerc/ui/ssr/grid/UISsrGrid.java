@@ -26,28 +26,28 @@ import cn.cerc.db.core.Utils;
 import cn.cerc.mis.core.Application;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.RequestReader;
+import cn.cerc.ui.core.TemplateConfigOptionEnum;
 import cn.cerc.ui.core.UIComponent;
+import cn.cerc.ui.ssr.base.UISsrBlock;
 import cn.cerc.ui.ssr.core.AlignEnum;
 import cn.cerc.ui.ssr.core.ISsrOption;
 import cn.cerc.ui.ssr.core.ISsrTemplateConfig;
 import cn.cerc.ui.ssr.core.ISupplierBlock;
 import cn.cerc.ui.ssr.core.PropertiesReader;
 import cn.cerc.ui.ssr.core.SsrBlock;
-import cn.cerc.ui.ssr.core.SsrComponent;
-import cn.cerc.ui.ssr.core.SsrContainer;
 import cn.cerc.ui.ssr.core.SsrTemplate;
-import cn.cerc.ui.ssr.core.SsrUtils;
+import cn.cerc.ui.ssr.core.VuiComponent;
+import cn.cerc.ui.ssr.core.VuiContainer;
 import cn.cerc.ui.ssr.editor.EditorGrid;
 import cn.cerc.ui.ssr.editor.ISsrBoard;
 import cn.cerc.ui.ssr.editor.SsrMessage;
-import cn.cerc.ui.ssr.other.TemplateConfigOptionEnum;
-import cn.cerc.ui.ssr.other.UISsrBlock;
-import cn.cerc.ui.ssr.page.ISupportVisualContainer;
+import cn.cerc.ui.ssr.page.ISupportCanvas;
+import cn.cerc.ui.ssr.page.IVuiEnvironment;
 import cn.cerc.ui.ssr.source.Binder;
 import cn.cerc.ui.ssr.source.Binders;
 import cn.cerc.ui.ssr.source.IBinders;
 import cn.cerc.ui.ssr.source.ISupplierFields;
-import cn.cerc.ui.ssr.source.SsrDataService;
+import cn.cerc.ui.ssr.source.VuiDataService;
 import cn.cerc.ui.style.IGridStyle;
 
 /**
@@ -57,8 +57,8 @@ import cn.cerc.ui.style.IGridStyle;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Description("数据表格")
-public class UISsrGrid extends SsrContainer<ISupportGrid>
-        implements ISsrBoard, IGridStyle, IBinders, ISupportVisualContainer {
+public class UISsrGrid extends VuiContainer<ISupportGrid>
+        implements ISsrBoard, IGridStyle, IBinders, ISupportCanvas {
     private static final Logger log = LoggerFactory.getLogger(UISsrGrid.class);
     private SsrTemplate template;
     private List<String> columns = new ArrayList<>();
@@ -81,7 +81,7 @@ public class UISsrGrid extends SsrContainer<ISupportGrid>
     @Column(name = "当表格为空时显示内容")
     String emptyText = "";
     @Column
-    Binder<SsrDataService> dataSet = new Binder<>(SsrDataService.class);
+    Binder<VuiDataService> dataSet = new Binder<>(VuiDataService.class);
 
     public UISsrGrid() {
         super();
@@ -500,7 +500,7 @@ public class UISsrGrid extends SsrContainer<ISupportGrid>
         impl.block().dataSet(dataSet);
         impl.block().option("id", this.getId());
 
-        Optional<SsrDataService> optSvr = this.dataSet.target();
+        Optional<VuiDataService> optSvr = this.dataSet.target();
         dataSet.append()
                 .setValue("field", "it")
                 .setValue("title", "序")
@@ -540,7 +540,7 @@ public class UISsrGrid extends SsrContainer<ISupportGrid>
     }
 
     @Override
-    public boolean saveEditor(RequestReader reader) {
+    public void saveEditor(RequestReader reader) {
         reader.saveProperties(this);
         // 对栏位进行排序saveEditor
         reader.sortComponent(this);
@@ -548,35 +548,35 @@ public class UISsrGrid extends SsrContainer<ISupportGrid>
         batchAppendComponents();
         // 处理移除组件
         reader.removeComponent(this);
-        return true;
     }
 
     private void batchAppendComponents() {
         String[] components = request.getParameterValues("components");
         if (Utils.isEmpty(components))
             return;
+        IVuiEnvironment environment = this.canvas().environment();
         for (String component : components) {
             String[] componentProperties = component.split(",");
             String clazz = componentProperties[0];
             String field = componentProperties[1];
             int width = Utils.strToIntDef(componentProperties[2], 10);
             String title = componentProperties[3];
-            Optional<SsrComponent> optBean = SsrUtils.getBean(clazz, SsrComponent.class);
+            Optional<VuiComponent> optBean = environment.getBean(clazz, VuiComponent.class);
             if (optBean.isEmpty())
                 continue;
-            SsrComponent item = optBean.get();
+            VuiComponent item = optBean.get();
             item.setOwner(this);
-            item.setContainer(this.getContainer());
+            item.canvas(this.canvas());
             // 创建id
             String prefix = item.getIdPrefix();
-            String nid = this.getContainer().createUid(prefix);
+            String nid = this.canvas().createUid(prefix);
             item.setId(nid);
             if (item instanceof ISupportGrid gridField) {
                 gridField.title(title);
                 gridField.field(field);
                 gridField.width(width);
             }
-            this.getContainer().sendMessage(this, SsrMessage.appendComponent, item, this.dataSet.targetId());
+            this.canvas().sendMessage(this, SsrMessage.appendComponent, item, this.dataSet.targetId());
         }
     }
 
@@ -602,7 +602,7 @@ public class UISsrGrid extends SsrContainer<ISupportGrid>
                 log.warn("未设置数据源：dataSet");
                 break;
             }
-            var bean = this.getContainer().getMember(this.dataSet.targetId(), SsrDataService.class);
+            var bean = this.canvas().getMember(this.dataSet.targetId(), VuiDataService.class);
             if (bean.isPresent())
                 this.dataSet(bean.get().getDataSet());
             else

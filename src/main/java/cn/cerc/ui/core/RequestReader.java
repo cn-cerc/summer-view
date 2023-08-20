@@ -21,9 +21,10 @@ import com.fasterxml.jackson.databind.node.TextNode;
 
 import cn.cerc.db.core.Utils;
 import cn.cerc.ui.ssr.core.PropertiesReader;
-import cn.cerc.ui.ssr.core.SsrComponent;
 import cn.cerc.ui.ssr.core.SsrUtils;
-import cn.cerc.ui.ssr.page.VisualContainer;
+import cn.cerc.ui.ssr.core.VuiComponent;
+import cn.cerc.ui.ssr.page.IVuiEnvironment;
+import cn.cerc.ui.ssr.page.VuiCanvas;
 import cn.cerc.ui.ssr.source.Binder;
 
 @Component
@@ -40,7 +41,7 @@ public class RequestReader {
         return Optional.ofNullable(request.getParameter(key));
     }
 
-    public SsrComponent sortComponent(SsrComponent owner) {
+    public VuiComponent sortComponent(VuiComponent owner) {
         var sort = this.getString("sort");
         if (sort.isEmpty())
             return null;
@@ -54,7 +55,7 @@ public class RequestReader {
         return null;
     }
 
-    public void saveProperties(SsrComponent sender) {
+    public void saveProperties(VuiComponent sender) {
         var config = sender.config();
         var names = this.request.getParameterNames();
         while (names.hasMoreElements()) {
@@ -71,12 +72,12 @@ public class RequestReader {
                 addField(sender, field);
     }
 
-    public SsrComponent removeComponent(SsrComponent owner) {
+    public VuiComponent removeComponent(VuiComponent owner) {
         var removeComponent = this.getString("removeComponent");
         if (removeComponent.isEmpty())
             return null;
         for (var item : owner) {
-            if (removeComponent.get().equals(item.getId()) && item instanceof SsrComponent result) {
+            if (removeComponent.get().equals(item.getId()) && item instanceof VuiComponent result) {
                 owner.removeComponent(item);
                 return result;
             }
@@ -84,7 +85,7 @@ public class RequestReader {
         return null;
     }
 
-    public void updateComponents(VisualContainer container) {
+    public void updateComponents(VuiCanvas container) {
         var newItems = this.getString("updateComponents");
         if (newItems.isEmpty())
             return;
@@ -104,8 +105,8 @@ public class RequestReader {
     }
 
     // 更新指定的容器
-    private void updateComponent(VisualContainer root, String ownerId, JsonNode object) {
-        var ownerMember = root.getMember(ownerId, SsrComponent.class);
+    private void updateComponent(VuiCanvas root, String ownerId, JsonNode object) {
+        var ownerMember = root.getMember(ownerId, VuiComponent.class);
         if (ownerMember == null) {
             log.error("{} 容器组件找不到", ownerId);
             return;
@@ -119,7 +120,7 @@ public class RequestReader {
                 var classData = clasInfo.get(className);
                 var id = classData.get("id");
                 if (id != null) { // 修改已有组件的 view 属性
-                    var member = root.getMember(id.asText(), SsrComponent.class);
+                    var member = root.getMember(id.asText(), VuiComponent.class);
                     if (member.isPresent()) {
                         var child = member.get();
                         writerViewConfig(child, classData);
@@ -138,22 +139,23 @@ public class RequestReader {
         }
     }
 
-    private void writerViewConfig(SsrComponent child, JsonNode classData) {
+    private void writerViewConfig(VuiComponent child, JsonNode classData) {
         SsrUtils.copyNode(classData, child.config());
         for (var field : SsrUtils.getFieldList(child.getClass()))
             SsrUtils.readProperty(child, field, classData);
     }
 
-    private SsrComponent addComponent(SsrComponent owner, String appendComponent) {
-        Optional<SsrComponent> optBean = SsrUtils.getBean(appendComponent, SsrComponent.class);
+    private VuiComponent addComponent(VuiComponent owner, String appendComponent) {
+        IVuiEnvironment environment = owner.canvas().environment();
+        Optional<VuiComponent> optBean = environment.getBean(appendComponent, VuiComponent.class);
         if (optBean.isEmpty())
             return null;
-        SsrComponent item = optBean.get();
+        VuiComponent item = optBean.get();
         item.setOwner(owner);
-        item.setContainer(owner.getContainer());
+        item.canvas(owner.canvas());
         // 创建id
         var prefix = item.getIdPrefix();
-        var nid = owner.getContainer().createUid(prefix);
+        var nid = owner.canvas().createUid(prefix);
         item.setId(nid);
         return item;
     }

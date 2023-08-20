@@ -7,12 +7,12 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import cn.cerc.ui.ssr.core.SsrBlock;
-import cn.cerc.ui.ssr.core.SsrControl;
+import cn.cerc.ui.ssr.core.VuiControl;
 import cn.cerc.ui.ssr.editor.ISsrBoard;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class GridOperaField extends SsrControl implements ISupportGrid {
+public class GridOperaField extends VuiControl implements ISupportGrid {
     private SsrBlock block = new SsrBlock();
     private String title = "操作";
     @Column

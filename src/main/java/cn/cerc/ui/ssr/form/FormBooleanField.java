@@ -9,14 +9,14 @@ import org.springframework.stereotype.Component;
 
 import cn.cerc.ui.core.RequestReader;
 import cn.cerc.ui.ssr.core.SsrBlock;
-import cn.cerc.ui.ssr.core.SsrControl;
+import cn.cerc.ui.ssr.core.VuiControl;
 import cn.cerc.ui.ssr.editor.ISsrBoard;
 import cn.cerc.ui.ssr.editor.SsrMessage;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Description("开关组件")
-public class FormBooleanField extends SsrControl implements ISupportForm {
+public class FormBooleanField extends VuiControl implements ISupportForm {
     private SsrBlock block = new SsrBlock();
     @Column
     String title = "";
@@ -94,15 +94,14 @@ public class FormBooleanField extends SsrControl implements ISupportForm {
     }
 
     @Override
-    public boolean saveEditor(RequestReader reader) {
+    public void saveEditor(RequestReader reader) {
         var oldValue = this.field;
         if (oldValue == null)
             oldValue = "";
-        var result = super.saveEditor(reader);
+        super.saveEditor(reader);
         var newValue = this.field;
         if (!oldValue.equals(newValue))
-            this.getContainer().sendMessage(this, SsrMessage.RenameFieldCode, newValue, this.getOwner().getId());
-        return result;
+            this.canvas().sendMessage(this, SsrMessage.RenameFieldCode, newValue, this.getOwner().getId());
     }
 
     @Override

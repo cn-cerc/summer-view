@@ -11,16 +11,16 @@ import org.springframework.stereotype.Component;
 
 import cn.cerc.ui.core.RequestReader;
 import cn.cerc.ui.ssr.core.SsrBlock;
-import cn.cerc.ui.ssr.core.SsrControl;
+import cn.cerc.ui.ssr.core.VuiControl;
 import cn.cerc.ui.ssr.editor.ISsrBoard;
 import cn.cerc.ui.ssr.editor.SsrMessage;
 import cn.cerc.ui.ssr.source.Binder;
-import cn.cerc.ui.ssr.source.IMapSource;
+import cn.cerc.ui.ssr.source.ISupplierMap;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Description("下拉组件")
-public class FormMapField extends SsrControl implements ISupportForm {
+public class FormMapField extends VuiControl implements ISupportForm {
     private SsrBlock block = new SsrBlock();
     @Column
     String title = "";
@@ -29,7 +29,7 @@ public class FormMapField extends SsrControl implements ISupportForm {
     @Column
     String mark = "";
     @Column
-    Binder<IMapSource> mapSource = new Binder<>(IMapSource.class);
+    Binder<ISupplierMap> mapSource = new Binder<>(ISupplierMap.class);
     @Column
     boolean readonly = false;
     @Column
@@ -140,15 +140,14 @@ public class FormMapField extends SsrControl implements ISupportForm {
     }
 
     @Override
-    public boolean saveEditor(RequestReader reader) {
+    public void saveEditor(RequestReader reader) {
         var oldValue = this.field;
         if (oldValue == null)
             oldValue = "";
-        var result = super.saveEditor(reader);
+        super.saveEditor(reader);
         var newValue = this.field;
         if (!oldValue.equals(newValue))
-            this.getContainer().sendMessage(this, SsrMessage.RenameFieldCode, newValue, this.getOwner().getId());
-        return result;
+            this.canvas().sendMessage(this, SsrMessage.RenameFieldCode, newValue, this.getOwner().getId());
     }
 
     @Override
@@ -160,7 +159,7 @@ public class FormMapField extends SsrControl implements ISupportForm {
         case SsrMessage.InitMapSourceDone:
             var obj = this.mapSource.target();
             if (obj.isPresent()) {
-                IMapSource source = obj.get();
+                ISupplierMap source = obj.get();
                 source.selected().ifPresent(this::selected);
                 block.toMap(source.items());
             }

@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import cn.cerc.db.core.DataRow;
 import cn.cerc.db.core.DataSet;
+import cn.cerc.ui.ssr.page.IVuiEnvironment;
 
 public class PropertiesReader {
     private static final Logger log = LoggerFactory.getLogger(PropertiesReader.class);
@@ -46,7 +47,7 @@ public class PropertiesReader {
     }
 
     /** 从config-json还原组件 */
-    public void read(SsrComponent self) {
+    public void read(VuiComponent self) {
         var id = this.getString("id");
         if (id.isPresent())
             self.setId(id.get());
@@ -62,6 +63,7 @@ public class PropertiesReader {
         if (node.isPresent()) {
             if (!node.get().isArray())
                 throw new RuntimeException("components 必须为数组");
+            IVuiEnvironment environment = self.canvas().environment();
             var components = node.get();
             for (var i = 0; i < components.size(); i++) {
                 var child = components.get(i);
@@ -69,10 +71,11 @@ public class PropertiesReader {
                 if (clazz == null)
                     log.error("clazz不允许为空");
                 else {
-                    var beanId = clazz.asText();
-                    var component = SsrUtils.getBean(beanId, SsrComponent.class);
+                    var beanId = environment.getBeanId(clazz.asText());
+                    var component = environment.getBean(beanId, VuiComponent.class);
                     if (component.isPresent()) {
                         self.addComponent(component.get());
+                        component.get().canvas(self.canvas());
                         component.get().readProperties(new PropertiesReader(child));
                     } else {
                         log.error("无法创建对象：{}", beanId);

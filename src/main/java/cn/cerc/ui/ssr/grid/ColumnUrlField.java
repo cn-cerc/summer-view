@@ -10,11 +10,11 @@ import cn.cerc.db.core.DataSet;
 import cn.cerc.db.core.Utils;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.ssr.core.SsrBlock;
-import cn.cerc.ui.ssr.core.SsrControl;
+import cn.cerc.ui.ssr.core.VuiControl;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class ColumnUrlField extends SsrControl implements ISupportGridColumn {
+public class ColumnUrlField extends VuiControl implements ISupportGridColumn {
     private DataSet dataSet;
     @Column(name = "描述文字")
     String text = "内容";

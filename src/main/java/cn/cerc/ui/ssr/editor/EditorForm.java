@@ -3,16 +3,19 @@ package cn.cerc.ui.ssr.editor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Map;
+import java.util.Set;
 
 import javax.persistence.Column;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Description;
 
 import cn.cerc.db.core.DataRow;
 import cn.cerc.db.core.Utils;
 import cn.cerc.ui.core.UIComponent;
-import cn.cerc.ui.ssr.core.SsrComponent;
+import cn.cerc.ui.ssr.core.VuiComponent;
+import cn.cerc.ui.ssr.core.VuiContainer;
 import cn.cerc.ui.ssr.core.SsrUtils;
 import cn.cerc.ui.ssr.form.FormMapField;
 import cn.cerc.ui.ssr.form.UISsrForm;
@@ -21,9 +24,9 @@ import cn.cerc.ui.ssr.source.Binder;
 public class EditorForm extends UIComponent {
     private static final Logger log = LoggerFactory.getLogger(EditorForm.class);
     private UISsrForm form;
-    private SsrComponent sender;
+    private VuiComponent sender;
 
-    public EditorForm(UIComponent content, SsrComponent sender) {
+    public EditorForm(UIComponent content, VuiComponent sender) {
         super(content);
         this.sender = sender;
         form = new UISsrForm(content);
@@ -79,7 +82,7 @@ public class EditorForm extends UIComponent {
         form.loadDefaultConfig();
     }
 
-    public void addProperties(SsrComponent sender) {
+    public void addProperties(VuiComponent sender) {
         var config = sender.config();
         var names = config.fieldNames();
         while (names.hasNext()) {
@@ -119,7 +122,7 @@ public class EditorForm extends UIComponent {
                 var style = form.defaultStyle();
                 FormMapField mapField = style.getMap(title, field.getName());
                 var clazz = binder.targetType();
-                this.sender.getContainer().getMembers().forEach((id, ssr) -> {
+                this.sender.canvas().getMembers().forEach((id, ssr) -> {
                     if (clazz.isInstance(ssr))
                         mapField.toMap(id, id);
                 });
@@ -154,11 +157,18 @@ public class EditorForm extends UIComponent {
         var block = form.defaultStyle().getMap(column, "appendComponent");
         if (defaultClass != null)
             block.selected(defaultClass.getSimpleName());
-        Map<Class<? extends SsrComponent>, String> map = SsrUtils.getClassList(sender, class1);
-        for (Class<? extends SsrComponent> clazz : map.keySet())
-            block.toMap(clazz.getSimpleName(), map.get(clazz));
-        form.addBlock(block);
-        form.addColumn(column);
+        if (sender instanceof VuiContainer<?> impl) {
+            Set<Class<? extends VuiComponent>> children = impl.getChildren();
+            for (var clazz : children) {
+                var title = clazz.getSimpleName();
+                Description desc = clazz.getAnnotation(Description.class);
+                if (desc != null && !Utils.isEmpty(desc.value()))
+                    title = desc.value();
+                block.toMap(clazz.getSimpleName(), title);
+            }
+            form.addBlock(block);
+            form.addColumn(column);
+        }
         return block;
     }
 

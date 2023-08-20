@@ -6,17 +6,12 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
 
 import javax.persistence.Column;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Description;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -26,8 +21,6 @@ import cn.cerc.db.core.Datetime;
 import cn.cerc.db.core.FastDate;
 import cn.cerc.db.core.FastTime;
 import cn.cerc.db.core.Utils;
-import cn.cerc.mis.core.Application;
-import cn.cerc.ui.ssr.page.ISupplierClassList;
 import cn.cerc.ui.ssr.source.Binder;
 
 public class SsrUtils {
@@ -181,56 +174,6 @@ public class SsrUtils {
         }
         if (clazz.getSuperclass() != null && clazz.getSuperclass() != Object.class)
             addFieldList(list, clazz.getSuperclass());
-    }
-
-    public static <T> Map<Class<? extends SsrComponent>, String> getClassList(SsrComponent sender, Class<T> class1) {
-        var map = new HashMap<Class<? extends SsrComponent>, String>();
-        ISupplierClassList supplierClassList = sender.getContainer().supplierClassList();
-        if (supplierClassList != null) {
-            Set<Class<? extends SsrComponent>> classList = supplierClassList.getAttachClass(sender.getClass());
-            if (classList != null) {
-                for (Class<? extends SsrComponent> clazz : classList) {
-                    String title = clazz.getSimpleName();
-                    var desc = clazz.getAnnotation(Description.class);
-                    if (desc != null)
-                        title = desc.value();
-                    map.put(clazz, title);
-                }
-            }
-        }
-
-        var context = Application.getContext();
-        context.getBeansOfType(class1).forEach((name, bean) -> {
-            var title = bean.getClass().getSimpleName();
-            var desc = bean.getClass().getAnnotation(Description.class);
-            if (desc != null)
-                title = desc.value();
-            if (bean instanceof SsrComponent ssr)
-                map.put(ssr.getClass(), title);
-        });
-        return map;
-    }
-
-    protected static String getBeanId(String beanId) {
-        if (beanId.length() < 2)
-            return beanId.toLowerCase();
-        var temp = beanId;
-        var first = beanId.substring(0, 2);
-        if (!first.toUpperCase().equals(first))
-            temp = beanId.substring(0, 1).toLowerCase() + beanId.substring(1);
-        return temp;
-    }
-
-    public static <T> Optional<T> getBean(String beanId, Class<T> requiredType) {
-        var context = Application.getContext();
-        if (context.containsBean(beanId))
-            return Optional.ofNullable(context.getBean(beanId, requiredType));
-        else {
-            var temp = getBeanId(beanId);
-            if (context.containsBean(temp))
-                return Optional.ofNullable(context.getBean(temp, requiredType));
-        }
-        return Optional.empty();
     }
 
     public static void readProperty(Object properties, Field field, JsonNode json) {

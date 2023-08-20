@@ -9,11 +9,11 @@ import org.springframework.stereotype.Component;
 import cn.cerc.db.core.DataSet;
 import cn.cerc.db.core.Utils;
 import cn.cerc.mis.core.HtmlWriter;
-import cn.cerc.ui.ssr.core.SsrControl;
+import cn.cerc.ui.ssr.core.VuiControl;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class ColumnStringField extends SsrControl implements ISupportGridColumn {
+public class ColumnStringField extends VuiControl implements ISupportGridColumn {
     private DataSet dataSet;
     @Column
     String field = "";
