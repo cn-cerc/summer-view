@@ -6,20 +6,20 @@ import cn.cerc.mis.core.Application;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.fields.ImageConfigImpl;
 import cn.cerc.ui.ssr.core.VuiComponent;
-import cn.cerc.ui.ssr.grid.UISsrGrid;
+import cn.cerc.ui.ssr.grid.VuiGrid;
 import cn.cerc.ui.vcl.UIButton;
 import cn.cerc.ui.vcl.UIDiv;
 
 public class EditorPanel extends UIComponent {
 
-    private UISsrGrid grid;
+    private VuiGrid grid;
     private UIComponent sender;
     private ImageConfigImpl imageConfig;
 
     public EditorPanel(UIComponent owner, VuiComponent sender) {
         super(owner);
         this.sender = sender;
-        grid = new UISsrGrid(owner);
+        grid = new VuiGrid(owner);
         grid.dataSet(new DataSet());
     }
 

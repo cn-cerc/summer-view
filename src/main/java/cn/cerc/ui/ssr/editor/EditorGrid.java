@@ -10,20 +10,20 @@ import cn.cerc.ui.ssr.core.ISupplierBlock;
 import cn.cerc.ui.ssr.core.VuiComponent;
 import cn.cerc.ui.ssr.form.ISupportForm;
 import cn.cerc.ui.ssr.grid.ISupportGrid;
-import cn.cerc.ui.ssr.grid.UISsrGrid;
+import cn.cerc.ui.ssr.grid.VuiGrid;
 import cn.cerc.ui.vcl.UIButton;
 import cn.cerc.ui.vcl.UIDiv;
 
 public class EditorGrid extends UIComponent {
 
-    private UISsrGrid grid;
+    private VuiGrid grid;
     private UIComponent sender;
     private ImageConfigImpl imageConfig;
 
     public EditorGrid(UIComponent owner, VuiComponent sender) {
         super(owner);
         this.sender = sender;
-        grid = new UISsrGrid(owner);
+        grid = new VuiGrid(owner);
         grid.dataSet(new DataSet());
 
         String dragTitle = "head.drag";

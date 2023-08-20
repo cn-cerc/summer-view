@@ -30,7 +30,7 @@ public class FormSubmitButton extends VuiControl implements ISupplierBlock {
 
     @Override
     public SsrBlock request(ISsrBoard owner) {
-        block = owner.addBlock(UISsrForm.FormStart, String.format("""
+        block = owner.addBlock(VuiForm.FormStart, String.format("""
                     <div>
                         ${if _searchButton}
                         <span onclick="toggleSearch(this)">查询条件</span>

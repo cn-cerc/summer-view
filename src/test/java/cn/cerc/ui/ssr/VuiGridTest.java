@@ -5,16 +5,16 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 import cn.cerc.db.core.DataSet;
-import cn.cerc.ui.ssr.grid.UISsrGrid;
+import cn.cerc.ui.ssr.grid.VuiGrid;
 
-public class UISsrGridTest {
+public class VuiGridTest {
 
     @Test
     public void test_base() {
         var ds = new DataSet();
         ds.append().setValue("code_", "001").setValue("name_", "a01");
         ds.append().setValue("code_", "002").setValue("name_", "b01");
-        var grid = new UISsrGrid(null, "");
+        var grid = new VuiGrid(null, "");
         grid.dataSet(ds);
         grid.addColumn("name_");
         assertEquals("""
@@ -33,8 +33,8 @@ public class UISsrGridTest {
         ds.append().setValue("code_", "001").setValue("name_", "a01");
         ds.append().setValue("code_", "002").setValue("name_", "b01");
 
-        var grid = new UISsrGrid(null, "");
-        grid.addBlock(UISsrGrid.TableBegin, "<div><table class='a'>");
+        var grid = new VuiGrid(null, "");
+        grid.addBlock(VuiGrid.TableBegin, "<div><table class='a'>");
         grid.addBlock("head.code_", "<th width=${width}>${title}</td>");
         grid.onGetHeadHtml("code_", ssr -> ssr.toMap("width", "30").toMap("title", "xxx"));
         grid.addBlock("body.code_", "<td><a href=\"${url}\">${code_}</a></td>");
@@ -54,7 +54,7 @@ public class UISsrGridTest {
 
     @Test
     public void test_sample() {
-        var grid = new UISsrGrid(null, """
+        var grid = new VuiGrid(null, """
                 ${define table.begin}
                 <table>
 

@@ -56,9 +56,9 @@ import cn.cerc.ui.ssr.source.ISupplierFields;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Description("查询表单")
-public class UISsrForm extends VuiContainer<ISupportForm>
+public class VuiForm extends VuiContainer<ISupportForm>
         implements ISsrBoard, ISupplierDataRow, IBinders, ISupportCanvas {
-    private static final Logger log = LoggerFactory.getLogger(UISsrForm.class);
+    private static final Logger log = LoggerFactory.getLogger(VuiForm.class);
     private SsrTemplate template;
     private List<String> columns = new ArrayList<>();
     public static final String FormBegin = "form.begin";
@@ -76,30 +76,30 @@ public class UISsrForm extends VuiContainer<ISupportForm>
     @Column
     AlignEnum align = AlignEnum.None;
 
-    public UISsrForm() {
+    public VuiForm() {
         this(null);
         this.dataRow.owner(this);
     }
 
-    public UISsrForm(UIComponent owner) {
+    public VuiForm(UIComponent owner) {
         super(owner);
         template = new SsrTemplate("");
         init(findOwner(IPage.class));
     }
 
-    public UISsrForm(UIComponent owner, String templateText) {
+    public VuiForm(UIComponent owner, String templateText) {
         super(owner);
         template = new SsrTemplate(templateText);
         init(findOwner(IPage.class));
     }
 
-    public UISsrForm(UIComponent owner, Class<?> class1, String id) {
+    public VuiForm(UIComponent owner, Class<?> class1, String id) {
         super(owner);
         template = new SsrTemplate(class1, id);
         init(findOwner(IPage.class));
     }
 
-    private UISsrForm init(IPage page) {
+    private VuiForm init(IPage page) {
         this.setId("form1");
         if (page != null) {
             for (var block : template)
@@ -113,7 +113,7 @@ public class UISsrForm extends VuiContainer<ISupportForm>
         return template.dataRow();
     }
 
-    public UISsrForm dataRow(DataRow dataRow) {
+    public VuiForm dataRow(DataRow dataRow) {
         this.template.dataRow(dataRow);
         return this;
     }
@@ -165,10 +165,10 @@ public class UISsrForm extends VuiContainer<ISupportForm>
         var action = this.template().option("action").orElse("");
         return () -> {
             var ssr = new SsrBlock(String.format("<form method='post' action='%s'%s role='${role}'>${callback(%s)}<ul>",
-                    action, !Utils.isEmpty(getId()) ? " id='" + getId() + "'" : "", UISsrForm.FormStart))
+                    action, !Utils.isEmpty(getId()) ? " id='" + getId() + "'" : "", VuiForm.FormStart))
                     .template(template);
-            ssr.onCallback(UISsrForm.FormStart, () -> {
-                var formFirst = this.getBlock(UISsrForm.FormStart);
+            ssr.onCallback(VuiForm.FormStart, () -> {
+                var formFirst = this.getBlock(VuiForm.FormStart);
                 formFirst.ifPresent(template -> {
                     if (this.template.id() != null)
                         template.option(ISsrOption.TemplateId, this.template.id());
@@ -205,7 +205,7 @@ public class UISsrForm extends VuiContainer<ISupportForm>
         buffer(buffer);
     }
 
-    public UISsrForm buffer(MemoryBuffer buffer) {
+    public VuiForm buffer(MemoryBuffer buffer) {
         this.buffer = buffer;
         return this;
     }
@@ -322,12 +322,12 @@ public class UISsrForm extends VuiContainer<ISupportForm>
         return option("action").orElse("");
     }
 
-    public UISsrForm action(String action) {
+    public VuiForm action(String action) {
         option("action", action);
         return this;
     }
 
-    public UISsrForm templateId(String id) {
+    public VuiForm templateId(String id) {
         template.id(id);
         return this;
     }
@@ -336,7 +336,7 @@ public class UISsrForm extends VuiContainer<ISupportForm>
         return template.id();
     }
 
-    public UISsrForm role(String role) {
+    public VuiForm role(String role) {
         this.option("role", role);
         return this;
     }
@@ -347,7 +347,7 @@ public class UISsrForm extends VuiContainer<ISupportForm>
      * @return
      */
     @Deprecated
-    public UISsrForm modify() {
+    public VuiForm modify() {
         role("modify");
         return this;
     }

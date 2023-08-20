@@ -7,7 +7,7 @@ import java.util.LinkedHashMap;
 import org.junit.Test;
 
 import cn.cerc.db.core.DataSet;
-import cn.cerc.ui.ssr.grid.UISsrGrid;
+import cn.cerc.ui.ssr.grid.VuiGrid;
 
 public class SsrDefaultGridStyleTest {
 
@@ -17,7 +17,7 @@ public class SsrDefaultGridStyleTest {
         ds.append().setValue("Name_", "研发部").setValue("Code_", "001").setValue("Type_", "a");
         ds.append().setValue("Name_", "生产部").setValue("Code_", "002").setValue("Final_", true);
 
-        var grid = new UISsrGrid(null, "");
+        var grid = new VuiGrid(null, "");
         grid.dataSet(ds);
 
         var map = new LinkedHashMap<String, String>();
@@ -57,7 +57,7 @@ public class SsrDefaultGridStyleTest {
         ds.append().setValue("Name_", "货车").setValue("Code_", "001").setValue("Type_", "0");
         ds.append().setValue("Name_", "汽车").setValue("Code_", "002").setValue("Type_", "1");
 
-        var grid = new UISsrGrid(null, "");
+        var grid = new VuiGrid(null, "");
         grid.dataSet(ds);
 
         var map = new LinkedHashMap<String, String>();

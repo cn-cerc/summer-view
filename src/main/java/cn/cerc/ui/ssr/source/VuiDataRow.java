@@ -16,7 +16,7 @@ import cn.cerc.ui.ssr.editor.EditorForm;
 import cn.cerc.ui.ssr.editor.SsrMessage;
 import cn.cerc.ui.ssr.form.ISupportForm;
 import cn.cerc.ui.ssr.form.ISupplierDataRow;
-import cn.cerc.ui.ssr.form.UISsrForm;
+import cn.cerc.ui.ssr.form.VuiForm;
 import cn.cerc.ui.ssr.page.ISupportCanvas;
 
 @Component
@@ -83,14 +83,14 @@ public class VuiDataRow extends VuiComponent implements ISupplierDataRow, ISuppo
     public void onMessage(Object sender, int msgType, Object msgData, String targetId) {
         switch (msgType) {
         case SsrMessage.appendComponent:
-            if (sender instanceof UISsrForm form && msgData instanceof ISupportForm block) {
+            if (sender instanceof VuiForm form && msgData instanceof ISupportForm block) {
                 String newField = block.fields();
                 if (!Utils.isEmpty(newField) && !dataRow.fields().exists(newField))
                     dataRow.fields().add(newField);
             }
             break;
         case SsrMessage.UpdateFieldCode:
-            if (sender instanceof UISsrForm form && msgData instanceof String newField) {
+            if (sender instanceof VuiForm form && msgData instanceof String newField) {
                 if (!dataRow.fields().exists(newField))
                     dataRow.fields().add(newField);
             }

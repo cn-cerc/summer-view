@@ -8,13 +8,13 @@ import java.util.Map;
 import org.junit.Test;
 
 import cn.cerc.db.core.DataRow;
-import cn.cerc.ui.ssr.form.UISsrForm;
+import cn.cerc.ui.ssr.form.VuiForm;
 
 public class SsrFormStyleDefaultTest {
 
     @Test
     public void test1() {
-        UISsrForm form = new UISsrForm(null);
+        VuiForm form = new VuiForm(null);
         var style = form.defaultStyle();
         form.addBlock(style.getString("查询条件", "SearchText_"));
         form.dataRow(DataRow.of("SearchText_", "小"));
@@ -34,7 +34,7 @@ public class SsrFormStyleDefaultTest {
 
     @Test
     public void test2() {
-        UISsrForm form = new UISsrForm(null);
+        VuiForm form = new VuiForm(null);
         var style = form.defaultStyle();
         form.addBlock(style.getString("查询条件", "SearchText_").dialog("showDateDialog"));
         form.dataRow(DataRow.of("SearchText_", "小"));
@@ -56,7 +56,7 @@ public class SsrFormStyleDefaultTest {
 
     @Test
     public void test3() {
-        UISsrForm form = new UISsrForm(null);
+        VuiForm form = new VuiForm(null);
         var style = form.defaultStyle();
         form.addBlock(style.getBoolean("是否可为空", "null_able_"));
         form.dataRow(DataRow.of("null_able_", ""));
@@ -73,7 +73,7 @@ public class SsrFormStyleDefaultTest {
 
     @Test
     public void test4() {
-        UISsrForm form = new UISsrForm(null);
+        VuiForm form = new VuiForm(null);
         var style = form.defaultStyle();
         Map<String, String> statusMap = new LinkedHashMap<String, String>();
         statusMap.put("0", "全部");
@@ -96,7 +96,7 @@ public class SsrFormStyleDefaultTest {
 
     @Test
     public void test5() {
-        UISsrForm form = new UISsrForm(null);
+        VuiForm form = new VuiForm(null);
         var style = form.defaultStyle();
         form.addBlock(style.getCodeName("制单人员", "code_", "showCusCodeDialog"));
         form.dataRow(DataRow.of("code_", "CW001", "code__name", "张三"));
@@ -121,7 +121,7 @@ public class SsrFormStyleDefaultTest {
 
     @Test
     public void test6() {
-        UISsrForm form = new UISsrForm(null);
+        VuiForm form = new VuiForm(null);
         var style = form.defaultStyle();
         form.addBlock(style.getDate("起始日期", "start_date_"));
         form.dataRow(DataRow.of("start_date_", "2022-11-02"));
@@ -143,7 +143,7 @@ public class SsrFormStyleDefaultTest {
 
     @Test
     public void test7() {
-        UISsrForm form = new UISsrForm(null);
+        VuiForm form = new VuiForm(null);
         var style = form.defaultStyle();
         form.addBlock(style.getDatetime("起始时间", "start_time_"));
         form.dataRow(DataRow.of("start_time_", "2022-11-02 11:23:21"));
@@ -165,7 +165,7 @@ public class SsrFormStyleDefaultTest {
 
     @Test
     public void test8() {
-        UISsrForm form = new UISsrForm(null);
+        VuiForm form = new VuiForm(null);
         var style = form.defaultStyle();
         form.addBlock(style.getDateRange("单据日期", "start_date_", "end_date_"));
         form.dataRow(DataRow.of("start_date_", "2022-11-02", "end_date_", "2023-10-22"));
@@ -191,7 +191,7 @@ public class SsrFormStyleDefaultTest {
 
     @Test
     public void test9() {
-        UISsrForm form = new UISsrForm(null);
+        VuiForm form = new VuiForm(null);
         var style = form.defaultStyle();
         form.addBlock(style.getTextarea("详细地址", "address_"));
         form.dataRow(DataRow.of("address_", "宏宇商务大厦686"));

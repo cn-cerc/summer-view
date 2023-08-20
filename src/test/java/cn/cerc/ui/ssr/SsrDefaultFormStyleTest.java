@@ -5,13 +5,13 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 import cn.cerc.db.core.DataRow;
-import cn.cerc.ui.ssr.form.UISsrForm;
+import cn.cerc.ui.ssr.form.VuiForm;
 
 public class SsrDefaultFormStyleTest {
 
     @Test
     public void test() {
-        var form = new UISsrForm(null);
+        var form = new VuiForm(null);
         form.strict(false);
         form.dataRow(DataRow.of("Name_", "jason", "Man_", true, "Xl_", "初中"));
 

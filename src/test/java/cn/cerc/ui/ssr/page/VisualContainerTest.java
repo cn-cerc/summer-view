@@ -7,8 +7,8 @@ import org.junit.Test;
 
 import cn.cerc.mis.core.Application;
 import cn.cerc.ui.ssr.core.PropertiesReader;
-import cn.cerc.ui.ssr.form.UISsrForm;
-import cn.cerc.ui.ssr.grid.UISsrGrid;
+import cn.cerc.ui.ssr.form.VuiForm;
+import cn.cerc.ui.ssr.grid.VuiGrid;
 import cn.cerc.ui.ssr.source.VuiDataService;
 
 //@Configuration
@@ -90,7 +90,7 @@ public class VisualContainerTest {
         var vc = new VuiCanvas(null);
         vc.setId("FrmDept");
 
-        var form1 = new UISsrForm(vc);
+        var form1 = new VuiForm(vc);
         form1.setId("form1");
         form1.action("FrmDept");
         var style = form1.defaultStyle();
@@ -103,7 +103,7 @@ public class VisualContainerTest {
         dataSource1.service("SvrDept.download");
         dataSource1.headIn().targetId(form1.getId());
 
-        var grid1 = new UISsrGrid(vc);
+        var grid1 = new VuiGrid(vc);
         grid1.setId("grid1");
         grid1.dataSourceBindId(dataSource1.getId());
         var style2 = grid1.defaultStyle();

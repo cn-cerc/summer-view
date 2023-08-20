@@ -12,13 +12,13 @@ import cn.cerc.ui.ssr.base.VuiPanel;
 import cn.cerc.ui.ssr.form.FormFastDateField;
 import cn.cerc.ui.ssr.form.FormStringField;
 import cn.cerc.ui.ssr.form.FormSubmitButton;
-import cn.cerc.ui.ssr.form.UISsrForm;
+import cn.cerc.ui.ssr.form.VuiForm;
 import cn.cerc.ui.ssr.grid.GridBooleanField;
 import cn.cerc.ui.ssr.grid.GridCheckBoxField;
 import cn.cerc.ui.ssr.grid.GridItField;
 import cn.cerc.ui.ssr.grid.GridStringField;
 import cn.cerc.ui.ssr.grid.GridUrlField;
-import cn.cerc.ui.ssr.grid.UISsrGrid;
+import cn.cerc.ui.ssr.grid.VuiGrid;
 import cn.cerc.ui.ssr.source.VuiDataRow;
 import cn.cerc.ui.ssr.source.VuiDataService;
 import cn.cerc.ui.ssr.source.VuiDataSet;
@@ -476,9 +476,9 @@ public class VuiEnvironmentTest extends VuiEnvironment {
     public <T> Optional<T> getBean(String beanId, Class<T> requiredType) {
         Object obj = null;
         if ("UISsrForm".equals(beanId))
-            obj = new UISsrForm();
+            obj = new VuiForm();
         if ("UISsrGrid".equals(beanId))
-            obj = new UISsrGrid();
+            obj = new VuiGrid();
         if ("formStringField".equals(beanId))
             obj = new FormStringField();
         if ("formSubmitButton".equals(beanId))

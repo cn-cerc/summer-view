@@ -18,21 +18,21 @@ import cn.cerc.ui.ssr.core.VuiComponent;
 import cn.cerc.ui.ssr.core.VuiContainer;
 import cn.cerc.ui.ssr.core.SsrUtils;
 import cn.cerc.ui.ssr.form.FormMapField;
-import cn.cerc.ui.ssr.form.UISsrForm;
+import cn.cerc.ui.ssr.form.VuiForm;
 import cn.cerc.ui.ssr.source.Binder;
 
 public class EditorForm extends UIComponent {
     private static final Logger log = LoggerFactory.getLogger(EditorForm.class);
-    private UISsrForm form;
+    private VuiForm form;
     private VuiComponent sender;
 
     public EditorForm(UIComponent content, VuiComponent sender) {
         super(content);
         this.sender = sender;
-        form = new UISsrForm(content);
+        form = new VuiForm(content);
         form.dataRow(new DataRow());
         form.strict(false);
-        form.addBlock(UISsrForm.FormStart, """
+        form.addBlock(VuiForm.FormStart, """
                 <div>
                     <span onclick="toggleSearch(this)">编辑</span>
                     <div class="searchFormButtonDiv">
@@ -172,7 +172,7 @@ public class EditorForm extends UIComponent {
         return block;
     }
 
-    public UISsrForm getForm() {
+    public VuiForm getForm() {
         return form;
     }
 

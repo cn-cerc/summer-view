@@ -8,15 +8,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import cn.cerc.db.core.DataRow;
 import cn.cerc.ui.ssr.core.PropertiesWriter;
-import cn.cerc.ui.ssr.form.UISsrForm;
+import cn.cerc.ui.ssr.form.VuiForm;
 
-public class UISsrFormTest {
+public class VuiFormTest {
 
     @Test
     public void test_base() {
         var row = new DataRow();
         row.setValue("code_", "001").setValue("name_", "a01");
-        var form = new UISsrForm(null, "");
+        var form = new VuiForm(null, "");
         form.dataRow(row);
         form.addColumn("name_", "code_");
         assertEquals(
@@ -26,7 +26,7 @@ public class UISsrFormTest {
 
     @Test
     public void test_virtual() {
-        var form = new UISsrForm(null, "");
+        var form = new VuiForm(null, "");
         form.setId("form1");
         form.action("FrmDept");
         var style = form.defaultStyle();

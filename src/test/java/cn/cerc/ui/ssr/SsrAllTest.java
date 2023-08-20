@@ -8,8 +8,8 @@ import org.junit.runners.Suite.SuiteClasses;
 
 @SuiteClasses({ SsrBlockTest.class, SsrCallbackTest.class, SsrComboTest.class, SsrDataRowTest.class,
         SsrDatasetTest.class, SsrIfNodeTest.class, SsrTextNodeTest.class, UISsrBlockTest.class, SsrTemplateTest.class,
-        UISsrGridTest.class, SsrDefaultGridStyleTest.class, SsrMapNodeTest.class, SsrListNodeTest.class,
-        UISsrFormTest.class, SsrUtilsTest.class, SsrDefaultFormStyleTest.class, UISsrChunkTest.class,
+        VuiGridTest.class, SsrDefaultGridStyleTest.class, SsrMapNodeTest.class, SsrListNodeTest.class,
+        VuiFormTest.class, SsrUtilsTest.class, SsrDefaultFormStyleTest.class, UISsrChunkTest.class,
         SsrFormStyleDefaultTest.class })
 
 public class SsrAllTest {

@@ -18,7 +18,7 @@ import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.ssr.core.VuiComponent;
 import cn.cerc.ui.ssr.editor.EditorForm;
 import cn.cerc.ui.ssr.editor.SsrMessage;
-import cn.cerc.ui.ssr.form.UISsrForm;
+import cn.cerc.ui.ssr.form.VuiForm;
 import cn.cerc.ui.ssr.page.IVuiEnvironment;
 import cn.cerc.ui.ssr.page.ISupportCanvas;
 
@@ -64,7 +64,7 @@ public class VuiMapSupplier extends VuiComponent implements ISupplierMap, ISuppo
         IVuiEnvironment environment = canvas().canvas().environment();
         if (environment != null) {
             EditorForm form = new EditorForm(content, this);
-            UISsrForm ssrForm = form.getForm();
+            VuiForm ssrForm = form.getForm();
             var style = ssrForm.defaultStyle();
             Map<String, Object> map = environment.getAttachData(this.getClass());
             Map<String, String> targetMap = map.keySet().stream().collect(Collectors.toMap(t -> t, t -> t));

@@ -3,7 +3,7 @@ package cn.cerc.ui.ssr;
 import static org.junit.Assert.assertEquals;
 
 import cn.cerc.db.core.DataSet;
-import cn.cerc.ui.ssr.grid.UISsrGrid;
+import cn.cerc.ui.ssr.grid.VuiGrid;
 
 public class SsrGridStyleDefaultTest {
 
@@ -12,7 +12,7 @@ public class SsrGridStyleDefaultTest {
         ds.append().setValue("name_", "张三");
         ds.append().setValue("name_", "李四");
         ds.append().setValue("name_", "王五");
-        UISsrGrid grid = new UISsrGrid(null);
+        VuiGrid grid = new VuiGrid(null);
         grid.dataSet(ds);
         var style = grid.defaultStyle();
         grid.addBlock(style.getIt());

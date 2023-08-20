@@ -55,7 +55,7 @@ public class GridColumn extends VuiContainer<ISupportGridColumn> implements ISup
         StringBuffer sb = new StringBuffer();
         for (var column : this) {
             if (column instanceof ISupportGridColumn impl) {
-                if (this.getOwner() instanceof UISsrGrid grid)
+                if (this.getOwner() instanceof VuiGrid grid)
                     impl.dataSet(grid.dataSet());
             }
             sb.append(column.toString());

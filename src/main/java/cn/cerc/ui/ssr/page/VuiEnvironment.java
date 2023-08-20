@@ -61,8 +61,10 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
         AliasNames.put("ssrMapSource", "vuiMapService");
         AliasNames.put("SsrMapValueSource", "vuiMapValue");
         AliasNames.put("SsrMapEnumSource", "vuiMapSupplier");
-        AliasNames.put("SsrButton", "VuiButton");
+        AliasNames.put("SsrButton", "vuiButton");
         AliasNames.put("VisualContainer", "vuiCanvas");
+        AliasNames.put("UISsrForm", "vuiForm");
+        AliasNames.put("UISsrGrid", "vuiGrid");
     }
 
     public void form(AbstractForm form) {

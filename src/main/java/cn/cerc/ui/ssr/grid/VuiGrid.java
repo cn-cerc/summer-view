@@ -57,9 +57,9 @@ import cn.cerc.ui.style.IGridStyle;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Description("数据表格")
-public class UISsrGrid extends VuiContainer<ISupportGrid>
+public class VuiGrid extends VuiContainer<ISupportGrid>
         implements ISsrBoard, IGridStyle, IBinders, ISupportCanvas {
-    private static final Logger log = LoggerFactory.getLogger(UISsrGrid.class);
+    private static final Logger log = LoggerFactory.getLogger(VuiGrid.class);
     private SsrTemplate template;
     private List<String> columns = new ArrayList<>();
     private Map<String, Consumer<SsrBlock>> onGetBodyHtml = new HashMap<>();
@@ -83,23 +83,23 @@ public class UISsrGrid extends VuiContainer<ISupportGrid>
     @Column
     Binder<VuiDataService> dataSet = new Binder<>(VuiDataService.class);
 
-    public UISsrGrid() {
+    public VuiGrid() {
         super();
         template = new SsrTemplate("");
         this.dataSet.owner(this);
     }
 
-    public UISsrGrid(UIComponent owner) {
+    public VuiGrid(UIComponent owner) {
         super(owner);
         template = new SsrTemplate("");
     }
 
-    public UISsrGrid(UIComponent owner, String templateText) {
+    public VuiGrid(UIComponent owner, String templateText) {
         super(owner);
         template = new SsrTemplate(templateText);
     }
 
-    public UISsrGrid(UIComponent owner, Class<?> class1, String id) {
+    public VuiGrid(UIComponent owner, Class<?> class1, String id) {
         super(owner);
         template = new SsrTemplate(class1, id);
     }
@@ -114,11 +114,11 @@ public class UISsrGrid extends VuiContainer<ISupportGrid>
     }
 
     @Deprecated
-    public UISsrGrid setDataSet(DataSet dataSet) {
+    public VuiGrid setDataSet(DataSet dataSet) {
         return this.dataSet(dataSet);
     }
 
-    public UISsrGrid dataSet(DataSet dataSet) {
+    public VuiGrid dataSet(DataSet dataSet) {
         template.dataSet(dataSet);
         return this;
     }
@@ -268,7 +268,7 @@ public class UISsrGrid extends VuiContainer<ISupportGrid>
      * @return
      */
     @Deprecated
-    public UISsrGrid putDefine(String id, String templateText) {
+    public VuiGrid putDefine(String id, String templateText) {
         addBlock(id, templateText);
         return this;
     }
@@ -426,12 +426,12 @@ public class UISsrGrid extends VuiContainer<ISupportGrid>
      * @return
      */
     @Deprecated
-    public UISsrGrid setTemplateId(String id) {
+    public VuiGrid setTemplateId(String id) {
         template.id(id);
         return this;
     }
 
-    public UISsrGrid templateId(String id) {
+    public VuiGrid templateId(String id) {
         template.id(id);
         return this;
     }
