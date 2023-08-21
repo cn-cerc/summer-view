@@ -30,7 +30,7 @@ public class FormDatetimeField extends VuiControl implements ISupportForm {
     @Column
     String field = "";
     @Column
-    String patten = "";
+    String pattern = "";
     @Column
     String placeholder = "";
     @Column
@@ -38,7 +38,9 @@ public class FormDatetimeField extends VuiControl implements ISupportForm {
     @Column
     boolean readonly = false;
     @Column
-    DatetimeKindEnum kind = DatetimeKindEnum.Datetime; 
+    boolean autofocus = false;
+    @Column
+    DatetimeKindEnum kind = DatetimeKindEnum.Datetime;
 
     public FormDatetimeField() {
         super();
@@ -72,6 +74,12 @@ public class FormDatetimeField extends VuiControl implements ISupportForm {
     public SsrBlock request(ISsrBoard form) {
         String title = this.title;
         String field = this.field;
+        String dialog = switch (kind) {
+        case Datetime -> "showDateTimeDialog";
+        case OnlyDate -> "showDateDialog";
+        case YearMonth -> "showYMDialog";
+        default -> "showDateTimeDialog";
+        };
         form.addBlock(title,
                 block.text(String.format(
                         """
@@ -80,17 +88,20 @@ public class FormDatetimeField extends VuiControl implements ISupportForm {
                                     <div>
                                         <input type="text" name="%s" id="%s" value="${%s}" autocomplete="off"${if _readonly} readonly${endif}${if _autofocus} autofocus${endif}
                                         ${if _placeholder} placeholder="${_placeholder}"${else} placeholder="请点击获取%s"${endif}${if _pattern} pattern="${_pattern}"${endif}${if _required} required${endif} />
-                                        <span role="suffix-icon"><a href="javascript:showDateTimeDialog('%s')">
+                                        <span role="suffix-icon">
+                                            <a href="javascript:%s('%s')">
                                                 <img src="%s" />
-                                            </a></span>
+                                            </a>
+                                        </span>
                                     </div>
                                 </li>
                                 """,
-                        field, title, field, field, field, title, field, dateDialogIcon)));
+                        field, title, field, field, field, title, dialog, field, dateDialogIcon)));
         block().option("_placeholder", this.placeholder);
         block().option("_readonly", this.readonly ? "1" : "");
         block().option("_required", this.required ? "1" : "");
-        block().option("_patten", this.patten);
+        block().option("_autofocus", this.autofocus ? "1" : "");
+        block().option("_pattern", this.pattern);
         block.fields(this.field);
         return block;
     }
@@ -110,8 +121,13 @@ public class FormDatetimeField extends VuiControl implements ISupportForm {
         return this;
     }
 
-    public FormDatetimeField patten(String patten) {
-        this.patten = patten;
+    @Deprecated
+    public FormDatetimeField patten(String pattern) {
+        return pattern(pattern);
+    }
+
+    public FormDatetimeField pattern(String pattern) {
+        this.pattern = pattern;
         return this;
     }
 
@@ -151,6 +167,15 @@ public class FormDatetimeField extends VuiControl implements ISupportForm {
     @Override
     public String getIdPrefix() {
         return "field";
+    }
+
+    public DatetimeKindEnum getKind() {
+        return kind;
+    }
+
+    public FormDatetimeField setKind(DatetimeKindEnum kind) {
+        this.kind = kind;
+        return this;
     }
 
 }

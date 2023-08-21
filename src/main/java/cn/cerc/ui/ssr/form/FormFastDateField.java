@@ -21,6 +21,7 @@ import cn.cerc.ui.ssr.editor.SsrMessage;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Description("日期组件")
+@Deprecated
 public class FormFastDateField extends VuiControl implements ISupportForm {
     private static final ClassConfig DateConfig = new ClassConfig(DateField.class, SummerUI.ID);
     private SsrBlock block = new SsrBlock();

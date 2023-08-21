@@ -85,12 +85,12 @@ public class VuiListSupplier extends VuiComponent implements ISupplierList, IBin
             }
             var map = visualPage.getAttachData(this.getClass());
             var data = map.get(this.target);
-            if (data instanceof Map) {
+
+            if (data instanceof List) {
                 @SuppressWarnings("unchecked")
-                var child = (List<String>) data;
-                for (var value : child) {
+                List<String> child = (List<String>) data;
+                for (var value : child)
                     items.add(value);
-                }
             } else if (data instanceof Enum<?>[] enums) {
                 for (Enum<?> item : enums)
                     items.add(item.name());

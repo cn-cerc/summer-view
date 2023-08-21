@@ -128,9 +128,11 @@ public class SsrFormStyleDefaultTest {
                         <label for="start_date_"><em>起始日期</em></label>
                         <div>
                         <input type="text" name="start_date_" id="start_date_" value="2022-11-02" autocomplete="off" placeholder="请点击获取起始日期"/>
-                        <span role="suffix-icon"><a href="javascript:showDateDialog('start_date_')">
+                        <span role="suffix-icon">
+                        <a href="javascript:showDateDialog('start_date_')">
                         <img src="null" />
-                        </a></span>
+                        </a>
+                        </span>
                         </div>
                         </li></ul></form>""",
                 form.toString());
@@ -150,9 +152,11 @@ public class SsrFormStyleDefaultTest {
                         <label for="start_time_"><em>起始时间</em></label>
                         <div>
                         <input type="text" name="start_time_" id="start_time_" value="2022-11-02 11:23:21" autocomplete="off" placeholder="请点击获取起始时间"/>
-                        <span role="suffix-icon"><a href="javascript:showDateTimeDialog('start_time_')">
+                        <span role="suffix-icon">
+                        <a href="javascript:showDateTimeDialog('start_time_')">
                         <img src="null" />
-                        </a></span>
+                        </a>
+                        </span>
                         </div>
                         </li></ul></form>""",
                 form.toString());

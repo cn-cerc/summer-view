@@ -53,8 +53,8 @@ public class SsrFormStyleDefault {
         return sb.toString();
     }
 
-    public FormFastDateField getDate(String title, String field) {
-        return new FormFastDateField(title, field);
+    public FormDatetimeField getDate(String title, String field) {
+        return new FormDatetimeField(title, field).setKind(DatetimeKindEnum.OnlyDate);
     }
 
     public FormDatetimeField getDatetime(String title, String field) {
