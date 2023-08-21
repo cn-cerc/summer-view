@@ -175,7 +175,7 @@ public class SsrBlockStyleDefault {
         for (Enum<?> item : enums) {
             map.put(String.valueOf(item.ordinal()), item.name());
         }
-        return getMap(title, field, map);
+        return getOption(title, field, map);
     }
 
     /** 请改用getString */

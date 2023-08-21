@@ -359,7 +359,7 @@ public class UISsrChunkTest {
         UISsrBlock3101 board = new UISsrBlock3101(chunk);
         board.slot0(style.getString("姓名", "name_"));
         board.slot1(style.getString("年龄", "age_"));
-        board.slot2(style.getMap("性别", "sex_", Map.of("0", "女", "1", "男")));
+        board.slot2(style.getOption("性别", "sex_", Map.of("0", "女", "1", "男")));
         chunk.dataSet(ds);
         assertEquals("""
                 <div role='chunkBox'><ul role='chunkBoxItem'><li role='UISsrBlock3101'> <div style='flex: 1;'>
