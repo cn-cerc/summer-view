@@ -3,6 +3,7 @@ package cn.cerc.ui.ssr.page;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -242,12 +243,17 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
 
     @Override
     public void saveProperties(String json) {
+        String device = "";
+        if (this.form.getRequest().getParameter("storage") != null)
+            device = form.getRequest().getParameter("storage");
         MongoCollection<Document> collection = MongoConfig.getDatabase().getCollection(VuiEnvironment.Visual_Menu);
-        Bson bson = Filters.and(Filters.eq("corp_no_", form.getCorpNo()), Filters.eq("page_code_", pageCode));
+        Bson bson = Filters.and(Filters.eq("corp_no_", form.getCorpNo()), Filters.eq("page_code_", pageCode),
+                Filters.eq("device_", device));
         Document document = collection.find(bson).first();
         Document value = new Document();
         value.append("corp_no_", form.getCorpNo());
         value.append("page_code_", pageCode);
+        value.append("device_", form.getClient().getDevice());
         Document template = Document.parse(json);
         value.append("template_", template);
         if (document != null) {
@@ -266,12 +272,23 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
     public String loadProperties() {
         MongoCollection<Document> collection = MongoConfig.getDatabase().getCollection(VuiEnvironment.Visual_Menu);
         Bson bson = Filters.and(Filters.eq("corp_no_", form.getCorpNo()), Filters.eq("page_code_", pageCode));
-        Document document = collection.find(bson).first();
-        if (document != null) {
-            Document value = document.get("template_", Document.class);
-            return value.toJson();
+
+        String device = form.getClient().getDevice();
+        Document documentDef = null;
+        ArrayList<Document> documents = collection.find(bson).into(new ArrayList<>());
+        for (Document document : documents) {
+            if ("".equals(document.getString("device_")))
+                documentDef = document;
+            if (device.equals(document.getString("device_"))) {
+                Document value = document.get("template_", Document.class);
+                return value.toJson();
+            }
         }
-        return getSampleData(pageCode);
+        if (documentDef != null) {
+            Document value = documentDef.get("template_", Document.class);
+            return value.toJson();
+        } else
+            return getSampleData(pageCode);
     }
 
     @Override
