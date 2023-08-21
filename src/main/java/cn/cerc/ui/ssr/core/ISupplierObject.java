@@ -1,7 +1,6 @@
 package cn.cerc.ui.ssr.core;
 
-@Deprecated
-public interface IVuiContainer {
+public interface ISupplierObject {
 
     SsrContainerNode createObject(String text);
 
