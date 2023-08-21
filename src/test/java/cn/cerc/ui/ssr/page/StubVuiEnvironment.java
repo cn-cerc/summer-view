@@ -9,7 +9,7 @@ import org.junit.Test;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.mis.core.IPage;
 import cn.cerc.ui.ssr.base.VuiPanel;
-import cn.cerc.ui.ssr.form.FormFastDateField;
+import cn.cerc.ui.ssr.form.FormDatetimeField;
 import cn.cerc.ui.ssr.form.FormStringField;
 import cn.cerc.ui.ssr.form.FormSubmitButton;
 import cn.cerc.ui.ssr.form.VuiForm;
@@ -128,7 +128,7 @@ public class StubVuiEnvironment extends VuiEnvironment {
                                     "searchButton": true
                                 },
                                 {
-                                    "class": "FormFastDateField",
+                                    "class": "FormDatetimeField",
                                     "id": "field2",
                                     "v_top": 10,
                                     "v_left": 10,
@@ -139,7 +139,8 @@ public class StubVuiEnvironment extends VuiEnvironment {
                                     "placeholder": "",
                                     "patten": "",
                                     "required": false,
-                                    "readonly": false
+                                    "readonly": false,
+                                    "kind": "OnlyDate"
                                 },
                                 {
                                     "class": "FormStringField",
@@ -159,7 +160,7 @@ public class StubVuiEnvironment extends VuiEnvironment {
                                     "autofocus": false
                                 },
                                 {
-                                    "class": "FormFastDateField",
+                                    "class": "FormDatetimeField",
                                     "id": "field4",
                                     "v_top": 10,
                                     "v_left": 10,
@@ -170,10 +171,11 @@ public class StubVuiEnvironment extends VuiEnvironment {
                                     "placeholder": "",
                                     "patten": "",
                                     "required": false,
-                                    "readonly": false
+                                    "readonly": false,
+                                    "kind": "OnlyDate"
                                 },
                                 {
-                                    "class": "FormFastDateField",
+                                    "class": "FormDatetimeField",
                                     "id": "field5",
                                     "v_top": 10,
                                     "v_left": 10,
@@ -184,7 +186,8 @@ public class StubVuiEnvironment extends VuiEnvironment {
                                     "placeholder": "",
                                     "patten": "",
                                     "required": false,
-                                    "readonly": false
+                                    "readonly": false,
+                                    "kind": "OnlyDate"
                                 }
                             ]
                         },
@@ -475,16 +478,16 @@ public class StubVuiEnvironment extends VuiEnvironment {
     @Override
     public <T> Optional<T> getBean(String beanId, Class<T> requiredType) {
         Object obj = null;
-        if ("UISsrForm".equals(beanId))
+        if ("vuiForm".equals(beanId))
             obj = new VuiForm();
-        if ("UISsrGrid".equals(beanId))
+        if ("vuiGrid".equals(beanId))
             obj = new VuiGrid();
         if ("formStringField".equals(beanId))
             obj = new FormStringField();
         if ("formSubmitButton".equals(beanId))
             obj = new FormSubmitButton();
-        if ("formFastDateField".equals(beanId))
-            obj = new FormFastDateField();
+        if ("formDatetimeField".equals(beanId))
+            obj = new FormDatetimeField();
         if ("vuiDataRow".equals(beanId))
             obj = new VuiDataRow();
         if ("vuiDataSet".equals(beanId))
@@ -525,26 +528,23 @@ public class StubVuiEnvironment extends VuiEnvironment {
                         <button name="submit" value="submit">提交</button> </div>
                         </div><ul><li>
                         <label for="code_"><em>查询条件</em></label>
-                        <div>
-                        <input type="text" name="code_" id="code_" value="*" autocomplete="off" placeholder="请输入查询条件"/>
-                        <span role="suffix-icon"></span>
+                        <div> <input type="text" name="code_" id="code_" value="*" autocomplete="off" placeholder="请输入查询条件"/> <span role="suffix-icon"></span>
                         </div>
                         </li><li>
                         <label for="MaxRecord_"><em>载入笔数</em></label>
-                        <div>
-                        <input type="text" name="MaxRecord_" id="MaxRecord_" value="100" autocomplete="off" placeholder="请输入载入笔数"/>
-                        <span role="suffix-icon"></span>
+                        <div> <input type="text" name="MaxRecord_" id="MaxRecord_" value="100" autocomplete="off" placeholder="请输入载入笔数"/> <span role="suffix-icon"></span>
                         </div>
                         </li><li>
                         <label for="TBDate_"><em>日期范围</em></label>
                         <div>
                         <input type="text" name="TBDate_" id="TBDate_" value="" autocomplete="off" placeholder="请点击获取日期范围"/>
-                        <span role="suffix-icon"><a href="javascript:showDateDialog('TBDate_')">
+                        <span role="suffix-icon">
+                        <a href="javascript:showDateDialog('TBDate_')">
                         <img src="null" />
-                        </a></span>
+                        </a>
+                        </span>
                         </div>
-                        </li></ul></form><div>dataSet is null</div><div>dataRow is null</div><div>dataSet is null</div><div></div><div>dataRow is null</div>
-                                                                                """
+                        </li></ul></form><div>dataSet is null</div><div>dataRow is null</div><div>dataSet is null</div><div></div><div>dataRow is null</div>"""
                         .trim(),
                 html.toString());
     }
