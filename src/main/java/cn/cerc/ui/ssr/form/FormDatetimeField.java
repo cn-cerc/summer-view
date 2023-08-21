@@ -37,6 +37,8 @@ public class FormDatetimeField extends VuiControl implements ISupportForm {
     boolean required = false;
     @Column
     boolean readonly = false;
+    @Column
+    DatetimeKindEnum kind = DatetimeKindEnum.Datetime; 
 
     public FormDatetimeField() {
         super();

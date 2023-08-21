@@ -27,6 +27,7 @@ public class SsrFormStyleDefault {
         return new FormBooleanField(title, field);
     }
 
+    @Deprecated
     public FormMapField getMap(String title, String field) {
         return new FormMapField(title, field);
     }

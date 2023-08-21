@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import cn.cerc.ui.ssr.core.VuiControl;
+import cn.cerc.ui.ssr.form.DatetimeKindEnum;
 import cn.cerc.ui.ssr.form.ISupplierDataRow;
 import cn.cerc.ui.ssr.source.Binder;
 
@@ -15,6 +16,8 @@ import cn.cerc.ui.ssr.source.Binder;
 public class RptPanelDatetime extends VuiControl implements ISupportRptPanel {
     @Column
     String field;
+    @Column
+    DatetimeKindEnum kind = DatetimeKindEnum.Datetime; 
     @Column
     Binder<ISupplierDataRow> dataRow = new Binder<>(ISupplierDataRow.class);
 }

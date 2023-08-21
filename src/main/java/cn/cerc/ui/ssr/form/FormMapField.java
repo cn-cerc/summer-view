@@ -20,6 +20,7 @@ import cn.cerc.ui.ssr.source.ISupplierMap;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Description("下拉组件")
+@Deprecated
 public class FormMapField extends VuiControl implements ISupportForm {
     private SsrBlock block = new SsrBlock();
     @Column
