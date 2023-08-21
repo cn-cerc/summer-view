@@ -27,7 +27,7 @@ public class VuiButton extends VuiControl implements ISupportPanel {
     @Column
     String href = "";
     @Column
-    Binder<ISupplierDataRow> dataRow = new Binder<>(ISupplierDataRow.class);
+    Binder<ISupplierDataRow> dataRow = new Binder<>(this, ISupplierDataRow.class);
 
     @Override
     public void output(HtmlWriter html) {
@@ -50,7 +50,6 @@ public class VuiButton extends VuiControl implements ISupportPanel {
     public void onMessage(Object sender, int msgType, Object msgData, String targetId) {
         switch (msgType) {
         case SsrMessage.InitBinder:
-            dataRow.owner(this);
             dataRow.init();
             break;
         }

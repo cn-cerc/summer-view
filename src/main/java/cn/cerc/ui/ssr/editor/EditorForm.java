@@ -34,7 +34,7 @@ public class EditorForm extends UIComponent {
         form.strict(false);
         form.addBlock(VuiForm.FormStart, """
                 <div>
-                    <span onclick="toggleSearch(this)">编辑</span>
+                    <span onclick="toggleSearch(this)">数据属性</span>
                     <div class="searchFormButtonDiv">
                         <button name="submit" type="submit" value="1">保存</button>
                     </div>
@@ -64,6 +64,8 @@ public class EditorForm extends UIComponent {
     }
 
     public void addItem(String title, String field, String value) {
+        if (field.startsWith("v_"))
+            return;
         var style = form.defaultStyle();
         form.addBlock(style.getString(title, field));
         if (!Utils.isEmpty(title))

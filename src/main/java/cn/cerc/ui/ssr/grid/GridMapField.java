@@ -14,6 +14,7 @@ import cn.cerc.ui.ssr.editor.ISsrBoard;
 import cn.cerc.ui.ssr.editor.SsrMessage;
 import cn.cerc.ui.ssr.source.VuiMapService;
 
+@Deprecated
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class GridMapField extends VuiControl implements ISupportGrid {

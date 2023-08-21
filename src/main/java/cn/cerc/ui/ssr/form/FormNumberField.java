@@ -1,6 +1,6 @@
 package cn.cerc.ui.ssr.form;
 
-import java.util.Map;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -24,12 +24,12 @@ import cn.cerc.ui.ssr.core.VuiControl;
 import cn.cerc.ui.ssr.editor.ISsrBoard;
 import cn.cerc.ui.ssr.editor.SsrMessage;
 import cn.cerc.ui.ssr.source.Binder;
-import cn.cerc.ui.ssr.source.ISupplierMap;
+import cn.cerc.ui.ssr.source.ISupplierList;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Description("输入框组件")
-public class FormStringField extends VuiControl implements ISupportForm {
+public class FormNumberField extends VuiControl implements ISupportForm {
     private static final ClassConfig FieldConfig = new ClassConfig(AbstractField.class, SummerUI.ID);
     private SsrBlock block = new SsrBlock();
     private String fieldDialogIcon;
@@ -38,7 +38,7 @@ public class FormStringField extends VuiControl implements ISupportForm {
     @Column
     String field = "";
     @Column
-    Binder<ISupplierMap> mapSource = new Binder<>(this, ISupplierMap.class);
+    Binder<ISupplierList> listSource = new Binder<>(this, ISupplierList.class);
     @Column
     String mark = "";
     @Column(name = "输入提示")
@@ -54,12 +54,12 @@ public class FormStringField extends VuiControl implements ISupportForm {
     @Column
     boolean autofocus = false;
 
-    public FormStringField() {
+    public FormNumberField() {
         super();
         init();
     }
 
-    public FormStringField(String title, String field) {
+    public FormNumberField(String title, String field) {
         super();
         init();
         this.setId(title);
@@ -69,6 +69,7 @@ public class FormStringField extends VuiControl implements ISupportForm {
 
     private void init() {
         block.option("_isTextField", "1");
+        block.option("_addAll", "");
         var context = Application.getContext();
         if (context != null) {
             var impl = Application.getBean(ImageConfigImpl.class);
@@ -97,7 +98,8 @@ public class FormStringField extends VuiControl implements ISupportForm {
                                             ${if _placeholder} placeholder="${_placeholder}"${else} placeholder="请${if _dialog}点击获取${else}输入${endif}${_title}"${endif}${if _pattern} pattern="${_pattern}"${endif}${if _required} required${endif} />
                                         ${else}
                                             <select id="${fields}" name="${fields}"${if _readonly} disabled${endif}>
-                                            ${map.begin}<option value="${map.key}" ${if map.key==%s}selected${endif}>${map.value}</option>${map.end}
+                                            ${if _addAll}<option value="">全部</option>${endif}
+                                            ${list.begin}<option value="${list.index}" ${if list.index==%s}selected${endif}>${list.value}</option>${list.end}
                                             </select>
                                         ${endif}
                                         <span role="suffix-icon">${if _dialog}<a href="javascript:${_dialog}"><img src="%s" /></a>${endif}</span>
@@ -132,51 +134,52 @@ public class FormStringField extends VuiControl implements ISupportForm {
     public void onMessage(Object sender, int msgType, Object msgData, String targetId) {
         switch (msgType) {
         case SsrMessage.InitBinder:
-            this.mapSource.init();
+            this.listSource.init();
             break;
-        case SsrMessage.InitMapSourceDone:
-            Optional<ISupplierMap> optMap = this.mapSource.target();
-            if (optMap.isPresent()) {
-                ISupplierMap source = optMap.get();
+        case SsrMessage.InitListSourceDone:
+            Optional<ISupplierList> optList = this.listSource.target();
+            if (optList.isPresent()) {
+                ISupplierList source = optList.get();
                 source.selected().ifPresent(this::selected);
-                block.toMap(source.items());
+                block.toList(source.items());
                 block.option("_isTextField", "");
+                block.option("_addAll", source.addAll() ? "1" : "");
             }
             break;
         }
     }
 
-    public FormStringField dialog(String... dialogFunc) {
+    public FormNumberField dialog(String... dialogFunc) {
         this.dialog = getDialogText(this.field, dialogFunc);
         return this;
     }
 
-    public FormStringField placeholder(String placeholder) {
+    public FormNumberField placeholder(String placeholder) {
         this.placeholder = placeholder;
         return this;
     }
 
-    public FormStringField readonly(boolean readonly) {
+    public FormNumberField readonly(boolean readonly) {
         this.readonly = readonly;
         return this;
     }
 
-    public FormStringField required(boolean required) {
+    public FormNumberField required(boolean required) {
         this.required = required;
         return this;
     }
 
-    public FormStringField autofocus(boolean autofocus) {
+    public FormNumberField autofocus(boolean autofocus) {
         this.autofocus = autofocus;
         return this;
     }
 
-    public FormStringField patten(String patten) {
+    public FormNumberField patten(String patten) {
         this.patten = patten;
         return this;
     }
 
-    public FormStringField mark(String mark) {
+    public FormNumberField mark(String mark) {
         this.mark = mark;
         return this;
     }
@@ -197,18 +200,18 @@ public class FormStringField extends VuiControl implements ISupportForm {
         return block.option("_selected");
     }
 
-    public FormStringField selected(String selected) {
+    public FormNumberField selected(String selected) {
         block.option("_selected", selected);
         return this;
     }
 
     @Override
-    public FormStringField title(String title) {
+    public FormNumberField title(String title) {
         this.title = title;
         return this;
     }
 
-    public FormStringField url(Supplier<String> url) {
+    public FormNumberField url(Supplier<String> url) {
         block.option("_enabled_url", "1");
         block.onCallback("_url", url);
         return this;
@@ -251,8 +254,8 @@ public class FormStringField extends VuiControl implements ISupportForm {
         return this;
     }
 
-    public ISupplierBlock toMap(Map<String, String> targetMap) {
-        block.toMap(targetMap);
+    public ISupplierBlock toList(List<String> targetList) {
+        block.toList(targetList);
         block.option("_isTextField", "");
         return this;
     }

@@ -14,6 +14,6 @@ import cn.cerc.ui.ssr.source.ISupplierDataSet;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class RptGrid extends VuiContainer<ISupportRptGrid> implements ISupportRpt {
     @Column
-    Binder<ISupplierDataSet> dataSet = new Binder<>(ISupplierDataSet.class);
+    Binder<ISupplierDataSet> dataSet = new Binder<>(this, ISupplierDataSet.class);
 
 }

@@ -23,6 +23,10 @@ public class SsrFormStyleDefault {
         return new FormStringField(title, field);
     }
 
+    public FormNumberField getNumber(String title, String field) {
+        return new FormNumberField(title, field);
+    }
+
     public FormBooleanField getBoolean(String title, String field) {
         return new FormBooleanField(title, field);
     }

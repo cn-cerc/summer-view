@@ -80,12 +80,11 @@ public class VuiGrid extends VuiContainer<ISupportGrid> implements ISsrBoard, IG
     @Column(name = "当表格为空时显示内容")
     String emptyText = "";
     @Column
-    Binder<VuiDataService> dataSet = new Binder<>(VuiDataService.class);
+    Binder<VuiDataService> dataSet = new Binder<>(this, VuiDataService.class);
 
     public VuiGrid() {
         super();
         template = new SsrTemplate("");
-        this.dataSet.owner(this);
     }
 
     public VuiGrid(UIComponent owner) {
@@ -528,6 +527,10 @@ public class VuiGrid extends VuiContainer<ISupportGrid> implements ISsrBoard, IG
                 String classCode = GridStringField.class.getSimpleName();
                 if (field.getType() == Boolean.class || field.getType() == boolean.class)
                     classCode = GridBooleanField.class.getSimpleName();
+                else if (field.getType() == Integer.class || field.getType() == int.class
+                        || field.getType() == Double.class || field.getType() == double.class
+                        || field.getType().isEnum())
+                    classCode = GridNumberField.class.getSimpleName();
                 dataSet.append()
                         .setValue("field", field.getName())
                         .setValue("title", title)

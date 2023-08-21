@@ -67,7 +67,7 @@ public class VuiDataRow extends VuiComponent implements ISupplierDataRow {
             reader.getString(field.code()).ifPresent(value -> dataRow.setValue(field.code(), value));
         }
         var appendField = reader.getString("appendField");
-        if (appendField.isPresent()) {
+        if (appendField.isPresent() && !Utils.isEmpty(appendField.get())) {
             if (!this.dataRow.fields().exists(appendField.get()))
                 this.dataRow.fields().add(appendField.get());
         }

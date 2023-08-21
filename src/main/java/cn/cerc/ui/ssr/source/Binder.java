@@ -15,11 +15,8 @@ public class Binder<T> {
     private String targetId = "";
     private Class<T> targetType;
 
-    public Binder(Class<T> targetType) {
+    public Binder(VuiComponent owner, Class<T> targetType) {
         this.targetType = targetType;
-    }
-
-    public void owner(VuiComponent owner) {
         this.owner = owner;
     }
 

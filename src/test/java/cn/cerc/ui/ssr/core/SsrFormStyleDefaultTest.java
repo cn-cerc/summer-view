@@ -25,8 +25,8 @@ public class SsrFormStyleDefaultTest {
                 """
                         <form method='post' action='' id='form1' role='search'><ul><li>
                         <label for="SearchText_"><em>查询条件</em></label>
-                        <div> <input type="text" name="SearchText_" id="SearchText_" value="小" autocomplete="off" placeholder="请输入查询条件"/>
-                        <span role="suffix-icon"></span> </div>
+                        <div> <input type="text" name="SearchText_" id="SearchText_" value="小" autocomplete="off" placeholder="请输入查询条件"/> <span role="suffix-icon"></span>
+                        </div>
                         </li></ul></form>""",
                 form.toString());
     }
@@ -43,10 +43,8 @@ public class SsrFormStyleDefaultTest {
                 """
                         <form method='post' action='' id='form1' role='search'><ul><li>
                         <label for="SearchText_"><em>查询条件</em></label>
-                        <div> <input type="text" name="SearchText_" id="SearchText_" value="小" autocomplete="off" placeholder="请点击获取查询条件"/>
-                        <span role="suffix-icon"><a href="javascript:showDateDialog('SearchText_')">
-                        <img src="null" />
-                        </a></span> </div>
+                        <div> <input type="text" name="SearchText_" id="SearchText_" value="小" autocomplete="off" placeholder="请点击获取查询条件"/> <span role="suffix-icon"><a href="javascript:showDateDialog('SearchText_')"><img src="null" /></a></span>
+                        </div>
                         </li></ul></form>""",
                 form.toString());
     }
@@ -208,7 +206,7 @@ public class SsrFormStyleDefaultTest {
     public void test10() {
         VuiForm form = new VuiForm(null);
         var style = form.defaultStyle();
-        form.addBlock(style.getString("单据类型", "type_").toList(List.of("草稿", "生效", "作废")));
+        form.addBlock(style.getNumber("单据类型", "type_").toList(List.of("草稿", "生效", "作废")));
         Map<String, String> map = new LinkedHashMap<String, String>();
         map.put("1", "草稿");
         map.put("2", "生效");
@@ -223,10 +221,12 @@ public class SsrFormStyleDefaultTest {
                 """
                         <form method='post' action='' id='form1' role='search'><ul><li>
                         <label for="type_"><em>单据类型</em></label>
-                        <div> <select id="type_" name="type_">  <option value="0" >草稿</option> <option value="1" selected>生效</option> <option value="2" >作废</option>  </select> </div>
+                        <div> <select id="type_" name="type_">  <option value="0" >草稿</option><option value="1" selected>生效</option><option value="2" >作废</option></select> <span role="suffix-icon"></span>
+                        </div>
                         </li><li>
                         <label for="type2_"><em>运单类型</em></label>
-                        <div> <select id="type2_" name="type2_">  <option value="1" >草稿</option> <option value="2" >生效</option> <option value="3" selected>作废</option>  </select> </div>
+                        <div> <select id="type2_" name="type2_"> <option value="1" >草稿</option><option value="2" >生效</option><option value="3" selected>作废</option></select> <span role="suffix-icon"></span>
+                        </div>
                         </li></ul></form>""",
                 form.toString());
     }

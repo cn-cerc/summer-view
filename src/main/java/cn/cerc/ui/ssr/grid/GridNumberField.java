@@ -1,6 +1,6 @@
 package cn.cerc.ui.ssr.grid;
 
-import java.util.Map;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -18,11 +18,11 @@ import cn.cerc.ui.ssr.core.VuiControl;
 import cn.cerc.ui.ssr.editor.ISsrBoard;
 import cn.cerc.ui.ssr.editor.SsrMessage;
 import cn.cerc.ui.ssr.source.Binder;
-import cn.cerc.ui.ssr.source.ISupplierMap;
+import cn.cerc.ui.ssr.source.ISupplierList;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class GridStringField extends VuiControl implements ISupportGrid {
+public class GridNumberField extends VuiControl implements ISupportGrid {
     private SsrBlock head = new SsrBlock();
     private SsrBlock body = new SsrBlock();
     @Column
@@ -34,9 +34,9 @@ public class GridStringField extends VuiControl implements ISupportGrid {
     @Column
     public String align = "";
     @Column
-    Binder<ISupplierMap> mapSource = new Binder<>(this, ISupplierMap.class);
+    Binder<ISupplierList> listSource = new Binder<>(this, ISupplierList.class);
 
-    public GridStringField() {
+    public GridNumberField() {
         super();
         body.option("_isTextField", "1");
     }
@@ -57,7 +57,7 @@ public class GridStringField extends VuiControl implements ISupportGrid {
                 ${if _isTextField}
                 ${dataset.%s}
                 ${else}
-                ${map.begin}${if map.key==%s}${map.value}${endif}${map.end}
+                ${list.begin}${if list.index==%s}${list.value}${endif}${list.end}
                 ${endif}
                 ${if _enabled_url}</a>${endif}
                 </td>""", this.field, this.field)));
@@ -73,20 +73,20 @@ public class GridStringField extends VuiControl implements ISupportGrid {
     public void onMessage(Object sender, int msgType, Object msgData, String targetId) {
         switch (msgType) {
         case SsrMessage.InitBinder:
-            this.mapSource.init();
+            this.listSource.init();
             break;
-        case SsrMessage.InitMapSourceDone:
-            Optional<ISupplierMap> optMap = this.mapSource.target();
-            if (optMap.isPresent()) {
-                ISupplierMap source = optMap.get();
-                body.toMap(source.items());
+        case SsrMessage.InitListSourceDone:
+            Optional<ISupplierList> optList = this.listSource.target();
+            if (optList.isPresent()) {
+                ISupplierList source = optList.get();
+                body.toList(source.items());
                 body.option("_isTextField", "");
             }
             break;
         }
     }
 
-    public GridStringField url(Supplier<String> url) {
+    public GridNumberField url(Supplier<String> url) {
         body.option("_enabled_url", "1");
         body.onCallback("url", url);
         return this;
@@ -97,12 +97,12 @@ public class GridStringField extends VuiControl implements ISupportGrid {
         return body;
     }
 
-    public GridStringField align(AlginEnum align) {
+    public GridNumberField align(AlginEnum align) {
         body.option("_align", align.name());
         return this;
     }
 
-    public GridStringField readonly(boolean readonly) {
+    public GridNumberField readonly(boolean readonly) {
         body.option(ISsrOption.Readonly, readonly ? "1" : "");
         return this;
     }
@@ -140,13 +140,13 @@ public class GridStringField extends VuiControl implements ISupportGrid {
     }
 
     @Override
-    public GridStringField width(int width) {
+    public GridNumberField width(int width) {
         this.fieldWidth = width;
         return this;
     }
-    
-    public ISupplierBlock toMap(Map<String, String> targetMap) {
-        body.toMap(targetMap);
+
+    public ISupplierBlock toList(List<String> targetList) {
+        body.toList(targetList);
         body.option("_isTextField", "");
         return this;
     }

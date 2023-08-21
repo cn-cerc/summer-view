@@ -27,14 +27,9 @@ public class VuiRedirectPage extends VuiComponent implements ISupportCanvas {
     @Column
     String title = "";
     @Column
-    Binder<VuiDataService> service = new Binder<>(VuiDataService.class);
+    Binder<VuiDataService> service = new Binder<>(this, VuiDataService.class);
     @Column
     RedirectEnum redirect = RedirectEnum.None;
-
-    public VuiRedirectPage() {
-        super();
-        this.service.owner(this);
-    }
 
     @Override
     public void onMessage(Object sender, int msgType, Object msgData, String targetId) {

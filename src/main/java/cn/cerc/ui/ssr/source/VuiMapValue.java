@@ -22,8 +22,9 @@ import cn.cerc.ui.ssr.page.IVuiEnvironment;
 public class VuiMapValue extends VuiComponent implements ISupplierMap, IBinders {
     private static final Logger log = LoggerFactory.getLogger(VuiMapValue.class);
     private Map<String, String> items = new LinkedHashMap<>();
-    private String selected = "";
     private Binders binders = new Binders();
+    @Column(name = "默认选中")
+    private String selected = "";
     @Column(name = "加入全部选择项")
     boolean addAll = false;
 

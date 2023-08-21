@@ -19,5 +19,5 @@ public class RptPanelDatetime extends VuiControl implements ISupportRptPanel {
     @Column
     DatetimeKindEnum kind = DatetimeKindEnum.Datetime; 
     @Column
-    Binder<ISupplierDataRow> dataRow = new Binder<>(ISupplierDataRow.class);
+    Binder<ISupplierDataRow> dataRow = new Binder<>(this, ISupplierDataRow.class);
 }

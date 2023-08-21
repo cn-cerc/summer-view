@@ -423,7 +423,7 @@ public class UISsrChunkTest {
         UISsrBlock3101 board = new UISsrBlock3101(chunk);
         board.slot0(style.getString("姓名", "name_"));
         board.slot1(style.getString("年龄", "age_"));
-        board.slot2(style.getString("性别", "sex_").toList(List.of("男", "女")));
+        board.slot2(style.getNumber("性别", "sex_").toList(List.of("男", "女")));
         board.ratio(2, 1, 1);
         chunk.dataSet(ds);
         assertEquals(

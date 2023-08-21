@@ -14,5 +14,5 @@ import cn.cerc.ui.ssr.source.ISupplierDataSet;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class XlsGrid extends VuiContainer<ISupportXlsGrid> implements ISupportXls {
     @Column
-    Binder<ISupplierDataSet> dataSet = new Binder<>(ISupplierDataSet.class);
+    Binder<ISupplierDataSet> dataSet = new Binder<>(this, ISupplierDataSet.class);
 }

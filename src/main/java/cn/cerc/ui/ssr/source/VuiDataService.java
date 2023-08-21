@@ -38,17 +38,12 @@ public class VuiDataService extends VuiComponent
     @Column(name = "成功后发送消息")
     String success_message = "";
     @Column
-    Binder<ISupplierDataRow> headIn = new Binder<>(ISupplierDataRow.class);
+    Binder<ISupplierDataRow> headIn = new Binder<>(this, ISupplierDataRow.class);
     @Column(name = "在启动时立即执行")
     boolean callByInit = false;
 
     public Binder<ISupplierDataRow> headIn() {
         return this.headIn;
-    }
-
-    public VuiDataService() {
-        super();
-        this.headIn.owner(this);
     }
 
     public void service(String service) {
@@ -141,12 +136,18 @@ public class VuiDataService extends VuiComponent
     @Override
     public List<Field> fields(int fieldsType) {
         IVuiEnvironment environment = this.canvas().environment();
+        if (Utils.isEmpty(this.service))
+            return new ArrayList<>();
         var optBean = environment.getBean(this.service, CustomEntityService.class);
         if (optBean.isPresent()) {
             CustomEntityService<?, ?, ?, ?> svr = optBean.get();
             switch (fieldsType) {
+            case HeadOutFields:
+                return svr.getMetaHeadOut();
             case HeadInFields:
                 return svr.getMetaHeadIn();
+            case BodyInFields:
+                return svr.getMetaBodyIn();
             case BodyOutFields:
                 return svr.getMetaBodyOut();
             }

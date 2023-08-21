@@ -27,6 +27,8 @@ public class SsrMessage {
 
     /** 在 MapSource 数据加载完成后发送 */
     public static final int InitMapSourceDone = 300;
+    /** 在 ListSource 数据加载完成后发送 */
+    public static final int InitListSourceDone = 301;
 
     public static final int RenameFieldCode = 400;
     public static final int UpdateFieldCode = 500;

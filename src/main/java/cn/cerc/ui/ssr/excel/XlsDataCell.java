@@ -16,5 +16,5 @@ public class XlsDataCell extends VuiControl implements ISupportXlsRow {
     @Column
     String field;
     @Column
-    Binder<ISupplierDataRow> dataRow = new Binder<>(ISupplierDataRow.class);
+    Binder<ISupplierDataRow> dataRow = new Binder<>(this, ISupplierDataRow.class);
 }

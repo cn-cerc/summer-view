@@ -18,8 +18,6 @@ public class SsrBlockStyleDefault {
         private String field;
 
         public SupplierString(String title, String field) {
-            block.option("_list", "");
-            block.option("_map", "");
             block.option("_select", "");
             this.title = title;
             this.field = field;
@@ -31,10 +29,9 @@ public class SsrBlockStyleDefault {
                     """
                             <div style='flex: ${_ratio};'>
                                 <label for='%s'>%s</label>
-                                ${if _enabled_url}<a id='%s' href='${callback(url)}'>${else}<span id='%s'>${endif}${if _select}${if _map}${map.begin}${if map.key==%s}${map.value}${endif}${map.end}${else}${list.begin}${if list.index==%s}${list.value}${endif}${list.end}${endif}${else}${%s}${endif}${if _enabled_url}</a>${else}</span>${endif}
-                            </div>
-                            """,
-                    field, title, field, field, field, field, field));
+                                ${if _enabled_url}<a id='%s' href='${callback(url)}'>${else}<span id='%s'>${endif}${if _select}${map.begin}${if map.key==%s}${map.value}${endif}${map.end}${else}${%s}${endif}${if _enabled_url}</a>${else}</span>${endif}
+                                </div>""",
+                    field, title, field, field, field, field));
             block.option("_ratio", "1");
             block.option("_enabled_url", url != null ? "1" : "");
             if (url != null)
@@ -48,37 +45,68 @@ public class SsrBlockStyleDefault {
             return this;
         }
 
-        public SupplierString toList(String... values) {
-            block.toList(values);
-            block.option("_list", "1");
-            block.option("_select", "1");
-            return this;
-        }
-
-        public SupplierString toList(List<String> list) {
-            block.toList(list);
-            block.option("_list", "1");
-            block.option("_select", "1");
-            return this;
-        }
-
-        public SupplierString toList(Enum<?>[] enums) {
-            block.toList(enums);
-            block.option("_list", "1");
-            block.option("_select", "1");
-            return this;
-        }
-
         public SupplierString toMap(String key, String value) {
             block.toMap(key, value);
-            block.option("_map", "1");
             block.option("_select", "1");
             return this;
         }
 
         public SupplierString toMap(Map<String, String> map) {
             block.toMap(map);
-            block.option("_map", "1");
+            block.option("_select", "1");
+            return this;
+        }
+    }
+
+    public class SupplierNumber implements ISupplierBlock {
+        private Supplier<String> url;
+        private SsrBlock block = new SsrBlock();
+        private String title;
+        private String field;
+
+        public SupplierNumber(String title, String field) {
+            block.option("_select", "");
+            this.title = title;
+            this.field = field;
+        }
+
+        @Override
+        public SsrBlock request(ISsrBoard owner) {
+            block.text(String.format(
+                    """
+                            <div style='flex: ${_ratio};'>
+                                <label for='%s'>%s</label>
+                                ${if _enabled_url}<a id='%s' href='${callback(url)}'>${else}<span id='%s'>${endif}${if _select}${list.begin}${if list.index==%s}${list.value}${endif}${list.end}${else}${%s}${endif}${if _enabled_url}</a>${else}</span>${endif}
+                                </div>
+                            """,
+                    field, title, field, field, field, field));
+            block.option("_ratio", "1");
+            block.option("_enabled_url", url != null ? "1" : "");
+            if (url != null)
+                block.onCallback("url", url);
+
+            return block;
+        }
+
+        public SupplierNumber url(Supplier<String> url) {
+            this.url = url;
+            return this;
+        }
+
+        public SupplierNumber toList(String... values) {
+            block.toList(values);
+            block.option("_select", "1");
+            return this;
+        }
+
+        public SupplierNumber toList(List<String> list) {
+            block.toList(list);
+            block.option("_select", "1");
+            return this;
+        }
+
+        public SupplierNumber toList(Enum<?>[] enums) {
+            block.toList(enums);
             block.option("_select", "1");
             return this;
         }
@@ -90,6 +118,14 @@ public class SsrBlockStyleDefault {
 
     public SupplierString getRowString(String title, String field) {
         return new SupplierString(title + "：", field);
+    }
+
+    public SupplierNumber getNumber(String title, String field) {
+        return new SupplierNumber(title, field);
+    }
+
+    public SupplierNumber getRowNumber(String title, String field) {
+        return new SupplierNumber(title + "：", field);
     }
 
     public ISupplierBlock getBoolean(String title, String field) {

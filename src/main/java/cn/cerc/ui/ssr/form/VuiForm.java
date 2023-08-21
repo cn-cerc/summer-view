@@ -46,6 +46,7 @@ import cn.cerc.ui.ssr.core.VuiContainer;
 import cn.cerc.ui.ssr.editor.EditorGrid;
 import cn.cerc.ui.ssr.editor.ISsrBoard;
 import cn.cerc.ui.ssr.editor.SsrMessage;
+import cn.cerc.ui.ssr.grid.GridNumberField;
 import cn.cerc.ui.ssr.page.ISupportCanvas;
 import cn.cerc.ui.ssr.page.IVuiEnvironment;
 import cn.cerc.ui.ssr.source.Binder;
@@ -72,13 +73,12 @@ public class VuiForm extends VuiContainer<ISupportForm>
     @Column(name = "动作(action)")
     String action = "";
     @Column
-    Binder<ISupplierDataRow> dataRow = new Binder<>(ISupplierDataRow.class);
+    Binder<ISupplierDataRow> dataRow = new Binder<>(this, ISupplierDataRow.class);
     @Column
     AlignEnum align = AlignEnum.None;
 
     public VuiForm() {
         this(null);
-        this.dataRow.owner(this);
     }
 
     public VuiForm(UIComponent owner) {
@@ -443,7 +443,7 @@ public class VuiForm extends VuiContainer<ISupportForm>
         if (optSvr.isPresent())
             fields.addAll(optSvr.get().fields(ISupplierFields.HeadInFields));
         for (Field field : fields) {
-            if (dataSet.locate("code", field.getName()))
+            if (dataSet.locate("field", field.getName()))
                 continue;
             String title = field.getName();
             Column column = field.getAnnotation(Column.class);
@@ -457,6 +457,9 @@ public class VuiForm extends VuiContainer<ISupportForm>
             String classCode = FormStringField.class.getSimpleName();
             if (field.getType() == Boolean.class || field.getType() == boolean.class)
                 classCode = FormBooleanField.class.getSimpleName();
+            else if (field.getType() == Integer.class || field.getType() == int.class || field.getType() == Double.class
+                    || field.getType() == double.class || field.getType().isEnum())
+                classCode = GridNumberField.class.getSimpleName();
             dataSet.append()
                     .setValue("field", field.getName())
                     .setValue("title", title)

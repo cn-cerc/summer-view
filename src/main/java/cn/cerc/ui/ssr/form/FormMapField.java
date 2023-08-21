@@ -30,7 +30,7 @@ public class FormMapField extends VuiControl implements ISupportForm {
     @Column
     String mark = "";
     @Column
-    Binder<ISupplierMap> mapSource = new Binder<>(ISupplierMap.class);
+    Binder<ISupplierMap> mapSource = new Binder<>(this, ISupplierMap.class);
     @Column
     boolean readonly = false;
     @Column
@@ -38,7 +38,6 @@ public class FormMapField extends VuiControl implements ISupportForm {
 
     public FormMapField() {
         super();
-        this.mapSource.owner(this);
     }
 
     public FormMapField(String title, String field) {

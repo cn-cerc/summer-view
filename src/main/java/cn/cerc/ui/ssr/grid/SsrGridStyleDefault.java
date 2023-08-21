@@ -92,6 +92,15 @@ public class SsrGridStyleDefault {
         return column;
     }
 
+    public GridNumberField getNumber(String title, String field, int fieldWidth) {
+        items.add(title);
+        var column = new GridNumberField();
+        column.title(title);
+        column.field(field);
+        column.fieldWidth = fieldWidth;
+        return column;
+    }
+
     public List<String> items() {
         return items;
     }

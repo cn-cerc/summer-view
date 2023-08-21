@@ -326,8 +326,13 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
         if (context != null) {
             if (context.containsBean(beanId))
                 result = context.getBean(beanId, requiredType);
-            else
-                log.error("找不到组件：{}", beanId);
+            else {
+                String temp = getBeanId(beanId);
+                if (context.containsBean(temp))
+                    result = context.getBean(temp, requiredType);
+                else
+                    log.error("找不到组件：{}", beanId);
+            }
         } else
             log.error("无法创建对象：{}", beanId);
         return Optional.ofNullable(result);
