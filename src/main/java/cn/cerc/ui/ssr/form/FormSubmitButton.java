@@ -24,7 +24,7 @@ public class FormSubmitButton extends VuiControl implements ISupplierBlock {
     @Column
     String title = "查询";
     @Column
-    String field = "submit";
+    String field = "search";
     @Column
     boolean searchButton = true;
 
