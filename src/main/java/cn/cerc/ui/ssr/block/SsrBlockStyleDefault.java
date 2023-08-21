@@ -185,9 +185,9 @@ public class SsrBlockStyleDefault {
         return chunk -> {
             var block = new SsrBlock(String.format("""
                     <div role='checkboxIt'>
-                        <input type="checkbox" name="%s" value="${%s}"/>
+                        <input type="checkbox" id="%s" name="%s" value="${%s}"/>
                         <span>${dataset.rec}</span>
-                    </div>""", checkboxField, checkboxValueField));
+                    </div>""", checkboxField, checkboxField, checkboxValueField));
             return block;
         };
     }
@@ -196,9 +196,9 @@ public class SsrBlockStyleDefault {
         return chunk -> {
             var block = new SsrBlock(String.format("""
                     <div role='checkboxIt'>
-                        <input type="checkbox" name="%s" value="${callback(%s)}"/>
+                        <input type="checkbox" id="%s" name="%s" value="${callback(%s)}"/>
                         <span>${dataset.rec}</span>
-                    </div>""", checkboxField, checkboxField));
+                    </div>""", checkboxField, checkboxField, checkboxField));
             block.onCallback(checkboxField, checkboxValue);
             return block;
         };
