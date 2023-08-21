@@ -56,6 +56,7 @@ public class GridOperaField extends VuiControl implements ISupportGrid {
                 """, title, title));
         ssr.toMap("_width", "" + fieldWidth);
         ssr.option("templateId", "");
+        ssr.option("templateConfigImg", "");
         ssr.id(headTitle);
 
         grid.addBlock(bodyTitle,
