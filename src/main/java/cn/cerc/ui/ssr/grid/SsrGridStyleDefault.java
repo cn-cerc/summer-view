@@ -9,7 +9,7 @@ import cn.cerc.mis.core.Application;
 import cn.cerc.ui.fields.ImageConfigImpl;
 import cn.cerc.ui.ssr.core.ISupplierBlock;
 
-public class SsrGridStyleDefault implements SsrGridStyleImpl {
+public class SsrGridStyleDefault {
     private List<String> items = new ArrayList<>();
     private ImageConfigImpl imageConfig;
 
@@ -23,20 +23,17 @@ public class SsrGridStyleDefault implements SsrGridStyleImpl {
         return imageConfig == null ? imgSrc : imageConfig.getCommonFile(imgSrc);
     }
 
-    @Override
     public GridItField getIt(String title, int fieldWidth) {
         items.add(title);
         return new GridItField(title, fieldWidth);
     }
 
-    @Override
     public GridOperaField getOpera(int fieldWidth) {
         String title = "操作";
         items.add(title);
         return new GridOperaField(fieldWidth);
     }
 
-    @Override
     public GridStringField getDate(String title, String field) {
         return getString(title, field, 5, "center");
     }
@@ -49,7 +46,8 @@ public class SsrGridStyleDefault implements SsrGridStyleImpl {
         return getString(title, field, 4, "right");
     }
 
-    @Override
+    /** 请改用getString */
+    @Deprecated
     public GridMapField getMap(String title, String field, int fieldWidth, Map<String, String> map) {
         items.add(title);
         return new GridMapField(title, field, fieldWidth, map);
@@ -63,20 +61,17 @@ public class SsrGridStyleDefault implements SsrGridStyleImpl {
         return getMap(title, field, fieldWidth, map);
     }
 
-    @Override
     public GridBooleanField getBoolean(String title, String field, int fieldWidth) {
         items.add(title);
         return new GridBooleanField(title, field, fieldWidth);
     }
 
     // TODO 要支持自定义 checkbox 的value
-    @Override
     public GridCheckBoxField getCheckBox(String title, String field, int fieldWidth) {
         items.add(title);
         return new GridCheckBoxField(title, field, fieldWidth);
     }
 
-    @Override
     public GridStringField getString(String title, String field, int fieldWidth) {
         items.add(title);
         var column = new GridStringField();
@@ -97,7 +92,6 @@ public class SsrGridStyleDefault implements SsrGridStyleImpl {
         return column;
     }
 
-    @Override
     public List<String> items() {
         return items;
     }

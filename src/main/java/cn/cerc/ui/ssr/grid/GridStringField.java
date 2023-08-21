@@ -1,5 +1,7 @@
 package cn.cerc.ui.ssr.grid;
 
+import java.util.List;
+import java.util.Map;
 import java.util.function.Supplier;
 
 import javax.persistence.Column;
@@ -30,23 +32,26 @@ public class GridStringField extends VuiControl implements ISupportGrid {
 
     public GridStringField() {
         super();
+        body.option("_list", "");
+        body.option("_map", "");
+        body.option("_select", "");
     }
 
     @Override
     public SsrBlock request(ISsrBoard grid) {
         String headTitle = "head." + this.title;
         grid.addBlock(headTitle, head.text("<th style='width: ${_width}em'>${_title}</th>"));
-        head.toMap("_width", "" + this.fieldWidth);
-        head.toMap("_title", this.title);
+        head.option("_width", "" + this.fieldWidth);
+        head.option("_title", this.title);
         head.id(headTitle);
         head.display(1);
 
         String bodyTitle = "body." + this.title;
         grid.addBlock(bodyTitle, body.text(String.format(
-                "<td align='${_align}' role='${_field}'>${if _enabled_url}<a href='${callback(url)}'>${endif}${dataset.%s}${if _enabled_url}</a>${endif}</td>",
-                this.field)));
-        head.toMap("_align", this.align);
-        head.toMap("_field", this.field);
+                "<td align='${_align}' role='${_field}'>${if _select}${if _map}${map.begin}${if map.key==%s}${map.value}${endif}${map.end}${else}${list.begin}${if list.index==%s}${list.value}${endif}${list.end}${endif}${else}${if _enabled_url}<a href='${callback(url)}'>${endif}${dataset.%s}${if _enabled_url}</a>${endif}${endif}</td>",
+                field, field, field)));
+        body.option("_align", this.align);
+        body.option("_field", this.field);
         body.id(bodyTitle);
         body.display(1);
         body.strict(false);
@@ -109,6 +114,41 @@ public class GridStringField extends VuiControl implements ISupportGrid {
     @Override
     public GridStringField width(int width) {
         this.fieldWidth = width;
+        return this;
+    }
+
+    public GridStringField toList(String... values) {
+        body.toList(values);
+        body.option("_list", "1");
+        body.option("_select", "1");
+        return this;
+    }
+
+    public GridStringField toList(List<String> list) {
+        body.toList(list);
+        body.option("_list", "1");
+        body.option("_select", "1");
+        return this;
+    }
+
+    public GridStringField toList(Enum<?>[] enums) {
+        body.toList(enums);
+        body.option("_list", "1");
+        body.option("_select", "1");
+        return this;
+    }
+
+    public GridStringField toMap(String key, String value) {
+        body.toMap(key, value);
+        body.option("_map", "1");
+        body.option("_select", "1");
+        return this;
+    }
+
+    public GridStringField toMap(Map<String, String> map) {
+        body.toMap(map);
+        body.option("_map", "1");
+        body.option("_select", "1");
         return this;
     }
 

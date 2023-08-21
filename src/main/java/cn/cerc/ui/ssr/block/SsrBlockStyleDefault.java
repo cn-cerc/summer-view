@@ -1,6 +1,7 @@
 package cn.cerc.ui.ssr.block;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
@@ -12,38 +13,73 @@ public class SsrBlockStyleDefault {
 
     public class SupplierString implements ISupplierBlock {
         private Supplier<String> url;
+        private SsrBlock block = new SsrBlock();
         private String title;
         private String field;
 
         public SupplierString(String title, String field) {
+            block.option("_list", "");
+            block.option("_map", "");
+            block.option("_select", "");
             this.title = title;
             this.field = field;
         }
 
         @Override
         public SsrBlock request(ISsrBoard owner) {
-            var block = new SsrBlock(String.format("""
-                    <div style='flex: ${_ratio};'>
-                        <label for='%s'>%s</label>
-                        ${if _enabled_%s}
-                            <a id='%s' href='${callback(%s)}'>${%s}</a>
-                        ${else}
-                            <span id='%s'>${%s}</span>
-                        ${endif}
-                    </div>
-                    """, field, title, field, field, field, field, field, field));
+            block.text(String.format(
+                    """
+                            <div style='flex: ${_ratio};'>
+                                <label for='%s'>%s</label>
+                                ${if _enabled_url}<a id='%s' href='${callback(url)}'>${else}<span id='%s'>${endif}${if _select}${if _map}${map.begin}${if map.key==%s}${map.value}${endif}${map.end}${else}${list.begin}${if list.index==%s}${list.value}${endif}${list.end}${endif}${else}${%s}${endif}${if _enabled_url}</a>${else}</span>${endif}
+                            </div>
+                            """,
+                    field, title, field, field, field, field, field));
             block.option("_ratio", "1");
-            if (url != null) {
-                block.option(String.format("_enabled_%s", field), "1");
-                block.onCallback(field, url);
-            } else
-                block.option(String.format("_enabled_%s", field), "0");
+            block.option("_enabled_url", url != null ? "1" : "");
+            if (url != null)
+                block.onCallback("url", url);
 
             return block;
         }
 
         public SupplierString url(Supplier<String> url) {
             this.url = url;
+            return this;
+        }
+
+        public SupplierString toList(String... values) {
+            block.toList(values);
+            block.option("_list", "1");
+            block.option("_select", "1");
+            return this;
+        }
+
+        public SupplierString toList(List<String> list) {
+            block.toList(list);
+            block.option("_list", "1");
+            block.option("_select", "1");
+            return this;
+        }
+
+        public SupplierString toList(Enum<?>[] enums) {
+            block.toList(enums);
+            block.option("_list", "1");
+            block.option("_select", "1");
+            return this;
+        }
+
+        public SupplierString toMap(String key, String value) {
+            block.toMap(key, value);
+            block.option("_map", "1");
+            block.option("_select", "1");
+            return this;
+        }
+
+        public SupplierString toMap(Map<String, String> map) {
+            block.toMap(map);
+            block.option("_map", "1");
+            block.option("_select", "1");
             return this;
         }
     }
@@ -132,15 +168,19 @@ public class SsrBlockStyleDefault {
         };
     }
 
-    public ISupplierBlock getOption(String title, String field, Enum<?>[] enums) {
+    /** 请改用getString */
+    @Deprecated
+    public ISupplierBlock getMap(String title, String field, Enum<?>[] enums) {
         Map<String, String> map = new LinkedHashMap<String, String>();
         for (Enum<?> item : enums) {
             map.put(String.valueOf(item.ordinal()), item.name());
         }
-        return getOption(title, field, map);
+        return getMap(title, field, map);
     }
 
-    public ISupplierBlock getOption(String title, String field, Map<String, String> map) {
+    /** 请改用getString */
+    @Deprecated
+    public ISupplierBlock getMap(String title, String field, Map<String, String> map) {
         return chunk -> {
             var block = new SsrBlock(String.format("""
                     <div style='flex: ${_ratio};'>

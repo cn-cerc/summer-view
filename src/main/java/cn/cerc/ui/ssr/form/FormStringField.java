@@ -1,5 +1,7 @@
 package cn.cerc.ui.ssr.form;
 
+import java.util.List;
+import java.util.Map;
 import java.util.function.Supplier;
 
 import javax.persistence.Column;
@@ -61,6 +63,9 @@ public class FormStringField extends VuiControl implements ISupportForm {
     }
 
     private void init() {
+        block.option("_list", "");
+        block.option("_map", "");
+        block.option("_select", "");
         var context = Application.getContext();
         if (context != null) {
             var impl = Application.getBean(ImageConfigImpl.class);
@@ -83,11 +88,25 @@ public class FormStringField extends VuiControl implements ISupportForm {
                                 <li>
                                     <label for="%s"${if _mark} class='formMark'${endif}>${if _required}<font role="require">*</font>${endif}<em>%s</em></label>
                                     <div>
+                                        ${if _select}
+                                        <select id="%s" name="%s"${if _readonly} disabled${endif}>
+                                        ${if _map}
+                                        ${map.begin}
+                                            <option value="${map.key}" ${if map.key==%s}selected${endif}>${map.value}</option>
+                                        ${map.end}
+                                        ${else}
+                                        ${list.begin}
+                                            <option value="${list.index}" ${if list.index==%s}selected${endif}>${list.value}</option>
+                                        ${list.end}
+                                        ${endif}
+                                        </select>
+                                        ${else}
                                         <input type="text" name="%s" id="%s" value="${%s}" autocomplete="off"${if _readonly} readonly${endif}${if _autofocus} autofocus${endif}
                                         ${if _placeholder} placeholder="${_placeholder}"${else} placeholder="请${if _dialog}点击获取${else}输入${endif}%s"${endif}${if _pattern} pattern="${_pattern}"${endif}${if _required} required${endif} />
                                         <span role="suffix-icon">${if _dialog}<a href="javascript:${_dialog}">
                                                 <img src="%s" />
                                             </a>${endif}</span>
+                                        ${endif}
                                     </div>
                                 </li>
                                 ${if _mark}
@@ -96,7 +115,7 @@ public class FormStringField extends VuiControl implements ISupportForm {
                                 </li>
                                 ${endif}
                                 """,
-                        field, title, field, field, field, title, fieldDialogIcon, field)));
+                        field, title, field, field, field, field, field, field, field, title, fieldDialogIcon, field)));
         block.option("_placeholder", this.placeholder);
         block.option(ISsrOption.Readonly, this.readonly ? "1" : "");
         block.option("_required", this.required ? "1" : "");
@@ -202,6 +221,41 @@ public class FormStringField extends VuiControl implements ISupportForm {
     @Override
     public ISupportForm field(String field) {
         this.field = field;
+        return this;
+    }
+
+    public ISupportForm toList(String... values) {
+        block.toList(values);
+        block.option("_list", "1");
+        block.option("_select", "1");
+        return this;
+    }
+
+    public ISupportForm toList(List<String> list) {
+        block.toList(list);
+        block.option("_list", "1");
+        block.option("_select", "1");
+        return this;
+    }
+
+    public ISupportForm toList(Enum<?>[] enums) {
+        block.toList(enums);
+        block.option("_list", "1");
+        block.option("_select", "1");
+        return this;
+    }
+
+    public ISupportForm toMap(String key, String value) {
+        block.toMap(key, value);
+        block.option("_map", "1");
+        block.option("_select", "1");
+        return this;
+    }
+
+    public ISupportForm toMap(Map<String, String> map) {
+        block.toMap(map);
+        block.option("_map", "1");
+        block.option("_select", "1");
         return this;
     }
 

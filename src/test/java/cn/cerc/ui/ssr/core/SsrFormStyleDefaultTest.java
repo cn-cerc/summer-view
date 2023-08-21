@@ -3,6 +3,7 @@ package cn.cerc.ui.ssr.core;
 import static org.junit.Assert.assertEquals;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;
@@ -24,10 +25,8 @@ public class SsrFormStyleDefaultTest {
                 """
                         <form method='post' action='' id='form1' role='search'><ul><li>
                         <label for="SearchText_"><em>查询条件</em></label>
-                        <div>
-                        <input type="text" name="SearchText_" id="SearchText_" value="小" autocomplete="off" placeholder="请输入查询条件"/>
-                        <span role="suffix-icon"></span>
-                        </div>
+                        <div> <input type="text" name="SearchText_" id="SearchText_" value="小" autocomplete="off" placeholder="请输入查询条件"/>
+                        <span role="suffix-icon"></span> </div>
                         </li></ul></form>""",
                 form.toString());
     }
@@ -44,12 +43,10 @@ public class SsrFormStyleDefaultTest {
                 """
                         <form method='post' action='' id='form1' role='search'><ul><li>
                         <label for="SearchText_"><em>查询条件</em></label>
-                        <div>
-                        <input type="text" name="SearchText_" id="SearchText_" value="小" autocomplete="off" placeholder="请点击获取查询条件"/>
+                        <div> <input type="text" name="SearchText_" id="SearchText_" value="小" autocomplete="off" placeholder="请点击获取查询条件"/>
                         <span role="suffix-icon"><a href="javascript:showDateDialog('SearchText_')">
                         <img src="null" />
-                        </a></span>
-                        </div>
+                        </a></span> </div>
                         </li></ul></form>""",
                 form.toString());
     }
@@ -132,7 +129,7 @@ public class SsrFormStyleDefaultTest {
                         <form method='post' action='' id='form1' role='search'><ul><li>
                         <label for="start_date_"><em>起始日期</em></label>
                         <div>
-                        <input type="text" name="start_date_" id="start_date_" value="2022-11-02" autocomplete="off" placeholder="请输入起始日期"/>
+                        <input type="text" name="start_date_" id="start_date_" value="2022-11-02" autocomplete="off" placeholder="请点击获取起始日期"/>
                         <span role="suffix-icon"><a href="javascript:showDateDialog('start_date_')">
                         <img src="null" />
                         </a></span>
@@ -154,7 +151,7 @@ public class SsrFormStyleDefaultTest {
                         <form method='post' action='' id='form1' role='search'><ul><li>
                         <label for="start_time_"><em>起始时间</em></label>
                         <div>
-                        <input type="text" name="start_time_" id="start_time_" value="2022-11-02 11:23:21" autocomplete="off" placeholder="请输入起始时间"/>
+                        <input type="text" name="start_time_" id="start_time_" value="2022-11-02 11:23:21" autocomplete="off" placeholder="请点击获取起始时间"/>
                         <span role="suffix-icon"><a href="javascript:showDateTimeDialog('start_time_')">
                         <img src="null" />
                         </a></span>
@@ -205,6 +202,33 @@ public class SsrFormStyleDefaultTest {
                 <span role="suffix-icon"></span>
                 </div>
                 </li></ul></form>""", form.toString());
+    }
+
+    @Test
+    public void test10() {
+        VuiForm form = new VuiForm(null);
+        var style = form.defaultStyle();
+        form.addBlock(style.getString("单据类型", "type_").toList(List.of("草稿", "生效", "作废")));
+        Map<String, String> map = new LinkedHashMap<String, String>();
+        map.put("1", "草稿");
+        map.put("2", "生效");
+        map.put("3", "作废");
+        form.addBlock(style.getString("运单类型", "type2_").toMap(map));
+        form.dataRow(DataRow.of("type_", "1", "type2_", "3"));
+        form.addColumn("单据类型");
+        form.addColumn("运单类型");
+
+        form.strict(false);
+        assertEquals(
+                """
+                        <form method='post' action='' id='form1' role='search'><ul><li>
+                        <label for="type_"><em>单据类型</em></label>
+                        <div> <select id="type_" name="type_">  <option value="0" >草稿</option> <option value="1" selected>生效</option> <option value="2" >作废</option>  </select> </div>
+                        </li><li>
+                        <label for="type2_"><em>运单类型</em></label>
+                        <div> <select id="type2_" name="type2_">  <option value="1" >草稿</option> <option value="2" >生效</option> <option value="3" selected>作废</option>  </select> </div>
+                        </li></ul></form>""",
+                form.toString());
     }
 
 }
