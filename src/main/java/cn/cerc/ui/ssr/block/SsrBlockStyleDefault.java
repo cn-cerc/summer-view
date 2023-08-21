@@ -170,7 +170,7 @@ public class SsrBlockStyleDefault {
 
     /** 请改用getString */
     @Deprecated
-    public ISupplierBlock getMap(String title, String field, Enum<?>[] enums) {
+    public ISupplierBlock getOption(String title, String field, Enum<?>[] enums) {
         Map<String, String> map = new LinkedHashMap<String, String>();
         for (Enum<?> item : enums) {
             map.put(String.valueOf(item.ordinal()), item.name());
@@ -180,7 +180,7 @@ public class SsrBlockStyleDefault {
 
     /** 请改用getString */
     @Deprecated
-    public ISupplierBlock getMap(String title, String field, Map<String, String> map) {
+    public ISupplierBlock getOption(String title, String field, Map<String, String> map) {
         return chunk -> {
             var block = new SsrBlock(String.format("""
                     <div style='flex: ${_ratio};'>
