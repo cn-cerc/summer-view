@@ -55,14 +55,14 @@ public class RequestReader {
     }
 
     public void saveProperties(VuiComponent sender) {
-        var config = sender.config();
+        var properties = sender.properties();
         var names = this.request.getParameterNames();
         while (names.hasMoreElements()) {
             String name = names.nextElement();
             String value = this.request.getParameter(name);
             if (name.startsWith("v_")) {
                 if (value != null)
-                    config.put(name, value);
+                    properties.put(name, value);
             }
         }
 
@@ -138,7 +138,7 @@ public class RequestReader {
     }
 
     private void writerViewConfig(VuiComponent child, JsonNode classData) {
-        SsrUtils.copyNode(classData, child.config());
+        SsrUtils.copyNode(classData, child.properties());
         for (var field : SsrUtils.getFieldList(child.getClass()))
             SsrUtils.readProperty(child, field, classData);
     }

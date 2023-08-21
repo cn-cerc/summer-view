@@ -13,7 +13,7 @@ import cn.cerc.ui.ssr.page.VuiCanvas;
 @Description("组件")
 public abstract class VuiComponent extends UIComponent implements ISsrMessage {
     private static final ObjectMapper objectMapper = new ObjectMapper();
-    private ObjectNode config = objectMapper.createObjectNode();
+    private ObjectNode properties = objectMapper.createObjectNode();
     private VuiCanvas canvas;
 
     public VuiComponent() {
@@ -69,12 +69,12 @@ public abstract class VuiComponent extends UIComponent implements ISsrMessage {
 
     }
 
-    public ObjectNode config() {
-        if (!config.has("v_top"))
-            config.put("v_top", 10);
-        if (!config.has("v_left"))
-            config.put("v_left", 10);
-        return config;
+    public ObjectNode properties() {
+        if (!properties.has("v_top"))
+            properties.put("v_top", 10);
+        if (!properties.has("v_left"))
+            properties.put("v_left", 10);
+        return properties;
     }
 
 }

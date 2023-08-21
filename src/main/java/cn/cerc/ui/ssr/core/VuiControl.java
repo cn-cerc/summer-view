@@ -22,13 +22,13 @@ public class VuiControl extends VuiComponent {
     }
 
     @Override
-    public ObjectNode config() {
-        var config = super.config();
-        if (!config.has("v_width"))
-            config.put("v_width", 50);
-        if (!config.has("v_height"))
-            config.put("v_height", 50);
-        return config;
+    public ObjectNode properties() {
+        var properties = super.properties();
+        if (!properties.has("v_width"))
+            properties.put("v_width", 50);
+        if (!properties.has("v_height"))
+            properties.put("v_height", 50);
+        return properties;
     }
 
 }

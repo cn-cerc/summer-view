@@ -52,7 +52,7 @@ public class PropertiesReader {
         if (id.isPresent())
             self.setId(id.get());
 
-        SsrUtils.copyNode(json, self.config());
+        SsrUtils.copyNode(json, self.properties());
 
         for (var field : SsrUtils.getFieldList(self.getClass())) {
             if (!Modifier.isStatic(field.getModifiers()))

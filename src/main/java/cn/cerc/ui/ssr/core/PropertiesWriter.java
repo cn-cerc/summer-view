@@ -35,7 +35,7 @@ public class PropertiesWriter {
         if (self.getId() != null)
             json.put("id", self.getId());
 
-        SsrUtils.copyNode(self.config(), json);
+        SsrUtils.copyNode(self.properties(), json);
 
         var fields = SsrUtils.getFieldList(self.getClass());
         for (var field : fields)

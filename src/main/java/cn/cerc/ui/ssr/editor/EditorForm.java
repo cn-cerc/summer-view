@@ -83,11 +83,11 @@ public class EditorForm extends UIComponent {
     }
 
     public void addProperties(VuiComponent sender) {
-        var config = sender.config();
-        var names = config.fieldNames();
+        var properties = sender.properties();
+        var names = properties.fieldNames();
         while (names.hasNext()) {
             var name = names.next();
-            this.addItem(name, name, config.get(name).asText());
+            this.addItem(name, name, properties.get(name).asText());
         }
         var fields = SsrUtils.getFieldList(sender.getClass());
         for (var field : fields) {

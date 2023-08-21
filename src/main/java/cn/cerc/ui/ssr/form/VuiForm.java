@@ -554,11 +554,13 @@ public class VuiForm extends VuiContainer<ISupportForm>
     }
 
     @Override
-    public ObjectNode config() {
-        var config = super.config();
-        config.put("_width", 0);
-        config.put("_height", 0);
-        return config;
+    public ObjectNode properties() {
+        var properties = super.properties();
+        if (!properties.has("_width"))
+            properties.put("_width", 0);
+        if (!properties.has("_height"))
+            properties.put("_height", 0);
+        return properties;
     }
 
 }
