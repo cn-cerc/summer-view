@@ -3,7 +3,6 @@ package cn.cerc.ui.core;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Optional;
 
@@ -92,49 +91,48 @@ public class RequestReader {
         // 找到存在变动的容器对象
         PropertiesReader reader = new PropertiesReader(newItems.get());
         var root = reader.root();
-        Iterator<String> names = root.fieldNames();
-        while (names.hasNext()) {
-            String objectId = names.next();
-            JsonNode object = root.get(objectId);
-            if (object.isArray()) {
-                updateComponent(container, objectId, object);
-            } else {
-                log.error("{} 数据格式错误，必须为数组", objectId);
-            }
+        if (root.isArray()) {
+            for (var i = 0; i < root.size(); i++)
+                updateComponent(container, root.get(i));
         }
+        log.error("updateComponents 数据格式错误，必须为数组");
     }
 
     // 更新指定的容器
-    private void updateComponent(VuiCanvas root, String ownerId, JsonNode object) {
-        var ownerMember = root.getMember(ownerId, VuiComponent.class);
-        if (ownerMember == null) {
-            log.error("{} 容器组件找不到", ownerId);
-            return;
-        }
-        var owner = ownerMember.get();
-        for (var i = 0; i < object.size(); i++) {
-            var clasInfo = object.get(i);
-            Iterator<String> classList = clasInfo.fieldNames();
-            while (classList.hasNext()) {
-                var className = classList.next();
-                var classData = clasInfo.get(className);
-                var id = classData.get("id");
-                if (id != null) { // 修改已有组件的 view 属性
-                    var member = root.getMember(id.asText(), VuiComponent.class);
-                    if (member.isPresent()) {
-                        var child = member.get();
-                        writerViewConfig(child, classData);
-                    } else {
-                        log.error("{} 组件找不到", id.asText());
-                    }
-                } else { // 增加新的组件
-                    var child = addComponent(owner, className);
+    private void updateComponent(VuiCanvas root, JsonNode objectData) {
+        if (objectData.has("id")) {
+            // 修改已有对象
+            String objectId = objectData.get("id").asText();
+            var ownerMember = root.getMember(objectId, VuiComponent.class);
+            if (ownerMember == null) {
+                log.error("{} 容器组件找不到", objectId);
+                return;
+            }
+            var member = root.getMember(objectId, VuiComponent.class);
+            if (member.isPresent()) {
+                writerViewConfig(member.get(), objectData);
+            } else {
+                log.error("{} 组件找不到", objectId);
+            }
+        } else {
+            // 增加新的对象
+            if (objectData.has("owner_id") && objectData.has("class")) {
+                String ownerId = objectData.get("owner_id").asText();
+                String className = objectData.get("class").asText();
+                var owner = root.getMember(ownerId, VuiComponent.class);
+                if (owner != null) {
+                    var beanId = root.environment().getBeanId(className);
+                    var child = addComponent(owner.get(), beanId);
                     if (child != null) {
-                        writerViewConfig(child, classData);
+                        writerViewConfig(child, objectData);
                     } else {
-                        log.error("{} 组件找不到", className);
+                        log.error("{} 组件找不到", beanId);
                     }
+                } else {
+                    log.error("{} 容器组件找不到", ownerId);
                 }
+            } else {
+                log.error("owner_id 与 class 不得为空");
             }
         }
     }
@@ -197,4 +195,5 @@ public class RequestReader {
             e.printStackTrace();
         }
     }
+
 }
