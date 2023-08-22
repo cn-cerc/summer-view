@@ -19,7 +19,7 @@ import cn.cerc.ui.ssr.page.ISupportCanvas;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Description("通用面板")
-public class VuiPanel extends VuiContainer<ISupportPanel> implements ISupportCanvas {
+public class VuiPanel extends VuiContainer<ISupportPanel> implements ISupportPanel, ISupportCanvas {
     SsrBlock block = new SsrBlock();
     @Column
     String v_type = "div";
@@ -51,6 +51,8 @@ public class VuiPanel extends VuiContainer<ISupportPanel> implements ISupportCan
     public void beginOutput(HtmlWriter html) {
         html.print("<");
         html.print(this.v_type);
+        if (this.properties("v_style").isPresent())
+            html.print(String.format(" style='%s'", this.properties("v_style").get()));
         if (!Utils.isEmpty(this.v_role))
             html.print(String.format(" role='%s'", this.v_role));
         if (!Utils.isEmpty(this.v_class))

@@ -104,16 +104,21 @@ public class RequestReader {
         if (objectData.has("id")) {
             // 修改已有对象
             String objectId = objectData.get("id").asText();
-            var ownerMember = root.getMember(objectId, VuiComponent.class);
-            if (ownerMember == null) {
-                log.error("{} 容器组件找不到", objectId);
+            var member = root.getMember(objectId, VuiComponent.class);
+            if (member.isEmpty()) {
+                log.error("{} 组件找不到", objectId);
                 return;
             }
-            var member = root.getMember(objectId, VuiComponent.class);
-            if (member.isPresent()) {
-                writerViewConfig(member.get(), objectData);
+            if (objectData.has("owner_id")) {
+                String ownerId = objectData.get("owner_id").asText();
+                var ownerMember = root.getMember(ownerId, VuiComponent.class);
+                if (ownerMember == null) {
+                    log.error("{} 容器组件找不到", objectId);
+                    return;
+                }
+                ownerMember.get().removeComponent(member.get());
             } else {
-                log.error("{} 组件找不到", objectId);
+                writerViewConfig(member.get(), objectData);
             }
         } else {
             // 增加新的对象

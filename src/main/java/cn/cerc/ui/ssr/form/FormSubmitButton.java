@@ -31,7 +31,7 @@ public class FormSubmitButton extends VuiControl implements ISupplierBlock {
     @Override
     public SsrBlock request(ISsrBoard owner) {
         block = owner.addBlock(VuiForm.FormStart, String.format("""
-                    <div>
+                    <div ${if _style}style='${_style}'${endif}>
                         ${if _searchButton}
                         <span onclick="toggleSearch(this)">查询条件</span>
                         ${endif}
@@ -49,7 +49,8 @@ public class FormSubmitButton extends VuiControl implements ISupplierBlock {
         block.option("templateId", "")
                 .option("_field", this.field)
                 .option("_title", this.title)
-                .option("_searchButton", this.searchButton ? "1" : "0");
+                .option("_searchButton", this.searchButton ? "1" : "0")
+                .option("_style", this.properties("v_style").orElse(""));
         return block;
     }
 

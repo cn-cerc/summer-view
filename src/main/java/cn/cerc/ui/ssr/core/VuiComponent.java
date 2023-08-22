@@ -70,10 +70,6 @@ public abstract class VuiComponent extends UIComponent implements ISsrMessage {
     }
 
     public ObjectNode properties() {
-        if (!properties.has("v_top"))
-            properties.put("v_top", 10);
-        if (!properties.has("v_left"))
-            properties.put("v_left", 10);
         return properties;
     }
 

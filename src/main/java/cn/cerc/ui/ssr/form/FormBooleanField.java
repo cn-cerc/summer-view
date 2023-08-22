@@ -51,7 +51,7 @@ public class FormBooleanField extends VuiControl implements ISupportForm {
         form.addBlock(title,
                 block.text(String.format(
                         """
-                                    <li>
+                                    <li ${if _style}style='${_style}'${endif}>
                                     <div role="switch">
                                         <input autocomplete="off" name="%s" id="%s" type="checkbox" value="1" ${if %s}checked ${endif} ${if _readonly}disabled ${endif} />
                                     </div>
@@ -62,6 +62,7 @@ public class FormBooleanField extends VuiControl implements ISupportForm {
         block().option("_mark", this.mark);
         block.option("_readonly", this.readonly ? "1" : "");
         block.option("_required", this.required ? "1" : "");
+        block.option("_style", this.properties("v_style").orElse(""));
         block.fields(this.field);
         return block;
     }

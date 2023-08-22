@@ -1,5 +1,7 @@
 package cn.cerc.ui.ssr.core;
 
+import java.util.Optional;
+
 import javax.persistence.Column;
 
 import org.springframework.context.annotation.Description;
@@ -31,4 +33,11 @@ public class VuiControl extends VuiComponent {
         return properties;
     }
 
+    public Optional<String> properties(String key) {
+        var node = this.properties().get(key);
+        if (node != null)
+            return Optional.ofNullable(node.asText());
+        else
+            return Optional.empty();
+    }
 }

@@ -105,7 +105,7 @@ public class FormCodeNameField extends VuiControl implements ISupportForm {
         form.addBlock(title,
                 block.text(String.format(
                         """
-                                <li>
+                                <li ${if _style}style='${_style}'${endif}>
                                     <label for="%s"><em>%s</em></label>
                                     <div>
                                         <input type="hidden" name="%s" id="%s" value="${%s}">
@@ -121,6 +121,7 @@ public class FormCodeNameField extends VuiControl implements ISupportForm {
                         nameField, title, codeField, codeField, codeField, nameField, nameField, nameField, title,
                         fieldDialogIcon)));
         block().option("_readonly", this.readonly ? "1" : "");
+        block().option("_style", this.properties("v_style").orElse(""));
         block.option("_dialog", this.dialog);
         block.fields(fields());
         return block;

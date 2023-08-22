@@ -59,7 +59,7 @@ public class FormMapField extends VuiControl implements ISupportForm {
         form.addBlock(title,
                 block.text(String.format(
                         """
-                                <li>
+                                <li ${if _style}style='${_style}'${endif}>
                                     <label for="%s"${if _mark} class='formMark'${endif}>${if _required}<font role="require">*</font>${endif}<em>%s</em></label>
                                     <div>
                                         <select id="%s" name="%s"${if _readonly} disabled${endif}>
@@ -79,6 +79,7 @@ public class FormMapField extends VuiControl implements ISupportForm {
         block().option("_readonly", this.readonly ? "1" : "");
         block().option("_required", this.required ? "1" : "");
         block().option("_mark", this.mark);
+        block().option("_style", this.properties("v_style").orElse(""));
         block.fields(this.field);
         return block;
     }

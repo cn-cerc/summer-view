@@ -83,7 +83,7 @@ public class FormDatetimeField extends VuiControl implements ISupportForm {
         form.addBlock(title,
                 block.text(String.format(
                         """
-                                <li>
+                                <li ${if _style}style='${_style}'${endif}>
                                     <label for="%s"><em>%s</em></label>
                                     <div>
                                         <input type="text" name="%s" id="%s" value="${%s}" autocomplete="off"${if _readonly} readonly${endif}${if _autofocus} autofocus${endif}
@@ -102,6 +102,7 @@ public class FormDatetimeField extends VuiControl implements ISupportForm {
         block().option("_required", this.required ? "1" : "");
         block().option("_autofocus", this.autofocus ? "1" : "");
         block().option("_pattern", this.pattern);
+        block().option("_style", this.properties("v_style").orElse(""));
         block.fields(this.field);
         return block;
     }

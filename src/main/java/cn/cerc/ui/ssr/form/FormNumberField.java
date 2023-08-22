@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import cn.cerc.db.core.ClassConfig;
+import cn.cerc.db.core.Utils;
 import cn.cerc.mis.core.Application;
 import cn.cerc.ui.SummerUI;
 import cn.cerc.ui.core.RequestReader;
@@ -86,15 +87,18 @@ public class FormNumberField extends VuiControl implements ISupportForm {
         String title = this.title;
         String field = this.field;
 
+        var fieldKey = String.format("${%s}", field);
+        if (Utils.isEmpty(field))
+            fieldKey = "";
         block.id(title).fields(field).display(1);
         form.addBlock(title,
                 block.text(String.format(
                         """
-                                <li>
+                                <li ${if _style}style='${_style}'${endif}>
                                     <label for="${fields}"${if _mark} class='formMark'${endif}>${if _required}<font role="require">*</font>${endif}<em>${_title}</em></label>
                                     <div>
                                         ${if _isTextField}
-                                            <input type="text" name="${fields}" id="${fields}" value="${%s}" autocomplete="off"${if _readonly} readonly${endif}${if _autofocus} autofocus${endif}
+                                            <input type="text" name="${fields}" id="${fields}" value="%s" autocomplete="off"${if _readonly} readonly${endif}${if _autofocus} autofocus${endif}
                                             ${if _placeholder} placeholder="${_placeholder}"${else} placeholder="请${if _dialog}点击获取${else}输入${endif}${_title}"${endif}${if _pattern} pattern="${_pattern}"${endif}${if _required} required${endif} />
                                         ${else}
                                             <select id="${fields}" name="${fields}"${if _readonly} disabled${endif}>
@@ -111,7 +115,7 @@ public class FormNumberField extends VuiControl implements ISupportForm {
                                 </li>
                                 ${endif}
                                 """,
-                        field, field, fieldDialogIcon)));
+                        fieldKey, field, fieldDialogIcon)));
 
         block().option("_readonly", this.readonly ? "1" : "");
         block().option("_required", this.required ? "1" : "");
@@ -127,6 +131,7 @@ public class FormNumberField extends VuiControl implements ISupportForm {
         block.option("_readonly", this.readonly ? "1" : "");
         block.option("_pattern", this.patten);
         block.option("_autofocus", this.autofocus ? "1" : "");
+        block.option("_style", this.properties("v_style").orElse(""));
         return block;
     }
 

@@ -51,7 +51,7 @@ public class FormTextareaField extends VuiControl implements ISupportForm {
         String title = this.title;
         String field = this.field;
         form.addBlock(title, block.text(String.format("""
-                    <li>
+                    <li ${if _style}style='${_style}'${endif}>
                     <label for="%s">${if _required}<font role="require">*</font>${endif}<em>%s</em></label>
                     <div>
                         <textarea name="%s" id="%s"${if _readonly} readonly${endif}>${%s}</textarea>
@@ -62,6 +62,7 @@ public class FormTextareaField extends VuiControl implements ISupportForm {
         block().option("_placeholder", this.placeholder);
         block().option("_readonly", this.readonly ? "1" : "");
         block().option("_required", this.required ? "1" : "");
+        block().option("_style", this.properties("v_style").orElse(""));
         block.fields(this.field);
         return block;
     }
