@@ -94,8 +94,9 @@ public class RequestReader {
         if (root.isArray()) {
             for (var i = 0; i < root.size(); i++)
                 updateComponent(container, root.get(i));
+        } else {
+            log.error("updateComponents 数据格式错误，必须为数组");
         }
-        log.error("updateComponents 数据格式错误，必须为数组");
     }
 
     // 更新指定的容器
@@ -139,8 +140,10 @@ public class RequestReader {
 
     private void writerViewConfig(VuiComponent child, JsonNode classData) {
         SsrUtils.copyNode(classData, child.properties());
-        for (var field : SsrUtils.getFieldList(child.getClass()))
-            SsrUtils.readProperty(child, field, classData);
+        for (var field : SsrUtils.getFieldList(child.getClass())) {
+            if (!Modifier.isStatic(field.getModifiers()))
+                SsrUtils.readProperty(child, field, classData);
+        }
     }
 
     private VuiComponent addComponent(VuiComponent owner, String appendComponent) {

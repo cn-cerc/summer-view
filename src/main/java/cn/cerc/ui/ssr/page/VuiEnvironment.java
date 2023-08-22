@@ -246,6 +246,8 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
         String device = "";
         if (this.form.getRequest().getParameter("storage") != null)
             device = form.getRequest().getParameter("storage");
+        if (Utils.isEmpty(device))
+            device = "pc";
         MongoCollection<Document> collection = MongoConfig.getDatabase().getCollection(VuiEnvironment.Visual_Menu);
         Bson bson = Filters.and(Filters.eq("corp_no_", form.getCorpNo()), Filters.eq("page_code_", pageCode),
                 Filters.eq("device_", device));
