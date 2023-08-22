@@ -1,8 +1,17 @@
 package cn.cerc.ui.ssr.page;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.lang.reflect.Modifier;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -22,8 +31,10 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 
+import cn.cerc.db.core.ServerConfig;
 import cn.cerc.db.core.Utils;
 import cn.cerc.db.mongo.MongoConfig;
+import cn.cerc.local.tool.JsonTool;
 import cn.cerc.mis.core.AbstractForm;
 import cn.cerc.mis.core.Application;
 import cn.cerc.mis.core.FormSign;
@@ -278,12 +289,32 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
         } else {
             collection.insertOne(value);
         }
+
+        // 开发环境下将文件写入磁盘
+        if (ServerConfig.isServerDevelop())
+            writeFile(pageCode, device, json);
+    }
+
+    public void writeFile(String pageCode, String device, String template) {
+        // 保存在用户根目录的 visual-menus 文件夹下，自行拷贝到项目对应的 resources
+        String fileName = Utils.isEmpty(device) ? pageCode : String.join("-", pageCode, device);
+        Path storage = Paths.get(System.getProperty("user.home"), "visual-menus", fileName + ".json");
+        if (!Files.exists(storage)) {
+            try {
+                Files.createDirectories(storage.getParent());
+            } catch (IOException e) {
+                log.error(e.getMessage(), e);
+            }
+        }
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(storage.toFile(), StandardCharsets.UTF_8))) {
+            writer.write(JsonTool.format(template));
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
     }
 
     /**
      * 取得页面配置数据
-     * 
-     * @return
      */
     @Override
     public String loadProperties() {
@@ -308,6 +339,23 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
             return value.toJson();
         } else
             return getSampleData(pageCode);
+    }
+
+    public String loadFile(Class<?> clazz, String pageCode) {
+        InputStream input = clazz.getClassLoader().getResourceAsStream(String.join("/", pageCode + ".json"));
+        if (input == null)
+            return "";
+
+        StringBuilder builder = new StringBuilder();
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(input, StandardCharsets.UTF_8))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                builder.append(line);
+            }
+        } catch (IOException e) {
+            log.error(e.getMessage(), e);
+        }
+        return builder.toString();
     }
 
     @Override
