@@ -246,16 +246,19 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
         String device = "";
         if (this.form.getRequest().getParameter("storage") != null)
             device = form.getRequest().getParameter("storage");
-        if (Utils.isEmpty(device))
-            device = "pc";
+
         MongoCollection<Document> collection = MongoConfig.getDatabase().getCollection(VuiEnvironment.Visual_Menu);
-        Bson bson = Filters.and(Filters.eq("corp_no_", form.getCorpNo()), Filters.eq("page_code_", pageCode),
-                Filters.eq("device_", device));
+        ArrayList<Bson> match = new ArrayList<>();
+        match.add(Filters.eq("corp_no_", form.getCorpNo()));
+        match.add(Filters.eq("page_code_", pageCode));
+        match.add(Filters.eq("device_", device));
+        Bson bson = Filters.and(match);
+
         Document document = collection.find(bson).first();
         Document value = new Document();
         value.append("corp_no_", form.getCorpNo());
         value.append("page_code_", pageCode);
-        value.append("device_", form.getClient().getDevice());
+        value.append("device_", device);
         Document template = Document.parse(json);
         value.append("template_", template);
         if (document != null) {
@@ -275,11 +278,13 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
         MongoCollection<Document> collection = MongoConfig.getDatabase().getCollection(VuiEnvironment.Visual_Menu);
         Bson bson = Filters.and(Filters.eq("corp_no_", form.getCorpNo()), Filters.eq("page_code_", pageCode));
 
-        String device = form.getClient().getDevice();
+        String device = "";
+        if (this.form.getRequest().getParameter("storage") != null)
+            device = form.getRequest().getParameter("storage");
         Document documentDef = null;
         ArrayList<Document> documents = collection.find(bson).into(new ArrayList<>());
         for (Document document : documents) {
-            if ("".equals(document.getString("device_")))
+            if (Utils.isEmpty(document.getString("device_")))
                 documentDef = document;
             if (device.equals(document.getString("device_"))) {
                 Document value = document.get("template_", Document.class);
