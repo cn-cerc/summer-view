@@ -69,9 +69,10 @@ public class VuiRequestRow extends VuiComponent implements ISupplierDataRow, ISu
             reader.getString(field.code()).ifPresent(value -> config.setValue(field.code(), value));
         }
         var appendField = reader.getString("appendField");
-        if (appendField.isPresent()) {
-            if (!this.config.fields().exists(appendField.get()))
-                this.config.fields().add(appendField.get());
+        if (appendField.isPresent() && !Utils.isEmpty(appendField.get())) {
+            String fieldCode = appendField.get();
+            if (!this.config.fields().exists(fieldCode))
+                this.config.fields().add(fieldCode);
         }
     }
 
