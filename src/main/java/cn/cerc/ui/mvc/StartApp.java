@@ -108,8 +108,8 @@ public class StartApp implements Filter {
                 } else {
                     response.getWriter().println("alert(\"not find file " + beanName + ".js\")");
                 }
+                return;
             }
-            return;
         }
         chain.doFilter(req, resp);
     }
