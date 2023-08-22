@@ -39,4 +39,8 @@ public class SsrMessage {
     public static final int SuccessOnService = 700;
     /** 服务执行失败消息 */
     public static final int FailOnService = 701;
+    /** 传递 xls 变量 */
+    public static final int InitSheet = 800;
+    /** Sheet行数递增 msgData 为增加的数量 */
+    public static final int SheetNextRow = 801;
 }

@@ -8,6 +8,7 @@ import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.fields.ImageConfigImpl;
 import cn.cerc.ui.ssr.core.ISupplierBlock;
 import cn.cerc.ui.ssr.core.VuiComponent;
+import cn.cerc.ui.ssr.excel.ISupportXlsGrid;
 import cn.cerc.ui.ssr.form.ISupportForm;
 import cn.cerc.ui.ssr.grid.ISupportGrid;
 import cn.cerc.ui.ssr.grid.VuiGrid;
@@ -68,9 +69,16 @@ public class EditorGrid extends UIComponent {
                         .setValue("id", item.getId())
                         .setValue("cloumn", cloumn)
                         .setValue("class", item.getClass().getSimpleName());
+            } else if (item instanceof ISupportXlsGrid gridBlock && !Utils.isEmpty(gridBlock.title())) {
+                String cloumn = gridBlock.title();
+                this.addRow()
+                        .setValue("id", item.getId())
+                        .setValue("cloumn", cloumn)
+                        .setValue("class", item.getClass().getSimpleName());
             }
         }
 
+        this.addColumn("栏位", "cloumn", 30);
         this.addColumn("类名", "class", 30);
         if (grid.dataSet().size() > 0) {
             var cid = sender.getId();

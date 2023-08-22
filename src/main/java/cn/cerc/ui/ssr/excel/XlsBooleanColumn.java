@@ -1,7 +1,5 @@
 package cn.cerc.ui.ssr.excel;
 
-import java.util.Optional;
-
 import javax.persistence.Column;
 
 import org.slf4j.Logger;
@@ -10,37 +8,36 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import cn.cerc.db.core.DataRow;
 import cn.cerc.db.core.Utils;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.ssr.core.VuiControl;
 import cn.cerc.ui.ssr.editor.SsrMessage;
-import cn.cerc.ui.ssr.form.ISupplierDataRow;
-import cn.cerc.ui.ssr.source.Binder;
 import jxl.write.Label;
 import jxl.write.WritableSheet;
 import jxl.write.WriteException;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class XlsDataCell extends VuiControl implements ISupportXlsRow {
-    private static final Logger log = LoggerFactory.getLogger(XlsDataCell.class);
+public class XlsBooleanColumn extends VuiControl implements ISupportXlsGrid {
+    private static final Logger log = LoggerFactory.getLogger(XlsBooleanColumn.class);
+    @Column
+    String title;
     @Column
     String field;
     @Column
-    Binder<ISupplierDataRow> dataRow = new Binder<>(this, ISupplierDataRow.class);
+    int width;
     @Column
-    int column = 0;
+    String trueText = "是";
+    @Column
+    String falseText = "否";
 
     private WritableSheet sheet;
+    private int total = 0;
     private int startRow = 0;
 
     @Override
     public void onMessage(Object sender, int msgType, Object msgData, String targetId) {
         switch (msgType) {
-        case SsrMessage.InitBinder:
-            dataRow.init();
-            break;
         case SsrMessage.InitSheet:
             if (msgData instanceof WritableSheet sheet)
                 this.sheet = sheet;
@@ -59,16 +56,55 @@ public class XlsDataCell extends VuiControl implements ISupportXlsRow {
             return;
         }
         try {
-            Optional<ISupplierDataRow> optDataRow = dataRow.target();
-            if (optDataRow.isPresent()) {
-                DataRow dataRow = optDataRow.get().dataRow();
-                if (dataRow != null) {
-                    int column = this.column > 0 ? this.column : this.getOwner().getComponents().indexOf(this);
-                    sheet.addCell(new Label(column, startRow, dataRow.getString(field)));
+            if (this.getOwner() instanceof XlsGrid grid) {
+                int column = grid.getComponents().indexOf(this);
+                if (this.total++ == 0) {
+                    sheet.setColumnView(column, this.width);
+                    sheet.addCell(new Label(column, startRow, this.title));
+                } else {
+                    var dataSet = grid.dataSet();
+                    if (dataSet != null) {
+                        String text = dataSet.getBoolean(field) ? trueText : falseText;
+                        sheet.addCell(new Label(column, startRow, text));
+                    }
                 }
             }
         } catch (WriteException e) {
             log.error(e.getMessage(), e);
         }
     }
+
+    @Override
+    public ISupportXlsGrid title(String title) {
+        this.title = title;
+        return this;
+    }
+
+    @Override
+    public ISupportXlsGrid field(String field) {
+        this.field = field;
+        return this;
+    }
+
+    @Override
+    public ISupportXlsGrid width(int width) {
+        this.width = width;
+        return this;
+    }
+
+    @Override
+    public String title() {
+        return title;
+    }
+
+    @Override
+    public String field() {
+        return field;
+    }
+
+    @Override
+    public int width() {
+        return width;
+    }
+
 }

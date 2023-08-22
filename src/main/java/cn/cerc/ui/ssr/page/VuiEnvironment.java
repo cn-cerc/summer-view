@@ -112,6 +112,11 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
     /** 设计页面 */
     protected abstract IPage getDesignPage();
 
+    @Override
+    public Class<?> getSupportClass() {
+        return ISupportCanvas.class;
+    }
+
     /**
      * 返回搜索页范例
      * 

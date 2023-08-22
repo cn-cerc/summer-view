@@ -46,7 +46,6 @@ import cn.cerc.ui.ssr.core.VuiContainer;
 import cn.cerc.ui.ssr.editor.EditorGrid;
 import cn.cerc.ui.ssr.editor.ISsrBoard;
 import cn.cerc.ui.ssr.editor.SsrMessage;
-import cn.cerc.ui.ssr.grid.GridNumberField;
 import cn.cerc.ui.ssr.page.ISupportCanvas;
 import cn.cerc.ui.ssr.page.IVuiEnvironment;
 import cn.cerc.ui.ssr.source.Binder;
@@ -459,7 +458,7 @@ public class VuiForm extends VuiContainer<ISupportForm>
                 classCode = FormBooleanField.class.getSimpleName();
             else if (field.getType() == Integer.class || field.getType() == int.class || field.getType() == Double.class
                     || field.getType() == double.class || field.getType().isEnum())
-                classCode = GridNumberField.class.getSimpleName();
+                classCode = FormNumberField.class.getSimpleName();
             dataSet.append()
                     .setValue("field", field.getName())
                     .setValue("title", title)

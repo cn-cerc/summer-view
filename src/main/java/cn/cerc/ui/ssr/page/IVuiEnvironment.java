@@ -52,4 +52,6 @@ public interface IVuiEnvironment {
     /** 画布所在的组件 */
     UIComponent getContent();
 
+    Class<?> getSupportClass();
+
 }

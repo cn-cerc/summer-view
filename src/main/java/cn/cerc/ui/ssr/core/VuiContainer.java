@@ -17,12 +17,18 @@ public abstract class VuiContainer<T> extends VuiControl {
     @Column
     protected static final boolean container = true;
 
+    private Class<?> supportClass;
+
+    @SuppressWarnings("unchecked")
     public VuiContainer() {
         super();
+        supportClass = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
     }
 
+    @SuppressWarnings("unchecked")
     public VuiContainer(UIComponent owner) {
         super(owner);
+        supportClass = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
     }
 
     public Set<Class<? extends VuiComponent>> getChildren() {
@@ -33,9 +39,6 @@ public abstract class VuiContainer<T> extends VuiControl {
         else
             result = new LinkedHashSet<Class<? extends VuiComponent>>();
 
-        @SuppressWarnings("unchecked")
-        var supportClass = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass())
-                .getActualTypeArguments()[0];
         var context = Application.getContext();
         context.getBeansOfType(supportClass).forEach((name, bean) -> {
             if (bean instanceof VuiComponent ssr)
@@ -46,6 +49,11 @@ public abstract class VuiContainer<T> extends VuiControl {
 
     public String getComponentSign() {
         return null;
+    }
+
+    protected VuiContainer<?> setSupportClass(Class<?> supportClass) {
+        this.supportClass = supportClass;
+        return this;
     }
 
 }

@@ -39,6 +39,7 @@ public class VuiCanvas extends VuiContainer<ISupportCanvas> {
             this.setOwner(environment.getContent());
             var json = environment.loadProperties();
             this.readProperties(new PropertiesReader(json));
+            this.setSupportClass(environment.getSupportClass());
         }
     }
 
@@ -229,6 +230,10 @@ public class VuiCanvas extends VuiContainer<ISupportCanvas> {
         this.sendMessage(this, SsrMessage.InitProperties, null, null);
         // 通知所有成员进行初始化，可在此执行进行初始化作业
         this.sendMessage(this, SsrMessage.InitContent, null, null);
+    }
+
+    public String title() {
+        return title;
     }
 
 }
