@@ -98,6 +98,14 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
         }
     }
 
+    public String getPageCode() {
+        return pageCode;
+    }
+
+    public void setPageCode(String pageCode) {
+        this.pageCode = pageCode;
+    }
+
     /** 运行页面 */
     protected abstract IPage getRuntimePage();
 
