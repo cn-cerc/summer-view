@@ -50,7 +50,6 @@ public class VuiRequestRow extends VuiComponent implements ISupplierDataRow, ISu
 
     @Override
     public void buildEditor(UIComponent content, String pageCode) {
-        super.buildEditor(content, pageCode);
         var form = new EditorForm(content, this);
         for (var field : config.fields()) {
             var title = field.name();
