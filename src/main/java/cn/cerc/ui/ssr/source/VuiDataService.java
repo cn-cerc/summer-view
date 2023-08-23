@@ -1,8 +1,8 @@
 package cn.cerc.ui.ssr.source;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 
@@ -134,25 +134,25 @@ public class VuiDataService extends VuiComponent
     }
 
     @Override
-    public List<Field> fields(int fieldsType) {
+    public Set<Field> fields(int fieldsType) {
         IVuiEnvironment environment = this.canvas().environment();
         if (Utils.isEmpty(this.service))
-            return new ArrayList<>();
+            return new LinkedHashSet<>();
         var optBean = environment.getBean(this.service, CustomEntityService.class);
         if (optBean.isPresent()) {
             CustomEntityService<?, ?, ?, ?> svr = optBean.get();
             switch (fieldsType) {
             case HeadOutFields:
-                return svr.getMetaHeadOut();
+                return svr.getMetaHeadOut().keySet();
             case HeadInFields:
-                return svr.getMetaHeadIn();
+                return svr.getMetaHeadIn().keySet();
             case BodyInFields:
-                return svr.getMetaBodyIn();
+                return svr.getMetaBodyIn().keySet();
             case BodyOutFields:
-                return svr.getMetaBodyOut();
+                return svr.getMetaBodyOut().keySet();
             }
         }
-        return new ArrayList<>();
+        return new LinkedHashSet<>();
     }
 
     @Override

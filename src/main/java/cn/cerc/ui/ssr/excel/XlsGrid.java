@@ -1,8 +1,8 @@
 package cn.cerc.ui.ssr.excel;
 
 import java.lang.reflect.Field;
-import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.servlet.http.HttpServletRequest;
@@ -94,7 +94,7 @@ public class XlsGrid extends VuiContainer<ISupportXlsGrid> implements ISupportXl
 
         Optional<ISupplierDataSet> optSvr = this.dataSet.target();
         if (optSvr.isPresent() && optSvr.get() instanceof VuiDataService svr) {
-            List<Field> fields = svr.fields(ISupplierFields.BodyOutFields);
+            Set<Field> fields = svr.fields(ISupplierFields.BodyOutFields);
             for (Field field : fields) {
                 if (dataSet.locate("field", field.getName()))
                     continue;

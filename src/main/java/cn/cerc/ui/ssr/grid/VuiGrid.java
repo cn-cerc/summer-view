@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -506,7 +507,7 @@ public class VuiGrid extends VuiContainer<ISupportGrid> implements ISsrBoard, IG
                 .setValue("width", 4)
                 .setValue("check", false);
         if (optSvr.isPresent()) {
-            List<Field> fields = optSvr.get().fields(ISupplierFields.BodyOutFields);
+            Set<Field> fields = optSvr.get().fields(ISupplierFields.BodyOutFields);
             for (Field field : fields) {
                 if (dataSet.locate("field", field.getName()))
                     continue;
