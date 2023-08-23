@@ -17,7 +17,7 @@ import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.ssr.core.SsrUtils;
 import cn.cerc.ui.ssr.core.VuiComponent;
 import cn.cerc.ui.ssr.core.VuiContainer;
-import cn.cerc.ui.ssr.form.FormMapField;
+import cn.cerc.ui.ssr.form.FormStringField;
 import cn.cerc.ui.ssr.form.VuiForm;
 import cn.cerc.ui.ssr.source.Binder;
 
@@ -75,8 +75,7 @@ public class EditorForm extends UIComponent {
 
     public void addMap(String title, String field, Map<String, String> map) {
         var style = form.defaultStyle();
-        var block = form.addBlock(style.getMap(title, field));
-        block.toMap(map);
+        form.addBlock(style.getString(title, field).toMap(map));
         form.addColumn(title);
     }
 
@@ -122,13 +121,13 @@ public class EditorForm extends UIComponent {
                 if (column != null && !Utils.isEmpty(column.name()))
                     title = column.name();
                 var style = form.defaultStyle();
-                FormMapField mapField = style.getMap(title, field.getName());
+                FormStringField mapField = style.getString(title, field.getName());
                 var clazz = binder.targetType();
                 this.sender.canvas().getMembers().forEach((id, ssr) -> {
                     if (clazz.isInstance(ssr))
                         mapField.toMap(id, id);
                 });
-                if (mapField.block().map() == null || mapField.block().map().size() == 0)
+                if (mapField.block().map() != null && mapField.block().map().size() == 0)
                     mapField.toMap("", "未查找到可用数据源");
                 else
                     mapField.toMap("", "请选择数据源");
@@ -141,7 +140,7 @@ public class EditorForm extends UIComponent {
                 if (column != null && !Utils.isEmpty(column.name()))
                     title = column.name();
                 var style = form.defaultStyle();
-                FormMapField mapField = style.getMap(title, field.getName());
+                FormStringField mapField = style.getString(title, field.getName());
                 for (Enum<?> item : enums)
                     mapField.toMap(item.name(), item.name());
                 mapField.selected(((Enum<?>) field.get(properties)).name());
@@ -154,11 +153,11 @@ public class EditorForm extends UIComponent {
         }
     }
 
-    public FormMapField addClassList(Class<?> class1, Class<?> defaultClass) {
+    public FormStringField addClassList(Class<?> class1, Class<?> defaultClass) {
         String column = "增加";
-        var block = form.defaultStyle().getMap(column, "appendComponent");
+        FormStringField mapField = form.defaultStyle().getString(column, "appendComponent");
         if (defaultClass != null)
-            block.selected(defaultClass.getSimpleName());
+            mapField.selected(defaultClass.getSimpleName());
         if (sender instanceof VuiContainer<?> impl) {
             Set<Class<? extends VuiComponent>> children = impl.getChildren();
             for (var clazz : children) {
@@ -166,12 +165,12 @@ public class EditorForm extends UIComponent {
                 Description desc = clazz.getAnnotation(Description.class);
                 if (desc != null && !Utils.isEmpty(desc.value()))
                     title = desc.value();
-                block.toMap(clazz.getSimpleName(), title);
+                mapField.toMap(clazz.getSimpleName(), title);
             }
-            form.addBlock(block);
+            form.addBlock(mapField);
             form.addColumn(column);
         }
-        return block;
+        return mapField;
     }
 
     public VuiForm getForm() {

@@ -256,6 +256,12 @@ public class FormStringField extends VuiControl implements ISupportForm {
         return this;
     }
 
+    public FormStringField toMap(String key, String val) {
+        block.toMap(key, val);
+        block.option("_isTextField", "");
+        return this;
+    }
+
     public ISupplierBlock toMap(Map<String, String> targetMap) {
         block.toMap(targetMap);
         block.option("_isTextField", "");

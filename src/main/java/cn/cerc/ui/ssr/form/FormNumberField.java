@@ -1,5 +1,6 @@
 package cn.cerc.ui.ssr.form;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -263,6 +264,13 @@ public class FormNumberField extends VuiControl implements ISupportForm {
         block.toList(targetList);
         block.option("_isTextField", "");
         return this;
+    }
+
+    public ISupplierBlock toList(Enum<?>[] enums) {
+        List<String> list = new ArrayList<>();
+        for (Enum<?> item : enums)
+            list.add(item.name());
+        return toList(list);
     }
 
 }

@@ -3,6 +3,7 @@ package cn.cerc.ui.ssr.core;
 import static org.junit.Assert.assertEquals;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 
 import org.junit.Test;
 
@@ -29,7 +30,7 @@ public class SsrGridStyleDefaultTest {
         grid.addBlock(style.getIt("序", 2));
         grid.addBlock(style.getString("部门名称", "Name_", 10));
         grid.addBlock(style.getCheckBox("状态", "Final_", 4));
-        grid.addBlock(style.getMap("类别", "Type_", 10, map));
+        grid.addBlock(style.getString("类别", "Type_", 10).toMap(map));
         grid.addBlock(style.getOpera(4)).onCallback("url", () -> {
             return "FrmView?code=" + ds.getString("Code_");
         });
@@ -60,14 +61,10 @@ public class SsrGridStyleDefaultTest {
         var grid = new VuiGrid(null, "");
         grid.dataSet(ds);
 
-        var map = new LinkedHashMap<String, String>();
-        map.put("0", "自有");
-        map.put("1", "租赁");
-
         var style = grid.defaultStyle();
         grid.addBlock(style.getIt());
         grid.addBlock(style.getString("车辆名称", "Name_", 10, "right"));
-        grid.addBlock(style.getMap("类别", "Type_", 10, map));
+        grid.addBlock(style.getNumber("类别", "Type_", 10).toList(List.of("自有", "租赁")));
         grid.addBlock(style.getOpera(4)).onCallback("url", () -> {
             return "FrmView?code=" + ds.getString("Code_");
         });

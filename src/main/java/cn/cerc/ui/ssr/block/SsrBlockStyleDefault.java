@@ -225,7 +225,7 @@ public class SsrBlockStyleDefault {
                     </div>
                     """, field, title, field, field, field, field, field));
             block.option("_ratio", "1");
-            block.setMap(map);
+            block.toMap(map);
             return block;
         };
     }

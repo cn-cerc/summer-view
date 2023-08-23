@@ -68,7 +68,7 @@ public class VuiMapSupplier extends VuiComponent implements ISupplierMap, IBinde
             Map<String, Object> map = environment.getAttachData(this.getClass());
             Map<String, String> targetMap = map.keySet().stream().collect(Collectors.toMap(t -> t, t -> t));
             ssrForm.addBlock(style.getBoolean("加入全部选择项", "addAll"));
-            ssrForm.addBlock(style.getMap("附加数据源", "target")).toMap(targetMap);
+            ssrForm.addBlock(style.getString("附加数据源", "target").toMap(targetMap));
             ssrForm.addBlock(style.getString("默认选中", "selected"));
             form.build();
         }

@@ -70,11 +70,7 @@ public class SsrFormStyleDefaultTest {
     public void test4() {
         VuiForm form = new VuiForm(null);
         var style = form.defaultStyle();
-        Map<String, String> statusMap = new LinkedHashMap<String, String>();
-        statusMap.put("0", "全部");
-        statusMap.put("1", "待审核");
-        statusMap.put("2", "已审核");
-        form.addBlock(style.getMap("单据状态", "status_")).setMap(statusMap);
+        form.addBlock(style.getNumber("单据状态", "status_").toList(List.of("全部", "待审核", "已审核")));
         form.dataRow(DataRow.of("status_", "1"));
         form.addColumn("单据状态");
         form.strict(false);
