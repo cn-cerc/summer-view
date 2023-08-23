@@ -116,7 +116,7 @@ public class StartForms implements Filter {
                 request.getServletContext().getRequestDispatcher(uri).forward(request, response);
             } else {
                 String source = "/" + Application.getConfig().getFormsPath() + uri.substring(index);
-                source = Utils.decode(source, StandardCharsets.UTF_8.name());
+                source = Utils.decode(source, StandardCharsets.UTF_8);
                 request.getServletContext().getRequestDispatcher(source).forward(request, response);
                 log.debug("after  {}", source);
             }
