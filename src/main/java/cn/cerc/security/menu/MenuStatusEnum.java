@@ -1,6 +1,6 @@
 package cn.cerc.security.menu;
 
-public enum MenuStatus {
+public enum MenuStatusEnum {
 
     开发中,
     使用中,

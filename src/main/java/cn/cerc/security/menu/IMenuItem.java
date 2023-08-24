@@ -15,7 +15,7 @@ public interface IMenuItem {
     String getPermission();
 
     // 0: 开发中，1.使用中；2.已停用
-    MenuStatus getStatus();
+    MenuStatusEnum getStatus();
 
     /**
      * 返回菜单的图标文件名
