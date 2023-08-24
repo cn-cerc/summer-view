@@ -78,7 +78,6 @@ public class EditorGrid extends UIComponent {
             }
         }
 
-        this.addColumn("栏位", "cloumn", 30);
         this.addColumn("类名", "class", 30);
         if (grid.dataSet().size() > 0) {
             var cid = sender.getId();
