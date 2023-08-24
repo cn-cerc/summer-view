@@ -22,6 +22,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import cn.cerc.db.core.Handle;
+import cn.cerc.db.core.IAppConfig;
 import cn.cerc.db.core.IHandle;
 import cn.cerc.db.core.ISession;
 import cn.cerc.db.core.MD5;
@@ -115,7 +116,7 @@ public class StartForms implements Filter {
             if (index < 0) {
                 request.getServletContext().getRequestDispatcher(uri).forward(request, response);
             } else {
-                String source = "/" + Application.getConfig().getFormsPath() + uri.substring(index);
+                String source = "/" + Application.getBean(IAppConfig.class).getFormsPath() + uri.substring(index);
                 source = Utils.decode(source, StandardCharsets.UTF_8);
                 request.getServletContext().getRequestDispatcher(source).forward(request, response);
                 log.debug("after  {}", source);
@@ -124,7 +125,7 @@ public class StartForms implements Filter {
         }
 
         if (StringUtils.countMatches(uri, "/") < 2 && !uri.contains("favicon.ico")) {
-            String redirect = String.format("/public/%s", Application.getConfig().getWelcomePage());
+            String redirect = String.format("/public/%s", Application.getBean(IAppConfig.class).getWelcomePage());
             redirect = resp.encodeRedirectURL(redirect);
             resp.sendRedirect(redirect);
             return;
@@ -203,9 +204,9 @@ public class StartForms implements Filter {
                 } else {
                     String token = (String) req.getAttribute(ISession.TOKEN);
                     if (token != null && !"".equals(token)) {
-                        url = Application.getConfig().getDefaultPage();
+                        url = Application.getBean(IAppConfig.class).getDefaultPage();
                     } else {
-                        url = Application.getConfig().getWelcomePage();
+                        url = Application.getBean(IAppConfig.class).getWelcomePage();
                     }
                 }
             }

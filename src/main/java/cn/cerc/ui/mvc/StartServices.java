@@ -84,7 +84,7 @@ public class StartServices extends HttpServlet {
 
         // 执行指定函数
         try {
-            ISession session = Application.getSession();
+            ISession session = Application.getBean(ISession.class);
             session.setProperty(ISession.REQUEST, request);
             // 获取token
             String token = request.getParameter(ISession.TOKEN);

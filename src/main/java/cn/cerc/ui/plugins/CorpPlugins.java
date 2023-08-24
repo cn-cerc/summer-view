@@ -17,7 +17,6 @@ import cn.cerc.mis.core.IPage;
  * @author ZhangGong
  *
  */
-@Deprecated
 public class CorpPlugins {
     private static final Logger log = LoggerFactory.getLogger(CorpPlugins.class);
 //    private static final Logger log = LoggerFactory.getLogger(CorpPlugins.class);
@@ -96,10 +95,6 @@ public class CorpPlugins {
         return new ServiceSign(result);
     }
 
-    public static IPlugins getBean(AbstractForm form, Class<IPlugins> class1) {
-        return getPluginsByCorp(form, class1);
-    }
-
     /**
      * 返回当前公司别当前对象之之插件对象，如FrmProduct_131001（必须继承 IPlugins）
      *
@@ -134,7 +129,7 @@ public class CorpPlugins {
         return result;
     }
 
-    protected static String getCorpClassName(Object owner) {
+    private static String getCorpClassName(Object owner) {
         String names[];
         if (owner instanceof Class)
             names = ((Class<?>) owner).getName().split("\\.");

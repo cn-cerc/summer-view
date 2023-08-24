@@ -6,6 +6,7 @@ import java.net.URL;
 
 import javax.servlet.ServletException;
 
+import cn.cerc.db.core.IAppConfig;
 import cn.cerc.mis.core.Application;
 import cn.cerc.mis.core.IForm;
 import cn.cerc.mis.language.R;
@@ -44,7 +45,7 @@ public class JspFile extends AbstractPage {
             return jspFile;
         }
 
-        String rootPath = String.format("/WEB-INF/%s/", Application.getConfig().getFormsPath());
+        String rootPath = String.format("/WEB-INF/%s/", Application.getBean(IAppConfig.class).getFormsPath());
         String fileName = jspFile.substring(0, jspFile.indexOf(".jsp"));
         String extName = jspFile.substring(jspFile.indexOf(".jsp") + 1);
         IForm form = getForm();

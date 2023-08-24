@@ -21,6 +21,7 @@ import org.springframework.aop.support.AopUtils;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import cn.cerc.db.core.ClassConfig;
+import cn.cerc.db.core.IAppConfig;
 import cn.cerc.db.core.ISession;
 import cn.cerc.mis.core.AppClient;
 import cn.cerc.mis.core.Application;
@@ -69,14 +70,14 @@ public class StartApp implements Filter {
 
         // 处理默认首页问题
         if ("/".equals(uri)) {
-            String redirect = String.format("/%s/%s", Application.getConfig().getFormsPath(),
-                    Application.getConfig().getWelcomePage());
+            String redirect = String.format("/%s/%s", Application.getBean(IAppConfig.class).getFormsPath(),
+                    Application.getBean(IAppConfig.class).getWelcomePage());
             redirect = resp.encodeRedirectURL(redirect);
             resp.sendRedirect(redirect);
             return;
         } else if ("/MobileConfig".equals(uri) || "/mobileConfig".equals(uri)) {
             try {
-                ISession session = Application.getSession();
+                ISession session = Application.getBean(ISession.class);
                 IMobileConfig form = Application.getBean(IMobileConfig.class);
                 form.setSession(session);
                 IPage page = form.execute();
