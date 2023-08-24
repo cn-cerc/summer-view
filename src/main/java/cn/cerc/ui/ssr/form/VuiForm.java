@@ -23,7 +23,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import cn.cerc.db.core.DataRow;
 import cn.cerc.db.core.DataSet;
-import cn.cerc.db.core.Describe;
 import cn.cerc.db.core.IHandle;
 import cn.cerc.db.core.Utils;
 import cn.cerc.mis.core.Application;
@@ -450,9 +449,6 @@ public class VuiForm extends VuiContainer<ISupportForm>
                 continue;
             if (!Utils.isEmpty(column.name()))
                 title = column.name();
-            Describe describe = field.getAnnotation(Describe.class);
-            if (describe != null && !Utils.isEmpty(describe.name()))
-                title = describe.name();
             String classCode = FormStringField.class.getSimpleName();
             if (field.getType() == Boolean.class || field.getType() == boolean.class)
                 classCode = FormBooleanField.class.getSimpleName();

@@ -106,12 +106,8 @@ public class XlsGrid extends VuiContainer<ISupportXlsGrid> implements ISupportXl
                     title = column.name();
                 int width = 10;
                 Describe describe = field.getAnnotation(Describe.class);
-                if (describe != null) {
-                    if (!Utils.isEmpty(describe.name()))
-                        title = describe.name();
-                    if (describe.width() > 0)
-                        width = describe.width();
-                }
+                if (describe != null && describe.width() > 0)
+                    width = describe.width();
                 String classCode = XlsStringColumn.class.getSimpleName();
                 if (field.getType() == Boolean.class || field.getType() == boolean.class)
                     classCode = XlsBooleanColumn.class.getSimpleName();

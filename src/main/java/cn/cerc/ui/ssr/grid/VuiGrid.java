@@ -520,8 +520,6 @@ public class VuiGrid extends VuiContainer<ISupportGrid> implements ISsrBoard, IG
                 int width = 10;
                 Describe describe = field.getAnnotation(Describe.class);
                 if (describe != null) {
-                    if (!Utils.isEmpty(describe.name()))
-                        title = describe.name();
                     if (describe.width() > 0)
                         width = describe.width();
                 }
