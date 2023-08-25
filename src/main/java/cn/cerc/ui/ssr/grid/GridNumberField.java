@@ -44,7 +44,8 @@ public class GridNumberField extends VuiControl implements ISupportGrid {
     @Override
     public SsrBlock request(ISsrBoard grid) {
         String headTitle = "head." + this.title;
-        grid.addBlock(headTitle, head.text("<th style='width: ${_width}em'>${_title}</th>"));
+        grid.addBlock(headTitle, head.text(
+                String.format("<th style='width: ${_width}em' onclick=\"gridSort(this,'%s')\">${_title}</th>", field)));
         head.toMap("_width", "" + this.fieldWidth);
         head.toMap("_title", this.title);
         head.id(headTitle);
@@ -61,8 +62,8 @@ public class GridNumberField extends VuiControl implements ISupportGrid {
                 ${endif}
                 ${if _enabled_url}</a>${endif}
                 </td>""", this.field, this.field)));
-        head.toMap("_align", this.align);
-        head.toMap("_field", this.field);
+        body.option("_align", this.align);
+        body.option("_field", this.field);
         body.id(bodyTitle);
         body.display(1);
         body.strict(false);

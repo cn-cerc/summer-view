@@ -48,7 +48,8 @@ public class GridBooleanField extends VuiControl implements ISupportGrid {
         var fieldWidth = this.fieldWidth;
         String headTitle = "head." + title;
         String bodyTitle = "body." + title;
-        var ssr = grid.addBlock(headTitle, String.format("<th style='width: ${_width}em'>%s</th>", title));
+        var ssr = grid.addBlock(headTitle,
+                String.format("<th style='width: ${_width}em' onclick=\"gridSort(this,'%s')\">%s</th>", title, field));
         ssr.toMap("_width", "" + fieldWidth);
         ssr.id(headTitle);
         ssr.display(1);

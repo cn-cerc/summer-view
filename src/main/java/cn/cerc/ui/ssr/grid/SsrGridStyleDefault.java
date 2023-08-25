@@ -46,7 +46,12 @@ public class SsrGridStyleDefault {
         return getString(title, field, 4, "right");
     }
 
-    /** 请改用getString */
+    /**
+     * 如果是value值为enum的下标的枚举请改为getNumber+toList方法，toList需要跟在getNumber之后
+     * addBlock(style.getNumber('title', 'field', width).toList(enum.values()))
+     * 如果value为非enum的下标的枚举请改为getString+toMap方法，toMap需要跟在getString之后
+     * addBlock(style.getString('title', 'field', width).toMap(Map.of('', '')))
+     */
     @Deprecated
     public GridMapField getMap(String title, String field, int fieldWidth, Map<String, String> map) {
         items.add(title);

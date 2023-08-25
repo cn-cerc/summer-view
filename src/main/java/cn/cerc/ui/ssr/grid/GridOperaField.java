@@ -40,7 +40,7 @@ public class GridOperaField extends VuiControl implements ISupportGrid {
         String bodyTitle = "body." + title;
         int fieldWidth = this.fieldWidth;
         var ssr = grid.addBlock(headTitle, String.format("""
-                <th style='width: ${_width}em'>
+                <th style='width: ${_width}em' onclick="gridSort(this,'_opera_')">
                 ${if templateId}
                     <a href="javascript:showSsrConfigDialog('${templateId}')">
                         ${if templateConfigImg}

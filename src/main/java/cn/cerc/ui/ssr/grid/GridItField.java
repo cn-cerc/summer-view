@@ -40,7 +40,7 @@ public class GridItField extends VuiControl implements ISupportGrid {
     @Override
     public SsrBlock request(ISsrBoard grid) {
         String headTitle = "head." + this.title;
-        grid.addBlock(headTitle, head.text("<th style='width: ${_width}em'>序</th>"));
+        grid.addBlock(headTitle, head.text("<th style='width: ${_width}em' onclick=\"gridSort(this,'_it_')\">序</th>"));
         head.id(headTitle);
         head.display(1);
         head.toMap("_width", "" + this.fieldWidth);
