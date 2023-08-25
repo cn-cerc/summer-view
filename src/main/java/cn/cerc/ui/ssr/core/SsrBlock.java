@@ -324,6 +324,11 @@ public class SsrBlock implements ISsrOption {
     }
 
     public SsrBlock toMap(Map<String, String> map) {
+        if (map == null) {
+            var e = new RuntimeException("map 不允许为空");
+            log.warn(e.getMessage(), e);
+            return this;
+        }
         for (var key : map.keySet())
             toMap(key, map.get(key));
         return this;
