@@ -10,10 +10,13 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import cn.cerc.db.core.DataSet;
+import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.ssr.core.AlginEnum;
 import cn.cerc.ui.ssr.core.ISsrOption;
 import cn.cerc.ui.ssr.core.ISupplierBlock;
 import cn.cerc.ui.ssr.core.SsrBlock;
+import cn.cerc.ui.ssr.core.SummaryTypeEnum;
 import cn.cerc.ui.ssr.core.VuiControl;
 import cn.cerc.ui.ssr.editor.ISsrBoard;
 import cn.cerc.ui.ssr.editor.SsrMessage;
@@ -33,6 +36,10 @@ public class GridStringField extends VuiControl implements ISupportGrid {
     public int fieldWidth = 10;
     @Column
     public String align = "";
+    @Column
+    SummaryTypeEnum summaryType = SummaryTypeEnum.无;
+    @Column
+    String summaryValue = "";
     @Column
     Binder<ISupplierMap> mapSource = new Binder<>(this, ISupplierMap.class);
 
@@ -143,6 +150,41 @@ public class GridStringField extends VuiControl implements ISupportGrid {
     @Override
     public GridStringField width(int width) {
         this.fieldWidth = width;
+        return this;
+    }
+
+    @Override
+    public SummaryTypeEnum summaryType() {
+        return summaryType;
+    }
+
+    @Override
+    public void outputTotal(HtmlWriter html, DataSet dataSet) {
+        String value = switch (summaryType) {
+        case 计数 -> String.valueOf(dataSet.size());
+        case 固定 -> summaryValue;
+        default -> "";
+        };
+        html.print("<td>");
+        html.print(value);
+        html.print("</td>");
+    }
+
+    public SummaryTypeEnum getSummaryType() {
+        return summaryType;
+    }
+
+    public GridStringField setSummaryType(SummaryTypeEnum summaryType) {
+        this.summaryType = summaryType;
+        return this;
+    }
+
+    public String getSummaryValue() {
+        return summaryValue;
+    }
+
+    public GridStringField setSummaryValue(String summaryValue) {
+        this.summaryValue = summaryValue;
         return this;
     }
 

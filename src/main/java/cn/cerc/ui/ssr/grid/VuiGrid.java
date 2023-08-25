@@ -37,6 +37,7 @@ import cn.cerc.ui.ssr.core.ISupplierBlock;
 import cn.cerc.ui.ssr.core.PropertiesReader;
 import cn.cerc.ui.ssr.core.SsrBlock;
 import cn.cerc.ui.ssr.core.SsrTemplate;
+import cn.cerc.ui.ssr.core.SummaryTypeEnum;
 import cn.cerc.ui.ssr.core.VuiComponent;
 import cn.cerc.ui.ssr.core.VuiContainer;
 import cn.cerc.ui.ssr.editor.EditorGrid;
@@ -171,6 +172,28 @@ public class VuiGrid extends VuiContainer<ISupportGrid> implements ISsrBoard, IG
                                 value.accept(block.get().id(field));
                         }
                         block.ifPresent(value -> html.print(value.html()));
+                    }
+                    getTemplate(BodyEnd, () -> new SsrBlock("</tr>").template(template))
+                            .ifPresent(value -> html.println(value.html()));
+                }
+
+                Map<String, ISupportGrid> summaryFieldMap = new HashMap<>();
+                for (UIComponent component : this) {
+                    if (component instanceof ISupportGrid item) {
+                        if (item.summaryType() != SummaryTypeEnum.无)
+                            summaryFieldMap.put(item.title(), item);
+                    }
+                }
+
+                if (summaryFieldMap.size() > 0) {
+                    getTemplate(BodyBegin, getDefault_BodyBegin()).ifPresent(value -> html.println(value.html()));
+                    for (String field : columns) {
+                        ISupportGrid find = summaryFieldMap.get(field);
+                        if (find != null) {
+                            find.outputTotal(html, dataSet());
+                        } else {
+                            html.print("<td></td>");
+                        }
                     }
                     getTemplate(BodyEnd, () -> new SsrBlock("</tr>").template(template))
                             .ifPresent(value -> html.println(value.html()));

@@ -1,8 +1,10 @@
 package cn.cerc.ui.ssr.grid;
 
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
+import java.util.stream.DoubleStream;
 
 import javax.persistence.Column;
 
@@ -10,10 +12,14 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import cn.cerc.db.core.DataSet;
+import cn.cerc.db.core.Utils;
+import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.ssr.core.AlginEnum;
 import cn.cerc.ui.ssr.core.ISsrOption;
 import cn.cerc.ui.ssr.core.ISupplierBlock;
 import cn.cerc.ui.ssr.core.SsrBlock;
+import cn.cerc.ui.ssr.core.SummaryTypeEnum;
 import cn.cerc.ui.ssr.core.VuiControl;
 import cn.cerc.ui.ssr.editor.ISsrBoard;
 import cn.cerc.ui.ssr.editor.SsrMessage;
@@ -33,6 +39,10 @@ public class GridNumberField extends VuiControl implements ISupportGrid {
     public int fieldWidth = 10;
     @Column
     public String align = "";
+    @Column
+    String format = "";
+    @Column
+    SummaryTypeEnum summaryType = SummaryTypeEnum.无;
     @Column
     Binder<ISupplierList> listSource = new Binder<>(this, ISupplierList.class);
 
@@ -143,6 +153,48 @@ public class GridNumberField extends VuiControl implements ISupportGrid {
     @Override
     public GridNumberField width(int width) {
         this.fieldWidth = width;
+        return this;
+    }
+
+    @Override
+    public SummaryTypeEnum summaryType() {
+        return summaryType;
+    }
+
+    @Override
+    public void outputTotal(HtmlWriter html, DataSet dataSet) {
+        DoubleStream doubleStream = dataSet.records().stream().mapToDouble(row -> row.getDouble(field));
+        double summary = switch (summaryType) {
+        case 求和 -> doubleStream.sum();
+        case 最大 -> doubleStream.max().orElse(0d);
+        case 最小 -> doubleStream.min().orElse(0d);
+        case 平均 -> doubleStream.average().orElse(0d);
+        case 计数 -> doubleStream.count();
+        default -> 0d;
+        };
+        html.print("<td>");
+        if (Utils.isEmpty(format))
+            html.print(String.valueOf(summary));
+        else
+            html.print(new DecimalFormat(format).format(summary));
+        html.print("</td>");
+    }
+
+    public String getFormat() {
+        return format;
+    }
+
+    public GridNumberField setFormat(String format) {
+        this.format = format;
+        return this;
+    }
+
+    public SummaryTypeEnum getSummaryType() {
+        return summaryType;
+    }
+
+    public GridNumberField setSummaryType(SummaryTypeEnum summaryType) {
+        this.summaryType = summaryType;
         return this;
     }
 

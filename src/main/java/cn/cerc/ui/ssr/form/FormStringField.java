@@ -90,6 +90,7 @@ public class FormStringField extends VuiControl implements ISupportForm {
         var fieldKey = String.format("${%s}", field);
         if (Utils.isEmpty(field))
             fieldKey = "";
+        String selected = block().option("_selected").map("'%s'"::formatted).orElse(field);
         form.addBlock(title,
                 block.text(String.format(
                         """
@@ -113,7 +114,7 @@ public class FormStringField extends VuiControl implements ISupportForm {
                                 </li>
                                 ${endif}
                                 """,
-                        fieldKey, field, fieldDialogIcon)));
+                        fieldKey, selected, fieldDialogIcon)));
 
         block().option("_readonly", this.readonly ? "1" : "");
         block().option("_required", this.required ? "1" : "");
