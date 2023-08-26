@@ -300,7 +300,14 @@ public class SsrBlock implements ISsrOption {
     }
 
     public SsrBlock toList(List<String> list) {
-        toList(list.toArray(new String[list.size()]));
+        if (list == null) {
+            var e = new RuntimeException("list 不允许为空");
+            log.warn(e.getMessage(), e);
+            return this;
+        }
+        if (this.list == null)
+            this.list = new ArrayList<>();
+        this.list.addAll(list);
         return this;
     }
 
@@ -329,8 +336,9 @@ public class SsrBlock implements ISsrOption {
             log.warn(e.getMessage(), e);
             return this;
         }
-        for (var key : map.keySet())
-            toMap(key, map.get(key));
+        if (this.map == null)
+            this.map = new LinkedHashMap<>();
+        this.map.putAll(map);
         return this;
     }
 
