@@ -14,10 +14,12 @@ import org.springframework.context.annotation.Description;
 import cn.cerc.db.core.DataRow;
 import cn.cerc.db.core.Utils;
 import cn.cerc.ui.core.UIComponent;
+import cn.cerc.ui.ssr.core.EntityServiceRecord;
 import cn.cerc.ui.ssr.core.SsrUtils;
 import cn.cerc.ui.ssr.core.VuiComponent;
 import cn.cerc.ui.ssr.core.VuiContainer;
 import cn.cerc.ui.ssr.form.FormStringField;
+import cn.cerc.ui.ssr.form.SsrFormStyleDefault;
 import cn.cerc.ui.ssr.form.VuiForm;
 import cn.cerc.ui.ssr.source.Binder;
 
@@ -99,27 +101,19 @@ public class EditorForm extends UIComponent {
 
     private void addField(Object properties, Field field) {
         try {
+            var title = field.getName();
+            var column = field.getAnnotation(Column.class);
+            if (column != null && !Utils.isEmpty(column.name()))
+                title = column.name();
             if (field.getType() == String.class || field.getType() == int.class) {
-                var title = field.getName();
-                var column = field.getAnnotation(Column.class);
-                if (column != null && !Utils.isEmpty(column.name()))
-                    title = column.name();
                 this.addItem(title, field.getName(), "" + field.get(properties));
             } else if (field.getType() == boolean.class || field.getType() == Boolean.class) {
-                var title = field.getName();
-                var column = field.getAnnotation(Column.class);
-                if (column != null && !Utils.isEmpty(column.name()))
-                    title = column.name();
                 var style = form.defaultStyle();
                 form.addBlock(style.getBoolean(title, field.getName()));
                 form.addColumn(title);
                 form.dataRow().setValue(field.getName(), field.get(properties));
             } else if (field.getType() == Binder.class) {
                 Binder<?> binder = (Binder<?>) field.get(properties);
-                var title = field.getName();
-                var column = field.getAnnotation(Column.class);
-                if (column != null && !Utils.isEmpty(column.name()))
-                    title = column.name();
                 var style = form.defaultStyle();
                 FormStringField mapField = style.getString(title, field.getName());
                 var clazz = binder.targetType();
@@ -131,20 +125,25 @@ public class EditorForm extends UIComponent {
                     mapField.toMap("", "未查找到可用数据源");
                 else
                     mapField.toMap("", "请选择数据源");
-                mapField.selected(binder.targetId());
                 form.addBlock(mapField);
+                form.dataRow().setValue(field.getName(), binder.targetId());
             } else if (field.getType().isEnum()) {
                 Enum<?>[] enums = (Enum<?>[]) field.getType().getEnumConstants();
-                var title = field.getName();
-                var column = field.getAnnotation(Column.class);
-                if (column != null && !Utils.isEmpty(column.name()))
-                    title = column.name();
                 var style = form.defaultStyle();
                 FormStringField mapField = style.getString(title, field.getName());
                 for (Enum<?> item : enums)
                     mapField.toMap(item.name(), item.name());
-                mapField.selected(((Enum<?>) field.get(properties)).name());
                 form.addBlock(mapField);
+                form.dataRow().setValue(field.getName(), ((Enum<?>) field.get(properties)).name());
+            } else if (field.getType() == EntityServiceRecord.class) {
+                SsrFormStyleDefault style = form.defaultStyle();
+                form.addBlock(style.getCodeName(title, field.getName(), "showEntityServiceDialog"));
+                Object svr = field.get(properties);
+                if (svr != null && svr instanceof EntityServiceRecord record) {
+                    form.dataRow()
+                            .setValue(field.getName(), record.service())
+                            .setValue(field.getName() + "_name", record.desc());
+                }
             } else {
                 log.warn("暂不支持的属性 {} of {}", field.getName(), field.getType().getSimpleName());
             }
@@ -157,7 +156,7 @@ public class EditorForm extends UIComponent {
         String column = "增加";
         FormStringField mapField = form.defaultStyle().getString(column, "appendComponent");
         if (defaultClass != null)
-            mapField.selected(defaultClass.getSimpleName());
+            form.dataRow().setValue(mapField.fields(), defaultClass.getSimpleName());
         if (sender instanceof VuiContainer<?> impl) {
             Set<Class<? extends VuiComponent>> children = impl.getChildren();
             for (var clazz : children) {

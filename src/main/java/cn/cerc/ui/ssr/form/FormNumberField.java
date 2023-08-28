@@ -146,8 +146,8 @@ public class FormNumberField extends VuiControl implements ISupportForm {
             Optional<ISupplierList> optList = this.listSource.target();
             if (optList.isPresent()) {
                 ISupplierList source = optList.get();
-                source.selected().ifPresent(this::selected);
                 block.toList(source.items());
+                source.selected().ifPresent(selected -> block.dataRow().setValue(field, selected));
                 block.option("_isTextField", "");
                 block.option("_addAll", source.addAll() ? "1" : "");
             }
@@ -200,15 +200,6 @@ public class FormNumberField extends VuiControl implements ISupportForm {
         }
         sb.append(")");
         return sb.toString();
-    }
-
-    public Optional<String> selected() {
-        return block.option("_selected");
-    }
-
-    public FormNumberField selected(String selected) {
-        block.option("_selected", selected);
-        return this;
     }
 
     @Override

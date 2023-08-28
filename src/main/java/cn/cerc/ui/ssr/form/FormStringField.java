@@ -144,9 +144,8 @@ public class FormStringField extends VuiControl implements ISupportForm {
             Optional<ISupplierMap> optMap = this.mapSource.target();
             if (optMap.isPresent()) {
                 ISupplierMap source = optMap.get();
-                source.selected().ifPresent(this::selected);
                 block.toMap(source.items());
-                block.option("_isTextField", "");
+                source.selected().ifPresent(selected -> block.dataRow().setValue(field, selected));
             }
             break;
         }
@@ -197,15 +196,6 @@ public class FormStringField extends VuiControl implements ISupportForm {
         }
         sb.append(")");
         return sb.toString();
-    }
-
-    public Optional<String> selected() {
-        return block.option("_selected");
-    }
-
-    public FormStringField selected(String selected) {
-        block.option("_selected", selected);
-        return this;
     }
 
     @Override
