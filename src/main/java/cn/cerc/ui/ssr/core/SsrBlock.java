@@ -256,9 +256,7 @@ public class SsrBlock implements ISsrOption {
         } else if (!strict()) {
             result = "";
         } else if (onGetValue == null) {
-//            var e = new RuntimeException();
-//            e.printStackTrace();
-            log.error("not find field: {}", field);
+            log.error("not find field {}", field, new RuntimeException());
         }
         if (onGetValue != null)
             result = onGetValue.getValue(field, result);

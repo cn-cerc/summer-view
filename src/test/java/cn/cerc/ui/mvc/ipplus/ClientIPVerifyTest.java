@@ -11,25 +11,25 @@ public class ClientIPVerifyTest {
     @Test
     public void test_reserved() {
         String ip = "192.168.1.128";// 保留IP
-        assertEquals(true, ClientIPVerify.allow(ip));
+        assertEquals(true, ClientIPVerify.create().allow(ip));
     }
 
     @Test
     public void test_abroad() {
         String ip = "113.180.74.76";// 越南
-        assertEquals(true, ClientIPVerify.allow(ip));
+        assertEquals(true, ClientIPVerify.create().allow(ip));
     }
 
     @Test
     public void test_hk() {
         String ip = "123.58.212.8";// 香港
-        assertEquals(true, ClientIPVerify.allow(ip));
+        assertEquals(true, ClientIPVerify.create().allow(ip));
     }
 
     @Test
     public void test_tw() {
         String ip = "36.231.69.50";// 台湾
-        assertEquals(true, ClientIPVerify.allow(ip));
+        assertEquals(true, ClientIPVerify.create().allow(ip));
     }
 
     @Test
@@ -40,7 +40,7 @@ public class ClientIPVerifyTest {
         int c = random.nextInt(255);
         int d = random.nextInt(255);
         String ip = a + "." + b + "." + c + "." + d;
-        assertEquals(true, ClientIPVerify.allow(ip));
+        assertEquals(true, ClientIPVerify.create().allow(ip));
     }
 
     @Test

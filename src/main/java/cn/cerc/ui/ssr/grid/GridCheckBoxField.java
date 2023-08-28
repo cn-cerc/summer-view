@@ -10,8 +10,13 @@ import cn.cerc.ui.ssr.core.SsrBlock;
 import cn.cerc.ui.ssr.core.VuiControl;
 import cn.cerc.ui.ssr.editor.ISsrBoard;
 
+/**
+ * 请改使用GridBooleanField
+ *
+ */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+@Deprecated
 public class GridCheckBoxField extends VuiControl implements ISupportGrid {
     private SsrBlock block = new SsrBlock();
     @Column

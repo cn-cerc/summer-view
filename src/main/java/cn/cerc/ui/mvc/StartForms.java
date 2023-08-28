@@ -156,10 +156,11 @@ public class StartForms implements Filter {
         IHandle handle = new Handle(session);
 
         boolean existWhiteList = false;
-        IFormWhiteListVerify whiteListVerify = Application.getBean(IFormWhiteListVerify.class);
-        if (whiteListVerify != null)
-            existWhiteList = whiteListVerify.exist(childCode);
-
+        if (Application.containsBean(IFormWhiteListVerify.class)) {
+            IFormWhiteListVerify whiteListVerify = Application.getBean(IFormWhiteListVerify.class);
+            if (whiteListVerify != null)
+                existWhiteList = whiteListVerify.exist(childCode);
+        }
         if ("POST".equalsIgnoreCase(req.getMethod()) && !existWhiteList) {
             Variant variant = new Variant();
             if (!AppClient.createCookie(req, resp, variant)) {
