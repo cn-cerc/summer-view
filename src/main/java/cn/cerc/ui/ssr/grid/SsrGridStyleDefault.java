@@ -1,16 +1,14 @@
 package cn.cerc.ui.ssr.grid;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 import cn.cerc.mis.core.Application;
 import cn.cerc.ui.fields.ImageConfigImpl;
+import cn.cerc.ui.ssr.core.AlginEnum;
 import cn.cerc.ui.ssr.core.ISupplierBlock;
 
 public class SsrGridStyleDefault {
-    private List<String> items = new ArrayList<>();
     private ImageConfigImpl imageConfig;
 
     public ISupplierBlock getIt() {
@@ -24,13 +22,10 @@ public class SsrGridStyleDefault {
     }
 
     public GridItField getIt(String title, int fieldWidth) {
-        items.add(title);
         return new GridItField(title, fieldWidth);
     }
 
     public GridOperaField getOpera(int fieldWidth) {
-        String title = "操作";
-        items.add(title);
         return new GridOperaField(fieldWidth);
     }
 
@@ -42,14 +37,9 @@ public class SsrGridStyleDefault {
         return getString(title, field, 10, "center");
     }
 
-    public GridStringField getDouble(String title, String field) {
-        return getString(title, field, 4, "right");
-    }
-
     /** 请改用getString */
     @Deprecated
     public GridMapField getMap(String title, String field, int fieldWidth, Map<String, String> map) {
-        items.add(title);
         return new GridMapField(title, field, fieldWidth, map);
     }
 
@@ -62,18 +52,23 @@ public class SsrGridStyleDefault {
     }
 
     public GridBooleanField getBoolean(String title, String field, int fieldWidth) {
-        items.add(title);
         return new GridBooleanField(title, field, fieldWidth);
     }
 
-    // TODO 要支持自定义 checkbox 的value
+    /**
+     * 请改使用 getBoolean
+     * 
+     * @param title
+     * @param field
+     * @param fieldWidth
+     * @return
+     */
+    @Deprecated
     public GridCheckBoxField getCheckBox(String title, String field, int fieldWidth) {
-        items.add(title);
         return new GridCheckBoxField(title, field, fieldWidth);
     }
 
     public GridStringField getString(String title, String field, int fieldWidth) {
-        items.add(title);
         var column = new GridStringField();
         column.title(title);
         column.field(field);
@@ -83,7 +78,6 @@ public class SsrGridStyleDefault {
     }
 
     public GridStringField getString(String title, String field, int fieldWidth, String align) {
-        items.add(title);
         var column = new GridStringField();
         column.title(title);
         column.field(field);
@@ -92,17 +86,16 @@ public class SsrGridStyleDefault {
         return column;
     }
 
+    public GridNumberField getDouble(String title, String field) {
+        return getNumber(title, field, 4).align(AlginEnum.center);
+    }
+
     public GridNumberField getNumber(String title, String field, int fieldWidth) {
-        items.add(title);
         var column = new GridNumberField();
         column.title(title);
         column.field(field);
         column.fieldWidth = fieldWidth;
         return column;
-    }
-
-    public List<String> items() {
-        return items;
     }
 
 }
