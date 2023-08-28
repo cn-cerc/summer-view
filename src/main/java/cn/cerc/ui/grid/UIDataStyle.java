@@ -238,8 +238,9 @@ public class UIDataStyle implements UIDataStyleImpl {
         if (dataSet == null && current() != null)
             dataSet = current().dataSet();
         if (dataSet == null) {
-            log.error("没有找到dataSet");
-            throw new RuntimeException("没有找到dataSet");
+            RuntimeException exception = new RuntimeException("没有找到dataSet");
+            log.error("{}", exception.getMessage(), exception);
+            throw exception;
         }
         var ds = dataSet;
         return this.addField("it").setWidth(2).setAlignCenter().field().onGetText(data -> "" + ds.recNo()).setName("序");
@@ -247,7 +248,7 @@ public class UIDataStyle implements UIDataStyleImpl {
 
     public UIDataStyle setDataRow(DataRow dataRow) {
         if (this.dataSet != null)
-            throw new RuntimeException("dataSet not is null");
+            throw new RuntimeException("dataSet is not null");
         this.dataSet = new DataSet();
         this.dataSet.fields().copyFrom(dataRow.fields());
         this.dataSet.records().add(dataRow);
