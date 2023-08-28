@@ -59,18 +59,22 @@ public class VuiMapSupplier extends VuiComponent implements ISupplierMap, IBinde
 
     @Override
     public void buildEditor(UIComponent content, String pageCode) {
-        super.buildEditor(content, pageCode);
-        IVuiEnvironment environment = canvas().canvas().environment();
+        IVuiEnvironment environment = canvas().environment();
         if (environment != null) {
             EditorForm form = new EditorForm(content, this);
+            form.addProperties(this);
             VuiForm ssrForm = form.getForm();
             var style = ssrForm.defaultStyle();
             Map<String, Object> map = environment.getAttachData(this.getClass());
             Map<String, String> targetMap = map.keySet().stream().collect(Collectors.toMap(t -> t, t -> t));
-            ssrForm.addBlock(style.getBoolean("加入全部选择项", "addAll"));
+            if (targetMap.size() == 0)
+                targetMap.put("", "暂无附加数据源");
+            else
+                targetMap.put("", "请选择附加数据源");
             ssrForm.addBlock(style.getString("附加数据源", "target").toMap(targetMap));
-            ssrForm.addBlock(style.getString("默认选中", "selected"));
             form.build();
+        } else {
+            super.buildEditor(content, pageCode);
         }
     }
 

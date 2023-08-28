@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -502,6 +503,13 @@ public class VuiForm extends VuiContainer<ISupportForm>
             }
             this.canvas().sendMessage(this, SsrMessage.appendComponent, item, this.dataRow.targetId());
         }
+    }
+
+    @Override
+    public Set<Class<? extends VuiComponent>> getChildren() {
+        Set<Class<? extends VuiComponent>> set = super.getChildren();
+        set.add(FormSubmitButton.class);
+        return set;
     }
 
     @Override
