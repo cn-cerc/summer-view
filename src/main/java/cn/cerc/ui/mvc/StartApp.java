@@ -45,7 +45,7 @@ public class StartApp implements Filter {
 
         if ("true".equals(APP_IP_FILTER)) {
             String ip = AppClient.getClientIP(req);
-            if (!ClientIPVerify.allow(ip)) {
+            if (!ClientIPVerify.create().allow(ip)) {
                 resp.sendError(HttpServletResponse.SC_NOT_FOUND);
                 return;
             }

@@ -35,11 +35,13 @@ public class StaticFile {
         builder.append(this.endpoint).append(this.bucket).append(this.object);
 
         // 取得版本号
-        StaticFileVersionImpl impl = Application.getBean(StaticFileVersionImpl.class);
-        if (impl != null) {
-            String version = impl.getVersion(this.fileType.getGroup());
-            if (!Utils.isEmpty(version))
-                builder.append("?v=").append(version);
+        if (Application.containsBean(StaticFileVersionImpl.class)) {
+            StaticFileVersionImpl impl = Application.getBean(StaticFileVersionImpl.class);
+            if (impl != null) {
+                String version = impl.getVersion(this.fileType.getGroup());
+                if (!Utils.isEmpty(version))
+                    builder.append("?v=").append(version);
+            }
         }
         return builder.toString();
     }

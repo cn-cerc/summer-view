@@ -3,6 +3,7 @@ package cn.cerc.ui.mvc.ipplus;
 import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,24 +18,43 @@ import cn.cerc.mis.core.Application;
 public class ClientIPVerify {
     private static final Logger log = LoggerFactory.getLogger(ClientIPVerify.class);
 
-    private static final File file;
+    private final File file;
+    private static volatile ClientIPVerify instance;
+    private final Optional<IClientIPCheckList> option;
 
-    static {
+    public static ClientIPVerify create() {
+        if (instance == null) {
+            synchronized (ClientIPVerify.class) {
+                if (instance == null)
+                    instance = new ClientIPVerify();
+            }
+        }
+        return instance;
+    }
+
+    private ClientIPVerify() {
+        if (instance != null)
+            throw new RuntimeException("client verify's instance is not null");
+
         // 加载本地文件配置
         String path = System.getProperty("user.home") + System.getProperty("file.separator");
         String filePath = path + "IP_trial_single_WGS84.awdb";
         file = new File(filePath);
+
+        // 初始化客户端
+        if (Application.containsBean(IClientIPCheckList.class))
+            option = Optional.ofNullable(Application.getBean(IClientIPCheckList.class));
+        else
+            option = Optional.empty();
     }
 
-    private static final IClientIPCheckList client = Application.getBean(IClientIPCheckList.class);
-
-    public static boolean allow(String ip) {
-        // 没有定义则免校验
-        if (client == null)
-            return true;
-
+    public boolean allow(String ip) {
         // 没有文件则免校验
         if (!file.exists())
+            return true;
+
+        // 没有定义则免校验
+        if (option.isEmpty())
             return true;
 
         // 检查地址合法性
@@ -56,6 +76,7 @@ public class ClientIPVerify {
             return true;
         }
 
+        IClientIPCheckList client = option.get();
         // 检查大洲通行的白名单
         if (record.has("continent")) {
             String continent = record.get("continent").asText();
@@ -109,6 +130,10 @@ public class ClientIPVerify {
     }
 
     public static void main(String[] args) {
+        // 加载本地文件配置
+        String path = System.getProperty("user.home") + System.getProperty("file.separator");
+        String filePath = path + "IP_trial_single_WGS84.awdb";
+        File file = new File(filePath);
         String ip = "193.111.250.21";
         try (AWReader awReader = new AWReader(file)) {
             InetAddress address = InetAddress.getByName(ip);
