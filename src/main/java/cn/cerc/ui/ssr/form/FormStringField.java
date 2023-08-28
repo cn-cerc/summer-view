@@ -90,6 +90,7 @@ public class FormStringField extends VuiControl implements ISupportForm {
         var fieldKey = String.format("${%s}", field);
         if (Utils.isEmpty(field))
             fieldKey = "";
+        String selected = block().option("_selected").map("'%s'"::formatted).orElse(field);
         form.addBlock(title,
                 block.text(String.format(
                         """
@@ -113,7 +114,7 @@ public class FormStringField extends VuiControl implements ISupportForm {
                                 </li>
                                 ${endif}
                                 """,
-                        fieldKey, field, fieldDialogIcon)));
+                        fieldKey, selected, fieldDialogIcon)));
 
         block().option("_readonly", this.readonly ? "1" : "");
         block().option("_required", this.required ? "1" : "");
@@ -143,9 +144,8 @@ public class FormStringField extends VuiControl implements ISupportForm {
             Optional<ISupplierMap> optMap = this.mapSource.target();
             if (optMap.isPresent()) {
                 ISupplierMap source = optMap.get();
-                source.selected().ifPresent(this::selected);
                 block.toMap(source.items());
-                block.option("_isTextField", "");
+                source.selected().ifPresent(selected -> block.dataRow().setValue(field, selected));
             }
             break;
         }
@@ -196,15 +196,6 @@ public class FormStringField extends VuiControl implements ISupportForm {
         }
         sb.append(")");
         return sb.toString();
-    }
-
-    public Optional<String> selected() {
-        return block.option("_selected");
-    }
-
-    public FormStringField selected(String selected) {
-        block.option("_selected", selected);
-        return this;
     }
 
     @Override

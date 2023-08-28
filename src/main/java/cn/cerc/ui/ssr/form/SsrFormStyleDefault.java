@@ -31,7 +31,12 @@ public class SsrFormStyleDefault {
         return new FormBooleanField(title, field);
     }
 
-    /** 请改用getString */
+    /**
+     * 如果是value值为enum的下标的枚举请改为getNumber+toList方法，toList需要跟在getNumber之后
+     * addBlock(style.getNumber('title', 'field').toList(enum.values()))
+     * 如果value为非enum的下标的枚举请改为getString+toMap方法，toMap需要跟在getString之后
+     * addBlock(style.getString('title', 'field').toMap(Map.of('', '')))
+     */
     @Deprecated
     public FormMapField getMap(String title, String field) {
         return new FormMapField(title, field);

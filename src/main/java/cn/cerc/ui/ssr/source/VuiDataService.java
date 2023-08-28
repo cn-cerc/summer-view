@@ -19,6 +19,7 @@ import cn.cerc.db.core.Utils;
 import cn.cerc.mis.client.ServiceSign;
 import cn.cerc.mis.core.CustomEntityService;
 import cn.cerc.mis.core.IPage;
+import cn.cerc.ui.ssr.core.EntityServiceRecord;
 import cn.cerc.ui.ssr.core.VuiComponent;
 import cn.cerc.ui.ssr.editor.SsrMessage;
 import cn.cerc.ui.ssr.form.ISupplierDataRow;
@@ -34,7 +35,7 @@ public class VuiDataService extends VuiComponent
     private IPage page;
     private Binders binders = new Binders();
     @Column
-    String service = "";
+    EntityServiceRecord service = EntityServiceRecord.EMPTY;
     @Column(name = "成功后发送消息")
     String success_message = "";
     @Column
@@ -47,11 +48,11 @@ public class VuiDataService extends VuiComponent
     }
 
     public void service(String service) {
-        this.service = service;
+        this.service = new EntityServiceRecord(service, service);
     }
 
     public String service() {
-        return this.service;
+        return this.service.service();
     }
 
     @Override
@@ -77,12 +78,12 @@ public class VuiDataService extends VuiComponent
             break;
         case SsrMessage.InitContent: {
             if (this.callByInit) {
-                if (!Utils.isEmpty(this.service)) {
+                if (!Utils.isEmpty(this.service.service())) {
                     var dataIn = new DataRow();
                     var target = this.headIn.target();
                     if (target.isPresent())
                         dataIn = target.get().dataRow();
-                    var svr = new ServiceSign(this.service).callLocal(page.getForm(), dataIn);
+                    var svr = new ServiceSign(this.service.service()).callLocal(page.getForm(), dataIn);
                     if (svr.isFail())
                         throw new RuntimeException(svr.message());
                     this.dataSet = svr.dataOut();
@@ -101,7 +102,7 @@ public class VuiDataService extends VuiComponent
             if (!this.callByInit) {
                 var target = this.headIn.target();
                 if (target.isPresent()) {
-                    var svr = new ServiceSign(this.service).callLocal(page.getForm(), target.get().dataRow());
+                    var svr = new ServiceSign(this.service.service()).callLocal(page.getForm(), target.get().dataRow());
                     if (svr.isFail()) {
                         binders.sendMessage(this, SsrMessage.FailOnService, null, null);
                         this.canvas().sendMessage(this, SsrMessage.FailOnService, svr.message(), null);
@@ -136,9 +137,9 @@ public class VuiDataService extends VuiComponent
     @Override
     public Set<Field> fields(int fieldsType) {
         IVuiEnvironment environment = this.canvas().environment();
-        if (Utils.isEmpty(this.service))
+        if (Utils.isEmpty(this.service.service()))
             return new LinkedHashSet<>();
-        var optBean = environment.getBean(this.service, CustomEntityService.class);
+        var optBean = environment.getBean(this.service.service(), CustomEntityService.class);
         if (optBean.isPresent()) {
             CustomEntityService<?, ?, ?, ?> svr = optBean.get();
             switch (fieldsType) {

@@ -168,6 +168,8 @@ public class SsrUtils {
                     list.add(field);
                 else if (field.getType() == Binder.class)
                     list.add(field);
+                else if (field.getType() == EntityServiceRecord.class)
+                    list.add(field);
                 else
                     log.error("不支持的字段类型：{}: {}", field.getName(), field.getType().getSimpleName());
             }
@@ -194,6 +196,12 @@ public class SsrUtils {
                     }
                 }
                 field.set(properties, defaultValue);
+            } else if (field.getType() == EntityServiceRecord.class) {
+                JsonNode temp = json.get(field.getName() + "_name");
+                String desc = value.asText();
+                if (temp != null && !Utils.isEmpty(temp.asText()))
+                    desc = temp.asText();
+                field.set(properties, new EntityServiceRecord(value.asText(), desc));
             } else
                 writeToObject(properties, field, value);
             return;

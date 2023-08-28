@@ -72,6 +72,10 @@ public class PropertiesWriter {
             } else if (field.getType().isEnum()) {
                 Enum<?> value = (Enum<?>) field.get(object);
                 json.put(field.getName(), value.name());
+            } else if (field.getType() == EntityServiceRecord.class) {
+                EntityServiceRecord record = (EntityServiceRecord) field.get(object);
+                json.put(field.getName(), record.service());
+                json.put(field.getName() + "_name", record.desc());
             } else {
                 log.warn(String.format("put error: %s.%s", field.getType().getName(), field.getName()));
             }

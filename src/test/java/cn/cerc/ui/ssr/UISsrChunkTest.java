@@ -135,12 +135,12 @@ public class UISsrChunkTest {
         assertEquals(
                 """
                         <div role='chunkBox'><ul role='chunkBoxItem'><li role='UISsrBlock310101'> <div role='checkboxIt'>
-                        <input type="checkbox" name="checkbox_name_" value="zhangsan"/>
+                        <input type="checkbox" id="checkbox_name_" name="checkbox_name_" value="zhangsan"/>
                         <span>1</span>
                         </div> <div style='flex: 1;'>
                         <label for='name_'>姓名</label> <a id='name_' href='www'>zhangsan</a></div> <div style='flex: 1;'>
                         <label for='opera_'>内容</label> <span id='opera_'>内容</span></div></li></ul><ul role='chunkBoxItem'><li role='UISsrBlock310101'> <div role='checkboxIt'>
-                        <input type="checkbox" name="checkbox_name_" value="lisi"/>
+                        <input type="checkbox" id="checkbox_name_" name="checkbox_name_" value="lisi"/>
                         <span>2</span>
                         </div> <div style='flex: 1;'>
                         <label for='name_'>姓名</label> <a id='name_' href='www'>lisi</a></div> <div style='flex: 1;'>
@@ -217,11 +217,11 @@ public class UISsrChunkTest {
         assertEquals(
                 """
                         <div role='chunkBox'><ul role='chunkBoxItem'><li role='UISsrBlock2101'> <div role='checkboxIt'>
-                        <input type="checkbox" name="checkBoxName" value="zhangsan"/>
+                        <input type="checkbox" id="checkBoxName" name="checkBoxName" value="zhangsan"/>
                         <span>1</span>
                         </div> <div style='flex: 1;'>
                         <label for='name_'>姓名</label> <span id='name_'>zhangsan</span></div></li></ul><ul role='chunkBoxItem'><li role='UISsrBlock2101'> <div role='checkboxIt'>
-                        <input type="checkbox" name="checkBoxName" value="lisi"/>
+                        <input type="checkbox" id="checkBoxName" name="checkBoxName" value="lisi"/>
                         <span>2</span>
                         </div> <div style='flex: 1;'>
                         <label for='name_'>姓名</label> <span id='name_'>lisi</span></div></li></ul></div>""",
@@ -360,18 +360,16 @@ public class UISsrChunkTest {
         board.slot1(style.getString("年龄", "age_"));
         board.slot2(style.getNumber("性别", "sex_").toList(List.of("女", "男")));
         chunk.dataSet(ds);
-        assertEquals("""
-                <div role='chunkBox'><ul role='chunkBoxItem'><li role='UISsrBlock3101'> <div style='flex: 1;'>
-                <label for='name_'>姓名</label> <span id='name_'>zhangsan</span></div> <div style='flex: 1;'>
-                <label for='age_'>年龄</label> <span id='age_'>15</span></div> <div style='flex: 1;'>
-                <label for='sex_'>性别</label>
-                <span id='sex_'>男</span>
-                </div></li></ul><ul role='chunkBoxItem'><li role='UISsrBlock3101'> <div style='flex: 1;'>
-                <label for='name_'>姓名</label> <span id='name_'>lisi</span></div> <div style='flex: 1;'>
-                <label for='age_'>年龄</label> <span id='age_'>18</span></div> <div style='flex: 1;'>
-                <label for='sex_'>性别</label>
-                <span id='sex_'>女</span>
-                </div></li></ul></div>""", chunk.toString());
+        assertEquals(
+                """
+                        <div role='chunkBox'><ul role='chunkBoxItem'><li role='UISsrBlock3101'> <div style='flex: 1;'>
+                        <label for='name_'>姓名</label> <span id='name_'>zhangsan</span></div> <div style='flex: 1;'>
+                        <label for='age_'>年龄</label> <span id='age_'>15</span></div> <div style='flex: 1;'>
+                        <label for='sex_'>性别</label> <span id='sex_'>男</span></div></li></ul><ul role='chunkBoxItem'><li role='UISsrBlock3101'> <div style='flex: 1;'>
+                        <label for='name_'>姓名</label> <span id='name_'>lisi</span></div> <div style='flex: 1;'>
+                        <label for='age_'>年龄</label> <span id='age_'>18</span></div> <div style='flex: 1;'>
+                        <label for='sex_'>性别</label> <span id='sex_'>女</span></div></li></ul></div>""",
+                chunk.toString());
     }
 
     @Test
@@ -395,17 +393,17 @@ public class UISsrChunkTest {
                 <label for='name_'>姓名</label> <span id='name_'>zhangsan</span></div> <div style='flex: 1;'>
                 <label for='age_'>年龄</label> <span id='age_'>15</span></div> <div style='flex: 1;'>
                 <label for='adult_'>是否成年</label>
-                <span id='adult_'> 否 </span>
+                <span id='adult_'>否</span>
                 </div></li></ul><ul role='chunkBoxItem'><li role='UISsrBlock3101'> <div style='flex: 2;'>
                 <label for='name_'>姓名</label> <span id='name_'>lisi</span></div> <div style='flex: 1;'>
                 <label for='age_'>年龄</label> <span id='age_'>18</span></div> <div style='flex: 1;'>
                 <label for='adult_'>是否成年</label>
-                <span id='adult_'> 是 </span>
+                <span id='adult_'>是</span>
                 </div></li></ul><ul role='chunkBoxItem'><li role='UISsrBlock3101'> <div style='flex: 2;'>
                 <label for='name_'>姓名</label> <span id='name_'>wangwu</span></div> <div style='flex: 1;'>
                 <label for='age_'>年龄</label> <span id='age_'>0</span></div> <div style='flex: 1;'>
                 <label for='adult_'>是否成年</label>
-                <span id='adult_'> 否 </span>
+                <span id='adult_'>否</span>
                 </div></li></ul></div>""", chunk.toString());
     }
 

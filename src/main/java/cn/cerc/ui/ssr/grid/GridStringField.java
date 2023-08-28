@@ -10,10 +10,13 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import cn.cerc.db.core.DataSet;
+import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.ssr.core.AlginEnum;
 import cn.cerc.ui.ssr.core.ISsrOption;
 import cn.cerc.ui.ssr.core.ISupplierBlock;
 import cn.cerc.ui.ssr.core.SsrBlock;
+import cn.cerc.ui.ssr.core.SummaryTypeEnum;
 import cn.cerc.ui.ssr.core.VuiControl;
 import cn.cerc.ui.ssr.editor.ISsrBoard;
 import cn.cerc.ui.ssr.editor.SsrMessage;
@@ -34,6 +37,10 @@ public class GridStringField extends VuiControl implements ISupportGrid {
     @Column
     public String align = "";
     @Column
+    SummaryTypeEnum summaryType = SummaryTypeEnum.无;
+    @Column
+    String summaryValue = "";
+    @Column
     Binder<ISupplierMap> mapSource = new Binder<>(this, ISupplierMap.class);
 
     public GridStringField() {
@@ -44,7 +51,8 @@ public class GridStringField extends VuiControl implements ISupportGrid {
     @Override
     public SsrBlock request(ISsrBoard grid) {
         String headTitle = "head." + this.title;
-        grid.addBlock(headTitle, head.text("<th style='width: ${_width}em'>${_title}</th>"));
+        grid.addBlock(headTitle, head.text(
+                String.format("<th style='width: ${_width}em' onclick=\"gridSort(this,'%s')\">${_title}</th>", field)));
         head.toMap("_width", "" + this.fieldWidth);
         head.toMap("_title", this.title);
         head.id(headTitle);
@@ -61,8 +69,8 @@ public class GridStringField extends VuiControl implements ISupportGrid {
                 ${endif}
                 ${if _enabled_url}</a>${endif}
                 </td>""", this.field, this.field)));
-        head.toMap("_align", this.align);
-        head.toMap("_field", this.field);
+        body.option("_align", this.align);
+        body.option("_field", this.field);
         body.id(bodyTitle);
         body.display(1);
         body.strict(false);
@@ -144,7 +152,42 @@ public class GridStringField extends VuiControl implements ISupportGrid {
         this.fieldWidth = width;
         return this;
     }
-    
+
+    @Override
+    public SummaryTypeEnum summaryType() {
+        return summaryType;
+    }
+
+    @Override
+    public void outputTotal(HtmlWriter html, DataSet dataSet) {
+        String value = switch (summaryType) {
+        case 计数 -> String.valueOf(dataSet.size());
+        case 固定 -> summaryValue;
+        default -> "";
+        };
+        html.print("<td>");
+        html.print(value);
+        html.print("</td>");
+    }
+
+    public SummaryTypeEnum getSummaryType() {
+        return summaryType;
+    }
+
+    public GridStringField setSummaryType(SummaryTypeEnum summaryType) {
+        this.summaryType = summaryType;
+        return this;
+    }
+
+    public String getSummaryValue() {
+        return summaryValue;
+    }
+
+    public GridStringField setSummaryValue(String summaryValue) {
+        this.summaryValue = summaryValue;
+        return this;
+    }
+
     public ISupplierBlock toMap(Map<String, String> targetMap) {
         body.toMap(targetMap);
         body.option("_isTextField", "");

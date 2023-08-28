@@ -19,6 +19,7 @@ import com.fasterxml.jackson.databind.node.BooleanNode;
 import com.fasterxml.jackson.databind.node.TextNode;
 
 import cn.cerc.db.core.Utils;
+import cn.cerc.ui.ssr.core.EntityServiceRecord;
 import cn.cerc.ui.ssr.core.PropertiesReader;
 import cn.cerc.ui.ssr.core.SsrUtils;
 import cn.cerc.ui.ssr.core.VuiComponent;
@@ -195,6 +196,14 @@ public class RequestReader {
                         }
                     }
                     field.set(properties, defaultValue);
+                }
+            } else if (field.getType() == EntityServiceRecord.class) {
+                String service = this.request.getParameter(field.getName());
+                String desc = this.request.getParameter(field.getName() + "_name");
+                if (service != null) {
+                    if (Utils.isEmpty(desc))
+                        desc = service;
+                    field.set(properties, new EntityServiceRecord(service, desc));
                 }
             } else {
                 log.warn("暂不支持的数据字段类型：{}({})", field.getClass().getSimpleName(), field.getName());
