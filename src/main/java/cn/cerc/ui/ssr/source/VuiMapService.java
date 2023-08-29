@@ -7,6 +7,7 @@ import java.util.Optional;
 import javax.persistence.Column;
 
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Description;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -19,6 +20,7 @@ import cn.cerc.ui.ssr.editor.SsrMessage;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+@Description("Map数据服务")
 public class VuiMapService extends VuiComponent implements ISupplierMap, IBinders {
     private Map<String, String> items = new LinkedHashMap<>();
     private String selected = "";

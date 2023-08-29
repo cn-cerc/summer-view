@@ -72,6 +72,35 @@ public class RequestReader {
                 addField(sender, field);
     }
 
+    public void removeComponents(VuiCanvas canvas) {
+        Optional<String> removeItems = this.getString("removeComponents");
+        if (removeItems.isEmpty())
+            return;
+        // 找到存在变动的容器对象
+        PropertiesReader reader = new PropertiesReader(removeItems.get());
+        JsonNode root = reader.root();
+        if (root.isArray()) {
+            for (int i = 0; i < root.size(); i++) {
+                JsonNode jsonNode = root.get(i);
+                String ownerId = jsonNode.get("owner_id").asText();
+                String id = jsonNode.get("id").asText();
+                Optional<VuiComponent> ownerOpt = canvas.getMember(ownerId, VuiComponent.class);
+                if (ownerOpt.isEmpty()) {
+                    log.error("删除组件失败 ownerId 未找到组件 {}", ownerId);
+                    continue;
+                }
+                Optional<VuiComponent> idOpt = canvas.getMember(id, VuiComponent.class);
+                if (ownerOpt.isEmpty()) {
+                    log.error("删除组件失败 id 未找到组件 {}", id);
+                    continue;
+                }
+                ownerOpt.get().removeComponent(idOpt.get());
+            }
+        } else {
+            log.error("removeComponents 数据格式错误，必须为数组");
+        }
+    }
+
     public VuiComponent removeComponent(VuiComponent owner) {
         var removeComponent = this.getString("removeComponent");
         if (removeComponent.isEmpty())

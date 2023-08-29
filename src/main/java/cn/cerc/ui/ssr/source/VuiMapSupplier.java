@@ -10,6 +10,7 @@ import javax.persistence.Column;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Description;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -23,6 +24,7 @@ import cn.cerc.ui.ssr.page.IVuiEnvironment;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+@Description("Map附加数据")
 public class VuiMapSupplier extends VuiComponent implements ISupplierMap, IBinders {
     private static final Logger log = LoggerFactory.getLogger(VuiMapSupplier.class);
     private Map<String, String> items = new LinkedHashMap<>();

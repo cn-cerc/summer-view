@@ -18,8 +18,9 @@ import cn.cerc.ui.vcl.UIDiv;
 public class EditorGrid extends UIComponent {
 
     private VuiGrid grid;
-    private UIComponent sender;
+    private VuiComponent sender;
     private ImageConfigImpl imageConfig;
+    private String storage;
 
     public EditorGrid(UIComponent owner, VuiComponent sender) {
         super(owner);
@@ -88,13 +89,14 @@ public class EditorGrid extends UIComponent {
             var ssr2 = grid.addBlock(bodyTitle,
                     """
                             <td data-id="${callback(dataId)}">
-                                <a href='javascript: updateLowCode("${pageCode}?mode=design", {id: "${cid}",removeComponent: "${callback(dataId)}",submit: true})'>
+                                <a href='javascript: updateLowCode("${pageCode}?mode=design&storage=${storage}", {id: "${cid}",removeComponent: "${callback(dataId)}",submit: true})'>
                                     删除
                                 </a>
                             </td>
                             """);
             ssr2.onCallback("dataId", () -> grid.dataSet().getString("id"));
             ssr2.option("pageCode", pageCode);
+            ssr2.option("storage", sender.canvas().storage());
             ssr2.option("cid", cid);
             ssr2.id(bodyTitle);
             grid.addColumn("操作");
@@ -106,6 +108,15 @@ public class EditorGrid extends UIComponent {
         button.setName("save");
         button.setOnclick(String.format("updateGrid(this, '%s?mode=design', '%s')", pageCode, sender.getId()));
         button.setText("保存");
+    }
+
+    public String getStorage() {
+        return storage;
+    }
+
+    public EditorGrid setStorage(String storage) {
+        this.storage = storage;
+        return this;
     }
 
 }
