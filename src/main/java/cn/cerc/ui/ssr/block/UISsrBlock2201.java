@@ -1,5 +1,10 @@
 package cn.cerc.ui.ssr.block;
 
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Description;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.ssr.core.ISupplierBlock;
 import cn.cerc.ui.ssr.core.SsrBlock;
@@ -11,8 +16,15 @@ import cn.cerc.ui.ssr.core.SsrBlock;
  * 00       22222        22222        00
  * 0000000000000000000000000000000000000
  */
-public class UISsrBlock2201 extends UISsrBoard {
+@Component
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+@Description("手机表格行2201")
+public class UISsrBlock2201 extends UISsrBoard implements ISupportBoard {
 
+    public UISsrBlock2201() {
+        this(null);
+    }
+    
     public UISsrBlock2201(UIComponent owner) {
         super(owner);
         this.cpu(new SsrBlock("""

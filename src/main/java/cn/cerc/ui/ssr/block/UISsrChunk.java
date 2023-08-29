@@ -4,22 +4,45 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+import javax.persistence.Column;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Description;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import cn.cerc.db.core.DataSet;
+import cn.cerc.db.core.Utils;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.ssr.core.SsrBlock;
 import cn.cerc.ui.ssr.core.SsrTemplate;
+import cn.cerc.ui.ssr.core.VuiContainer;
 import cn.cerc.ui.ssr.editor.ISsrBoard;
+import cn.cerc.ui.ssr.editor.SsrMessage;
+import cn.cerc.ui.ssr.page.ISupportCanvas;
+import cn.cerc.ui.ssr.source.Binder;
+import cn.cerc.ui.ssr.source.VuiDataService;
 
-public class UISsrChunk extends UIComponent implements ISsrBoard {
+@Component
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+@Description("手机表格块")
+public class UISsrChunk extends VuiContainer<ISupportBoard> implements ISsrBoard, ISupportCanvas {
     private static final Logger log = LoggerFactory.getLogger(UISsrChunk.class);
     private SsrTemplate template;
     private SsrBlockStyleDefault defaultStle;
     public static final String ListBegin = "list.begin";
     public static final String ListEnd = "list.end";
+
+    @Column
+    Binder<VuiDataService> dataSet = new Binder<>(this, VuiDataService.class);
+
+    public UISsrChunk() {
+        super(null);
+        template = new SsrTemplate();
+    }
 
     public UISsrChunk(UIComponent owner) {
         super(owner);
@@ -73,6 +96,34 @@ public class UISsrChunk extends UIComponent implements ISsrBoard {
             }
             getBlock(SsrTemplate.EndFlag, () -> new SsrBlock("</div>").template(template))
                     .ifPresent(template -> html.print(template.html()));
+        }
+    }
+
+    @Override
+    public void onMessage(Object sender, int msgType, Object msgData, String targetId) {
+        switch (msgType) {
+        case SsrMessage.InitBinder:
+            this.dataSet.init();
+            List<UIComponent> list = getComponents();
+            if (!Utils.isEmpty(list)) {
+                for (UIComponent component : list) {
+                    this.canvas().sendMessage(this, SsrMessage.InitBinder, this.dataSet, component.getId());
+                }
+            }
+            break;
+        case SsrMessage.RefreshProperties:
+        case SsrMessage.InitProperties:
+        case SsrMessage.AfterSubmit:
+            if (this.dataSet.target().isEmpty()) {
+                log.warn("未设置数据源：dataSet");
+                break;
+            }
+            var bean = this.canvas().getMember(this.dataSet.targetId(), VuiDataService.class);
+            if (bean.isPresent())
+                this.dataSet(bean.get().dataSet());
+            else
+                log.warn("{} 绑定的数据源 {} 找不到", this.getId(), this.dataSet.targetId());
+            break;
         }
     }
 

@@ -22,13 +22,21 @@ public abstract class VuiContainer<T> extends VuiControl {
     @SuppressWarnings("unchecked")
     public VuiContainer() {
         super();
-        supportClass = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+        if (getClass().getGenericSuperclass() instanceof ParameterizedType type) {
+            supportClass = (Class<T>) type.getActualTypeArguments()[0];
+        } else if (getClass().getSuperclass().getGenericSuperclass() instanceof ParameterizedType type) {
+            supportClass = (Class<T>) type.getActualTypeArguments()[0];
+        }
     }
 
     @SuppressWarnings("unchecked")
     public VuiContainer(UIComponent owner) {
         super(owner);
-        supportClass = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+        if (getClass().getGenericSuperclass() instanceof ParameterizedType type) {
+            supportClass = (Class<T>) type.getActualTypeArguments()[0];
+        } else if (getClass().getSuperclass().getGenericSuperclass() instanceof ParameterizedType type) {
+            supportClass = (Class<T>) type.getActualTypeArguments()[0];
+        }
     }
 
     public Set<Class<? extends VuiComponent>> getChildren() {

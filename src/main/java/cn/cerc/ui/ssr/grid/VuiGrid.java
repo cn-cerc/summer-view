@@ -600,7 +600,6 @@ public class VuiGrid extends VuiContainer<ISupportGrid> implements ISsrBoard, IG
                 gridField.field(field);
                 gridField.width(width);
             }
-            this.canvas().sendMessage(this, SsrMessage.appendComponent, item, this.dataSet.targetId());
         }
     }
 
