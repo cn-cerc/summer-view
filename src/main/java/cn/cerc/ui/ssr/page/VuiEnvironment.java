@@ -57,6 +57,7 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
     private Map<Class<? extends VuiComponent>, Set<Class<? extends VuiComponent>>> customMap = new HashMap<>();
     private Map<Class<? extends VuiComponent>, Map<String, Object>> sourceMap = new HashMap<>();
     protected ISsrMessage onMessage;
+    private boolean isRuntime;
     private UIComponent content;
 
     // 支持曾用类名
@@ -105,6 +106,7 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
         else if ("components".equals(mode))
             return getComponentsData();
         else {
+            this.isRuntime = true;
             return getRuntimePage();
         }
     }
@@ -325,6 +327,8 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
         String device = "";
         if (this.form.getRequest().getParameter("storage") != null)
             device = form.getRequest().getParameter("storage");
+        if (isRuntime)
+            device = form.getClient().isPhone() ? "" : form.getClient().getDevice();
         Document documentDef = null;
         ArrayList<Document> documents = collection.find(bson).into(new ArrayList<>());
         for (Document document : documents) {
@@ -446,6 +450,10 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
 
     public void setContent(UIComponent content) {
         this.content = content;
+    }
+
+    public boolean isRuntime() {
+        return this.isRuntime;
     }
 
 }

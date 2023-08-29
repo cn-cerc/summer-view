@@ -69,6 +69,28 @@ public class SsrBlockStyleDefault {
         public SsrBlock block() {
             return block;
         }
+
+        @Override
+        public String title() {
+            return title;
+        }
+
+        @Override
+        public ISupportBlock title(String title) {
+            this.title = title;
+            return this;
+        }
+
+        @Override
+        public String field() {
+            return field;
+        }
+
+        @Override
+        public ISupportBlock field(String field) {
+            this.field = field;
+            return this;
+        }
     }
 
     /**

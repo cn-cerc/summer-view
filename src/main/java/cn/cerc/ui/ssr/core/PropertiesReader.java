@@ -74,9 +74,9 @@ public class PropertiesReader {
                     var beanId = environment.getBeanId(clazz.asText());
                     var component = environment.getBean(beanId, VuiComponent.class);
                     if (component.isPresent()) {
-                        self.addComponent(component.get());
                         component.get().canvas(self.canvas());
                         component.get().readProperties(new PropertiesReader(child));
+                        self.addComponent(component.get());
                     } else {
                         log.error("无法创建对象：{}", beanId);
                     }

@@ -2,15 +2,22 @@ package cn.cerc.ui.ssr.block;
 
 import javax.persistence.Column;
 
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
 import cn.cerc.ui.ssr.core.SsrBlock;
+import cn.cerc.ui.ssr.core.VuiControl;
 import cn.cerc.ui.ssr.editor.ISsrBoard;
 
-public class BlockBooleanField implements ISupportBlock {
+@Component
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+public class BlockBooleanField extends VuiControl implements ISupportBlock {
     private SsrBlock block = new SsrBlock();
     @Column
-    String title;
+    String title = "";
     @Column
-    String field;
+    String field = "";
     @Column
     String trueText = "是";
     @Column
@@ -45,8 +52,35 @@ public class BlockBooleanField implements ISupportBlock {
     }
 
     @Override
+    public String getIdPrefix() {
+        return "field";
+    }
+
+    @Override
     public SsrBlock block() {
         return block;
+    }
+
+    @Override
+    public String title() {
+        return title;
+    }
+
+    @Override
+    public ISupportBlock title(String title) {
+        this.title = title;
+        return this;
+    }
+
+    @Override
+    public String field() {
+        return field;
+    }
+
+    @Override
+    public ISupportBlock field(String field) {
+        this.field = field;
+        return this;
     }
 
 }

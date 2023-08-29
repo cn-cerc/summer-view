@@ -4,17 +4,31 @@ import java.util.function.Supplier;
 
 import javax.persistence.Column;
 
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
 import cn.cerc.db.core.Utils;
 import cn.cerc.ui.ssr.core.SsrBlock;
+import cn.cerc.ui.ssr.core.VuiControl;
 import cn.cerc.ui.ssr.editor.ISsrBoard;
 
-public class BlockCheckBoxField implements ISupportBlock {
+@Component
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+public class BlockCheckBoxField extends VuiControl implements ISupportBlock {
     private SsrBlock block = new SsrBlock();
     @Column
-    String field;
+    String title = "选择";
     @Column
-    String valueField;
+    String field = "";
+    @Column
+    String valueField = "";
     Supplier<String> callBackValue;
+
+    public BlockCheckBoxField() {
+        super(null);
+        init();
+    }
 
     public BlockCheckBoxField(String field) {
         super();
@@ -64,8 +78,35 @@ public class BlockCheckBoxField implements ISupportBlock {
         return block;
     }
 
+    @Override
+    public String getIdPrefix() {
+        return "field";
+    }
+
     public BlockCheckBoxField value(Supplier<String> value) {
         callBackValue = value;
+        return this;
+    }
+
+    @Override
+    public String field() {
+        return field;
+    }
+
+    @Override
+    public ISupportBlock field(String field) {
+        this.field = field;
+        return this;
+    }
+
+    @Override
+    public String title() {
+        return title;
+    }
+
+    @Override
+    public ISupportBlock title(String title) {
+        this.title = title;
         return this;
     }
 

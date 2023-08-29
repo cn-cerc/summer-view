@@ -1,5 +1,10 @@
 package cn.cerc.ui.ssr.block;
 
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Description;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.ssr.core.ISupplierBlock;
 import cn.cerc.ui.ssr.core.SsrBlock;
@@ -7,8 +12,15 @@ import cn.cerc.ui.ssr.core.SsrBlock;
 /**
  * 手机端UISsrChunk列表的内容组件，一个插槽，一行一列，标题和内容纵向展示
  */
-public class UISsrBlock1201 extends UISsrBoard {
+@Component
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+@Description("手机表格行1201")
+public class UISsrBlock1201 extends UISsrBoard implements ISupportBoard {
 
+    public UISsrBlock1201() {
+        this(null);
+    }
+    
     public UISsrBlock1201(UIComponent owner) {
         super(owner);
         this.cpu(new SsrBlock("""

@@ -1,19 +1,33 @@
 package cn.cerc.ui.ssr.block;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 import javax.persistence.Column;
 
-import cn.cerc.ui.ssr.core.SsrBlock;
-import cn.cerc.ui.ssr.editor.ISsrBoard;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
-public class BlockStringField implements ISupportBlock {
+import cn.cerc.ui.ssr.core.SsrBlock;
+import cn.cerc.ui.ssr.core.VuiControl;
+import cn.cerc.ui.ssr.editor.ISsrBoard;
+import cn.cerc.ui.ssr.editor.SsrMessage;
+import cn.cerc.ui.ssr.source.Binder;
+import cn.cerc.ui.ssr.source.ISupplierMap;
+
+@Component
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+public class BlockStringField extends VuiControl implements ISupportBlock {
     private SsrBlock block = new SsrBlock();
     @Column
-    String title;
+    String title = "";
     @Column
-    String field;
+    String field = "";
+    @Column
+    Binder<ISupplierMap> mapSource = new Binder<>(this, ISupplierMap.class);
+
     Supplier<String> url;
 
     public BlockStringField(String title, String field) {
@@ -38,7 +52,7 @@ public class BlockStringField implements ISupportBlock {
     public SsrBlock request(ISsrBoard line) {
         block.text(String.format(
                 """
-                                        <div style='flex: ${_ratio};'>
+                                    <div style='flex: ${_ratio};'>
                                         <label for='%s'>%s</label>
                                         ${if _enabled_url}<a id='%s' href='${callback(url)}'>${else}<span id='%s'>${endif}${if _isTextField}${%s}${else}${map.begin}${if map.key==%s}${map.value}${endif}${map.end}${endif}${if _enabled_url}</a>${else}</span>${endif}
                                     </div>
@@ -48,6 +62,23 @@ public class BlockStringField implements ISupportBlock {
         if (url != null)
             block.onCallback("url", url);
         return block;
+    }
+
+    @Override
+    public void onMessage(Object sender, int msgType, Object msgData, String targetId) {
+        switch (msgType) {
+        case SsrMessage.InitBinder:
+            this.mapSource.init();
+            break;
+        case SsrMessage.InitMapSourceDone:
+            Optional<ISupplierMap> optMap = this.mapSource.target();
+            if (optMap.isPresent()) {
+                ISupplierMap source = optMap.get();
+                block.toMap(source.items());
+                block.option("_isTextField", "");
+            }
+            break;
+        }
     }
 
     @Override
@@ -69,6 +100,33 @@ public class BlockStringField implements ISupportBlock {
     public BlockStringField toMap(Map<String, String> map) {
         block.toMap(map);
         block.option("_isTextField", "");
+        return this;
+    }
+
+    @Override
+    public String getIdPrefix() {
+        return "field";
+    }
+
+    @Override
+    public String title() {
+        return title;
+    }
+
+    @Override
+    public ISupportBlock title(String title) {
+        this.title = title;
+        return this;
+    }
+
+    @Override
+    public String field() {
+        return field;
+    }
+
+    @Override
+    public ISupportBlock field(String field) {
+        this.field = field;
         return this;
     }
 
