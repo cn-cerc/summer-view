@@ -146,6 +146,7 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
         // 处理组件视图属性更新
         var reader = new RequestReader(form.getRequest());
         reader.updateComponents(canvas);
+        reader.removeComponents(canvas);
 
         // 处理组件数据属性更新
         var targetId = form.getRequest().getParameter("id");

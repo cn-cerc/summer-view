@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import javax.persistence.Column;
+import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +28,7 @@ public class VuiCanvas extends VuiContainer<ISupportCanvas> {
     private IVuiEnvironment environment;
     private AbstractPage page;
     private String redirectPage;
+    private String storage;
     @Column(name = "标题")
     String title = "";
     @Column(name = "页面描述")
@@ -107,6 +109,10 @@ public class VuiCanvas extends VuiContainer<ISupportCanvas> {
     @Override
     public void onMessage(Object sender, int msgType, Object msgData, String targetId) {
         switch (msgType) {
+        case SsrMessage.InitRequest:
+            if (msgData instanceof HttpServletRequest request)
+                this.storage = request.getParameter("storage");
+            break;
         case SsrMessage.InitHeader:
             if (msgData instanceof IHeader header)
                 header.setPageTitle(this.title);
@@ -234,6 +240,10 @@ public class VuiCanvas extends VuiContainer<ISupportCanvas> {
 
     public String title() {
         return title;
+    }
+
+    public String storage() {
+        return storage;
     }
 
 }

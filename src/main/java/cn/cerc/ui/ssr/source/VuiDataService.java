@@ -126,8 +126,9 @@ public class VuiDataService extends VuiComponent
 
     @Override
     public DataRow dataRow() {
-        if (dataSet.size() > 0) {
+        if (dataSet.size() > 1)
             log.error("service {} 返回的记录有多笔", this.service);
+        if (dataSet.size() > 0) {
             dataSet.first();
             return dataSet.current();
         }
