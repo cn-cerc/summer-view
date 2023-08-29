@@ -54,6 +54,7 @@ public class VuiPageMessage extends VuiComponent implements ISupportCanvas {
                 }
             }
             break;
+        case SsrMessage.FailOnService:
         case SsrMessage.SuccessOnService:
             if (msgData instanceof String msg) {
                 try (Redis redis = new Redis()) {
