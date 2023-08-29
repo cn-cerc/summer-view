@@ -61,7 +61,7 @@ public class GridStringField extends VuiControl implements ISupportGrid {
         String bodyTitle = "body." + this.title;
         grid.addBlock(bodyTitle, body.text(String.format("""
                 <td align='${_align}' role='${_field}'>
-                ${if _enabled_url}<a href='${callback(url)}'>${endif}
+                ${if _enabled_url}<a href='${callback(url)}' ${if _target}target='${_target}'${endif}>${endif}
                 ${if _isTextField}
                 ${dataset.%s}
                 ${else}
@@ -71,6 +71,7 @@ public class GridStringField extends VuiControl implements ISupportGrid {
                 </td>""", this.field, this.field)));
         body.option("_align", this.align);
         body.option("_field", this.field);
+        body.option("_target", "");
         body.id(bodyTitle);
         body.display(1);
         body.strict(false);
