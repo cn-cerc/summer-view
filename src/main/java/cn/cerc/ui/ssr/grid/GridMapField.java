@@ -54,7 +54,7 @@ public class GridMapField extends VuiControl implements ISupportGrid {
         String headTitle = "head." + title;
         String bodyTitle = "body." + title;
         var head = grid.addBlock(headTitle,
-                String.format("<th style='width: ${_width}em' onclick=\"gridSort(this,'%s')\">%s</th>", title, field));
+                String.format("<th style='width: ${_width}em' onclick=\"gridSort(this,'%s')\">%s</th>", field, title));
         head.toMap("_width", "" + fieldWidth);
         head.id(headTitle);
         head.display(1);
