@@ -9,6 +9,7 @@ import javax.persistence.Column;
 import org.springframework.context.annotation.Description;
 
 import cn.cerc.mis.core.Application;
+import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.ssr.page.IVuiEnvironment;
 
@@ -62,6 +63,35 @@ public abstract class VuiContainer<T> extends VuiControl {
     protected VuiContainer<?> setSupportClass(Class<?> supportClass) {
         this.supportClass = supportClass;
         return this;
+    }
+
+    @Override
+    public void output(HtmlWriter html) {
+        var props = this.properties();
+        if (props.has("v_inner_align") && "Grid".equals(props.get("v_inner_align").asText())) {
+            var rows = props.get("v_row_num").asInt();
+            var cols = props.get("v_column_num").asInt();
+            var index = 0;
+            html.print("<div role='grid'>");
+            for (var i = 0; i < cols; i++) {
+                html.print("<div role='grid-row'>");
+                for (var j = 0; j < rows; j++) {
+                    html.print(String.format("<div role='grid-col' style='%s'>", props.get("v_style").asText()));
+                    VuiComponent item = null;
+                    if (index < this.getComponentCount()) {
+                        if (this.getComponent(index) instanceof VuiComponent temp)
+                            item = temp;
+                    }
+                    if (item != null)
+                        item.output(html);
+                    html.print("</div>");
+                    index++;
+                }
+                html.println("</div>");
+            }
+            html.println("</div>");
+        } else
+            super.output(html);
     }
 
 }
