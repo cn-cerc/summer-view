@@ -8,8 +8,8 @@ import org.springframework.stereotype.Component;
 
 import cn.cerc.ui.ssr.core.VuiControl;
 import cn.cerc.ui.ssr.form.DatetimeKindEnum;
-import cn.cerc.ui.ssr.form.ISupplierDataRow;
 import cn.cerc.ui.ssr.source.Binder;
+import cn.cerc.ui.ssr.source.ISupplierDataRow;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)

@@ -17,12 +17,11 @@ import cn.cerc.ui.ssr.core.VuiComponent;
 import cn.cerc.ui.ssr.editor.EditorForm;
 import cn.cerc.ui.ssr.editor.SsrMessage;
 import cn.cerc.ui.ssr.excel.ISupportXls;
-import cn.cerc.ui.ssr.form.ISupplierDataRow;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Description("请求数据行")
-public class VuiRequestRow extends VuiComponent implements ISupplierDataRow, ISupportXls {
+public class VuiRequestRow extends VuiComponent implements ICommonSupplierDataRow, ISupportXls {
     private DataRow config = new DataRow();
     private DataRow dataRow = new DataRow();
     private HttpServletRequest request;

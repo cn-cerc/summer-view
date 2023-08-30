@@ -26,7 +26,7 @@ import cn.cerc.ui.ssr.page.IVuiEnvironment;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Description("List附加数据")
-public class VuiListSupplier extends VuiComponent implements ISupplierList, IBinders {
+public class VuiListSupplier extends VuiComponent implements ICommonSupplierList, IBinders {
     private static final Logger log = LoggerFactory.getLogger(VuiMapSupplier.class);
     private List<String> items = new ArrayList<>();
     private Binders binders = new Binders();

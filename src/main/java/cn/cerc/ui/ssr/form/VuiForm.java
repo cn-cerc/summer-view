@@ -50,14 +50,16 @@ import cn.cerc.ui.ssr.page.ISupportCanvas;
 import cn.cerc.ui.ssr.page.IVuiEnvironment;
 import cn.cerc.ui.ssr.source.Binder;
 import cn.cerc.ui.ssr.source.Binders;
+import cn.cerc.ui.ssr.source.ICommonSupplierDataRow;
 import cn.cerc.ui.ssr.source.IBinders;
+import cn.cerc.ui.ssr.source.ISupplierDataRow;
 import cn.cerc.ui.ssr.source.ISupplierFields;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Description("查询表单")
 public class VuiForm extends VuiContainer<ISupportForm>
-        implements ISsrBoard, ISupplierDataRow, IBinders, ISupportCanvas {
+        implements ISsrBoard, ICommonSupplierDataRow, IBinders, ISupportCanvas {
     private static final Logger log = LoggerFactory.getLogger(VuiForm.class);
     private SsrTemplate template;
     private List<String> columns = new ArrayList<>();

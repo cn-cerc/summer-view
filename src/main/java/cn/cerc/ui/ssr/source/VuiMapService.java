@@ -21,7 +21,7 @@ import cn.cerc.ui.ssr.editor.SsrMessage;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Description("Map数据服务")
-public class VuiMapService extends VuiComponent implements ISupplierMap, IBinders {
+public class VuiMapService extends VuiComponent implements ICommonSupplierMap, IBinders {
     private Map<String, String> items = new LinkedHashMap<>();
     private String selected = "";
     private IHandle handle;
