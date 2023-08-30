@@ -13,8 +13,8 @@ import cn.cerc.db.core.Utils;
 import cn.cerc.ui.ssr.core.SsrBlock;
 import cn.cerc.ui.ssr.core.VuiComponent;
 import cn.cerc.ui.ssr.editor.SsrMessage;
-import cn.cerc.ui.ssr.form.ISupplierDataRow;
 import cn.cerc.ui.ssr.source.Binder;
+import cn.cerc.ui.ssr.source.ISupplierDataRow;
 import cn.cerc.ui.vcl.ext.UIBottom;
 
 @Component

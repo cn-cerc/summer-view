@@ -22,14 +22,13 @@ import cn.cerc.mis.core.IPage;
 import cn.cerc.ui.ssr.core.EntityServiceRecord;
 import cn.cerc.ui.ssr.core.VuiComponent;
 import cn.cerc.ui.ssr.editor.SsrMessage;
-import cn.cerc.ui.ssr.form.ISupplierDataRow;
 import cn.cerc.ui.ssr.page.IVuiEnvironment;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Description("数据服务")
 public class VuiDataService extends VuiComponent
-        implements ISupplierDataRow, ISupplierFields, IBinders, ISupplierDataSet {
+        implements ICommonSupplierDataRow, ISupplierFields, IBinders, ICommonSupplierDataSet {
     private static final Logger log = LoggerFactory.getLogger(VuiDataService.class);
     private DataSet dataSet = new DataSet();
     private IPage page;

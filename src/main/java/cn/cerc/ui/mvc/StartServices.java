@@ -23,6 +23,7 @@ import cn.cerc.mis.core.Application;
 import cn.cerc.mis.core.DataValidateException;
 import cn.cerc.mis.core.IService;
 import cn.cerc.mis.core.ServiceState;
+import cn.cerc.mis.security.SecurityStopException;
 import cn.cerc.ui.SummerUI;
 
 public class StartServices extends HttpServlet {
@@ -124,6 +125,11 @@ public class StartServices extends HttpServlet {
             Throwable err = e.getCause() != null ? e.getCause() : e;
             log.error("service {}, dataIn {}, error {}", service, text, err.getMessage(), err);
             dataOut.setState(ServiceState.ERROR).setMessage(err.getMessage());
+            response.getWriter().write(dataOut.toString());
+        } catch (SecurityStopException e) {
+            Throwable err = e.getCause() != null ? e.getCause() : e;
+            log.error("service {}, dataIn {}, error {}", service, text, err.getMessage(), err);
+            dataOut.setState(ServiceState.TOKEN_INVALID).setMessage(err.getMessage());
             response.getWriter().write(dataOut.toString());
         }
     }

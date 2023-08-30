@@ -21,7 +21,7 @@ import cn.cerc.ui.ssr.page.IVuiEnvironment;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Description("Map附加数据")
-public class VuiMapValue extends VuiComponent implements ISupplierMap, IBinders {
+public class VuiMapValue extends VuiComponent implements ICommonSupplierMap, IBinders {
     private static final Logger log = LoggerFactory.getLogger(VuiMapValue.class);
     private Map<String, String> items = new LinkedHashMap<>();
     private Binders binders = new Binders();

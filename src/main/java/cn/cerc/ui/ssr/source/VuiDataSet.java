@@ -16,7 +16,7 @@ import cn.cerc.ui.ssr.editor.EditorGrid;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Description("内存数据表")
-public class VuiDataSet extends VuiComponent implements ISupplierDataSet {
+public class VuiDataSet extends VuiComponent implements ICommonSupplierDataSet {
     private DataSet dataSet = new DataSet();
 
     public VuiDataSet() {
