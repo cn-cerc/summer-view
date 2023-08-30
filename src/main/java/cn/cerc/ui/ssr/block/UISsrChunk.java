@@ -7,7 +7,6 @@ public class UISsrChunk extends VuiChunk {
 
     public UISsrChunk() {
         super(null);
-        template = new SsrTemplate();
     }
 
     public UISsrChunk(UIComponent owner) {
