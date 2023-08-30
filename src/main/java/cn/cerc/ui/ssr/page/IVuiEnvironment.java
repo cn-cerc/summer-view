@@ -33,7 +33,7 @@ public interface IVuiEnvironment {
     Set<Class<? extends VuiComponent>> getAttachClass(Class<? extends VuiComponent> clazz);
 
     /**
-     * 对指定的组件附件数据，一般用于客制化
+     * 对指定的组件附加数据，一般用于客制化
      * 
      * @param ownerClass
      * @param sourceId

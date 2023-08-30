@@ -24,6 +24,7 @@ import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Description;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -85,10 +86,24 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
         if (form.getRequest() != null) {
             String childCode = StartForms.getRequestCode(form.getRequest());
             FormSign formSign = new FormSign(childCode);
-            String methName = formSign.getValue();
-            this.pageCode = form.getClass().getSimpleName() + "." + methName;
+            String methodName = formSign.getValue();
+            this.pageCode = formSign.getId() + "." + methodName;
         } else {
             this.pageCode = "undefine";
+        }
+        // 查找是否有增加插件存在
+        ApplicationContext context = Application.getContext();
+        if (context != null) {
+            for (var beanId : context.getBeanNamesForType(VuiPlugins.class)) {
+                var anno = context.findAnnotationOnBean(beanId, VuiMatches.class);
+                try {
+                    if (anno == null || (anno.value() != null && pageCode.matches(anno.value()))) {
+                        context.getBean(beanId, VuiPlugins.class).install(this);
+                    }
+                } catch (Exception e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
         }
     }
 
