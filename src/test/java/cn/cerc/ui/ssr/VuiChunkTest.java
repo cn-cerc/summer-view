@@ -15,9 +15,9 @@ import cn.cerc.ui.ssr.block.UISsrBlock2201;
 import cn.cerc.ui.ssr.block.UISsrBlock3101;
 import cn.cerc.ui.ssr.block.UISsrBlock310101;
 import cn.cerc.ui.ssr.block.UISsrBlock3201;
-import cn.cerc.ui.ssr.block.UISsrChunk;
+import cn.cerc.ui.ssr.block.VuiChunk;
 
-public class UISsrChunkTest {
+public class VuiChunkTest {
 
     @Test
     public void test_cpu101() {
@@ -25,7 +25,7 @@ public class UISsrChunkTest {
         ds.append().setValue("name_", "zhangsan");
         ds.append().setValue("name_", "lisi");
 
-        UISsrChunk chunk = new UISsrChunk(null);
+        VuiChunk chunk = new VuiChunk(null);
         SsrBlockStyleDefault style = chunk.defaultStyle();
 
         UISsrBlock2101 block = new UISsrBlock2101(chunk);
@@ -50,7 +50,7 @@ public class UISsrChunkTest {
         ds.append().setValue("name_", "zhangsan");
         ds.append().setValue("name_", "lisi");
 
-        UISsrChunk chunk = new UISsrChunk(null);
+        VuiChunk chunk = new VuiChunk(null);
         SsrBlockStyleDefault style = chunk.defaultStyle();
 
         UISsrBlock1101 block = new UISsrBlock1101(chunk);
@@ -70,7 +70,7 @@ public class UISsrChunkTest {
         ds.append().setValue("name_", "zhangsan");
         ds.append().setValue("name_", "lisi");
 
-        UISsrChunk chunk = new UISsrChunk(null);
+        VuiChunk chunk = new VuiChunk(null);
         SsrBlockStyleDefault style = chunk.defaultStyle();
 
         UISsrBlock310101 block = new UISsrBlock310101(chunk);
@@ -98,7 +98,7 @@ public class UISsrChunkTest {
         ds.append().setValue("name_", "zhangsan").setValue("age_", 18).setValue("weight_", 160);
         ds.append().setValue("name_", "lisi").setValue("age_", 16).setValue("weight_", 150);
 
-        UISsrChunk chunk = new UISsrChunk(null);
+        VuiChunk chunk = new VuiChunk(null);
         SsrBlockStyleDefault style = chunk.defaultStyle();
 
         UISsrBlock3201 block = new UISsrBlock3201(chunk);
@@ -124,7 +124,7 @@ public class UISsrChunkTest {
         ds.append().setValue("name_", "zhangsan").setValue("opera_", "内容");
         ds.append().setValue("name_", "lisi").setValue("opera_", "内容");
 
-        UISsrChunk chunk = new UISsrChunk(null);
+        VuiChunk chunk = new VuiChunk(null);
         SsrBlockStyleDefault style = chunk.defaultStyle();
 
         UISsrBlock310101 board = new UISsrBlock310101(chunk);
@@ -154,7 +154,7 @@ public class UISsrChunkTest {
         ds.append().setValue("name_", "zhangsan");
         ds.append().setValue("name_", "lisi");
 
-        UISsrChunk chunk = new UISsrChunk(null);
+        VuiChunk chunk = new VuiChunk(null);
         SsrBlockStyleDefault style = chunk.defaultStyle();
 
         UISsrBlock2101 board = new UISsrBlock2101(chunk);
@@ -179,7 +179,7 @@ public class UISsrChunkTest {
         ds.append().setValue("name_", "zhangsan");
         ds.append().setValue("name_", "lisi");
 
-        UISsrChunk chunk = new UISsrChunk(null);
+        VuiChunk chunk = new VuiChunk(null);
         SsrBlockStyleDefault style = chunk.defaultStyle();
 
         UISsrBlock310101 board = new UISsrBlock310101(chunk);
@@ -207,7 +207,7 @@ public class UISsrChunkTest {
         ds.append().setValue("name_", "zhangsan");
         ds.append().setValue("name_", "lisi");
 
-        UISsrChunk chunk = new UISsrChunk(null);
+        VuiChunk chunk = new VuiChunk(null);
         SsrBlockStyleDefault style = chunk.defaultStyle();
 
         UISsrBlock2101 board = new UISsrBlock2101(chunk);
@@ -234,7 +234,7 @@ public class UISsrChunkTest {
         ds.append().setValue("name_", "zhangsan");
         ds.append().setValue("name_", "lisi");
 
-        UISsrChunk chunk = new UISsrChunk(null);
+        VuiChunk chunk = new VuiChunk(null);
         SsrBlockStyleDefault style = chunk.defaultStyle();
 
         UISsrBlock1201 board = new UISsrBlock1201(chunk);
@@ -254,7 +254,7 @@ public class UISsrChunkTest {
         ds.append().setValue("name_", "zhangsan").setValue("age_", "15");
         ds.append().setValue("name_", "lisi").setValue("age_", "18");
 
-        UISsrChunk chunk = new UISsrChunk(null);
+        VuiChunk chunk = new VuiChunk(null);
         SsrBlockStyleDefault style = chunk.defaultStyle();
 
         UISsrBlock2201 board = new UISsrBlock2201(chunk);
@@ -277,7 +277,7 @@ public class UISsrChunkTest {
         ds.append().setValue("name_", "zhangsan").setValue("age_", "15").setValue("sex_", "男");
         ds.append().setValue("name_", "lisi").setValue("age_", "18").setValue("sex_", "女");
 
-        UISsrChunk chunk = new UISsrChunk(null);
+        VuiChunk chunk = new VuiChunk(null);
         SsrBlockStyleDefault style = chunk.defaultStyle();
 
         UISsrBlock3201 board = new UISsrBlock3201(chunk);
@@ -303,7 +303,7 @@ public class UISsrChunkTest {
         ds.append().setValue("name_", "zhangsan").setValue("age_", "15");
         ds.append().setValue("name_", "lisi").setValue("age_", "18");
 
-        UISsrChunk chunk = new UISsrChunk(null);
+        VuiChunk chunk = new VuiChunk(null);
         SsrBlockStyleDefault style = chunk.defaultStyle();
 
         UISsrBlock2101 board = new UISsrBlock2101(chunk);
@@ -326,7 +326,7 @@ public class UISsrChunkTest {
         ds.append().setValue("name_", "zhangsan").setValue("age_", "15").setValue("sex_", "男");
         ds.append().setValue("name_", "lisi").setValue("age_", "18").setValue("sex_", "女");
 
-        UISsrChunk chunk = new UISsrChunk(null);
+        VuiChunk chunk = new VuiChunk(null);
         SsrBlockStyleDefault style = chunk.defaultStyle();
 
         UISsrBlock3101 board = new UISsrBlock3101(chunk);
@@ -352,7 +352,7 @@ public class UISsrChunkTest {
         ds.append().setValue("name_", "zhangsan").setValue("age_", "15").setValue("sex_", "1");
         ds.append().setValue("name_", "lisi").setValue("age_", "18").setValue("sex_", "0");
 
-        UISsrChunk chunk = new UISsrChunk(null);
+        VuiChunk chunk = new VuiChunk(null);
         SsrBlockStyleDefault style = chunk.defaultStyle();
 
         UISsrBlock3101 board = new UISsrBlock3101(chunk);
@@ -379,7 +379,7 @@ public class UISsrChunkTest {
         ds.append().setValue("name_", "lisi").setValue("age_", "18").setValue("adult_", "true");
         ds.append().setValue("name_", "wangwu").setValue("age_", "0");
 
-        UISsrChunk chunk = new UISsrChunk(null);
+        VuiChunk chunk = new VuiChunk(null);
         SsrBlockStyleDefault style = chunk.defaultStyle();
 
         UISsrBlock3101 board = new UISsrBlock3101(chunk);
@@ -414,7 +414,7 @@ public class UISsrChunkTest {
         ds.append().setValue("name_", "lisi").setValue("age_", "18").setValue("sex_", "1");
         ds.append().setValue("name_", "wangwu").setValue("age_", "0").setValue("sex_", "0");
 
-        UISsrChunk chunk = new UISsrChunk(null);
+        VuiChunk chunk = new VuiChunk(null);
         SsrBlockStyleDefault style = chunk.defaultStyle();
 
         UISsrBlock3101 board = new UISsrBlock3101(chunk);
