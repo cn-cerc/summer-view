@@ -94,11 +94,11 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
         // 查找是否有增加插件存在
         ApplicationContext context = Application.getContext();
         if (context != null) {
-            for (var beanId : context.getBeanNamesForType(VuiPlugins.class)) {
+            for (var beanId : context.getBeanNamesForType(IVuiPlugins.class)) {
                 var anno = context.findAnnotationOnBean(beanId, VuiMatches.class);
                 try {
                     if (anno == null || (anno.value() != null && pageCode.matches(anno.value()))) {
-                        context.getBean(beanId, VuiPlugins.class).install(this);
+                        context.getBean(beanId, IVuiPlugins.class).install(this, form);
                     }
                 } catch (Exception e) {
                     log.error(e.getMessage(), e);

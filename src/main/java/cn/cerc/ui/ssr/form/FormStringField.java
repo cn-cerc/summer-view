@@ -145,6 +145,7 @@ public class FormStringField extends VuiControl implements ISupportForm {
             if (optMap.isPresent()) {
                 ISupplierMap source = optMap.get();
                 block.toMap(source.items());
+                block.option("_isTextField", "");
                 source.selected().ifPresent(selected -> block.dataRow().setValue(field, selected));
             }
             break;

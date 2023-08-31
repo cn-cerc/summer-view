@@ -21,7 +21,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import cn.cerc.db.core.DataSet;
-import cn.cerc.db.core.Describe;
 import cn.cerc.db.core.IHandle;
 import cn.cerc.db.core.Utils;
 import cn.cerc.mis.core.Application;
@@ -540,12 +539,7 @@ public class VuiGrid extends VuiContainer<ISupportGrid> implements ISsrBoard, IG
                     continue;
                 if (!Utils.isEmpty(column.name()))
                     title = column.name();
-                int width = 10;
-                Describe describe = field.getAnnotation(Describe.class);
-                if (describe != null) {
-                    if (describe.width() > 0)
-                        width = describe.width();
-                }
+                int width = column.length() > 0 ? column.length() : 10;
                 String classCode = GridStringField.class.getSimpleName();
                 if (field.getType() == Boolean.class || field.getType() == boolean.class)
                     classCode = GridBooleanField.class.getSimpleName();
@@ -625,7 +619,7 @@ public class VuiGrid extends VuiContainer<ISupportGrid> implements ISsrBoard, IG
                 log.warn("未设置数据源：dataSet");
                 break;
             }
-            var bean = this.canvas().getMember(this.dataSet.targetId(), VuiDataService.class);
+            Optional<VuiDataService> bean = this.canvas().getMember(this.dataSet.targetId(), VuiDataService.class);
             if (bean.isPresent())
                 this.dataSet(bean.get().dataSet());
             else

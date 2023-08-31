@@ -134,7 +134,9 @@ public class EditorForm extends UIComponent {
                 for (Enum<?> item : enums)
                     mapField.toMap(item.name(), item.name());
                 form.addBlock(mapField);
-                form.dataRow().setValue(field.getName(), ((Enum<?>) field.get(properties)).name());
+                Object obj = field.get(properties);
+                if (obj != null)
+                    form.dataRow().setValue(field.getName(), ((Enum<?>) obj).name());
             } else if (field.getType() == EntityServiceRecord.class) {
                 SsrFormStyleDefault style = form.defaultStyle();
                 form.addBlock(style.getCodeName(title, field.getName(), "showEntityServiceDialog"));

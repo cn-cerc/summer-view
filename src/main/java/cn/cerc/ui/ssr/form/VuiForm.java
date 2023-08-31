@@ -41,6 +41,7 @@ import cn.cerc.ui.ssr.core.ISupplierBlock;
 import cn.cerc.ui.ssr.core.PropertiesReader;
 import cn.cerc.ui.ssr.core.SsrBlock;
 import cn.cerc.ui.ssr.core.SsrTemplate;
+import cn.cerc.ui.ssr.core.VuiBufferType;
 import cn.cerc.ui.ssr.core.VuiComponent;
 import cn.cerc.ui.ssr.core.VuiContainer;
 import cn.cerc.ui.ssr.editor.EditorGrid;
@@ -50,10 +51,11 @@ import cn.cerc.ui.ssr.page.ISupportCanvas;
 import cn.cerc.ui.ssr.page.IVuiEnvironment;
 import cn.cerc.ui.ssr.source.Binder;
 import cn.cerc.ui.ssr.source.Binders;
-import cn.cerc.ui.ssr.source.ICommonSupplierDataRow;
 import cn.cerc.ui.ssr.source.IBinders;
+import cn.cerc.ui.ssr.source.ICommonSupplierDataRow;
 import cn.cerc.ui.ssr.source.ISupplierDataRow;
 import cn.cerc.ui.ssr.source.ISupplierFields;
+import cn.cerc.ui.ssr.source.VuiDataService;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -71,12 +73,15 @@ public class VuiForm extends VuiContainer<ISupportForm>
     private SsrFormStyleDefault defaultStle;
     private HttpServletRequest request;
     private Binders binders = new Binders();
+    @Column
+    String bufferKey = "";
     @Column(name = "动作(action)")
     String action = "";
     @Column
     Binder<ISupplierDataRow> dataRow = new Binder<>(this, ISupplierDataRow.class);
     @Column
     AlignEnum align = AlignEnum.None;
+    private IHandle handle;
 
     public VuiForm() {
         this(null);
@@ -526,10 +531,20 @@ public class VuiForm extends VuiContainer<ISupportForm>
             if (msgData instanceof HttpServletRequest request)
                 this.request = request;
             break;
+        case SsrMessage.InitHandle:
+            if (msgData instanceof IHandle handle)
+                this.handle = handle;
+            break;
         case SsrMessage.InitBinder:
             this.dataRow.init();
             break;
         case SsrMessage.InitProperties:
+            if (!Utils.isEmpty(bufferKey) && buffer == null) {
+                SsrBlock block = new SsrBlock(bufferKey);
+                block.option("CorpNo", handle.getCorpNo());
+                block.option("UserCode", handle.getUserCode());
+                buffer = new MemoryBuffer(VuiBufferType.VuiForm, block.html());
+            }
         case SsrMessage.RefreshProperties:
             if (Utils.isEmpty(this.dataRow.targetId())) {
                 log.warn("{} 没有绑定数据源", this.getId());
@@ -545,6 +560,10 @@ public class VuiForm extends VuiContainer<ISupportForm>
             if (request != null) {
                 if (this.readAll(request, "submit"))
                     this.canvas().sendMessage(this, SsrMessage.AfterSubmit, null, null);
+                if (buffer != null)
+                    buffer.post();
+                binders.findOwner(VuiDataService.class)
+                        .ifPresent(service -> service.onMessage(this, SsrMessage.InitContent, null, null));
             } else {
                 log.error("request 为空，无法执行");
             }
