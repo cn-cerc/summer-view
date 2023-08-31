@@ -8,11 +8,15 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import cn.cerc.db.core.ClassConfig;
+import cn.cerc.db.core.Datetime;
+import cn.cerc.db.core.Datetime.DateType;
 import cn.cerc.mis.core.Application;
 import cn.cerc.ui.SummerUI;
 import cn.cerc.ui.core.RequestReader;
+import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.fields.DateField;
 import cn.cerc.ui.fields.ImageConfigImpl;
+import cn.cerc.ui.ssr.core.DefaultDateRangeEnum;
 import cn.cerc.ui.ssr.core.SsrBlock;
 import cn.cerc.ui.ssr.core.VuiControl;
 import cn.cerc.ui.ssr.editor.ISsrBoard;
@@ -39,6 +43,8 @@ public class FormDateRangeField extends VuiControl implements ISupportForm {
     boolean required = false;
     @Column
     boolean readonly = false;
+    @Column
+    DefaultDateRangeEnum range = DefaultDateRangeEnum.无;
 
     public FormDateRangeField() {
         super();
@@ -97,10 +103,44 @@ public class FormDateRangeField extends VuiControl implements ISupportForm {
         block().option("_placeholder", this.placeholder);
         block().option("_readonly", this.readonly ? "1" : "");
         block().option("_required", this.required ? "1" : "");
-        block().option("_patten", this.patten);
+        block().option("_pattern", this.patten);
         block().option("_style", this.properties("v_style").orElse(""));
         block.fields(String.format("%s,%s", this.beginField, this.endField));
         return block;
+    }
+
+    @Override
+    public void onMessage(Object sender, int msgType, Object msgData, String targetId) {
+        switch (msgType) {
+        case SsrMessage.InitProperties:
+            if (range != DefaultDateRangeEnum.无) {
+                UIComponent owner = getOwner();
+                if (owner instanceof VuiForm form) {
+                    Datetime now = new Datetime();
+                    switch (range) {
+                    case 最近一周:
+                        form.dataRow().setValue(beginField, now.inc(DateType.Day, -7).getDate());
+                        break;
+                    case 最近一个月:
+                        form.dataRow().setValue(beginField, now.inc(DateType.Month, -1).getDate());
+                        break;
+                    case 最近三个月:
+                        form.dataRow().setValue(beginField, now.inc(DateType.Month, -3).getDate());
+                        break;
+                    case 最近半年:
+                        form.dataRow().setValue(beginField, now.inc(DateType.Month, -6).getDate());
+                        break;
+                    case 最近一年:
+                        form.dataRow().setValue(beginField, now.inc(DateType.Year, -1).getDate());
+                        break;
+                    default:
+                        break;
+                    }
+                    form.dataRow().setValue(endField, now.getDate());
+                }
+            }
+            break;
+        }
     }
 
     public FormDateRangeField placeholder(String placeholder) {

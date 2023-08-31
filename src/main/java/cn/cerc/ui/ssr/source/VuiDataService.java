@@ -2,6 +2,7 @@ package cn.cerc.ui.ssr.source;
 
 import java.lang.reflect.Field;
 import java.util.LinkedHashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -22,6 +23,7 @@ import cn.cerc.mis.core.IPage;
 import cn.cerc.ui.ssr.core.EntityServiceRecord;
 import cn.cerc.ui.ssr.core.VuiComponent;
 import cn.cerc.ui.ssr.editor.SsrMessage;
+import cn.cerc.ui.ssr.form.VuiForm;
 import cn.cerc.ui.ssr.page.IVuiEnvironment;
 
 @Component
@@ -75,13 +77,20 @@ public class VuiDataService extends VuiComponent
             if (msgData instanceof IPage page)
                 this.page = page;
             break;
+        case SsrMessage.InitBinder:
+            this.headIn.init();
+            break;
         case SsrMessage.InitContent: {
             if (this.callByInit) {
                 if (!Utils.isEmpty(this.service.service())) {
-                    var dataIn = new DataRow();
-                    var target = this.headIn.target();
-                    if (target.isPresent())
+                    DataRow dataIn = new DataRow();
+                    Optional<ISupplierDataRow> target = this.headIn.target();
+                    if (target.isPresent()) {
+                        // 如果绑定的数据源是VuiForm，那么就需要等待VuiForm执行InitContent后发送InitContent消息才执行
+                        if (target.get() instanceof VuiForm && !(sender instanceof VuiForm))
+                            break;
                         dataIn = target.get().dataRow();
+                    }
                     var svr = new ServiceSign(this.service.service()).callLocal(page.getForm(), dataIn);
                     if (svr.isFail())
                         throw new RuntimeException(svr.message());
@@ -92,34 +101,29 @@ public class VuiDataService extends VuiComponent
             }
             break;
         }
-        case SsrMessage.InitBinder:
-            this.headIn.init();
-            break;
         case SsrMessage.AfterSubmit: {
             if (page == null) // 非运行环境
                 break;
-            if (!this.callByInit) {
-                var target = this.headIn.target();
-                if (target.isPresent()) {
-                    var svr = new ServiceSign(this.service.service()).callLocal(page.getForm(), target.get().dataRow());
-                    if (svr.isFail()) {
-                        binders.sendMessage(this, SsrMessage.FailOnService, null, null);
-                        this.canvas().sendMessage(this, SsrMessage.FailOnService, svr.message(), null);
-                        return;
-                    } else {
-                        this.dataSet = svr.dataOut();
-                        binders.sendMessage(this, SsrMessage.SuccessOnService, null, null);
-                    }
-                    if (!Utils.isEmpty(this.success_message))
-                        this.canvas().sendMessage(this, SsrMessage.SuccessOnService, this.success_message, null);
-                    else if (!Utils.isEmpty(svr.message()))
-                        this.canvas().sendMessage(this, SsrMessage.SuccessOnService, svr.message(), null);
+            var target = this.headIn.target();
+            if (target.isPresent()) {
+                var svr = new ServiceSign(this.service.service()).callLocal(page.getForm(), target.get().dataRow());
+                if (svr.isFail()) {
+                    binders.sendMessage(this, SsrMessage.FailOnService, null, null);
+                    this.canvas().sendMessage(this, SsrMessage.FailOnService, svr.message(), null);
+                    return;
                 } else {
-                    log.warn("找不到绑定对象：{}", this.headIn.targetId());
+                    this.dataSet = svr.dataOut();
+                    binders.sendMessage(this, SsrMessage.SuccessOnService, null, null);
                 }
+                if (!Utils.isEmpty(this.success_message))
+                    this.canvas().sendMessage(this, SsrMessage.SuccessOnService, this.success_message, null);
+                else if (!Utils.isEmpty(svr.message()))
+                    this.canvas().sendMessage(this, SsrMessage.SuccessOnService, svr.message(), null);
+            } else {
+                log.warn("找不到绑定对象：{}", this.headIn.targetId());
             }
-        }
             break;
+        }
         }
     }
 

@@ -86,7 +86,7 @@ public class XlsGrid extends VuiContainer<ISupportXlsGrid> implements ISupportXl
                                     </tbody>
                                 </table>
                             </div>
-                            <div lowcode="button"><button name="save" value="save" onclick="submitForm('fieldForm', 'submit')">保存</button>
+                            <div lowcode="button"><label onclick="selectItems('components')"><input type='checkbox' id='selectAll' />全选</label><button name="save" value="save" onclick="submitForm('fieldForm', 'submit')">保存</button>
                             </div>
                         </form>""");
         impl.block().dataSet(dataSet);
