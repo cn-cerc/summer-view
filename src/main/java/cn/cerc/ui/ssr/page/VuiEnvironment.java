@@ -362,7 +362,7 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
     }
 
     public String loadFile(Class<?> clazz, String pageCode) {
-        InputStream input = clazz.getClassLoader().getResourceAsStream(String.join("/", pageCode + ".json"));
+        InputStream input = clazz.getClassLoader().getResourceAsStream(String.join("/", "menus", pageCode + ".json"));
         if (input == null)
             return "";
 

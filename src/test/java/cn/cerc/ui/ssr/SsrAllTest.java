@@ -24,7 +24,7 @@ import cn.cerc.ui.ssr.grid.VuiGridTest;
 @SuiteClasses({ SsrBlockTest.class, SsrCallbackTest.class, SsrComboTest.class, SsrDataRowTest.class,
         SsrDatasetTest.class, SsrIfNodeTest.class, SsrTextNodeTest.class, UISsrBlockTest.class, SsrTemplateTest.class,
         VuiGridTest.class, SsrFormStyleDefaultTest.class, SsrMapNodeTest.class, SsrListNodeTest.class,
-        VuiFormTest.class, SsrUtilsTest.class, UISsrChunkTest.class, SsrFormStyleDefaultTest.class })
+        VuiFormTest.class, SsrUtilsTest.class, VuiChunkTest.class, SsrFormStyleDefaultTest.class })
 
 public class SsrAllTest {
 
