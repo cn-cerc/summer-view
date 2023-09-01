@@ -106,7 +106,8 @@ public class EditorGrid extends UIComponent {
         UIButton button = new UIButton(save);
         button.setValue("save");
         button.setName("save");
-        button.setOnclick(String.format("updateGrid(this, '%s?mode=design', '%s')", pageCode, sender.getId()));
+        button.setOnclick(String.format("updateGrid(this, '%s?mode=design&storage=%s', '%s')", pageCode,
+                sender.canvas().storage(), sender.getId()));
         button.setText("保存");
     }
 

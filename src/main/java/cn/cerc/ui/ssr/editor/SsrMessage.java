@@ -13,6 +13,8 @@ public class SsrMessage {
     public static final int InitHeader = 5;
     /** 初始化 UIFooter msgData: UIFooter（IFooter） */
     public static final int InitFooter = 6;
+    /** 初始化 UIToolbar msgData UIToolbar（IToolbar） */
+    public static final int InitToolbar = 7;
 
     /** 在读取完所有配置后广播 */
     public static final int InitProperties = 100;
