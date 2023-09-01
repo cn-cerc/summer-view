@@ -112,7 +112,7 @@ public class SsrBlockStyleDefault {
     }
 
     public BlockStringField getRowString2(String title, String field) {
-        return new BlockStringField(title, field);
+        return new BlockStringField(title + "：", field);
     }
 
     public BlockNumberField getNumber(String title, String field) {
