@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import cn.cerc.db.core.Utils;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
+import cn.cerc.ui.ssr.chart.ISupportChart;
 import cn.cerc.ui.ssr.core.AlignEnum;
 import cn.cerc.ui.ssr.core.SsrBlock;
 import cn.cerc.ui.ssr.core.VuiContainer;
@@ -19,7 +20,7 @@ import cn.cerc.ui.ssr.page.ISupportCanvas;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Description("通用面板")
-public class VuiPanel extends VuiContainer<ISupportPanel> implements ISupportPanel, ISupportCanvas {
+public class VuiPanel extends VuiContainer<ISupportPanel> implements ISupportPanel, ISupportCanvas, ISupportChart {
     SsrBlock block = new SsrBlock();
     @Column
     String v_type = "div";
