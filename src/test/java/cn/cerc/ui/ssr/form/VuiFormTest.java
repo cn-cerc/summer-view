@@ -37,7 +37,7 @@ public class VuiFormTest {
         assertEquals(2, form.getComponentCount());
         assertEquals(
                 """
-                        {"class":"VuiForm","id":"form1","action":"","dataRow":"","align":"None","container":true,"visual":true,"components":[{"class":"FormStringField","id":"部门代码","title":"部门代码","field":"code_","mapSource":"","mark":"","placeholder":"","dialog":"","patten":"","readonly":false,"required":false,"autofocus":false,"visual":true},{"class":"FormStringField","id":"部门名称","title":"部门名称","field":"name_","mapSource":"","mark":"","placeholder":"","dialog":"","patten":"","readonly":false,"required":false,"autofocus":false,"visual":true}]}
+                        {"class":"VuiForm","id":"form1","bufferKey":"","action":"","dataRow":"","align":"None","enableConfig":true,"container":true,"visual":true,"components":[{"class":"FormStringField","id":"部门代码","title":"部门代码","field":"code_","mapSource":"","mark":"","placeholder":"","dialog":"","patten":"","readonly":false,"required":false,"autofocus":false,"visual":true},{"class":"FormStringField","id":"部门名称","title":"部门名称","field":"name_","mapSource":"","mark":"","placeholder":"","dialog":"","patten":"","readonly":false,"required":false,"autofocus":false,"visual":true}]}
                                 """
                         .trim(),
                 root.toString());

@@ -8,13 +8,13 @@ import org.junit.Test;
 
 import cn.cerc.db.core.DataSet;
 import cn.cerc.ui.ssr.block.SsrBlockStyleDefault;
-import cn.cerc.ui.ssr.block.UISsrBlock1101;
-import cn.cerc.ui.ssr.block.UISsrBlock1201;
-import cn.cerc.ui.ssr.block.UISsrBlock2101;
-import cn.cerc.ui.ssr.block.UISsrBlock2201;
-import cn.cerc.ui.ssr.block.UISsrBlock3101;
-import cn.cerc.ui.ssr.block.UISsrBlock310101;
-import cn.cerc.ui.ssr.block.UISsrBlock3201;
+import cn.cerc.ui.ssr.block.VuiBlock1101;
+import cn.cerc.ui.ssr.block.VuiBlock1201;
+import cn.cerc.ui.ssr.block.VuiBlock2101;
+import cn.cerc.ui.ssr.block.VuiBlock2201;
+import cn.cerc.ui.ssr.block.VuiBlock3101;
+import cn.cerc.ui.ssr.block.VuiBlock310101;
+import cn.cerc.ui.ssr.block.VuiBlock3201;
 import cn.cerc.ui.ssr.block.VuiChunk;
 
 public class VuiChunkTest {
@@ -28,8 +28,8 @@ public class VuiChunkTest {
         VuiChunk chunk = new VuiChunk(null);
         SsrBlockStyleDefault style = chunk.defaultStyle();
 
-        UISsrBlock2101 block = new UISsrBlock2101(chunk);
-        block.slot0(style.getString("姓名", "name_").url(() -> "www?name=" + ds.getString("name_")));
+        VuiBlock2101 block = new VuiBlock2101(chunk);
+        block.slot0(style.getString2("姓名", "name_").url(() -> "www?name=" + ds.getString("name_")));
         block.slot1(style.getOpera("name_"));
         chunk.dataSet(ds);
         assertEquals(
@@ -53,8 +53,8 @@ public class VuiChunkTest {
         VuiChunk chunk = new VuiChunk(null);
         SsrBlockStyleDefault style = chunk.defaultStyle();
 
-        UISsrBlock1101 block = new UISsrBlock1101(chunk);
-        block.slot0(style.getString("姓名", "name_").url(() -> "www?name=" + ds.getString("name_")));
+        VuiBlock1101 block = new VuiBlock1101(chunk);
+        block.slot0(style.getString2("姓名", "name_").url(() -> "www?name=" + ds.getString("name_")));
         chunk.dataSet(ds);
         assertEquals(
                 """
@@ -73,7 +73,7 @@ public class VuiChunkTest {
         VuiChunk chunk = new VuiChunk(null);
         SsrBlockStyleDefault style = chunk.defaultStyle();
 
-        UISsrBlock310101 block = new UISsrBlock310101(chunk);
+        VuiBlock310101 block = new VuiBlock310101(chunk);
         block.slot0(style.getIt());
         block.slot1(style.getString("姓名", "name_"));
         block.slot2(style.getOpera(() -> ds.getString("name_")));
@@ -101,7 +101,7 @@ public class VuiChunkTest {
         VuiChunk chunk = new VuiChunk(null);
         SsrBlockStyleDefault style = chunk.defaultStyle();
 
-        UISsrBlock3201 block = new UISsrBlock3201(chunk);
+        VuiBlock3201 block = new VuiBlock3201(chunk);
         block.slot0(style.getString("姓名", "name_"));
         block.slot1(style.getString("年龄", "age_"));
         block.slot2(style.getString("体重", "weight_"));
@@ -127,9 +127,9 @@ public class VuiChunkTest {
         VuiChunk chunk = new VuiChunk(null);
         SsrBlockStyleDefault style = chunk.defaultStyle();
 
-        UISsrBlock310101 board = new UISsrBlock310101(chunk);
+        VuiBlock310101 board = new VuiBlock310101(chunk);
         board.slot0(style.getCheckboxIt("checkbox_name_", "name_"));
-        board.slot1(style.getString("姓名", "name_").url(() -> "www"));
+        board.slot1(style.getString2("姓名", "name_").url(() -> "www"));
         board.slot2(style.getString("内容", "opera_"));
         chunk.dataSet(ds);
         assertEquals(
@@ -157,9 +157,9 @@ public class VuiChunkTest {
         VuiChunk chunk = new VuiChunk(null);
         SsrBlockStyleDefault style = chunk.defaultStyle();
 
-        UISsrBlock2101 board = new UISsrBlock2101(chunk);
+        VuiBlock2101 board = new VuiBlock2101(chunk);
         board.slot0(style.getCheckbox("checkBoxName", "name_"));
-        board.slot1(style.getString("姓名", "name_").url(() -> "www"));
+        board.slot1(style.getString2("姓名", "name_").url(() -> "www"));
         chunk.dataSet(ds);
         assertEquals(
                 """
@@ -182,7 +182,7 @@ public class VuiChunkTest {
         VuiChunk chunk = new VuiChunk(null);
         SsrBlockStyleDefault style = chunk.defaultStyle();
 
-        UISsrBlock310101 board = new UISsrBlock310101(chunk);
+        VuiBlock310101 board = new VuiBlock310101(chunk);
         board.slot0(style.getCheckbox("checkBoxName", "name_"));
         board.slot1(style.getString("姓名", "name_"));
         board.slot2(style.getOpera(() -> "www"));
@@ -210,7 +210,7 @@ public class VuiChunkTest {
         VuiChunk chunk = new VuiChunk(null);
         SsrBlockStyleDefault style = chunk.defaultStyle();
 
-        UISsrBlock2101 board = new UISsrBlock2101(chunk);
+        VuiBlock2101 board = new VuiBlock2101(chunk);
         board.slot0(style.getCheckboxIt("checkBoxName", "name_"));
         board.slot1(style.getString("姓名", "name_"));
         chunk.dataSet(ds);
@@ -237,7 +237,7 @@ public class VuiChunkTest {
         VuiChunk chunk = new VuiChunk(null);
         SsrBlockStyleDefault style = chunk.defaultStyle();
 
-        UISsrBlock1201 board = new UISsrBlock1201(chunk);
+        VuiBlock1201 board = new VuiBlock1201(chunk);
         board.slot0(style.getString("姓名", "name_"));
         chunk.dataSet(ds);
         assertEquals(
@@ -257,7 +257,7 @@ public class VuiChunkTest {
         VuiChunk chunk = new VuiChunk(null);
         SsrBlockStyleDefault style = chunk.defaultStyle();
 
-        UISsrBlock2201 board = new UISsrBlock2201(chunk);
+        VuiBlock2201 board = new VuiBlock2201(chunk);
         board.slot0(style.getString("姓名", "name_"));
         board.slot1(style.getString("年龄", "age_"));
         chunk.dataSet(ds);
@@ -280,7 +280,7 @@ public class VuiChunkTest {
         VuiChunk chunk = new VuiChunk(null);
         SsrBlockStyleDefault style = chunk.defaultStyle();
 
-        UISsrBlock3201 board = new UISsrBlock3201(chunk);
+        VuiBlock3201 board = new VuiBlock3201(chunk);
         board.slot0(style.getString("姓名", "name_"));
         board.slot1(style.getString("年龄", "age_"));
         board.slot2(style.getString("性别", "sex_"));
@@ -306,7 +306,7 @@ public class VuiChunkTest {
         VuiChunk chunk = new VuiChunk(null);
         SsrBlockStyleDefault style = chunk.defaultStyle();
 
-        UISsrBlock2101 board = new UISsrBlock2101(chunk);
+        VuiBlock2101 board = new VuiBlock2101(chunk);
         board.slot0(style.getString("姓名", "name_"));
         board.slot1(style.getString("年龄", "age_"));
         chunk.dataSet(ds);
@@ -329,7 +329,7 @@ public class VuiChunkTest {
         VuiChunk chunk = new VuiChunk(null);
         SsrBlockStyleDefault style = chunk.defaultStyle();
 
-        UISsrBlock3101 board = new UISsrBlock3101(chunk);
+        VuiBlock3101 board = new VuiBlock3101(chunk);
         board.slot0(style.getString("姓名", "name_"));
         board.slot1(style.getString("年龄", "age_"));
         board.slot2(style.getString("性别", "sex_"));
@@ -355,7 +355,7 @@ public class VuiChunkTest {
         VuiChunk chunk = new VuiChunk(null);
         SsrBlockStyleDefault style = chunk.defaultStyle();
 
-        UISsrBlock3101 board = new UISsrBlock3101(chunk);
+        VuiBlock3101 board = new VuiBlock3101(chunk);
         board.slot0(style.getString("姓名", "name_"));
         board.slot1(style.getString("年龄", "age_"));
         board.slot2(style.getNumber("性别", "sex_").toList(List.of("女", "男")));
@@ -382,7 +382,7 @@ public class VuiChunkTest {
         VuiChunk chunk = new VuiChunk(null);
         SsrBlockStyleDefault style = chunk.defaultStyle();
 
-        UISsrBlock3101 board = new UISsrBlock3101(chunk);
+        VuiBlock3101 board = new VuiBlock3101(chunk);
         board.slot0(style.getString("姓名", "name_"));
         board.slot1(style.getString("年龄", "age_"));
         board.slot2(style.getBoolean("是否成年", "adult_"));
@@ -417,7 +417,7 @@ public class VuiChunkTest {
         VuiChunk chunk = new VuiChunk(null);
         SsrBlockStyleDefault style = chunk.defaultStyle();
 
-        UISsrBlock3101 board = new UISsrBlock3101(chunk);
+        VuiBlock3101 board = new VuiBlock3101(chunk);
         board.slot0(style.getString("姓名", "name_"));
         board.slot1(style.getString("年龄", "age_"));
         board.slot2(style.getNumber("性别", "sex_").toList(List.of("男", "女")));
