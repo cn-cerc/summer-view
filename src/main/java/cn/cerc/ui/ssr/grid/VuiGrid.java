@@ -44,6 +44,7 @@ import cn.cerc.ui.ssr.editor.ISsrBoard;
 import cn.cerc.ui.ssr.editor.SsrMessage;
 import cn.cerc.ui.ssr.page.ISupportCanvas;
 import cn.cerc.ui.ssr.page.IVuiEnvironment;
+import cn.cerc.ui.ssr.page.VuiEnvironment;
 import cn.cerc.ui.ssr.source.Binder;
 import cn.cerc.ui.ssr.source.Binders;
 import cn.cerc.ui.ssr.source.IBinders;
@@ -82,6 +83,9 @@ public class VuiGrid extends VuiContainer<ISupportGrid> implements ISsrBoard, IG
     String emptyText = "";
     @Column
     Binder<VuiDataService> dataSet = new Binder<>(this, VuiDataService.class);
+    @Column
+    private boolean enableConfig = true;
+    private IHandle handle;
 
     public VuiGrid() {
         super();
@@ -605,6 +609,10 @@ public class VuiGrid extends VuiContainer<ISupportGrid> implements ISsrBoard, IG
     @Override
     public void onMessage(Object sender, int msgType, Object msgData, String targetId) {
         switch (msgType) {
+        case SsrMessage.InitHandle:
+            if (msgData instanceof IHandle handle)
+                this.handle = handle;
+            break;
         case SsrMessage.InitRequest:
             if (msgData instanceof HttpServletRequest request)
                 this.request = request;
@@ -624,6 +632,16 @@ public class VuiGrid extends VuiContainer<ISupportGrid> implements ISsrBoard, IG
                 this.dataSet(bean.get().dataSet());
             else
                 log.warn("{} 绑定的数据源 {} 找不到", this.getId(), this.dataSet.targetId());
+            break;
+        case SsrMessage.InitContent:
+            if (enableConfig) {
+                if (canvas().environment() instanceof VuiEnvironment environment) {
+                    String pageCode = environment.getPageCode();
+                    this.templateId(pageCode + "_grid");
+                    this.columns.clear();
+                    this.loadConfig(handle);
+                }
+            }
             break;
         }
     }
