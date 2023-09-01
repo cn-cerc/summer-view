@@ -6,6 +6,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import cn.cerc.db.core.Utils;
 import cn.cerc.ui.ssr.core.VuiControl;
 
 @Component
@@ -19,6 +20,8 @@ public class VuiHelpLine extends VuiControl implements ISupportHelp {
 
     @Override
     public String line() {
+        if (Utils.isEmpty(content))
+            return "";
         if (isRed)
             return String.format("<span style='color:red;'>%s</span>", content);
         return content;
