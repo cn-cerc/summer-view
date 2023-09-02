@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 import cn.cerc.db.core.Utils;
 import cn.cerc.mis.math.FunctionIf;
-import cn.cerc.mis.math.FunctionManage;
+import cn.cerc.mis.math.FunctionManager;
 import cn.cerc.mis.math.FunctionMath;
 import cn.cerc.ui.ssr.core.SsrBlock;
 import cn.cerc.ui.ssr.core.VuiControl;
@@ -72,7 +72,7 @@ public class GridCalculateField extends VuiControl implements ISupportGrid {
         body.onCallback("val", () -> {
             SsrBlock block = new SsrBlock(calculate);
             block.dataRow(grid.template().dataSet().current());
-            FunctionManage fm = new FunctionManage();
+            FunctionManager fm = new FunctionManager();
             fm.addFunction(new FunctionMath());
             fm.addFunction(new FunctionIf());
             return fm.parse(block.html()).getString();
