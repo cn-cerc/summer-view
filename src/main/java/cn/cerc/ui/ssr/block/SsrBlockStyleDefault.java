@@ -36,10 +36,10 @@ public class SsrBlockStyleDefault {
             block.text(String.format(
                     """
                             <div style='flex: ${_ratio};'>
-                                <label for='%s'>%s</label>
+                                <label>%s</label>
                                 ${if _enabled_url}<a id='%s' href='${callback(url)}'>${else}<span id='%s'>${endif}${if _select}${map.begin}${if map.key==%s}${map.value}${endif}${map.end}${else}${%s}${endif}${if _enabled_url}</a>${else}</span>${endif}
                                 </div>""",
-                    field, title, field, field, field, field));
+                    title, field, field, field, field));
             block.option("_ratio", "1");
             block.option("_enabled_url", url != null ? "1" : "");
             if (url != null)
@@ -187,7 +187,7 @@ public class SsrBlockStyleDefault {
         return chunk -> {
             var block = new SsrBlock(String.format("""
                     <div style='flex: ${_ratio};'>
-                        <label for='%s'>%s</label>
+                        <label>%s</label>
                         <span id='%s'>${map.begin}${if map.key==%s}${map.value}${endif}${map.end}</span>
                     </div>
                     """, field, title, field, field, field, field, field));

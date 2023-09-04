@@ -53,11 +53,11 @@ public class BlockNumberField extends VuiControl implements ISupportBlock {
         block.text(String.format(
                 """
                                     <div style='flex: ${_ratio};'>
-                                        <label for='%s'>%s</label>
+                                        <label>%s</label>
                                         ${if _enabled_url}<a id='%s' href='${callback(url)}'>${else}<span id='%s'>${endif}${if _isTextField}${%s}${else}${list.begin}${if list.index==%s}${list.value}${endif}${list.end}${endif}${if _enabled_url}</a>${else}</span>${endif}
                                     </div>
                         """,
-                field, title, field, field, field, field));
+                title, field, field, field, field));
         block.option("_enabled_url", url != null ? "1" : "");
         if (url != null)
             block.onCallback("url", url);

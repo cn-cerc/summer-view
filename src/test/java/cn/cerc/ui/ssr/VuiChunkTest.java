@@ -32,16 +32,14 @@ public class VuiChunkTest {
         block.slot0(style.getString2("姓名", "name_").url(() -> "www?name=" + ds.getString("name_")));
         block.slot1(style.getOpera("name_"));
         chunk.dataSet(ds);
-        assertEquals(
-                """
-                        <div role='chunkBox'><ul role='chunkBoxItem'><li role='UISsrBlock2101'> <div style='flex: 1;'>
-                        <label for='name_'>姓名</label> <a id='name_' href='www?name=zhangsan'>zhangsan</a></div> <div role='opera'>
-                        <a href='zhangsan'>内容</a>
-                        </div></li></ul><ul role='chunkBoxItem'><li role='UISsrBlock2101'> <div style='flex: 1;'>
-                        <label for='name_'>姓名</label> <a id='name_' href='www?name=lisi'>lisi</a></div> <div role='opera'>
-                        <a href='lisi'>内容</a>
-                        </div></li></ul></div>""",
-                chunk.toString());
+        assertEquals("""
+                <div role='chunkBox'><ul role='chunkBoxItem'><li role='UISsrBlock2101'> <div style='flex: 1;'>
+                <label>姓名</label> <a id='name_' href='www?name=zhangsan'>zhangsan</a></div> <div role='opera'>
+                <a href='zhangsan'>内容</a>
+                </div></li></ul><ul role='chunkBoxItem'><li role='UISsrBlock2101'> <div style='flex: 1;'>
+                <label>姓名</label> <a id='name_' href='www?name=lisi'>lisi</a></div> <div role='opera'>
+                <a href='lisi'>内容</a>
+                </div></li></ul></div>""", chunk.toString());
     }
 
     @Test
@@ -59,8 +57,8 @@ public class VuiChunkTest {
         assertEquals(
                 """
                         <div role='chunkBox'><ul role='chunkBoxItem'><li role='UISsrBlock1101'> <div style='flex: 1;'>
-                        <label for='name_'>姓名</label> <a id='name_' href='www?name=zhangsan'>zhangsan</a></div></li></ul><ul role='chunkBoxItem'><li role='UISsrBlock1101'> <div style='flex: 1;'>
-                        <label for='name_'>姓名</label> <a id='name_' href='www?name=lisi'>lisi</a></div></li></ul></div>""",
+                        <label>姓名</label> <a id='name_' href='www?name=zhangsan'>zhangsan</a></div></li></ul><ul role='chunkBoxItem'><li role='UISsrBlock1101'> <div style='flex: 1;'>
+                        <label>姓名</label> <a id='name_' href='www?name=lisi'>lisi</a></div></li></ul></div>""",
                 chunk.toString());
     }
 
@@ -82,12 +80,12 @@ public class VuiChunkTest {
                 <div role='chunkBox'><ul role='chunkBoxItem'><li role='UISsrBlock310101'> <div role='gridIt'>
                 <span>1</span>
                 </div> <div style='flex: 1;'>
-                <label for='name_'>姓名</label> <span id='name_'>zhangsan</span></div> <div role='opera'>
+                <label>姓名</label> <span id='name_'>zhangsan</span></div> <div role='opera'>
                 <a href='zhangsan'>内容</a>
                 </div></li></ul><ul role='chunkBoxItem'><li role='UISsrBlock310101'> <div role='gridIt'>
                 <span>2</span>
                 </div> <div style='flex: 1;'>
-                <label for='name_'>姓名</label> <span id='name_'>lisi</span></div> <div role='opera'>
+                <label>姓名</label> <span id='name_'>lisi</span></div> <div role='opera'>
                 <a href='lisi'>内容</a>
                 </div></li></ul></div>""", chunk.toString());
     }
@@ -109,12 +107,12 @@ public class VuiChunkTest {
         assertEquals(
                 """
                         <div role='chunkBox'><ul role='chunkBoxItem'><li role='UISsrBlock3201'> <div style='flex: 1;'>
-                        <label for='name_'>姓名</label> <span id='name_'>zhangsan</span></div> <div style='flex: 1;'>
-                        <label for='age_'>年龄</label> <span id='age_'>18</span></div> <div style='flex: 1;'>
-                        <label for='weight_'>体重</label> <span id='weight_'>160</span></div></li></ul><ul role='chunkBoxItem'><li role='UISsrBlock3201'> <div style='flex: 1;'>
-                        <label for='name_'>姓名</label> <span id='name_'>lisi</span></div> <div style='flex: 1;'>
-                        <label for='age_'>年龄</label> <span id='age_'>16</span></div> <div style='flex: 1;'>
-                        <label for='weight_'>体重</label> <span id='weight_'>150</span></div></li></ul></div>""",
+                        <label>姓名</label> <span id='name_'>zhangsan</span></div> <div style='flex: 1;'>
+                        <label>年龄</label> <span id='age_'>18</span></div> <div style='flex: 1;'>
+                        <label>体重</label> <span id='weight_'>160</span></div></li></ul><ul role='chunkBoxItem'><li role='UISsrBlock3201'> <div style='flex: 1;'>
+                        <label>姓名</label> <span id='name_'>lisi</span></div> <div style='flex: 1;'>
+                        <label>年龄</label> <span id='age_'>16</span></div> <div style='flex: 1;'>
+                        <label>体重</label> <span id='weight_'>150</span></div></li></ul></div>""",
                 chunk.toString());
     }
 
@@ -138,13 +136,13 @@ public class VuiChunkTest {
                         <input type="checkbox" id="checkbox_name_" name="checkbox_name_" value="zhangsan"/>
                         <span>1</span>
                         </div> <div style='flex: 1;'>
-                        <label for='name_'>姓名</label> <a id='name_' href='www'>zhangsan</a></div> <div style='flex: 1;'>
-                        <label for='opera_'>内容</label> <span id='opera_'>内容</span></div></li></ul><ul role='chunkBoxItem'><li role='UISsrBlock310101'> <div role='checkboxIt'>
+                        <label>姓名</label> <a id='name_' href='www'>zhangsan</a></div> <div style='flex: 1;'>
+                        <label>内容</label> <span id='opera_'>内容</span></div></li></ul><ul role='chunkBoxItem'><li role='UISsrBlock310101'> <div role='checkboxIt'>
                         <input type="checkbox" id="checkbox_name_" name="checkbox_name_" value="lisi"/>
                         <span>2</span>
                         </div> <div style='flex: 1;'>
-                        <label for='name_'>姓名</label> <a id='name_' href='www'>lisi</a></div> <div style='flex: 1;'>
-                        <label for='opera_'>内容</label> <span id='opera_'>内容</span></div></li></ul></div>""",
+                        <label>姓名</label> <a id='name_' href='www'>lisi</a></div> <div style='flex: 1;'>
+                        <label>内容</label> <span id='opera_'>内容</span></div></li></ul></div>""",
                 chunk.toString());
     }
 
@@ -166,10 +164,10 @@ public class VuiChunkTest {
                         <div role='chunkBox'><ul role='chunkBoxItem'><li role='UISsrBlock2101'> <div role='checkbox'>
                         <input type="checkbox" name="checkBoxName" value="zhangsan"/>
                         </div> <div style='flex: 1;'>
-                        <label for='name_'>姓名</label> <a id='name_' href='www'>zhangsan</a></div></li></ul><ul role='chunkBoxItem'><li role='UISsrBlock2101'> <div role='checkbox'>
+                        <label>姓名</label> <a id='name_' href='www'>zhangsan</a></div></li></ul><ul role='chunkBoxItem'><li role='UISsrBlock2101'> <div role='checkbox'>
                         <input type="checkbox" name="checkBoxName" value="lisi"/>
                         </div> <div style='flex: 1;'>
-                        <label for='name_'>姓名</label> <a id='name_' href='www'>lisi</a></div></li></ul></div>""",
+                        <label>姓名</label> <a id='name_' href='www'>lisi</a></div></li></ul></div>""",
                 chunk.toString());
     }
 
@@ -191,12 +189,12 @@ public class VuiChunkTest {
                 <div role='chunkBox'><ul role='chunkBoxItem'><li role='UISsrBlock310101'> <div role='checkbox'>
                 <input type="checkbox" name="checkBoxName" value="zhangsan"/>
                 </div> <div style='flex: 1;'>
-                <label for='name_'>姓名</label> <span id='name_'>zhangsan</span></div> <div role='opera'>
+                <label>姓名</label> <span id='name_'>zhangsan</span></div> <div role='opera'>
                 <a href='www'>内容</a>
                 </div></li></ul><ul role='chunkBoxItem'><li role='UISsrBlock310101'> <div role='checkbox'>
                 <input type="checkbox" name="checkBoxName" value="lisi"/>
                 </div> <div style='flex: 1;'>
-                <label for='name_'>姓名</label> <span id='name_'>lisi</span></div> <div role='opera'>
+                <label>姓名</label> <span id='name_'>lisi</span></div> <div role='opera'>
                 <a href='www'>内容</a>
                 </div></li></ul></div>""", chunk.toString());
     }
@@ -220,11 +218,11 @@ public class VuiChunkTest {
                         <input type="checkbox" id="checkBoxName" name="checkBoxName" value="zhangsan"/>
                         <span>1</span>
                         </div> <div style='flex: 1;'>
-                        <label for='name_'>姓名</label> <span id='name_'>zhangsan</span></div></li></ul><ul role='chunkBoxItem'><li role='UISsrBlock2101'> <div role='checkboxIt'>
+                        <label>姓名</label> <span id='name_'>zhangsan</span></div></li></ul><ul role='chunkBoxItem'><li role='UISsrBlock2101'> <div role='checkboxIt'>
                         <input type="checkbox" id="checkBoxName" name="checkBoxName" value="lisi"/>
                         <span>2</span>
                         </div> <div style='flex: 1;'>
-                        <label for='name_'>姓名</label> <span id='name_'>lisi</span></div></li></ul></div>""",
+                        <label>姓名</label> <span id='name_'>lisi</span></div></li></ul></div>""",
                 chunk.toString());
     }
 
@@ -243,8 +241,8 @@ public class VuiChunkTest {
         assertEquals(
                 """
                         <div role='chunkBox'><ul role='chunkBoxItem'><li role='UISsrBlock1201'> <div style='flex: 1;'>
-                        <label for='name_'>姓名</label> <span id='name_'>zhangsan</span></div></li></ul><ul role='chunkBoxItem'><li role='UISsrBlock1201'> <div style='flex: 1;'>
-                        <label for='name_'>姓名</label> <span id='name_'>lisi</span></div></li></ul></div>""",
+                        <label>姓名</label> <span id='name_'>zhangsan</span></div></li></ul><ul role='chunkBoxItem'><li role='UISsrBlock1201'> <div style='flex: 1;'>
+                        <label>姓名</label> <span id='name_'>lisi</span></div></li></ul></div>""",
                 chunk.toString());
     }
 
@@ -264,10 +262,10 @@ public class VuiChunkTest {
         assertEquals(
                 """
                         <div role='chunkBox'><ul role='chunkBoxItem'><li role='UISsrBlock2201'> <div style='flex: 1;'>
-                        <label for='name_'>姓名</label> <span id='name_'>zhangsan</span></div> <div style='flex: 1;'>
-                        <label for='age_'>年龄</label> <span id='age_'>15</span></div></li></ul><ul role='chunkBoxItem'><li role='UISsrBlock2201'> <div style='flex: 1;'>
-                        <label for='name_'>姓名</label> <span id='name_'>lisi</span></div> <div style='flex: 1;'>
-                        <label for='age_'>年龄</label> <span id='age_'>18</span></div></li></ul></div>""",
+                        <label>姓名</label> <span id='name_'>zhangsan</span></div> <div style='flex: 1;'>
+                        <label>年龄</label> <span id='age_'>15</span></div></li></ul><ul role='chunkBoxItem'><li role='UISsrBlock2201'> <div style='flex: 1;'>
+                        <label>姓名</label> <span id='name_'>lisi</span></div> <div style='flex: 1;'>
+                        <label>年龄</label> <span id='age_'>18</span></div></li></ul></div>""",
                 chunk.toString());
     }
 
@@ -288,12 +286,12 @@ public class VuiChunkTest {
         assertEquals(
                 """
                         <div role='chunkBox'><ul role='chunkBoxItem'><li role='UISsrBlock3201'> <div style='flex: 1;'>
-                        <label for='name_'>姓名</label> <span id='name_'>zhangsan</span></div> <div style='flex: 1;'>
-                        <label for='age_'>年龄</label> <span id='age_'>15</span></div> <div style='flex: 1;'>
-                        <label for='sex_'>性别</label> <span id='sex_'>男</span></div></li></ul><ul role='chunkBoxItem'><li role='UISsrBlock3201'> <div style='flex: 1;'>
-                        <label for='name_'>姓名</label> <span id='name_'>lisi</span></div> <div style='flex: 1;'>
-                        <label for='age_'>年龄</label> <span id='age_'>18</span></div> <div style='flex: 1;'>
-                        <label for='sex_'>性别</label> <span id='sex_'>女</span></div></li></ul></div>""",
+                        <label>姓名</label> <span id='name_'>zhangsan</span></div> <div style='flex: 1;'>
+                        <label>年龄</label> <span id='age_'>15</span></div> <div style='flex: 1;'>
+                        <label>性别</label> <span id='sex_'>男</span></div></li></ul><ul role='chunkBoxItem'><li role='UISsrBlock3201'> <div style='flex: 1;'>
+                        <label>姓名</label> <span id='name_'>lisi</span></div> <div style='flex: 1;'>
+                        <label>年龄</label> <span id='age_'>18</span></div> <div style='flex: 1;'>
+                        <label>性别</label> <span id='sex_'>女</span></div></li></ul></div>""",
                 chunk.toString());
     }
 
@@ -313,10 +311,10 @@ public class VuiChunkTest {
         assertEquals(
                 """
                         <div role='chunkBox'><ul role='chunkBoxItem'><li role='UISsrBlock2101'> <div style='flex: 1;'>
-                        <label for='name_'>姓名</label> <span id='name_'>zhangsan</span></div> <div style='flex: 1;'>
-                        <label for='age_'>年龄</label> <span id='age_'>15</span></div></li></ul><ul role='chunkBoxItem'><li role='UISsrBlock2101'> <div style='flex: 1;'>
-                        <label for='name_'>姓名</label> <span id='name_'>lisi</span></div> <div style='flex: 1;'>
-                        <label for='age_'>年龄</label> <span id='age_'>18</span></div></li></ul></div>""",
+                        <label>姓名</label> <span id='name_'>zhangsan</span></div> <div style='flex: 1;'>
+                        <label>年龄</label> <span id='age_'>15</span></div></li></ul><ul role='chunkBoxItem'><li role='UISsrBlock2101'> <div style='flex: 1;'>
+                        <label>姓名</label> <span id='name_'>lisi</span></div> <div style='flex: 1;'>
+                        <label>年龄</label> <span id='age_'>18</span></div></li></ul></div>""",
                 chunk.toString());
     }
 
@@ -337,12 +335,12 @@ public class VuiChunkTest {
         assertEquals(
                 """
                         <div role='chunkBox'><ul role='chunkBoxItem'><li role='UISsrBlock3101'> <div style='flex: 1;'>
-                        <label for='name_'>姓名</label> <span id='name_'>zhangsan</span></div> <div style='flex: 1;'>
-                        <label for='age_'>年龄</label> <span id='age_'>15</span></div> <div style='flex: 1;'>
-                        <label for='sex_'>性别</label> <span id='sex_'>男</span></div></li></ul><ul role='chunkBoxItem'><li role='UISsrBlock3101'> <div style='flex: 1;'>
-                        <label for='name_'>姓名</label> <span id='name_'>lisi</span></div> <div style='flex: 1;'>
-                        <label for='age_'>年龄</label> <span id='age_'>18</span></div> <div style='flex: 1;'>
-                        <label for='sex_'>性别</label> <span id='sex_'>女</span></div></li></ul></div>""",
+                        <label>姓名</label> <span id='name_'>zhangsan</span></div> <div style='flex: 1;'>
+                        <label>年龄</label> <span id='age_'>15</span></div> <div style='flex: 1;'>
+                        <label>性别</label> <span id='sex_'>男</span></div></li></ul><ul role='chunkBoxItem'><li role='UISsrBlock3101'> <div style='flex: 1;'>
+                        <label>姓名</label> <span id='name_'>lisi</span></div> <div style='flex: 1;'>
+                        <label>年龄</label> <span id='age_'>18</span></div> <div style='flex: 1;'>
+                        <label>性别</label> <span id='sex_'>女</span></div></li></ul></div>""",
                 chunk.toString());
     }
 
@@ -363,12 +361,12 @@ public class VuiChunkTest {
         assertEquals(
                 """
                         <div role='chunkBox'><ul role='chunkBoxItem'><li role='UISsrBlock3101'> <div style='flex: 1;'>
-                        <label for='name_'>姓名</label> <span id='name_'>zhangsan</span></div> <div style='flex: 1;'>
-                        <label for='age_'>年龄</label> <span id='age_'>15</span></div> <div style='flex: 1;'>
-                        <label for='sex_'>性别</label> <span id='sex_'>男</span></div></li></ul><ul role='chunkBoxItem'><li role='UISsrBlock3101'> <div style='flex: 1;'>
-                        <label for='name_'>姓名</label> <span id='name_'>lisi</span></div> <div style='flex: 1;'>
-                        <label for='age_'>年龄</label> <span id='age_'>18</span></div> <div style='flex: 1;'>
-                        <label for='sex_'>性别</label> <span id='sex_'>女</span></div></li></ul></div>""",
+                        <label>姓名</label> <span id='name_'>zhangsan</span></div> <div style='flex: 1;'>
+                        <label>年龄</label> <span id='age_'>15</span></div> <div style='flex: 1;'>
+                        <label>性别</label> <span id='sex_'>男</span></div></li></ul><ul role='chunkBoxItem'><li role='UISsrBlock3101'> <div style='flex: 1;'>
+                        <label>姓名</label> <span id='name_'>lisi</span></div> <div style='flex: 1;'>
+                        <label>年龄</label> <span id='age_'>18</span></div> <div style='flex: 1;'>
+                        <label>性别</label> <span id='sex_'>女</span></div></li></ul></div>""",
                 chunk.toString());
     }
 
@@ -390,19 +388,19 @@ public class VuiChunkTest {
         chunk.dataSet(ds);
         assertEquals("""
                 <div role='chunkBox'><ul role='chunkBoxItem'><li role='UISsrBlock3101'> <div style='flex: 2;'>
-                <label for='name_'>姓名</label> <span id='name_'>zhangsan</span></div> <div style='flex: 1;'>
-                <label for='age_'>年龄</label> <span id='age_'>15</span></div> <div style='flex: 1;'>
-                <label for='adult_'>是否成年</label>
+                <label>姓名</label> <span id='name_'>zhangsan</span></div> <div style='flex: 1;'>
+                <label>年龄</label> <span id='age_'>15</span></div> <div style='flex: 1;'>
+                <label>是否成年</label>
                 <span id='adult_'>否</span>
                 </div></li></ul><ul role='chunkBoxItem'><li role='UISsrBlock3101'> <div style='flex: 2;'>
-                <label for='name_'>姓名</label> <span id='name_'>lisi</span></div> <div style='flex: 1;'>
-                <label for='age_'>年龄</label> <span id='age_'>18</span></div> <div style='flex: 1;'>
-                <label for='adult_'>是否成年</label>
+                <label>姓名</label> <span id='name_'>lisi</span></div> <div style='flex: 1;'>
+                <label>年龄</label> <span id='age_'>18</span></div> <div style='flex: 1;'>
+                <label>是否成年</label>
                 <span id='adult_'>是</span>
                 </div></li></ul><ul role='chunkBoxItem'><li role='UISsrBlock3101'> <div style='flex: 2;'>
-                <label for='name_'>姓名</label> <span id='name_'>wangwu</span></div> <div style='flex: 1;'>
-                <label for='age_'>年龄</label> <span id='age_'>0</span></div> <div style='flex: 1;'>
-                <label for='adult_'>是否成年</label>
+                <label>姓名</label> <span id='name_'>wangwu</span></div> <div style='flex: 1;'>
+                <label>年龄</label> <span id='age_'>0</span></div> <div style='flex: 1;'>
+                <label>是否成年</label>
                 <span id='adult_'>否</span>
                 </div></li></ul></div>""", chunk.toString());
     }
@@ -426,15 +424,15 @@ public class VuiChunkTest {
         assertEquals(
                 """
                         <div role='chunkBox'><ul role='chunkBoxItem'><li role='UISsrBlock3101'> <div style='flex: 2;'>
-                        <label for='name_'>姓名</label> <span id='name_'>zhangsan</span></div> <div style='flex: 1;'>
-                        <label for='age_'>年龄</label> <span id='age_'>15</span></div> <div style='flex: 1;'>
-                        <label for='sex_'>性别</label> <span id='sex_'>男</span></div></li></ul><ul role='chunkBoxItem'><li role='UISsrBlock3101'> <div style='flex: 2;'>
-                        <label for='name_'>姓名</label> <span id='name_'>lisi</span></div> <div style='flex: 1;'>
-                        <label for='age_'>年龄</label> <span id='age_'>18</span></div> <div style='flex: 1;'>
-                        <label for='sex_'>性别</label> <span id='sex_'>女</span></div></li></ul><ul role='chunkBoxItem'><li role='UISsrBlock3101'> <div style='flex: 2;'>
-                        <label for='name_'>姓名</label> <span id='name_'>wangwu</span></div> <div style='flex: 1;'>
-                        <label for='age_'>年龄</label> <span id='age_'>0</span></div> <div style='flex: 1;'>
-                        <label for='sex_'>性别</label> <span id='sex_'>男</span></div></li></ul></div>""",
+                        <label>姓名</label> <span id='name_'>zhangsan</span></div> <div style='flex: 1;'>
+                        <label>年龄</label> <span id='age_'>15</span></div> <div style='flex: 1;'>
+                        <label>性别</label> <span id='sex_'>男</span></div></li></ul><ul role='chunkBoxItem'><li role='UISsrBlock3101'> <div style='flex: 2;'>
+                        <label>姓名</label> <span id='name_'>lisi</span></div> <div style='flex: 1;'>
+                        <label>年龄</label> <span id='age_'>18</span></div> <div style='flex: 1;'>
+                        <label>性别</label> <span id='sex_'>女</span></div></li></ul><ul role='chunkBoxItem'><li role='UISsrBlock3101'> <div style='flex: 2;'>
+                        <label>姓名</label> <span id='name_'>wangwu</span></div> <div style='flex: 1;'>
+                        <label>年龄</label> <span id='age_'>0</span></div> <div style='flex: 1;'>
+                        <label>性别</label> <span id='sex_'>男</span></div></li></ul></div>""",
                 chunk.toString());
     }
 }
