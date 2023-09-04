@@ -44,10 +44,10 @@ public class BlockBooleanField extends VuiControl implements ISupportBlock {
     public SsrBlock request(ISsrBoard owner) {
         block.text(String.format("""
                 <div style='flex: ${_ratio};'>
-                    <label for='%s'>%s</label>
+                    <label>%s</label>
                     <span id='%s'>${if %s}%s${else}%s${endif}</span>
                 </div>
-                """, field, title, field, field, trueText, falseText));
+                """, title, field, field, trueText, falseText));
         return block;
     }
 
