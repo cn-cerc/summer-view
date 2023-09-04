@@ -55,7 +55,7 @@ public class FormDateRangeField extends VuiControl implements ISupportForm {
         this.title = title;
         this.beginField = beginDate;
         this.endField = endDate;
-        block.id(title).fields(String.format("%s,%s", beginDate, endDate)).display(1);
+        block.id(title).fields(String.format("%s,%s", beginDate, endDate));
         init();
     }
 
@@ -68,6 +68,7 @@ public class FormDateRangeField extends VuiControl implements ISupportForm {
             else
                 this.dateDialogIcon = DateConfig.getClassProperty("icon", "");
         }
+        block.display(1);
     }
 
     @Override
@@ -105,7 +106,7 @@ public class FormDateRangeField extends VuiControl implements ISupportForm {
         block().option("_required", this.required ? "1" : "");
         block().option("_pattern", this.patten);
         block().option("_style", this.properties("v_style").orElse(""));
-        block.fields(String.format("%s,%s", this.beginField, this.endField));
+        block.id(title).fields(String.format("%s,%s", this.beginField, this.endField));
         return block;
     }
 

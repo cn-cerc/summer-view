@@ -33,6 +33,7 @@ public class FormTextareaField extends VuiControl implements ISupportForm {
 
     public FormTextareaField() {
         super();
+        block.display(1);
     }
 
     public FormTextareaField(String title, String field) {
@@ -63,7 +64,7 @@ public class FormTextareaField extends VuiControl implements ISupportForm {
         block().option("_readonly", this.readonly ? "1" : "");
         block().option("_required", this.required ? "1" : "");
         block().option("_style", this.properties("v_style").orElse(""));
-        block.fields(this.field);
+        block.id(title).fields(this.field);
         return block;
     }
 
