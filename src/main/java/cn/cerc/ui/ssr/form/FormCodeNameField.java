@@ -48,7 +48,7 @@ public class FormCodeNameField extends VuiControl implements ISupportForm {
         this.codeField = field;
         this.nameField = field + "_name";
         this.dialog = getDialogText(String.format("%s,%s_name", field, field), dialogFunc);
-        block.id(title).fields(String.format("%s,%s_name", field, field)).display(1);
+        block.id(title).fields(String.format("%s,%s_name", field, field));
         init();
     }
 
@@ -61,6 +61,7 @@ public class FormCodeNameField extends VuiControl implements ISupportForm {
             else
                 this.fieldDialogIcon = FieldConfig.getClassProperty("icon", "");
         }
+        block.display(1);
     }
 
     protected String getDialogText(String field, String... dialogFunc) {
@@ -123,7 +124,7 @@ public class FormCodeNameField extends VuiControl implements ISupportForm {
         block().option("_readonly", this.readonly ? "1" : "");
         block().option("_style", this.properties("v_style").orElse(""));
         block.option("_dialog", this.dialog);
-        block.fields(fields());
+        block.id(title).fields(fields());
         return block;
     }
 

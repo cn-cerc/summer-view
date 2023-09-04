@@ -38,6 +38,7 @@ public class FormMapField extends VuiControl implements ISupportForm {
 
     public FormMapField() {
         super();
+        block.display(1);
     }
 
     public FormMapField(String title, String field) {
@@ -80,7 +81,7 @@ public class FormMapField extends VuiControl implements ISupportForm {
         block().option("_required", this.required ? "1" : "");
         block().option("_mark", this.mark);
         block().option("_style", this.properties("v_style").orElse(""));
-        block.fields(this.field);
+        block.id(title).fields(this.field);
         return block;
     }
 

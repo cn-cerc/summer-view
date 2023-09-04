@@ -50,7 +50,7 @@ public class FormDatetimeField extends VuiControl implements ISupportForm {
     public FormDatetimeField(String title, String field) {
         this.title = title;
         this.field = field;
-        block.id(title).fields(field).display(1);
+        block.id(title).fields(field);
         init();
     }
 
@@ -63,6 +63,7 @@ public class FormDatetimeField extends VuiControl implements ISupportForm {
             else
                 this.dateDialogIcon = DateConfig.getClassProperty("icon", "");
         }
+        block.display(1);
     }
 
     @Override
@@ -103,7 +104,7 @@ public class FormDatetimeField extends VuiControl implements ISupportForm {
         block().option("_autofocus", this.autofocus ? "1" : "");
         block().option("_pattern", this.pattern);
         block().option("_style", this.properties("v_style").orElse(""));
-        block.fields(this.field);
+        block.id(title).fields(this.field);
         return block;
     }
 
