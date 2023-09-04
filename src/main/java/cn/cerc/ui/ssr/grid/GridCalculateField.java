@@ -6,9 +6,11 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import cn.cerc.db.core.DataRow;
 import cn.cerc.db.core.Utils;
+import cn.cerc.mis.math.FunctionField;
 import cn.cerc.mis.math.FunctionIf;
-import cn.cerc.mis.math.FunctionManage;
+import cn.cerc.mis.math.FunctionManager;
 import cn.cerc.mis.math.FunctionMath;
 import cn.cerc.ui.ssr.core.SsrBlock;
 import cn.cerc.ui.ssr.core.VuiControl;
@@ -70,12 +72,14 @@ public class GridCalculateField extends VuiControl implements ISupportGrid {
                 ${if _enabled_url}</a>${endif}
                 </td>""", redWhere, yellowWhere, greenWhere, grayWhere, this.field)));
         body.onCallback("val", () -> {
-            SsrBlock block = new SsrBlock(calculate);
-            block.dataRow(grid.template().dataSet().current());
-            FunctionManage fm = new FunctionManage();
+            if (Utils.isEmpty(calculate))
+                return "";
+            DataRow current = grid.template().dataSet().current();
+            FunctionManager fm = new FunctionManager();
             fm.addFunction(new FunctionMath());
             fm.addFunction(new FunctionIf());
-            return fm.parse(block.html()).getString();
+            fm.addFunction(new FunctionField(current));
+            return fm.parse(calculate).getString();
         });
         body.option("_align", this.align);
         body.option("_field", this.field);
