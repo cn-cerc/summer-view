@@ -24,10 +24,8 @@ import cn.cerc.ui.ssr.core.SvrEntityServiceList.HeadInEntity;
 public class SvrEntityServiceList extends CustomEntityService<HeadInEntity, EmptyEntity, EmptyEntity, BodyOutEntity> {
 
     public static class HeadInEntity extends CustomEntity {
-        @Column(name = "服务代码")
-        String service_;
-        @Column(name = "服务描述")
-        String desc_;
+        @Column(name = "查询条件")
+        String SearchText_;
         @Column(name = "载入笔数")
         int MaxRecord_;
     }
@@ -50,13 +48,12 @@ public class SvrEntityServiceList extends CustomEntityService<HeadInEntity, Empt
             if (this.getClass() == svr.getClass())
                 continue;
             String service = svr.getClass().getSimpleName();
-            if (!Utils.isEmpty(headIn.service_) && !service.contains(headIn.service_))
-                continue;
             Description description = svr.getClass().getAnnotation(Description.class);
             String desc = "";
             if (description != null)
                 desc = description.value();
-            if (!Utils.isEmpty(headIn.desc_) && !desc.contains(headIn.desc_))
+            if (!Utils.isEmpty(headIn.SearchText_) && !service.contains(headIn.SearchText_)
+                    && !desc.contains(headIn.SearchText_))
                 continue;
             dataOut.append().setValue("service_", service).setValue("desc_", desc);
             if (maxRecord != -1 && dataOut.size() >= maxRecord)
