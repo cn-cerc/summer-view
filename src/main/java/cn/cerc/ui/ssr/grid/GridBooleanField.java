@@ -1,5 +1,7 @@
 package cn.cerc.ui.ssr.grid;
 
+import java.util.function.Supplier;
+
 import javax.persistence.Column;
 
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -25,15 +27,27 @@ public class GridBooleanField extends VuiControl implements ISupportGrid {
     String falseText = "否";
     @Column
     int fieldWidth = 5;
+    @Column(name = "只读")
+    private boolean readonly = true;
+    Supplier<String> callBackVal;
+    @Column(name = "自定义value")
+    String customVal = "";
 
     public GridBooleanField() {
         super();
+        init();
     }
 
     public GridBooleanField(String title, String field, int fieldWidth) {
         this.title = title;
         this.field = field;
         this.fieldWidth = fieldWidth;
+        init();
+    }
+
+    private void init() {
+        block.option("_customVal", "");
+        block.option("_callBackVal", "");
     }
 
     @Override
@@ -61,16 +75,24 @@ public class GridBooleanField extends VuiControl implements ISupportGrid {
         if (!Utils.isEmpty(this.falseText))
             falseText = this.falseText;
 
-        grid.addBlock(bodyTitle, block.text(String.format("""
-                <td align='center' role='%s'>
-                    <span>
-                        ${if %s}
-                        %s
-                        ${else}
-                        %s
-                        ${endif}
-                    </span>
-                </td>""", field, field, trueText, falseText)));
+        grid.addBlock(bodyTitle,
+                block.text(String.format(
+                        """
+                                <td align='center' role='%s'>
+                                    <span>${if _readonly}${if %s}%s${else}%s${endif}${else}
+                                    <input type='checkbox' name='checkBoxName' value='${if _callBackVal}${callback(callBackVal)}${else}${if _customVal}%s${else}1${endif}${endif}' ${if %s}checked ${endif}/>${endif}</span>
+                                </td>""",
+                        field, field, trueText, falseText, customVal, field)));
+        block.option("_readonly", readonly() ? "1" : "");
+        if (callBackVal != null) {
+            block.option("_customVal", "");
+            block.option("_callBackVal", "1");
+            block.onCallback("callBackVal", callBackVal);
+        }
+        if (!Utils.isEmpty(customVal)) {
+            block.option("_customVal", "1");
+            block.option("_callBackVal", "");
+        }
         block.id(bodyTitle);
         block.display(1);
         return block;
@@ -111,6 +133,38 @@ public class GridBooleanField extends VuiControl implements ISupportGrid {
     @Override
     public ISupportGrid width(int width) {
         this.fieldWidth = width;
+        return this;
+    }
+
+    public GridBooleanField value(Supplier<String> value) {
+        this.callBackVal = value;
+        return this;
+    }
+
+    public String trueText() {
+        return trueText;
+    }
+
+    public GridBooleanField trueText(String trueText) {
+        this.trueText = trueText;
+        return this;
+    }
+
+    public String falseText() {
+        return falseText;
+    }
+
+    public GridBooleanField falseText(String falseText) {
+        this.falseText = falseText;
+        return this;
+    }
+
+    public boolean readonly() {
+        return readonly;
+    }
+
+    public GridBooleanField readonly(boolean readonly) {
+        this.readonly = readonly;
         return this;
     }
 

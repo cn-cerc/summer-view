@@ -14,7 +14,6 @@ import cn.cerc.ui.ssr.form.FormStringField;
 import cn.cerc.ui.ssr.form.FormSubmitButton;
 import cn.cerc.ui.ssr.form.VuiForm;
 import cn.cerc.ui.ssr.grid.GridBooleanField;
-import cn.cerc.ui.ssr.grid.GridCheckBoxField;
 import cn.cerc.ui.ssr.grid.GridItField;
 import cn.cerc.ui.ssr.grid.GridStringField;
 import cn.cerc.ui.ssr.grid.GridUrlField;
@@ -501,7 +500,7 @@ public class StubVuiEnvironment extends VuiEnvironment {
         if ("vuiMapService".equals(beanId))
             obj = new VuiMapService();
         if ("gridCheckBoxField".equals(beanId))
-            obj = new GridCheckBoxField();
+            obj = new GridBooleanField();
         if ("gridBooleanField".equals(beanId))
             obj = new GridBooleanField();
         if ("gridUrlField".equals(beanId))

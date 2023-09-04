@@ -49,6 +49,7 @@ import cn.cerc.ui.ssr.editor.ISsrBoard;
 import cn.cerc.ui.ssr.editor.SsrMessage;
 import cn.cerc.ui.ssr.page.ISupportCanvas;
 import cn.cerc.ui.ssr.page.IVuiEnvironment;
+import cn.cerc.ui.ssr.page.VuiEnvironment;
 import cn.cerc.ui.ssr.source.Binder;
 import cn.cerc.ui.ssr.source.Binders;
 import cn.cerc.ui.ssr.source.IBinders;
@@ -81,6 +82,8 @@ public class VuiForm extends VuiContainer<ISupportForm>
     Binder<ISupplierDataRow> dataRow = new Binder<>(this, ISupplierDataRow.class);
     @Column
     AlignEnum align = AlignEnum.None;
+    @Column
+    boolean enableConfig = true;
     private IHandle handle;
 
     public VuiForm() {
@@ -279,8 +282,10 @@ public class VuiForm extends VuiContainer<ISupportForm>
     public void loadConfig(IHandle handle) {
         var context = Application.getContext();
         var bean = context.getBean(ISsrTemplateConfig.class);
-        for (var field : bean.getFields(handle, this.getDefaultOptions()))
-            this.addColumn(field);
+        DataSet defaultDataSet = this.getDefaultOptions();
+        if (defaultDataSet != null && !defaultDataSet.eof())
+            for (var field : bean.getFields(handle, defaultDataSet))
+                this.addColumn(field);
     }
 
     /**
@@ -564,6 +569,14 @@ public class VuiForm extends VuiContainer<ISupportForm>
                     buffer.post();
                 binders.findOwner(VuiDataService.class)
                         .ifPresent(service -> service.onMessage(this, SsrMessage.InitContent, null, null));
+                if (enableConfig) {
+                    if (canvas().environment() instanceof VuiEnvironment environment) {
+                        String pageCode = environment.getPageCode();
+                        this.templateId(pageCode);
+                        this.columns.clear();
+                        this.loadConfig(handle);
+                    }
+                }
             } else {
                 log.error("request 为空，无法执行");
             }

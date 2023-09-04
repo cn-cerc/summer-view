@@ -29,7 +29,7 @@ public class SsrGridStyleDefaultTest {
         var style = grid.defaultStyle();
         grid.addBlock(style.getIt("序", 2));
         grid.addBlock(style.getString("部门名称", "Name_", 10));
-        grid.addBlock(style.getCheckBox("状态", "Final_", 4));
+        grid.addBlock(style.getBoolean("状态", "Final_", 4).readonly(false));
         grid.addBlock(style.getString("类别", "Type_", 10).toMap(map));
         grid.addBlock(style.getOpera(4)).onCallback("url", () -> {
             return "FrmView?code=" + ds.getString("Code_");
@@ -39,15 +39,15 @@ public class SsrGridStyleDefaultTest {
         assertEquals(
                 """
                         <div id='grid' class='scrollArea'><table class='dbgrid'><tr>
-                        <th style='width: 2em'>序</th><th style='width: 10em'>部门名称</th><th style='width: 4em'>状态</th><th style='width: 10em'>类别</th><th style='width: 4em'>操作</th></tr>
+                        <th style='width: 2em' onclick="gridSort(this,'_it_')">序</th><th style='width: 10em' onclick="gridSort(this,'Name_')">部门名称</th><th style='width: 4em' onclick="gridSort(this,'Final_')">状态</th><th style='width: 10em' onclick="gridSort(this,'Type_')">类别</th><th style='width: 4em' onclick="gridSort(this,'_opera_')">操作</th></tr>
                         <tr>
                         <td align='center' role='_it_'>1</td><td align='left' role='Name_'>研发部</td><td align='center' role='Final_'>
                         <span><input type='checkbox' name='checkBoxName' value='1' /></span>
-                        </td><td role='Type_'>张三</td><td align='center' role='_opera_'><a href='FrmView?code=001'>内容</a></td></tr>
+                        </td><td align='left' role='Type_'>张三</td><td align='center' role='_opera_'><a href='FrmView?code=001'>内容</a></td></tr>
                         <tr>
                         <td align='center' role='_it_'>2</td><td align='left' role='Name_'>生产部</td><td align='center' role='Final_'>
                         <span><input type='checkbox' name='checkBoxName' value='1' checked /></span>
-                        </td><td role='Type_'></td><td align='center' role='_opera_'><a href='FrmView?code=002'>内容</a></td></tr>
+                        </td><td align='left' role='Type_'></td><td align='center' role='_opera_'><a href='FrmView?code=002'>内容</a></td></tr>
                         </table></div>""",
                 grid.toString());
     }
@@ -73,11 +73,11 @@ public class SsrGridStyleDefaultTest {
         assertEquals(
                 """
                         <div id='grid' class='scrollArea'><table class='dbgrid'><tr>
-                        <th style='width: 2em'>序</th><th style='width: 10em'>车辆名称</th><th style='width: 10em'>类别</th><th style='width: 4em'>操作</th></tr>
+                        <th style='width: 2em' onclick="gridSort(this,'_it_')">序</th><th style='width: 10em' onclick="gridSort(this,'Name_')">车辆名称</th><th style='width: 10em' onclick="gridSort(this,'Type_')">类别</th><th style='width: 4em' onclick="gridSort(this,'_opera_')">操作</th></tr>
                         <tr>
-                        <td align='center' role='_it_'>1</td><td align='right' role='Name_'>货车</td><td role='Type_'>自有</td><td align='center' role='_opera_'><a href='FrmView?code=001'>内容</a></td></tr>
+                        <td align='center' role='_it_'>1</td><td align='right' role='Name_'>货车</td><td align='' role='Type_'>自有</td><td align='center' role='_opera_'><a href='FrmView?code=001'>内容</a></td></tr>
                         <tr>
-                        <td align='center' role='_it_'>2</td><td align='right' role='Name_'>汽车</td><td role='Type_'>租赁</td><td align='center' role='_opera_'><a href='FrmView?code=002'>内容</a></td></tr>
+                        <td align='center' role='_it_'>2</td><td align='right' role='Name_'>汽车</td><td align='' role='Type_'>租赁</td><td align='center' role='_opera_'><a href='FrmView?code=002'>内容</a></td></tr>
                         </table></div>""",
                 grid.toString());
     }
@@ -99,7 +99,7 @@ public class SsrGridStyleDefaultTest {
         var style = grid.defaultStyle();
         grid.addBlock(style.getIt("序", 2));
         grid.addBlock(style.getString("部门名称", "Name_", 10));
-        grid.addBlock(style.getCheckBox("状态", "Final_", 4));
+        grid.addBlock(style.getBoolean("状态", "Final_", 4).readonly(false));
         grid.addBlock(style.getString("类别", "Type_", 10).toMap(map));
         grid.addBlock(style.getOpera(4)).onCallback("url", () -> {
             return "FrmView?code=" + ds.getString("Code_");
@@ -109,7 +109,7 @@ public class SsrGridStyleDefaultTest {
         assertEquals(
                 """
                         <div id='grid' class='scrollArea'><table class='dbgrid'><tr>
-                        <th style='width: 2em'>序</th><th style='width: 10em'>部门名称</th><th style='width: 4em'>状态</th><th style='width: 10em'>类别</th><th style='width: 4em'>操作</th></tr>
+                        <th style='width: 2em' onclick="gridSort(this,'_it_')">序</th><th style='width: 10em' onclick="gridSort(this,'Name_')">部门名称</th><th style='width: 4em' onclick="gridSort(this,'Final_')">状态</th><th style='width: 10em' onclick="gridSort(this,'Type_')">类别</th><th style='width: 4em' onclick="gridSort(this,'_opera_')">操作</th></tr>
                         <tr>
                         <td align='center' role='_it_'>1</td><td align='left' role='Name_'>研发部</td><td align='center' role='Final_'>
                         <span><input type='checkbox' name='checkBoxName' value='1' /></span>
@@ -118,6 +118,36 @@ public class SsrGridStyleDefaultTest {
                         <td align='center' role='_it_'>2</td><td align='left' role='Name_'>生产部</td><td align='center' role='Final_'>
                         <span><input type='checkbox' name='checkBoxName' value='1' checked /></span>
                         </td><td align='left' role='Type_'></td><td align='center' role='_opera_'><a href='FrmView?code=002'>内容</a></td></tr>
+                        </table></div>""",
+                grid.toString());
+    }
+
+    @Test
+    public void test3() {
+        var ds = new DataSet();
+        ds.append().setValue("Name_", "张三").setValue("Sex_", "1");
+        ds.append().setValue("Name_", "李四").setValue("Sex_", "");
+
+        var grid = new VuiGrid(null, "");
+        grid.dataSet(ds);
+
+        var style = grid.defaultStyle();
+        grid.addBlock(style.getString("姓名", "Name_", 10));
+        grid.addBlock(style.getBoolean("性别", "Sex_", 4).trueText("男").falseText("女"));
+
+        grid.addColumn("姓名", "性别");
+        assertEquals(
+                """
+                        <div id='grid' class='scrollArea'><table class='dbgrid'><tr>
+                        <th style='width: 10em' onclick="gridSort(this,'Name_')">姓名</th><th style='width: 4em' onclick="gridSort(this,'Sex_')">性别</th></tr>
+                        <tr>
+                        <td align='left' role='Name_'>张三</td><td align='center' role='Sex_'>
+                        <span>男</span>
+                        </td></tr>
+                        <tr>
+                        <td align='left' role='Name_'>李四</td><td align='center' role='Sex_'>
+                        <span>女</span>
+                        </td></tr>
                         </table></div>""",
                 grid.toString());
     }
