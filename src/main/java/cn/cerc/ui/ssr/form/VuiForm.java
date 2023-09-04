@@ -282,8 +282,10 @@ public class VuiForm extends VuiContainer<ISupportForm>
     public void loadConfig(IHandle handle) {
         var context = Application.getContext();
         var bean = context.getBean(ISsrTemplateConfig.class);
-        for (var field : bean.getFields(handle, this.getDefaultOptions()))
-            this.addColumn(field);
+        DataSet defaultDataSet = this.getDefaultOptions();
+        if (defaultDataSet != null && !defaultDataSet.eof())
+            for (var field : bean.getFields(handle, defaultDataSet))
+                this.addColumn(field);
     }
 
     /**

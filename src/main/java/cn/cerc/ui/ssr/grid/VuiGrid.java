@@ -372,8 +372,10 @@ public class VuiGrid extends VuiContainer<ISupportGrid> implements ISsrBoard, IG
     public void loadConfig(IHandle handle) {
         var context = Application.getContext();
         var bean = context.getBean(ISsrTemplateConfig.class);
-        for (var field : bean.getFields(handle, this.getDefaultOptions()))
-            this.addField(field);
+        DataSet defaultDataSet = this.getDefaultOptions();
+        if (defaultDataSet != null && !defaultDataSet.eof())
+            for (var field : bean.getFields(handle, defaultDataSet))
+                this.addColumn(field);
     }
 
     /**
