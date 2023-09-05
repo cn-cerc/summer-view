@@ -54,23 +54,28 @@ public class GridCalculateField extends VuiControl implements ISupportGrid {
 
         boolean hasColorWhere = !Utils.isEmpty(redWhere) || !Utils.isEmpty(yellowWhere) || !Utils.isEmpty(greenWhere)
                 || !Utils.isEmpty(grayWhere);
+        String colorWhere = String.format("if(%s,red,if(%s,yellow,if(%s,green,if(%s,gray,black))))", redWhere,
+                yellowWhere, greenWhere, grayWhere);
 
         String bodyTitle = "body." + this.title;
         grid.addBlock(bodyTitle, body.text(String.format("""
                 <td align='${_align}' role='${_field}'>
                 ${if _enabled_url}<a href='${callback(url)}' ${if _target}target='${_target}'${endif}>${endif}
-                ${if hasColorWhere}<span style='color:
-                ${if %s}red${else}
-                    ${if %s}yellow${else}
-                        ${if %s}green${else}
-                            ${if %s}gray${endif}
-                        ${endif}
-                    ${endif}
-                ${endif};'>${endif}
+                ${if hasColorWhere}<span style='color:${callback(color)};'>${endif}
                 ${callback(val)}
                 ${if hasColorWhere}</span>${endif}
                 ${if _enabled_url}</a>${endif}
-                </td>""", redWhere, yellowWhere, greenWhere, grayWhere, this.field)));
+                </td>""", this.field)));
+        body.onCallback("color", () -> {
+            if (Utils.isEmpty(colorWhere))
+                return "";
+            DataRow current = grid.template().dataSet().current();
+            FunctionManager fm = new FunctionManager();
+            fm.addFunction(new FunctionMath());
+            fm.addFunction(new FunctionIf());
+            fm.addFunction(new FunctionField(current));
+            return fm.parse(colorWhere).getString();
+        });
         body.onCallback("val", () -> {
             if (Utils.isEmpty(calculate))
                 return "";
