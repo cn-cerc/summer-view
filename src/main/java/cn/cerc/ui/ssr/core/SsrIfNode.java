@@ -2,12 +2,14 @@ package cn.cerc.ui.ssr.core;
 
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.function.BiFunction;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cn.cerc.db.core.Utils;
 import cn.cerc.db.core.Variant;
+import cn.cerc.mis.math.FunctionIf;
 
 public class SsrIfNode extends SsrContainerNode {
     private static final Logger log = LoggerFactory.getLogger(SsrIfNode.class);
@@ -18,11 +20,8 @@ public class SsrIfNode extends SsrContainerNode {
         super(text);
     }
 
-    private interface LeftRightEquals {
-        boolean execute(String left, String right);
-    }
-
-    private boolean check(SsrBlock block, Variant status, String text, String flag, LeftRightEquals lrEquals) {
+    private boolean check(SsrBlock block, Variant status, String text, String flag,
+            BiFunction<String, String, Boolean> lrEquals) {
         if (block == null)
             return false;
         var arr = text.split(flag);
@@ -33,7 +32,7 @@ public class SsrIfNode extends SsrContainerNode {
                 log.error("not find field: {}", field);
                 status.setValue(-1);
             } else
-                status.setValue(lrEquals.execute(value.get(), "") ? 1 : 0);
+                status.setValue(lrEquals.apply(value.get(), "") ? 1 : 0);
             return true;
         } else if (arr.length == 2 && (arr[0].length()) > 0) {
             var leftField = arr[0];
@@ -59,7 +58,7 @@ public class SsrIfNode extends SsrContainerNode {
                 }
             }
 
-            status.setValue(lrEquals.execute(leftValue.get(), rightValue.get()) ? 1 : 0);
+            status.setValue(lrEquals.apply(leftValue.get(), rightValue.get()) ? 1 : 0);
             return true;
         } else {
             return false;
@@ -73,13 +72,13 @@ public class SsrIfNode extends SsrContainerNode {
 
         Variant status = new Variant();
         var text = this.getField().substring(3, this.getField().length());
-        if (check(block, status, text, "==", (left, right) -> left.equals(right))
-                || check(block, status, text, "<>", (left, right) -> !left.equals(right))
-                || check(block, status, text, "!=", (left, right) -> !left.equals(right))
-                || check(block, status, text, ">=", (left, right) -> left.compareTo(right) >= 0)
-                || check(block, status, text, "<=", (left, right) -> left.compareTo(right) <= 0)
-                || check(block, status, text, ">", (left, right) -> left.compareTo(right) > 0)
-                || check(block, status, text, "<", (left, right) -> left.compareTo(right) < 0)
+        if (check(block, status, text, "==", FunctionIf.EQ)
+                || check(block, status, text, "<>", FunctionIf.NEQ)
+                || check(block, status, text, "!=", FunctionIf.NEQ)
+                || check(block, status, text, ">=", FunctionIf.GTE)
+                || check(block, status, text, "<=", FunctionIf.LTE)
+                || check(block, status, text, ">", FunctionIf.GT)
+                || check(block, status, text, "<", FunctionIf.LT)
                 || check(block, status, text, " is empty", (left, right) -> left.equals(right))
                 || check(block, status, text, " is not empty", (left, right) -> !left.equals(right))) {
             if (status.getInt() == -1)

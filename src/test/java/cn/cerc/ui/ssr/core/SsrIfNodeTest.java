@@ -181,4 +181,11 @@ public class SsrIfNodeTest {
         var result = template.dataRow(DataRow.of("final_", false)).html();
         assertEquals("<div></div>", result);
     }
+
+    @Test
+    public void testDecode_if_11() {
+        SsrBlock block = new SsrBlock("${if val>15.7}true${else}false${endif}");
+        block.toMap("val", "9.54");
+        assertEquals("false", block.html());
+    }
 }
