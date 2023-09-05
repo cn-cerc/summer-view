@@ -15,8 +15,10 @@ import org.springframework.stereotype.Component;
 
 import cn.cerc.db.core.DataSet;
 import cn.cerc.db.core.Utils;
+import cn.cerc.mis.core.Application;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
+import cn.cerc.ui.fields.ImageConfigImpl;
 import cn.cerc.ui.ssr.core.SsrBlock;
 import cn.cerc.ui.ssr.core.SsrTemplate;
 import cn.cerc.ui.ssr.core.VuiContainer;
@@ -35,6 +37,7 @@ public class VuiChunk extends VuiContainer<ISupportBoard> implements ISsrBoard, 
     private SsrBlockStyleDefault defaultStle;
     public static final String ListBegin = "list.begin";
     public static final String ListEnd = "list.end";
+    private ImageConfigImpl imageConfig;
 
     @Column
     Binder<VuiDataService> dataSet = new Binder<>(this, VuiDataService.class);
@@ -67,6 +70,12 @@ public class VuiChunk extends VuiContainer<ISupportBoard> implements ISsrBoard, 
         template.dataSet(dataSet);
         return this;
     }
+    
+    protected String getImage(String imgSrc) {
+        if (imageConfig == null)
+            imageConfig = Application.getBean(ImageConfigImpl.class);
+        return imageConfig == null ? imgSrc : imageConfig.getCommonFile(imgSrc);
+    }
 
     @Override
     public void output(HtmlWriter html) {
@@ -96,6 +105,13 @@ public class VuiChunk extends VuiContainer<ISupportBoard> implements ISsrBoard, 
             }
             getBlock(SsrTemplate.EndFlag, () -> new SsrBlock("</div>").template(template))
                     .ifPresent(template -> html.print(template.html()));
+        } else {
+            html.print("""
+                <div id="UINoData" class="grey">
+                    <img src=%s />
+                    <p>暂无数据</p>
+                </div>
+            """, this.getImage("images/Frmshopping/notDataImg.png"));
         }
     }
 
