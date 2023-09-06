@@ -108,22 +108,22 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
     }
 
     public IPage getPage() {
-        var mode = form.getRequest().getParameter("mode");
-        if ("design".equals(mode)) {
-            if (form.getRequest().getParameter("submit") != null
-                    || "submit".equals(form.getRequest().getParameter("opera")))
-                saveEditor();
-            return getDesignPage();
-        } else if ("editor".equals(mode))
-            return getEditorHtml();
-        else if ("config".equals(mode))
-            return loadFromDB();
-        else if ("components".equals(mode))
-            return getComponentsData();
-        else {
-            this.isRuntime = true;
-            return getRuntimePage();
+        if (form.allowVisualDesign()) {
+            var mode = form.getRequest().getParameter("mode");
+            if ("design".equals(mode)) {
+                if (form.getRequest().getParameter("submit") != null
+                        || "submit".equals(form.getRequest().getParameter("opera")))
+                    saveEditor();
+                return getDesignPage();
+            } else if ("editor".equals(mode))
+                return getEditorHtml();
+            else if ("config".equals(mode))
+                return loadFromDB();
+            else if ("components".equals(mode))
+                return getComponentsData();
         }
+        this.isRuntime = true;
+        return getRuntimePage();
     }
 
     public String getPageCode() {
