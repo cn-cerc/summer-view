@@ -347,8 +347,6 @@ public class VuiGrid extends VuiContainer<ISupportGrid> implements ISsrBoard, IG
 
     /**
      * 请改使用 loadConfig
-     * 
-     * @return
      */
     public DataSet getDefaultOptions() {
         DataSet ds = new DataSet();

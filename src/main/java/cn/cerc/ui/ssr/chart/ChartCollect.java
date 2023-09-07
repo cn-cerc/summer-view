@@ -1,5 +1,9 @@
 package cn.cerc.ui.ssr.chart;
 
+import java.lang.reflect.Field;
+import java.util.Optional;
+import java.util.Set;
+
 import javax.persistence.Column;
 
 import org.slf4j.Logger;
@@ -10,9 +14,13 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import cn.cerc.db.core.DataSet;
-import cn.cerc.mis.core.HtmlWriter;
+import cn.cerc.db.core.Utils;
+import cn.cerc.ui.core.RequestReader;
 import cn.cerc.ui.ssr.base.ISupportPanel;
+import cn.cerc.ui.ssr.core.ISupplierBlock;
+import cn.cerc.ui.ssr.core.SsrBlock;
 import cn.cerc.ui.ssr.core.VuiControl;
+import cn.cerc.ui.ssr.editor.ISsrBoard;
 import cn.cerc.ui.ssr.editor.SsrMessage;
 import cn.cerc.ui.ssr.source.Binder;
 import cn.cerc.ui.ssr.source.VuiDataService;
@@ -20,15 +28,25 @@ import cn.cerc.ui.ssr.source.VuiDataService;
 @Component
 @Description("单列滚动")
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class ChartCollect extends VuiControl implements ICommonSupportChart, ISupportPanel {
+public class ChartCollect extends VuiControl implements ICommonSupportChart, ISupportPanel, ISupplierBlock {
     private static final Logger log = LoggerFactory.getLogger(ChartCollect.class);
+    private SsrBlock block = new SsrBlock("");
     @Column
     String title = "";
     @Column
     String field = "";
     @Column
     Binder<VuiDataService> binder = new Binder<>(this, VuiDataService.class);
-    DataSet dataSet;
+
+    @Override
+    public void saveEditor(RequestReader reader) {
+        super.saveEditor(reader);
+        if (Utils.isEmpty(title))
+            this.title = reader.getString("binder")
+                    .map(serviceId -> canvas().getMember(serviceId, binder.targetType()).orElse(null))
+                    .map(VuiDataService::serviceDesc)
+                    .orElse(reader.getString("title").orElse(""));
+    }
 
     @Override
     public String fields() {
@@ -60,38 +78,52 @@ public class ChartCollect extends VuiControl implements ICommonSupportChart, ISu
             break;
         case SsrMessage.RefreshProperties:
         case SsrMessage.InitProperties:
-        case SsrMessage.AfterSubmit:
             if (this.binder.target().isEmpty()) {
                 log.warn("未设置数据源：dataSet");
                 break;
             }
-            var bean = this.binder.target();
-            if (bean.isPresent())
-                dataSet = bean.get().dataSet();
-            else
+            Optional<VuiDataService> serviceOpt = this.binder.target();
+            if (serviceOpt.isPresent()) {
+                if (sender == serviceOpt.get()) {
+                    DataSet dataSet = serviceOpt.get().dataSet();
+                    block.dataSet(dataSet);
+                    String fieldName = null;
+                    if (binder.target().isPresent()) {
+                        VuiDataService service = binder.target().get();
+                        Set<Field> fields = service.fields(VuiDataService.BodyOutFields);
+                        fieldName = fields.stream().findFirst().map(Field::getName).orElse(null);
+                    }
+                    if (Utils.isEmpty(fieldName))
+                        return;
+                    String title = dataSet.head().getString("title");
+                    block.option("_data_title", title + this.getClass().getSimpleName());
+                    block.option("_title", title);
+                    block.onCallback("value", () -> {
+                        return String.format("<li>%s</li>", dataSet.getString(dataSet.fields().get(0).code()));
+                    });
+                }
+            } else
                 log.warn("{} 绑定的数据源 {} 找不到", this.getId(), this.binder.targetId());
             break;
         }
     }
 
     @Override
-    public void output(HtmlWriter html) {
-        if (dataSet == null)
-            return;
-
-        String title = dataSet.head().getString("title") + this.getClass().getSimpleName();
-        html.println("<div role='chart' data-title='%s'>", title);
-        html.println("<div class='chartTitle'>%s</div>", dataSet.head().getString("title"));
-        html.println("<div class='scroll'>");
-        html.println("<ul class='tabBody'>");
-
-        dataSet.records().forEach((row) -> {
-            html.println("<li>%s</li>", row.getString(row.fields().get(0).code()));
-        });
-        html.println("</ul>");
-        html.println("</div>");
-        html.println("</div>");
-        html.println("<script>$(function(){initChartScroll('%s')})</script>", title);
+    public SsrBlock request(ISsrBoard owner) {
+        owner.addBlock(this.title, block.text("""
+                <div role='chart' data-title='${_data_title}'>
+                    <div class='chartTitle'>${_title}</div>
+                    <div class='scroll'>
+                        <ul class='tabBody'>
+                        ${dataset.begin}
+                            ${callback(value)}
+                        ${dataset.end}
+                        </ul>
+                    </div>
+                </div>
+                <script>$(function(){initChartScroll('${_data_title}')})</script>"""));
+        block.id(title).display(1);
+        return block;
     }
 
 }

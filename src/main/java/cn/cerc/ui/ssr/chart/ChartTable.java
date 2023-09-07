@@ -10,9 +10,14 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import cn.cerc.db.core.DataSet;
-import cn.cerc.mis.core.HtmlWriter;
+import cn.cerc.db.core.FieldMeta;
+import cn.cerc.db.core.Utils;
+import cn.cerc.ui.core.RequestReader;
 import cn.cerc.ui.ssr.base.ISupportPanel;
+import cn.cerc.ui.ssr.core.ISupplierBlock;
+import cn.cerc.ui.ssr.core.SsrBlock;
 import cn.cerc.ui.ssr.core.VuiControl;
+import cn.cerc.ui.ssr.editor.ISsrBoard;
 import cn.cerc.ui.ssr.editor.SsrMessage;
 import cn.cerc.ui.ssr.source.Binder;
 import cn.cerc.ui.ssr.source.VuiDataService;
@@ -20,15 +25,26 @@ import cn.cerc.ui.ssr.source.VuiDataService;
 @Component
 @Description("数据表格")
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class ChartTable extends VuiControl implements ICommonSupportChart, ISupportPanel {
+public class ChartTable extends VuiControl implements ICommonSupportChart, ISupportPanel, ISupplierBlock {
     private static final Logger log = LoggerFactory.getLogger(ChartTable.class);
+    private SsrBlock block = new SsrBlock("");
+
     @Column
     String title = "";
     @Column
     String field = "";
     @Column
     Binder<VuiDataService> binder = new Binder<>(this, VuiDataService.class);
-    DataSet dataSet;
+
+    @Override
+    public void saveEditor(RequestReader reader) {
+        super.saveEditor(reader);
+        if (Utils.isEmpty(title))
+            this.title = reader.getString("binder")
+                    .map(serviceId -> canvas().getMember(serviceId, binder.targetType()).orElse(null))
+                    .map(VuiDataService::serviceDesc)
+                    .orElse(reader.getString("title").orElse(""));
+    }
 
     @Override
     public String fields() {
@@ -66,39 +82,55 @@ public class ChartTable extends VuiControl implements ICommonSupportChart, ISupp
                 break;
             }
             var bean = this.binder.target();
-            if (bean.isPresent())
-                dataSet = bean.get().dataSet();
-            else
+            if (bean.isPresent()) {
+                if (sender == bean.get()) {
+                    VuiDataService service = bean.get();
+                    DataSet dataSet = service.dataSet();
+                    String title = dataSet.head().getString("title");
+                    block.option("_data_title", title + this.getClass().getSimpleName());
+                    block.option("_title", title);
+                    block.toList(dataSet.fields().getItems().stream().map(FieldMeta::name).toList());
+                    if (dataSet.eof()) {
+                        dataSet.append().setValue(dataSet.fields().get(0).code(), "(无)");
+                    }
+                    block.dataSet(dataSet);
+                    block.onCallback("spanContent", () -> {
+                        StringBuilder builder = new StringBuilder();
+                        dataSet.records().forEach((row) -> {
+                            builder.append("<li>");
+                            dataSet.fields().forEach((meta) -> {
+                                builder.append(String.format("<span>%s</span>", row.getString(meta.code())));
+                            });
+                            builder.append("</li>");
+                        });
+                        return builder.toString();
+                    });
+                }
+            } else
                 log.warn("{} 绑定的数据源 {} 找不到", this.getId(), this.binder.targetId());
             break;
         }
     }
 
     @Override
-    public void output(HtmlWriter html) {
-        if (dataSet == null)
-            return;
-        String title = dataSet.head().getString("title") + this.getClass().getSimpleName();
-        html.println("<div role='chart' data-title='%s'>", title);
-        html.println("<div class='chartTitle'>%s</div>", dataSet.head().getString("title"));
-        html.println("<div class='tabHead'>");
-        dataSet.fields().forEach((meta) -> {
-            html.println("<span>%s</span>", meta.name());
-        });
-        html.println("</div>");
-        html.println("<div class='scroll'>");
-        html.println("<ul class='tabBody'>");
-        dataSet.records().forEach((row) -> {
-            html.println("<li>");
-            dataSet.fields().forEach((meta) -> {
-                html.println("<span>%s</span>", row.getString(meta.code()));
-            });
-            html.println("</li>");
-        });
-        html.println("</ul>");
-        html.println("</div>");
-        html.println("</div>");
-        html.println("<script>$(function(){initChartScroll('%s')})</script>", title);
+    public SsrBlock request(ISsrBoard owner) {
+        owner.addBlock(title, block.text("""
+                <div role='chart' data-title='${_data_title}'>
+                    <div class='chartTitle'>${_title}</div>
+                    <div class='tabHead'>
+                        ${list.begin}
+                            <span>${list.value}</span>
+                        ${list.end}
+                    </div>
+                    <div class='scroll'>
+                        <ul class='tabBody'>
+                        ${callback(spanContent)}
+                        </ul>
+                    </div>
+                </div>
+                <script>$(function(){initChartScroll('${_data_title}')})</script>"""));
+        block.id(title).display(1);
+        return block;
     }
 
 }

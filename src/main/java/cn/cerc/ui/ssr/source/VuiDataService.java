@@ -56,6 +56,10 @@ public class VuiDataService extends VuiComponent
         return this.service.service();
     }
 
+    public String serviceDesc() {
+        return this.service.desc();
+    }
+
     @Override
     public DataSet dataSet() {
         return dataSet;
