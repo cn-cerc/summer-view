@@ -13,7 +13,9 @@ import org.springframework.stereotype.Component;
 
 import cn.cerc.db.core.DataSet;
 import cn.cerc.db.core.Utils;
+import cn.cerc.mis.core.Application;
 import cn.cerc.ui.core.RequestReader;
+import cn.cerc.ui.fields.ImageConfigImpl;
 import cn.cerc.ui.ssr.base.ISupportPanel;
 import cn.cerc.ui.ssr.core.ISupplierBlock;
 import cn.cerc.ui.ssr.core.SsrBlock;
@@ -29,6 +31,7 @@ import cn.cerc.ui.ssr.source.VuiDataService;
 public class ChartLine extends VuiControl implements ICommonSupportChart, ISupportPanel, ISupplierBlock {
     private static final Logger log = LoggerFactory.getLogger(ChartBar.class);
     private SsrBlock block = new SsrBlock("");
+    private ImageConfigImpl imageConfig;
     @Column
     String title = "";
     @Column
@@ -40,6 +43,12 @@ public class ChartLine extends VuiControl implements ICommonSupportChart, ISuppo
 
     public ChartLine() {
         super();
+        init();
+    }
+
+    private void init() {
+        block.option("_data", "");
+        imageConfig = Application.getBean(ImageConfigImpl.class);
     }
 
     @Override
@@ -72,7 +81,8 @@ public class ChartLine extends VuiControl implements ICommonSupportChart, ISuppo
                         dataSet.append().setValue("key", "(无)").setValue("值", 0);
                     String title = dataSet.head().getString("title") + this.getClass().getSimpleName();
                     block.option("_data_title", title);
-                    block.option("_data", dataSet.json());
+                    if (!dataSet.eof())
+                        block.option("_data", dataSet.json());
                 }
             } else
                 log.warn("{} 绑定的数据源 {} 找不到", this.getId(), this.binder.targetId());
@@ -82,10 +92,13 @@ public class ChartLine extends VuiControl implements ICommonSupportChart, ISuppo
 
     @Override
     public SsrBlock request(ISsrBoard owner) {
-        owner.addBlock(this.title, block.text("""
-                <div role='chart' data-title='${_data_title}'></div>
+        owner.addBlock(this.title, block.text(String.format("""
+                <div role='chart' data-title='${_data_title}'>${if not _data}<div role='noData'>
+                    <img src='%s' />
+                    <span>数据源为空或者未绑定数据源</span>
+                </div>${endif}</div>
                 <script>$(function(){buildChartByDataSet(`${_data}`, '${_type}', '${_data_title}')})</script>
-                """));
+                """, imageConfig.getCommonFile("images/Frmshopping/notDataImg.png"))));
         block.option("_type", isBar ? "bar" : "line");
         block.id(title).display(1);
         return block;

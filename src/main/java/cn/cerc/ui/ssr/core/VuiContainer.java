@@ -72,7 +72,7 @@ public abstract class VuiContainer<T> extends VuiControl {
             var cols = props.get("v_column_num").asInt();
             html.print("<div role='grid'>");
             int count = this.getComponentCount() / cols * cols;
-            if ((this.getComponentCount() / cols) % cols > 0) {
+            if (this.getComponentCount() % cols > 0) {
                 count += cols;
             }
             for (int i = 0; i < count; i++) {

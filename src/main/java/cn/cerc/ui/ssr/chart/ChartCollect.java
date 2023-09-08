@@ -15,7 +15,9 @@ import org.springframework.stereotype.Component;
 
 import cn.cerc.db.core.DataSet;
 import cn.cerc.db.core.Utils;
+import cn.cerc.mis.core.Application;
 import cn.cerc.ui.core.RequestReader;
+import cn.cerc.ui.fields.ImageConfigImpl;
 import cn.cerc.ui.ssr.base.ISupportPanel;
 import cn.cerc.ui.ssr.core.ISupplierBlock;
 import cn.cerc.ui.ssr.core.SsrBlock;
@@ -31,6 +33,7 @@ import cn.cerc.ui.ssr.source.VuiDataService;
 public class ChartCollect extends VuiControl implements ICommonSupportChart, ISupportPanel, ISupplierBlock {
     private static final Logger log = LoggerFactory.getLogger(ChartCollect.class);
     private SsrBlock block = new SsrBlock("");
+    private ImageConfigImpl imageConfig;
     @Column
     String title = "";
     @Column
@@ -46,6 +49,15 @@ public class ChartCollect extends VuiControl implements ICommonSupportChart, ISu
                     .map(serviceId -> canvas().getMember(serviceId, binder.targetType()).orElse(null))
                     .map(VuiDataService::serviceDesc)
                     .orElse(reader.getString("title").orElse(""));
+    }
+
+    public ChartCollect() {
+        init();
+    }
+
+    private void init() {
+        block.option("_data", "");
+        imageConfig = Application.getBean(ImageConfigImpl.class);
     }
 
     @Override
@@ -87,6 +99,8 @@ public class ChartCollect extends VuiControl implements ICommonSupportChart, ISu
                 if (sender == serviceOpt.get()) {
                     DataSet dataSet = serviceOpt.get().dataSet();
                     block.dataSet(dataSet);
+                    if (!dataSet.eof())
+                        block.option("_data", "1");
                     String fieldName = null;
                     if (binder.target().isPresent()) {
                         VuiDataService service = binder.target().get();
@@ -110,8 +124,12 @@ public class ChartCollect extends VuiControl implements ICommonSupportChart, ISu
 
     @Override
     public SsrBlock request(ISsrBoard owner) {
-        owner.addBlock(this.title, block.text("""
+        owner.addBlock(this.title, block.text(String.format("""
                 <div role='chart' data-title='${_data_title}'>
+                    ${if not _data}<div role='noData'>
+                        <img src='%s' />
+                        <span>数据源为空或者未绑定数据源</span>
+                    </div>${else}
                     <div class='chartTitle'>${_title}</div>
                     <div class='scroll'>
                         <ul class='tabBody'>
@@ -120,8 +138,10 @@ public class ChartCollect extends VuiControl implements ICommonSupportChart, ISu
                         ${dataset.end}
                         </ul>
                     </div>
+                    ${endif}
                 </div>
-                <script>$(function(){initChartScroll('${_data_title}')})</script>"""));
+                <script>$(function(){initChartScroll('${_data_title}')})</script>""",
+                imageConfig.getCommonFile("images/Frmshopping/notDataImg.png"))));
         block.id(title).display(1);
         return block;
     }

@@ -12,7 +12,9 @@ import org.springframework.stereotype.Component;
 import cn.cerc.db.core.DataSet;
 import cn.cerc.db.core.FieldMeta;
 import cn.cerc.db.core.Utils;
+import cn.cerc.mis.core.Application;
 import cn.cerc.ui.core.RequestReader;
+import cn.cerc.ui.fields.ImageConfigImpl;
 import cn.cerc.ui.ssr.base.ISupportPanel;
 import cn.cerc.ui.ssr.core.ISupplierBlock;
 import cn.cerc.ui.ssr.core.SsrBlock;
@@ -28,6 +30,7 @@ import cn.cerc.ui.ssr.source.VuiDataService;
 public class ChartTable extends VuiControl implements ICommonSupportChart, ISupportPanel, ISupplierBlock {
     private static final Logger log = LoggerFactory.getLogger(ChartTable.class);
     private SsrBlock block = new SsrBlock("");
+    private ImageConfigImpl imageConfig;
 
     @Column
     String title = "";
@@ -35,6 +38,16 @@ public class ChartTable extends VuiControl implements ICommonSupportChart, ISupp
     String field = "";
     @Column
     Binder<VuiDataService> binder = new Binder<>(this, VuiDataService.class);
+
+    public ChartTable() {
+        super();
+        init();
+    }
+
+    private void init() {
+        block.option("_data", "");
+        imageConfig = Application.getBean(ImageConfigImpl.class);
+    }
 
     @Override
     public void saveEditor(RequestReader reader) {
@@ -90,10 +103,9 @@ public class ChartTable extends VuiControl implements ICommonSupportChart, ISupp
                     block.option("_data_title", title + this.getClass().getSimpleName());
                     block.option("_title", title);
                     block.toList(dataSet.fields().getItems().stream().map(FieldMeta::name).toList());
-                    if (dataSet.eof()) {
-                        dataSet.append().setValue(dataSet.fields().get(0).code(), "(无)");
-                    }
                     block.dataSet(dataSet);
+                    if (!dataSet.eof())
+                        block.option("_data", "1");
                     block.onCallback("spanContent", () -> {
                         StringBuilder builder = new StringBuilder();
                         dataSet.records().forEach((row) -> {
@@ -114,8 +126,12 @@ public class ChartTable extends VuiControl implements ICommonSupportChart, ISupp
 
     @Override
     public SsrBlock request(ISsrBoard owner) {
-        owner.addBlock(title, block.text("""
+        owner.addBlock(title, block.text(String.format("""
                 <div role='chart' data-title='${_data_title}'>
+                    ${if not _data}<div role='noData'>
+                        <img src='%s' />
+                        <span>数据源为空或者未绑定数据源</span>
+                    </div>${else}
                     <div class='chartTitle'>${_title}</div>
                     <div class='tabHead'>
                         ${list.begin}
@@ -127,8 +143,10 @@ public class ChartTable extends VuiControl implements ICommonSupportChart, ISupp
                         ${callback(spanContent)}
                         </ul>
                     </div>
+                    ${endif}
                 </div>
-                <script>$(function(){initChartScroll('${_data_title}')})</script>"""));
+                <script>$(function(){initChartScroll('${_data_title}')})</script>""",
+                imageConfig.getCommonFile("images/Frmshopping/notDataImg.png"))));
         block.id(title).display(1);
         return block;
     }
