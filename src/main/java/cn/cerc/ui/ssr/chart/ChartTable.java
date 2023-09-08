@@ -21,6 +21,7 @@ import cn.cerc.ui.ssr.core.SsrBlock;
 import cn.cerc.ui.ssr.core.VuiControl;
 import cn.cerc.ui.ssr.editor.ISsrBoard;
 import cn.cerc.ui.ssr.editor.SsrMessage;
+import cn.cerc.ui.ssr.page.VuiEnvironment;
 import cn.cerc.ui.ssr.source.Binder;
 import cn.cerc.ui.ssr.source.VuiDataService;
 
@@ -121,6 +122,13 @@ public class ChartTable extends VuiControl implements ICommonSupportChart, ISupp
             } else
                 log.warn("{} 绑定的数据源 {} 找不到", this.getId(), this.binder.targetId());
             break;
+        case SsrMessage.InitContent:
+            if (canvas().environment() instanceof VuiEnvironment environment) {
+                String templateId = environment.getPageCode() + "_panel";
+                block.id(templateId);
+                block.option("_templateId", templateId);
+            }
+            break;
         }
     }
 
@@ -128,24 +136,28 @@ public class ChartTable extends VuiControl implements ICommonSupportChart, ISupp
     public SsrBlock request(ISsrBoard owner) {
         owner.addBlock(title, block.text(String.format("""
                 <div role='chart' data-title='${_data_title}'>
-                    ${if not _data}<div role='noData'>
-                        <img src='%s' />
-                        <span>数据源为空或者未绑定数据源</span>
-                    </div>${else}
-                    <div class='chartTitle'>${_title}</div>
-                    <div class='tabHead'>
-                        ${list.begin}
-                            <span>${list.value}</span>
-                        ${list.end}
-                    </div>
-                    <div class='scroll'>
-                        <ul class='tabBody'>
-                        ${callback(spanContent)}
-                        </ul>
-                    </div>
-                    ${endif}
+                <div class='opera' title='隐藏此图表' onclick='hideChart("${_templateId}", "%s")'><img src='%s' /></div>
+                <div class='content'>
+                ${if not _data}<div role='noData'>
+                    <img src='%s' />
+                    <span>数据源为空或者未绑定数据源</span>
+                </div>${else}
+                <div class='chartTitle'>${_title}</div>
+                <div class='tabHead'>
+                    ${list.begin}
+                        <span>${list.value}</span>
+                    ${list.end}
                 </div>
-                <script>$(function(){initChartScroll('${_data_title}')})</script>""",
+                <div class='scroll'>
+                    <ul class='tabBody'>
+                    ${callback(spanContent)}
+                    </ul>
+                </div>
+                <script>$(function(){initChartScroll('${_data_title}')})</script>
+                ${endif}
+                </div>
+                </div>
+                """, title, imageConfig.getCommonFile("images/icon/hide.png"),
                 imageConfig.getCommonFile("images/Frmshopping/notDataImg.png"))));
         block.id(title).display(1);
         return block;
