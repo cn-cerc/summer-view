@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 public class Binders implements Iterable<Binder<?>> {
 
@@ -24,12 +25,21 @@ public class Binders implements Iterable<Binder<?>> {
 
     @SuppressWarnings("unchecked")
     public <T> Optional<T> findOwner(Class<T> clazz) {
-        T item = null;
         for (Binder<?> binder : items) {
             if (binder.owner() != null && clazz.isInstance(binder.owner()))
-                item = (T) binder.owner();
+                return Optional.ofNullable((T) binder.owner());
         }
-        return Optional.ofNullable(item);
+        return Optional.empty();
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T> List<T> findOwners(Class<T> clazz) {
+        List<T> list = new ArrayList<>();
+        for (Binder<?> binder : items) {
+            if (binder.owner() != null && clazz.isInstance(binder.owner()))
+                list.add((T) binder.owner());
+        }
+        return list;
     }
 
     /** 通知发送 */
@@ -37,4 +47,9 @@ public class Binders implements Iterable<Binder<?>> {
         for (var binder : this.items)
             binder.owner().onMessage(sender, msgType, msgData, targetId);
     }
+
+    public Stream<Binder<?>> stream() {
+        return items.stream();
+    }
+
 }

@@ -1,7 +1,9 @@
 package cn.cerc.ui.ssr.core;
 
 import java.lang.reflect.ParameterizedType;
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -63,6 +65,16 @@ public abstract class VuiContainer<T> extends VuiControl {
     protected VuiContainer<?> setSupportClass(Class<?> supportClass) {
         this.supportClass = supportClass;
         return this;
+    }
+
+    @SuppressWarnings("unchecked")
+    protected <R> List<R> getCommponetsByClass(Class<R> clazz) {
+        List<R> list = new ArrayList<>();
+        for (UIComponent component : this) {
+            if (clazz.isInstance(component))
+                list.add((R) component);
+        }
+        return list;
     }
 
     @Override

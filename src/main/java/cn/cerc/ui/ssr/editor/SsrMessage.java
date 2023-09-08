@@ -47,4 +47,9 @@ public class SsrMessage {
     public static final int InitSheet = 800;
     /** Sheet行数递增 msgData 为增加的数量 */
     public static final int SheetNextRow = 801;
+    /** 初始化 DataSet */
+    public static final int InitDataIn = 900;
+    /** 初始化 ServiceExceptionHandler */
+    public static final int InitExceptionHandler = 901;
+
 }

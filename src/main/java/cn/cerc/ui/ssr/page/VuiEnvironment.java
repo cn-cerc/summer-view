@@ -34,12 +34,14 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 
+import cn.cerc.db.core.IHandle;
 import cn.cerc.db.core.FastDate;
 import cn.cerc.db.core.ServerConfig;
 import cn.cerc.db.core.Utils;
 import cn.cerc.db.mongo.MongoConfig;
 import cn.cerc.local.tool.JsonTool;
 import cn.cerc.mis.core.AbstractForm;
+import cn.cerc.mis.core.AppClient;
 import cn.cerc.mis.core.Application;
 import cn.cerc.mis.core.FormSign;
 import cn.cerc.mis.core.IPage;
@@ -61,6 +63,7 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
     private Map<Class<? extends VuiComponent>, Set<Class<? extends VuiComponent>>> customMap = new HashMap<>();
     private Map<Class<? extends VuiComponent>, Map<String, Object>> sourceMap = new HashMap<>();
     protected ISsrMessage onMessage;
+    protected IHandle handle;
     private boolean isRuntime;
     private UIComponent content;
 
@@ -84,8 +87,13 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
         AliasNames.put("UISsrGrid", "vuiGrid");
     }
 
+    public void setHandle(IHandle handle) {
+        this.handle = handle;
+    }
+
     public void form(AbstractForm form) {
         this.form = form;
+        this.handle = form;
         if (form.getRequest() != null) {
             String childCode = StartForms.getRequestCode(form.getRequest());
             FormSign formSign = new FormSign(childCode);
@@ -111,11 +119,11 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
     }
 
     public IPage getPage() {
-        if (form.allowVisualDesign()) {
-            var mode = form.getRequest().getParameter("mode");
+        if (handle.allowVisualDesign()) {
+            var mode = handle.getRequest().getParameter("mode");
             if ("design".equals(mode)) {
-                if (form.getRequest().getParameter("submit") != null
-                        || "submit".equals(form.getRequest().getParameter("opera")))
+                if (handle.getRequest().getParameter("submit") != null
+                        || "submit".equals(handle.getRequest().getParameter("opera")))
                     saveEditor();
                 return getDesignPage();
             } else if ("editor".equals(mode))
@@ -164,20 +172,20 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
     private void saveEditor() {
         var canvas = new VuiCanvas(this);
         // 初始化环境变量
-        canvas.sendMessage(this, SsrMessage.InitRequest, form.getRequest(), null);
-        canvas.sendMessage(this, SsrMessage.InitHandle, form, null);
+        canvas.sendMessage(this, SsrMessage.InitRequest, handle.getRequest(), null);
+        canvas.sendMessage(this, SsrMessage.InitHandle, handle, null);
 
         // 处理组件视图属性更新
-        var reader = new RequestReader(form.getRequest());
+        var reader = new RequestReader(handle.getRequest());
         reader.updateComponents(canvas);
         reader.removeComponents(canvas);
 
         // 处理组件数据属性更新
-        var targetId = form.getRequest().getParameter("id");
+        var targetId = handle.getRequest().getParameter("id");
         if (!Utils.isEmpty(targetId)) {
             var owner = canvas.getMember(targetId, VuiComponent.class);
             if (owner.isPresent()) {
-                owner.get().saveEditor(new RequestReader(form.getRequest()));
+                owner.get().saveEditor(new RequestReader(handle.getRequest()));
             } else {
                 throw new RuntimeException(String.format("<div>组件id %s 没有找到！</div>", targetId));
             }
@@ -188,16 +196,16 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
 
     /** 属性页 */
     private IPage getEditorHtml() {
-        var cid = form.getRequest().getParameter("id");
+        var cid = handle.getRequest().getParameter("id");
         PrintWriter writer;
         try {
-            writer = form.getResponse().getWriter();
+            writer = handle.getSession().getResponse().getWriter();
             writer.print("<div>");
             // 恢复现场
             var canvas = new VuiCanvas(this);
             // 初始化环境变量
-            canvas.sendMessage(this, SsrMessage.InitRequest, form.getRequest(), null);
-            canvas.sendMessage(this, SsrMessage.InitHandle, form, null);
+            canvas.sendMessage(this, SsrMessage.InitRequest, handle.getRequest(), null);
+            canvas.sendMessage(this, SsrMessage.InitHandle, handle, null);
             canvas.sendMessage(this, SsrMessage.InitBinder, null, null);
             var owner = canvas.getMember(cid, UIComponent.class);
             if (owner.isPresent()) {
@@ -225,12 +233,12 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
     }
 
     private IPage getComponentsData() {
-        var cid = form.getRequest().getParameter("id");
+        var cid = handle.getRequest().getParameter("id");
         // 恢复现场
         var canvas = new VuiCanvas(this);
         // 初始化环境变量
-        canvas.sendMessage(this, SsrMessage.InitRequest, form.getRequest(), null);
-        canvas.sendMessage(this, SsrMessage.InitHandle, form, null);
+        canvas.sendMessage(this, SsrMessage.InitRequest, handle.getRequest(), null);
+        canvas.sendMessage(this, SsrMessage.InitHandle, handle, null);
         canvas.sendMessage(this, SsrMessage.InitBinder, null, null);
         // 输出可用组件
         PrintWriter writer;
@@ -238,7 +246,7 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
             var mapper = new ObjectMapper();
             var root = mapper.createObjectNode();
             ArrayNode items = root.putArray("components");
-            writer = form.getResponse().getWriter();
+            writer = handle.getSession().getResponse().getWriter();
             Optional<VuiComponent> obj = canvas.getMember(cid, VuiComponent.class);
             if (obj.isPresent()) {
                 if (obj.get() instanceof VuiContainer<?> impl) {
@@ -282,7 +290,7 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
     private IPage loadFromDB() {
         PrintWriter writer;
         try {
-            writer = form.getResponse().getWriter();
+            writer = handle.getSession().getResponse().getWriter();
             writer.print(loadProperties());
         } catch (IOException e) {
             e.printStackTrace();
@@ -316,18 +324,18 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
     @Override
     public void saveProperties(String json) {
         String device = "";
-        if (this.form.getRequest().getParameter("storage") != null)
-            device = form.getRequest().getParameter("storage");
+        if (this.handle.getRequest().getParameter("storage") != null)
+            device = handle.getRequest().getParameter("storage");
         MongoCollection<Document> collection = MongoConfig.getDatabase().getCollection(VuiEnvironment.Visual_Menu);
         ArrayList<Bson> match = new ArrayList<>();
-        match.add(Filters.eq("corp_no_", form.getCorpNo()));
+        match.add(Filters.eq("corp_no_", corpNo()));
         match.add(Filters.eq("page_code_", pageCode));
         match.add(Filters.eq("device_", device));
         Bson bson = Filters.and(match);
 
         Document document = collection.find(bson).first();
         Document value = new Document();
-        value.append("corp_no_", form.getCorpNo());
+        value.append("corp_no_", corpNo());
         value.append("page_code_", pageCode);
         value.append("device_", device);
         Document template = Document.parse(json);
@@ -367,13 +375,15 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
     @Override
     public String loadProperties() {
         MongoCollection<Document> collection = MongoConfig.getDatabase().getCollection(VuiEnvironment.Visual_Menu);
-        Bson bson = Filters.and(Filters.eq("corp_no_", form.getCorpNo()), Filters.eq("page_code_", pageCode));
+        Bson bson = Filters.and(Filters.eq("corp_no_", corpNo()), Filters.eq("page_code_", pageCode));
 
         String device = "";
-        if (this.form.getRequest().getParameter("storage") != null)
-            device = form.getRequest().getParameter("storage");
-        if (isRuntime)
-            device = form.getClient().isPhone() ? "" : form.getClient().getDevice();
+        if (this.handle.getRequest().getParameter("storage") != null)
+            device = handle.getRequest().getParameter("storage");
+        if (isRuntime) {
+            AppClient client = new AppClient(handle.getRequest(), handle.getSession().getResponse());
+            device = client.isPhone() ? "" : client.getDevice();
+        }
         Document documentDef = null;
         ArrayList<Document> documents = collection.find(bson).into(new ArrayList<>());
         for (Document document : documents) {
@@ -486,6 +496,10 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
         if (!first.toUpperCase().equals(first))
             temp = beanId.substring(0, 1).toLowerCase() + beanId.substring(1);
         return temp;
+    }
+
+    protected String corpNo() {
+        return handle.getCorpNo();
     }
 
     @Override
