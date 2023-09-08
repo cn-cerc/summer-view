@@ -17,6 +17,8 @@ import cn.cerc.ui.ssr.core.VuiComponent;
 import cn.cerc.ui.ssr.editor.EditorForm;
 import cn.cerc.ui.ssr.editor.SsrMessage;
 import cn.cerc.ui.ssr.excel.ISupportXls;
+import cn.cerc.ui.ssr.form.ISupportForm;
+import cn.cerc.ui.ssr.form.VuiForm;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -89,10 +91,21 @@ public class VuiRequestRow extends VuiComponent implements ICommonSupplierDataRo
                     String key = config.getString(field.code());
                     if (Utils.isEmpty(key))
                         key = field.code();
-                    var value = request.getParameter(key);
-                    if (value != null)
-                        dataRow.setValue(field.code(), value);
+                    dataRow.setValue(field.code(), request.getParameter(key));
                 }
+            }
+            break;
+        case SsrMessage.appendComponent:
+            if (sender instanceof VuiForm form && msgData instanceof ISupportForm block) {
+                String newField = block.fields();
+                if (!Utils.isEmpty(newField) && !config.fields().exists(newField))
+                    config.fields().add(newField);
+            }
+            break;
+        case SsrMessage.UpdateFieldCode:
+            if (sender instanceof VuiForm form && msgData instanceof String newField) {
+                if (!config.fields().exists(newField))
+                    config.fields().add(newField);
             }
             break;
         }
