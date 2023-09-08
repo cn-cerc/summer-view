@@ -27,6 +27,8 @@ public class BlockStringField extends VuiControl implements ISupportBlock {
     String field = "";
     @Column
     Binder<ISupplierMap> mapSource = new Binder<>(this, ISupplierMap.class);
+    @Column
+    Boolean hideTitle = false;
 
     Supplier<String> url;
 
@@ -57,7 +59,7 @@ public class BlockStringField extends VuiControl implements ISupportBlock {
                                         ${if _enabled_url}<a id='%s' href='${callback(url)}'>${else}<span id='%s'>${endif}${if _isTextField}${%s}${else}${map.begin}${if map.key==%s}${map.value}${endif}${map.end}${endif}${if _enabled_url}</a>${else}</span>${endif}
                                     </div>
                         """,
-                title, field, field, field, field));
+               this.hideTitle ? "" : title, field, field, field, field));
         block.option("_enabled_url", url != null ? "1" : "");
         if (url != null)
             block.onCallback("url", url);
@@ -88,6 +90,11 @@ public class BlockStringField extends VuiControl implements ISupportBlock {
 
     public BlockStringField url(Supplier<String> url) {
         this.url = url;
+        return this;
+    }
+
+    public BlockStringField hideTitle(Boolean hideTitle) {
+        this.hideTitle = hideTitle;
         return this;
     }
 
