@@ -4,8 +4,6 @@ import java.lang.reflect.Field;
 import java.util.Optional;
 import java.util.Set;
 
-import javax.persistence.Column;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -18,10 +16,7 @@ import cn.cerc.db.core.Utils;
 import cn.cerc.mis.core.Application;
 import cn.cerc.ui.core.RequestReader;
 import cn.cerc.ui.fields.ImageConfigImpl;
-import cn.cerc.ui.ssr.base.ISupportPanel;
-import cn.cerc.ui.ssr.core.ISupplierBlock;
 import cn.cerc.ui.ssr.core.SsrBlock;
-import cn.cerc.ui.ssr.core.VuiControl;
 import cn.cerc.ui.ssr.editor.ISsrBoard;
 import cn.cerc.ui.ssr.editor.SsrMessage;
 import cn.cerc.ui.ssr.page.VuiEnvironment;
@@ -31,16 +26,10 @@ import cn.cerc.ui.ssr.source.VuiDataService;
 @Component
 @Description("单列滚动")
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class ChartCollect extends VuiControl implements ICommonSupportChart, ISupportPanel, ISupplierBlock {
+public class ChartCollect extends VuiAbstractChart {
     private static final Logger log = LoggerFactory.getLogger(ChartCollect.class);
+
     private SsrBlock block = new SsrBlock("");
-    private ImageConfigImpl imageConfig;
-    @Column
-    String title = "";
-    @Column
-    String field = "";
-    @Column
-    Binder<VuiDataService> binder = new Binder<>(this, VuiDataService.class);
 
     @Override
     public void saveEditor(RequestReader reader) {
@@ -59,17 +48,6 @@ public class ChartCollect extends VuiControl implements ICommonSupportChart, ISu
     private void init() {
         block.option("_data", "");
         imageConfig = Application.getBean(ImageConfigImpl.class);
-    }
-
-    @Override
-    public String fields() {
-        return field;
-    }
-
-    @Override
-    public ChartCollect field(String field) {
-        this.field = field;
-        return this;
     }
 
     @Override
@@ -155,7 +133,7 @@ public class ChartCollect extends VuiControl implements ICommonSupportChart, ISu
                 </div>
                 """, title, imageConfig.getCommonFile("images/icon/hide.png"),
                 imageConfig.getCommonFile("images/Frmshopping/notDataImg.png"))));
-        block.id(title).display(1);
+        block.id(title).display(display_option.ordinal());
         return block;
     }
 

@@ -20,6 +20,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.slf4j.Logger;
@@ -32,6 +34,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 
+import cn.cerc.db.core.FastDate;
 import cn.cerc.db.core.ServerConfig;
 import cn.cerc.db.core.Utils;
 import cn.cerc.db.mongo.MongoConfig;
@@ -121,6 +124,10 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
                 return loadFromDB();
             else if ("components".equals(mode))
                 return getComponentsData();
+            else if ("import".equals(mode))
+                return importJson();
+            else if ("export".equals(mode))
+                return exportJson();
         }
         this.isRuntime = true;
         return getRuntimePage();
@@ -280,6 +287,29 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return null;
+    }
+
+    private IPage exportJson() {
+        String json = loadProperties();
+        HttpServletResponse response = form.getResponse();
+        response.setContentType("application/octet-stream");
+        String fileName = String.join("-", Utils.encode(form.getName().trim(), StandardCharsets.UTF_8.name()),
+                new FastDate().format("yyyyMMdd"));
+        response.addHeader("Content-Disposition", "attachment;filename=" + fileName + ".json");
+        response.setContentLength(json.getBytes().length);
+        PrintWriter writer;
+        try {
+            writer = response.getWriter();
+            writer.print(json);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private IPage importJson() {
+        // TODO 导入
         return null;
     }
 

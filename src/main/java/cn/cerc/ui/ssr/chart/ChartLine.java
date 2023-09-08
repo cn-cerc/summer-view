@@ -16,31 +16,21 @@ import cn.cerc.db.core.Utils;
 import cn.cerc.mis.core.Application;
 import cn.cerc.ui.core.RequestReader;
 import cn.cerc.ui.fields.ImageConfigImpl;
-import cn.cerc.ui.ssr.base.ISupportPanel;
-import cn.cerc.ui.ssr.core.ISupplierBlock;
 import cn.cerc.ui.ssr.core.SsrBlock;
-import cn.cerc.ui.ssr.core.VuiControl;
 import cn.cerc.ui.ssr.editor.ISsrBoard;
 import cn.cerc.ui.ssr.editor.SsrMessage;
 import cn.cerc.ui.ssr.page.VuiEnvironment;
-import cn.cerc.ui.ssr.source.Binder;
 import cn.cerc.ui.ssr.source.VuiDataService;
 
 @Component
 @Description("折线图")
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class ChartLine extends VuiControl implements ICommonSupportChart, ISupportPanel, ISupplierBlock {
+public class ChartLine extends VuiAbstractChart {
     private static final Logger log = LoggerFactory.getLogger(ChartBar.class);
     private SsrBlock block = new SsrBlock("");
-    private ImageConfigImpl imageConfig;
-    @Column
-    String title = "";
-    @Column
-    String field = "";
+
     @Column(name = "是否以柱状图方式展示")
     boolean isBar = false;
-    @Column
-    Binder<VuiDataService> binder = new Binder<>(this, VuiDataService.class);
 
     public ChartLine() {
         super();
@@ -114,18 +104,8 @@ public class ChartLine extends VuiControl implements ICommonSupportChart, ISuppo
                 """, title, imageConfig.getCommonFile("images/icon/hide.png"),
                 imageConfig.getCommonFile("images/Frmshopping/notDataImg.png"))));
         block.option("_type", isBar ? "bar" : "line");
-        block.id(title).display(1);
+        block.id(title).display(display_option.ordinal());
         return block;
-    }
-
-    @Override
-    public String fields() {
-        return this.fields();
-    }
-
-    @Override
-    public ICommonSupportChart field(String field) {
-        return this.field(field);
     }
 
     @Override

@@ -188,14 +188,18 @@ public class SsrUtils {
                 binder.targetId(value.asText());
             } else if (field.getType().isEnum()) {
                 Enum<?>[] enums = (Enum<?>[]) field.getType().getEnumConstants();
-                Enum<?> defaultValue = enums[0];
-                for (Enum<?> item : enums) {
-                    if (item.name().equals(value.asText())) {
-                        defaultValue = item;
-                        break;
+                if (Utils.isNumeric(value.asText())) {
+                    field.set(properties, enums[value.asInt()]);
+                } else {
+                    Enum<?> defaultValue = enums[0];
+                    for (Enum<?> item : enums) {
+                        if (item.name().equals(value.asText())) {
+                            defaultValue = item;
+                            break;
+                        }
                     }
+                    field.set(properties, defaultValue);
                 }
-                field.set(properties, defaultValue);
             } else if (field.getType() == EntityServiceRecord.class) {
                 JsonNode temp = json.get(field.getName() + "_name");
                 String desc = value.asText();

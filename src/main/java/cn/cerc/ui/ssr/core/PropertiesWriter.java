@@ -71,7 +71,8 @@ public class PropertiesWriter {
                 json.put(field.getName(), binder.targetId());
             } else if (field.getType().isEnum()) {
                 Enum<?> value = (Enum<?>) field.get(object);
-                json.put(field.getName(), value.name());
+                if (value != null)
+                    json.put(field.getName(), value.ordinal());
             } else if (field.getType() == EntityServiceRecord.class) {
                 EntityServiceRecord record = (EntityServiceRecord) field.get(object);
                 json.put(field.getName(), record.service());

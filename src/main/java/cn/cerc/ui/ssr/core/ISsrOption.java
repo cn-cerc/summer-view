@@ -2,6 +2,8 @@ package cn.cerc.ui.ssr.core;
 
 import java.util.Optional;
 
+import cn.cerc.ui.core.ViewDisplay;
+
 public interface ISsrOption {
     public static final String TemplateId = "templateId";
     public static final String Strict = "strict";
@@ -24,6 +26,8 @@ public interface ISsrOption {
     Optional<String> option(String key);
 
     default ISsrOption display(int display) {
+        if (display == ViewDisplay.默认隐藏.ordinal())
+            return this;
         this.option(Display, String.valueOf(display));
         return this;
     }

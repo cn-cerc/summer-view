@@ -31,7 +31,7 @@ import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.mis.core.IPage;
 import cn.cerc.mis.other.MemoryBuffer;
 import cn.cerc.ui.core.RequestReader;
-import cn.cerc.ui.core.TemplateConfigOptionEnum;
+import cn.cerc.ui.core.ViewDisplay;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.ssr.base.UISsrBlock;
 import cn.cerc.ui.ssr.core.AlignEnum;
@@ -294,14 +294,14 @@ public class VuiForm extends VuiContainer<ISupportForm>
     @Deprecated
     public void setConfig(DataSet configs) {
         configs.forEach(item -> {
-            if (item.getEnum("option_", TemplateConfigOptionEnum.class) != TemplateConfigOptionEnum.不显示)
+            if (item.getEnum("option_", ViewDisplay.class) != ViewDisplay.默认隐藏)
                 addColumn(item.getString("column_name_"));
         });
     }
 
     public void loadDefaultConfig() {
         this.getDefaultOptions().forEach(item -> {
-            if (item.getEnum("option_", TemplateConfigOptionEnum.class) != TemplateConfigOptionEnum.不显示)
+            if (item.getEnum("option_", ViewDisplay.class) != ViewDisplay.默认隐藏)
                 addColumn(item.getString("column_name_"));
         });
     }
