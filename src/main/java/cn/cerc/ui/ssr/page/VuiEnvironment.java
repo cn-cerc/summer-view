@@ -34,8 +34,8 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 
-import cn.cerc.db.core.IHandle;
 import cn.cerc.db.core.FastDate;
+import cn.cerc.db.core.IHandle;
 import cn.cerc.db.core.ServerConfig;
 import cn.cerc.db.core.Utils;
 import cn.cerc.db.mongo.MongoConfig;
@@ -299,7 +299,7 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
     }
 
     private IPage exportJson() {
-        String json = loadProperties();
+        String json = JsonTool.format(loadProperties());
         HttpServletResponse response = form.getResponse();
         response.setContentType("application/octet-stream");
         String fileName = String.join("-", Utils.encode(form.getName().trim(), StandardCharsets.UTF_8.name()),
