@@ -5,15 +5,15 @@ import java.util.function.Supplier;
 
 import cn.cerc.mis.ado.CustomEntity;
 
-public abstract class AbstractEntityOpenHelper<T extends CustomEntity> {
+public abstract class VuiAbstractEntityOpenHelper<T extends CustomEntity> {
 
-    public abstract <X extends Throwable> AbstractEntityOpenHelper<T> isEmptyThrow(
+    public abstract <X extends Throwable> VuiAbstractEntityOpenHelper<T> isEmptyThrow(
             Supplier<? extends X> exceptionSupplier) throws X;
 
-    public abstract <X extends Throwable> AbstractEntityOpenHelper<T> isPresentThrow(
+    public abstract <X extends Throwable> VuiAbstractEntityOpenHelper<T> isPresentThrow(
             Supplier<? extends X> exceptionSupplier) throws X;
 
-    public abstract AbstractEntityOpenHelper<T> update(Consumer<T> action);
+    public abstract VuiAbstractEntityOpenHelper<T> update(Consumer<T> action);
 
     public abstract T insert(Consumer<T> action);
 

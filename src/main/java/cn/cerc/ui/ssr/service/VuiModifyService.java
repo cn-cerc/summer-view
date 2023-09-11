@@ -8,6 +8,8 @@ import java.util.Optional;
 
 import javax.persistence.Column;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -24,6 +26,8 @@ import cn.cerc.ui.ssr.service.VuiEntityMany.EntityManyOpenHelper;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class VuiModifyService extends VuiAbstractService<ISupportServiceHandler, ISupplierEntityOpen> {
 
+    private static final Logger log = LoggerFactory.getLogger(VuiModifyService.class);
+
     @Column
     String emptyMsg = "数据不存在，修改失败";
 
@@ -35,20 +39,25 @@ public class VuiModifyService extends VuiAbstractService<ISupportServiceHandler,
     public DataSet execute() throws ServiceException {
         Optional<ISupplierEntityOpen> entityHandler = binder.target();
         if (entityHandler.isPresent()) {
-            Optional<VuiSearchDataIn> optional = getComponent(VuiSearchDataIn.class);
-            List<ISupportFilter> filterList = new ArrayList<>();
-            if (optional.isPresent()) {
-                VuiSearchDataIn searchDataIn = optional.get();
-                filterList = searchDataIn.getFilterFields();
-            }
-
             ISupplierEntityOpen supplierEntityOpen = entityHandler.get();
             List<VuiModifyField> modifyFields = supplierEntityOpen.fields();
             if (supplierEntityOpen instanceof EntityManyOpenHelper && !dataIn.eof()) {
+                Optional<VuiSearchBodyIn> component = getComponent(VuiSearchBodyIn.class);
+                List<ISupportFilter> filterList = new ArrayList<>();
+                if (component.isPresent()) {
+                    component.get().validate();
+                    filterList = component.get().fields();
+                }
                 for (DataRow row : dataIn) {
                     modify(supplierEntityOpen, filterList, modifyFields, row);
                 }
             } else {
+                Optional<VuiSearchHeadIn> component = getComponent(VuiSearchHeadIn.class);
+                List<ISupportFilter> filterList = new ArrayList<>();
+                if (component.isPresent()) {
+                    component.get().validate();
+                    filterList = component.get().fields();
+                }
                 modify(supplierEntityOpen, filterList, modifyFields, dataIn.head());
             }
             return new DataSet();
@@ -76,6 +85,7 @@ public class VuiModifyService extends VuiAbstractService<ISupportServiceHandler,
                         else
                             field.set(item, obj);
                     } catch (IllegalArgumentException | IllegalAccessException e) {
+                        log.error(e.getMessage(), e);
                     }
                 }
             }

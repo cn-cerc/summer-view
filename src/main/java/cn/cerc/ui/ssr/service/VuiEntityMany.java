@@ -1,7 +1,10 @@
 package cn.cerc.ui.ssr.service;
 
+import java.lang.reflect.Field;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -13,36 +16,34 @@ import org.springframework.stereotype.Component;
 
 import cn.cerc.db.core.DataRow;
 import cn.cerc.db.core.DataSet;
+import cn.cerc.db.core.EntityHelper;
 import cn.cerc.db.core.IHandle;
 import cn.cerc.db.core.SqlWhere;
 import cn.cerc.db.core.SqlWhere.JoinDirectionEnum;
+import cn.cerc.db.core.Utils;
 import cn.cerc.mis.ado.CustomEntity;
 import cn.cerc.mis.ado.EntityMany;
 import cn.cerc.mis.core.Application;
-import cn.cerc.ui.ssr.core.VuiContainer;
 import cn.cerc.ui.ssr.editor.SsrMessage;
-import cn.cerc.ui.ssr.source.Binder;
 import cn.cerc.ui.ssr.source.Binders;
 import cn.cerc.ui.ssr.source.IBinders;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class VuiEntityMany extends VuiContainer<VuiOutputField>
+public class VuiEntityMany extends VuiAbstractEntityContainer<VuiOutputField>
         implements ISupportServiceHandler, IBinders, ISupplierEntityOpen {
     private Binders binders = new Binders();
     private IHandle handle;
     private DataSet dataIn;
     private List<VuiModifyField> fields;
+    private Class<? extends CustomEntity> entityClass;
 
     @Column
     String entityId = "";
-    @Column
-    Binder<VuiEntityMany> joinMaster = new Binder<>(this, VuiEntityMany.class);
-    @Column
-    String masterField = "";
 
     @Override
     public void onMessage(Object sender, int msgType, Object msgData, String targetId) {
+        super.onMessage(sender, msgType, msgData, targetId);
         switch (msgType) {
         case SsrMessage.InitHandle:
             if (msgData instanceof IHandle handle)
@@ -52,14 +53,11 @@ public class VuiEntityMany extends VuiContainer<VuiOutputField>
             if (msgData instanceof DataSet dataIn)
                 this.dataIn = dataIn;
             break;
-        case SsrMessage.InitBinder:
-            joinMaster.init();
-            break;
         }
     }
 
     @Override
-    public AbstractEntityOpenHelper<? extends CustomEntity> open(List<ISupportFilter> filterList) {
+    public VuiAbstractEntityOpenHelper<? extends CustomEntity> open(List<ISupportFilter> filterList) {
         DataRow head = dataIn.head();
         EntityMany<? extends CustomEntity> many = EntityMany.open(handle, this.getEntityClass(), where -> {
             SqlWhere whereRef = where;
@@ -77,28 +75,38 @@ public class VuiEntityMany extends VuiContainer<VuiOutputField>
         return new EntityManyOpenHelper<>(many);
     }
 
+    @Override
+    public Set<Field> entityFields() {
+        Class<? extends CustomEntity> entityClass = getEntityClass();
+        if (entityClass == null)
+            return Set.of();
+        return new LinkedHashSet<>(EntityHelper.get(entityClass).fields().values());
+    }
+
     private Class<? extends CustomEntity> getEntityClass() {
-        var temp = entityId;
-        var first = entityId.substring(0, 2);
-        if (!first.toUpperCase().equals(first))
-            temp = entityId.substring(0, 1).toLowerCase() + entityId.substring(1);
-        return Application.getBean(temp, CustomEntity.class).getClass();
+        if (Utils.isEmpty(entityId))
+            return null;
+        if (entityClass == null) {
+            var temp = entityId;
+            var first = entityId.substring(0, 2);
+            if (!first.toUpperCase().equals(first))
+                temp = entityId.substring(0, 1).toLowerCase() + entityId.substring(1);
+            entityClass = Application.getBean(temp, CustomEntity.class).getClass();
+            return entityClass;
+        }
+        return entityClass;
     }
 
     @Override
     public List<VuiModifyField> fields() {
-        if (fields == null)
-            fields = getFields(VuiModifyField.class);
+        if (fields == null) {
+            fields = this.getComponents().stream().map(o -> {
+                if (o instanceof VuiModifyField field)
+                    return field;
+                return null;
+            }).filter(Objects::nonNull).toList();
+        }
         return fields;
-    }
-
-    @SuppressWarnings("unchecked")
-    private <T> List<T> getFields(Class<T> clazz) {
-        return this.getComponents().stream().map(o -> {
-            if (clazz.isInstance(o))
-                return (T) o;
-            return null;
-        }).filter(Objects::nonNull).toList();
     }
 
     @Override
@@ -111,7 +119,7 @@ public class VuiEntityMany extends VuiContainer<VuiOutputField>
         return "entityQuery";
     }
 
-    public class EntityManyOpenHelper<T extends CustomEntity> extends AbstractEntityOpenHelper<T> {
+    public class EntityManyOpenHelper<T extends CustomEntity> extends VuiAbstractEntityOpenHelper<T> {
 
         private EntityMany<T> entityMany;
 
@@ -120,23 +128,23 @@ public class VuiEntityMany extends VuiContainer<VuiOutputField>
         }
 
         @Override
-        public <X extends Throwable> AbstractEntityOpenHelper<T> isEmptyThrow(Supplier<? extends X> exceptionSupplier)
-                throws X {
+        public <X extends Throwable> VuiAbstractEntityOpenHelper<T> isEmptyThrow(
+                Supplier<? extends X> exceptionSupplier) throws X {
             entityMany.isEmptyThrow(exceptionSupplier);
             return this;
         }
 
         @Override
-        public <X extends Throwable> AbstractEntityOpenHelper<T> isPresentThrow(Supplier<? extends X> exceptionSupplier)
-                throws X {
+        public <X extends Throwable> VuiAbstractEntityOpenHelper<T> isPresentThrow(
+                Supplier<? extends X> exceptionSupplier) throws X {
             entityMany.isPresentThrow(exceptionSupplier);
             return this;
         }
 
         @Override
-        public AbstractEntityOpenHelper<T> update(Consumer<T> action) {
+        public VuiAbstractEntityOpenHelper<T> update(Consumer<T> action) {
             entityMany.updateAll(action);
-            return null;
+            return this;
         }
 
         @Override

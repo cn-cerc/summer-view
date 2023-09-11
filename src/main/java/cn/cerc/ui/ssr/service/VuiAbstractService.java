@@ -1,6 +1,5 @@
 package cn.cerc.ui.ssr.service;
 
-import java.util.List;
 import java.util.Optional;
 
 import javax.persistence.Column;
@@ -8,7 +7,6 @@ import javax.persistence.Column;
 import cn.cerc.db.core.DataSet;
 import cn.cerc.db.core.IHandle;
 import cn.cerc.db.core.ServiceException;
-import cn.cerc.mis.core.DataValidateException;
 import cn.cerc.mis.core.JsonPage;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.ssr.core.VuiContainer;
@@ -78,18 +76,12 @@ public abstract class VuiAbstractService<T extends ISupportServiceHandler, B> ex
     }
 
     @SuppressWarnings("unchecked")
-    protected <T> Optional<T> getComponent(Class<T> clazz) {
+    protected <R> Optional<R> getComponent(Class<R> clazz) {
         for (UIComponent component : this) {
             if (clazz.isInstance(component))
-                return Optional.ofNullable(((T) component));
+                return Optional.ofNullable((R) component);
         }
         return Optional.empty();
-    }
-
-    protected void validate() throws DataValidateException {
-        List<ISupportDataValidate> list = binders().findOwners(ISupportDataValidate.class);
-        for (ISupportDataValidate validate : list)
-            validate.validate();
     }
 
     @Override

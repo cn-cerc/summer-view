@@ -1,6 +1,7 @@
 package cn.cerc.ui.ssr.core;
 
 import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -22,24 +23,25 @@ public abstract class VuiContainer<T> extends VuiControl {
 
     private Class<?> supportClass;
 
-    @SuppressWarnings("unchecked")
     public VuiContainer() {
         super();
-        if (getClass().getGenericSuperclass() instanceof ParameterizedType type) {
-            supportClass = (Class<T>) type.getActualTypeArguments()[0];
-        } else if (getClass().getSuperclass().getGenericSuperclass() instanceof ParameterizedType type) {
-            supportClass = (Class<T>) type.getActualTypeArguments()[0];
-        }
+        supportClass = findSupportClass(getClass());
+    }
+
+    public VuiContainer(UIComponent owner) {
+        super(owner);
+        supportClass = findSupportClass(getClass());
     }
 
     @SuppressWarnings("unchecked")
-    public VuiContainer(UIComponent owner) {
-        super(owner);
-        if (getClass().getGenericSuperclass() instanceof ParameterizedType type) {
-            supportClass = (Class<T>) type.getActualTypeArguments()[0];
-        } else if (getClass().getSuperclass().getGenericSuperclass() instanceof ParameterizedType type) {
-            supportClass = (Class<T>) type.getActualTypeArguments()[0];
+    private Class<T> findSupportClass(Class<?> clazz) {
+        if (clazz.getGenericSuperclass() instanceof ParameterizedType type) {
+            Type[] types = type.getActualTypeArguments();
+            if (types != null && types.length > 0 && types[0] instanceof Class<?> result) {
+                return (Class<T>) result;
+            }
         }
+        return findSupportClass(clazz.getSuperclass());
     }
 
     public Set<Class<? extends VuiComponent>> getChildren() {
@@ -65,6 +67,10 @@ public abstract class VuiContainer<T> extends VuiControl {
     protected VuiContainer<?> setSupportClass(Class<?> supportClass) {
         this.supportClass = supportClass;
         return this;
+    }
+
+    protected Class<?> getSupportClass() {
+        return this.supportClass;
     }
 
     @SuppressWarnings("unchecked")

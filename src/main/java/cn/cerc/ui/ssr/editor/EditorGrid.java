@@ -12,6 +12,7 @@ import cn.cerc.ui.ssr.excel.ISupportXlsGrid;
 import cn.cerc.ui.ssr.form.ISupportForm;
 import cn.cerc.ui.ssr.grid.ISupportGrid;
 import cn.cerc.ui.ssr.grid.VuiGrid;
+import cn.cerc.ui.ssr.service.ISupportServiceField;
 import cn.cerc.ui.vcl.UIButton;
 import cn.cerc.ui.vcl.UIDiv;
 
@@ -72,6 +73,12 @@ public class EditorGrid extends UIComponent {
                         .setValue("class", item.getClass().getSimpleName());
             } else if (item instanceof ISupportXlsGrid gridBlock && !Utils.isEmpty(gridBlock.title())) {
                 String cloumn = gridBlock.title();
+                this.addRow()
+                        .setValue("id", item.getId())
+                        .setValue("cloumn", cloumn)
+                        .setValue("class", item.getClass().getSimpleName());
+            } else if (item instanceof ISupportServiceField serviceField && !Utils.isEmpty(serviceField.title())) {
+                String cloumn = serviceField.title();
                 this.addRow()
                         .setValue("id", item.getId())
                         .setValue("cloumn", cloumn)

@@ -90,7 +90,7 @@ public class VuiDataRow extends VuiComponent implements ICommonSupplierDataRow, 
             break;
         case SsrMessage.UpdateFieldCode:
             if (sender instanceof VuiForm form && msgData instanceof String newField) {
-                if (!dataRow.fields().exists(newField))
+                if (!Utils.isEmpty(newField) && !dataRow.fields().exists(newField))
                     dataRow.fields().add(newField);
             }
             break;

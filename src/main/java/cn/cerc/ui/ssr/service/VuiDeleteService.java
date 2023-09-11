@@ -23,11 +23,11 @@ public class VuiDeleteService extends VuiAbstractService<ISupportServiceHandler,
     public DataSet execute() throws ServiceException {
         Optional<ISupplierEntityOpen> entityHandler = binder.target();
         if (entityHandler.isPresent()) {
-            Optional<VuiSearchDataIn> optional = getComponent(VuiSearchDataIn.class);
+            Optional<VuiSearchHeadIn> component = getComponent(VuiSearchHeadIn.class);
             List<ISupportFilter> filterList = new ArrayList<>();
-            if (optional.isPresent()) {
-                VuiSearchDataIn searchDataIn = optional.get();
-                filterList = searchDataIn.getFilterFields();
+            if (component.isPresent()) {
+                component.get().validate();
+                filterList = component.get().fields();
             }
             entityHandler.get().open(filterList).delete();
             return new DataSet();

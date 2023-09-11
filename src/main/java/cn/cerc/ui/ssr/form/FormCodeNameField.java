@@ -26,11 +26,11 @@ public class FormCodeNameField extends VuiControl implements ISupportForm {
     private SsrBlock block = new SsrBlock();
     private String fieldDialogIcon;
     @Column
-    String title;
+    String title = "";
     @Column
-    String codeField;
+    String codeField = "";
     @Column
-    String nameField;
+    String nameField = "";
     @Column
     String dialog = "";
     @Column

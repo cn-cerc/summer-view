@@ -6,7 +6,7 @@ import cn.cerc.mis.ado.CustomEntity;
 
 public interface ISupplierEntityOpen {
 
-    public AbstractEntityOpenHelper<? extends CustomEntity> open(List<ISupportFilter> filterList);
+    public VuiAbstractEntityOpenHelper<? extends CustomEntity> open(List<ISupportFilter> filterList);
 
     public List<VuiModifyField> fields();
 

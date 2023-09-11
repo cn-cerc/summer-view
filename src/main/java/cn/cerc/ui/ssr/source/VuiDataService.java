@@ -16,15 +16,17 @@ import org.springframework.stereotype.Component;
 
 import cn.cerc.db.core.DataRow;
 import cn.cerc.db.core.DataSet;
+import cn.cerc.db.core.IHandle;
 import cn.cerc.db.core.Utils;
+import cn.cerc.db.core.Variant;
 import cn.cerc.mis.client.ServiceSign;
-import cn.cerc.mis.core.CustomEntityService;
-import cn.cerc.mis.core.IPage;
+import cn.cerc.mis.core.Application;
+import cn.cerc.mis.core.IEntityServiceFields;
+import cn.cerc.mis.core.IService;
 import cn.cerc.ui.ssr.core.EntityServiceRecord;
 import cn.cerc.ui.ssr.core.VuiComponent;
 import cn.cerc.ui.ssr.editor.SsrMessage;
 import cn.cerc.ui.ssr.form.VuiForm;
-import cn.cerc.ui.ssr.page.IVuiEnvironment;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -33,7 +35,7 @@ public class VuiDataService extends VuiComponent
         implements ICommonSupplierDataRow, ISupplierFields, IBinders, ICommonSupplierDataSet {
     private static final Logger log = LoggerFactory.getLogger(VuiDataService.class);
     private DataSet dataSet = new DataSet();
-    private IPage page;
+    private IHandle handle;
     private Binders binders = new Binders();
     @Column
     EntityServiceRecord service = EntityServiceRecord.EMPTY;
@@ -77,9 +79,9 @@ public class VuiDataService extends VuiComponent
     @Override
     public void onMessage(Object sender, int msgType, Object msgData, String targetId) {
         switch (msgType) {
-        case SsrMessage.InitPage:
-            if (msgData instanceof IPage page)
-                this.page = page;
+        case SsrMessage.InitHandle:
+            if (msgData instanceof IHandle handle)
+                this.handle = handle;
             break;
         case SsrMessage.InitBinder:
             this.headIn.init();
@@ -95,7 +97,7 @@ public class VuiDataService extends VuiComponent
                             break;
                         dataIn = target.get().dataRow();
                     }
-                    var svr = new ServiceSign(this.service.service()).callLocal(page.getForm(), dataIn);
+                    var svr = new ServiceSign(this.service.service()).callLocal(handle, dataIn);
                     if (svr.isFail())
                         throw new RuntimeException(svr.message());
                     this.dataSet = svr.dataOut();
@@ -106,11 +108,11 @@ public class VuiDataService extends VuiComponent
             break;
         }
         case SsrMessage.AfterSubmit: {
-            if (page == null) // 非运行环境
+            if (handle == null) // 非运行环境
                 break;
             var target = this.headIn.target();
             if (target.isPresent()) {
-                var svr = new ServiceSign(this.service.service()).callLocal(page.getForm(), target.get().dataRow());
+                var svr = new ServiceSign(this.service.service()).callLocal(handle, target.get().dataRow());
                 if (svr.isFail()) {
                     binders.sendMessage(this, SsrMessage.FailOnService, null, null);
                     this.canvas().sendMessage(this, SsrMessage.FailOnService, svr.message(), null);
@@ -144,22 +146,26 @@ public class VuiDataService extends VuiComponent
 
     @Override
     public Set<Field> fields(int fieldsType) {
-        IVuiEnvironment environment = this.canvas().environment();
-        if (Utils.isEmpty(this.service.service()))
+        if (handle == null)
+            return Set.of();
+        if (Utils.isEmpty(this.service()))
             return new LinkedHashSet<>();
-        var optBean = environment.getBean(this.service.service(), CustomEntityService.class);
-        if (optBean.isPresent()) {
-            CustomEntityService<?, ?, ?, ?> svr = optBean.get();
-            switch (fieldsType) {
-            case HeadOutFields:
-                return svr.getMetaHeadOut().keySet();
-            case HeadInFields:
-                return svr.getMetaHeadIn().keySet();
-            case BodyInFields:
-                return svr.getMetaBodyIn().keySet();
-            case BodyOutFields:
-                return svr.getMetaBodyOut().keySet();
+        try {
+            IService svr = Application.getService(handle, this.service(), new Variant());
+            if (svr instanceof IEntityServiceFields service) {
+                switch (fieldsType) {
+                case HeadOutFields:
+                    return service.getMetaHeadOut().keySet();
+                case HeadInFields:
+                    return service.getMetaHeadIn().keySet();
+                case BodyInFields:
+                    return service.getMetaBodyIn().keySet();
+                case BodyOutFields:
+                    return service.getMetaBodyOut().keySet();
+                }
             }
+        } catch (ClassNotFoundException e) {
+            log.error(e.getMessage(), e);
         }
         return new LinkedHashSet<>();
     }

@@ -1,5 +1,6 @@
 package cn.cerc.ui.ssr.service;
 
+import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Component;
 
 import cn.cerc.db.core.DataRow;
 import cn.cerc.db.core.DataSet;
+import cn.cerc.db.core.EntityHelper;
 import cn.cerc.db.core.FieldDefs;
 import cn.cerc.db.core.FieldMeta;
 import cn.cerc.db.core.IHandle;
@@ -26,7 +28,6 @@ import cn.cerc.mis.ado.CustomEntity;
 import cn.cerc.mis.ado.EntityMany;
 import cn.cerc.mis.ado.EntityQuery;
 import cn.cerc.mis.core.Application;
-import cn.cerc.ui.ssr.core.VuiContainer;
 import cn.cerc.ui.ssr.editor.SsrMessage;
 import cn.cerc.ui.ssr.source.Binder;
 import cn.cerc.ui.ssr.source.Binders;
@@ -34,7 +35,8 @@ import cn.cerc.ui.ssr.source.IBinders;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class VuiEntityQuery extends VuiContainer<VuiOutputField> implements ISupportServiceHandler, IBinders {
+public class VuiEntityQuery extends VuiAbstractEntityContainer<VuiOutputField>
+        implements ISupportServiceHandler, IBinders {
     private Binders binders = new Binders();
     private IHandle handle;
     private DataSet dataIn;
@@ -46,9 +48,11 @@ public class VuiEntityQuery extends VuiContainer<VuiOutputField> implements ISup
     Binder<VuiEntityQuery> joinMaster = new Binder<>(this, VuiEntityQuery.class);
     @Column
     String masterField = "";
+    private Class<? extends CustomEntity> entityClass;
 
     @Override
     public void onMessage(Object sender, int msgType, Object msgData, String targetId) {
+        super.onMessage(sender, msgType, msgData, targetId);
         switch (msgType) {
         case SsrMessage.InitHandle:
             if (msgData instanceof IHandle handle)
@@ -128,29 +132,37 @@ public class VuiEntityQuery extends VuiContainer<VuiOutputField> implements ISup
         return Optional.of(row);
     }
 
-    public Class<? extends CustomEntity> getEntityClass() {
-        var temp = entityId;
-        var first = entityId.substring(0, 2);
-        if (!first.toUpperCase().equals(first))
-            temp = entityId.substring(0, 1).toLowerCase() + entityId.substring(1);
-        return Application.getBean(temp, CustomEntity.class).getClass();
+    @Override
+    public Set<Field> entityFields() {
+        Class<? extends CustomEntity> entityClass = getEntityClass();
+        if (entityClass == null)
+            return Set.of();
+        return new LinkedHashSet<>(EntityHelper.get(entityClass).fields().values());
     }
 
-    private Set<String> getOutputFields() {
-        if (outputFields == null)
-            outputFields = getFields(VuiOutputField.class).stream()
-                    .map(VuiOutputField::field)
-                    .collect(Collectors.toCollection(LinkedHashSet::new));
-        return outputFields;
-    }
-
-    @SuppressWarnings("unchecked")
-    private <T> List<T> getFields(Class<T> clazz) {
-        return this.getComponents().stream().map(o -> {
-            if (clazz.isInstance(o))
-                return (T) o;
+    private Class<? extends CustomEntity> getEntityClass() {
+        if (Utils.isEmpty(entityId))
             return null;
-        }).filter(Objects::nonNull).toList();
+        if (entityClass == null) {
+            var temp = entityId;
+            var first = entityId.substring(0, 2);
+            if (!first.toUpperCase().equals(first))
+                temp = entityId.substring(0, 1).toLowerCase() + entityId.substring(1);
+            entityClass = Application.getBean(temp, CustomEntity.class).getClass();
+            return entityClass;
+        }
+        return entityClass;
+    }
+
+    public Set<String> getOutputFields() {
+        if (outputFields == null) {
+            outputFields = this.getComponents().stream().map(o -> {
+                if (o instanceof VuiOutputField field)
+                    return field;
+                return null;
+            }).filter(Objects::nonNull).map(VuiOutputField::field).collect(Collectors.toCollection(LinkedHashSet::new));
+        }
+        return outputFields;
     }
 
     @Override

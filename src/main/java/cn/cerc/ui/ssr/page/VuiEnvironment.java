@@ -87,10 +87,6 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
         AliasNames.put("UISsrGrid", "vuiGrid");
     }
 
-    public void setHandle(IHandle handle) {
-        this.handle = handle;
-    }
-
     public void form(AbstractForm form) {
         this.form = form;
         this.handle = form;

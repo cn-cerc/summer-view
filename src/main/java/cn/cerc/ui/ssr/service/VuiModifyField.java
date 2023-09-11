@@ -45,4 +45,19 @@ public class VuiModifyField extends VuiControl implements ISupportUpdate {
         return alias;
     }
 
+    @Override
+    public void field(String field) {
+        this.field = field;
+    }
+
+    @Override
+    public void title(String title) {
+        this.title = title;
+    }
+
+    @Override
+    public void required(boolean required) {
+        this.required = required;
+    }
+
 }

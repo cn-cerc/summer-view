@@ -68,4 +68,19 @@ public class VuiSearchField extends VuiControl implements ISupportFilter {
         return endJoin;
     }
 
+    @Override
+    public void field(String field) {
+        this.field = field;
+    }
+
+    @Override
+    public void title(String title) {
+        this.title = title;
+    }
+
+    @Override
+    public void required(boolean required) {
+        this.required = required;
+    }
+
 }
