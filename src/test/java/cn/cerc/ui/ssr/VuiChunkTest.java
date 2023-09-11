@@ -73,7 +73,7 @@ public class VuiChunkTest {
 
         VuiBlock310101 block = new VuiBlock310101(chunk);
         block.slot0(style.getIt());
-        block.slot1(style.getString("姓名", "name_"));
+        block.slot1(style.getString2("姓名", "name_"));
         block.slot2(style.getOpera(() -> ds.getString("name_")));
         chunk.dataSet(ds);
         assertEquals("""
@@ -100,9 +100,9 @@ public class VuiChunkTest {
         SsrBlockStyleDefault style = chunk.defaultStyle();
 
         VuiBlock3201 block = new VuiBlock3201(chunk);
-        block.slot0(style.getString("姓名", "name_"));
-        block.slot1(style.getString("年龄", "age_"));
-        block.slot2(style.getString("体重", "weight_"));
+        block.slot0(style.getString2("姓名", "name_"));
+        block.slot1(style.getString2("年龄", "age_"));
+        block.slot2(style.getString2("体重", "weight_"));
         chunk.dataSet(ds);
         assertEquals(
                 """
@@ -128,7 +128,7 @@ public class VuiChunkTest {
         VuiBlock310101 board = new VuiBlock310101(chunk);
         board.slot0(style.getCheckboxIt("checkbox_name_", "name_"));
         board.slot1(style.getString2("姓名", "name_").url(() -> "www"));
-        board.slot2(style.getString("内容", "opera_"));
+        board.slot2(style.getString2("内容", "opera_"));
         chunk.dataSet(ds);
         assertEquals(
                 """
@@ -182,7 +182,7 @@ public class VuiChunkTest {
 
         VuiBlock310101 board = new VuiBlock310101(chunk);
         board.slot0(style.getCheckbox("checkBoxName", "name_"));
-        board.slot1(style.getString("姓名", "name_"));
+        board.slot1(style.getString2("姓名", "name_"));
         board.slot2(style.getOpera(() -> "www"));
         chunk.dataSet(ds);
         assertEquals("""
@@ -210,7 +210,7 @@ public class VuiChunkTest {
 
         VuiBlock2101 board = new VuiBlock2101(chunk);
         board.slot0(style.getCheckboxIt("checkBoxName", "name_"));
-        board.slot1(style.getString("姓名", "name_"));
+        board.slot1(style.getString2("姓名", "name_"));
         chunk.dataSet(ds);
         assertEquals(
                 """
@@ -236,7 +236,7 @@ public class VuiChunkTest {
         SsrBlockStyleDefault style = chunk.defaultStyle();
 
         VuiBlock1201 board = new VuiBlock1201(chunk);
-        board.slot0(style.getString("姓名", "name_"));
+        board.slot0(style.getString2("姓名", "name_"));
         chunk.dataSet(ds);
         assertEquals(
                 """
@@ -256,8 +256,8 @@ public class VuiChunkTest {
         SsrBlockStyleDefault style = chunk.defaultStyle();
 
         VuiBlock2201 board = new VuiBlock2201(chunk);
-        board.slot0(style.getString("姓名", "name_"));
-        board.slot1(style.getString("年龄", "age_"));
+        board.slot0(style.getString2("姓名", "name_"));
+        board.slot1(style.getString2("年龄", "age_"));
         chunk.dataSet(ds);
         assertEquals(
                 """
@@ -279,9 +279,9 @@ public class VuiChunkTest {
         SsrBlockStyleDefault style = chunk.defaultStyle();
 
         VuiBlock3201 board = new VuiBlock3201(chunk);
-        board.slot0(style.getString("姓名", "name_"));
-        board.slot1(style.getString("年龄", "age_"));
-        board.slot2(style.getString("性别", "sex_"));
+        board.slot0(style.getString2("姓名", "name_"));
+        board.slot1(style.getString2("年龄", "age_"));
+        board.slot2(style.getString2("性别", "sex_"));
         chunk.dataSet(ds);
         assertEquals(
                 """
@@ -305,8 +305,8 @@ public class VuiChunkTest {
         SsrBlockStyleDefault style = chunk.defaultStyle();
 
         VuiBlock2101 board = new VuiBlock2101(chunk);
-        board.slot0(style.getString("姓名", "name_"));
-        board.slot1(style.getString("年龄", "age_"));
+        board.slot0(style.getString2("姓名", "name_"));
+        board.slot1(style.getString2("年龄", "age_"));
         chunk.dataSet(ds);
         assertEquals(
                 """
@@ -328,9 +328,9 @@ public class VuiChunkTest {
         SsrBlockStyleDefault style = chunk.defaultStyle();
 
         VuiBlock3101 board = new VuiBlock3101(chunk);
-        board.slot0(style.getString("姓名", "name_"));
-        board.slot1(style.getString("年龄", "age_"));
-        board.slot2(style.getString("性别", "sex_"));
+        board.slot0(style.getString2("姓名", "name_"));
+        board.slot1(style.getString2("年龄", "age_"));
+        board.slot2(style.getString2("性别", "sex_"));
         chunk.dataSet(ds);
         assertEquals(
                 """
@@ -354,8 +354,8 @@ public class VuiChunkTest {
         SsrBlockStyleDefault style = chunk.defaultStyle();
 
         VuiBlock3101 board = new VuiBlock3101(chunk);
-        board.slot0(style.getString("姓名", "name_"));
-        board.slot1(style.getString("年龄", "age_"));
+        board.slot0(style.getString2("姓名", "name_"));
+        board.slot1(style.getString2("年龄", "age_"));
         board.slot2(style.getNumber("性别", "sex_").toList(List.of("女", "男")));
         chunk.dataSet(ds);
         assertEquals(
@@ -381,8 +381,8 @@ public class VuiChunkTest {
         SsrBlockStyleDefault style = chunk.defaultStyle();
 
         VuiBlock3101 board = new VuiBlock3101(chunk);
-        board.slot0(style.getString("姓名", "name_"));
-        board.slot1(style.getString("年龄", "age_"));
+        board.slot0(style.getString2("姓名", "name_"));
+        board.slot1(style.getString2("年龄", "age_"));
         board.slot2(style.getBoolean("是否成年", "adult_"));
         board.ratio(2, 1, 1);
         chunk.dataSet(ds);
@@ -416,8 +416,8 @@ public class VuiChunkTest {
         SsrBlockStyleDefault style = chunk.defaultStyle();
 
         VuiBlock3101 board = new VuiBlock3101(chunk);
-        board.slot0(style.getString("姓名", "name_"));
-        board.slot1(style.getString("年龄", "age_"));
+        board.slot0(style.getString2("姓名", "name_"));
+        board.slot1(style.getString2("年龄", "age_"));
         board.slot2(style.getNumber("性别", "sex_").toList(List.of("男", "女")));
         board.ratio(2, 1, 1);
         chunk.dataSet(ds);
