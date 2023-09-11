@@ -20,7 +20,6 @@ import cn.cerc.ui.ssr.core.SsrBlock;
 import cn.cerc.ui.ssr.editor.ISsrBoard;
 import cn.cerc.ui.ssr.editor.SsrMessage;
 import cn.cerc.ui.ssr.page.VuiEnvironment;
-import cn.cerc.ui.ssr.source.Binder;
 import cn.cerc.ui.ssr.source.VuiDataService;
 
 @Component
