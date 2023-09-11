@@ -169,4 +169,12 @@ public class VuiDataService extends VuiComponent
         return binders;
     }
 
+    protected String successMessage() {
+        return success_message;
+    }
+
+    protected boolean callByInit() {
+        return callByInit;
+    }
+
 }
