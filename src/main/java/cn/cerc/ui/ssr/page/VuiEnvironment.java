@@ -1,5 +1,6 @@
 package cn.cerc.ui.ssr.page;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -16,12 +17,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.slf4j.Logger;
@@ -45,6 +51,7 @@ import cn.cerc.mis.core.AppClient;
 import cn.cerc.mis.core.Application;
 import cn.cerc.mis.core.FormSign;
 import cn.cerc.mis.core.IPage;
+import cn.cerc.mis.core.JsonPage;
 import cn.cerc.ui.core.RequestReader;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.mvc.StartForms;
@@ -313,8 +320,28 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
     }
 
     private IPage importJson() {
-        // TODO 导入
-        return null;
+        HttpServletRequest request = form.getRequest();
+        try {
+            // 处理文件上传
+            DiskFileItemFactory factory = new DiskFileItemFactory();
+            ServletFileUpload upload = new ServletFileUpload(factory);
+            // 获取所有文件列表
+            List<FileItem> uploadFiles = upload.parseRequest(request);
+            Optional<FileItem> file = uploadFiles.stream().filter(item -> !item.isFormField()).findFirst();
+            if (file.isEmpty())
+                return new JsonPage(form).setResultMessage(false, "导入失败：未上传文件");
+            FileItem item = file.get();
+            byte[] bytes = null;
+            try (BufferedInputStream inputStream = new BufferedInputStream(item.getInputStream())) {
+                bytes = inputStream.readAllBytes();
+            }
+            String json = new String(bytes);
+            saveProperties(json);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            return new JsonPage(form).setResultMessage(false, "导入失败：" + e.getMessage());
+        }
+        return new JsonPage(form).setResultMessage(true, "导入成功");
     }
 
     @Override
