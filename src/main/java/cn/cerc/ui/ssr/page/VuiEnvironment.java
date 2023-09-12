@@ -305,7 +305,7 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
         String json = JsonTool.format(loadProperties());
         HttpServletResponse response = form.getResponse();
         response.setContentType("application/octet-stream");
-        String fileName = String.join("-", Utils.encode(form.getName().trim(), StandardCharsets.UTF_8.name()),
+        String fileName = String.join("-", Utils.encode(pageCode, StandardCharsets.UTF_8.name()),
                 new FastDate().format("yyyyMMdd"));
         response.addHeader("Content-Disposition", "attachment;filename=" + fileName + ".json");
         response.setContentLength(json.getBytes().length);

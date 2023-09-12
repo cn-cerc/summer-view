@@ -156,18 +156,18 @@ public class VuiDataService extends VuiComponent
             IService svr = Application.getService(handle, this.service(), new Variant());
             if (svr instanceof CustomEntityService<?, ?, ?, ?> service) {
                 Set<Field> fields = switch (fieldsType) {
-                case HeadOutFields -> service.getMetaHeadOut().keySet();
                 case HeadInFields -> service.getMetaHeadIn().keySet();
                 case BodyInFields -> service.getMetaBodyIn().keySet();
+                case HeadOutFields -> service.getMetaHeadOut().keySet();
                 case BodyOutFields -> service.getMetaBodyOut().keySet();
                 default -> Set.of();
                 };
                 return fields.stream().map(EntityServiceField::new).toList();
             } else if (svr instanceof IEntityServiceFields service) {
                 return switch (fieldsType) {
-                case HeadOutFields -> service.getHeadOutFields();
-                case HeadInFields -> service.getHeadOutFields();
+                case HeadInFields -> service.getHeadInFields();
                 case BodyInFields -> service.getBodyInFields();
+                case HeadOutFields -> service.getHeadOutFields();
                 case BodyOutFields -> service.getBodyOutFields();
                 default -> List.of();
                 };
