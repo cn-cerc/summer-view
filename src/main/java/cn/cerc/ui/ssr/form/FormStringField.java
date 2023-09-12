@@ -19,7 +19,6 @@ import cn.cerc.ui.core.RequestReader;
 import cn.cerc.ui.fields.AbstractField;
 import cn.cerc.ui.fields.ImageConfigImpl;
 import cn.cerc.ui.ssr.core.ISsrOption;
-import cn.cerc.ui.ssr.core.ISupplierBlock;
 import cn.cerc.ui.ssr.core.SsrBlock;
 import cn.cerc.ui.ssr.core.VuiControl;
 import cn.cerc.ui.ssr.editor.ISsrBoard;
@@ -243,7 +242,7 @@ public class FormStringField extends VuiControl implements ISupportForm {
     }
 
     @Override
-    public ISupportForm field(String field) {
+    public FormStringField field(String field) {
         this.field = field;
         return this;
     }
@@ -254,7 +253,7 @@ public class FormStringField extends VuiControl implements ISupportForm {
         return this;
     }
 
-    public ISupplierBlock toMap(Map<String, String> targetMap) {
+    public FormStringField toMap(Map<String, String> targetMap) {
         block.toMap(targetMap);
         block.option("_isTextField", "");
         return this;

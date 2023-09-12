@@ -20,7 +20,6 @@ import cn.cerc.ui.core.RequestReader;
 import cn.cerc.ui.fields.AbstractField;
 import cn.cerc.ui.fields.ImageConfigImpl;
 import cn.cerc.ui.ssr.core.ISsrOption;
-import cn.cerc.ui.ssr.core.ISupplierBlock;
 import cn.cerc.ui.ssr.core.SsrBlock;
 import cn.cerc.ui.ssr.core.VuiControl;
 import cn.cerc.ui.ssr.editor.ISsrBoard;
@@ -48,7 +47,15 @@ public class FormNumberField extends VuiControl implements ISupportForm {
     @Column
     String dialog = "";
     @Column
-    String patten = "";
+    String pattern = "[\\d\\.]+";
+    /**
+     * 步进值
+     * https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/input/number#step
+     * <br>
+     * 如果要输入任意个小数位，赋值为 any
+     */
+    @Column
+    String step = "any";
     @Column
     boolean readonly = false;
     @Column
@@ -99,7 +106,7 @@ public class FormNumberField extends VuiControl implements ISupportForm {
                                     <label for="${fields}"${if _mark} class='formMark'${endif}>${if _required}<font role="require">*</font>${endif}<em>${_title}</em></label>
                                     <div>
                                         ${if _isTextField}
-                                            <input type="text" name="${fields}" id="${fields}" value="%s" autocomplete="off"${if _readonly} readonly${endif}${if _autofocus} autofocus${endif}
+                                            <input type="number" step="${_step}" name="${fields}" id="${fields}" value="%s" autocomplete="off"${if _readonly} readonly${endif}${if _autofocus} autofocus${endif}
                                             ${if _placeholder} placeholder="${_placeholder}"${else} placeholder="请${if _dialog}点击获取${else}输入${endif}${_title}"${endif}${if _pattern} pattern="${_pattern}"${endif}${if _required} required${endif} />
                                         ${else}
                                             <select id="${fields}" name="${fields}"${if _readonly} disabled${endif}>
@@ -128,11 +135,12 @@ public class FormNumberField extends VuiControl implements ISupportForm {
         block.option("_required", this.required ? "1" : "");
         block.option("_dialog", this.dialog);
         block.option("_mark", this.mark);
-        block.option("_patten", this.patten);
+        block.option("_patten", this.pattern);
         block.option("_readonly", this.readonly ? "1" : "");
-        block.option("_pattern", this.patten);
+        block.option("_pattern", this.pattern);
         block.option("_autofocus", this.autofocus ? "1" : "");
         block.option("_style", this.properties("v_style").orElse(""));
+        block.option("_step", this.step());
         return block;
     }
 
@@ -180,8 +188,8 @@ public class FormNumberField extends VuiControl implements ISupportForm {
         return this;
     }
 
-    public FormNumberField patten(String patten) {
-        this.patten = patten;
+    public FormNumberField pattern(String pattern) {
+        this.pattern = pattern;
         return this;
     }
 
@@ -246,22 +254,31 @@ public class FormNumberField extends VuiControl implements ISupportForm {
     }
 
     @Override
-    public ISupportForm field(String field) {
+    public FormNumberField field(String field) {
         this.field = field;
         return this;
     }
 
-    public ISupplierBlock toList(List<String> targetList) {
+    public FormNumberField toList(List<String> targetList) {
         block.toList(targetList);
         block.option("_isTextField", "");
         return this;
     }
 
-    public ISupplierBlock toList(Enum<?>[] enums) {
+    public FormNumberField toList(Enum<?>[] enums) {
         List<String> list = new ArrayList<>();
         for (Enum<?> item : enums)
             list.add(item.name());
         return toList(list);
+    }
+
+    public String step() {
+        return step;
+    }
+
+    public FormNumberField step(String step) {
+        this.step = step;
+        return this;
     }
 
 }
