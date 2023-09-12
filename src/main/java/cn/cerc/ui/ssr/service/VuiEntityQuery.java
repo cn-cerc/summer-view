@@ -146,9 +146,9 @@ public class VuiEntityQuery extends VuiAbstractEntityContainer<VuiOutputField>
         }
         for (VuiOutputField field : outputFields.values()) {
             if (!Utils.isEmpty(field.alias())) {
-                row.setValue(field.alias(), row.getString(field.field()));
+                row.setValue(field.alias(), row.getValue(field.field()));
+                row.fields().remove(field.field());
             }
-            row.fields().remove(field.field());
         }
         return Optional.of(row);
     }

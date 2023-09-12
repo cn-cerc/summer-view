@@ -105,6 +105,8 @@ public class VuiDataService extends VuiComponent
                     this.dataSet = svr.dataOut();
                     this.canvas().sendMessage(this, SsrMessage.RefreshProperties, dataSet, null);
                     binders.sendMessage(this, SsrMessage.SuccessOnService, null, null);
+                    if (!Utils.isEmpty(this.success_message))
+                        this.canvas().sendMessage(this, SsrMessage.SuccessOnService, this.success_message, null);
                 }
             }
             break;
