@@ -6,8 +6,6 @@ public interface ISupportServiceField {
     
     void field(String field);
 
-    String alias();
-
     String title();
     
     void title(String title);

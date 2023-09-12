@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 
 import cn.cerc.db.core.DataRow;
 import cn.cerc.db.core.DataSet;
+import cn.cerc.db.core.Datetime;
 import cn.cerc.db.core.EntityHelper;
 import cn.cerc.db.core.ServiceException;
 import cn.cerc.mis.ado.CustomEntity;
@@ -65,7 +66,6 @@ public class VuiModifyService extends VuiAbstractService<ISupportServiceHandler,
         return new DataSet();
     }
 
-    @SuppressWarnings("unchecked")
     private void modify(ISupplierEntityOpen supplierEntityOpen, List<ISupportFilter> filterList,
             List<VuiModifyField> modifyFields, DataRow row) throws ServiceExecuteException {
         supplierEntityOpen.open(filterList).isEmptyThrow(() -> new ServiceExecuteException(emptyMsg)).update(item -> {
@@ -74,22 +74,38 @@ public class VuiModifyService extends VuiAbstractService<ISupportServiceHandler,
             Map<String, Field> fields = helper.fields();
             for (VuiModifyField modifyField : modifyFields) {
                 String fieldCode = modifyField.field();
-                Object obj = row.getValue(fieldCode);
                 if (!modifyField.required() && !row.hasValue(fieldCode))
                     continue;
                 Field field = fields.get(fieldCode);
                 if (field != null) {
                     try {
-                        if (field.getType().isEnum())
-                            field.set(item, row.getEnum(fieldCode, (Class<Enum<?>>) field.getType()));
-                        else
-                            field.set(item, obj);
+                        field.set(item, getByType(row, fieldCode, field.getType()));
                     } catch (IllegalArgumentException | IllegalAccessException e) {
                         log.error(e.getMessage(), e);
                     }
                 }
             }
         });
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T> T getByType(DataRow row, String field, Class<T> clazz) {
+        if (clazz == String.class)
+            return (T) row.getString(field);
+        else if (clazz == boolean.class || clazz == Boolean.class)
+            return (T) Boolean.valueOf(row.getBoolean(field));
+        else if (clazz == int.class || clazz == Integer.class)
+            return (T) Integer.valueOf(row.getInt(field));
+        else if (clazz == double.class || clazz == Double.class)
+            return (T) Double.valueOf(row.getDouble(field));
+        else if (clazz == long.class || clazz == Long.class)
+            return (T) Long.valueOf(row.getLong(field));
+        else if (clazz == Datetime.class)
+            return (T) row.getDatetime(field);
+        else if (clazz.isEnum())
+            return (T) row.getEnum(field, (Class<Enum<?>>) clazz);
+        else
+            return (T) row.getValue(field);
     }
 
     @Override

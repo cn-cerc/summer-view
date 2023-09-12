@@ -49,11 +49,6 @@ public class VuiSearchField extends VuiControl implements ISupportFilter {
     }
 
     @Override
-    public String alias() {
-        return alias;
-    }
-
-    @Override
     public SearchTypeEnum searchType() {
         return searchType;
     }

@@ -41,11 +41,6 @@ public class VuiOutputField extends VuiControl implements ISupportServiceField {
     }
 
     @Override
-    public String alias() {
-        return alias;
-    }
-
-    @Override
     public void field(String field) {
         this.field = field;
     }

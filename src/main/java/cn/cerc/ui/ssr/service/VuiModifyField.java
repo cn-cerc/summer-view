@@ -14,8 +14,6 @@ public class VuiModifyField extends VuiControl implements ISupportUpdate {
     @Column
     String field = "";
     @Column
-    String alias = "";
-    @Column
     String title = "";
     @Column
     boolean required = false;
@@ -38,11 +36,6 @@ public class VuiModifyField extends VuiControl implements ISupportUpdate {
     @Override
     public String title() {
         return title;
-    }
-
-    @Override
-    public String alias() {
-        return alias;
     }
 
     @Override
