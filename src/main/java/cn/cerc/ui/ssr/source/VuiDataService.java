@@ -1,7 +1,7 @@
 package cn.cerc.ui.ssr.source;
 
 import java.lang.reflect.Field;
-import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -21,6 +21,8 @@ import cn.cerc.db.core.Utils;
 import cn.cerc.db.core.Variant;
 import cn.cerc.mis.client.ServiceSign;
 import cn.cerc.mis.core.Application;
+import cn.cerc.mis.core.CustomEntityService;
+import cn.cerc.mis.core.EntityServiceField;
 import cn.cerc.mis.core.IEntityServiceFields;
 import cn.cerc.mis.core.IService;
 import cn.cerc.ui.ssr.core.EntityServiceRecord;
@@ -145,29 +147,35 @@ public class VuiDataService extends VuiComponent
     }
 
     @Override
-    public Set<Field> fields(int fieldsType) {
+    public List<EntityServiceField> fields(int fieldsType) {
         if (handle == null)
-            return Set.of();
+            return List.of();
         if (Utils.isEmpty(this.service()))
-            return new LinkedHashSet<>();
+            return List.of();
         try {
             IService svr = Application.getService(handle, this.service(), new Variant());
-            if (svr instanceof IEntityServiceFields service) {
-                switch (fieldsType) {
-                case HeadOutFields:
-                    return service.getMetaHeadOut().keySet();
-                case HeadInFields:
-                    return service.getMetaHeadIn().keySet();
-                case BodyInFields:
-                    return service.getMetaBodyIn().keySet();
-                case BodyOutFields:
-                    return service.getMetaBodyOut().keySet();
-                }
+            if (svr instanceof CustomEntityService<?, ?, ?, ?> service) {
+                Set<Field> fields = switch (fieldsType) {
+                case HeadOutFields -> service.getMetaHeadOut().keySet();
+                case HeadInFields -> service.getMetaHeadIn().keySet();
+                case BodyInFields -> service.getMetaBodyIn().keySet();
+                case BodyOutFields -> service.getMetaBodyOut().keySet();
+                default -> Set.of();
+                };
+                return fields.stream().map(EntityServiceField::new).toList();
+            } else if (svr instanceof IEntityServiceFields service) {
+                return switch (fieldsType) {
+                case HeadOutFields -> service.getHeadOutFields();
+                case HeadInFields -> service.getHeadOutFields();
+                case BodyInFields -> service.getBodyInFields();
+                case BodyOutFields -> service.getBodyOutFields();
+                default -> List.of();
+                };
             }
         } catch (ClassNotFoundException e) {
             log.error(e.getMessage(), e);
         }
-        return new LinkedHashSet<>();
+        return List.of();
     }
 
     @Override

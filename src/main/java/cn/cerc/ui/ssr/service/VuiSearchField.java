@@ -16,8 +16,6 @@ public class VuiSearchField extends VuiControl implements ISupportFilter {
     @Column
     String field = "";
     @Column
-    String alias = "";
-    @Column
     String title = "";
     @Column
     boolean required = false;

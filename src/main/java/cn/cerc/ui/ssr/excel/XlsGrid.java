@@ -1,8 +1,7 @@
 package cn.cerc.ui.ssr.excel;
 
-import java.lang.reflect.Field;
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +15,7 @@ import cn.cerc.db.core.Datetime;
 import cn.cerc.db.core.Describe;
 import cn.cerc.db.core.FastDate;
 import cn.cerc.db.core.Utils;
+import cn.cerc.mis.core.EntityServiceField;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.RequestReader;
 import cn.cerc.ui.core.UIComponent;
@@ -94,8 +94,8 @@ public class XlsGrid extends VuiContainer<ISupportXlsGrid> implements ISupportXl
 
         Optional<ISupplierDataSet> optSvr = this.dataSet.target();
         if (optSvr.isPresent() && optSvr.get() instanceof VuiDataService svr) {
-            Set<Field> fields = svr.fields(ISupplierFields.BodyOutFields);
-            for (Field field : fields) {
+            List<EntityServiceField> fields = svr.fields(ISupplierFields.BodyOutFields);
+            for (EntityServiceField field : fields) {
                 if (dataSet.locate("field", field.getName()))
                     continue;
                 String title = field.getName();

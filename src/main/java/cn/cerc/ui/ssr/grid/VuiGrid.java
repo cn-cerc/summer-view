@@ -1,12 +1,10 @@
 package cn.cerc.ui.ssr.grid;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -24,10 +22,11 @@ import cn.cerc.db.core.DataSet;
 import cn.cerc.db.core.IHandle;
 import cn.cerc.db.core.Utils;
 import cn.cerc.mis.core.Application;
+import cn.cerc.mis.core.EntityServiceField;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.RequestReader;
-import cn.cerc.ui.core.ViewDisplay;
 import cn.cerc.ui.core.UIComponent;
+import cn.cerc.ui.core.ViewDisplay;
 import cn.cerc.ui.ssr.base.UISsrBlock;
 import cn.cerc.ui.ssr.core.AlignEnum;
 import cn.cerc.ui.ssr.core.ISsrOption;
@@ -533,8 +532,8 @@ public class VuiGrid extends VuiContainer<ISupportGrid> implements ISsrBoard, IG
                 .setValue("width", 4)
                 .setValue("check", false);
         if (optSvr.isPresent()) {
-            Set<Field> fields = optSvr.get().fields(ISupplierFields.BodyOutFields);
-            for (Field field : fields) {
+            List<EntityServiceField> fields = optSvr.get().fields(ISupplierFields.BodyOutFields);
+            for (EntityServiceField field : fields) {
                 if (dataSet.locate("field", field.getName()))
                     continue;
                 String title = field.getName();

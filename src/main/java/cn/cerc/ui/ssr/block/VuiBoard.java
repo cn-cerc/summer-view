@@ -1,11 +1,9 @@
 package cn.cerc.ui.ssr.block;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.servlet.http.HttpServletRequest;
@@ -13,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import cn.cerc.db.core.DataRow;
 import cn.cerc.db.core.DataSet;
 import cn.cerc.db.core.Utils;
+import cn.cerc.mis.core.EntityServiceField;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.RequestReader;
 import cn.cerc.ui.core.UIComponent;
@@ -126,8 +125,8 @@ public class VuiBoard extends VuiContainer<ISupportBlock> implements ISsrBoard {
                 .setValue("class", BlockItFIeld.class.getSimpleName())
                 .setValue("check", false);
         if (optSvr.isPresent()) {
-            Set<Field> fields = optSvr.get().fields(ISupplierFields.BodyOutFields);
-            for (Field field : fields) {
+            List<EntityServiceField> fields = optSvr.get().fields(ISupplierFields.BodyOutFields);
+            for (EntityServiceField field : fields) {
                 if (dataSet.locate("field", field.getName()))
                     continue;
                 String title = field.getName();

@@ -2,11 +2,14 @@ package cn.cerc.ui.ssr.service;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import javax.persistence.Column;
@@ -24,6 +27,7 @@ import cn.cerc.db.core.IHandle;
 import cn.cerc.db.core.SqlWhere;
 import cn.cerc.db.core.SqlWhere.JoinDirectionEnum;
 import cn.cerc.db.core.Utils;
+import cn.cerc.mis.ado.BatchCache;
 import cn.cerc.mis.ado.CustomEntity;
 import cn.cerc.mis.ado.EntityMany;
 import cn.cerc.mis.ado.EntityQuery;
@@ -40,7 +44,9 @@ public class VuiEntityQuery extends VuiAbstractEntityContainer<VuiOutputField>
     private Binders binders = new Binders();
     private IHandle handle;
     private DataSet dataIn;
-    private Set<String> outputFields;
+    private Map<String, VuiOutputField> outputFields;
+    private Class<? extends CustomEntity> entityClass;
+    private BatchCache<? extends CustomEntity> findBatch;
 
     @Column
     String entityId = "";
@@ -48,7 +54,6 @@ public class VuiEntityQuery extends VuiAbstractEntityContainer<VuiOutputField>
     Binder<VuiEntityQuery> joinMaster = new Binder<>(this, VuiEntityQuery.class);
     @Column
     String masterField = "";
-    private Class<? extends CustomEntity> entityClass;
 
     @Override
     public void onMessage(Object sender, int msgType, Object msgData, String targetId) {
@@ -85,16 +90,24 @@ public class VuiEntityQuery extends VuiAbstractEntityContainer<VuiOutputField>
             }
         }).dataSet().disableStorage();
 
-        Set<String> outputFields = getOutputFields();
-        if (!outputFields.contains("*")) {
+        Map<String, VuiOutputField> outputFields = getOutputFields();
+        if (!outputFields.keySet().contains("*")) {
             FieldDefs fields = dataOut.fields();
             List<String> removeFields = fields.getItems()
                     .stream()
                     .map(FieldMeta::code)
-                    .filter(t -> !outputFields.contains(t))
+                    .filter(t -> !outputFields.keySet().contains(t))
                     .toList();
             for (String field : removeFields) {
                 fields.remove(field);
+            }
+        }
+        for (VuiOutputField field : outputFields.values()) {
+            if (!Utils.isEmpty(field.alias())) {
+                for (DataRow row : dataOut) {
+                    row.setValue(field.alias(), row.getString(field.field()));
+                }
+                dataOut.fields().remove(field.field());
             }
         }
 
@@ -112,22 +125,30 @@ public class VuiEntityQuery extends VuiAbstractEntityContainer<VuiOutputField>
     }
 
     public Optional<DataRow> findBatchAndProcess(String... values) {
-        Optional<? extends CustomEntity> optional = EntityQuery.findBatch(handle, getEntityClass()).get(values);
+        if (findBatch == null)
+            findBatch = EntityQuery.findBatch(handle, getEntityClass());
+        Optional<? extends CustomEntity> optional = findBatch.get(values);
         if (optional.isEmpty())
             return Optional.empty();
 
         DataRow row = new DataRow().loadFromEntity(optional.get());
-        Set<String> outputFields = getOutputFields();
-        if (!outputFields.contains("*")) {
+        Map<String, VuiOutputField> outputFields = getOutputFields();
+        if (!outputFields.keySet().contains("*")) {
             FieldDefs fields = row.fields();
             List<String> removeFields = fields.getItems()
                     .stream()
                     .map(FieldMeta::code)
-                    .filter(t -> !outputFields.contains(t))
+                    .filter(t -> !outputFields.keySet().contains(t))
                     .toList();
             for (String field : removeFields) {
                 fields.remove(field);
             }
+        }
+        for (VuiOutputField field : outputFields.values()) {
+            if (!Utils.isEmpty(field.alias())) {
+                row.setValue(field.alias(), row.getString(field.field()));
+            }
+            row.fields().remove(field.field());
         }
         return Optional.of(row);
     }
@@ -154,13 +175,16 @@ public class VuiEntityQuery extends VuiAbstractEntityContainer<VuiOutputField>
         return entityClass;
     }
 
-    public Set<String> getOutputFields() {
+    public Map<String, VuiOutputField> getOutputFields() {
         if (outputFields == null) {
             outputFields = this.getComponents().stream().map(o -> {
                 if (o instanceof VuiOutputField field)
                     return field;
                 return null;
-            }).filter(Objects::nonNull).map(VuiOutputField::field).collect(Collectors.toCollection(LinkedHashSet::new));
+            })
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toMap(VuiOutputField::field, Function.identity(), (o1, o2) -> o1,
+                            LinkedHashMap::new));
         }
         return outputFields;
     }

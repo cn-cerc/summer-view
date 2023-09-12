@@ -55,4 +55,8 @@ public class VuiOutputField extends VuiControl implements ISupportServiceField {
         this.required = required;
     }
 
+    public String alias() {
+        return alias;
+    }
+
 }

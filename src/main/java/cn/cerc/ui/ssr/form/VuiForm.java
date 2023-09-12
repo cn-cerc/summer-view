@@ -1,6 +1,5 @@
 package cn.cerc.ui.ssr.form;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,6 +26,7 @@ import cn.cerc.db.core.DataSet;
 import cn.cerc.db.core.IHandle;
 import cn.cerc.db.core.Utils;
 import cn.cerc.mis.core.Application;
+import cn.cerc.mis.core.EntityServiceField;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.mis.core.IPage;
 import cn.cerc.mis.other.MemoryBuffer;
@@ -164,8 +164,8 @@ public class VuiForm extends VuiContainer<ISupportForm>
         var formFirst = this.getBlock(VuiForm.FormStart);
         getBlock(FormEnd,
                 () -> new SsrBlock(String.format("</ul>%s</form>",
-                        formFirst.isPresent() && isPhone() ? formFirst.get().html() : ""))
-                .template(template)).ifPresent(value -> html.print(value.html()));
+                        formFirst.isPresent() && isPhone() ? formFirst.get().html() : "")).template(template))
+                .ifPresent(value -> html.print(value.html()));
         getBlock(SsrTemplate.EndFlag).ifPresent(template -> html.print(template.html()));
     }
 
@@ -446,7 +446,7 @@ public class VuiForm extends VuiContainer<ISupportForm>
         impl.block().dataSet(dataSet);
         impl.block().option("id", this.getId());
 
-        List<Field> fields = new ArrayList<>();
+        List<EntityServiceField> fields = new ArrayList<>();
         Optional<ISupplierDataRow> optDataRow = this.dataRow.target();
         if (optDataRow.isPresent() && optDataRow.get() instanceof ISupplierFields supperli)
             fields.addAll(supperli.fields(ISupplierFields.BodyOutFields));
@@ -454,7 +454,7 @@ public class VuiForm extends VuiContainer<ISupportForm>
         Optional<ISupplierFields> optSvr = binders.findOwner(ISupplierFields.class);
         if (optSvr.isPresent())
             fields.addAll(optSvr.get().fields(ISupplierFields.HeadInFields));
-        for (Field field : fields) {
+        for (EntityServiceField field : fields) {
             if (dataSet.locate("field", field.getName()))
                 continue;
             String title = field.getName();

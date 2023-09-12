@@ -1,8 +1,6 @@
 package cn.cerc.ui.ssr.chart;
 
-import java.lang.reflect.Field;
 import java.util.Optional;
-import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -79,14 +77,6 @@ public class ChartCollect extends VuiAbstractChart {
                     block.dataSet(dataSet);
                     if (!dataSet.eof())
                         block.option("_data", "1");
-                    String fieldName = null;
-                    if (binder.target().isPresent()) {
-                        VuiDataService service = binder.target().get();
-                        Set<Field> fields = service.fields(VuiDataService.BodyOutFields);
-                        fieldName = fields.stream().findFirst().map(Field::getName).orElse(null);
-                    }
-                    if (Utils.isEmpty(fieldName))
-                        return;
                     String title = dataSet.head().getString("title");
                     block.option("_data_title", title + this.getClass().getSimpleName());
                     block.option("_title", title);
