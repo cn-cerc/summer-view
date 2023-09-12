@@ -31,8 +31,8 @@ import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.mis.core.IPage;
 import cn.cerc.mis.other.MemoryBuffer;
 import cn.cerc.ui.core.RequestReader;
-import cn.cerc.ui.core.ViewDisplay;
 import cn.cerc.ui.core.UIComponent;
+import cn.cerc.ui.core.ViewDisplay;
 import cn.cerc.ui.ssr.base.UISsrBlock;
 import cn.cerc.ui.ssr.core.AlignEnum;
 import cn.cerc.ui.ssr.core.ISsrOption;
@@ -161,8 +161,11 @@ public class VuiForm extends VuiContainer<ISupportForm>
                 log.error("找不到数据列: {}", column);
             }
         }
-        getBlock(FormEnd, () -> new SsrBlock("</ul></form>").template(template))
-                .ifPresent(value -> html.print(value.html()));
+        var formFirst = this.getBlock(VuiForm.FormStart);
+        getBlock(FormEnd,
+                () -> new SsrBlock(String.format("</ul>%s</form>",
+                        formFirst.isPresent() && isPhone() ? formFirst.get().html() : ""))
+                .template(template)).ifPresent(value -> html.print(value.html()));
         getBlock(SsrTemplate.EndFlag).ifPresent(template -> html.print(template.html()));
     }
 
@@ -182,7 +185,7 @@ public class VuiForm extends VuiContainer<ISupportForm>
                     if (this.template.id() != null)
                         template.option(ISsrOption.TemplateId, this.template.id());
                 });
-                return formFirst.isPresent() ? formFirst.get().html() : "";
+                return formFirst.isPresent() && !isPhone() ? formFirst.get().html() : "";
             });
             ssr.option("role", "search");
             return ssr;
