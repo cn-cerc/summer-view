@@ -18,7 +18,8 @@ import cn.cerc.ui.ssr.editor.EditorGrid;
 import cn.cerc.ui.ssr.editor.SsrMessage;
 import cn.cerc.ui.ssr.page.IVuiEnvironment;
 
-public abstract class VuiAbstractEntityContainer<T extends ISupportServiceField> extends VuiContainer<T> {
+public abstract class VuiAbstractEntityContainer<T extends ISupportServiceField> extends VuiContainer<T>
+        implements ISupplierEntityFields {
 
     private HttpServletRequest request;
 
@@ -47,7 +48,7 @@ public abstract class VuiAbstractEntityContainer<T extends ISupportServiceField>
                                         ${dataset.begin}
                                         <tr>
                                             <td align="center" role="check">
-                                                <span><input type="checkbox" name="components" value="${required},${field},${title}"></span>
+                                                <span><input type="checkbox" name="components" value="${field},${title}"></span>
                                             </td>
                                             <td align="left" role="title">${title}</td>
                                             <td align="left" role="required">${if required}是${else}否${endif}</td>
@@ -95,9 +96,8 @@ public abstract class VuiAbstractEntityContainer<T extends ISupportServiceField>
         IVuiEnvironment environment = this.canvas().environment();
         for (String component : components) {
             String[] componentProperties = component.split(",");
-            String required = componentProperties[0];
-            String field = componentProperties[1];
-            String title = componentProperties[2];
+            String field = componentProperties[0];
+            String title = componentProperties[1];
             Optional<VuiComponent> optBean = environment.getBean(clazz.getSimpleName(), VuiComponent.class);
             if (optBean.isEmpty())
                 continue;
@@ -111,7 +111,6 @@ public abstract class VuiAbstractEntityContainer<T extends ISupportServiceField>
             if (item instanceof ISupportServiceField serviceField) {
                 serviceField.title(title);
                 serviceField.field(field);
-                serviceField.required("true".equals(required));
             }
         }
     }
@@ -127,6 +126,11 @@ public abstract class VuiAbstractEntityContainer<T extends ISupportServiceField>
         }
     }
 
-    public abstract Set<Field> entityFields();
+    protected void sendMessageToChild(int msgType, Object msgData) {
+        for (UIComponent component : this.getComponents()) {
+            if (component instanceof VuiComponent vuiComponent)
+                vuiComponent.onMessage(this, msgType, msgData, null);
+        }
+    }
 
 }

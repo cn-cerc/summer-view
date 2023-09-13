@@ -51,5 +51,10 @@ public class SsrMessage {
     public static final int InitDataIn = 900;
     /** 初始化 ServiceExceptionHandler */
     public static final int InitExceptionHandler = 901;
-
+    /** 初始化 ServiceSqlWhere */
+    public static final int initSqlWhere = 902;
+    /** 初始化 EntityHelper */
+    public static final int initEntityHelper = 903;
+    /** 开始执行修改 msgData: CustomEntity */
+    public static final int RunServiceModify = 904;
 }

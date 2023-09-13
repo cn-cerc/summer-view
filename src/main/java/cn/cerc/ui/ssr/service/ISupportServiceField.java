@@ -12,6 +12,4 @@ public interface ISupportServiceField {
 
     boolean required();
 
-    void required(boolean required);
-
 }

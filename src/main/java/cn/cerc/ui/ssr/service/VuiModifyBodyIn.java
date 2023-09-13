@@ -4,22 +4,17 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import cn.cerc.db.core.DataSet;
 import cn.cerc.ui.ssr.editor.SsrMessage;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class VuiSearchBodyIn extends VuiAbstractServiceBodyIn<ISupportFilter> {
+public class VuiModifyBodyIn extends VuiAbstractServiceBodyIn<ISupportUpdate> implements ISupportModifyDataIn {
 
     @Override
     public void onMessage(Object sender, int msgType, Object msgData, String targetId) {
         super.onMessage(sender, msgType, msgData, targetId);
         switch (msgType) {
-        case SsrMessage.InitDataIn:
-            if (msgData instanceof DataSet dataIn)
-                sendMessageToChild(msgType, dataIn.current());
-            break;
-        case SsrMessage.initSqlWhere:
+        case SsrMessage.InitDataIn, SsrMessage.initEntityHelper, SsrMessage.RunServiceModify:
             if (getOwner() == sender)
                 sendMessageToChild(msgType, msgData);
             break;

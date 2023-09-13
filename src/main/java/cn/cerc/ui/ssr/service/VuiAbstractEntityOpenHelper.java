@@ -17,6 +17,8 @@ public abstract class VuiAbstractEntityOpenHelper<T extends CustomEntity> {
 
     public abstract T insert(Consumer<T> action);
 
-    public abstract void delete();
+    public abstract T delete();
+
+    public abstract T get();
 
 }
