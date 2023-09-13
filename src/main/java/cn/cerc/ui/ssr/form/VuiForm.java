@@ -235,8 +235,8 @@ public class VuiForm extends VuiContainer<ISupportForm>
             this.dataRow(new DataRow());
         boolean submit = request.getParameter(submitId) != null
                 && (submitVal == null || submitVal.equals(request.getParameter(submitId)));
-        for (var ssr : this.template) {
-            ssr.option("fields").ifPresent(fields1 -> {
+        for (String column : columns) {
+            getBlock(column).ifPresent(ssr -> ssr.option("fields").ifPresent(fields1 -> {
                 for (var field : fields1.split(",")) {
                     if (!Utils.isEmpty(field)) {
                         String val = request.getParameter(field);
@@ -245,7 +245,7 @@ public class VuiForm extends VuiContainer<ISupportForm>
                         updateValue(field, val, submit);
                     }
                 }
-            });
+            }));
         }
         return submit;
     }
