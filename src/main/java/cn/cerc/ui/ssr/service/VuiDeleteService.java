@@ -2,6 +2,8 @@ package cn.cerc.ui.ssr.service;
 
 import java.util.Optional;
 
+import javax.persistence.Column;
+
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -14,6 +16,9 @@ import cn.cerc.mis.ado.CustomEntity;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class VuiDeleteService extends VuiAbstractService<ISupportServiceHandler, ISupplierEntityOpen> {
 
+    @Column
+    String emptyMsg = "数据不存在，删除失败";
+
     public VuiDeleteService() {
         super(ISupplierEntityOpen.class);
     }
@@ -22,7 +27,10 @@ public class VuiDeleteService extends VuiAbstractService<ISupportServiceHandler,
     public DataSet execute() throws ServiceException {
         Optional<ISupplierEntityOpen> entityHandler = binder.target();
         if (entityHandler.isPresent()) {
-            CustomEntity entity = entityHandler.get().open().delete();
+            CustomEntity entity = entityHandler.get()
+                    .open()
+                    .isEmptyThrow(() -> new RuntimeException(emptyMsg))
+                    .delete();
             if (entity != null) {
                 DataSet dataOut = new DataSet();
                 dataOut.append().current().loadFromEntity(entity);
