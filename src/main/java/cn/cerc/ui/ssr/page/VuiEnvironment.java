@@ -139,6 +139,8 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
                 return importJson();
             else if ("export".equals(mode))
                 return exportJson();
+            else if ("delete".equals(mode))
+                return delete();
         }
         this.isRuntime = true;
         return getRuntimePage();
@@ -342,6 +344,20 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
             return new JsonPage(form).setResultMessage(false, "导入失败：" + e.getMessage());
         }
         return new JsonPage(form).setResultMessage(true, "导入成功");
+    }
+
+    private IPage delete() {
+        String device = "";
+        if (this.handle.getRequest().getParameter("storage") != null)
+            device = handle.getRequest().getParameter("storage");
+        MongoCollection<Document> collection = MongoConfig.getDatabase().getCollection(VuiEnvironment.Visual_Menu);
+        ArrayList<Bson> match = new ArrayList<>();
+        match.add(Filters.eq("corp_no_", corpNo()));
+        match.add(Filters.eq("page_code_", pageCode));
+        match.add(Filters.eq("device_", device));
+        Bson bson = Filters.and(match);
+        collection.deleteOne(bson);
+        return new JsonPage(form).setResultMessage(true, "删除成功");
     }
 
     @Override
