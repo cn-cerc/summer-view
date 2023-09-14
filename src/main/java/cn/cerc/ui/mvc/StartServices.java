@@ -15,12 +15,10 @@ import cn.cerc.db.core.DataSet;
 import cn.cerc.db.core.Handle;
 import cn.cerc.db.core.IHandle;
 import cn.cerc.db.core.ISession;
-import cn.cerc.db.core.ServiceException;
 import cn.cerc.db.core.Utils;
 import cn.cerc.db.core.Variant;
 import cn.cerc.db.other.RecordFilter;
 import cn.cerc.mis.core.Application;
-import cn.cerc.mis.core.DataValidateException;
 import cn.cerc.mis.core.IService;
 import cn.cerc.mis.core.ServiceState;
 import cn.cerc.mis.security.SecurityStopException;
@@ -111,20 +109,10 @@ public class StartServices extends HttpServlet {
             if (dataOut == null)
                 dataOut = new DataSet().setMessage("service return empty");
             response.getWriter().write(RecordFilter.execute(dataIn, dataOut).toString());
-        } catch (DataValidateException e) {
-            log.error("service {}, dataIn {}, error {}", service, text, e.getMessage(), e);
-            dataOut.setState(ServiceState.ERROR);
-            dataOut.setMessage(e.getMessage());
-            response.getWriter().write(dataOut.toString());
         } catch (ClassNotFoundException e) {
             log.error("service {}, dataIn {}, error {}", service, text, e.getMessage(), e);
             dataOut.setState(ServiceState.NOT_FIND_SERVICE);
             dataOut.setMessage(e.getMessage());
-            response.getWriter().write(dataOut.toString());
-        } catch (ServiceException e) {
-            Throwable err = e.getCause() != null ? e.getCause() : e;
-            log.error("service {}, dataIn {}, error {}", service, text, err.getMessage(), err);
-            dataOut.setState(ServiceState.ERROR).setMessage(err.getMessage());
             response.getWriter().write(dataOut.toString());
         } catch (SecurityStopException e) {
             Throwable err = e.getCause() != null ? e.getCause() : e;
