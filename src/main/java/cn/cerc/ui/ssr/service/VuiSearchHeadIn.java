@@ -16,7 +16,7 @@ public class VuiSearchHeadIn extends VuiAbstractServiceHeadIn<ISupportFilter> {
         super.onMessage(sender, msgType, msgData, targetId);
         switch (msgType) {
         case SsrMessage.InitDataIn:
-            if (msgData instanceof DataSet dataIn)
+            if (sender == canvas() && msgData instanceof DataSet dataIn)
                 sendMessageToChild(msgType, dataIn.head());
             break;
         case SsrMessage.initSqlWhere:

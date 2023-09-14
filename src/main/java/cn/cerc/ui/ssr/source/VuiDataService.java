@@ -45,11 +45,17 @@ public class VuiDataService extends VuiComponent
     String success_message = "";
     @Column
     Binder<ISupplierDataRow> headIn = new Binder<>(this, ISupplierDataRow.class);
+    @Column
+    Binder<ISupplierDataSet> bodyIn = new Binder<>(this, ISupplierDataSet.class);
     @Column(name = "在启动时立即执行")
     boolean callByInit = false;
 
     public Binder<ISupplierDataRow> headIn() {
         return this.headIn;
+    }
+
+    public Binder<ISupplierDataSet> bodyIn() {
+        return this.bodyIn;
     }
 
     public void service(String service) {
@@ -87,18 +93,22 @@ public class VuiDataService extends VuiComponent
             break;
         case SsrMessage.InitBinder:
             this.headIn.init();
+            this.bodyIn.init();
             break;
         case SsrMessage.InitContent: {
             if (this.callByInit) {
                 if (!Utils.isEmpty(this.service.service())) {
-                    DataRow dataIn = new DataRow();
+                    DataSet dataIn = new DataSet();
                     Optional<ISupplierDataRow> target = this.headIn.target();
                     if (target.isPresent()) {
                         // 如果绑定的数据源是VuiForm，那么就需要等待VuiForm执行InitContent后发送InitContent消息才执行
                         if (target.get() instanceof VuiForm && !(sender instanceof VuiForm))
                             break;
-                        dataIn = target.get().dataRow();
+                        dataIn.head().copyValues(target.get().dataRow());
                     }
+                    if (bodyIn.target().isPresent())
+                        dataIn.appendDataSet(bodyIn.target().get().dataSet());
+
                     var svr = new ServiceSign(this.service.service()).callLocal(handle, dataIn);
                     if (svr.isFail())
                         throw new RuntimeException(svr.message());

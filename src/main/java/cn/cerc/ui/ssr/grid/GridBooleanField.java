@@ -17,6 +17,8 @@ import cn.cerc.ui.ssr.editor.ISsrBoard;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class GridBooleanField extends VuiControl implements ISupportGrid {
     private SsrBlock block = new SsrBlock();
+    Supplier<String> callBackVal;
+
     @Column
     String title = "";
     @Column
@@ -29,7 +31,6 @@ public class GridBooleanField extends VuiControl implements ISupportGrid {
     int fieldWidth = 5;
     @Column(name = "只读")
     private boolean readonly = true;
-    Supplier<String> callBackVal;
     @Column(name = "自定义value")
     String customVal = "";
 
@@ -80,10 +81,12 @@ public class GridBooleanField extends VuiControl implements ISupportGrid {
                         """
                                 <td align='center' role='%s'>
                                     <span>${if _readonly}${if %s}%s${else}%s${endif}${else}
-                                    <input type='checkbox' name='checkBoxName' value='${if _callBackVal}${callback(callBackVal)}${else}${if _customVal}%s${else}1${endif}${endif}' ${if %s}checked ${endif}/>${endif}</span>
+                                    <input name='${_name}' type='checkbox' name='checkBoxName' value='${if _callBackVal}${callback(callBackVal)}${else}${if _customVal}%s${else}1${endif}${endif}' ${if %s}checked ${endif}/>${endif}</span>
                                 </td>""",
                         field, field, trueText, falseText, customVal, field)));
         block.option("_readonly", readonly() ? "1" : "");
+        block.option("_name", field);
+        block.option(field, "");
         if (callBackVal != null) {
             block.option("_customVal", "");
             block.option("_callBackVal", "1");

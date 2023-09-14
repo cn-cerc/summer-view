@@ -44,7 +44,7 @@ public class VuiEntityOne extends VuiContainer<ISupportServiceData>
             if (msgData instanceof IHandle handle)
                 this.handle = handle;
             break;
-        case SsrMessage.InitDataIn, SsrMessage.initEntityHelper, SsrMessage.RunServiceModify:
+        case SsrMessage.initEntityHelper, SsrMessage.RunServiceModify:
             if (getOwner() == sender) {
                 for (UIComponent component : this.getComponents()) {
                     if (component instanceof VuiComponent vuiComponent && component instanceof ISupportModifyDataIn) {
@@ -105,10 +105,20 @@ public class VuiEntityOne extends VuiContainer<ISupportServiceData>
         }
 
         @Override
+        public boolean isEmpty() {
+            return entityOne.isEmpty();
+        }
+
+        @Override
         public <X extends Throwable> VuiAbstractEntityOpenHelper<T> isEmptyThrow(
                 Supplier<? extends X> exceptionSupplier) throws X {
             entityOne.isEmptyThrow(exceptionSupplier);
             return this;
+        }
+
+        @Override
+        public boolean isPresent() {
+            return entityOne.isPresent();
         }
 
         @Override

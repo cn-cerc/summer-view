@@ -8,14 +8,12 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import cn.cerc.db.core.DataRow;
 import cn.cerc.db.core.DataSet;
 import cn.cerc.db.core.EntityHelper;
 import cn.cerc.db.core.ServiceException;
 import cn.cerc.mis.ado.CustomEntity;
 import cn.cerc.mis.client.ServiceExecuteException;
 import cn.cerc.ui.ssr.editor.SsrMessage;
-import cn.cerc.ui.ssr.service.VuiEntityMany.EntityManyOpenHelper;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -23,6 +21,10 @@ public class VuiAppendService extends VuiAbstractService<ISupportServiceHandler,
 
     @Column
     String presentMsg = "数据已存在，增加失败";
+    @Column(name = "忽略数据已存在异常")
+    boolean ignore;
+    @Column(name = "是否为批量操作")
+    boolean batch;
 
     private DataSet dataIn;
 
@@ -47,13 +49,13 @@ public class VuiAppendService extends VuiAbstractService<ISupportServiceHandler,
         if (entityHandler.isPresent()) {
             ISupplierEntityOpen supplierEntityOpen = entityHandler.get();
             DataSet dataOut = new DataSet();
-            if (supplierEntityOpen instanceof EntityManyOpenHelper && !dataIn.eof()) {
-                for (DataRow row : dataIn) {
-                    CustomEntity item = insert(supplierEntityOpen, row);
+            if (batch && !dataIn.eof()) {
+                while (dataIn.fetch()) {
+                    CustomEntity item = insert(supplierEntityOpen);
                     dataOut.append().current().loadFromEntity(item);
                 }
             } else {
-                CustomEntity item = insert(supplierEntityOpen, dataIn.head());
+                CustomEntity item = insert(supplierEntityOpen);
                 dataOut.append().current().loadFromEntity(item);
             }
             return ISupportServiceDataOut.findDataOut(this, dataOut);
@@ -61,11 +63,13 @@ public class VuiAppendService extends VuiAbstractService<ISupportServiceHandler,
         return new DataSet();
     }
 
-    public CustomEntity insert(ISupplierEntityOpen supplierEntityOpen, DataRow row) throws ServiceExecuteException {
-        return supplierEntityOpen.open().isPresentThrow(() -> new ServiceExecuteException(presentMsg)).insert(item -> {
+    public CustomEntity insert(ISupplierEntityOpen supplierEntityOpen) throws ServiceExecuteException {
+        VuiAbstractEntityOpenHelper<? extends CustomEntity> open = supplierEntityOpen.open();
+        if (ignore && open.isPresent())
+            return open.get();
+        return open.isPresentThrow(() -> new ServiceExecuteException(presentMsg)).insert(item -> {
             Class<? extends CustomEntity> clazz = item.getClass();
             EntityHelper<? extends CustomEntity> helper = EntityHelper.get(clazz);
-            binder.sendMessage(SsrMessage.InitDataIn, row);
             binder.sendMessage(SsrMessage.initEntityHelper, helper);
             binder.sendMessage(SsrMessage.RunServiceModify, item);
         });

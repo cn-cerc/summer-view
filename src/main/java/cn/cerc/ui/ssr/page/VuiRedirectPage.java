@@ -48,6 +48,7 @@ public class VuiRedirectPage extends VuiComponent implements ISupportCanvas {
                     DataSet dataSet = svr.dataSet();
                     if (!dataSet.eof())
                         url.dataSet(dataSet);
+                    url.dataRow(dataSet.head());
                 }
                 canvas().redirectPage(url.html());
             }

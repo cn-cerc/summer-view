@@ -11,17 +11,21 @@ import cn.cerc.ui.ssr.editor.SsrMessage;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class VuiSearchBodyIn extends VuiAbstractServiceBodyIn<ISupportFilter> {
 
+    private DataSet dataIn;
+
     @Override
     public void onMessage(Object sender, int msgType, Object msgData, String targetId) {
         super.onMessage(sender, msgType, msgData, targetId);
         switch (msgType) {
         case SsrMessage.InitDataIn:
-            if (msgData instanceof DataSet dataIn)
-                sendMessageToChild(msgType, dataIn.current());
+            if (sender == canvas() && msgData instanceof DataSet dataIn)
+                this.dataIn = dataIn;
             break;
         case SsrMessage.initSqlWhere:
-            if (getOwner() == sender)
+            if (getOwner() == sender) {
+                sendMessageToChild(SsrMessage.InitDataIn, dataIn.current());
                 sendMessageToChild(msgType, msgData);
+            }
             break;
         }
     }

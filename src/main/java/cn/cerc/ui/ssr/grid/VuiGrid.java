@@ -41,6 +41,7 @@ import cn.cerc.ui.ssr.core.VuiContainer;
 import cn.cerc.ui.ssr.editor.EditorGrid;
 import cn.cerc.ui.ssr.editor.ISsrBoard;
 import cn.cerc.ui.ssr.editor.SsrMessage;
+import cn.cerc.ui.ssr.form.ISupportCommonForm;
 import cn.cerc.ui.ssr.page.ISupportCanvas;
 import cn.cerc.ui.ssr.page.IVuiEnvironment;
 import cn.cerc.ui.ssr.page.VuiEnvironment;
@@ -58,7 +59,8 @@ import cn.cerc.ui.style.IGridStyle;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Description("数据表格")
-public class VuiGrid extends VuiContainer<ISupportGrid> implements ISsrBoard, IGridStyle, IBinders, ISupportCanvas {
+public class VuiGrid extends VuiContainer<ISupportGrid>
+        implements ISsrBoard, IGridStyle, IBinders, ISupportCanvas, ISupportCommonForm {
     private static final Logger log = LoggerFactory.getLogger(VuiGrid.class);
     private SsrTemplate template;
     private List<String> columns = new ArrayList<>();

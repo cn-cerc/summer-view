@@ -8,20 +8,22 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import cn.cerc.db.core.DataRow;
 import cn.cerc.db.core.DataSet;
 import cn.cerc.db.core.EntityHelper;
 import cn.cerc.db.core.ServiceException;
 import cn.cerc.mis.ado.CustomEntity;
 import cn.cerc.mis.client.ServiceExecuteException;
 import cn.cerc.ui.ssr.editor.SsrMessage;
-import cn.cerc.ui.ssr.service.VuiEntityMany.EntityManyOpenHelper;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class VuiModifyService extends VuiAbstractService<ISupportServiceHandler, ISupplierEntityOpen> {
     @Column
     String emptyMsg = "数据不存在，修改失败";
+    @Column(name = "忽略数据不存在异常")
+    boolean ignore;
+    @Column(name = "是否为批量操作")
+    boolean batch;
 
     private DataSet dataIn;
 
@@ -46,13 +48,13 @@ public class VuiModifyService extends VuiAbstractService<ISupportServiceHandler,
         if (entityHandler.isPresent()) {
             ISupplierEntityOpen supplierEntityOpen = entityHandler.get();
             DataSet dataOut = new DataSet();
-            if (supplierEntityOpen instanceof EntityManyOpenHelper && !dataIn.eof()) {
-                for (DataRow row : dataIn) {
-                    CustomEntity item = modify(supplierEntityOpen, row);
+            if (batch && !dataIn.eof()) {
+                while (dataIn.fetch()) {
+                    CustomEntity item = modify(supplierEntityOpen);
                     dataOut.append().current().loadFromEntity(item);
                 }
             } else {
-                CustomEntity item = modify(supplierEntityOpen, dataIn.head());
+                CustomEntity item = modify(supplierEntityOpen);
                 dataOut.append().current().loadFromEntity(item);
             }
             return ISupportServiceDataOut.findDataOut(this, dataOut);
@@ -60,11 +62,13 @@ public class VuiModifyService extends VuiAbstractService<ISupportServiceHandler,
         return new DataSet();
     }
 
-    private CustomEntity modify(ISupplierEntityOpen supplierEntityOpen, DataRow row) throws ServiceExecuteException {
-        return supplierEntityOpen.open().isEmptyThrow(() -> new ServiceExecuteException(emptyMsg)).update(item -> {
+    private CustomEntity modify(ISupplierEntityOpen supplierEntityOpen) throws ServiceExecuteException {
+        VuiAbstractEntityOpenHelper<? extends CustomEntity> open = supplierEntityOpen.open();
+        if (ignore && open.isEmpty())
+            return null;
+        return open.isEmptyThrow(() -> new RuntimeException(emptyMsg)).update(item -> {
             Class<? extends CustomEntity> clazz = item.getClass();
             EntityHelper<? extends CustomEntity> helper = EntityHelper.get(clazz);
-            binder.sendMessage(SsrMessage.InitDataIn, row);
             binder.sendMessage(SsrMessage.initEntityHelper, helper);
             binder.sendMessage(SsrMessage.RunServiceModify, item);
         }).get();

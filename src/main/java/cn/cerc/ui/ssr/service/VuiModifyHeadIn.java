@@ -4,6 +4,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import cn.cerc.db.core.DataSet;
 import cn.cerc.ui.ssr.editor.SsrMessage;
 
 @Component
@@ -14,7 +15,11 @@ public class VuiModifyHeadIn extends VuiAbstractServiceHeadIn<ISupportUpdate> im
     public void onMessage(Object sender, int msgType, Object msgData, String targetId) {
         super.onMessage(sender, msgType, msgData, targetId);
         switch (msgType) {
-        case SsrMessage.InitDataIn, SsrMessage.initEntityHelper, SsrMessage.RunServiceModify:
+        case SsrMessage.InitDataIn:
+            if (sender == canvas() && msgData instanceof DataSet dataIn)
+                sendMessageToChild(msgType, dataIn.head());
+            break;
+        case SsrMessage.initEntityHelper, SsrMessage.RunServiceModify:
             if (getOwner() == sender)
                 sendMessageToChild(msgType, msgData);
             break;

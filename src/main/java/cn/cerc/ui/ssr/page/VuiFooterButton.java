@@ -27,6 +27,8 @@ public class VuiFooterButton extends VuiComponent implements ISupportCanvas {
     String href = "";
     @Column
     String target = "";
+    @Column(name = "全选目标Id")
+    String checkAllTargetId = "";
     @Column
     Binder<ISupplierDataRow> dataRow = new Binder<>(this, ISupplierDataRow.class);
 
@@ -40,6 +42,8 @@ public class VuiFooterButton extends VuiComponent implements ISupportCanvas {
         switch (msgType) {
         case SsrMessage.InitFooter:
             if (msgData instanceof IFooter footer) {
+                if (!Utils.isEmpty(checkAllTargetId))
+                    footer.setCheckAllTargetId(checkAllTargetId);
                 UIBottom button = footer.addButton();
                 button.setCaption(text);
 
