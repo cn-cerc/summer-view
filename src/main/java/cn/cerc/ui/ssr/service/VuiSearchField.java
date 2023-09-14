@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import cn.cerc.db.core.DataRow;
-import cn.cerc.db.core.SqlWhere;
 import cn.cerc.db.core.SqlWhere.JoinDirectionEnum;
 import cn.cerc.db.core.Utils;
 import cn.cerc.ui.ssr.core.VuiControl;
@@ -22,6 +21,8 @@ public class VuiSearchField extends VuiControl implements ISupportFilter {
     String field = "";
     @Column
     String title = "";
+    @Column
+    String alias = "";
     @Column
     boolean required = false;
     @Column
@@ -45,19 +46,26 @@ public class VuiSearchField extends VuiControl implements ISupportFilter {
                 return;
             if (dataIn == null)
                 throw new RuntimeException("DataIn为NULL！");
-            if (msgData instanceof ServiceSqlWhere sqlWhere) {
+            if (msgData instanceof IServiceSqlWhere sqlWhere) {
                 String fieldCode = this.field();
                 String title = Utils.isEmpty(this.title()) ? this.field() : this.title();
                 if (this.required() && !dataIn.hasValue(fieldCode))
                     throw new RuntimeException(String.format("%s不允许为空", title));
                 if (!this.required() && !dataIn.hasValue(fieldCode))
                     return;
+                Object obj = dataIn.getValue(Utils.isEmpty(alias) ? fieldCode : alias);
 
-                SqlWhere where = sqlWhere.where();
-                if (this.endJoin() && where.size() > 0)
-                    sqlWhere.where(this.joinDirection() == JoinDirectionEnum.And ? where.AND() : where.OR());
-                Object obj = dataIn.getValue(fieldCode);
-                this.where(sqlWhere.where(), fieldCode, obj);
+                if (this.endJoin() && sqlWhere.size() > 0) {
+                    if (joinDirection() == JoinDirectionEnum.And)
+                        sqlWhere.AND();
+                    else
+                        sqlWhere.OR();
+                }
+                if (joinDirection() == JoinDirectionEnum.Or)
+                    sqlWhere.or();
+                else
+                    sqlWhere.and();
+                searchType().buildWhere(sqlWhere, fieldCode, obj);
             }
         }
     }
