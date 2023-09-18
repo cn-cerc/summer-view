@@ -117,7 +117,7 @@ public class StartServices extends HttpServlet {
             String message = String.format("clientIP %s, token %s, service %s, corpNo %s, dataIn %s, message %s",
                     clientIP, token, function.key(), handle.getCorpNo(), dataIn.json(), throwable.getMessage());
             LastModified modified = clazz.getClass().getAnnotation(LastModified.class);
-            JayunLogParser.analyze(serviceCode, modified, throwable, message);
+            JayunLogParser.error(serviceCode, modified, throwable, message);
             log.info("{}", message, throwable);
             dataOut.setError().setMessage(throwable.getMessage());
         }
