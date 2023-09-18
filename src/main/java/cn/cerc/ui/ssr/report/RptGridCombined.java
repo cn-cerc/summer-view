@@ -1,24 +1,19 @@
 package cn.cerc.ui.ssr.report;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.persistence.Column;
 import javax.servlet.http.HttpServletRequest;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Element;
-import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfPCell;
-import com.itextpdf.text.pdf.PdfPTable;
 
 import cn.cerc.db.core.DataSet;
 import cn.cerc.db.core.Datetime;
@@ -35,38 +30,28 @@ import cn.cerc.ui.ssr.core.VuiContainer;
 import cn.cerc.ui.ssr.editor.EditorGrid;
 import cn.cerc.ui.ssr.editor.SsrMessage;
 import cn.cerc.ui.ssr.page.IVuiEnvironment;
-import cn.cerc.ui.ssr.source.Binder;
 import cn.cerc.ui.ssr.source.ISupplierDataSet;
 import cn.cerc.ui.ssr.source.ISupplierFields;
 import cn.cerc.ui.ssr.source.VuiDataService;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class RptGrid extends VuiContainer<ISupportRptGrid> implements ISupportRpt {
-    private static final Logger log = LoggerFactory.getLogger(RptGrid.class);
+public class RptGridCombined extends VuiContainer<AbstractRptGridControl> implements ISupportRptGrid {
+    private PdfPCell header;
+    private PdfPCell content;
+    private int total;
     private HttpServletRequest request;
-    private Document document;
 
-    @Column(name = "是否显示边框")
-    boolean showBorder = true;
-    @Column(name = "正文表格高度")
-    int bodyCellMinimumHeight = 20;
     @Column
-    Binder<ISupplierDataSet> dataSet = new Binder<>(this, ISupplierDataSet.class);
-
-    @Override
-    public void onMessage(Object sender, int msgType, Object msgData, String targetId) {
-        switch (msgType) {
-        case SsrMessage.InitRequest:
-            if (msgData instanceof HttpServletRequest request)
-                this.request = request;
-            break;
-        case SsrMessage.InitPdfDocument:
-            if (msgData instanceof Document document)
-                this.document = document;
-            break;
-        }
-    }
+    String title = "";
+    @Column
+    private int width;
+    @Column
+    RptCellAlign align = RptCellAlign.Center;
+    @Column
+    String summaryValue = "";
+    @Column
+    SummaryTypeEnum summaryType = SummaryTypeEnum.无;
 
     @Override
     public void buildEditor(UIComponent content, String pageCode) {
@@ -111,8 +96,9 @@ public class RptGrid extends VuiContainer<ISupportRptGrid> implements ISupportRp
                 .setValue("title", "序")
                 .setValue("class", RptGridIt.class.getSimpleName())
                 .setValue("check", false);
-
-        Optional<ISupplierDataSet> optSvr = this.dataSet.target();
+        Optional<ISupplierDataSet> optSvr = Optional.empty();
+        if (getOwner() instanceof RptGrid ownerGrid)
+            optSvr = ownerGrid.dataSet.target();
         if (optSvr.isPresent() && optSvr.get() instanceof VuiDataService svr) {
             List<EntityServiceField> fields = svr.fields(ISupplierFields.BodyOutFields);
             for (EntityServiceField field : fields) {
@@ -181,98 +167,87 @@ public class RptGrid extends VuiContainer<ISupportRptGrid> implements ISupportRp
     }
 
     @Override
-    public void output(HtmlWriter html) {
-        try {
-            // 创建一个N列的表格控件
-            PdfPTable table = new PdfPTable(getComponentCount());
-            // 设置表格占PDF文档100%宽度
-            table.setWidthPercentage(100);
-            // 水平方向表格控件左对齐
-            table.setHorizontalAlignment(PdfPTable.ALIGN_LEFT);
-            // 创建一个表格的表头单元格
-            PdfPCell headerCell = new PdfPCell();
-            // 设置表格的表头单元格颜色
-            headerCell.setUseAscender(true);
-            headerCell.setVerticalAlignment(Element.ALIGN_MIDDLE); // 垂直居中
-            headerCell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
-            headerCell.setMinimumHeight(bodyCellMinimumHeight);
-            if (!this.showBorder) {
-                headerCell.setBorder(Rectangle.NO_BORDER);
-            }
-            // 输出标题
-            for (UIComponent item : this) {
-                if (item instanceof VuiComponent vui)
-                    vui.onMessage(this, SsrMessage.initPdfGridHeader, headerCell, null);
-                item.output(html);
-                table.addCell(headerCell);
-            }
-
-            if (this.dataSet.target().isEmpty())
-                return;
-            DataSet dataSet = this.dataSet.target().get().dataSet();
-            if (dataSet == null)
-                return;
-
-            for (UIComponent item : this) {
-                if (item instanceof VuiComponent vui)
-                    vui.onMessage(this, SsrMessage.InitDataIn, dataSet, null);
-            }
-
-            // 创建一个表格的正文内容单元格
-            PdfPCell contentCell = new PdfPCell();
-            contentCell.setUseAscender(true);
-            contentCell.setMinimumHeight(bodyCellMinimumHeight);
-            contentCell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
-            contentCell.setVerticalAlignment(PdfPCell.ALIGN_MIDDLE);
-            if (!this.showBorder) {
-                contentCell.setBorder(Rectangle.NO_BORDER);
-            }
-            // 输出表格内容
-            dataSet.first();
-            while (dataSet.fetch()) {
+    public void onMessage(Object sender, int msgType, Object msgData, String targetId) {
+        switch (msgType) {
+        case SsrMessage.InitRequest:
+            if (msgData instanceof HttpServletRequest request)
+                this.request = request;
+            break;
+        case SsrMessage.initPdfGridHeader:
+            if (msgData instanceof PdfPCell header)
+                this.header = header;
+            break;
+        case SsrMessage.initPdfGridContent:
+            if (msgData instanceof PdfPCell content)
+                this.content = content;
+            break;
+        case SsrMessage.InitDataIn:
+            if (sender == getOwner() && msgData instanceof DataSet dataSet) {
                 for (UIComponent item : this) {
                     if (item instanceof VuiComponent vui)
-                        vui.onMessage(this, SsrMessage.initPdfGridContent, contentCell, null);
-                    item.output(html);
-                    table.addCell(contentCell);
+                        vui.onMessage(this, SsrMessage.InitDataIn, dataSet, null);
                 }
             }
-
-            // 按百分比设置表格的列宽度
-            List<Integer> columnWidth = new ArrayList<>();
-            for (UIComponent item : this) {
-                if (item instanceof ISupportRptGrid vui) {
-                    columnWidth.add(vui.width());
-                }
-            }
-            int widthSum = columnWidth.stream().mapToInt(t -> t).sum();
-            if (widthSum > 0) {
-                float ratio = 100f / widthSum;
-                float[] relativeWidths = new float[columnWidth.size()];
-                for (int i = 0; i < columnWidth.size(); i++) {
-                    relativeWidths[i] = columnWidth.get(i) * ratio;
-                }
-                table.setWidths(relativeWidths);
-            }
-
-            boolean existSummary = this.getComponents().stream().anyMatch(component -> {
-                if (component instanceof ISupportRptGrid item)
-                    return item.summaryType() != SummaryTypeEnum.无;
-                return false;
-            });
-            if (existSummary) {
-                for (UIComponent component : this) {
-                    if (component instanceof ISupportRptGrid item) {
-                        contentCell.setPhrase(item.outputTotal(dataSet));
-                        contentCell.setHorizontalAlignment(item.align().cellAlign());
-                    }
-                    table.addCell(contentCell);
-                }
-            }
-            document.add(table);
-        } catch (DocumentException e) {
-            log.error(e.getMessage(), e);
+            break;
         }
+    }
+
+    @Override
+    public Paragraph outputTotal(DataSet dataSet) {
+        String value = switch (summaryType) {
+        case 计数 -> String.valueOf(dataSet.size());
+        case 固定 -> summaryValue;
+        default -> "";
+        };
+        return new Paragraph(value, RptFontLibrary.f10());
+    }
+
+    @Override
+    public SummaryTypeEnum summaryType() {
+        return summaryType;
+    }
+
+    @Override
+    public void output(HtmlWriter html) {
+        if (total++ == 0) {
+            header.setPhrase(new Paragraph(title, RptFontLibrary.f10()));
+            return;
+        }
+        String collect = getComponents().stream().map(componet -> {
+            if (componet instanceof AbstractRptGridControl control) {
+                String text = control.content();
+                if (Utils.isEmpty(text))
+                    return null;
+                return text;
+            }
+            return null;
+        }).filter(Objects::nonNull).collect(Collectors.joining(","));
+        content.setPhrase(new Paragraph(collect, RptFontLibrary.f10()));
+        content.setHorizontalAlignment(align.cellAlign());
+    }
+
+    @Override
+    public void title(String title) {
+        this.title = title;
+    }
+
+    @Override
+    public void field(String field) {
+    }
+
+    @Override
+    public void width(int width) {
+        this.width = width;
+    }
+
+    @Override
+    public int width() {
+        return this.width;
+    }
+
+    @Override
+    public RptCellAlign align() {
+        return align;
     }
 
 }

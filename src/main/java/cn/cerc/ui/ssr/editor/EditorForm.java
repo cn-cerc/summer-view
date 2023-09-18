@@ -105,7 +105,9 @@ public class EditorForm extends UIComponent {
             var column = field.getAnnotation(Column.class);
             if (column != null && !Utils.isEmpty(column.name()))
                 title = column.name();
-            if (field.getType() == String.class || field.getType() == int.class) {
+            if (field.getType() == String.class || field.getType() == int.class || field.getType() == Integer.class
+                    || field.getType() == double.class || field.getType() == Double.class
+                    || field.getType() == float.class || field.getType() == Float.class) {
                 this.addItem(title, field.getName(), "" + field.get(properties));
             } else if (field.getType() == boolean.class || field.getType() == Boolean.class) {
                 var style = form.defaultStyle();

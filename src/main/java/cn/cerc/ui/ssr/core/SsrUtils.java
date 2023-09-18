@@ -164,6 +164,10 @@ public class SsrUtils {
                     list.add(field);
                 else if (field.getType() == boolean.class || field.getType() == Boolean.class)
                     list.add(field);
+                else if (field.getType() == float.class || field.getType() == Float.class)
+                    list.add(field);
+                else if (field.getType() == double.class || field.getType() == Double.class)
+                    list.add(field);
                 else if (field.getType().isEnum())
                     list.add(field);
                 else if (field.getType() == Binder.class)
@@ -189,7 +193,10 @@ public class SsrUtils {
             } else if (field.getType().isEnum()) {
                 Enum<?>[] enums = (Enum<?>[]) field.getType().getEnumConstants();
                 if (Utils.isNumeric(value.asText())) {
-                    field.set(properties, enums[value.asInt()]);
+                    int index = value.asInt();
+                    if (enums.length <= index)
+                        index = 0;
+                    field.set(properties, enums[index]);
                 } else {
                     Enum<?> defaultValue = enums[0];
                     for (Enum<?> item : enums) {
@@ -216,15 +223,15 @@ public class SsrUtils {
     }
 
     public static void writeToObject(Object object, Field field, JsonNode node) throws IllegalAccessException {
-        if ("boolean".equals(field.getType().getName()))
+        if (field.getType() == boolean.class)
             field.setBoolean(object, node.asBoolean());
-        else if ("int".equals(field.getType().getName()))
+        else if (field.getType() == int.class)
             field.setInt(object, node.asInt());
-        else if ("long".equals(field.getType().getName()))
+        else if (field.getType() == long.class)
             field.setLong(object, node.asLong());
-        else if ("float".equals(field.getType().getName()))
-            field.setDouble(object, node.asDouble());
-        else if ("double".equals(field.getType().getName()))
+        else if (field.getType() == float.class)
+            field.setFloat(object, Float.parseFloat(node.asText()));
+        else if (field.getType() == double.class)
             field.setDouble(object, node.asDouble());
         else if (field.getType() == Boolean.class)
             field.set(object, Boolean.valueOf(node.asBoolean()));
@@ -233,7 +240,7 @@ public class SsrUtils {
         else if (field.getType() == Long.class)
             field.set(object, Long.valueOf(node.asLong()));
         else if (field.getType() == Float.class)
-            field.set(object, Float.valueOf(node.asLong()));
+            field.set(object, Float.valueOf(node.asText()));
         else if (field.getType() == Double.class)
             field.set(object, Double.valueOf(node.asDouble()));
         else if (field.getType() == Datetime.class)

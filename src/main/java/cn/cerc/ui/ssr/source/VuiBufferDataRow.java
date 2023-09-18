@@ -18,13 +18,15 @@ import cn.cerc.ui.ssr.core.VuiBufferType;
 import cn.cerc.ui.ssr.core.VuiComponent;
 import cn.cerc.ui.ssr.editor.SsrMessage;
 import cn.cerc.ui.ssr.excel.ISupportXls;
+import cn.cerc.ui.ssr.report.ISupportRpt;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Description("缓存数据行")
-public class VuiBufferDataRow extends VuiComponent implements ICommonSupplierDataRow, ISupportXls {
+public class VuiBufferDataRow extends VuiComponent implements ICommonSupplierDataRow, ISupportXls, ISupportRpt, IBinders {
     private static final Logger log = LoggerFactory.getLogger(VuiBufferDataRow.class);
     private IHandle handle;
+    private Binders binders = new Binders();
 
     private MemoryBuffer buffer;
     @Column
@@ -59,9 +61,15 @@ public class VuiBufferDataRow extends VuiComponent implements ICommonSupplierDat
                 block.option("CorpNo", handle.getCorpNo());
                 block.option("UserCode", handle.getUserCode());
                 buffer = new MemoryBuffer(bufferType, block.html());
+                canvas().sendMessage(this, SsrMessage.RefreshProperties, buffer.getRecord(), null);
             }
             break;
         }
+    }
+
+    @Override
+    public Binders binders() {
+        return binders;
     }
 
 }

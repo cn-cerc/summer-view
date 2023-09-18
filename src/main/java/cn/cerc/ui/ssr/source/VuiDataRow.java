@@ -17,11 +17,12 @@ import cn.cerc.ui.ssr.editor.SsrMessage;
 import cn.cerc.ui.ssr.excel.ISupportXls;
 import cn.cerc.ui.ssr.form.ISupportForm;
 import cn.cerc.ui.ssr.form.VuiForm;
+import cn.cerc.ui.ssr.report.ISupportRpt;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Description("内存数据行")
-public class VuiDataRow extends VuiComponent implements ICommonSupplierDataRow, ISupportXls {
+public class VuiDataRow extends VuiComponent implements ICommonSupplierDataRow, ISupportXls, ISupportRpt {
     private DataRow dataRow = new DataRow();
 
     @Override

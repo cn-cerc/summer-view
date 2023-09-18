@@ -175,7 +175,7 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
     }
 
     private void saveEditor() {
-        var canvas = new VuiCanvas(this);
+        var canvas = initCanvas();
         // 初始化环境变量
         canvas.sendMessage(this, SsrMessage.InitRequest, handle.getRequest(), null);
         canvas.sendMessage(this, SsrMessage.InitHandle, handle, null);
@@ -207,7 +207,7 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
             writer = handle.getSession().getResponse().getWriter();
             writer.print("<div>");
             // 恢复现场
-            var canvas = new VuiCanvas(this);
+            var canvas = initCanvas();
             // 初始化环境变量
             canvas.sendMessage(this, SsrMessage.InitRequest, handle.getRequest(), null);
             canvas.sendMessage(this, SsrMessage.InitHandle, handle, null);
@@ -240,7 +240,7 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
     private IPage getComponentsData() {
         var cid = handle.getRequest().getParameter("id");
         // 恢复现场
-        var canvas = new VuiCanvas(this);
+        var canvas = initCanvas();
         // 初始化环境变量
         canvas.sendMessage(this, SsrMessage.InitRequest, handle.getRequest(), null);
         canvas.sendMessage(this, SsrMessage.InitHandle, handle, null);
@@ -552,6 +552,10 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
 
     public boolean isRuntime() {
         return this.isRuntime;
+    }
+    
+    protected VuiCanvas initCanvas() {
+        return new VuiCanvas(this);
     }
 
 }

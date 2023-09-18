@@ -19,14 +19,16 @@ import cn.cerc.ui.ssr.editor.SsrMessage;
 import cn.cerc.ui.ssr.excel.ISupportXls;
 import cn.cerc.ui.ssr.form.ISupportForm;
 import cn.cerc.ui.ssr.form.VuiForm;
+import cn.cerc.ui.ssr.report.ISupportRpt;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Description("请求数据行")
-public class VuiRequestRow extends VuiComponent implements ICommonSupplierDataRow, ISupportXls {
+public class VuiRequestRow extends VuiComponent implements ICommonSupplierDataRow, ISupportXls, ISupportRpt, IBinders {
     private DataRow config = new DataRow();
     private DataRow dataRow = new DataRow();
     private HttpServletRequest request;
+    private Binders binders = new Binders();
 
     @Override
     public void readProperties(PropertiesReader reader) {
@@ -93,6 +95,7 @@ public class VuiRequestRow extends VuiComponent implements ICommonSupplierDataRo
                         key = field.code();
                     dataRow.setValue(field.code(), request.getParameter(key));
                 }
+                binders.sendMessage(this, SsrMessage.RefreshProperties, dataRow, null);
             }
             break;
         case SsrMessage.appendComponent:
@@ -109,5 +112,10 @@ public class VuiRequestRow extends VuiComponent implements ICommonSupplierDataRo
             }
             break;
         }
+    }
+
+    @Override
+    public Binders binders() {
+        return binders;
     }
 }

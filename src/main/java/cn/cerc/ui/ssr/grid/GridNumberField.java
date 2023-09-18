@@ -163,6 +163,10 @@ public class GridNumberField extends VuiControl implements ISupportGrid {
 
     @Override
     public void outputTotal(HtmlWriter html, DataSet dataSet) {
+        if (summaryType == SummaryTypeEnum.无) {
+            ISupportGrid.super.outputTotal(html, dataSet);
+            return;
+        }
         DoubleStream doubleStream = dataSet.records().stream().mapToDouble(row -> row.getDouble(field));
         double summary = switch (summaryType) {
         case 求和 -> doubleStream.sum();

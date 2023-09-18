@@ -6,17 +6,17 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import cn.cerc.mis.core.HtmlWriter;
-
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class RptPanelText extends AbstractRptPanelControl {
+public class RptGridIt extends AbstractRptGridControl {
     @Column
-    String text = "";
+    String title = "序";
+    @Column
+    String field = "";
 
     @Override
-    public void output(HtmlWriter html) {
-        div.addElement(buildContent(text));
+    protected String content() {
+        return String.valueOf(total++);
     }
 
 }
