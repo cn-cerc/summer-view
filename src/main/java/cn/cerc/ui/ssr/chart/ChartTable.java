@@ -114,11 +114,11 @@ public class ChartTable extends VuiAbstractChart {
                 <div role='chart' data-title='${_data_title}'>
                 <div class='opera' title='隐藏此图表' onclick='hideChart("${_templateId}", "%s")'><img src='%s' /></div>
                 <div class='content'>
+                <div class='chartTitle'>${_title}</div>
                 ${if not _data}<div role='noData'>
                     <img src='%s' />
                     <span>数据源为空或者未绑定数据源</span>
                 </div>${else}
-                <div class='chartTitle'>${_title}</div>
                 <div class='tabHead'>
                     ${list.begin}
                         <span>${list.value}</span>
