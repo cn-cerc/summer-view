@@ -56,6 +56,10 @@ public class SsrGridStyleDefault {
         return getMap(title, field, fieldWidth, map);
     }
 
+    public GridBooleanField getBoolean(String title, int fieldWidth) {
+        return new GridBooleanField(title, fieldWidth);
+    }
+
     public GridBooleanField getBoolean(String title, String field, int fieldWidth) {
         return new GridBooleanField(title, field, fieldWidth);
     }

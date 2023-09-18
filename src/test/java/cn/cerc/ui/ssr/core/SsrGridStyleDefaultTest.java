@@ -42,11 +42,11 @@ public class SsrGridStyleDefaultTest {
                         <th style='width: 2em' onclick="gridSort(this,'_it_')">序</th><th style='width: 10em' onclick="gridSort(this,'Name_')">部门名称</th><th style='width: 4em' onclick="gridSort(this,'Final_')">状态</th><th style='width: 10em' onclick="gridSort(this,'Type_')">类别</th><th style='width: 4em' onclick="gridSort(this,'_opera_')">操作</th></tr>
                         <tr>
                         <td align='center' role='_it_'>1</td><td align='left' role='Name_'>研发部</td><td align='center' role='Final_'>
-                        <span><input type='checkbox' name='checkBoxName' value='1' /></span>
+                        <span><input type='checkbox' name='Final_' value='1' /></span>
                         </td><td align='left' role='Type_'>张三</td><td align='center' role='_opera_'><a href='FrmView?code=001'>内容</a></td></tr>
                         <tr>
                         <td align='center' role='_it_'>2</td><td align='left' role='Name_'>生产部</td><td align='center' role='Final_'>
-                        <span><input type='checkbox' name='checkBoxName' value='1' checked /></span>
+                        <span><input type='checkbox' name='Final_' value='1' checked /></span>
                         </td><td align='left' role='Type_'></td><td align='center' role='_opera_'><a href='FrmView?code=002'>内容</a></td></tr>
                         </table></div>""",
                 grid.toString());
@@ -112,11 +112,11 @@ public class SsrGridStyleDefaultTest {
                         <th style='width: 2em' onclick="gridSort(this,'_it_')">序</th><th style='width: 10em' onclick="gridSort(this,'Name_')">部门名称</th><th style='width: 4em' onclick="gridSort(this,'Final_')">状态</th><th style='width: 10em' onclick="gridSort(this,'Type_')">类别</th><th style='width: 4em' onclick="gridSort(this,'_opera_')">操作</th></tr>
                         <tr>
                         <td align='center' role='_it_'>1</td><td align='left' role='Name_'>研发部</td><td align='center' role='Final_'>
-                        <span><input type='checkbox' name='checkBoxName' value='1' /></span>
+                        <span><input type='checkbox' name='Final_' value='1' /></span>
                         </td><td align='left' role='Type_'>张三</td><td align='center' role='_opera_'><a href='FrmView?code=001'>内容</a></td></tr>
                         <tr>
                         <td align='center' role='_it_'>2</td><td align='left' role='Name_'>生产部</td><td align='center' role='Final_'>
-                        <span><input type='checkbox' name='checkBoxName' value='1' checked /></span>
+                        <span><input type='checkbox' name='Final_' value='1' checked /></span>
                         </td><td align='left' role='Type_'></td><td align='center' role='_opera_'><a href='FrmView?code=002'>内容</a></td></tr>
                         </table></div>""",
                 grid.toString());

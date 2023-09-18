@@ -22,7 +22,7 @@ public class GridBooleanField extends VuiControl implements ISupportGrid {
     @Column
     String title = "";
     @Column
-    String field = "";
+    String field = "checkBoxName";
     @Column
     String trueText = "是";
     @Column
@@ -36,6 +36,12 @@ public class GridBooleanField extends VuiControl implements ISupportGrid {
 
     public GridBooleanField() {
         super();
+        init();
+    }
+
+    public GridBooleanField(String title, int fieldWidth) {
+        this.title = title;
+        this.fieldWidth = fieldWidth;
         init();
     }
 
@@ -81,7 +87,7 @@ public class GridBooleanField extends VuiControl implements ISupportGrid {
                         """
                                 <td align='center' role='%s'>
                                     <span>${if _readonly}${if %s}%s${else}%s${endif}${else}
-                                    <input name='${_name}' type='checkbox' name='checkBoxName' value='${if _callBackVal}${callback(callBackVal)}${else}${if _customVal}%s${else}1${endif}${endif}' ${if %s}checked ${endif}/>${endif}</span>
+                                    <input type='checkbox' name='${_name}' value='${if _callBackVal}${callback(callBackVal)}${else}${if _customVal}%s${else}1${endif}${endif}' ${if %s}checked ${endif}/>${endif}</span>
                                 </td>""",
                         field, field, trueText, falseText, customVal, field)));
         block.option("_readonly", readonly() ? "1" : "");
