@@ -12,12 +12,14 @@ import cn.cerc.mis.core.Application;
 import cn.cerc.ui.fields.ImageConfigImpl;
 import cn.cerc.ui.ssr.core.ISupplierBlock;
 import cn.cerc.ui.ssr.core.SsrBlock;
+import cn.cerc.ui.ssr.core.VuiCommonComponent;
 import cn.cerc.ui.ssr.core.VuiControl;
 import cn.cerc.ui.ssr.editor.ISsrBoard;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Description("提交按钮")
+@VuiCommonComponent
 public class FormSubmitButton extends VuiControl implements ISupplierBlock {
     private ImageConfigImpl imageConfig;
     private SsrBlock block;

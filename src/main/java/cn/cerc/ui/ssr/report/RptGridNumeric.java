@@ -16,12 +16,14 @@ import com.itextpdf.text.Paragraph;
 import cn.cerc.db.core.DataSet;
 import cn.cerc.db.core.Utils;
 import cn.cerc.ui.ssr.core.SummaryTypeEnum;
+import cn.cerc.ui.ssr.core.VuiCommonComponent;
 import cn.cerc.ui.ssr.editor.SsrMessage;
 import cn.cerc.ui.ssr.source.Binder;
 import cn.cerc.ui.ssr.source.ISupplierList;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+@VuiCommonComponent
 public class RptGridNumeric extends AbstractRptGridControl {
     private List<String> list;
 

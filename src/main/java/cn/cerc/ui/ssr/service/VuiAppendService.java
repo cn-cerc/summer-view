@@ -13,10 +13,12 @@ import cn.cerc.db.core.EntityHelper;
 import cn.cerc.db.core.ServiceException;
 import cn.cerc.mis.ado.CustomEntity;
 import cn.cerc.mis.client.ServiceExecuteException;
+import cn.cerc.ui.ssr.core.VuiCommonComponent;
 import cn.cerc.ui.ssr.editor.SsrMessage;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+@VuiCommonComponent
 public class VuiAppendService extends VuiAbstractService<ISupportServiceHandler, ISupplierEntityOpen> {
 
     @Column

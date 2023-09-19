@@ -14,6 +14,7 @@ import cn.cerc.ui.core.RequestReader;
 import cn.cerc.ui.fields.AbstractField;
 import cn.cerc.ui.fields.ImageConfigImpl;
 import cn.cerc.ui.ssr.core.SsrBlock;
+import cn.cerc.ui.ssr.core.VuiCommonComponent;
 import cn.cerc.ui.ssr.core.VuiControl;
 import cn.cerc.ui.ssr.editor.ISsrBoard;
 import cn.cerc.ui.ssr.editor.SsrMessage;
@@ -21,6 +22,7 @@ import cn.cerc.ui.ssr.editor.SsrMessage;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Description("代码名称块组件")
+@VuiCommonComponent
 public class FormCodeNameField extends VuiControl implements ISupportForm {
     private static final ClassConfig FieldConfig = new ClassConfig(AbstractField.class, SummerUI.ID);
     private SsrBlock block = new SsrBlock();

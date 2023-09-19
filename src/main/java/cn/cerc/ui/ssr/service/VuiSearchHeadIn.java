@@ -5,10 +5,12 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import cn.cerc.db.core.DataSet;
+import cn.cerc.ui.ssr.core.VuiCommonComponent;
 import cn.cerc.ui.ssr.editor.SsrMessage;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+@VuiCommonComponent
 public class VuiSearchHeadIn extends VuiAbstractServiceHeadIn<ISupportFilter> {
 
     @Override

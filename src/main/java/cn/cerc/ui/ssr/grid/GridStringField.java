@@ -17,6 +17,7 @@ import cn.cerc.ui.ssr.core.ISsrOption;
 import cn.cerc.ui.ssr.core.ISupplierBlock;
 import cn.cerc.ui.ssr.core.SsrBlock;
 import cn.cerc.ui.ssr.core.SummaryTypeEnum;
+import cn.cerc.ui.ssr.core.VuiCommonComponent;
 import cn.cerc.ui.ssr.core.VuiControl;
 import cn.cerc.ui.ssr.editor.ISsrBoard;
 import cn.cerc.ui.ssr.editor.SsrMessage;
@@ -25,6 +26,7 @@ import cn.cerc.ui.ssr.source.ISupplierMap;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+@VuiCommonComponent
 public class GridStringField extends VuiControl implements ISupportGrid {
     private SsrBlock head = new SsrBlock();
     private SsrBlock body = new SsrBlock();

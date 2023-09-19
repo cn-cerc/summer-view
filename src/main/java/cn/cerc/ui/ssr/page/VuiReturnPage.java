@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import cn.cerc.db.core.Utils;
 import cn.cerc.ui.ssr.core.SsrBlock;
+import cn.cerc.ui.ssr.core.VuiCommonComponent;
 import cn.cerc.ui.ssr.core.VuiComponent;
 import cn.cerc.ui.ssr.editor.SsrMessage;
 import cn.cerc.ui.ssr.source.Binder;
@@ -17,6 +18,7 @@ import cn.cerc.ui.ssr.source.ISupplierDataRow;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Description("返回页面")
+@VuiCommonComponent
 public class VuiReturnPage extends VuiComponent implements ISupportCanvas {
     SsrBlock block = new SsrBlock();
     @Column

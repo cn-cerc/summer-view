@@ -15,9 +15,14 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import cn.cerc.db.core.Utils;
+import cn.cerc.ui.ssr.chart.ISupportChart;
+import cn.cerc.ui.ssr.core.VuiCommonComponent;
 import cn.cerc.ui.ssr.core.VuiComponent;
 import cn.cerc.ui.ssr.editor.SsrMessage;
+import cn.cerc.ui.ssr.excel.ISupportXls;
+import cn.cerc.ui.ssr.page.ISupportCanvas;
 import cn.cerc.ui.ssr.page.IVuiEnvironment;
+import cn.cerc.ui.ssr.report.ISupportRpt;
 
 /**
  * 使用 attachData 方法添加附加数据时需把值添加到key
@@ -25,7 +30,9 @@ import cn.cerc.ui.ssr.page.IVuiEnvironment;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Description("List附加数据")
-public class VuiListValue extends VuiComponent implements ICommonSupplierList, IBinders {
+@VuiCommonComponent
+public class VuiListValue extends VuiComponent
+        implements ISupplierList, ISupportCanvas, ISupportXls, ISupportChart, ISupportRpt, IBinders {
     private static final Logger log = LoggerFactory.getLogger(VuiMapValue.class);
     private List<String> items = new ArrayList<>();
     private Binders binders = new Binders();

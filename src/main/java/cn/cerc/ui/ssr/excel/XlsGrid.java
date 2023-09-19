@@ -20,6 +20,7 @@ import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.RequestReader;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.ssr.base.UISsrBlock;
+import cn.cerc.ui.ssr.core.VuiCommonComponent;
 import cn.cerc.ui.ssr.core.VuiComponent;
 import cn.cerc.ui.ssr.core.VuiContainer;
 import cn.cerc.ui.ssr.editor.EditorGrid;
@@ -33,6 +34,7 @@ import jxl.write.WritableSheet;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+@VuiCommonComponent
 public class XlsGrid extends VuiContainer<ISupportXlsGrid> implements ISupportXls {
     @Column
     Binder<ISupplierDataSet> dataSet = new Binder<>(this, ISupplierDataSet.class);

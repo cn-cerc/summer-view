@@ -36,6 +36,7 @@ import cn.cerc.ui.ssr.core.PropertiesReader;
 import cn.cerc.ui.ssr.core.SsrBlock;
 import cn.cerc.ui.ssr.core.SsrTemplate;
 import cn.cerc.ui.ssr.core.SummaryTypeEnum;
+import cn.cerc.ui.ssr.core.VuiCommonComponent;
 import cn.cerc.ui.ssr.core.VuiComponent;
 import cn.cerc.ui.ssr.core.VuiContainer;
 import cn.cerc.ui.ssr.editor.EditorGrid;
@@ -59,6 +60,7 @@ import cn.cerc.ui.style.IGridStyle;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Description("数据表格")
+@VuiCommonComponent
 public class VuiGrid extends VuiContainer<ISupportGrid>
         implements ISsrBoard, IGridStyle, IBinders, ISupportCanvas, ISupportCommonForm {
     private static final Logger log = LoggerFactory.getLogger(VuiGrid.class);

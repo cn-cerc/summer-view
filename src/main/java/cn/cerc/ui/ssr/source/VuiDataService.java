@@ -25,16 +25,22 @@ import cn.cerc.mis.core.CustomEntityService;
 import cn.cerc.mis.core.EntityServiceField;
 import cn.cerc.mis.core.IEntityServiceFields;
 import cn.cerc.mis.core.IService;
+import cn.cerc.ui.ssr.chart.ISupportChart;
 import cn.cerc.ui.ssr.core.EntityServiceRecord;
+import cn.cerc.ui.ssr.core.VuiCommonComponent;
 import cn.cerc.ui.ssr.core.VuiComponent;
 import cn.cerc.ui.ssr.editor.SsrMessage;
+import cn.cerc.ui.ssr.excel.ISupportXls;
 import cn.cerc.ui.ssr.form.VuiForm;
+import cn.cerc.ui.ssr.page.ISupportCanvas;
+import cn.cerc.ui.ssr.report.ISupportRpt;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Description("数据服务")
-public class VuiDataService extends VuiComponent
-        implements ICommonSupplierDataRow, ISupplierFields, IBinders, ICommonSupplierDataSet {
+@VuiCommonComponent
+public class VuiDataService extends VuiComponent implements ISupplierDataRow, ISupportCanvas, ISupportChart,
+        ISupplierFields, IBinders, ISupplierDataSet, ISupportXls, ISupportRpt {
     private static final Logger log = LoggerFactory.getLogger(VuiDataService.class);
     private DataSet dataSet = new DataSet();
     private IHandle handle;

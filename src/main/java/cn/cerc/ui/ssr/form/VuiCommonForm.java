@@ -8,12 +8,14 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import cn.cerc.mis.core.HtmlWriter;
+import cn.cerc.ui.ssr.core.VuiCommonComponent;
 import cn.cerc.ui.ssr.core.VuiContainer;
 import cn.cerc.ui.ssr.page.ISupportCanvas;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Description("通用表单")
+@VuiCommonComponent
 public class VuiCommonForm extends VuiContainer<ISupportCommonForm> implements ISupportCanvas {
 
     @Column(name = "动作(action)")

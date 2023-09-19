@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import cn.cerc.ui.core.RequestReader;
 import cn.cerc.ui.ssr.core.SsrBlock;
+import cn.cerc.ui.ssr.core.VuiCommonComponent;
 import cn.cerc.ui.ssr.core.VuiControl;
 import cn.cerc.ui.ssr.editor.ISsrBoard;
 import cn.cerc.ui.ssr.editor.SsrMessage;
@@ -16,6 +17,7 @@ import cn.cerc.ui.ssr.editor.SsrMessage;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Description("开关组件")
+@VuiCommonComponent
 public class FormBooleanField extends VuiControl implements ISupportForm {
     private SsrBlock block = new SsrBlock();
     @Column

@@ -14,6 +14,7 @@ import cn.cerc.mis.core.Application;
 import cn.cerc.ui.core.RequestReader;
 import cn.cerc.ui.fields.ImageConfigImpl;
 import cn.cerc.ui.ssr.core.SsrBlock;
+import cn.cerc.ui.ssr.core.VuiCommonComponent;
 import cn.cerc.ui.ssr.editor.ISsrBoard;
 import cn.cerc.ui.ssr.editor.SsrMessage;
 import cn.cerc.ui.ssr.page.VuiEnvironment;
@@ -22,6 +23,7 @@ import cn.cerc.ui.ssr.source.VuiDataService;
 @Component
 @Description("数据表格")
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+@VuiCommonComponent
 public class ChartTable extends VuiAbstractChart {
     private static final Logger log = LoggerFactory.getLogger(ChartTable.class);
 

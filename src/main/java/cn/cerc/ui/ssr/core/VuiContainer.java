@@ -54,8 +54,11 @@ public abstract class VuiContainer<T> extends VuiControl {
 
         var context = Application.getContext();
         context.getBeansOfType(supportClass).forEach((name, bean) -> {
-            if (bean instanceof VuiComponent ssr)
-                result.add(ssr.getClass());
+            if (bean instanceof VuiComponent ssr) {
+                Class<? extends VuiComponent> clazz = ssr.getClass();
+                if (clazz.getAnnotation(VuiCommonComponent.class) != null)
+                    result.add(clazz);
+            }
         });
         return result;
     }

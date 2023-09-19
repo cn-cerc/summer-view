@@ -24,6 +24,7 @@ import cn.cerc.ui.ssr.core.ISupplierBlock;
 import cn.cerc.ui.ssr.core.PropertiesReader;
 import cn.cerc.ui.ssr.core.SsrBlock;
 import cn.cerc.ui.ssr.core.SsrTemplate;
+import cn.cerc.ui.ssr.core.VuiCommonComponent;
 import cn.cerc.ui.ssr.core.VuiContainer;
 import cn.cerc.ui.ssr.editor.EditorForm;
 import cn.cerc.ui.ssr.editor.ISsrBoard;
@@ -34,6 +35,7 @@ import cn.cerc.ui.ssr.page.VuiEnvironment;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Description("报表面板")
+@VuiCommonComponent
 public class VuiChartPanel extends VuiContainer<ISupportPanel>
         implements ISsrBoard, ISupportPanel, ISupportCanvas, ISupportChart {
     SsrBlock block = new SsrBlock();

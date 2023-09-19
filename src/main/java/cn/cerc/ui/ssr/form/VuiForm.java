@@ -34,6 +34,7 @@ import cn.cerc.ui.core.RequestReader;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.core.ViewDisplay;
 import cn.cerc.ui.ssr.base.UISsrBlock;
+import cn.cerc.ui.ssr.chart.ISupportChart;
 import cn.cerc.ui.ssr.core.AlignEnum;
 import cn.cerc.ui.ssr.core.ISsrOption;
 import cn.cerc.ui.ssr.core.ISsrTemplateConfig;
@@ -42,6 +43,7 @@ import cn.cerc.ui.ssr.core.PropertiesReader;
 import cn.cerc.ui.ssr.core.SsrBlock;
 import cn.cerc.ui.ssr.core.SsrTemplate;
 import cn.cerc.ui.ssr.core.VuiBufferType;
+import cn.cerc.ui.ssr.core.VuiCommonComponent;
 import cn.cerc.ui.ssr.core.VuiComponent;
 import cn.cerc.ui.ssr.core.VuiContainer;
 import cn.cerc.ui.ssr.editor.EditorGrid;
@@ -53,7 +55,6 @@ import cn.cerc.ui.ssr.page.VuiEnvironment;
 import cn.cerc.ui.ssr.source.Binder;
 import cn.cerc.ui.ssr.source.Binders;
 import cn.cerc.ui.ssr.source.IBinders;
-import cn.cerc.ui.ssr.source.ICommonSupplierDataRow;
 import cn.cerc.ui.ssr.source.ISupplierDataRow;
 import cn.cerc.ui.ssr.source.ISupplierFields;
 import cn.cerc.ui.ssr.source.VuiDataService;
@@ -61,8 +62,9 @@ import cn.cerc.ui.ssr.source.VuiDataService;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Description("查询表单")
+@VuiCommonComponent
 public class VuiForm extends VuiContainer<ISupportForm>
-        implements ISsrBoard, ICommonSupplierDataRow, IBinders, ISupportCanvas {
+        implements ISsrBoard, ISupplierDataRow, ISupportCanvas, ISupportChart, IBinders {
     private static final Logger log = LoggerFactory.getLogger(VuiForm.class);
     private SsrTemplate template;
     private List<String> columns = new ArrayList<>();

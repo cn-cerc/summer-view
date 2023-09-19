@@ -11,9 +11,11 @@ import org.springframework.stereotype.Component;
 import cn.cerc.db.core.DataSet;
 import cn.cerc.db.core.ServiceException;
 import cn.cerc.mis.ado.CustomEntity;
+import cn.cerc.ui.ssr.core.VuiCommonComponent;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+@VuiCommonComponent
 public class VuiDeleteService extends VuiAbstractService<ISupportServiceHandler, ISupplierEntityOpen> {
 
     @Column

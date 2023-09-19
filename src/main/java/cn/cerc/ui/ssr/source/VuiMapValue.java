@@ -14,14 +14,21 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import cn.cerc.db.core.Utils;
+import cn.cerc.ui.ssr.chart.ISupportChart;
+import cn.cerc.ui.ssr.core.VuiCommonComponent;
 import cn.cerc.ui.ssr.core.VuiComponent;
 import cn.cerc.ui.ssr.editor.SsrMessage;
+import cn.cerc.ui.ssr.excel.ISupportXls;
+import cn.cerc.ui.ssr.page.ISupportCanvas;
 import cn.cerc.ui.ssr.page.IVuiEnvironment;
+import cn.cerc.ui.ssr.report.ISupportRpt;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Description("Map附加数据")
-public class VuiMapValue extends VuiComponent implements ICommonSupplierMap, IBinders {
+@VuiCommonComponent
+public class VuiMapValue extends VuiComponent
+        implements ISupplierMap, ISupportCanvas, ISupportXls, ISupportChart, ISupportRpt, IBinders {
     private static final Logger log = LoggerFactory.getLogger(VuiMapValue.class);
     private Map<String, String> items = new LinkedHashMap<>();
     private Binders binders = new Binders();

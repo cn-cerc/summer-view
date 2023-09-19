@@ -13,11 +13,13 @@ import cn.cerc.mis.math.FunctionIf;
 import cn.cerc.mis.math.FunctionManager;
 import cn.cerc.mis.math.FunctionMath;
 import cn.cerc.ui.ssr.core.SsrBlock;
+import cn.cerc.ui.ssr.core.VuiCommonComponent;
 import cn.cerc.ui.ssr.core.VuiControl;
 import cn.cerc.ui.ssr.editor.ISsrBoard;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+@VuiCommonComponent
 public class GridCalculateField extends VuiControl implements ISupportGrid {
 
     private SsrBlock head = new SsrBlock();

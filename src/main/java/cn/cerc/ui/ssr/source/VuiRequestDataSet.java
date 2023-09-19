@@ -13,16 +13,23 @@ import cn.cerc.db.core.FieldMeta;
 import cn.cerc.db.core.Utils;
 import cn.cerc.ui.core.RequestReader;
 import cn.cerc.ui.core.UIComponent;
+import cn.cerc.ui.ssr.chart.ISupportChart;
 import cn.cerc.ui.ssr.core.PropertiesReader;
 import cn.cerc.ui.ssr.core.PropertiesWriter;
+import cn.cerc.ui.ssr.core.VuiCommonComponent;
 import cn.cerc.ui.ssr.core.VuiComponent;
 import cn.cerc.ui.ssr.editor.EditorForm;
 import cn.cerc.ui.ssr.editor.SsrMessage;
+import cn.cerc.ui.ssr.excel.ISupportXls;
+import cn.cerc.ui.ssr.page.ISupportCanvas;
+import cn.cerc.ui.ssr.report.ISupportRpt;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Description("请求数据集")
-public class VuiRequestDataSet extends VuiComponent implements ICommonSupplierDataSet {
+@VuiCommonComponent
+public class VuiRequestDataSet extends VuiComponent
+        implements ISupplierDataSet, ISupportCanvas, ISupportXls, ISupportChart, ISupportRpt {
     /**
      * key: Request中的请求字段, value: 请求内容与字段名称的对应 </br>
      * request: value: ["A1,B1,C1","A2,B2,C2","A3,B3,C3"] </br>

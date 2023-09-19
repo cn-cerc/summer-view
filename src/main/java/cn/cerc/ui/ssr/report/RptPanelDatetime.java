@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import cn.cerc.db.core.DataRow;
 import cn.cerc.db.core.Utils;
 import cn.cerc.mis.core.HtmlWriter;
+import cn.cerc.ui.ssr.core.VuiCommonComponent;
 import cn.cerc.ui.ssr.editor.SsrMessage;
 import cn.cerc.ui.ssr.form.DatetimeKindEnum;
 import cn.cerc.ui.ssr.source.Binder;
@@ -16,6 +17,7 @@ import cn.cerc.ui.ssr.source.ISupplierDataRow;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+@VuiCommonComponent
 public class RptPanelDatetime extends AbstractRptPanelControl {
     private DataRow dataRow;
 

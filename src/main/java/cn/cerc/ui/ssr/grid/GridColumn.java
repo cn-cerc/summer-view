@@ -9,11 +9,13 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import cn.cerc.ui.ssr.core.SsrBlock;
+import cn.cerc.ui.ssr.core.VuiCommonComponent;
 import cn.cerc.ui.ssr.core.VuiContainer;
 import cn.cerc.ui.ssr.editor.ISsrBoard;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+@VuiCommonComponent
 public class GridColumn extends VuiContainer<ISupportGridColumn> implements ISupportGrid, Supplier<String> {
     private SsrBlock head = new SsrBlock();
     private SsrBlock body = new SsrBlock();

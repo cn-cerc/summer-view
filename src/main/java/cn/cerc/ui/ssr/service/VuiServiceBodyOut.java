@@ -17,10 +17,12 @@ import cn.cerc.db.core.DataSet;
 import cn.cerc.db.core.FieldDefs;
 import cn.cerc.db.core.FieldMeta;
 import cn.cerc.db.core.Utils;
+import cn.cerc.ui.ssr.core.VuiCommonComponent;
 import cn.cerc.ui.ssr.editor.SsrMessage;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+@VuiCommonComponent
 public class VuiServiceBodyOut extends VuiAbstractEntityContainer<VuiOutputField> implements ISupportServiceDataOut {
 
     private DataSet dataOut;

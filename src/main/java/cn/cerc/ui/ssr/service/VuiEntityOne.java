@@ -19,6 +19,7 @@ import cn.cerc.mis.ado.CustomEntity;
 import cn.cerc.mis.ado.EntityOne;
 import cn.cerc.mis.core.Application;
 import cn.cerc.ui.core.UIComponent;
+import cn.cerc.ui.ssr.core.VuiCommonComponent;
 import cn.cerc.ui.ssr.core.VuiComponent;
 import cn.cerc.ui.ssr.core.VuiContainer;
 import cn.cerc.ui.ssr.editor.SsrMessage;
@@ -27,6 +28,7 @@ import cn.cerc.ui.ssr.source.IBinders;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+@VuiCommonComponent
 public class VuiEntityOne extends VuiContainer<ISupportServiceData>
         implements ISupportServiceHandler, IBinders, ISupplierEntityOpen {
     private Binders binders = new Binders();

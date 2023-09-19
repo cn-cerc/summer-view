@@ -8,10 +8,12 @@ import org.springframework.stereotype.Component;
 
 import cn.cerc.db.core.Utils;
 import cn.cerc.ui.core.UrlRecord;
+import cn.cerc.ui.ssr.core.VuiCommonComponent;
 import cn.cerc.ui.ssr.core.VuiControl;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+@VuiCommonComponent
 public class VuiUrlRecord extends VuiControl implements ISupportUrl {
 
     @Column

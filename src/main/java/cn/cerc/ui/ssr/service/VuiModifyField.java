@@ -15,11 +15,13 @@ import cn.cerc.db.core.Datetime;
 import cn.cerc.db.core.EntityHelper;
 import cn.cerc.db.core.Utils;
 import cn.cerc.mis.ado.CustomEntity;
+import cn.cerc.ui.ssr.core.VuiCommonComponent;
 import cn.cerc.ui.ssr.core.VuiControl;
 import cn.cerc.ui.ssr.editor.SsrMessage;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+@VuiCommonComponent
 public class VuiModifyField extends VuiControl implements ISupportUpdate {
     private static final Logger log = LoggerFactory.getLogger(VuiModifyField.class);
 

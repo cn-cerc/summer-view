@@ -10,12 +10,14 @@ import org.springframework.stereotype.Component;
 import cn.cerc.db.core.Utils;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.core.UrlRecord;
+import cn.cerc.ui.ssr.core.VuiCommonComponent;
 import cn.cerc.ui.ssr.core.VuiContainer;
 import cn.cerc.ui.ssr.editor.EditorGrid;
 import cn.cerc.ui.ssr.editor.SsrMessage;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+@VuiCommonComponent
 public class VuiSheetUrl extends VuiContainer<ISupportUrl> implements ISupportToolbar {
 
     @Override

@@ -17,9 +17,11 @@ import com.itextpdf.text.pdf.PdfDiv;
 import com.itextpdf.text.pdf.PdfDiv.PositionType;
 
 import cn.cerc.mis.core.HtmlWriter;
+import cn.cerc.ui.ssr.core.VuiCommonComponent;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+@VuiCommonComponent
 public class RptPanelImage extends AbstractRptPanelControl {
     private static final Logger log = LoggerFactory.getLogger(RptPanelImage.class);
 

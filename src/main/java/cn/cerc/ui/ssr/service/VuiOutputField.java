@@ -8,11 +8,13 @@ import org.springframework.stereotype.Component;
 
 import cn.cerc.db.core.DataRow;
 import cn.cerc.db.core.Utils;
+import cn.cerc.ui.ssr.core.VuiCommonComponent;
 import cn.cerc.ui.ssr.core.VuiControl;
 import cn.cerc.ui.ssr.editor.SsrMessage;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+@VuiCommonComponent
 public class VuiOutputField extends VuiControl implements ISupportServiceField {
     @Column
     String field = "";

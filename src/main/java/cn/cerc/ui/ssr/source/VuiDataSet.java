@@ -8,15 +8,22 @@ import org.springframework.stereotype.Component;
 import cn.cerc.db.core.DataSet;
 import cn.cerc.db.core.Utils;
 import cn.cerc.ui.core.UIComponent;
+import cn.cerc.ui.ssr.chart.ISupportChart;
 import cn.cerc.ui.ssr.core.PropertiesReader;
 import cn.cerc.ui.ssr.core.PropertiesWriter;
+import cn.cerc.ui.ssr.core.VuiCommonComponent;
 import cn.cerc.ui.ssr.core.VuiComponent;
 import cn.cerc.ui.ssr.editor.EditorGrid;
+import cn.cerc.ui.ssr.excel.ISupportXls;
+import cn.cerc.ui.ssr.page.ISupportCanvas;
+import cn.cerc.ui.ssr.report.ISupportRpt;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Description("内存数据表")
-public class VuiDataSet extends VuiComponent implements ICommonSupplierDataSet {
+@VuiCommonComponent
+public class VuiDataSet extends VuiComponent
+        implements ISupplierDataSet, ISupportCanvas, ISupportXls, ISupportChart, ISupportRpt {
     private DataSet dataSet = new DataSet();
 
     public VuiDataSet() {

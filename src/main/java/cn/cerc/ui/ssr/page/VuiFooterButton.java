@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import cn.cerc.db.core.Utils;
 import cn.cerc.ui.ssr.core.SsrBlock;
+import cn.cerc.ui.ssr.core.VuiCommonComponent;
 import cn.cerc.ui.ssr.core.VuiComponent;
 import cn.cerc.ui.ssr.editor.SsrMessage;
 import cn.cerc.ui.ssr.source.Binder;
@@ -20,6 +21,7 @@ import cn.cerc.ui.vcl.ext.UIBottom;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Description("页面底部按钮")
+@VuiCommonComponent
 public class VuiFooterButton extends VuiComponent implements ISupportCanvas {
     @Column
     String text = "button";

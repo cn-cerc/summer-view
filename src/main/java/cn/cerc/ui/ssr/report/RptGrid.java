@@ -30,6 +30,7 @@ import cn.cerc.ui.core.RequestReader;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.ssr.base.UISsrBlock;
 import cn.cerc.ui.ssr.core.SummaryTypeEnum;
+import cn.cerc.ui.ssr.core.VuiCommonComponent;
 import cn.cerc.ui.ssr.core.VuiComponent;
 import cn.cerc.ui.ssr.core.VuiContainer;
 import cn.cerc.ui.ssr.editor.EditorGrid;
@@ -42,6 +43,7 @@ import cn.cerc.ui.ssr.source.VuiDataService;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+@VuiCommonComponent
 public class RptGrid extends VuiContainer<ISupportRptGrid> implements ISupportRpt {
     private static final Logger log = LoggerFactory.getLogger(RptGrid.class);
     private HttpServletRequest request;

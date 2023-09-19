@@ -20,6 +20,7 @@ import cn.cerc.ui.fields.AbstractField;
 import cn.cerc.ui.fields.ImageConfigImpl;
 import cn.cerc.ui.ssr.core.ISsrOption;
 import cn.cerc.ui.ssr.core.SsrBlock;
+import cn.cerc.ui.ssr.core.VuiCommonComponent;
 import cn.cerc.ui.ssr.core.VuiControl;
 import cn.cerc.ui.ssr.editor.ISsrBoard;
 import cn.cerc.ui.ssr.editor.SsrMessage;
@@ -29,6 +30,7 @@ import cn.cerc.ui.ssr.source.ISupplierMap;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Description("输入框组件")
+@VuiCommonComponent
 public class FormStringField extends VuiControl implements ISupportForm {
     private static final ClassConfig FieldConfig = new ClassConfig(AbstractField.class, SummerUI.ID);
     private SsrBlock block = new SsrBlock();

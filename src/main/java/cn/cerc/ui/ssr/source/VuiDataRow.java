@@ -9,20 +9,25 @@ import cn.cerc.db.core.DataRow;
 import cn.cerc.db.core.Utils;
 import cn.cerc.ui.core.RequestReader;
 import cn.cerc.ui.core.UIComponent;
+import cn.cerc.ui.ssr.chart.ISupportChart;
 import cn.cerc.ui.ssr.core.PropertiesReader;
 import cn.cerc.ui.ssr.core.PropertiesWriter;
+import cn.cerc.ui.ssr.core.VuiCommonComponent;
 import cn.cerc.ui.ssr.core.VuiComponent;
 import cn.cerc.ui.ssr.editor.EditorForm;
 import cn.cerc.ui.ssr.editor.SsrMessage;
 import cn.cerc.ui.ssr.excel.ISupportXls;
 import cn.cerc.ui.ssr.form.ISupportForm;
 import cn.cerc.ui.ssr.form.VuiForm;
+import cn.cerc.ui.ssr.page.ISupportCanvas;
 import cn.cerc.ui.ssr.report.ISupportRpt;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Description("内存数据行")
-public class VuiDataRow extends VuiComponent implements ICommonSupplierDataRow, ISupportXls, ISupportRpt {
+@VuiCommonComponent
+public class VuiDataRow extends VuiComponent
+        implements ISupplierDataRow, ISupportCanvas, ISupportChart, ISupportXls, ISupportRpt {
     private DataRow dataRow = new DataRow();
 
     @Override

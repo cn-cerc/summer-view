@@ -12,6 +12,7 @@ import cn.cerc.db.core.Utils;
 import cn.cerc.db.redis.Redis;
 import cn.cerc.ui.mvc.AbstractPage;
 import cn.cerc.ui.ssr.core.SsrBlock;
+import cn.cerc.ui.ssr.core.VuiCommonComponent;
 import cn.cerc.ui.ssr.core.VuiComponent;
 import cn.cerc.ui.ssr.editor.SsrMessage;
 
@@ -28,6 +29,7 @@ import cn.cerc.ui.ssr.editor.SsrMessage;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Description("页面消息")
+@VuiCommonComponent
 public class VuiPageMessage extends VuiComponent implements ISupportCanvas {
 
     private IHandle handle;

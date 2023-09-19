@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import cn.cerc.mis.core.HtmlWriter;
+import cn.cerc.ui.ssr.core.VuiCommonComponent;
 import cn.cerc.ui.ssr.core.VuiControl;
 import cn.cerc.ui.ssr.editor.SsrMessage;
 import jxl.write.Label;
@@ -17,6 +18,7 @@ import jxl.write.WriteException;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+@VuiCommonComponent
 public class XlsTextCell extends VuiControl implements ISupportXlsRow {
     private static final Logger log = LoggerFactory.getLogger(XlsTextCell.class);
 

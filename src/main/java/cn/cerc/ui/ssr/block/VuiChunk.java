@@ -21,6 +21,7 @@ import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.fields.ImageConfigImpl;
 import cn.cerc.ui.ssr.core.SsrBlock;
 import cn.cerc.ui.ssr.core.SsrTemplate;
+import cn.cerc.ui.ssr.core.VuiCommonComponent;
 import cn.cerc.ui.ssr.core.VuiContainer;
 import cn.cerc.ui.ssr.editor.ISsrBoard;
 import cn.cerc.ui.ssr.editor.SsrMessage;
@@ -31,6 +32,7 @@ import cn.cerc.ui.ssr.source.VuiDataService;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Description("手机表格块")
+@VuiCommonComponent
 public class VuiChunk extends VuiContainer<ISupportBoard> implements ISsrBoard, ISupportCanvas {
     private static final Logger log = LoggerFactory.getLogger(VuiChunk.class);
     private SsrTemplate template;
