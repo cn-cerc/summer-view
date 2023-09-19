@@ -43,8 +43,8 @@ public class VuiDataService extends VuiComponent implements ISupplierDataRow, IS
         ISupplierFields, IBinders, ISupplierDataSet, ISupportXls, ISupportRpt {
     private static final Logger log = LoggerFactory.getLogger(VuiDataService.class);
     private DataSet dataSet = new DataSet();
-    private IHandle handle;
     private Binders binders = new Binders();
+    protected IHandle handle;
     @Column
     EntityServiceRecord service = EntityServiceRecord.EMPTY;
     @Column(name = "成功后发送消息")
@@ -115,7 +115,7 @@ public class VuiDataService extends VuiComponent implements ISupplierDataRow, IS
                     if (bodyIn.target().isPresent())
                         dataIn.appendDataSet(bodyIn.target().get().dataSet());
 
-                    var svr = new ServiceSign(this.service.service()).callLocal(handle, dataIn);
+                    ServiceSign svr = callService(dataIn);
                     if (svr.isFail()) {
                         this.canvas().sendMessage(this, SsrMessage.RefreshProperties, dataSet, null);
                         binders.sendMessage(this, SsrMessage.FailOnService, svr.message(), null);
@@ -135,7 +135,9 @@ public class VuiDataService extends VuiComponent implements ISupplierDataRow, IS
                 break;
             var target = this.headIn.target();
             if (target.isPresent()) {
-                var svr = new ServiceSign(this.service.service()).callLocal(handle, target.get().dataRow());
+                DataSet dataIn = new DataSet();
+                dataIn.head().copyValues(target.get().dataRow());
+                ServiceSign svr = callService(dataIn);
                 if (svr.isFail()) {
                     binders.sendMessage(this, SsrMessage.FailOnService, null, null);
                     this.canvas().sendMessage(this, SsrMessage.FailOnService, svr.message(), null);
@@ -154,6 +156,10 @@ public class VuiDataService extends VuiComponent implements ISupplierDataRow, IS
             break;
         }
         }
+    }
+
+    protected ServiceSign callService(DataSet dataIn) {
+        return new ServiceSign(this.service.service()).callLocal(handle, dataIn);
     }
 
     @Override
