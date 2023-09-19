@@ -116,8 +116,11 @@ public class VuiDataService extends VuiComponent implements ISupplierDataRow, IS
                         dataIn.appendDataSet(bodyIn.target().get().dataSet());
 
                     var svr = new ServiceSign(this.service.service()).callLocal(handle, dataIn);
-                    if (svr.isFail())
-                        throw new RuntimeException(svr.message());
+                    if (svr.isFail()) {
+                        this.canvas().sendMessage(this, SsrMessage.RefreshProperties, dataSet, null);
+                        binders.sendMessage(this, SsrMessage.FailOnService, svr.message(), null);
+                        break;
+                    }
                     this.dataSet = svr.dataOut();
                     this.canvas().sendMessage(this, SsrMessage.RefreshProperties, dataSet, null);
                     binders.sendMessage(this, SsrMessage.SuccessOnService, null, null);

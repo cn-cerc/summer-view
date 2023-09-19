@@ -66,25 +66,32 @@ public class ChartCollect extends VuiAbstractChart {
         case SsrMessage.InitBinder:
             this.binder.init();
             break;
+        case SsrMessage.FailOnService:
+            String title1 = this.binder.target().get().serviceDesc();
+            block.option("_data_title", title1 + this.getClass().getSimpleName());
+            block.option("_title", title1);
+            if (sender == this.binder.target().get()) {
+                String msg = (String) msgData;
+                block.option("_msg", Utils.isEmpty(msg) ? "统计服务异常" : msg);
+            }
+            break;
         case SsrMessage.RefreshProperties:
         case SsrMessage.InitProperties:
-            if (this.binder.target().isEmpty()) {
-                log.warn("未设置数据源：dataSet");
-                break;
-            }
             Optional<VuiDataService> serviceOpt = this.binder.target();
             if (serviceOpt.isPresent()) {
                 if (sender == serviceOpt.get()) {
                     DataSet dataSet = serviceOpt.get().dataSet();
-                    block.dataSet(dataSet);
-                    if (!dataSet.eof())
-                        block.option("_data", "1");
                     String title = dataSet.head().getString("title");
                     block.option("_data_title", title + this.getClass().getSimpleName());
                     block.option("_title", title);
-                    block.onCallback("value", () -> {
-                        return String.format("<li>%s</li>", dataSet.getString(dataSet.fields().get(0).code()));
-                    });
+                    if (!dataSet.eof()) {
+                        block.dataSet(dataSet);
+                        block.option("_data", "1");
+                        block.onCallback("value", () -> {
+                            return String.format("<li>%s</li>", dataSet.getString(dataSet.fields().get(0).code()));
+                        });
+                    } else
+                        block.option("_msg", Utils.isEmpty(dataSet.message()) ? "暂无统计数据" : dataSet.message());
                 }
             } else
                 log.warn("{} 绑定的数据源 {} 找不到", this.getId(), this.binder.targetId());
@@ -109,7 +116,7 @@ public class ChartCollect extends VuiAbstractChart {
                 <div class='chartTitle'>${_title}</div>
                 ${if not _data}<div role='noData'>
                     <img src='%s' />
-                    <span>数据源为空或者未绑定数据源</span>
+                    <span>${_msg}</span>
                 </div>${else}
                 <div class='scroll'>
                     <ul class='tabBody'>
