@@ -45,10 +45,14 @@ public abstract class VuiContainer<T> extends VuiControl {
     }
 
     public Set<Class<? extends VuiComponent>> getChildren() {
+        return getChildren(this, supportClass);
+    }
+
+    public static Set<Class<? extends VuiComponent>> getChildren(VuiComponent vuiComponent, Class<?> supportClass) {
         Set<Class<? extends VuiComponent>> result;
-        IVuiEnvironment visualPage = this.canvas().environment();
+        IVuiEnvironment visualPage = vuiComponent.canvas().environment();
         if (visualPage != null)
-            result = visualPage.getAttachClass(this.getClass());
+            result = visualPage.getAttachClass(vuiComponent.getClass());
         else
             result = new LinkedHashSet<Class<? extends VuiComponent>>();
 

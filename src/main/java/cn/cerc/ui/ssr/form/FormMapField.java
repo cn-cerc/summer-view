@@ -23,7 +23,7 @@ import cn.cerc.ui.ssr.source.ISupplierMap;
 @Description("下拉组件")
 @Deprecated
 @VuiCommonComponent
-public class FormMapField extends VuiControl implements ISupportForm {
+public class FormMapField extends VuiControl {
     private SsrBlock block = new SsrBlock();
     @Column
     String title = "";
@@ -49,12 +49,10 @@ public class FormMapField extends VuiControl implements ISupportForm {
         block.id(title).fields(field).display(1);
     }
 
-    @Override
     public SsrBlock block() {
         return block;
     }
 
-    @Override
     public SsrBlock request(ISsrBoard form) {
         String title = this.title;
         String field = this.field;
@@ -102,24 +100,20 @@ public class FormMapField extends VuiControl implements ISupportForm {
         return this;
     }
 
-    @Override
     public String title() {
         return this.title;
     }
 
-    @Override
-    public ISupportForm title(String title) {
+    public FormMapField title(String title) {
         this.title = title;
         return this;
     }
 
-    @Override
     public String fields() {
         return this.field;
     }
 
-    @Override
-    public ISupportForm field(String field) {
+    public FormMapField field(String field) {
         this.field = field;
         return this;
     }
@@ -159,6 +153,9 @@ public class FormMapField extends VuiControl implements ISupportForm {
         switch (msgType) {
         case SsrMessage.InitBinder:
             this.mapSource.init();
+            var form = this.findOwner(VuiForm.class);
+            if (form != null)
+                this.request(form);
             break;
         case SsrMessage.InitMapSourceDone:
             var obj = this.mapSource.target();

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 import cn.cerc.db.core.ClassConfig;
 import cn.cerc.db.core.Utils;
 import cn.cerc.mis.core.Application;
+import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.SummerUI;
 import cn.cerc.ui.core.RequestReader;
 import cn.cerc.ui.fields.AbstractField;
@@ -32,7 +33,7 @@ import cn.cerc.ui.ssr.source.ISupplierList;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Description("输入框组件")
 @VuiCommonComponent
-public class FormNumberField extends VuiControl implements ISupportForm {
+public class FormNumberField extends VuiControl implements ISupportField {
     private static final ClassConfig FieldConfig = new ClassConfig(AbstractField.class, SummerUI.ID);
     private SsrBlock block = new SsrBlock();
     private String fieldDialogIcon;
@@ -147,10 +148,23 @@ public class FormNumberField extends VuiControl implements ISupportForm {
     }
 
     @Override
+    public void output(HtmlWriter html) {
+        VuiForm form = this.findOwner(VuiForm.class);
+        if (form != null && !form.columns().contains(title))
+            return;
+        html.print(block.html());
+    }
+
+    @Override
     public void onMessage(Object sender, int msgType, Object msgData, String targetId) {
         switch (msgType) {
         case SsrMessage.InitBinder:
             this.listSource.init();
+            var form = this.findOwner(VuiForm.class);
+            if (form != null) {
+                this.request(form);
+                form.addColumn(title);
+            }
             break;
         case SsrMessage.InitListSourceDone:
             Optional<ISupplierList> optList = this.listSource.target();

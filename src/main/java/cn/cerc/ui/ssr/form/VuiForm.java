@@ -26,14 +26,12 @@ import cn.cerc.db.core.DataSet;
 import cn.cerc.db.core.IHandle;
 import cn.cerc.db.core.Utils;
 import cn.cerc.mis.core.Application;
-import cn.cerc.mis.core.EntityServiceField;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.mis.core.IPage;
 import cn.cerc.mis.other.MemoryBuffer;
 import cn.cerc.ui.core.RequestReader;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.core.ViewDisplay;
-import cn.cerc.ui.ssr.base.UISsrBlock;
 import cn.cerc.ui.ssr.chart.ISupportChart;
 import cn.cerc.ui.ssr.core.AlignEnum;
 import cn.cerc.ui.ssr.core.ISsrOption;
@@ -46,7 +44,6 @@ import cn.cerc.ui.ssr.core.VuiBufferType;
 import cn.cerc.ui.ssr.core.VuiCommonComponent;
 import cn.cerc.ui.ssr.core.VuiComponent;
 import cn.cerc.ui.ssr.core.VuiContainer;
-import cn.cerc.ui.ssr.editor.EditorGrid;
 import cn.cerc.ui.ssr.editor.ISsrBoard;
 import cn.cerc.ui.ssr.editor.SsrMessage;
 import cn.cerc.ui.ssr.page.ISupportCanvas;
@@ -56,12 +53,11 @@ import cn.cerc.ui.ssr.source.Binder;
 import cn.cerc.ui.ssr.source.Binders;
 import cn.cerc.ui.ssr.source.IBinders;
 import cn.cerc.ui.ssr.source.ISupplierDataRow;
-import cn.cerc.ui.ssr.source.ISupplierFields;
 import cn.cerc.ui.ssr.source.VuiDataService;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@Description("查询表单")
+@Description("表单")
 @VuiCommonComponent
 public class VuiForm extends VuiContainer<ISupportForm>
         implements ISsrBoard, ISupplierDataRow, ISupportCanvas, ISupportChart, IBinders {
@@ -87,6 +83,7 @@ public class VuiForm extends VuiContainer<ISupportForm>
     @Column
     boolean enableConfig = true;
     private IHandle handle;
+    private boolean submit;
 
     public VuiForm() {
         this(null);
@@ -136,87 +133,82 @@ public class VuiForm extends VuiContainer<ISupportForm>
             log.error("dataRow is null");
             return;
         }
+
         if (this.columns == null)
             this.columns = this.dataRow().fields().names();
 
         getBlock(SsrTemplate.BeginFlag).ifPresent(template -> html.print(template.html()));
-
         var top = getBlock(FormBegin, getDefault_FormBegin()).get();
         if (this.template.id() != null)
             top.option(ISsrOption.TemplateId, this.template.id());
         html.print(top.html());
 
-        for (var column : columns) {
-            var item = getBlock(column);
-            if (item.isPresent()) {
-                var block = item.get();
-                block.template(template);
-                Consumer<SsrBlock> value = onGetHtml.get(column);
-                if (value != null)
-                    value.accept(block.id(column));
-                html.print(block.html());
-            } else {
-                html.print(new SsrBlock(
-                        String.format("%s: <input type=\"text\" name=\"%s\" value=\"${%s}\">", column, column, column))
-                        .template(template)
-                        .html());
-                log.error("找不到数据列: {}", column);
-            }
-        }
+        writeContent(html);
+
         var formFirst = this.getBlock(VuiForm.FormStart);
         getBlock(FormEnd,
-                () -> new SsrBlock(String.format("</ul>%s</form>",
-                        formFirst.isPresent() && isPhone() ? formFirst.get().html() : "")).template(template))
+                () -> new SsrBlock(String.format("%s%s</form>", this.canvas() != null ? "" : "</ul>",
+                        formFirst.isPresent() && isPhone() && this.canvas() == null ? formFirst.get().html() : ""))
+                        .template(template))
                 .ifPresent(value -> html.print(value.html()));
+
         getBlock(SsrTemplate.EndFlag).ifPresent(template -> html.print(template.html()));
+    }
+
+    public void writeContent(HtmlWriter html) {
+        if (this.canvas() != null) {
+            for (var component : this) {
+                component.output(html);
+            }
+        } else {
+            for (var column : columns) {
+                var item = getBlock(column);
+                if (item.isPresent()) {
+                    var block = item.get();
+                    block.template(template);
+                    Consumer<SsrBlock> value = onGetHtml.get(column);
+                    if (value != null)
+                        value.accept(block.id(column));
+                    html.print(block.html());
+                } else {
+                    html.print(new SsrBlock(String.format("%s: <input type=\"text\" name=\"%s\" value=\"${%s}\">",
+                            column, column, column)).template(template).html());
+                    log.error("找不到数据列: {}", column);
+                }
+            }
+        }
     }
 
     public void onGetHtml(String field, Consumer<SsrBlock> consumer) {
         this.onGetHtml.put(field, consumer);
     }
 
-    private Supplier<SsrBlock> getDefault_FormBegin() {
+    protected Supplier<SsrBlock> getDefault_FormBegin() {
         var action = this.template().option("action").orElse("");
         return () -> {
-            var ssr = new SsrBlock(String.format("<form method='post' action='%s'%s role='${role}'>${callback(%s)}<ul>",
-                    action, !Utils.isEmpty(getId()) ? " id='" + getId() + "'" : "", VuiForm.FormStart))
-                    .template(template);
+            var ssr = new SsrBlock(String.format("<form method='post' action='%s'%s role='${role}'>${callback(%s)}%s",
+                    action, !Utils.isEmpty(getId()) ? " id='" + getId() + "'" : "", VuiForm.FormStart,
+                    this.canvas() != null ? "" : "<ul>")).template(template);
             ssr.onCallback(VuiForm.FormStart, () -> {
                 var formFirst = this.getBlock(VuiForm.FormStart);
                 formFirst.ifPresent(template -> {
                     if (this.template.id() != null)
                         template.option(ISsrOption.TemplateId, this.template.id());
                 });
-                return formFirst.isPresent() && !isPhone() ? formFirst.get().html() : "";
+                return formFirst.isPresent() && !isPhone() && this.canvas() == null ? formFirst.get().html() : "";
             });
-            ssr.option("role", "search");
+            ssr.option("role", Utils.isEmpty(this.getRole()) ? "search" : this.getRole());
             return ssr;
         };
     }
 
-    private Optional<SsrBlock> getBlock(String id, Supplier<SsrBlock> supplier) {
+    protected Optional<SsrBlock> getBlock(String id, Supplier<SsrBlock> supplier) {
         SsrBlock block = template.getOrAdd(id, supplier).orElse(null);
         if (block != null)
             block.id(id);
         else
             log.error("表单模版中缺失定义：{}", id);
         return Optional.ofNullable(block);
-    }
-
-    /** 请改使用 columns 函数 */
-    @Deprecated
-    public List<String> fields() {
-        return columns();
-    }
-
-    /**
-     * 请改使用 buffer 函数
-     * 
-     * @param buffer
-     */
-    @Deprecated
-    public void setBuffer(MemoryBuffer buffer) {
-        buffer(buffer);
     }
 
     public VuiForm buffer(MemoryBuffer buffer) {
@@ -235,34 +227,47 @@ public class VuiForm extends VuiContainer<ISupportForm>
     public boolean readAll(HttpServletRequest request, String submitId, String submitVal) {
         if (dataRow() == null)
             this.dataRow(new DataRow());
-        boolean submit = request.getParameter(submitId) != null
+
+        this.submit = request.getParameter(submitId) != null
                 && (submitVal == null || submitVal.equals(request.getParameter(submitId)));
-        for (String column : columns) {
-            getBlock(column).ifPresent(ssr -> ssr.option("fields").ifPresent(fields1 -> {
-                for (var field : fields1.split(",")) {
-                    if (!Utils.isEmpty(field)) {
-                        String val = request.getParameter(field);
-                        if (val != null)
-                            val = val.trim();
-                        updateValue(field, val, submit);
-                    }
-                }
-            }));
-        }
+
+        for (String column : columns)
+            updateValue(column, request);
+
         return submit;
     }
 
-    private void updateValue(String field, String val, boolean submit) {
-        if (submit) {
-            dataRow().setValue(field, val == null ? "" : val);
-            if (buffer != null) {
-                buffer.setValue(field, val);
-            }
-        } else {
-            if (val != null) {
-                dataRow().setValue(field, val);
-            } else if (buffer != null && !buffer.isNull() && buffer.getRecord().exists(field)) {
-                dataRow().setValue(field, buffer.getString(field));
+    private void updateValue(String column, HttpServletRequest request) {
+        if (!columns.contains(column))
+            return;
+
+        var block = template().get(column);
+        if (block.isEmpty())
+            return;
+
+        var fields1 = block.get().option("fields");
+        if (fields1.isEmpty())
+            return;
+
+        var fields = fields1.get();
+        for (var field : fields.split(",")) {
+            if (!Utils.isEmpty(field)) {
+                String val = request.getParameter(field);
+                if (val != null)
+                    val = val.trim();
+
+                if (submit) {
+                    dataRow().setValue(field, val == null ? "" : val);
+                    if (buffer != null) {
+                        buffer.setValue(field, val);
+                    }
+                } else {
+                    if (val != null) {
+                        dataRow().setValue(field, val);
+                    } else if (buffer != null && !buffer.isNull() && buffer.getRecord().exists(field)) {
+                        dataRow().setValue(field, buffer.getString(field));
+                    }
+                }
             }
         }
     }
@@ -291,34 +296,11 @@ public class VuiForm extends VuiContainer<ISupportForm>
                 this.addColumn(field);
     }
 
-    /**
-     * 请改使用 loadConfig
-     * 
-     * @param configs
-     */
-    @Deprecated
-    public void setConfig(DataSet configs) {
-        configs.forEach(item -> {
-            if (item.getEnum("option_", ViewDisplay.class) != ViewDisplay.默认隐藏)
-                addColumn(item.getString("column_name_"));
-        });
-    }
-
     public void loadDefaultConfig() {
         this.getDefaultOptions().forEach(item -> {
             if (item.getEnum("option_", ViewDisplay.class) != ViewDisplay.默认隐藏)
                 addColumn(item.getString("column_name_"));
         });
-    }
-
-    /**
-     * 请改使用 defaultStyle()
-     * 
-     * @return
-     */
-    @Deprecated
-    public SsrFormStyleDefault createDefaultStyle() {
-        return defaultStyle();
     }
 
     public SsrFormStyleDefault defaultStyle() {
@@ -355,35 +337,6 @@ public class VuiForm extends VuiContainer<ISupportForm>
         return this;
     }
 
-    /**
-     * 请改使用 role 函数
-     * 
-     * @return
-     */
-    @Deprecated
-    public VuiForm modify() {
-        role("modify");
-        return this;
-    }
-
-    /** 请改使用 getBlock */
-    @Deprecated
-    public Optional<SsrBlock> getTemplate(String blockId) {
-        return this.getBlock(blockId);
-    }
-
-    /** 请改使用 template 函数 */
-    @Deprecated
-    public SsrTemplate define() {
-        return template();
-    }
-
-    /** 请改使用 addColumn 函数 */
-    @Deprecated
-    public void addField(String name) {
-        this.addColumn(name);
-    }
-
     @Override
     public ISsrBoard addColumn(String... columns) {
         return ISsrBoard.super.addColumn(columns);
@@ -398,85 +351,22 @@ public class VuiForm extends VuiContainer<ISupportForm>
     public void readProperties(PropertiesReader reader) {
         reader.read(this);
         this.action(reader.getString("action").orElse(""));
-        for (var item : this) {
-            if (item instanceof ISupplierBlock supplier)
-                this.addBlock(supplier);
-            if (item instanceof ISupportForm impl) {
-                if (!Utils.isEmpty(impl.title()))
-                    this.addColumn(impl.title());
+        if (this.canvas() == null) {
+            for (var item : this) {
+                if (item instanceof ISupplierBlock supplier)
+                    this.addBlock(supplier);
+                if (item instanceof ISupportField impl) {
+                    if (!Utils.isEmpty(impl.title()))
+                        this.addColumn(impl.title());
+                }
             }
         }
     }
 
     @Override
-    public void buildEditor(UIComponent content, String pageCode) {
-        super.buildEditor(content, pageCode);
-
-        EditorGrid grid = new EditorGrid(content, this);
-        grid.addColumn("栏位", "cloumn", 20);
-        grid.build(pageCode);
-
-        // 显示所有可以加入的组件
-        DataSet dataSet = new DataSet();
-        UISsrBlock impl = new UISsrBlock(content,
-                """
-                        <form method="post" id="fieldForm">
-                            <input type="hidden" name="id" value=${id}>
-                            <div id="grid" class="scrollArea">
-                                <table class="dbgrid">
-                                    <tbody>
-                                        <tr>
-                                            <th style="width: 4em">选择</th>
-                                            <th style="width: 10em">字段</th>
-                                            <th style="width: 20em">类名</th>
-                                        </tr>
-                                        ${dataset.begin}
-                                        <tr>
-                                            <td align="center" role="check">
-                                                <span><input type="checkbox" name="components" value="${class},${field},${title}"></span>
-                                            </td>
-                                            <td align="left" role="title">${title}</td>
-                                            <td align="left" role="class">${class}</td>
-                                        </tr>
-                                        ${dataset.end}
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div lowcode="button"><label onclick="selectItems('components')"><input type='checkbox' id='selectAll' />全选</label><button name="save" value="save" onclick="submitForm('fieldForm', 'submit')">保存</button>
-                            </div>
-                        </form>""");
-        impl.block().dataSet(dataSet);
-        impl.block().option("id", this.getId());
-
-        List<EntityServiceField> fields = new ArrayList<>();
-        Optional<ISupplierDataRow> optDataRow = this.dataRow.target();
-        if (optDataRow.isPresent() && optDataRow.get() instanceof ISupplierFields supperli)
-            fields.addAll(supperli.fields(ISupplierFields.BodyOutFields));
-
-        Optional<ISupplierFields> optSvr = binders.findOwner(ISupplierFields.class);
-        if (optSvr.isPresent())
-            fields.addAll(optSvr.get().fields(ISupplierFields.HeadInFields));
-        for (EntityServiceField field : fields) {
-            if (dataSet.locate("field", field.getName()))
-                continue;
-            String title = field.getName();
-            Column column = field.getAnnotation(Column.class);
-            if (column == null)
-                continue;
-            if (!Utils.isEmpty(column.name()))
-                title = column.name();
-            String classCode = FormStringField.class.getSimpleName();
-            if (field.getType() == Boolean.class || field.getType() == boolean.class)
-                classCode = FormBooleanField.class.getSimpleName();
-            else if (field.getType() == Integer.class || field.getType() == int.class || field.getType() == Double.class
-                    || field.getType() == double.class || field.getType().isEnum())
-                classCode = FormNumberField.class.getSimpleName();
-            dataSet.append()
-                    .setValue("field", field.getName())
-                    .setValue("title", title)
-                    .setValue("class", classCode)
-                    .setValue("check", false);
-        }
+    public Set<Class<? extends VuiComponent>> getChildren() {
+        Set<Class<? extends VuiComponent>> set = super.getChildren();
+        return set;
     }
 
     @Override
@@ -512,19 +402,12 @@ public class VuiForm extends VuiContainer<ISupportForm>
             String prefix = item.getIdPrefix();
             String nid = this.canvas().createUid(prefix);
             item.setId(nid);
-            if (item instanceof ISupportForm formField) {
+            if (item instanceof ISupportField formField) {
                 formField.title(title);
                 formField.field(field);
             }
             this.canvas().sendMessage(this, SsrMessage.appendComponent, item, this.dataRow.targetId());
         }
-    }
-
-    @Override
-    public Set<Class<? extends VuiComponent>> getChildren() {
-        Set<Class<? extends VuiComponent>> set = super.getChildren();
-        set.add(FormSubmitButton.class);
-        return set;
     }
 
     @Override
@@ -570,7 +453,7 @@ public class VuiForm extends VuiContainer<ISupportForm>
                     this.canvas().sendMessage(this, SsrMessage.AfterSubmit, null, null);
                 if (buffer != null)
                     buffer.post();
-                binders.findOwner(VuiDataService.class)
+                binders().findOwner(VuiDataService.class)
                         .ifPresent(service -> service.onMessage(this, SsrMessage.InitContent, null, null));
                 if (enableConfig) {
                     if (canvas().environment() instanceof VuiEnvironment environment) {

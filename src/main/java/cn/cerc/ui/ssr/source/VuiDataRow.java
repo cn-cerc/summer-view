@@ -17,7 +17,7 @@ import cn.cerc.ui.ssr.core.VuiComponent;
 import cn.cerc.ui.ssr.editor.EditorForm;
 import cn.cerc.ui.ssr.editor.SsrMessage;
 import cn.cerc.ui.ssr.excel.ISupportXls;
-import cn.cerc.ui.ssr.form.ISupportForm;
+import cn.cerc.ui.ssr.form.ISupportField;
 import cn.cerc.ui.ssr.form.VuiForm;
 import cn.cerc.ui.ssr.page.ISupportCanvas;
 import cn.cerc.ui.ssr.report.ISupportRpt;
@@ -88,7 +88,7 @@ public class VuiDataRow extends VuiComponent
     public void onMessage(Object sender, int msgType, Object msgData, String targetId) {
         switch (msgType) {
         case SsrMessage.appendComponent:
-            if (sender instanceof VuiForm form && msgData instanceof ISupportForm block) {
+            if (sender instanceof VuiForm form && msgData instanceof ISupportField block) {
                 String newField = block.fields();
                 if (!Utils.isEmpty(newField) && !dataRow.fields().exists(newField))
                     dataRow.fields().add(newField);

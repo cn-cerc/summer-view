@@ -9,7 +9,7 @@ import cn.cerc.ui.fields.ImageConfigImpl;
 import cn.cerc.ui.ssr.core.ISupplierBlock;
 import cn.cerc.ui.ssr.core.VuiComponent;
 import cn.cerc.ui.ssr.excel.ISupportXlsGrid;
-import cn.cerc.ui.ssr.form.ISupportForm;
+import cn.cerc.ui.ssr.form.ISupportField;
 import cn.cerc.ui.ssr.grid.ISupportGrid;
 import cn.cerc.ui.ssr.grid.VuiGrid;
 import cn.cerc.ui.ssr.service.ISupportServiceField;
@@ -63,7 +63,7 @@ public class EditorGrid extends UIComponent {
         for (var item : sender) {
             if (item instanceof ISupplierBlock) {
                 String cloumn = item.getId();
-                if (item instanceof ISupportForm formBlock && !Utils.isEmpty(formBlock.title()))
+                if (item instanceof ISupportField formBlock && !Utils.isEmpty(formBlock.title()))
                     cloumn = formBlock.title();
                 else if (item instanceof ISupportGrid gridBlock && !Utils.isEmpty(gridBlock.title()))
                     cloumn = gridBlock.title();

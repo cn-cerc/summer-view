@@ -11,6 +11,7 @@ import cn.cerc.db.core.ClassConfig;
 import cn.cerc.db.core.Datetime;
 import cn.cerc.db.core.Datetime.DateType;
 import cn.cerc.mis.core.Application;
+import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.SummerUI;
 import cn.cerc.ui.core.RequestReader;
 import cn.cerc.ui.core.UIComponent;
@@ -27,7 +28,7 @@ import cn.cerc.ui.ssr.editor.SsrMessage;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Description("日期块组件")
 @VuiCommonComponent
-public class FormDateRangeField extends VuiControl implements ISupportForm {
+public class FormDateRangeField extends VuiControl implements ISupportField {
     private static final ClassConfig DateConfig = new ClassConfig(DateField.class, SummerUI.ID);
     private SsrBlock block = new SsrBlock();
     private String dateDialogIcon;
@@ -113,8 +114,24 @@ public class FormDateRangeField extends VuiControl implements ISupportForm {
     }
 
     @Override
+    public void output(HtmlWriter html) {
+        VuiForm form = this.findOwner(VuiForm.class);
+        if (form != null && !form.columns().contains(title))
+            return;
+        html.print(block.html());
+    }
+
+    @Override
     public void onMessage(Object sender, int msgType, Object msgData, String targetId) {
         switch (msgType) {
+        case SsrMessage.InitBinder: {
+            var form = this.findOwner(VuiForm.class);
+            if (form != null) {
+                this.request(form);
+                form.addColumn(title);
+            }
+            break;
+        }
         case SsrMessage.InitProperties:
             if (range != DefaultDateRangeEnum.无) {
                 UIComponent owner = getOwner();
@@ -172,7 +189,7 @@ public class FormDateRangeField extends VuiControl implements ISupportForm {
     }
 
     @Override
-    public ISupportForm title(String title) {
+    public FormDateRangeField title(String title) {
         this.title = title;
         return this;
     }
@@ -183,7 +200,7 @@ public class FormDateRangeField extends VuiControl implements ISupportForm {
     }
 
     @Override
-    public ISupportForm field(String fields) {
+    public FormDateRangeField field(String fields) {
         String[] fieldsArray = fields.split(",");
         if (fieldsArray.length == 2) {
             this.beginField = fieldsArray[0];

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import cn.cerc.db.core.ClassConfig;
 import cn.cerc.mis.core.Application;
+import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.SummerUI;
 import cn.cerc.ui.core.RequestReader;
 import cn.cerc.ui.fields.DateField;
@@ -23,7 +24,7 @@ import cn.cerc.ui.ssr.editor.SsrMessage;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Description("日期时间组件")
 @VuiCommonComponent
-public class FormDatetimeField extends VuiControl implements ISupportForm {
+public class FormDatetimeField extends VuiControl implements ISupportField {
     private static final ClassConfig DateConfig = new ClassConfig(DateField.class, SummerUI.ID);
     private SsrBlock block = new SsrBlock();
     private String dateDialogIcon;
@@ -110,6 +111,14 @@ public class FormDatetimeField extends VuiControl implements ISupportForm {
         return block;
     }
 
+    @Override
+    public void output(HtmlWriter html) {
+        VuiForm form = this.findOwner(VuiForm.class);
+        if (form != null && !form.columns().contains(title))
+            return;
+        html.print(block.html());
+    }
+
     public FormDatetimeField placeholder(String placeholder) {
         this.placeholder = placeholder;
         return this;
@@ -141,7 +150,7 @@ public class FormDatetimeField extends VuiControl implements ISupportForm {
     }
 
     @Override
-    public ISupportForm title(String title) {
+    public FormDatetimeField title(String title) {
         this.title = title;
         return this;
     }
@@ -152,7 +161,7 @@ public class FormDatetimeField extends VuiControl implements ISupportForm {
     }
 
     @Override
-    public ISupportForm field(String field) {
+    public FormDatetimeField field(String field) {
         this.field = field;
         return this;
     }
@@ -182,4 +191,16 @@ public class FormDatetimeField extends VuiControl implements ISupportForm {
         return this;
     }
 
+    @Override
+    public void onMessage(Object sender, int msgType, Object msgData, String targetId) {
+        switch (msgType) {
+        case SsrMessage.InitBinder:
+            var form = this.findOwner(VuiForm.class);
+            if (form != null) {
+                this.request(form);
+                form.addColumn(title);
+            }
+            break;
+        }
+    }
 }
