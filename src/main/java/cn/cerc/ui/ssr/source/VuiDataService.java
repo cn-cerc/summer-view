@@ -117,7 +117,7 @@ public class VuiDataService extends VuiComponent implements ISupplierDataRow, IS
 
                     ServiceSign svr = callService(dataIn);
                     if (svr.isFail()) {
-                        this.canvas().sendMessage(this, SsrMessage.RefreshProperties, dataSet, null);
+                        this.canvas().sendMessage(this, SsrMessage.FailOnService, svr.message(), null);
                         binders.sendMessage(this, SsrMessage.FailOnService, svr.message(), null);
                         break;
                     }
@@ -139,7 +139,7 @@ public class VuiDataService extends VuiComponent implements ISupplierDataRow, IS
                 dataIn.head().copyValues(target.get().dataRow());
                 ServiceSign svr = callService(dataIn);
                 if (svr.isFail()) {
-                    binders.sendMessage(this, SsrMessage.FailOnService, null, null);
+                    binders.sendMessage(this, SsrMessage.FailOnService, svr.message(), null);
                     this.canvas().sendMessage(this, SsrMessage.FailOnService, svr.message(), null);
                     return;
                 } else {

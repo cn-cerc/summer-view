@@ -23,4 +23,10 @@ public abstract class VuiAbstractChart extends VuiControl
 
     @Column
     Binder<VuiDataService> binder = new Binder<>(this, VuiDataService.class);
+
+    @Override
+    public String title() {
+        return title;
+    }
+
 }
