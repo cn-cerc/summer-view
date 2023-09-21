@@ -44,13 +44,12 @@ public class VuiDataCard extends VuiControl implements ISupportModule {
     @Override
     public void buildEditor(UIComponent content, String pageCode) {
         EditorForm editForm = new EditorForm(content, this);
-        editForm.addProperties(this);
-        editForm.build();
         VuiForm form = editForm.getForm();
-
         SsrFormStyleDefault style = form.defaultStyle();
-        form.addBlock(style.getCodeName("数据卡片", "code", "showDataCardDialog").field("code,name"));
+        form.addBlock(style.getString("卡片代码", "code").readonly(true).dialog("showDataCardDialog", "name"));
+        form.addBlock(style.getString("卡片名称", "name").readonly(true));
         form.dataRow().setValue("code", code).setValue("name", title);
+        editForm.build();
     }
 
     @Override
