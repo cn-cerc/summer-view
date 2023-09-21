@@ -26,11 +26,6 @@ public class VuiDataCardRuntime extends VuiEnvironment {
 
     /**
      * 运行状态
-     * 
-     * @return
-     * 
-     * @return
-     * @throws IOException
      */
     public VuiCanvas getCanvas() {
         // 初始化环境变量
@@ -44,9 +39,6 @@ public class VuiDataCardRuntime extends VuiEnvironment {
 
     /**
      * 新建时默认范例
-     * 
-     * @param pageCode
-     * @return
      */
     @Override
     public String getSampleData(String pageCode) {
