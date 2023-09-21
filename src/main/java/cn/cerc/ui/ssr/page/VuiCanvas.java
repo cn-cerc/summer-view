@@ -122,11 +122,11 @@ public class VuiCanvas extends VuiContainer<ISupportCanvas> {
                 this.page = page;
             break;
         case SsrMessage.FailOnService:
-            if (msgData instanceof String msg)
+            if (msgData instanceof String msg && page != null)
                 page.setMessage(msg);
             break;
         case SsrMessage.SuccessOnService:
-            if (msgData instanceof String msg)
+            if (msgData instanceof String msg && page != null)
                 page.setMessage(msg);
             break;
         }
