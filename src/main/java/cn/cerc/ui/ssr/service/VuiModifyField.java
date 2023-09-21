@@ -54,7 +54,7 @@ public class VuiModifyField extends VuiControl implements ISupportUpdate {
             if (msgData instanceof CustomEntity item) {
                 String fieldCode = this.field();
                 String title = Utils.isEmpty(this.title()) ? this.field() : this.title();
-                if (!this.required() && !dataIn.hasValue(fieldCode))
+                if (this.required() && !dataIn.hasValue(fieldCode))
                     throw new RuntimeException(String.format("%s不能为空", title));
                 Field field = entityHelper.fields().get(fieldCode);
                 if (field != null) {
