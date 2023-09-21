@@ -17,7 +17,7 @@ public abstract class VuiAbstractChart extends VuiControl
     String title = "";
 
     @Column(name = "用户自定义显示")
-    ViewDisplay display_option;
+    ViewDisplay display_option = ViewDisplay.选择显示;
 
     ImageConfigImpl imageConfig;
 

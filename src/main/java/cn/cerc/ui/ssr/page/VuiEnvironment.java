@@ -350,7 +350,7 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
         String device = "";
         if (this.handle.getRequest().getParameter("storage") != null)
             device = handle.getRequest().getParameter("storage");
-        MongoCollection<Document> collection = MongoConfig.getDatabase().getCollection(VuiEnvironment.Visual_Menu);
+        MongoCollection<Document> collection = MongoConfig.getDatabase().getCollection(table());
         ArrayList<Bson> match = new ArrayList<>();
         match.add(Filters.eq("corp_no_", corpNo()));
         match.add(Filters.eq("page_code_", pageCode));
@@ -365,7 +365,7 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
         String device = "";
         if (this.handle.getRequest().getParameter("storage") != null)
             device = handle.getRequest().getParameter("storage");
-        MongoCollection<Document> collection = MongoConfig.getDatabase().getCollection(VuiEnvironment.Visual_Menu);
+        MongoCollection<Document> collection = MongoConfig.getDatabase().getCollection(table());
         ArrayList<Bson> match = new ArrayList<>();
         match.add(Filters.eq("corp_no_", corpNo()));
         match.add(Filters.eq("page_code_", pageCode));
@@ -413,7 +413,7 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
      */
     @Override
     public String loadProperties() {
-        MongoCollection<Document> collection = MongoConfig.getDatabase().getCollection(VuiEnvironment.Visual_Menu);
+        MongoCollection<Document> collection = MongoConfig.getDatabase().getCollection(table());
         Bson bson = Filters.and(Filters.eq("corp_no_", corpNo()), Filters.eq("page_code_", pageCode));
 
         String device = "";
@@ -553,9 +553,13 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
     public boolean isRuntime() {
         return this.isRuntime;
     }
-    
+
     protected VuiCanvas initCanvas() {
         return new VuiCanvas(this);
+    }
+
+    protected String table() {
+        return Visual_Menu;
     }
 
 }
