@@ -6,6 +6,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import cn.cerc.db.core.Utils;
 import cn.cerc.ui.ssr.core.SsrBlock;
 import cn.cerc.ui.ssr.core.VuiCommonComponent;
 import cn.cerc.ui.ssr.core.VuiControl;
@@ -27,6 +28,8 @@ public class GridUrlField extends VuiControl implements ISupportGrid {
     int fieldWidth = 5;
     @Column
     String href = "";
+    @Column
+    String target = "";
 
     @Override
     public SsrBlock request(ISsrBoard grid) {
@@ -39,11 +42,13 @@ public class GridUrlField extends VuiControl implements ISupportGrid {
         head.display(1);
         //
         String bodyTitle = "body." + title;
-        grid.addBlock(bodyTitle, body.text(
-                String.format("<td align='center' role='${_role}'><a href='%s'>%s</a></td>", this.href, this.context)));
+        grid.addBlock(bodyTitle, body.text(String.format(
+                "<td align='center' role='${_role}'><a href='%s' ${if _target}target='${_target}'${endif}>%s</a></td>",
+                this.href, this.context)));
         body.id(bodyTitle);
         body.display(1);
         body.option("_role", this.field);
+        body.option("_target", !Utils.isEmpty(target) ? target : "");
         body.strict(false);
         return body;
     }

@@ -57,8 +57,14 @@ public class VuiDataCard extends VuiControl implements ISupportModule {
         if (handle instanceof AbstractForm form) {
             VuiDataCardRuntime cardEnv = new VuiDataCardRuntime(form);
             cardEnv.setPageCode(String.format("%s.execute", code));
+            html.print("<div class='dataCard'");
+            var props = this.properties();
+            if (props.has("v_style"))
+                html.print(" style='%s'", props.get("v_style").asText());
+            html.println(">");
             VuiCanvas canvas = cardEnv.getCanvas();
             canvas.output(html);
+            html.print("</div>");
         }
     }
 

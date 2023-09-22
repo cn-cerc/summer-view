@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import cn.cerc.db.core.DataSet;
 import cn.cerc.db.core.Utils;
 import cn.cerc.mis.core.Application;
+import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.RequestReader;
 import cn.cerc.ui.fields.ImageConfigImpl;
 import cn.cerc.ui.ssr.core.SsrBlock;
@@ -66,6 +67,11 @@ public class ChartRing extends VuiAbstractChart {
         switch (msgType) {
         case SsrMessage.InitBinder:
             this.binder.init();
+            this.request(null);
+            var board = this.findOwner(ISsrBoard.class);
+            if (board != null) {
+                board.addBlock(title, block);
+            }
             break;
         case SsrMessage.FailOnService:
             String title1 = this.binder.target().get().serviceDesc();
@@ -106,7 +112,7 @@ public class ChartRing extends VuiAbstractChart {
 
     @Override
     public SsrBlock request(ISsrBoard owner) {
-        owner.addBlock(this.title, block.text(String.format("""
+        block.text(String.format("""
                 <div role='chart' data-title='${_data_title}'>
                 <div class='opera' title='隐藏此图表' onclick='hideChart("${_templateId}", "%s")'><img src='%s' /></div>
                 <div class='content'>
@@ -119,9 +125,14 @@ public class ChartRing extends VuiAbstractChart {
                 ${endif}</div>
                 </div>
                 """, title, imageConfig.getCommonFile("images/icon/hide.png"),
-                imageConfig.getCommonFile("images/Frmshopping/notDataImg.png"))));
+                imageConfig.getCommonFile("images/Frmshopping/notDataImg.png")));
         block.id(title).display(display_option.ordinal());
         return block;
+    }
+
+    @Override
+    public void output(HtmlWriter html) {
+        html.print(block.html());
     }
 
 }
