@@ -42,6 +42,7 @@ public class ChartGroup extends VuiAbstractChart {
 
     public void init() {
         block.option("_title", "");
+        block.option("_noData", "");
     }
 
     @Override
@@ -70,6 +71,12 @@ public class ChartGroup extends VuiAbstractChart {
         block.text(String.format("""
                 <div role='chartGroup'>
                 <div>${_title}</div>
+                ${if _noData}
+                <div role='noData'>
+                    <img src='%s' />
+                    <span>${_msg}</span>
+                </div>
+                ${else}
                 <ul>
                 ${dataset.begin}
                     <li>
@@ -78,8 +85,9 @@ public class ChartGroup extends VuiAbstractChart {
                     </li>
                 ${dataset.end}
                 </ul>
+                ${endif}
                 </div>
-                """, titleField, valueField));
+                """, imageConfig.getCommonFile("images/Frmshopping/notDataImg.png"), titleField, valueField));
         block.id(title).display(display_option.ordinal());
         return block;
     }
@@ -115,8 +123,10 @@ public class ChartGroup extends VuiAbstractChart {
                     block.option("_title", title);
                     if (!dataSet.eof())
                         block.dataSet(dataSet);
-                    else
+                    else {
+                        block.option("_noData", "1");
                         block.option("_msg", Utils.isEmpty(dataSet.message()) ? "暂无统计数据" : dataSet.message());
+                    }
                 }
             } else
                 log.warn("{} 绑定的数据源 {} 找不到", this.getId(), this.binder.targetId());
