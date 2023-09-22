@@ -46,9 +46,9 @@ public class VuiDataCard extends VuiControl implements ISupportModule {
         EditorForm editForm = new EditorForm(content, this);
         VuiForm form = editForm.getForm();
         SsrFormStyleDefault style = form.defaultStyle();
-        form.addBlock(style.getString("卡片代码", "code").readonly(true).dialog("showDataCardDialog", "name"));
-        form.addBlock(style.getString("卡片名称", "name").readonly(true));
-        form.dataRow().setValue("code", code).setValue("name", title);
+        form.addBlock(style.getString("卡片代码", "code").readonly(true).dialog("showDataCardDialog", "title"));
+        form.addBlock(style.getString("卡片名称", "title").readonly(true));
+        form.dataRow().setValue("code", code).setValue("title", title);
         editForm.build();
     }
 

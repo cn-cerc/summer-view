@@ -117,23 +117,25 @@ public class ChartCollect extends VuiAbstractChart {
     public SsrBlock request(ISsrBoard owner) {
         block.text(String.format("""
                 <div role='chart' data-title='${_data_title}'>
-                <div class='opera' title='隐藏此图表' onclick='hideChart("${_templateId}", "%s")'><img src='%s' /></div>
-                <div class='content'>
-                <div class='chartTitle'>${_title}</div>
-                ${if not _data}<div role='noData'>
-                    <img src='%s' />
-                    <span>${_msg}</span>
-                </div>${else}
-                <div class='scroll'>
-                    <ul class='tabBody'>
-                    ${dataset.begin}
-                        ${callback(value)}
-                    ${dataset.end}
-                    </ul>
-                </div>
-                <script>$(function(){initChartScroll('${_data_title}')})</script>
-                ${endif}
-                </div>
+                    <div class='chartTitle'>${_title}</div>
+                    <div class='opera' title='隐藏此图表' onclick='hideChart("${_templateId}", "%s")'><img src='%s' /></div>
+                    <div class='content'>
+                        ${if not _data}
+                            <div role='noData'>
+                                <img src='%s' />
+                                <span>${_msg}</span>
+                            </div>
+                        ${else}
+                            <div class='scroll'>
+                                <ul class='tabBody'>
+                                ${dataset.begin}
+                                    ${callback(value)}
+                                ${dataset.end}
+                                </ul>
+                            </div>
+                            <script>$(function(){initChartScroll('${_data_title}')})</script>
+                        ${endif}
+                    </div>
                 </div>
                 """, title, imageConfig.getCommonFile("images/icon/hide.png"),
                 imageConfig.getCommonFile("images/Frmshopping/notDataImg.png")));
