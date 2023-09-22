@@ -77,7 +77,7 @@ public class ChartPie extends VuiAbstractChart {
             if (service.isPresent()) {
                 if (sender == service.get()) {
                     DataSet dataSet = service.get().dataSet();
-                    String title = dataSet.head().getString("title");
+                    String title = this.binder.target().get().serviceDesc();
                     block.option("_data_title", title + this.getClass().getSimpleName());
                     block.option("_title", title);
                     if (!dataSet.eof())

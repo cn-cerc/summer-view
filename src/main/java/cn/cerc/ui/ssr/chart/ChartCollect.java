@@ -87,7 +87,7 @@ public class ChartCollect extends VuiAbstractChart {
             if (serviceOpt.isPresent()) {
                 if (sender == serviceOpt.get()) {
                     DataSet dataSet = serviceOpt.get().dataSet();
-                    String title = dataSet.head().getString("title");
+                    String title = this.binder.target().get().serviceDesc();
                     block.option("_data_title", title + this.getClass().getSimpleName());
                     block.option("_title", title);
                     if (!dataSet.eof()) {

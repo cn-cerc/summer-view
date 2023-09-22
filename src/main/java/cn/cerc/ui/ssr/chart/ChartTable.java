@@ -89,7 +89,7 @@ public class ChartTable extends VuiAbstractChart {
                 if (sender == bean.get()) {
                     VuiDataService service = bean.get();
                     DataSet dataSet = service.dataSet();
-                    String title = dataSet.head().getString("title");
+                    String title = this.binder.target().get().serviceDesc();
                     block.option("_data_title", title + this.getClass().getSimpleName());
                     block.option("_title", title);
 
