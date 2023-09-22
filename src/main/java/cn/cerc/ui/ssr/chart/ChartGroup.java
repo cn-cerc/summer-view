@@ -13,8 +13,10 @@ import org.springframework.stereotype.Component;
 
 import cn.cerc.db.core.DataSet;
 import cn.cerc.db.core.Utils;
+import cn.cerc.mis.core.Application;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.RequestReader;
+import cn.cerc.ui.fields.ImageConfigImpl;
 import cn.cerc.ui.ssr.core.SsrBlock;
 import cn.cerc.ui.ssr.core.VuiCommonComponent;
 import cn.cerc.ui.ssr.editor.ISsrBoard;
@@ -43,6 +45,7 @@ public class ChartGroup extends VuiAbstractChart {
     public void init() {
         block.option("_title", "");
         block.option("_noData", "");
+        imageConfig = Application.getBean(ImageConfigImpl.class);
     }
 
     @Override
