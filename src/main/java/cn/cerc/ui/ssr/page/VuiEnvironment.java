@@ -42,6 +42,7 @@ import com.mongodb.client.model.Filters;
 
 import cn.cerc.db.core.FastDate;
 import cn.cerc.db.core.IHandle;
+import cn.cerc.db.core.ISession;
 import cn.cerc.db.core.ServerConfig;
 import cn.cerc.db.core.Utils;
 import cn.cerc.db.mongo.MongoConfig;
@@ -54,6 +55,7 @@ import cn.cerc.mis.core.IPage;
 import cn.cerc.mis.core.JsonPage;
 import cn.cerc.ui.core.RequestReader;
 import cn.cerc.ui.core.UIComponent;
+import cn.cerc.ui.core.UrlRecord;
 import cn.cerc.ui.mvc.StartForms;
 import cn.cerc.ui.ssr.core.ISsrMessage;
 import cn.cerc.ui.ssr.core.SsrBlock;
@@ -76,6 +78,7 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
 
     // 支持曾用类名
     private static final Map<String, String> AliasNames = new HashMap<>();
+
     static {
         AliasNames.put("SsrRedirectPage", "vuiRedirectPage");
         AliasNames.put("SsrDataRow", "vuiDataRow");
@@ -154,10 +157,14 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
         this.pageCode = pageCode;
     }
 
-    /** 运行页面 */
+    /**
+     * 运行页面
+     */
     protected abstract IPage getRuntimePage();
 
-    /** 设计页面 */
+    /**
+     * 设计页面
+     */
     protected abstract IPage getDesignPage();
 
     @Override
@@ -167,7 +174,7 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
 
     /**
      * 返回搜索页范例
-     * 
+     *
      * @return
      */
     protected String getSampleData(String pageCode) {
@@ -199,7 +206,9 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
         saveProperties(canvas.getProperties());
     }
 
-    /** 属性页 */
+    /**
+     * 属性页
+     */
     protected IPage getEditorHtml() {
         var cid = handle.getRequest().getParameter("id");
         PrintWriter writer;
@@ -291,7 +300,9 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
         return null;
     }
 
-    /** 配置数据 */
+    /**
+     * 配置数据
+     */
     protected IPage loadFromDB() {
         PrintWriter writer;
         try {
@@ -358,6 +369,26 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
         Bson bson = Filters.and(match);
         collection.deleteOne(bson);
         return new JsonPage(form).setResultMessage(true, "删除成功");
+    }
+
+    protected String getDesignUrl() {
+        HttpServletRequest request = this.form.getRequest();
+        Map<String, String[]> params = request.getParameterMap();
+        UrlRecord url = new UrlRecord();
+        url.setSite(pageCode);
+        params.forEach((k, v) -> {
+            if (ISession.TOKEN.equals(k) || "token".equals(k))
+                return;
+            StringBuilder builder = new StringBuilder();
+            for (int i = 0; i < v.length; i++) {
+                builder.append(v[i]);
+                if (i < v.length - 1) {
+                    builder.append(",");
+                }
+            }
+            url.putParam(k, builder.toString());
+        });
+        return url.getUrl();
     }
 
     @Override
@@ -495,7 +526,7 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
 
     /**
      * 在此可以插入自定义业务逻辑
-     * 
+     *
      * @param onMessage
      */
     public void onMessage(ISsrMessage onMessage) {
