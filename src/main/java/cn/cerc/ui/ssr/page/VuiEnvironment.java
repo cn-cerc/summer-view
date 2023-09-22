@@ -71,7 +71,7 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
     private Map<Class<? extends VuiComponent>, Map<String, Object>> sourceMap = new HashMap<>();
     protected ISsrMessage onMessage;
     protected IHandle handle;
-    private boolean isRuntime;
+    protected boolean isRuntime;
     private UIComponent content;
 
     // 支持曾用类名
@@ -174,7 +174,7 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
         return "{}";
     }
 
-    private void saveEditor() {
+    protected void saveEditor() {
         var canvas = initCanvas();
         // 初始化环境变量
         canvas.sendMessage(this, SsrMessage.InitRequest, handle.getRequest(), null);
@@ -200,7 +200,7 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
     }
 
     /** 属性页 */
-    private IPage getEditorHtml() {
+    protected IPage getEditorHtml() {
         var cid = handle.getRequest().getParameter("id");
         PrintWriter writer;
         try {
@@ -237,7 +237,7 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
         return null;
     }
 
-    private IPage getComponentsData() {
+    protected IPage getComponentsData() {
         var cid = handle.getRequest().getParameter("id");
         // 恢复现场
         var canvas = initCanvas();
@@ -292,7 +292,7 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
     }
 
     /** 配置数据 */
-    private IPage loadFromDB() {
+    protected IPage loadFromDB() {
         PrintWriter writer;
         try {
             writer = handle.getSession().getResponse().getWriter();
@@ -303,7 +303,7 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
         return null;
     }
 
-    private IPage exportJson() {
+    protected IPage exportJson() {
         String json = JsonTool.format(loadProperties());
         HttpServletResponse response = form.getResponse();
         response.setContentType("application/octet-stream");
@@ -321,7 +321,7 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
         return null;
     }
 
-    private IPage importJson() {
+    protected IPage importJson() {
         HttpServletRequest request = form.getRequest();
         try {
             // 处理文件上传
@@ -346,7 +346,7 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
         return new JsonPage(form).setResultMessage(true, "导入成功");
     }
 
-    private IPage delete() {
+    protected IPage delete() {
         String device = "";
         if (this.handle.getRequest().getParameter("storage") != null)
             device = handle.getRequest().getParameter("storage");
