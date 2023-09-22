@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import cn.cerc.db.core.DataSet;
 import cn.cerc.db.core.Utils;
 import cn.cerc.mis.core.HtmlWriter;
+import cn.cerc.ui.core.RequestReader;
 import cn.cerc.ui.ssr.core.SsrBlock;
 import cn.cerc.ui.ssr.core.VuiCommonComponent;
 import cn.cerc.ui.ssr.editor.ISsrBoard;
@@ -52,6 +53,16 @@ public class ChartGroup extends VuiAbstractChart {
     public ICommonSupportChart title(String title) {
         this.title = title;
         return this;
+    }
+
+    @Override
+    public void saveEditor(RequestReader reader) {
+        super.saveEditor(reader);
+        if (Utils.isEmpty(title))
+            this.title = reader.getString("binder")
+                    .map(serviceId -> canvas().getMember(serviceId, binder.targetType()).orElse(null))
+                    .map(VuiDataService::serviceDesc)
+                    .orElse(reader.getString("title").orElse(""));
     }
 
     @Override
