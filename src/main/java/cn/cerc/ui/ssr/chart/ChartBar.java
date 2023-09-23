@@ -21,6 +21,8 @@ import cn.cerc.ui.ssr.core.SsrBlock;
 import cn.cerc.ui.ssr.core.VuiCommonComponent;
 import cn.cerc.ui.ssr.editor.ISsrBoard;
 import cn.cerc.ui.ssr.editor.SsrMessage;
+import cn.cerc.ui.ssr.other.VuiDataCardRuntime;
+import cn.cerc.ui.ssr.page.IVuiEnvironment;
 import cn.cerc.ui.ssr.page.VuiEnvironment;
 import cn.cerc.ui.ssr.source.VuiDataService;
 
@@ -93,7 +95,10 @@ public class ChartBar extends VuiAbstractChart {
                 log.warn("{} 绑定的数据源 {} 找不到", this.getId(), this.binder.targetId());
             break;
         case SsrMessage.InitContent:
-            if (canvas().environment() instanceof VuiEnvironment environment) {
+            IVuiEnvironment env = canvas().environment();
+            if (env instanceof VuiDataCardRuntime runtime) {
+                block.option("_templateId", runtime.templateId());
+            } else if (env instanceof VuiEnvironment environment) {
                 String templateId = environment.getPageCode() + "_panel";
                 block.id(templateId);
                 block.option("_templateId", templateId);
@@ -115,22 +120,24 @@ public class ChartBar extends VuiAbstractChart {
 
     @Override
     public SsrBlock request(ISsrBoard owner) {
-        block.text(String.format("""
-                <div role='chart' data-title='${_data_title}'>
-                    <div class='chartTitle'>${_title}</div>
-                    <div class='opera' title='隐藏此图表' onclick='hideChart("${_templateId}", "%s")'><img src='%s' /></div>
-                    <div class='content'>
-                        ${if not _data}
-                            <div role='noData'>
-                                <img src='%s' />
-                                <span>${_msg}</span>
+        block.text(String.format(
+                """
+                        <div role='chart' data-title='${_data_title}'>
+                            <div class='chartTitle'>${_title}</div>
+                            <div class='opera' title='隐藏此图表' onclick='hideChart("${_templateId}", "%s")'><img src='%s' /></div>
+                            <div class='content'>
+                                ${if not _data}
+                                    <div role='noData'>
+                                        <img src='%s' />
+                                        <span>${_msg}</span>
+                                    </div>
+                                ${else}
+                                    <script>$(function(){buildChartByDataSet(`${_data}`, '${_type}', '${_data_title}')})</script>
+                                ${endif}
                             </div>
-                        ${else}
-                            <script>$(function(){buildChartByDataSet(`${_data}`, '${_type}', '${_data_title}')})</script>
-                        ${endif}
-                    </div>
-                </div>
-                """, title, imageConfig.getCommonFile("images/icon/hide.png"),
+                        </div>
+                        """,
+                title, imageConfig.getCommonFile("images/icon/hide.png"),
                 imageConfig.getCommonFile("images/Frmshopping/notDataImg.png")));
         block.option("_type", isLine ? "line" : "bar");
         block.id(title).display(display_option.ordinal());

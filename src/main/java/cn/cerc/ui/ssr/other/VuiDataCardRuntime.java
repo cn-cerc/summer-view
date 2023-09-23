@@ -1,7 +1,5 @@
 package cn.cerc.ui.ssr.other;
 
-import java.io.IOException;
-
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -18,6 +16,8 @@ import cn.cerc.ui.ssr.page.VuiEnvironment;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class VuiDataCardRuntime extends VuiEnvironment {
+
+    private String templateId;
 
     public VuiDataCardRuntime(AbstractForm form) {
         super();
@@ -93,6 +93,15 @@ public class VuiDataCardRuntime extends VuiEnvironment {
     @Override
     protected String corpNo() {
         return "000000";
+    }
+
+    public VuiDataCardRuntime templateId(String templateId) {
+        this.templateId = templateId;
+        return this;
+    }
+
+    public String templateId() {
+        return this.templateId;
     }
 
 }

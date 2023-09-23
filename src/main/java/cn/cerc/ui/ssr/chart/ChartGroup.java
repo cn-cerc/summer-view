@@ -21,6 +21,8 @@ import cn.cerc.ui.ssr.core.SsrBlock;
 import cn.cerc.ui.ssr.core.VuiCommonComponent;
 import cn.cerc.ui.ssr.editor.ISsrBoard;
 import cn.cerc.ui.ssr.editor.SsrMessage;
+import cn.cerc.ui.ssr.other.VuiDataCardRuntime;
+import cn.cerc.ui.ssr.page.IVuiEnvironment;
 import cn.cerc.ui.ssr.page.VuiEnvironment;
 import cn.cerc.ui.ssr.source.VuiDataService;
 
@@ -112,6 +114,7 @@ public class ChartGroup extends VuiAbstractChart {
             block.option("_title", title1);
             if (sender == this.binder.target().get()) {
                 String msg = (String) msgData;
+                block.option("_noData", "1");
                 block.option("_msg", Utils.isEmpty(msg) ? "统计服务异常" : msg);
             }
             break;
@@ -135,7 +138,10 @@ public class ChartGroup extends VuiAbstractChart {
                 log.warn("{} 绑定的数据源 {} 找不到", this.getId(), this.binder.targetId());
             break;
         case SsrMessage.InitContent:
-            if (canvas().environment() instanceof VuiEnvironment environment) {
+            IVuiEnvironment env = canvas().environment();
+            if (env instanceof VuiDataCardRuntime runtime) {
+                block.option("_templateId", runtime.templateId());
+            } else if (env instanceof VuiEnvironment environment) {
                 String templateId = environment.getPageCode() + "_panel";
                 block.id(templateId);
                 block.option("_templateId", templateId);

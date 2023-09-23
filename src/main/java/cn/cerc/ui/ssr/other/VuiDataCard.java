@@ -36,7 +36,7 @@ public class VuiDataCard extends VuiControl implements ISupportModule {
         switch (msgType) {
         case SsrMessage.InitHandle:
             if (msgData instanceof IHandle handle)
-                this.handle = handle;
+                this.handle(handle);
             break;
         }
     }
@@ -66,6 +66,11 @@ public class VuiDataCard extends VuiControl implements ISupportModule {
             canvas.output(html);
             html.print("</div>");
         }
+    }
+
+    public VuiDataCard handle(IHandle handle) {
+        this.handle = handle;
+        return this;
     }
 
 }
