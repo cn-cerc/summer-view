@@ -13,13 +13,16 @@ import cn.cerc.ui.ssr.source.VuiDataService;
 public abstract class VuiAbstractChart extends VuiControl
         implements ICommonSupportChart, ISupportPanel, ISupplierBlock {
 
+    ImageConfigImpl imageConfig;
+
     @Column
     String title = "";
 
+    @Column(name = "宽度占比")
+    int width = 1;
+
     @Column(name = "用户自定义显示")
     ViewDisplay display_option = ViewDisplay.选择显示;
-
-    ImageConfigImpl imageConfig;
 
     @Column
     Binder<VuiDataService> binder = new Binder<>(this, VuiDataService.class);

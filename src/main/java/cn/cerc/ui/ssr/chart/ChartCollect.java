@@ -121,7 +121,7 @@ public class ChartCollect extends VuiAbstractChart {
     @Override
     public SsrBlock request(ISsrBoard owner) {
         block.text(String.format("""
-                <div role='chart' data-title='${_data_title}'>
+                <div role='chart' data-title='${_data_title}' class='flex${_width}'>
                     <div class='chartTitle'>${_title}</div>
                     <div class='opera' title='隐藏此图表' onclick='hideChart("${_templateId}", "%s")'><img src='%s' /></div>
                     <div class='content'>
@@ -145,6 +145,7 @@ public class ChartCollect extends VuiAbstractChart {
                 """, title, imageConfig.getCommonFile("images/icon/hide.png"),
                 imageConfig.getCommonFile("images/Frmshopping/notDataImg.png")));
         block.id(title).display(display_option.ordinal());
+        block.option("_width", String.valueOf(width));
         return block;
     }
 

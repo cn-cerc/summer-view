@@ -74,7 +74,7 @@ public class ChartGroup extends VuiAbstractChart {
     @Override
     public SsrBlock request(ISsrBoard owner) {
         block.text(String.format("""
-                <div role='chartGroup'>
+                <div role='chartGroup' class='flex${_width}'>
                 <div class='chartTitle'>${_title}</div>
                 <div class='opera' title='隐藏此图表' onclick='hideChart("${_templateId}", "%s")'><img src='%s' /></div>
                 ${if _noData}
@@ -98,6 +98,7 @@ public class ChartGroup extends VuiAbstractChart {
                 """, title, imageConfig.getCommonFile("images/icon/hide.png"),
                 imageConfig.getCommonFile("images/Frmshopping/notDataImg.png"), titleField, valueField));
         block.id(title).display(display_option.ordinal());
+        block.option("_width", String.valueOf(width));
         return block;
     }
 
