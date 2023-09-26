@@ -131,7 +131,7 @@ public class ClientIPVerify {
     }
 
     public String getCity(String ip) {
-        String city = "（未知）";
+        String city = "(未知)";
         if (Utils.isEmpty(ip))
             return city;
         try (AWReader awReader = new AWReader(file)) {
@@ -139,6 +139,9 @@ public class ClientIPVerify {
             JsonNode record = awReader.get(address);
             if (record == null)
                 return city;
+            String continent = record.get("continent").asText();
+            if ("保留IP".equals(continent))
+                return continent;
             String value = record.get("province").asText();
             if (Utils.isEmpty(value))
                 return city;

@@ -36,6 +36,7 @@ public class ChartGroup extends VuiAbstractChart {
 
     @Column(name = "标题字段")
     String titleField = "key_";
+
     @Column(name = "取值字段")
     String valueField = "value_";
 
