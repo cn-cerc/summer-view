@@ -101,6 +101,8 @@ public class VuiDataCardRuntime extends VuiEnvironment {
     }
 
     public String templateId() {
+        if (Utils.isEmpty(templateId))
+            return getPageCode() + "_dataCard"; // 默认值：数据卡片代码_dataCard
         return this.templateId;
     }
 
