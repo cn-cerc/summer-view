@@ -40,6 +40,7 @@ public class ChartRing extends VuiAbstractChart {
 
     private void init() {
         block.option("_data", "");
+        block.option("_show_eye", "1");
         imageConfig = Application.getBean(ImageConfigImpl.class);
     }
 
@@ -87,6 +88,9 @@ public class ChartRing extends VuiAbstractChart {
         case SsrMessage.RefreshProperties:
         case SsrMessage.InitProperties:
         case SsrMessage.AfterSubmit:
+            if (canvas().environment() instanceof VuiDataCardRuntime)
+                block.option("_show_eye", "0");
+
             Optional<VuiDataService> service = this.binder.target();
             if (service.isPresent()) {
                 if (sender == service.get()) {
@@ -117,22 +121,26 @@ public class ChartRing extends VuiAbstractChart {
 
     @Override
     public SsrBlock request(ISsrBoard owner) {
-        block.text(String.format("""
-                <div role='chart' data-title='${_data_title}' class='flex${_width}'>
-                    <div class='chartTitle'>${_title}</div>
-                    <div class='opera' title='隐藏此图表' onclick='hideChart("${_templateId}", "%s")'><img src='%s' /></div>
-                    <div class='content'>
-                        ${if not _data}
-                            <div role='noData'>
-                                <img src='%s' />
-                                <span>${_msg}</span>
+        block.text(String.format(
+                """
+                        <div role='chart' data-title='${_data_title}' class='flex${_width}'>
+                            <div class='chartTitle'>${_title}</div>
+                            ${if _show_eye}
+                                <div class='opera' title='隐藏此图表' onclick='hideChart("${_templateId}", "%s")'><img src='%s' /></div>
+                            ${endif}
+                            <div class='content'>
+                                ${if not _data}
+                                    <div role='noData'>
+                                        <img src='%s' />
+                                        <span>${_msg}</span>
+                                    </div>
+                                ${else}
+                                    <script>$(function(){buildRingChart(`${_data}`, '${_data_title}')})</script>
+                                ${endif}
                             </div>
-                        ${else}
-                            <script>$(function(){buildRingChart(`${_data}`, '${_data_title}')})</script>
-                        ${endif}
-                    </div>
-                </div>
-                """, title, imageConfig.getCommonFile("images/icon/hide.png"),
+                        </div>
+                        """,
+                title, imageConfig.getCommonFile("images/icon/hide.png"),
                 imageConfig.getCommonFile("images/Frmshopping/notDataImg.png")));
         block.id(title).display(display_option.ordinal());
         block.option("_width", String.valueOf(width));

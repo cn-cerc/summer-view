@@ -39,6 +39,7 @@ public class ChartTable extends VuiAbstractChart {
 
     private void init() {
         block.option("_data", "");
+        block.option("_show_eye", "1");
         imageConfig = Application.getBean(ImageConfigImpl.class);
     }
 
@@ -86,6 +87,9 @@ public class ChartTable extends VuiAbstractChart {
         case SsrMessage.RefreshProperties:
         case SsrMessage.InitProperties:
         case SsrMessage.AfterSubmit:
+            if (canvas().environment() instanceof VuiDataCardRuntime)
+                block.option("_show_eye", "0");
+
             var bean = this.binder.target();
             if (bean.isPresent()) {
                 if (sender == bean.get()) {
@@ -131,32 +135,36 @@ public class ChartTable extends VuiAbstractChart {
 
     @Override
     public SsrBlock request(ISsrBoard owner) {
-        block.text(String.format("""
-                <div role='chart' data-title='${_data_title}' class='flex${_width}'>
-                    <div class='chartTitle'>${_title}</div>
-                    <div class='opera' title='隐藏此图表' onclick='hideChart("${_templateId}", "%s")'><img src='%s' /></div>
-                    <div class='content'>
-                        ${if not _data}
-                            <div role='noData'>
-                                <img src='%s' />
-                                <span>${_msg}</span>
+        block.text(String.format(
+                """
+                        <div role='chart' data-title='${_data_title}' class='flex${_width}'>
+                            <div class='chartTitle'>${_title}</div>
+                            ${if _show_eye}
+                                <div class='opera' title='隐藏此图表' onclick='hideChart("${_templateId}", "%s")'><img src='%s' /></div>
+                            ${endif}
+                            <div class='content'>
+                                ${if not _data}
+                                    <div role='noData'>
+                                        <img src='%s' />
+                                        <span>${_msg}</span>
+                                    </div>
+                                ${else}
+                                    <div class='tabHead'>
+                                        ${list.begin}
+                                            <span>${list.value}</span>
+                                        ${list.end}
+                                    </div>
+                                    <div class='scroll'>
+                                        <ul class='tabBody'>
+                                        ${callback(spanContent)}
+                                        </ul>
+                                    </div>
+                                    <script>$(function(){initChartScroll('${_data_title}')})</script>
+                                ${endif}
                             </div>
-                        ${else}
-                            <div class='tabHead'>
-                                ${list.begin}
-                                    <span>${list.value}</span>
-                                ${list.end}
-                            </div>
-                            <div class='scroll'>
-                                <ul class='tabBody'>
-                                ${callback(spanContent)}
-                                </ul>
-                            </div>
-                            <script>$(function(){initChartScroll('${_data_title}')})</script>
-                        ${endif}
-                    </div>
-                </div>
-                """, title, imageConfig.getCommonFile("images/icon/hide.png"),
+                        </div>
+                        """,
+                title, imageConfig.getCommonFile("images/icon/hide.png"),
                 imageConfig.getCommonFile("images/Frmshopping/notDataImg.png")));
         block.id(title).display(display_option.ordinal());
         block.option("_width", String.valueOf(width));

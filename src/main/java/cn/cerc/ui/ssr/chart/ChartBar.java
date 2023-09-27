@@ -44,6 +44,7 @@ public class ChartBar extends VuiAbstractChart {
 
     private void init() {
         block.option("_data", "");
+        block.option("_show_eye", "1");
         imageConfig = Application.getBean(ImageConfigImpl.class);
     }
 
@@ -79,6 +80,9 @@ public class ChartBar extends VuiAbstractChart {
             break;
         case SsrMessage.RefreshProperties:
         case SsrMessage.InitProperties:
+            if (canvas().environment() instanceof VuiDataCardRuntime)
+                block.option("_show_eye", "0");
+
             Optional<VuiDataService> service = this.binder.target();
             if (service.isPresent()) {
                 if (sender == service.get()) {
@@ -124,7 +128,9 @@ public class ChartBar extends VuiAbstractChart {
                 """
                         <div role='chart' data-title='${_data_title}' class='flex${_width}'>
                             <div class='chartTitle'>${_title}</div>
-                            <div class='opera' title='隐藏此图表' onclick='hideChart("${_templateId}", "%s")'><img src='%s' /></div>
+                            ${if _show_eye}
+                                <div class='opera' title='隐藏此图表' onclick='hideChart("${_templateId}", "%s")'><img src='%s' /></div>
+                            ${endif}
                             <div class='content'>
                                 ${if not _data}
                                     <div role='noData'>
