@@ -44,7 +44,11 @@ public class ChartLine extends VuiAbstractChart {
 
     private void init() {
         block.option("_data", "");
+        block.option("_data_title", "");
+        block.option("_title", "");
+        block.option("_msg", "");
         block.option("_show_eye", "1");
+        block.option("_templateId", "");
         imageConfig = Application.getBean(ImageConfigImpl.class);
     }
 

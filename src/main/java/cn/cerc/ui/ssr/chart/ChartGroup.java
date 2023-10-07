@@ -47,8 +47,11 @@ public class ChartGroup extends VuiAbstractChart {
 
     public void init() {
         block.option("_title", "");
+        block.option("_data_title", "");
+        block.option("_msg", "");
         block.option("_noData", "");
         block.option("_show_eye", "1");
+        block.option("_templateId", "");
         imageConfig = Application.getBean(ImageConfigImpl.class);
     }
 
