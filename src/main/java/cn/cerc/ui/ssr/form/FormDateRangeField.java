@@ -14,7 +14,6 @@ import cn.cerc.mis.core.Application;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.SummerUI;
 import cn.cerc.ui.core.RequestReader;
-import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.fields.DateField;
 import cn.cerc.ui.fields.ImageConfigImpl;
 import cn.cerc.ui.ssr.core.DefaultDateRangeEnum;
@@ -134,8 +133,8 @@ public class FormDateRangeField extends VuiControl implements ISupportField {
         }
         case SsrMessage.InitProperties:
             if (range != DefaultDateRangeEnum.无) {
-                UIComponent owner = getOwner();
-                if (owner instanceof VuiForm form) {
+                VuiForm form = findOwner(VuiForm.class);
+                if (form != null) {
                     Datetime now = new Datetime();
                     switch (range) {
                     case 最近一周:
