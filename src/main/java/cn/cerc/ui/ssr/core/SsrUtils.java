@@ -30,6 +30,21 @@ public class SsrUtils {
         if (text.length() == 0)
             return "";
         var value = text.trim();
+//        if (value.trim().startsWith("<")) {
+//            int startIndex = 0;
+//            while (startIndex < value.length() && Character.isWhitespace(value.charAt(startIndex))) {
+//                startIndex++;
+//            }
+//            value = value.substring(startIndex);
+//        }
+//        if (value.trim().endsWith(">")) {
+//            int endIndex = value.length() - 1;
+//            while (endIndex > 0 && Character.isWhitespace(value.charAt(endIndex))) {
+//                endIndex--;
+//            }
+//            value = value.substring(0, endIndex + 1);
+//        }
+
         if (value.length() == 0)
             return " ";
 

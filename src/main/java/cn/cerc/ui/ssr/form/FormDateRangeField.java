@@ -88,12 +88,12 @@ public class FormDateRangeField extends VuiControl implements ISupportField {
                     <label for="start_date_"><em>%s</em></label>
                     <div class="dateArea">
                         <input autocomplete="off" name="%s" id="%s" type="text" class="dateAreaInput" value="${%s}"
-                        ${if _pattern}pattern="${_pattern}"${endif} ${if _required}required${endif}
-                        ${if _placeholder}placeholder="${_placeholder}"${endif} />
+                        ${if _pattern}pattern="${_pattern}" ${endif}${if _required}required ${endif}
+                        ${if _placeholder}placeholder="${_placeholder}" ${endif}/>
                         <span>/</span>
                         <input autocomplete="off" name="%s" id="%s" type="text" class="dateAreaInput" value="${%s}"
-                        ${if _pattern}pattern="${_pattern}"${endif} ${if _required}required${endif}
-                        ${if _placeholder}placeholder="${_placeholder}"${endif} />
+                        ${if _pattern}pattern="${_pattern}" ${endif}${if _required}required ${endif}
+                        ${if _placeholder}placeholder="${_placeholder}" ${endif}/>
                         <span role="suffix-icon">
                             <a href="javascript:showDateAreaDialog('%s', '%s')">
                             <img src="%s" />

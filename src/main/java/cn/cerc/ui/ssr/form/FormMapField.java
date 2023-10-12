@@ -61,11 +61,11 @@ public class FormMapField extends VuiControl {
                 block.text(String.format(
                         """
                                 <li ${if _style}style='${_style}'${endif}>
-                                    <label for="%s"${if _mark} class='formMark'${endif}>${if _required}<font role="require">*</font>${endif}<em>%s</em></label>
+                                    <label for="%s" ${if _mark}class='formMark' ${endif}>${if _required}<font role="require">*</font>${endif}<em>%s</em></label>
                                     <div>
-                                        <select id="%s" name="%s"${if _readonly} disabled${endif}>
+                                        <select id="%s" name="%s" ${if _readonly}disabled ${endif}>
                                         ${map.begin}
-                                            <option value="${map.key}" ${if map.key==%s}selected${endif}>${map.value}</option>
+                                            <option value="${map.key}" ${if map.key==%s}selected ${endif}>${map.value}</option>
                                         ${map.end}
                                         </select>
                                     </div>

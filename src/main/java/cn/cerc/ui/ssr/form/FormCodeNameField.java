@@ -112,8 +112,8 @@ public class FormCodeNameField extends VuiControl implements ISupportField {
                                 <li ${if _style}style='${_style}'${endif}>
                                     <label for="%s"><em>%s</em></label>
                                     <div>
-                                        <input type="hidden" name="%s" id="%s" value="${%s}">
-                                        <input type="text" name="%s" id="%s" value="${%s}" autocomplete="off" placeholder="请点击获取%s"${if _readonly} readonly${endif}>
+                                        <input type="hidden" name="%s" id="%s" value="${%s}"/>
+                                        <input type="text" name="%s" id="%s" value="${%s}" autocomplete="off" placeholder="请点击获取%s" ${if _readonly}readonly ${endif}/>
                                         <span role="suffix-icon">
                                             <a href="javascript:${_dialog}">
                                                 <img src="%s">

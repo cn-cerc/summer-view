@@ -59,7 +59,7 @@ public class FormTextareaField extends VuiControl implements ISupportBlock {
                     <li ${if _style}style='${_style}'${endif}>
                     <label for="%s">${if _required}<font role="require">*</font>${endif}<em>%s</em></label>
                     <div>
-                        <textarea name="%s" id="%s"${if _readonly} readonly${endif}>${%s}</textarea>
+                        <textarea name="%s" id="%s" ${if _readonly}readonly ${endif}>${%s}</textarea>
                         <span role="suffix-icon"></span>
                     </div>
                 </li>

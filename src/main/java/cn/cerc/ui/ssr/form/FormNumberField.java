@@ -106,15 +106,15 @@ public class FormNumberField extends VuiControl implements ISupportField {
                 block.text(String.format(
                         """
                                 <li ${if _style}style='${_style}'${endif}>
-                                    <label for="${fields}"${if _mark} class='formMark'${endif}>${if _required}<font role="require">*</font>${endif}<em>${_title}</em></label>
+                                    <label for="${fields}" ${if _mark}class='formMark' ${endif}>${if _required}<font role="require">*</font>${endif}<em>${_title}</em></label>
                                     <div>
                                         ${if _isTextField}
-                                            <input type="number" step="${_step}" name="${fields}" id="${fields}" value="%s" autocomplete="off"${if _readonly} readonly${endif}${if _autofocus} autofocus${endif}
-                                            ${if _placeholder} placeholder="${_placeholder}"${else} placeholder="请${if _dialog}点击获取${else}输入${endif}${_title}"${endif}${if _pattern} pattern="${_pattern}"${endif}${if _required} required${endif} />
+                                            <input type="number" step="${_step}" name="${fields}" id="${fields}" value="%s" autocomplete="off" ${if _readonly}readonly ${endif}${if _autofocus}autofocus ${endif}
+                                            ${if _placeholder}placeholder="${_placeholder}" ${else}placeholder="请${if _dialog}点击获取${else}输入${endif}${_title}" ${endif}${if _pattern}pattern="${_pattern}" ${endif}${if _required}required ${endif}/>
                                         ${else}
-                                            <select id="${fields}" name="${fields}"${if _readonly} disabled${endif}>
+                                            <select id="${fields}" name="${fields}" ${if _readonly}disabled ${endif}>
                                             ${if _addAll}<option value="">全部</option>${endif}
-                                            ${list.begin}<option value="${list.index}" ${if list.index==%s}selected${endif}>${list.value}</option>${list.end}
+                                            ${list.begin}<option value="${list.index}" ${if list.index==%s}selected ${endif}>${list.value}</option>${list.end}
                                             </select>
                                         ${endif}
                                         <span role="suffix-icon">${if _dialog}<a href="javascript:${_dialog}"><img src="%s" /></a>${endif}</span>

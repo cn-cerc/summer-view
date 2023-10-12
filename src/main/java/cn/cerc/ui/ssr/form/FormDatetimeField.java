@@ -90,8 +90,8 @@ public class FormDatetimeField extends VuiControl implements ISupportField {
                                 <li ${if _style}style='${_style}'${endif}>
                                     <label for="%s"><em>%s</em></label>
                                     <div>
-                                        <input type="text" name="%s" id="%s" value="${%s}" autocomplete="off"${if _readonly} readonly${endif}${if _autofocus} autofocus${endif}
-                                        ${if _placeholder} placeholder="${_placeholder}"${else} placeholder="请点击获取%s"${endif}${if _pattern} pattern="${_pattern}"${endif}${if _required} required${endif} />
+                                        <input type="text" name="%s" id="%s" value="${%s}" autocomplete="off" ${if _readonly}readonly ${endif}${if _autofocus}autofocus ${endif}
+                                        ${if _placeholder}placeholder="${_placeholder}" ${else}placeholder="请点击获取%s" ${endif}${if _pattern}pattern="${_pattern}" ${endif}${if _required}required ${endif}/>
                                         <span role="suffix-icon">
                                             <a href="javascript:%s('%s')">
                                                 <img src="%s" />
