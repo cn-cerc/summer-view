@@ -447,13 +447,7 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
         MongoCollection<Document> collection = MongoConfig.getDatabase().getCollection(table());
         Bson bson = Filters.and(Filters.eq("corp_no_", corpNo()), Filters.eq("page_code_", pageCode));
 
-        String device = "";
-        if (this.handle.getRequest().getParameter("storage") != null)
-            device = handle.getRequest().getParameter("storage");
-        if (isRuntime) {
-            AppClient client = new AppClient(handle.getRequest(), handle.getSession().getResponse());
-            device = client.isPhone() ? "" : client.getDevice();
-        }
+        String device = device();
         Document documentDef = null;
         ArrayList<Document> documents = collection.find(bson).into(new ArrayList<>());
         for (Document document : documents) {
@@ -472,7 +466,9 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
     }
 
     public String loadFile(Class<?> clazz, String pageCode) {
-        InputStream input = clazz.getClassLoader().getResourceAsStream(String.join("/", "menus", pageCode + ".json"));
+        String device = device();
+        String fileName = String.format(Utils.isEmpty(device) ? "%s" : "%s_%s", pageCode, device);
+        InputStream input = clazz.getClassLoader().getResourceAsStream(String.join("/", "menus", fileName + ".json"));
         if (input == null)
             return "";
 
@@ -488,14 +484,20 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
         return builder.toString();
     }
 
+    protected String device() {
+        String device = "";
+        if (this.handle.getRequest().getParameter("storage") != null)
+            device = handle.getRequest().getParameter("storage");
+        if (isRuntime) {
+            AppClient client = new AppClient(handle.getRequest(), handle.getSession().getResponse());
+            device = client.isPhone() ? "" : client.getDevice();
+        }
+        return device;
+    }
+
     @Override
     public void attachClass(Class<? extends VuiComponent> ownerClass, Class<? extends VuiComponent> customClass) {
-        Set<Class<? extends VuiComponent>> list = customMap.get(ownerClass);
-        if (list == null) {
-            list = new LinkedHashSet<>();
-            customMap.put(ownerClass, list);
-        }
-        list.add(customClass);
+        customMap.computeIfAbsent(ownerClass, key -> new LinkedHashSet<>()).add(customClass);
     }
 
     @Override
@@ -516,12 +518,7 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
 
     @Override
     public void attachData(Class<? extends VuiComponent> ownerClass, String dataId, Object data) {
-        Map<String, Object> map = sourceMap.get(ownerClass);
-        if (map == null) {
-            map = new LinkedHashMap<>();
-            sourceMap.put(ownerClass, map);
-        }
-        map.put(dataId, data);
+        sourceMap.computeIfAbsent(ownerClass, key -> new LinkedHashMap<>()).put(dataId, data);
     }
 
     /**
