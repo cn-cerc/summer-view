@@ -30,6 +30,7 @@ public class UISelect extends UIComponent implements IHtml {
         if (this.isReadonly()) {
             html.print(" disabled");
         }
+        this.outputPropertys(html);
         html.print(">");
         for (String key : options.keySet()) {
             String value = options.get(key);
