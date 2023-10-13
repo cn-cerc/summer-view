@@ -1,6 +1,7 @@
 package cn.cerc.ui.ssr.grid;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -17,7 +18,6 @@ import cn.cerc.db.core.Utils;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.ssr.core.AlginEnum;
 import cn.cerc.ui.ssr.core.ISsrOption;
-import cn.cerc.ui.ssr.core.ISupplierBlock;
 import cn.cerc.ui.ssr.core.SsrBlock;
 import cn.cerc.ui.ssr.core.SummaryTypeEnum;
 import cn.cerc.ui.ssr.core.VuiCommonComponent;
@@ -204,10 +204,17 @@ public class GridNumberField extends VuiControl implements ISupportGrid {
         return this;
     }
 
-    public ISupplierBlock toList(List<String> targetList) {
+    public GridNumberField toList(List<String> targetList) {
         body.toList(targetList);
         body.option("_isTextField", "");
         return this;
+    }
+
+    public GridNumberField toList(Enum<?>[] enums) {
+        List<String> list = new ArrayList<>();
+        for (Enum<?> item : enums)
+            list.add(item.name());
+        return toList(list);
     }
 
 }
