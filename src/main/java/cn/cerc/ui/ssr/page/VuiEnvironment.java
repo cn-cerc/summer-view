@@ -467,10 +467,14 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
 
     public String loadFile(Class<?> clazz, String pageCode) {
         String device = device();
-        String fileName = String.format(Utils.isEmpty(device) ? "%s" : "%s_%s", pageCode, device);
+        String fileName = Utils.isEmpty(device) ? pageCode : String.join("_", pageCode, device);
         InputStream input = clazz.getClassLoader().getResourceAsStream(String.join("/", "menus", fileName + ".json"));
-        if (input == null)
-            return "";
+        if (input == null) {
+            if (!Utils.isEmpty(device))// 兼容不带下划线_pc 的原始设计
+                input = clazz.getClassLoader().getResourceAsStream(String.join("/", "menus", pageCode + ".json"));
+            if (input == null)
+                return "";
+        }
 
         StringBuilder builder = new StringBuilder();
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(input, StandardCharsets.UTF_8))) {
