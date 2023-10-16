@@ -139,8 +139,12 @@ public class VuiForm extends VuiContainer<ISupportForm>
 
         getBlock(SsrTemplate.BeginFlag).ifPresent(template -> html.print(template.html()));
         var top = getBlock(FormBegin, getDefault_FormBegin()).get();
-        if (this.template.id() != null)
+        if (this.template.id() != null) {
             top.option(ISsrOption.TemplateId, this.template.id());
+            if (this.getBlock(FormEnd).isPresent()) {
+                this.getBlock(FormEnd).get().option(ISsrOption.TemplateId, this.template.id());
+            }
+        }
         html.print(top.html());
 
         writeContent(html);
@@ -151,7 +155,6 @@ public class VuiForm extends VuiContainer<ISupportForm>
                         formFirst.isPresent() && isPhone() && this.canvas() == null ? formFirst.get().html() : ""))
                         .template(template))
                 .ifPresent(value -> html.print(value.html()));
-
         getBlock(SsrTemplate.EndFlag).ifPresent(template -> html.print(template.html()));
     }
 
