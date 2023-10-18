@@ -34,6 +34,7 @@ public class SsrBlock implements ISsrOption {
     private String id;
     private OnGetValueEvent onGetValue;
     private SsrTemplate template;
+    private Class<?> origin;
 
     public SsrBlock() {
     }
@@ -44,6 +45,7 @@ public class SsrBlock implements ISsrOption {
 
     public SsrBlock(Class<?> class1, String id) {
         this.text(SsrUtils.getTempateFileText(class1, id));
+        this.origin = class1;
     }
 
     /**
@@ -256,7 +258,12 @@ public class SsrBlock implements ISsrOption {
         } else if (!strict()) {
             result = "";
         } else if (onGetValue == null) {
-            log.error("not find field {}", field, new RuntimeException());
+            String templateId = Optional.ofNullable(template).map(SsrTemplate::id).orElse("");
+            if (this.origin != null)
+                log.error("not find field {}, templateId {}, origin {}", field, templateId, this.origin.getName(),
+                        new RuntimeException(this.text));
+            else
+                log.error("not find field {}, templateId {}", field, templateId, new RuntimeException(this.text));
         }
         if (onGetValue != null)
             result = onGetValue.getValue(field, result);
