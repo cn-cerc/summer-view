@@ -11,7 +11,7 @@ import cn.cerc.ui.core.UrlRecord;
 import cn.cerc.ui.vcl.UIImage;
 
 /**
- * 用于生成厂商、客户、帐套选择
+ * 用于生成供应商、客户、帐套选择
  */
 public class Block301 extends UICustomPhone {
     List<UIImage> list = new ArrayList<>();
