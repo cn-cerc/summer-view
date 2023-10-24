@@ -25,7 +25,6 @@ import cn.cerc.db.other.RecordFilter;
 import cn.cerc.mis.core.AppClient;
 import cn.cerc.mis.core.Application;
 import cn.cerc.mis.core.IService;
-import cn.cerc.mis.core.LastModified;
 import cn.cerc.mis.core.ServiceState;
 import cn.cerc.mis.log.JayunLogParser;
 import cn.cerc.ui.SummerUI;
@@ -52,7 +51,7 @@ public class StartServices extends HttpServlet {
         DataSet dataOut = new DataSet();
         String text = request.getParameter("dataIn");
         DataSet dataIn = new DataSet().setJson(text);
-        String service = request.getPathInfo().substring(1);
+        String key = request.getPathInfo().substring(1);
         response.setContentType("application/json;charset=utf-8");
         // 处理跨域问题
         String allow = config.getProperty("access-control-allow-origin");
@@ -60,7 +59,7 @@ public class StartServices extends HttpServlet {
             response.addHeader("access-control-allow-origin", allow);
         log.debug("dataIn {}", text);
 
-        if (Utils.isEmpty(service)) {
+        if (Utils.isEmpty(key)) {
             dataOut.setMessage("service is null.");
             response.getWriter().write(dataOut.toString());
             return;
@@ -89,14 +88,14 @@ public class StartServices extends HttpServlet {
 
         // 执行指定函数
         IHandle handle = new Handle(session);
-        Variant function = new Variant("execute").setKey(service);
 
-        IService clazz;
+        Variant function = new Variant("execute").setKey(key);
+        IService service;
         try {
-            clazz = Application.getService(handle, service, function);
+            service = Application.getService(handle, key, function);
         } catch (ClassNotFoundException e) {
             String clientIP = AppClient.getClientIP(request);
-            log.error("clientIP {}, token{} , service {}, dataIn {}, error {}", clientIP, token, service, text,
+            log.error("clientIP {}, token{} , service {}, dataIn {}, error {}", clientIP, token, key, text,
                     e.getMessage(), e);
             dataOut.setState(ServiceState.NOT_FIND_SERVICE).setMessage(e.getMessage());
             response.getWriter().write(dataOut.toString());
@@ -104,7 +103,7 @@ public class StartServices extends HttpServlet {
         }
 
         try {
-            dataOut = clazz._call(handle, dataIn, function);
+            dataOut = service._call(handle, dataIn, function);
             if (dataOut == null) {
                 dataOut = new DataSet();
                 dataOut.setError().setMessage("service return empty");
@@ -112,12 +111,13 @@ public class StartServices extends HttpServlet {
         } catch (RuntimeException | IllegalAccessException | InvocationTargetException | ServiceException
                 | DataException e) {
             Throwable throwable = e.getCause() != null ? e.getCause() : e;
-            String serviceCode = clazz.getClass().getName();
             String clientIP = AppClient.getClientIP(request);
             String message = String.format("clientIP %s, token %s, service %s, corpNo %s, dataIn %s, message %s",
                     clientIP, token, function.key(), handle.getCorpNo(), dataIn.json(), throwable.getMessage());
-            LastModified modified = clazz.getClass().getAnnotation(LastModified.class);
-            JayunLogParser.error(serviceCode, modified, throwable, message);
+
+            Class<? extends IService> clazz = service.getClass();
+            JayunLogParser.error(clazz, throwable);
+
             log.info("{}", message, throwable);
             dataOut.setError().setMessage(throwable.getMessage());
         }
