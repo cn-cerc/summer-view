@@ -27,6 +27,7 @@ import cn.cerc.mis.core.Application;
 import cn.cerc.mis.core.IService;
 import cn.cerc.mis.core.ServiceState;
 import cn.cerc.mis.log.JayunLogParser;
+import cn.cerc.mis.security.SecurityStopException;
 import cn.cerc.ui.SummerUI;
 
 public class StartServices extends HttpServlet {
@@ -116,8 +117,10 @@ public class StartServices extends HttpServlet {
                     clientIP, token, function.key(), handle.getCorpNo(), dataIn.json(), throwable.getMessage());
 
             Class<? extends IService> clazz = service.getClass();
-            JayunLogParser.error(clazz, throwable);
-
+            if (e instanceof SecurityStopException)
+                JayunLogParser.warn(clazz, throwable, message);// 远程服务用户权限不足，记入警告类日志内容
+            else
+                JayunLogParser.error(clazz, throwable, message);
             log.info("{}", message, throwable);
             dataOut.setError().setMessage(throwable.getMessage());
         }
