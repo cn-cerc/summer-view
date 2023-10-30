@@ -131,7 +131,7 @@ public class ChartCollect extends VuiAbstractChart {
         block.text(String.format(
                 """
                         <div role='chart' data-title='${_data_title}' class='flex${_width}'>
-                            <div class='chartTitle'>${_title}</div>
+                            <div class='chartTitle'><div class="dragHand">...</div>${_title}</div>
                             ${if _show_eye}
                                 <div class='opera' title='隐藏此图表' onclick='hideChart("${_templateId}", "%s")'><img src='%s' /></div>
                             ${endif}
