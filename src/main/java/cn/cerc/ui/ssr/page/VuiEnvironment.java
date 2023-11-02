@@ -423,7 +423,7 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
 
     public void writeFile(String pageCode, String device, String template) {
         // 保存在用户根目录的 visual-menus 文件夹下，自行拷贝到项目对应的 resources
-        String fileName = Utils.isEmpty(device) ? pageCode : String.join("-", pageCode, device);
+        String fileName = Utils.isEmpty(device) ? pageCode : String.join("_", pageCode, device);
         Path storage = Paths.get(System.getProperty("user.home"), "visual-menus", fileName + ".json");
         if (!Files.exists(storage)) {
             try {

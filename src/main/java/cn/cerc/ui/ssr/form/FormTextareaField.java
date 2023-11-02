@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.RequestReader;
-import cn.cerc.ui.ssr.block.ISupportBlock;
 import cn.cerc.ui.ssr.core.SsrBlock;
 import cn.cerc.ui.ssr.core.VuiCommonComponent;
 import cn.cerc.ui.ssr.core.VuiControl;
@@ -22,12 +21,12 @@ import cn.cerc.ui.ssr.editor.SsrMessage;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Description("文本域组件")
 @VuiCommonComponent
-public class FormTextareaField extends VuiControl implements ISupportBlock {
+public class FormTextareaField extends VuiControl implements ISupportField {
     private SsrBlock block = new SsrBlock();
     @Column
-    String title;
+    String title = "";
     @Column
-    String field;
+    String field = "";
     @Column
     String placeholder = "";
     @Column
@@ -52,11 +51,16 @@ public class FormTextareaField extends VuiControl implements ISupportBlock {
     }
 
     @Override
+    public String fields() {
+        return field;
+    }
+
+    @Override
     public SsrBlock request(ISsrBoard form) {
         String title = this.title;
         String field = this.field;
         form.addBlock(title, block.text(String.format("""
-                    <li ${if _style}style='${_style}'${endif}>
+                <li ${if _style}style='${_style}'${endif}>
                     <label for="%s">${if _required}<font role="require">*</font>${endif}<em>%s</em></label>
                     <div>
                         <textarea name="%s" id="%s" ${if _readonly}readonly ${endif}>${%s}</textarea>
@@ -110,11 +114,6 @@ public class FormTextareaField extends VuiControl implements ISupportBlock {
     public FormTextareaField title(String title) {
         this.title = title;
         return this;
-    }
-
-    @Override
-    public String field() {
-        return this.field;
     }
 
     @Override
