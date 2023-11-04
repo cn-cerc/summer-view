@@ -248,4 +248,21 @@ public class SsrFormStyleDefaultTest {
                 stringField.block().html());
     }
 
+    @Test
+    public void text12() {
+        VuiForm form = new VuiForm(null);
+        form.strict(false);
+        var style = form.defaultStyle();
+        FormStringField stringField = style.getString("姓名", "name").expand(true);
+        form.addBlock(stringField);
+        assertEquals(
+                """
+                        <li >
+                        <label for="name" ><em>姓名</em></label>
+                        <div> <input type="text" name="name" id="name" value="" autocomplete="off"  placeholder="请输入姓名" /> <span role="suffix-icon"><a href="javascript:initExpand('name')"><img src="null" /></a></span>
+                        </div>
+                        </li>""",
+                stringField.block().html());
+    }
+
 }

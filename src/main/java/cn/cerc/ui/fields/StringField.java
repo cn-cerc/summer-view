@@ -1,6 +1,8 @@
 package cn.cerc.ui.fields;
 
+import cn.cerc.mis.core.Application;
 import cn.cerc.mis.core.HtmlWriter;
+import cn.cerc.ui.SummerUI;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.fields.editor.ColumnEditor;
 import cn.cerc.ui.grid.lines.AbstractGridLine.IOutputOfGridLine;
@@ -50,4 +52,15 @@ public class StringField extends AbstractField implements IFormatColumn, IOutput
         return this.getContent().setCssProperty(key, value);
     }
 
+    public StringField expand(boolean expand) {
+        if (expand) {
+            this.setDialog("initExpand");
+            var impl = Application.getBean(ImageConfigImpl.class);
+            if (impl != null)
+                this.setIcon(impl.getClassProperty(StringField.class, SummerUI.ID, "icon", ""));
+            else
+                this.setIcon(config.getClassProperty("icon", ""));
+        }
+        return this;
+    }
 }

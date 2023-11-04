@@ -19,6 +19,7 @@ import cn.cerc.ui.SummerUI;
 import cn.cerc.ui.core.RequestReader;
 import cn.cerc.ui.fields.AbstractField;
 import cn.cerc.ui.fields.ImageConfigImpl;
+import cn.cerc.ui.fields.StringField;
 import cn.cerc.ui.ssr.core.ISsrOption;
 import cn.cerc.ui.ssr.core.SsrBlock;
 import cn.cerc.ui.ssr.core.VuiCommonComponent;
@@ -36,6 +37,7 @@ public class FormStringField extends VuiControl implements ISupportField {
     private static final ClassConfig FieldConfig = new ClassConfig(AbstractField.class, SummerUI.ID);
     private SsrBlock block = new SsrBlock();
     private String fieldDialogIcon;
+    private String fieldExpandIcon;
     @Column
     String title = "";
     @Column
@@ -56,6 +58,8 @@ public class FormStringField extends VuiControl implements ISupportField {
     boolean required = false;
     @Column
     boolean autofocus = false;
+    @Column
+    boolean expand = false;
 
     public FormStringField() {
         super();
@@ -77,8 +81,10 @@ public class FormStringField extends VuiControl implements ISupportField {
             var impl = Application.getBean(ImageConfigImpl.class);
             if (impl != null) {
                 this.fieldDialogIcon = impl.getClassProperty(AbstractField.class, SummerUI.ID, "icon", "");
+                this.fieldExpandIcon = impl.getClassProperty(StringField.class, SummerUI.ID, "icon", "");
             } else {
                 this.fieldDialogIcon = FieldConfig.getClassProperty("icon", "");
+                this.fieldExpandIcon = FieldConfig.getClassProperty("icon", "");
             }
         }
     }
@@ -107,7 +113,7 @@ public class FormStringField extends VuiControl implements ISupportField {
                                             ${map.begin}<option value="${map.key}" ${if map.key==%s}selected ${endif}>${map.value}</option>${map.end}
                                             </select>
                                         ${endif}
-                                        <span role="suffix-icon">${if _dialog}<a href="javascript:${_dialog}"><img src="%s" /></a>${endif}</span>
+                                        <span role="suffix-icon">${if _dialog}<a href="javascript:${_dialog}"><img src="%s" /></a>${else}${if _expand}<a href="javascript:initExpand('${fields}')"><img src="%s" /></a>${endif}${endif}</span>
                                     </div>
                                 </li>
                                 ${if _mark}
@@ -116,7 +122,7 @@ public class FormStringField extends VuiControl implements ISupportField {
                                 </li>
                                 ${endif}
                                 """,
-                        fieldKey, selected, fieldDialogIcon)));
+                        fieldKey, selected, fieldDialogIcon, fieldExpandIcon)));
 
         block().option("_readonly", this.readonly ? "1" : "");
         block().option("_required", this.required ? "1" : "");
@@ -132,6 +138,7 @@ public class FormStringField extends VuiControl implements ISupportField {
         block.option("_readonly", this.readonly ? "1" : "");
         block.option("_pattern", this.patten);
         block.option("_autofocus", this.autofocus ? "1" : "");
+        block.option("_expand", this.expand ? "1" : "");
         block.option("_style", this.properties("v_style").orElse(""));
         return block;
     }
@@ -272,6 +279,11 @@ public class FormStringField extends VuiControl implements ISupportField {
     public FormStringField toMap(Map<String, String> targetMap) {
         block.toMap(targetMap);
         block.option("_isTextField", "");
+        return this;
+    }
+
+    public FormStringField expand(boolean expand) {
+        this.expand = expand;
         return this;
     }
 }
