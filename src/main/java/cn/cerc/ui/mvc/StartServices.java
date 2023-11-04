@@ -45,9 +45,6 @@ public class StartServices extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         request.setCharacterEncoding(StandardCharsets.UTF_8.name());
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
-        String uri = request.getRequestURI();
-        log.debug(uri);
-        request.setCharacterEncoding("UTF-8");
 
         DataSet dataOut = new DataSet();
         String text = request.getParameter("dataIn");
@@ -61,7 +58,7 @@ public class StartServices extends HttpServlet {
         log.debug("dataIn {}", text);
 
         if (Utils.isEmpty(key)) {
-            dataOut.setMessage("service is null.");
+            dataOut.setMessage("远程服务不能为空");
             response.getWriter().write(dataOut.toString());
             return;
         }
@@ -80,8 +77,7 @@ public class StartServices extends HttpServlet {
         if (token != null && session.getProperty(token) != null) {
             int state = (int) session.getProperty(token);
             if (state == ServiceState.TOKEN_INVALID) {
-                dataOut.setState(ServiceState.TOKEN_INVALID)
-                        .setMessage(String.format("%s token is invalid, please login again.", token));
+                dataOut.setState(ServiceState.TOKEN_INVALID).setMessage("当前会话已过期，请重退出新登录");
                 response.getWriter().write(dataOut.toString());
                 return;
             }
@@ -89,7 +85,6 @@ public class StartServices extends HttpServlet {
 
         // 执行指定函数
         IHandle handle = new Handle(session);
-
         Variant function = new Variant("execute").setKey(key);
         IService service;
         try {
@@ -107,7 +102,7 @@ public class StartServices extends HttpServlet {
             dataOut = service._call(handle, dataIn, function);
             if (dataOut == null) {
                 dataOut = new DataSet();
-                dataOut.setError().setMessage("service return empty");
+                dataOut.setError().setMessage("远程服务没有响应");
             }
         } catch (RuntimeException | IllegalAccessException | InvocationTargetException | ServiceException
                 | DataException e) {
@@ -118,7 +113,7 @@ public class StartServices extends HttpServlet {
 
             Class<? extends IService> clazz = service.getClass();
             if (e instanceof SecurityStopException)
-                JayunLogParser.warn(clazz, throwable, message);// 远程服务用户权限不足，记入警告类日志内容
+                JayunLogParser.warn(clazz, throwable, message);// 用户权限不足，记入警告类日志
             else
                 JayunLogParser.error(clazz, throwable, message);
             log.info("{}", message, throwable);
