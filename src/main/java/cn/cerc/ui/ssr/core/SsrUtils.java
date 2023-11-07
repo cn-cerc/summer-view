@@ -7,6 +7,8 @@ import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.persistence.Column;
 
@@ -282,6 +284,12 @@ public class SsrUtils {
             if (name.startsWith("v_"))
                 target.put(name, source.get(name).asText());
         }
+    }
+
+    public static String extractTagContent(String str, String tagName) {
+        Pattern pattern = Pattern.compile(String.format("<%s[^>]*>(.*?)</%s>", tagName, tagName), Pattern.DOTALL);
+        Matcher matcher = pattern.matcher(str);
+        return matcher.find() ? matcher.group(1) : str;
     }
 
 }

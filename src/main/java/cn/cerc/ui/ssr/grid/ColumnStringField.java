@@ -15,6 +15,10 @@ import cn.cerc.ui.ssr.core.VuiControl;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @VuiCommonComponent
+@Deprecated
+/**
+ * 请改用GridGroup+GridStringField
+ */
 public class ColumnStringField extends VuiControl implements ISupportGridColumn {
     private DataSet dataSet;
     @Column

@@ -107,4 +107,10 @@ public class SsrGridStyleDefault {
         return column;
     }
 
+    public GridGroup getGroup(String title, String field, int fieldWidth) {
+        var group = new GridGroup(title, field);
+        group.fieldWidth = fieldWidth;
+        return group;
+    }
+
 }

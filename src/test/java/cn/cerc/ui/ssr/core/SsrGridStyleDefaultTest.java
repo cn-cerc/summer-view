@@ -8,6 +8,7 @@ import java.util.List;
 import org.junit.Test;
 
 import cn.cerc.db.core.DataSet;
+import cn.cerc.ui.ssr.grid.GridGroup;
 import cn.cerc.ui.ssr.grid.VuiGrid;
 
 public class SsrGridStyleDefaultTest {
@@ -150,6 +151,39 @@ public class SsrGridStyleDefaultTest {
                         </td></tr>
                         </table></div>""",
                 grid.toString());
+    }
+
+    @Test
+    public void test4() {
+        var ds = new DataSet();
+        ds.append().setValue("Name_", "张三").setValue("Sex_", "1");
+        ds.append().setValue("Name_", "李四").setValue("Sex_", "");
+
+        var grid = new VuiGrid(null, "");
+        grid.dataSet(ds);
+
+        var style = grid.defaultStyle();
+        GridGroup group = style.getGroup("姓名-性别", "group1", 10);
+        grid.addBlock(group);
+        group.addBlock(style.getString("姓名", "Name_", 10));
+        group.addBlock(style.getBoolean("性别", "Sex_", 4).trueText("男").falseText("女"));
+        group.addBlock(style.getOpera(4)).onCallback("url", () -> {
+            return "www.baidu.com";
+        });
+
+        grid.addColumn("姓名-性别");
+        assertEquals("""
+                <div id='grid' class='scrollArea'><table class='dbgrid'><tr>
+                <th style='width: 10em'>姓名-性别</th></tr>
+                <tr>
+                <td align='' role='group1'><span>张三</span><br/><span>
+                <span>男</span>
+                </span><br/><span><a href='www.baidu.com'>内容</a></span><br/></td></tr>
+                <tr>
+                <td align='' role='group1'><span>李四</span><br/><span>
+                <span>女</span>
+                </span><br/><span><a href='www.baidu.com'>内容</a></span><br/></td></tr>
+                </table></div>""", grid.toString());
     }
 
 }

@@ -1,5 +1,7 @@
 package cn.cerc.ui.ssr.grid;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Supplier;
 
 import javax.persistence.Column;
@@ -9,6 +11,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import cn.cerc.ui.ssr.core.SsrBlock;
+import cn.cerc.ui.ssr.core.SsrTemplate;
+import cn.cerc.ui.ssr.core.SsrUtils;
 import cn.cerc.ui.ssr.core.VuiCommonComponent;
 import cn.cerc.ui.ssr.core.VuiContainer;
 import cn.cerc.ui.ssr.editor.ISsrBoard;
@@ -16,29 +20,34 @@ import cn.cerc.ui.ssr.editor.ISsrBoard;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @VuiCommonComponent
-@Deprecated
-/**
- * 请改用GridGroup
- */
-public class GridColumn extends VuiContainer<ISupportGridColumn> implements ISupportGrid, Supplier<String> {
+public class GridGroup extends VuiContainer<ISupportGrid> implements ISupportGrid, Supplier<String>, ISsrBoard {
     private SsrBlock head = new SsrBlock();
     private SsrBlock body = new SsrBlock();
+    private SsrTemplate template = new SsrTemplate();
     @Column
     String title = "";
     String field;
     @Column
     public int fieldWidth = 10;
+    @Column(name = "是否展示描述")
+    boolean showTitle = false;
 
-    public GridColumn() {
+    public GridGroup() {
         super();
+    }
+
+    public GridGroup(String title, String field) {
+        super();
+        this.title = title;
+        this.field = field;
     }
 
     @Override
     public SsrBlock request(ISsrBoard grid) {
         String headTitle = "head." + this.title;
         grid.addBlock(headTitle, head.text("<th style='width: ${_width}em'>${_title}</th>"));
-        head.toMap("_width", "" + this.fieldWidth);
-        head.toMap("_title", this.title);
+        head.option("_width", "" + this.fieldWidth);
+        head.option("_title", this.title);
         head.id(headTitle);
         head.display(1);
 
@@ -48,7 +57,7 @@ public class GridColumn extends VuiContainer<ISupportGridColumn> implements ISup
                 ${callback(columns)}
                 </td>
                 """, this.field)));
-        head.toMap("_field", this.field);
+        body.option("_field", this.field);
         body.id(bodyTitle);
         body.display(1);
         body.strict(false);
@@ -60,11 +69,17 @@ public class GridColumn extends VuiContainer<ISupportGridColumn> implements ISup
     public String get() {
         StringBuffer sb = new StringBuffer();
         for (var column : this) {
-            if (column instanceof ISupportGridColumn impl) {
+            if (column instanceof ISupportGrid impl) {
+                impl.request(this);
                 if (this.getOwner() instanceof VuiGrid grid)
-                    impl.dataSet(grid.dataSet());
+                    impl.block().dataSet(grid.dataSet());
+                sb.append("<span>");
+                if (showTitle)
+                    sb.append(impl.title() + "：");
+                sb.append(SsrUtils.extractTagContent(impl.block().html(), "td"));
+                sb.append("</span>");
+                sb.append("<br/>");
             }
-            sb.append(column.toString());
         }
         return sb.toString();
     }
@@ -104,6 +119,31 @@ public class GridColumn extends VuiContainer<ISupportGridColumn> implements ISup
     @Override
     public ISupportGrid width(int width) {
         this.fieldWidth = width;
+        return this;
+    }
+
+    @Override
+    public SsrTemplate template() {
+        return template;
+    }
+
+    @Override
+    public List<String> columns() {
+        return new ArrayList<String>(template.items().keySet());
+    }
+
+    @Override
+    public ISsrBoard addBlock(String id, SsrBlock block) {
+        template.addItem(id, block);
+        return this;
+    }
+
+    public boolean showTitle() {
+        return showTitle;
+    }
+
+    public GridGroup showTitle(boolean showTitle) {
+        this.showTitle = showTitle;
         return this;
     }
 

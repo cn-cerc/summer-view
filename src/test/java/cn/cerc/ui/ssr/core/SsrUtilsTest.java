@@ -69,4 +69,23 @@ public class SsrUtilsTest {
         assertEquals("block is null", node.getHtml(null));
     }
 
+    @Test
+    public void test_extractTagContent() {
+        assertEquals("单元格", SsrUtils.extractTagContent("<td>单元格</td>", "td"));
+        assertEquals("单元格", SsrUtils.extractTagContent("<td role='remark_' align='center' >单元格</td>", "td"));
+        assertEquals("<span>单元格</span>",
+                SsrUtils.extractTagContent("<td role='remark_' align='center' ><span>单元格</span></td>", "td"));
+        assertEquals("<a href=''>单元格</a>",
+                SsrUtils.extractTagContent("<td role='remark_' align='center' ><a href=''>单元格</a></td>", "td"));
+        assertEquals("<a href=''>单元格</a>",
+                SsrUtils.extractTagContent("<div role='remark_' align='center' ><a href=''>单元格</a></div>", "div"));
+        assertEquals("""
+
+                    <a href=''>单元格</a>
+                """, SsrUtils.extractTagContent("""
+                <div role='remark_' align='center' >
+                    <a href=''>单元格</a>
+                </div>""", "div"));
+    }
+
 }
