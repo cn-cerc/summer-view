@@ -435,4 +435,50 @@ public class VuiChunkTest {
                         <label>性别</label> <span id='sex_'>男</span></div></li></ul></div>""",
                 chunk.toString());
     }
+
+    @Test
+    public void test_number() {
+        var ds = new DataSet();
+        ds.append().setValue("Num_", "10.7846574").setValue("total_", "10.7846574");
+        ds.append().setValue("Num_", "124.4656475").setValue("total_", "124.4656475");
+
+        VuiChunk chunk = new VuiChunk(null);
+        SsrBlockStyleDefault style = chunk.defaultStyle();
+
+        VuiBlock2101 board = new VuiBlock2101(chunk);
+        board.slot0(style.getRowString2("数量", "Num_"));
+        board.slot1(style.getRowNumber("合计", "total_"));
+        chunk.dataSet(ds);
+        assertEquals(
+                """
+                        <div role='chunkBox'><ul role='chunkBoxItem'><li role='UISsrBlock2101'> <div style='flex: 1;'>
+                        <label>数量：</label> <span id='Num_'>10.7846574</span></div> <div style='flex: 1;'>
+                        <label>合计：</label> <span id='total_'>10.7847</span></div></li></ul><ul role='chunkBoxItem'><li role='UISsrBlock2101'> <div style='flex: 1;'>
+                        <label>数量：</label> <span id='Num_'>124.4656475</span></div> <div style='flex: 1;'>
+                        <label>合计：</label> <span id='total_'>124.4656</span></div></li></ul></div>""",
+                chunk.toString());
+    }
+
+    @Test
+    public void test_row_number() {
+        var ds = new DataSet();
+        ds.append().setValue("Num_", "10.7846574").setValue("total_", "10.7846574");
+        ds.append().setValue("Num_", "124.4656475").setValue("total_", "124.4656475");
+
+        VuiChunk chunk = new VuiChunk(null);
+        SsrBlockStyleDefault style = chunk.defaultStyle();
+
+        VuiBlock2201 board = new VuiBlock2201(chunk);
+        board.slot0(style.getString2("数量", "Num_"));
+        board.slot1(style.getNumber("合计", "total_"));
+        chunk.dataSet(ds);
+        assertEquals(
+                """
+                        <div role='chunkBox'><ul role='chunkBoxItem'><li role='UISsrBlock2201'> <div style='flex: 1;'>
+                        <label>数量</label> <span id='Num_'>10.7846574</span></div> <div style='flex: 1;'>
+                        <label>合计</label> <span id='total_'>10.7847</span></div></li></ul><ul role='chunkBoxItem'><li role='UISsrBlock2201'> <div style='flex: 1;'>
+                        <label>数量</label> <span id='Num_'>124.4656475</span></div> <div style='flex: 1;'>
+                        <label>合计</label> <span id='total_'>124.4656</span></div></li></ul></div>""",
+                chunk.toString());
+    }
 }

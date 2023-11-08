@@ -186,4 +186,28 @@ public class SsrGridStyleDefaultTest {
                 </table></div>""", grid.toString());
     }
 
+    @Test
+    public void test5() {
+        var ds = new DataSet();
+        ds.append().setValue("Num_", "10.7846574").setValue("total_", "10.7846574");
+        ds.append().setValue("Num_", "124.4656475").setValue("total_", "124.4656475");
+
+        var grid = new VuiGrid(null, "");
+        grid.dataSet(ds);
+        var style = grid.defaultStyle();
+        grid.addBlock(style.getString("数量", "Num_", 10));
+        grid.addBlock(style.getNumber("合计", "total_", 10));
+        grid.addColumn("数量", "合计");
+        assertEquals(
+                """
+                        <div id='grid' class='scrollArea'><table class='dbgrid'><tr>
+                        <th style='width: 10em' onclick="gridSort(this,'Num_')">数量</th><th style='width: 10em' onclick="gridSort(this,'total_')">合计</th></tr>
+                        <tr>
+                        <td align='left' role='Num_'>10.7846574</td><td align='' role='total_'>10.7847</td></tr>
+                        <tr>
+                        <td align='left' role='Num_'>124.4656475</td><td align='' role='total_'>124.4656</td></tr>
+                        </table></div>""",
+                grid.toString());
+    }
+
 }

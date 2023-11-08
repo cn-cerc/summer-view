@@ -212,7 +212,7 @@ public class SsrBlock implements ISsrOption {
         return this;
     }
 
-    protected Optional<String> getValue(String field) {
+    public Optional<String> getValue(String field) {
         String result = null;
         var dataRow = this.dataRow();
         var dataSet = this.dataSet();

@@ -1,5 +1,7 @@
 package cn.cerc.ui.ssr.block;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -10,6 +12,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import cn.cerc.db.core.Utils;
 import cn.cerc.ui.ssr.core.SsrBlock;
 import cn.cerc.ui.ssr.core.VuiCommonComponent;
 import cn.cerc.ui.ssr.core.VuiControl;
@@ -29,6 +32,8 @@ public class BlockNumberField extends VuiControl implements ISupportBlock {
     String field = "";
     @Column
     Binder<ISupplierList> listSource = new Binder<>(this, ISupplierList.class);
+    @Column
+    String formatStyle = "0.####";
 
     Supplier<String> url;
 
@@ -56,13 +61,22 @@ public class BlockNumberField extends VuiControl implements ISupportBlock {
                 """
                                     <div style='flex: ${_ratio};'>
                                         <label>%s</label>
-                                        ${if _enabled_url}<a id='%s' href='${callback(url)}'>${else}<span id='%s'>${endif}${if _isTextField}${%s}${else}${list.begin}${if list.index==%s}${list.value}${endif}${list.end}${endif}${if _enabled_url}</a>${else}</span>${endif}
+                                        ${if _enabled_url}<a id='%s' href='${callback(url)}'>${else}<span id='%s'>${endif}${if _isTextField}${callback(_value)}${else}${list.begin}${if list.index==%s}${list.value}${endif}${list.end}${endif}${if _enabled_url}</a>${else}</span>${endif}
                                     </div>
                         """,
-                title, field, field, field, field));
+                title, field, field, field));
         block.option("_enabled_url", url != null ? "1" : "");
         if (url != null)
             block.onCallback("url", url);
+        block.onCallback("_value", () -> {
+            Optional<String> val = block.getValue(field);
+            if (val.isEmpty() || Utils.isEmpty(val.get())) {
+                return "0";
+            } else {
+                DecimalFormat df = new DecimalFormat(formatStyle);
+                return df.format(new BigDecimal(val.get()));
+            }
+        });
         return block;
     }
 
@@ -131,6 +145,15 @@ public class BlockNumberField extends VuiControl implements ISupportBlock {
     public ISupportBlock field(String field) {
         this.field = field;
         return this;
+    }
+
+    public BlockNumberField formatStyle(String formatStyle) {
+        this.formatStyle = formatStyle;
+        return this;
+    }
+
+    public String formatStyle() {
+        return formatStyle;
     }
 
 }

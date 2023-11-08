@@ -1,5 +1,6 @@
 package cn.cerc.ui.ssr.grid;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +48,8 @@ public class GridNumberField extends VuiControl implements ISupportGrid {
     SummaryTypeEnum summaryType = SummaryTypeEnum.无;
     @Column
     Binder<ISupplierList> listSource = new Binder<>(this, ISupplierList.class);
+    @Column
+    String formatStyle = "0.####";
 
     public GridNumberField() {
         super();
@@ -68,14 +71,23 @@ public class GridNumberField extends VuiControl implements ISupportGrid {
                 <td align='${_align}' role='${_field}'>
                 ${if _enabled_url}<a href='${callback(url)}'>${endif}
                 ${if _isTextField}
-                ${dataset.%s}
+                ${callback(_value)}
                 ${else}
                 ${list.begin}${if list.index==%s}${list.value}${endif}${list.end}
                 ${endif}
                 ${if _enabled_url}</a>${endif}
-                </td>""", this.field, this.field)));
+                </td>""", this.field)));
         body.option("_align", this.align);
         body.option("_field", this.field);
+        body.onCallback("_value", () -> {
+            Optional<String> val = body.getValue(field);
+            if (val.isEmpty() || Utils.isEmpty(val.get())) {
+                return "0";
+            } else {
+                DecimalFormat df = new DecimalFormat(formatStyle);
+                return df.format(new BigDecimal(val.get()));
+            }
+        });
         body.id(bodyTitle);
         body.display(1);
         body.strict(false);
@@ -215,6 +227,15 @@ public class GridNumberField extends VuiControl implements ISupportGrid {
         for (Enum<?> item : enums)
             list.add(item.name());
         return toList(list);
+    }
+
+    public GridNumberField formatStyle(String formatStyle) {
+        this.formatStyle = formatStyle;
+        return this;
+    }
+
+    public String formatStyle() {
+        return formatStyle;
     }
 
 }
