@@ -12,6 +12,7 @@ import cn.cerc.db.core.Utils;
 import cn.cerc.ui.core.RequestReader;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.ssr.base.UISsrBlock;
+import cn.cerc.ui.ssr.core.VuiCommonComponent;
 import cn.cerc.ui.ssr.core.VuiComponent;
 import cn.cerc.ui.ssr.core.VuiContainer;
 import cn.cerc.ui.ssr.editor.EditorGrid;
@@ -92,7 +93,13 @@ public abstract class VuiAbstractEntityContainer<T extends ISupportServiceField>
         Set<Class<? extends VuiComponent>> children = getChildren();
         if (Utils.isEmpty(children))
             return;
-        Class<?> clazz = children.stream().findFirst().get();
+        Class<? extends VuiComponent> first = children.stream().findFirst().orElse(null);
+        Class<?> clazz = children.stream()
+                .filter(item -> item.isAnnotationPresent(VuiCommonComponent.class))
+                .findFirst()
+                .orElse(first);
+        if (clazz == null)
+            return;
         IVuiEnvironment environment = this.canvas().environment();
         for (String component : components) {
             String[] componentProperties = component.split(",");
