@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import cn.cerc.db.core.DataSet;
+import cn.cerc.db.core.Utils;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.ssr.core.AlginEnum;
 import cn.cerc.ui.ssr.core.ISsrOption;
@@ -44,6 +45,9 @@ public class GridStringField extends VuiControl implements ISupportGrid {
     String summaryValue = "";
     @Column
     Binder<ISupplierMap> mapSource = new Binder<>(this, ISupplierMap.class);
+    Supplier<String> url;
+    @Column
+    String target = "";
 
     public GridStringField() {
         super();
@@ -63,7 +67,7 @@ public class GridStringField extends VuiControl implements ISupportGrid {
         String bodyTitle = "body." + this.title;
         grid.addBlock(bodyTitle, body.text(String.format("""
                 <td align='${_align}' role='${_field}'>
-                ${if _enabled_url}<a href='${callback(url)}' ${if _target}target='${_target}'${endif}>${endif}
+                ${if _enabled_url}<a href='${callback(url)} '${if _target}target='${_target}' ${endif}>${endif}
                 ${if _isTextField}
                 ${dataset.%s}
                 ${else}
@@ -73,7 +77,10 @@ public class GridStringField extends VuiControl implements ISupportGrid {
                 </td>""", this.field, this.field)));
         body.option("_align", this.align);
         body.option("_field", this.field);
-        body.option("_target", "");
+        body.option("_enabled_url", url != null ? "1" : "");
+        body.option("_target", Utils.isEmpty(target) ? "" : "1");
+        if (url != null)
+            body.onCallback("url", url);
         body.id(bodyTitle);
         body.display(1);
         body.strict(false);
@@ -98,8 +105,13 @@ public class GridStringField extends VuiControl implements ISupportGrid {
     }
 
     public GridStringField url(Supplier<String> url) {
-        body.option("_enabled_url", "1");
-        body.onCallback("url", url);
+        this.url = url;
+        return this;
+    }
+
+    public GridStringField url(String target, Supplier<String> url) {
+        this.target = target;
+        this.url = url;
         return this;
     }
 

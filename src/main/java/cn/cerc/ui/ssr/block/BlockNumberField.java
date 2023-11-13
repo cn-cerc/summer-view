@@ -34,6 +34,8 @@ public class BlockNumberField extends VuiControl implements ISupportBlock {
     Binder<ISupplierList> listSource = new Binder<>(this, ISupplierList.class);
     @Column
     String formatStyle = "0.####";
+    @Column
+    String target = "";
 
     Supplier<String> url;
 
@@ -61,11 +63,12 @@ public class BlockNumberField extends VuiControl implements ISupportBlock {
                 """
                                     <div style='flex: ${_ratio};'>
                                         <label>%s</label>
-                                        ${if _enabled_url}<a id='%s' href='${callback(url)}'>${else}<span id='%s'>${endif}${if _isTextField}${callback(_value)}${else}${list.begin}${if list.index==%s}${list.value}${endif}${list.end}${endif}${if _enabled_url}</a>${else}</span>${endif}
+                                        ${if _enabled_url}<a id='%s' href='${callback(url)}' ${if _target}target='${_target}' ${endif}>${else}<span id='%s'>${endif}${if _isTextField}${callback(_value)}${else}${list.begin}${if list.index==%s}${list.value}${endif}${list.end}${endif}${if _enabled_url}</a>${else}</span>${endif}
                                     </div>
                         """,
                 title, field, field, field));
         block.option("_enabled_url", url != null ? "1" : "");
+        block.option("_target", Utils.isEmpty(target) ? "" : "1");
         if (url != null)
             block.onCallback("url", url);
         block.onCallback("_value", () -> {
@@ -102,6 +105,17 @@ public class BlockNumberField extends VuiControl implements ISupportBlock {
         return block;
     }
 
+    public BlockNumberField url(Supplier<String> url) {
+        this.url = url;
+        return this;
+    }
+
+    public BlockNumberField url(String target, Supplier<String> url) {
+        this.target = target;
+        this.url = url;
+        return this;
+    }
+
     public BlockNumberField toList(String... values) {
         block.toList(values);
         block.option("_isTextField", "");
@@ -131,7 +145,7 @@ public class BlockNumberField extends VuiControl implements ISupportBlock {
     }
 
     @Override
-    public ISupportBlock title(String title) {
+    public BlockNumberField title(String title) {
         this.title = title;
         return this;
     }
@@ -142,7 +156,7 @@ public class BlockNumberField extends VuiControl implements ISupportBlock {
     }
 
     @Override
-    public ISupportBlock field(String field) {
+    public BlockNumberField field(String field) {
         this.field = field;
         return this;
     }

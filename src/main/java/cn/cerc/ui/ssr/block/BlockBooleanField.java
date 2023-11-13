@@ -69,7 +69,7 @@ public class BlockBooleanField extends VuiControl implements ISupportBlock {
     }
 
     @Override
-    public ISupportBlock title(String title) {
+    public BlockBooleanField title(String title) {
         this.title = title;
         return this;
     }
@@ -80,8 +80,26 @@ public class BlockBooleanField extends VuiControl implements ISupportBlock {
     }
 
     @Override
-    public ISupportBlock field(String field) {
+    public BlockBooleanField field(String field) {
         this.field = field;
+        return this;
+    }
+
+    public String trueText() {
+        return trueText;
+    }
+
+    public BlockBooleanField trueText(String trueText) {
+        this.trueText = trueText;
+        return this;
+    }
+
+    public String falseText() {
+        return falseText;
+    }
+
+    public BlockBooleanField falseText(String falseText) {
+        this.falseText = falseText;
         return this;
     }
 

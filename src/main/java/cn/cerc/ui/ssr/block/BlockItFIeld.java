@@ -51,7 +51,7 @@ public class BlockItFIeld extends VuiControl implements ISupportBlock {
     }
 
     @Override
-    public ISupportBlock title(String title) {
+    public BlockItFIeld title(String title) {
         this.title = title;
         return this;
     }

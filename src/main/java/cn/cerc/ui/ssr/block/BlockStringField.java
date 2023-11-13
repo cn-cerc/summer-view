@@ -10,6 +10,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import cn.cerc.db.core.Utils;
 import cn.cerc.ui.ssr.core.SsrBlock;
 import cn.cerc.ui.ssr.core.VuiCommonComponent;
 import cn.cerc.ui.ssr.core.VuiControl;
@@ -31,6 +32,8 @@ public class BlockStringField extends VuiControl implements ISupportBlock {
     Binder<ISupplierMap> mapSource = new Binder<>(this, ISupplierMap.class);
     @Column
     Boolean hideTitle = false;
+    @Column
+    String target = "";
 
     Supplier<String> url;
 
@@ -58,11 +61,12 @@ public class BlockStringField extends VuiControl implements ISupportBlock {
                 """
                                     <div style='flex: ${_ratio};'>
                                         <label>%s</label>
-                                        ${if _enabled_url}<a id='%s' href='${callback(url)}'>${else}<span id='%s'>${endif}${if _isTextField}${%s}${else}${map.begin}${if map.key==%s}${map.value}${endif}${map.end}${endif}${if _enabled_url}</a>${else}</span>${endif}
+                                        ${if _enabled_url}<a id='%s' href='${callback(url)}' ${if _target}target='${_target}' ${endif}>${else}<span id='%s'>${endif}${if _isTextField}${%s}${else}${map.begin}${if map.key==%s}${map.value}${endif}${map.end}${endif}${if _enabled_url}</a>${else}</span>${endif}
                                     </div>
                         """,
-               this.hideTitle ? "" : title, field, field, field, field));
+                this.hideTitle ? "" : title, field, field, field, field));
         block.option("_enabled_url", url != null ? "1" : "");
+        block.option("_target", Utils.isEmpty(target) ? "" : "1");
         if (url != null)
             block.onCallback("url", url);
         return block;
@@ -95,6 +99,12 @@ public class BlockStringField extends VuiControl implements ISupportBlock {
         return this;
     }
 
+    public BlockStringField url(String target, Supplier<String> url) {
+        this.target = target;
+        this.url = url;
+        return this;
+    }
+
     public BlockStringField hideTitle(Boolean hideTitle) {
         this.hideTitle = hideTitle;
         return this;
@@ -123,7 +133,7 @@ public class BlockStringField extends VuiControl implements ISupportBlock {
     }
 
     @Override
-    public ISupportBlock title(String title) {
+    public BlockStringField title(String title) {
         this.title = title;
         return this;
     }
@@ -134,7 +144,7 @@ public class BlockStringField extends VuiControl implements ISupportBlock {
     }
 
     @Override
-    public ISupportBlock field(String field) {
+    public BlockStringField field(String field) {
         this.field = field;
         return this;
     }

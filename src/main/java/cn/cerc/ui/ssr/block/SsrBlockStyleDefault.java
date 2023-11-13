@@ -199,11 +199,11 @@ public class SsrBlockStyleDefault {
         };
     }
 
-    public ISupplierBlock getOpera(String field) {
+    public BlockOperaField getOpera(String field) {
         return new BlockOperaField(field);
     }
 
-    public ISupplierBlock getOpera(Supplier<String> url) {
+    public BlockOperaField getOpera(Supplier<String> url) {
         return new BlockOperaField(url);
     }
 

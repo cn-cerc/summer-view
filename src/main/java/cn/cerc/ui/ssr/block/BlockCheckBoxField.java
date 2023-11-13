@@ -96,7 +96,7 @@ public class BlockCheckBoxField extends VuiControl implements ISupportBlock {
     }
 
     @Override
-    public ISupportBlock field(String field) {
+    public BlockCheckBoxField field(String field) {
         this.field = field;
         return this;
     }
@@ -107,7 +107,7 @@ public class BlockCheckBoxField extends VuiControl implements ISupportBlock {
     }
 
     @Override
-    public ISupportBlock title(String title) {
+    public BlockCheckBoxField title(String title) {
         this.title = title;
         return this;
     }

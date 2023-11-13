@@ -50,6 +50,10 @@ public class GridNumberField extends VuiControl implements ISupportGrid {
     Binder<ISupplierList> listSource = new Binder<>(this, ISupplierList.class);
     @Column
     String formatStyle = "0.####";
+    @Column
+    String target = "";
+
+    Supplier<String> url;
 
     public GridNumberField() {
         super();
@@ -69,7 +73,7 @@ public class GridNumberField extends VuiControl implements ISupportGrid {
         String bodyTitle = "body." + this.title;
         grid.addBlock(bodyTitle, body.text(String.format("""
                 <td align='${_align}' role='${_field}'>
-                ${if _enabled_url}<a href='${callback(url)}'>${endif}
+                ${if _enabled_url}<a href='${callback(url)} '${if _target}target='${_target}' ${endif}>${endif}
                 ${if _isTextField}
                 ${callback(_value)}
                 ${else}
@@ -79,6 +83,10 @@ public class GridNumberField extends VuiControl implements ISupportGrid {
                 </td>""", this.field)));
         body.option("_align", this.align);
         body.option("_field", this.field);
+        body.option("_enabled_url", url != null ? "1" : "");
+        body.option("_target", Utils.isEmpty(target) ? "" : "1");
+        if (url != null)
+            body.onCallback("url", url);
         body.onCallback("_value", () -> {
             Optional<String> val = body.getValue(field);
             if (val.isEmpty() || Utils.isEmpty(val.get())) {
@@ -112,8 +120,13 @@ public class GridNumberField extends VuiControl implements ISupportGrid {
     }
 
     public GridNumberField url(Supplier<String> url) {
-        body.option("_enabled_url", "1");
-        body.onCallback("url", url);
+        this.url = url;
+        return this;
+    }
+
+    public GridNumberField url(String target, Supplier<String> url) {
+        this.target = target;
+        this.url = url;
         return this;
     }
 
