@@ -27,6 +27,7 @@ import cn.cerc.mis.core.Application;
 import cn.cerc.mis.core.IService;
 import cn.cerc.mis.core.ServiceState;
 import cn.cerc.mis.log.JayunLogParser;
+import cn.cerc.mis.security.Permission;
 import cn.cerc.mis.security.SecurityStopException;
 import cn.cerc.ui.SummerUI;
 
@@ -59,7 +60,7 @@ public class StartServices extends HttpServlet {
 
         if (Utils.isEmpty(key)) {
             dataOut.setMessage("远程服务不能为空");
-            response.getWriter().write(dataOut.toString());
+            response.getWriter().write(dataOut.json());
             return;
         }
 
@@ -71,19 +72,9 @@ public class StartServices extends HttpServlet {
         // 使用token登录，并获取用户资料与授权数据
         ISession session = Application.getBean(ISession.class);
         session.setProperty(ISession.REQUEST, request);
-        session.loadToken(token);
+        boolean loadToken = session.loadToken(token);
 
-        // token失效则直接返回
-        if (token != null && session.getProperty(token) != null) {
-            int state = (int) session.getProperty(token);
-            if (state == ServiceState.TOKEN_INVALID) {
-                dataOut.setState(ServiceState.TOKEN_INVALID).setMessage("当前会话已过期，请重退出新登录");
-                response.getWriter().write(dataOut.toString());
-                return;
-            }
-        }
-
-        // 执行指定函数
+        // 获取服务执行函数
         IHandle handle = new Handle(session);
         Variant function = new Variant("execute").setKey(key);
         IService service;
@@ -93,8 +84,22 @@ public class StartServices extends HttpServlet {
             String clientIP = AppClient.getClientIP(request);
             log.error("clientIP {}, token{} , service {}, dataIn {}, error {}", clientIP, token, key, text,
                     e.getMessage(), e);
-            dataOut.setState(ServiceState.NOT_FIND_SERVICE).setMessage(e.getMessage());
-            response.getWriter().write(dataOut.toString());
+            dataOut.setState(ServiceState.NOT_FIND_SERVICE).setMessage("无效的访问请求，远程服务不存在");
+            response.getWriter().write(dataOut.json());
+            return;
+        }
+
+        // 取出执行服务需要的权限
+        Class<? extends IService> clazz = service.getClass();
+        Permission permission = clazz.getAnnotation(Permission.class);
+        String value = Permission.USERS;
+        if (permission != null)
+            value = permission.value();
+
+        // 非访客权限且令牌失效
+        if (!Utils.isEmpty(token) && !Permission.GUEST.equals(value) && !loadToken) {
+            dataOut.setState(ServiceState.TOKEN_INVALID).setMessage("当前会话已失效，请重退出新登录");
+            response.getWriter().write(dataOut.json());
             return;
         }
 
@@ -111,7 +116,6 @@ public class StartServices extends HttpServlet {
             String message = String.format("clientIP %s, token %s, service %s, corpNo %s, dataIn %s, message %s",
                     clientIP, token, function.key(), handle.getCorpNo(), dataIn.json(), throwable.getMessage());
 
-            Class<? extends IService> clazz = service.getClass();
             if (e instanceof SecurityStopException)
                 JayunLogParser.warn(clazz, throwable, message);// 用户权限不足，记入警告类日志
             else
@@ -120,7 +124,7 @@ public class StartServices extends HttpServlet {
             dataOut.setError().setMessage(throwable.getMessage());
         }
         // 数据过滤后返回
-        response.getWriter().write(RecordFilter.execute(dataIn, dataOut).toString());
+        response.getWriter().write(RecordFilter.execute(dataIn, dataOut).json());
     }
 
 }
