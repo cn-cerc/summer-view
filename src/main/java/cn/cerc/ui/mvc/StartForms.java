@@ -38,6 +38,7 @@ import cn.cerc.mis.core.IErrorPage;
 import cn.cerc.mis.core.SystemBuffer;
 import cn.cerc.mis.core.UserRequestException;
 import cn.cerc.mis.other.MemoryBuffer;
+import cn.cerc.mis.other.PageNotFoundException;
 
 public class StartForms implements Filter {
     private static final Logger log = LoggerFactory.getLogger(StartForms.class);
@@ -148,7 +149,7 @@ public class StartForms implements Filter {
         String childCode = getRequestCode(req);
         if (childCode == null) {
             IErrorPage error = context.getBean(IErrorPage.class);
-            error.output(req, resp, new RuntimeException("无效的请求：" + req.getServletPath()));
+            error.output(req, resp, new PageNotFoundException("无效的请求：" + req.getServletPath()));
             return;
         }
 
