@@ -82,7 +82,7 @@ public class StartServices extends HttpServlet {
             service = Application.getService(handle, key, function);
         } catch (ClassNotFoundException e) {
             String clientIP = AppClient.getClientIP(request);
-            log.error("clientIP {}, token{} , service {}, dataIn {}, error {}", clientIP, token, key, text,
+            log.warn("clientIP {}, token{} , service {}, dataIn {}, error {}", clientIP, token, key, text,
                     e.getMessage(), e);
             dataOut.setState(ServiceState.NOT_FIND_SERVICE).setMessage("无效的访问请求，远程服务不存在");
             response.getWriter().write(dataOut.json());
