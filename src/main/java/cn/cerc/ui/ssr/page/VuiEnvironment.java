@@ -490,6 +490,8 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
 
     protected String device() {
         String device = "";
+        if (this.handle.getRequest() == null)
+            return device;
         if (this.handle.getRequest().getParameter("storage") != null)
             device = handle.getRequest().getParameter("storage");
         if (isRuntime) {
