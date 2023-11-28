@@ -104,17 +104,12 @@ public class VuiDataService extends VuiComponent implements ISupplierDataRow, IS
         case SsrMessage.InitContent: {
             if (this.callByInit) {
                 if (!Utils.isEmpty(this.service.service())) {
-                    DataSet dataIn = new DataSet();
+                    long start = System.currentTimeMillis();
                     Optional<ISupplierDataRow> target = this.headIn.target();
-                    if (target.isPresent()) {
-                        // 如果绑定的数据源是VuiForm，那么就需要等待VuiForm执行InitContent后发送InitContent消息才执行
-                        if (target.get() instanceof VuiForm && !(sender instanceof VuiForm))
-                            break;
-                        dataIn.head().copyValues(target.get().dataRow());
-                    }
-                    if (bodyIn.target().isPresent())
-                        dataIn.appendDataSet(bodyIn.target().get().dataSet());
-
+                    // 如果绑定的数据源是VuiForm，那么就需要等待VuiForm执行InitContent后发送InitContent消息才执行
+                    if (target.isPresent() && target.get() instanceof VuiForm && !(sender instanceof VuiForm))
+                        break;
+                    DataSet dataIn = dataIn();
                     ServiceSign svr = callService(dataIn);
                     if (svr.isFail()) {
                         this.canvas().sendMessage(this, SsrMessage.FailOnService, svr.message(), null);
@@ -135,8 +130,7 @@ public class VuiDataService extends VuiComponent implements ISupplierDataRow, IS
                 break;
             var target = this.headIn.target();
             if (target.isPresent()) {
-                DataSet dataIn = new DataSet();
-                dataIn.head().copyValues(target.get().dataRow());
+                DataSet dataIn = dataIn();
                 ServiceSign svr = callService(dataIn);
                 if (svr.isFail()) {
                     binders.sendMessage(this, SsrMessage.FailOnService, svr.message(), null);
@@ -156,6 +150,13 @@ public class VuiDataService extends VuiComponent implements ISupplierDataRow, IS
             break;
         }
         }
+    }
+
+    public DataSet dataIn() {
+        DataSet dataIn = new DataSet();
+        this.headIn.target().ifPresent(headIn -> dataIn.head().copyValues(headIn.dataRow()));
+        this.bodyIn.target().ifPresent(bodyIn -> dataIn.appendDataSet(bodyIn.dataSet()));
+        return dataIn;
     }
 
     protected ServiceSign callService(DataSet dataIn) {
@@ -214,8 +215,13 @@ public class VuiDataService extends VuiComponent implements ISupplierDataRow, IS
         return success_message;
     }
 
-    protected boolean callByInit() {
+    public boolean callByInit() {
         return callByInit;
+    }
+
+    public VuiDataService callByInit(boolean callByInit) {
+        this.callByInit = callByInit;
+        return this;
     }
 
 }

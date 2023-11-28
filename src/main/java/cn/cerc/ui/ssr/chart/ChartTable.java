@@ -180,4 +180,9 @@ public class ChartTable extends VuiAbstractChart {
         html.print(block.html());
     }
 
+    @Override
+    protected SsrBlock block() {
+        return block;
+    }
+
 }
