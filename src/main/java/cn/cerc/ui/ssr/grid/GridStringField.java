@@ -36,9 +36,9 @@ public class GridStringField extends VuiControl implements ISupportGrid {
     @Column
     String field = "";
     @Column
-    public int fieldWidth = 10;
+    int fieldWidth = 10;
     @Column
-    public String align = "";
+    String align = "";
     @Column
     SummaryTypeEnum summaryType = SummaryTypeEnum.无;
     @Column
@@ -121,7 +121,7 @@ public class GridStringField extends VuiControl implements ISupportGrid {
     }
 
     public GridStringField align(AlginEnum align) {
-        body.option("_align", align.name());
+        this.align = align.name();
         return this;
     }
 

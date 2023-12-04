@@ -39,9 +39,9 @@ public class GridNumberField extends VuiControl implements ISupportGrid {
     @Column
     String field = "";
     @Column
-    public int fieldWidth = 10;
+    int fieldWidth = 10;
     @Column
-    public String align = "";
+    String align = "";
     @Column
     String format = "";
     @Column
@@ -136,7 +136,7 @@ public class GridNumberField extends VuiControl implements ISupportGrid {
     }
 
     public GridNumberField align(AlginEnum align) {
-        body.option("_align", align.name());
+        this.align = align.name();
         return this;
     }
 
