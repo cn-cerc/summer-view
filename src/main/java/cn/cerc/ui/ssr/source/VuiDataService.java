@@ -104,7 +104,6 @@ public class VuiDataService extends VuiComponent implements ISupplierDataRow, IS
         case SsrMessage.InitContent: {
             if (this.callByInit) {
                 if (!Utils.isEmpty(this.service.service())) {
-                    long start = System.currentTimeMillis();
                     Optional<ISupplierDataRow> target = this.headIn.target();
                     // 如果绑定的数据源是VuiForm，那么就需要等待VuiForm执行InitContent后发送InitContent消息才执行
                     if (target.isPresent() && target.get() instanceof VuiForm && !(sender instanceof VuiForm))
@@ -166,7 +165,7 @@ public class VuiDataService extends VuiComponent implements ISupplierDataRow, IS
     @Override
     public DataRow dataRow() {
         if (dataSet.size() > 1)
-            log.error("service {} 返回的记录有多笔", this.service);
+            log.warn("service {} 返回的记录有多笔", this.service);
         if (dataSet.size() > 0) {
             dataSet.first();
             return dataSet.current();
