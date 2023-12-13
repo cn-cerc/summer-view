@@ -1,7 +1,6 @@
 package cn.cerc.ui.fields;
 
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 import cn.cerc.db.core.Utils;
@@ -42,13 +41,6 @@ public class OptionField extends AbstractField {
         return this;
     }
 
-    public OptionField copyValues(List<Enum<?>> enums) {
-        for (Enum<?> item : enums) {
-            this.put(String.valueOf(item.ordinal()), item.name());
-        }
-        return this;
-    }
-
     public OptionField copyValues(Enum<?>[] enums) {
         for (Enum<?> item : enums) {
             this.put(String.valueOf(item.ordinal()), item.name());
@@ -59,7 +51,7 @@ public class OptionField extends AbstractField {
     @Override
     public String getString() {
         String result = super.getString();
-        if (result == null || "".equals(result)) {
+        if (result == null || result.isEmpty()) {
             return this.defaultValue;
         }
         return result;
