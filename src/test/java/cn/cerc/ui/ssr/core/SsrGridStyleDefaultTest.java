@@ -209,5 +209,51 @@ public class SsrGridStyleDefaultTest {
                         </table></div>""",
                 grid.toString());
     }
+    
+    @Test
+    public void test6() {
+        var ds = new DataSet();
+        ds.append().setValue("Name_", "张三").setValue("total_", "10");
+        ds.append().setValue("Name_", "李四").setValue("total_", "124");
+        var grid = new VuiGrid(null, "");
+        grid.dataSet(ds);
+        var style = grid.defaultStyle();
+        grid.addBlock(style.getString("姓名", "Name_", 10));
+        grid.addBlock(style.getHidden("余额", "total_"));
+        grid.addColumn("姓名");
+        assertEquals(
+                """
+                        <div id='grid' class='scrollArea'><table class='dbgrid'><tr>
+                        <th style='display: none;'
+                        onclick="gridSort(this,'total_')">余额</th><th style='width: 10em' onclick="gridSort(this,'Name_')">姓名</th></tr>
+                        <tr>
+                        <td align='left' style="display: none;" role='total_'> <input type="text" name="total_" id="1_0" value="10"/> </td><td align='left' role='Name_'>张三</td></tr>
+                        <tr>
+                        <td align='left' style="display: none;" role='total_'> <input type="text" name="total_" id="2_0" value="124"/> </td><td align='left' role='Name_'>李四</td></tr>
+                        </table></div>""",grid.toString());
+    }
+    
+    @Test
+    public void test7() {
+        var ds = new DataSet();
+        ds.append().setValue("Name_", "张三").setValue("total_", "10");
+        ds.append().setValue("Name_", "李四").setValue("total_", "124");
+        var grid = new VuiGrid(null, "");
+        grid.dataSet(ds);
+        var style = grid.defaultStyle();
+        grid.addBlock(style.getString("姓名", "Name_", 10));
+        grid.addBlock(style.getHidden("余额", "total_").readonly());
+        grid.addColumn("姓名");
+        assertEquals(
+                """
+                        <div id='grid' class='scrollArea'><table class='dbgrid'><tr>
+                        <th style='display: none;'
+                        onclick="gridSort(this,'total_')">余额</th><th style='width: 10em' onclick="gridSort(this,'Name_')">姓名</th></tr>
+                        <tr>
+                        <td align='left' style="display: none;" role='total_'> 10 </td><td align='left' role='Name_'>张三</td></tr>
+                        <tr>
+                        <td align='left' style="display: none;" role='total_'> 124 </td><td align='left' role='Name_'>李四</td></tr>
+                        </table></div>""",grid.toString());
+    }
 
 }

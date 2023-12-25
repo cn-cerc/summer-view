@@ -106,6 +106,13 @@ public class SsrGridStyleDefault {
         column.fieldWidth = fieldWidth;
         return column;
     }
+    
+    public GridHiddenField getHidden(String title, String field) {
+        var column = new GridHiddenField();
+        column.title(title);
+        column.field(field);
+        return column;
+    }
 
     public GridGroup getGroup(String title, String field, int fieldWidth) {
         var group = new GridGroup(title, field);
