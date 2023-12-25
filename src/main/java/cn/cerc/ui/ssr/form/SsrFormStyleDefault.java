@@ -73,5 +73,8 @@ public class SsrFormStyleDefault {
     public FormTextareaField getTextarea(String title, String field) {
         return new FormTextareaField(title, field);
     }
-
+    
+    public FormHiddenField getHiddenField(String title, String field) {
+        return new FormHiddenField(title, field);
+    }
 }
