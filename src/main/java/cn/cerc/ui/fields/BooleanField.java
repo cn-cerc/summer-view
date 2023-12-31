@@ -109,16 +109,18 @@ public class BooleanField extends AbstractField implements SearchItem, IFormatCo
         return trueText;
     }
 
-    public void setTrueText(String trueText) {
+    public BooleanField setTrueText(String trueText) {
         this.trueText = trueText;
+        return this;
     }
 
     public String getFalseText() {
         return falseText;
     }
 
-    public void setFalseText(String falseText) {
+    public BooleanField setFalseText(String falseText) {
         this.falseText = falseText;
+        return this;
     }
 
     @Override
