@@ -10,7 +10,11 @@ public class ItField extends AbstractField {
     private static final ClassResource res = new ClassResource(ItField.class, SummerUI.ID);
 
     public ItField(UIComponent owner) {
-        super(owner, res.getString(1, "序"), "_it_", 2);
+        this(owner, 2);
+    }
+    
+    public ItField(UIComponent owner, int width) {
+        super(owner, res.getString(1, "序"), "_it_", width);
         this.setReadonly(true);
         this.setShortName("");
         this.setAlign("center");

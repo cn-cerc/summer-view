@@ -129,6 +129,9 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
             log.error("没有找到dataSet");
             throw new RuntimeException("没有找到dataSet");
         }
+        if (dataStyle != null && dataStyle.getFieldStyle("it") != null) {
+            columnIt = dataStyle.getFieldStyle("it").field();
+        }
         if (columnIt == null)
             columnIt = this.addField("it")
                     .setWidth(2)
