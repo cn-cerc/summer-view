@@ -27,7 +27,7 @@ import cn.cerc.ui.ssr.page.VuiEnvironment;
 import cn.cerc.ui.ssr.source.VuiDataService;
 
 @Component
-@Description("数据组")
+@Description("数据摘要")
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @VuiCommonComponent
 public class ChartGroup extends VuiAbstractChart {
@@ -90,7 +90,7 @@ public class ChartGroup extends VuiAbstractChart {
                     <span>${_msg}</span>
                 </div>
                 ${else}
-                <div class='listBox'>
+                <a class='listBox' ${if _url}href='${_url}'${endif}>
                     <ul>
                     ${dataset.begin}
                         <li>
@@ -99,7 +99,7 @@ public class ChartGroup extends VuiAbstractChart {
                         </li>
                     ${dataset.end}
                     </ul>
-                </div>
+                </a>
                 ${endif}
                 </div>
                 """, title, imageConfig.getCommonFile("images/icon/hide.png"),
@@ -142,9 +142,10 @@ public class ChartGroup extends VuiAbstractChart {
                     String title = this.binder.target().get().serviceDesc();
                     block.option("_data_title", title + this.getClass().getSimpleName());
                     block.option("_title", title);
-                    if (!dataSet.eof())
+                    if (!dataSet.eof()) {
+                        block.option("_url", dataSet.head().getString("url"));
                         block.dataSet(dataSet);
-                    else {
+                    } else {
                         block.option("_noData", "1");
                         block.option("_msg", Utils.isEmpty(dataSet.message()) ? "暂无统计数据" : dataSet.message());
                     }
