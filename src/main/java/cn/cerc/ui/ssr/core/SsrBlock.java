@@ -250,7 +250,7 @@ public class SsrBlock implements ISsrOption {
         // 再查找其它
         else if (dataRow != null && dataRow.exists(field)) {
             if (dataSet != null && dataSet.exists(field))
-                fieldNotFindLog(field, log::warn);
+                fieldNotFindLog(field, false);
             result = dataRow.getText(field);
         } else if (dataSet != null && dataSet.exists(field)) {
             var row = dataSet.currentRow();
