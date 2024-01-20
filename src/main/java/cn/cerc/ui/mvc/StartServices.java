@@ -71,6 +71,12 @@ public class StartServices extends HttpServlet {
 
         // 使用token登录，并获取用户资料与授权数据
         ISession session = Application.getBean(ISession.class);
+        if (session == null) {
+            dataOut.setState(ServiceState.ERROR).setMessage("无效的访问请求，服务器 session 未配置");
+            response.getWriter().write(dataOut.json());
+            return;
+        }
+
         session.setProperty(ISession.REQUEST, request);
         boolean loadToken = session.loadToken(token);
 

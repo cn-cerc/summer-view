@@ -174,7 +174,7 @@ public class StartForms implements Filter {
                     });
 
                     String md5 = MD5.get(builder.toString());
-                    String key = MemoryBuffer.buildKey(SystemBuffer.User.Frequency, md5);
+                    String key = MemoryBuffer.buildKey(SystemBuffer.User.frequency, md5);
                     try (Redis jedis = new Redis()) {
                         if (jedis.setnx(key, "1") == 1) {
                             jedis.expire(key, 1);
