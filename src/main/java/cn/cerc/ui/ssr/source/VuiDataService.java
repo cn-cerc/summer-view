@@ -68,6 +68,10 @@ public class VuiDataService extends VuiComponent implements ISupplierDataRow, IS
         this.service = new EntityServiceRecord(service, service);
     }
 
+    public void service(String service, String serviceDesc) {
+        this.service = new EntityServiceRecord(service, serviceDesc);
+    }
+
     public String service() {
         return this.service.service();
     }
