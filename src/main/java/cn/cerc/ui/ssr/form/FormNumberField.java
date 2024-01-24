@@ -52,8 +52,7 @@ public class FormNumberField extends VuiControl implements ISupportField {
     @Column
     String pattern = "[\\d\\.]+";
     /**
-     * 步进值
-     * https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/input/number#step
+     * <a href="https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/input/number#step">步进值</a>
      * <br>
      * 如果要输入任意个小数位，赋值为 any
      */

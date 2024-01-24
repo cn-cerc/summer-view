@@ -208,7 +208,6 @@ public class VuiBoard extends VuiContainer<ISupportBlock> implements ISsrBoard {
     /**
      * 请改使用 columns
      * 
-     * @return
      */
     @Deprecated
     public List<String> fields() {

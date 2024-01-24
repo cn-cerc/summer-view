@@ -17,9 +17,7 @@ import cn.cerc.ui.ssr.editor.ISsrBoard;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @VuiCommonComponent
 @Deprecated
-/**
- * 请改用GridGroup
- */
+// 请改用GridGroup
 public class GridColumn extends VuiContainer<ISupportGridColumn> implements ISupportGrid, Supplier<String> {
     private SsrBlock head = new SsrBlock();
     private SsrBlock body = new SsrBlock();

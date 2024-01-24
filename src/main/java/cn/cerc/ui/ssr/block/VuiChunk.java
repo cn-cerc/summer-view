@@ -165,7 +165,6 @@ public class VuiChunk extends VuiContainer<ISupportBoard> implements ISsrBoard, 
     /**
      * 请改使用 defaultStyle()
      * 
-     * @return
      */
     @Deprecated
     public SsrBlockStyleDefault createDefaultStyle() {

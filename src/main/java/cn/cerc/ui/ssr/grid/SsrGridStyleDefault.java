@@ -66,11 +66,6 @@ public class SsrGridStyleDefault {
 
     /**
      * 请改使用 getBoolean
-     * 
-     * @param title
-     * @param field
-     * @param fieldWidth
-     * @return
      */
     @Deprecated
     public GridCheckBoxField getCheckBox(String title, String field, int fieldWidth) {

@@ -76,9 +76,7 @@ public class SsrUtils {
     }
 
     /**
-     * 
-     * @param templateText
-     * @return 根据模版创建 ssr 节点
+     * 根据模版创建 ssr 节点
      */
     public static ArrayList<ISsrNode> createNodes(String templateText) {
         var nodes = new ArrayList<ISsrNode>();
@@ -129,9 +127,6 @@ public class SsrUtils {
     }
 
     /**
-     * 
-     * @param class1
-     * @param id
      * @return 查找类所在目录下的同名文件，并返回相应的html文件内容
      */
     public static String getTempateFileText(Class<?> class1, String id) {

@@ -52,9 +52,6 @@ public class SsrBlock implements ISsrOption {
 
     /**
      * 请改使用 toMap
-     * 
-     * @param map
-     * @return
      */
     @Deprecated
     public SsrBlock setMap(Map<String, String> map) {
@@ -295,9 +292,6 @@ public class SsrBlock implements ISsrOption {
 
     /**
      * 固定当前查询字段（不会出现在配置列表中）
-     * 
-     * @param form
-     * @return
      */
     public SsrBlock fixed(ISsrBoard form) {
         this.option("option", null);
@@ -362,9 +356,6 @@ public class SsrBlock implements ISsrOption {
 
     /**
      * 请改使用 toList
-     * 
-     * @param enums
-     * @return
      */
     @Deprecated
     public SsrBlock toMap(Enum<?>[] enums) {

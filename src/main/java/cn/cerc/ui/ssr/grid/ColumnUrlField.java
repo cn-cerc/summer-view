@@ -17,9 +17,7 @@ import cn.cerc.ui.ssr.core.VuiControl;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @VuiCommonComponent
 @Deprecated
-/**
- * 请改用GridGroup+GridStringField
- */
+// 请改用GridGroup+GridStringField
 public class ColumnUrlField extends VuiControl implements ISupportGridColumn {
     private DataSet dataSet;
     @Column(name = "描述文字")

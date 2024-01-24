@@ -87,8 +87,6 @@ public class DataGrid extends UIComponent implements DataSetSource, IGridStyle {
 
     /**
      * 请改使用 getDataSet 函数
-     * 
-     * @return
      */
     @Deprecated
     public IRecord current() {

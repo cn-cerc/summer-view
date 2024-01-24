@@ -23,7 +23,7 @@ public class SsrMessage {
     /** 请求准备数据 */
     public static final int InitContent = 101;
 
-    /** 以下为 VuiForm 事件 */
+    // 以下为 VuiForm 事件
     /** 在 readAll 返回为真时发出 */
     public static final int AfterSubmit = 200;
     /** 在 appendComponent 时发出 */

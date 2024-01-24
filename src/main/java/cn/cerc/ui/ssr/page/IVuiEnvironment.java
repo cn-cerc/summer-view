@@ -10,23 +10,16 @@ import cn.cerc.ui.ssr.core.VuiComponent;
 public interface IVuiEnvironment {
     /**
      * 从数据库读取页面属性
-     * 
-     * @return
      */
     String loadProperties();
 
     /**
      * 将页面属性存入到数据库
-     * 
-     * @param jsonProperties
      */
     void saveProperties(String jsonProperties);
 
     /**
      * 对指定的组件附加组件，一般用于客制化
-     * 
-     * @param ownerClass
-     * @param customClass
      */
     void attachClass(Class<? extends VuiComponent> ownerClass, Class<? extends VuiComponent> customClass);
 
@@ -34,10 +27,6 @@ public interface IVuiEnvironment {
 
     /**
      * 对指定的组件附加数据，一般用于客制化
-     * 
-     * @param ownerClass
-     * @param sourceId
-     * @param source
      */
     void attachData(Class<? extends VuiComponent> ownerClass, String sourceId, Object source);
 

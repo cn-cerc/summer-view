@@ -54,8 +54,6 @@ public abstract class AbstractGridLine extends UIComponent implements DataSetSou
 
     /**
      * 请改使用source函数
-     * 
-     * @return
      */
     @Deprecated
     public IRecord current() {

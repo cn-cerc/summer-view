@@ -108,7 +108,6 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
     /**
      * 注册dataSet中的字段，若不存在则自动于dataSet中增加
      * 
-     * @param fieldCode
      * @return 返回 dataSet.fields(fieldCode)
      */
     public FieldStyleDefine addField(String fieldCode) {

@@ -175,7 +175,6 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
     /**
      * 返回搜索页范例
      *
-     * @return
      */
     protected String getSampleData(String pageCode) {
         return "{}";
@@ -530,7 +529,6 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
     /**
      * 在此可以插入自定义业务逻辑
      *
-     * @param onMessage
      */
     public void onMessage(ISsrMessage onMessage) {
         this.onMessage = onMessage;

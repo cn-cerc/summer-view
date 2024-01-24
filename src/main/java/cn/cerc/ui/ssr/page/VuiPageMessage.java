@@ -18,11 +18,11 @@ import cn.cerc.ui.ssr.editor.SsrMessage;
 
 /**
  * 用于监听页面服务发送的消息并将消息放入Redis中，达成页面跳转传递消息
- * 
+ * <p>
  * 需保证两个页面的key相同
- * 
+ * <p>
  * ${CorpNo} handle.getCorpNo()
- * 
+ * <p>
  * ${UserCode} handle.getUserCode()
  * 
  */
