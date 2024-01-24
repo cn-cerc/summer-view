@@ -25,7 +25,7 @@ public class SsrFormStyleDefaultTest {
         assertEquals(
                 """
                         <form method='post' action='' id='form1' role='search'><ul><li >
-                        <label for="SearchText_" ><em>查询条件</em></label>
+                        <label title="查询条件" for="SearchText_" ><em>查询条件</em></label>
                         <div> <input type="text" name="SearchText_" id="SearchText_" value="小" autocomplete="off"  placeholder="请输入查询条件" /> <span role="suffix-icon"></span>
                         </div>
                         </li></ul></form>""",
@@ -43,7 +43,7 @@ public class SsrFormStyleDefaultTest {
         assertEquals(
                 """
                         <form method='post' action='' id='form1' role='search'><ul><li >
-                        <label for="SearchText_" ><em>查询条件</em></label>
+                        <label title="查询条件" for="SearchText_" ><em>查询条件</em></label>
                         <div> <input type="text" name="SearchText_" id="SearchText_" value="小" autocomplete="off"  placeholder="请点击获取查询条件" /> <span role="suffix-icon"><a href="javascript:showDateDialog('SearchText_')"><img src="null" /></a></span>
                         </div>
                         </li></ul></form>""",
@@ -63,7 +63,7 @@ public class SsrFormStyleDefaultTest {
                 <div role="switch">
                 <input autocomplete="off" name="null_able_" id="null_able_" type="checkbox" value="1" />
                 </div>
-                <label for="null_able_" ><em>是否可为空</em></label>
+                <label title="是否可为空" for="null_able_" ><em>是否可为空</em></label>
                 </li></ul></form>""", form.toString());
     }
 
@@ -78,7 +78,7 @@ public class SsrFormStyleDefaultTest {
         assertEquals(
                 """
                         <form method='post' action='' id='form1' role='search'><ul><li >
-                        <label for="status_" ><em>单据状态</em></label>
+                        <label title="单据状态" for="status_" ><em>单据状态</em></label>
                         <div> <select id="status_" name="status_" >  <option value="0" >全部</option><option value="1" selected >待审核</option><option value="2" >已审核</option></select> <span role="suffix-icon"></span>
                         </div>
                         </li></ul></form>""",
@@ -96,7 +96,7 @@ public class SsrFormStyleDefaultTest {
         assertEquals(
                 """
                         <form method='post' action='' id='form1' role='search'><ul><li >
-                        <label for="code__name"><em>制单人员</em></label>
+                        <label title="制单人员" for="code__name"><em>制单人员</em></label>
                         <div>
                         <input type="hidden" name="code_" id="code_" value="CW001"/>
                         <input type="text" name="code__name" id="code__name" value="张三" autocomplete="off" placeholder="请点击获取制单人员" readonly />
@@ -121,7 +121,7 @@ public class SsrFormStyleDefaultTest {
         assertEquals(
                 """
                         <form method='post' action='' id='form1' role='search'><ul><li >
-                        <label for="start_date_"><em>起始日期</em></label>
+                        <label title="起始日期" for="start_date_"><em>起始日期</em></label>
                         <div>
                         <input type="text" name="start_date_" id="start_date_" value="2022-11-02" autocomplete="off"  placeholder="请点击获取起始日期" />
                         <span role="suffix-icon">
@@ -145,7 +145,7 @@ public class SsrFormStyleDefaultTest {
         assertEquals(
                 """
                         <form method='post' action='' id='form1' role='search'><ul><li >
-                        <label for="start_time_"><em>起始时间</em></label>
+                        <label title="起始时间" for="start_time_"><em>起始时间</em></label>
                         <div>
                         <input type="text" name="start_time_" id="start_time_" value="2022-11-02 11:23:21" autocomplete="off"  placeholder="请点击获取起始时间" />
                         <span role="suffix-icon">
@@ -169,7 +169,7 @@ public class SsrFormStyleDefaultTest {
         assertEquals(
                 """
                         <form method='post' action='' id='form1' role='search'><ul><li >
-                        <label for="start_date_"><em>单据日期</em></label>
+                        <label title="单据日期" for="start_date_"><em>单据日期</em></label>
                         <div class="dateArea">
                         <input autocomplete="off" name="start_date_" id="start_date_" type="text" class="dateAreaInput" value="2022-11-02"  />
                         <span>/</span>
@@ -194,7 +194,7 @@ public class SsrFormStyleDefaultTest {
         form.strict(false);
         assertEquals("""
                 <form method='post' action='' id='form1' role='search'><ul><li >
-                <label for="address_"><em>详细地址</em></label>
+                <label title="详细地址" for="address_"><em>详细地址</em></label>
                 <div>
                 <textarea name="address_" id="address_" >宏宇商务大厦686</textarea>
                 <span role="suffix-icon"></span>
@@ -220,11 +220,11 @@ public class SsrFormStyleDefaultTest {
         assertEquals(
                 """
                         <form method='post' action='' id='form1' role='search'><ul><li >
-                        <label for="type_" ><em>单据类型</em></label>
+                        <label title="单据类型" for="type_" ><em>单据类型</em></label>
                         <div> <select id="type_" name="type_" >  <option value="0" >草稿</option><option value="1" selected >生效</option><option value="2" >作废</option></select> <span role="suffix-icon"></span>
                         </div>
                         </li><li >
-                        <label for="type2_" ><em>运单类型</em></label>
+                        <label title="运单类型" for="type2_" ><em>运单类型</em></label>
                         <div> <select id="type2_" name="type2_" > <option value="1" >草稿</option><option value="2" >生效</option><option value="3" selected >作废</option></select> <span role="suffix-icon"></span>
                         </div>
                         </li></ul></form>""",
@@ -241,7 +241,7 @@ public class SsrFormStyleDefaultTest {
         assertEquals(
                 """
                         <li >
-                        <label for="name" ><em>姓名</em></label>
+                        <label title="姓名" for="name" ><em>姓名</em></label>
                         <div> <input type="text" name="name" id="name" value="" autocomplete="off" readonly autofocus  placeholder="请输入姓名" /> <span role="suffix-icon"></span>
                         </div>
                         </li>""",
@@ -258,13 +258,13 @@ public class SsrFormStyleDefaultTest {
         assertEquals(
                 """
                         <li >
-                        <label for="name" ><em>姓名</em></label>
+                        <label title="姓名" for="name" ><em>姓名</em></label>
                         <div> <input type="text" name="name" id="name" value="" autocomplete="off"  placeholder="请输入姓名" /> <span role="suffix-icon"><a href="javascript:initExpand('name')"><img src="null" /></a></span>
                         </div>
                         </li>""",
                 stringField.block().html());
     }
-    
+
     @Test
     public void test_13() {
         var row = new DataRow();
@@ -273,7 +273,9 @@ public class SsrFormStyleDefaultTest {
         form.dataRow(row);
         var style = form.defaultStyle();
         form.addBlock(style.getHiddenField("姓名", "name_"));
-        assertEquals("<form method='post' action='' id='form1' role='search'><ul><input type=\"hidden\" name=\"name_\" id=\"name_\" value=\"a01\" /></ul></form>", form.toString());
+        assertEquals(
+                "<form method='post' action='' id='form1' role='search'><ul><input type=\"hidden\" name=\"name_\" id=\"name_\" value=\"a01\" /></ul></form>",
+                form.toString());
     }
 
 }

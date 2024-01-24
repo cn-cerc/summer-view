@@ -110,7 +110,7 @@ public class FormCodeNameField extends VuiControl implements ISupportField {
                 block.text(String.format(
                         """
                                 <li ${if _style}style='${_style}'${endif}>
-                                    <label for="%s"><em>%s</em></label>
+                                    <label title="%s" for="%s"><em>%s</em></label>
                                     <div>
                                         <input type="hidden" name="%s" id="%s" value="${%s}"/>
                                         <input type="text" name="%s" id="%s" value="${%s}" autocomplete="off" placeholder="请点击获取%s" ${if _readonly}readonly ${endif}/>
@@ -122,8 +122,8 @@ public class FormCodeNameField extends VuiControl implements ISupportField {
                                     </div>
                                 </li>
                                 """,
-                        nameField, title, codeField, codeField, codeField, nameField, nameField, nameField, title,
-                        fieldDialogIcon)));
+                        title, nameField, title, codeField, codeField, codeField, nameField, nameField, nameField,
+                        title, fieldDialogIcon)));
         block().option("_readonly", this.readonly ? "1" : "");
         block().option("_style", this.properties("v_style").orElse(""));
         block.option("_dialog", this.dialog);

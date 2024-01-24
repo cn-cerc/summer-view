@@ -85,7 +85,7 @@ public class FormDateRangeField extends VuiControl implements ISupportField {
         String endDate = this.endField;
         form.addBlock(title, block.text(String.format("""
                     <li ${if _style}style='${_style}'${endif}>
-                    <label for="start_date_"><em>%s</em></label>
+                    <label title="%s" for="start_date_"><em>%s</em></label>
                     <div class="dateArea">
                         <input autocomplete="off" name="%s" id="%s" type="text" class="dateAreaInput" value="${%s}"
                         ${if _pattern}pattern="${_pattern}" ${endif}${if _required}required ${endif}
@@ -101,7 +101,7 @@ public class FormDateRangeField extends VuiControl implements ISupportField {
                         </span>
                     </div>
                 </li>
-                """, title, beginDate, beginDate, beginDate, endDate, endDate, endDate, beginDate, endDate,
+                """, title, title, beginDate, beginDate, beginDate, endDate, endDate, endDate, beginDate, endDate,
                 dateDialogIcon)));
         block().option("_placeholder", this.placeholder);
         block().option("_readonly", this.readonly ? "1" : "");

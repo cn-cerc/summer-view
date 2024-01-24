@@ -240,11 +240,11 @@ public class DataGrid extends UIComponent implements DataSetSource, IGridStyle {
             if (field.getWidth() == 0) {
                 html.print(" style=\"display:none\"");
             } else {
-                String val = String.format(" width=\"%f%%\"",
-                        Utils.roundTo(field.getWidth() / sumFieldWidth * 100, -2));
+                String val = String.format(" width=\"%f%%\" title=\"%s\"",
+                        Utils.roundTo(field.getWidth() / sumFieldWidth * 100, -2), field.getName());
                 if (this.widthInNum)
-                    val = String.format(" style=\"width: %sem\" data-fixed=\"%s\" title=\"\"", field.getWidth(),
-                            field.getWidth());
+                    val = String.format(" style=\"width: %sem\" data-fixed=\"%s\" title=\"%s\"", field.getWidth(),
+                            field.getWidth(), field.getName());
                 html.print(val);
 
             }
@@ -253,7 +253,7 @@ public class DataGrid extends UIComponent implements DataSetSource, IGridStyle {
             }
             html.print("onclick=\"gridSort(this,'%s')\"", field.getField());
             html.print(">");
-            html.print(field.getName());
+            html.print("<div>%s</div>", field.getName());
             html.println("</th>");
         }
         html.println("</tr>");
