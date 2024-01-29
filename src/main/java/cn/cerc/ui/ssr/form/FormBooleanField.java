@@ -59,10 +59,10 @@ public class FormBooleanField extends VuiControl implements ISupportField {
                                     <div role="switch">
                                         <input autocomplete="off" name="%s" id="%s" type="checkbox" value="1" ${if %s}checked ${endif}${if _readonly}disabled ${endif}/>
                                     </div>
-                                    <label title="%s" for="%s" ${if _mark}class='formMark' ${endif}><em>%s</em></label>
+                                    <label for="%s" ${if _mark}class='formMark' ${endif}><em>%s</em></label>
                                 </li>
                                         """,
-                        field, field, field, title, field, title)));
+                        field, field, field, field, title)));
         block().option("_mark", this.mark);
         block.option("_readonly", this.readonly ? "1" : "");
         block.option("_required", this.required ? "1" : "");

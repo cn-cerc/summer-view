@@ -88,7 +88,7 @@ public class FormDatetimeField extends VuiControl implements ISupportField {
                 block.text(String.format(
                         """
                                 <li ${if _style}style='${_style}'${endif}>
-                                    <label title="%s" for="%s"><em>%s</em></label>
+                                    <label for="%s"><em>%s</em></label>
                                     <div>
                                         <input type="text" name="%s" id="%s" value="${%s}" autocomplete="off" ${if _readonly}readonly ${endif}${if _autofocus}autofocus ${endif}
                                         ${if _placeholder}placeholder="${_placeholder}" ${else}placeholder="请点击获取%s" ${endif}${if _pattern}pattern="${_pattern}" ${endif}${if _required}required ${endif}/>
@@ -100,7 +100,7 @@ public class FormDatetimeField extends VuiControl implements ISupportField {
                                     </div>
                                 </li>
                                 """,
-                        title, field, title, field, field, field, title, dialog, field, dateDialogIcon)));
+                        field, title, field, field, field, title, dialog, field, dateDialogIcon)));
         block().option("_placeholder", this.placeholder);
         block().option("_readonly", this.readonly ? "1" : "");
         block().option("_required", this.required ? "1" : "");
