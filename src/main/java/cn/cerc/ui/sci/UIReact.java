@@ -55,7 +55,7 @@ public class UIReact extends UIComponent {
     }
 
     protected String getStaticFile(String filename) {
-        return StaticFile.getProductJsFile(filename);
+        return StaticFile.getJsFile(filename);
     }
 
     public class UIScriptContent extends UIComponent {
