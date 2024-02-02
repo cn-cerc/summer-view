@@ -190,9 +190,14 @@ public class StartForms implements Filter {
             }
         }
 
-        FormSign sv = new FormSign(childCode);
-        String viewId = factory.getView(handle, req, resp, sv.getId(), sv.getValue());
-        factory.outputView(req, resp, viewId);
+        try {
+            FormSign sv = new FormSign(childCode);
+            String viewId = factory.getView(handle, req, resp, sv.getId(), sv.getValue());
+            factory.outputView(req, resp, viewId);
+        } catch (Exception e) {
+            // url 解析失败直接返回 404 页面
+            resp.sendError(HttpServletResponse.SC_NOT_FOUND);
+        }
     }
 
     public static String getRequestCode(HttpServletRequest req) {
