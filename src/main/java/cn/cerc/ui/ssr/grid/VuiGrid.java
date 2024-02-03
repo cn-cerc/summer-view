@@ -145,6 +145,7 @@ public class VuiGrid extends VuiContainer<ISupportGrid>
         }
 
         getBlock(SsrTemplate.BeginFlag).ifPresent(template -> html.print(template.html()));
+        html.println("<script>$(function() { initGrid() });</script>");
         getTemplate(TableBegin, getDefault_TableBegin()).ifPresent(value -> html.print(value.html()));
 
         // 输出标题

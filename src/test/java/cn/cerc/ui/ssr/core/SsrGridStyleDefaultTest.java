@@ -39,6 +39,7 @@ public class SsrGridStyleDefaultTest {
         grid.addColumn("序", "部门名称", "状态", "类别", "操作");
         assertEquals(
                 """
+                        <script>$(function() { initGrid() });</script>
                         <div id='grid' class='scrollArea'><table class='dbgrid'><tr>
                         <th style='width: 2em' onclick="gridSort(this,'_it_')">序</th><th style='width: 10em' onclick="gridSort(this,'Name_')">部门名称</th><th style='width: 4em' onclick="gridSort(this,'Final_')">状态</th><th style='width: 10em' onclick="gridSort(this,'Type_')">类别</th><th style='width: 4em' onclick="gridSort(this,'_opera_')">操作</th></tr>
                         <tr>
@@ -73,6 +74,7 @@ public class SsrGridStyleDefaultTest {
         grid.addColumn("序", "车辆名称", "类别", "操作");
         assertEquals(
                 """
+                        <script>$(function() { initGrid() });</script>
                         <div id='grid' class='scrollArea'><table class='dbgrid'><tr>
                         <th style='width: 2em' onclick="gridSort(this,'_it_')">序</th><th style='width: 10em' onclick="gridSort(this,'Name_')">车辆名称</th><th style='width: 10em' onclick="gridSort(this,'Type_')">类别</th><th style='width: 4em' onclick="gridSort(this,'_opera_')">操作</th></tr>
                         <tr>
@@ -109,6 +111,7 @@ public class SsrGridStyleDefaultTest {
         grid.addColumn("序", "部门名称", "状态", "类别", "操作");
         assertEquals(
                 """
+                        <script>$(function() { initGrid() });</script>
                         <div id='grid' class='scrollArea'><table class='dbgrid'><tr>
                         <th style='width: 2em' onclick="gridSort(this,'_it_')">序</th><th style='width: 10em' onclick="gridSort(this,'Name_')">部门名称</th><th style='width: 4em' onclick="gridSort(this,'Final_')">状态</th><th style='width: 10em' onclick="gridSort(this,'Type_')">类别</th><th style='width: 4em' onclick="gridSort(this,'_opera_')">操作</th></tr>
                         <tr>
@@ -139,6 +142,7 @@ public class SsrGridStyleDefaultTest {
         grid.addColumn("姓名", "性别");
         assertEquals(
                 """
+                        <script>$(function() { initGrid() });</script>
                         <div id='grid' class='scrollArea'><table class='dbgrid'><tr>
                         <th style='width: 10em' onclick="gridSort(this,'Name_')">姓名</th><th style='width: 4em' onclick="gridSort(this,'Sex_')">性别</th></tr>
                         <tr>
@@ -173,6 +177,7 @@ public class SsrGridStyleDefaultTest {
 
         grid.addColumn("姓名-性别");
         assertEquals("""
+                <script>$(function() { initGrid() });</script>
                 <div id='grid' class='scrollArea'><table class='dbgrid'><tr>
                 <th style='width: 10em'>姓名-性别</th></tr>
                 <tr>
@@ -200,6 +205,7 @@ public class SsrGridStyleDefaultTest {
         grid.addColumn("数量", "合计");
         assertEquals(
                 """
+                        <script>$(function() { initGrid() });</script>
                         <div id='grid' class='scrollArea'><table class='dbgrid'><tr>
                         <th style='width: 10em' onclick="gridSort(this,'Num_')">数量</th><th style='width: 10em' onclick="gridSort(this,'total_')">合计</th></tr>
                         <tr>
@@ -223,6 +229,7 @@ public class SsrGridStyleDefaultTest {
         grid.addColumn("姓名");
         assertEquals(
                 """
+                        <script>$(function() { initGrid() });</script>
                         <div id='grid' class='scrollArea'><table class='dbgrid'><tr>
                         <th style='display: none;'
                         onclick="gridSort(this,'total_')">余额</th><th style='width: 10em' onclick="gridSort(this,'Name_')">姓名</th></tr>
@@ -246,6 +253,7 @@ public class SsrGridStyleDefaultTest {
         grid.addColumn("姓名");
         assertEquals(
                 """
+                        <script>$(function() { initGrid() });</script>
                         <div id='grid' class='scrollArea'><table class='dbgrid'><tr>
                         <th style='display: none;'
                         onclick="gridSort(this,'total_')">余额</th><th style='width: 10em' onclick="gridSort(this,'Name_')">姓名</th></tr>

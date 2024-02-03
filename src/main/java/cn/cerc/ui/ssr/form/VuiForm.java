@@ -138,6 +138,7 @@ public class VuiForm extends VuiContainer<ISupportForm>
             this.columns = this.dataRow().fields().names();
 
         getBlock(SsrTemplate.BeginFlag).ifPresent(template -> html.print(template.html()));
+        html.println("<script>$(function() { initForm('#%s') });</script>", getId());
         var top = getBlock(FormBegin, getDefault_FormBegin()).get();
         if (this.template.id() != null) {
             top.option(ISsrOption.TemplateId, this.template.id());

@@ -24,6 +24,7 @@ public class SsrFormStyleDefaultTest {
         form.strict(false);
         assertEquals(
                 """
+                        <script>$(function() { initForm('#form1') });</script>
                         <form method='post' action='' id='form1' role='search'><ul><li >
                         <label for="SearchText_" ><em>查询条件</em></label>
                         <div> <input type="text" name="SearchText_" id="SearchText_" value="小" autocomplete="off"  placeholder="请输入查询条件" /> <span role="suffix-icon"></span>
@@ -42,6 +43,7 @@ public class SsrFormStyleDefaultTest {
         form.strict(false);
         assertEquals(
                 """
+                        <script>$(function() { initForm('#form1') });</script>
                         <form method='post' action='' id='form1' role='search'><ul><li >
                         <label for="SearchText_" ><em>查询条件</em></label>
                         <div> <input type="text" name="SearchText_" id="SearchText_" value="小" autocomplete="off"  placeholder="请点击获取查询条件" /> <span role="suffix-icon"><a href="javascript:showDateDialog('SearchText_')"><img src="null" /></a></span>
@@ -59,6 +61,7 @@ public class SsrFormStyleDefaultTest {
         form.addColumn("是否可为空");
         form.strict(false);
         assertEquals("""
+                <script>$(function() { initForm('#form1') });</script>
                 <form method='post' action='' id='form1' role='search'><ul><li >
                 <div role="switch">
                 <input autocomplete="off" name="null_able_" id="null_able_" type="checkbox" value="1" />
@@ -77,6 +80,7 @@ public class SsrFormStyleDefaultTest {
         form.strict(false);
         assertEquals(
                 """
+                        <script>$(function() { initForm('#form1') });</script>
                         <form method='post' action='' id='form1' role='search'><ul><li >
                         <label for="status_" ><em>单据状态</em></label>
                         <div> <select id="status_" name="status_" >  <option value="0" >全部</option><option value="1" selected >待审核</option><option value="2" >已审核</option></select> <span role="suffix-icon"></span>
@@ -95,6 +99,7 @@ public class SsrFormStyleDefaultTest {
         form.strict(false);
         assertEquals(
                 """
+                        <script>$(function() { initForm('#form1') });</script>
                         <form method='post' action='' id='form1' role='search'><ul><li >
                         <label for="code__name"><em>制单人员</em></label>
                         <div>
@@ -120,6 +125,7 @@ public class SsrFormStyleDefaultTest {
         form.strict(false);
         assertEquals(
                 """
+                        <script>$(function() { initForm('#form1') });</script>
                         <form method='post' action='' id='form1' role='search'><ul><li >
                         <label for="start_date_"><em>起始日期</em></label>
                         <div>
@@ -144,6 +150,7 @@ public class SsrFormStyleDefaultTest {
         form.strict(false);
         assertEquals(
                 """
+                        <script>$(function() { initForm('#form1') });</script>
                         <form method='post' action='' id='form1' role='search'><ul><li >
                         <label for="start_time_"><em>起始时间</em></label>
                         <div>
@@ -168,6 +175,7 @@ public class SsrFormStyleDefaultTest {
         form.strict(false);
         assertEquals(
                 """
+                        <script>$(function() { initForm('#form1') });</script>
                         <form method='post' action='' id='form1' role='search'><ul><li >
                         <label for="start_date_"><em>单据日期</em></label>
                         <div class="dateArea">
@@ -193,6 +201,7 @@ public class SsrFormStyleDefaultTest {
         form.addColumn("详细地址");
         form.strict(false);
         assertEquals("""
+                <script>$(function() { initForm('#form1') });</script>
                 <form method='post' action='' id='form1' role='search'><ul><li >
                 <label for="address_"><em>详细地址</em></label>
                 <div>
@@ -219,6 +228,7 @@ public class SsrFormStyleDefaultTest {
         form.strict(false);
         assertEquals(
                 """
+                        <script>$(function() { initForm('#form1') });</script>
                         <form method='post' action='' id='form1' role='search'><ul><li >
                         <label for="type_" ><em>单据类型</em></label>
                         <div> <select id="type_" name="type_" >  <option value="0" >草稿</option><option value="1" selected >生效</option><option value="2" >作废</option></select> <span role="suffix-icon"></span>
@@ -273,7 +283,10 @@ public class SsrFormStyleDefaultTest {
         form.dataRow(row);
         var style = form.defaultStyle();
         form.addBlock(style.getHiddenField("姓名", "name_"));
-        assertEquals("<form method='post' action='' id='form1' role='search'><ul><input type=\"hidden\" name=\"name_\" id=\"name_\" value=\"a01\" /></ul></form>", form.toString());
+        assertEquals("""
+                <script>$(function() { initForm('#form1') });</script>
+                <form method='post' action='' id='form1' role='search'><ul><input type=\"hidden\" name=\"name_\" id=\"name_\" value=\"a01\" /></ul></form>
+                """, form.toString());
     }
 
 }

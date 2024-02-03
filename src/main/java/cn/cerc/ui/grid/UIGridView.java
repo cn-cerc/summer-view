@@ -145,6 +145,7 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
         if (!this.active())
             return;
         if (!this.init && this.dataSet != null) {
+            html.println("<script>$(function() { initGrid() });</script>");
             for (FieldMeta meta : fields) {
                 FieldStyleDefine styleDefine = this.items.get(meta.code());
                 if (styleDefine != null && styleDefine.name() != null)
