@@ -212,7 +212,8 @@ public class DataGrid extends UIComponent implements DataSetSource, IGridStyle {
 
     private void outputWebGrid(HtmlWriter html) {
         html.println("<script>$(function() { initGrid() });</script>");
-        html.println("<div role='aui-table-title'><b>%s</b></div>", this.gridTitle);
+        if (Utils.isNotEmpty(this.gridTitle))
+            html.println("<div role='aui-table-title'><b>%s</b></div>", this.gridTitle);
         html.print("<table class=\"%s\"", this.gridCssClass);
         html.println(" role=\"%s\"", this.widthInNum ? "fixed" : "default");
         if (this.gridCssStyle != null) {
