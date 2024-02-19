@@ -240,7 +240,7 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
             }
             writer.print("</div>");
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("error {}", e.getMessage(), e);
         }
         return null;
     }
@@ -294,7 +294,7 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
             }
             writer.print(root.toString());
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("error {}", e.getMessage(), e);
         }
         return null;
     }
@@ -308,7 +308,7 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
             writer = handle.getSession().getResponse().getWriter();
             writer.print(loadProperties());
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("error {}", e.getMessage(), e);
         }
         return null;
     }
@@ -326,7 +326,7 @@ public abstract class VuiEnvironment implements IVuiEnvironment {
             writer = response.getWriter();
             writer.print(json);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("error {}", e.getMessage(), e);
         }
         return null;
     }

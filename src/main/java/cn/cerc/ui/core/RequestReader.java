@@ -240,7 +240,7 @@ public class RequestReader {
                 log.warn("暂不支持的数据字段类型：{}({})", field.getClass().getSimpleName(), field.getName());
             }
         } catch (IllegalArgumentException | IllegalAccessException e) {
-            e.printStackTrace();
+            log.error("error {}", e.getMessage(), e);
         }
     }
 

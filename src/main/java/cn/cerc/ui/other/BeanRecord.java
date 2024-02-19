@@ -7,11 +7,15 @@ import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import cn.cerc.db.core.ClassResource;
 import cn.cerc.db.core.DataRow;
 import cn.cerc.ui.SummerUI;
 
 public class BeanRecord<T> implements AutoCloseable, BuildRecord {
+    private static final Logger log = LoggerFactory.getLogger(BeanRecord.class);
     private static final ClassResource res = new ClassResource(BeanRecord.class, SummerUI.ID);
 
     private Map<Field, Method> gets = new HashMap<>();
@@ -66,7 +70,7 @@ public class BeanRecord<T> implements AutoCloseable, BuildRecord {
             // log.info(gets.size());
             // log.info(sets.size());
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("error {}", e.getMessage(), e);
         } finally {
             items0.clear();
             items1.clear();
@@ -83,7 +87,7 @@ public class BeanRecord<T> implements AutoCloseable, BuildRecord {
                 record.setValue(field, value);
             }
         } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-            e.printStackTrace();
+            log.error("error {}", e.getMessage(), e);
         }
     }
 

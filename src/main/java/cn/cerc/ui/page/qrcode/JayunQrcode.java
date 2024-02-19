@@ -122,7 +122,7 @@ public class JayunQrcode {
             writer = response.getWriter();
             writer.print(msg);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("error {}", e.getMessage(), e);
         }
     }
 

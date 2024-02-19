@@ -114,7 +114,7 @@ public class JayunAPI {
         } catch (Exception e) {
             log.error("请求的网址不存在，或服务暂停使用中");
             this.message = e.getMessage();
-            e.printStackTrace();
+            log.error("error {}", e.getMessage(), e);
         }
     }
 

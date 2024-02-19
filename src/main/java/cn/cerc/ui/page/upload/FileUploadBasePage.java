@@ -7,6 +7,9 @@ import java.net.URL;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import cn.cerc.mis.core.AbstractForm;
 import cn.cerc.mis.core.IPage;
 
@@ -14,6 +17,7 @@ import cn.cerc.mis.core.IPage;
  * 文件上传基类
  */
 public abstract class FileUploadBasePage extends AbstractForm {
+    private static final Logger log = LoggerFactory.getLogger(FileUploadBasePage.class);
 
     /**
      * 导航栏
@@ -184,7 +188,7 @@ public abstract class FileUploadBasePage extends AbstractForm {
             conn.connect();
             return conn.getInputStream();
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("error {}", e.getMessage(), e);
         }
         return null;
     }
