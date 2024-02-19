@@ -62,7 +62,7 @@ public class ChartRing extends VuiAbstractChart {
     public SsrBlock request(ISsrBoard owner) {
         block.text(String.format(
                 """
-                        <div role='chart' data-title='${_data_title}' class='flex${_width}'>
+                        <div role='chart' data-title='${_data_title}' class='flex${_width}' data-height="${_height}">
                             <div class='chartTitle'>${_title}</div>
                             ${if _show_eye}
                                 <div class='opera' title='隐藏此图表' onclick='hideChart("${_templateId}", "%s")'><img src='%s' /></div>
@@ -74,6 +74,7 @@ public class ChartRing extends VuiAbstractChart {
                 title, imageConfig.getCommonFile("images/icon/hide.png")));
         block.id(title).display(display_option.ordinal());
         block.option("_width", String.valueOf(width));
+        block.option("_height", String.valueOf(height));
         return block;
     }
 

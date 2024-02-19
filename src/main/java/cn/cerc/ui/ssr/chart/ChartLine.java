@@ -56,7 +56,7 @@ public class ChartLine extends VuiAbstractChart {
     public SsrBlock request(ISsrBoard owner) {
         block.text(String.format(
                 """
-                        <div role='chart' data-title='${_data_title}' class='flex${_width}'>
+                        <div role='chart' data-title='${_data_title}' class='flex${_width}' data-height="${_height}">
                             <div class='chartTitle'>${_title}</div>
                             ${if _show_eye}
                                 <div class='opera' title='隐藏此图表' onclick='hideChart("${_templateId}", "%s")'><img src='%s' /></div>
@@ -68,6 +68,7 @@ public class ChartLine extends VuiAbstractChart {
                 title, imageConfig.getCommonFile("images/icon/hide.png")));
         block.option("_type", isBar ? "bar" : "line");
         block.option("_width", String.valueOf(width));
+        block.option("_height", String.valueOf(height));
         block.id(title).display(display_option.ordinal());
         return block;
     }

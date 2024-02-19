@@ -29,6 +29,9 @@ public abstract class VuiAbstractChart extends VuiControl
     @Column(name = "宽度占比")
     protected int width = 1;
 
+    @Column(name = "高度占比")
+    protected int height = 1;
+
     @Column(name = "用户自定义显示")
     protected ViewDisplay display_option = ViewDisplay.选择显示;
 
