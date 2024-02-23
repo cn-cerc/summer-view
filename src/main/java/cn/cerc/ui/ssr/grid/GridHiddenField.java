@@ -25,13 +25,13 @@ public class GridHiddenField extends VuiControl implements ISupportGrid {
     int fieldWidth = 0;
     @Column
     boolean readonly = false;
-    
+
     @Override
     public SsrBlock request(ISsrBoard grid) {
         String headTitle = "head." + this.title;
         grid.addBlock(headTitle, head.text(String.format("""
                 <th style='${if _width}width: ${_width}em;${else} display: none;${endif}'
-                onclick=\"gridSort(this,'%s')\">${_title}</th>""", field)));
+                onclick=\"gridSort(this,'%s')\"><div>${_title}</div></th>""", field)));
         head.option("_title", this.title);
         head.toMap("_width", "" + this.fieldWidth);
         head.id(headTitle);
@@ -50,7 +50,7 @@ public class GridHiddenField extends VuiControl implements ISupportGrid {
         grid.addColumn(title);
         return body;
     }
-    
+
     @Override
     public SsrBlock block() {
         return body;
@@ -78,6 +78,7 @@ public class GridHiddenField extends VuiControl implements ISupportGrid {
         return this;
     }
 
+    @Override
     public int width() {
         return this.fieldWidth;
     }
@@ -87,10 +88,9 @@ public class GridHiddenField extends VuiControl implements ISupportGrid {
         this.fieldWidth = width;
         return this;
     }
-    
+
     public GridHiddenField readonly() {
         this.readonly = true;
         return this;
     }
 }
-

@@ -45,7 +45,7 @@ public class GridGroup extends VuiContainer<ISupportGrid> implements ISupportGri
     @Override
     public SsrBlock request(ISsrBoard grid) {
         String headTitle = "head." + this.title;
-        grid.addBlock(headTitle, head.text("<th style='width: ${_width}em'>${_title}</th>"));
+        grid.addBlock(headTitle, head.text("<th style='width: ${_width}em'><div>${_title}</div></th>"));
         head.option("_width", "" + this.fieldWidth);
         head.option("_title", this.title);
         head.id(headTitle);

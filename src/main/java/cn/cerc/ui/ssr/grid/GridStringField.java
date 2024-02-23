@@ -57,8 +57,10 @@ public class GridStringField extends VuiControl implements ISupportGrid {
     @Override
     public SsrBlock request(ISsrBoard grid) {
         String headTitle = "head." + this.title;
-        grid.addBlock(headTitle, head.text(
-                String.format("<th style='width: ${_width}em' onclick=\"gridSort(this,'%s')\">${_title}</th>", field)));
+        grid.addBlock(headTitle,
+                head.text(String.format(
+                        "<th style='width: ${_width}em' onclick=\"gridSort(this,'%s')\"><div>${_title}</div></th>",
+                        field)));
         head.toMap("_width", "" + this.fieldWidth);
         head.toMap("_title", this.title);
         head.id(headTitle);

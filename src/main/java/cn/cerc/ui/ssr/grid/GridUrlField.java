@@ -35,7 +35,7 @@ public class GridUrlField extends VuiControl implements ISupportGrid {
     public SsrBlock request(ISsrBoard grid) {
         var title = this.title;
         String headTitle = "head." + title;
-        grid.addBlock(headTitle, head.text("<th style='width: ${_width}em'>${_title}</th>"));
+        grid.addBlock(headTitle, head.text("<th style='width: ${_width}em'><div>${_title}</div></th>"));
         head.toMap("_width", String.valueOf(this.fieldWidth));
         head.toMap("_title", this.title);
         head.id(headTitle);

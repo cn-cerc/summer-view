@@ -41,7 +41,9 @@ public class SsrGridStyleDefaultTest {
                 """
                         <script>$(function() { initGrid() });</script>
                         <div id='grid' class='scrollArea'><table class='dbgrid'><tr>
-                        <th style='width: 2em' onclick="gridSort(this,'_it_')">序</th><th style='width: 10em' onclick="gridSort(this,'Name_')">部门名称</th><th style='width: 4em' onclick="gridSort(this,'Final_')">状态</th><th style='width: 10em' onclick="gridSort(this,'Type_')">类别</th><th style='width: 4em' onclick="gridSort(this,'_opera_')">操作</th></tr>
+                        <th style='width: 2em' onclick="gridSort(this,'_it_')"><div>序</div></th><th style='width: 10em' onclick="gridSort(this,'Name_')"><div>部门名称</div></th><th style='width: 4em' onclick="gridSort(this,'Final_')"><div>状态</div></th><th style='width: 10em' onclick="gridSort(this,'Type_')"><div>类别</div></th><th style='width: 4em' onclick="gridSort(this,'_opera_')">
+                        <div>操作</div>
+                        </th></tr>
                         <tr>
                         <td align='center' role='_it_'>1</td><td align='left' role='Name_'>研发部</td><td align='center' role='Final_'>
                         <span><input type='checkbox' name='Final_' value='1' /></span>
@@ -76,7 +78,9 @@ public class SsrGridStyleDefaultTest {
                 """
                         <script>$(function() { initGrid() });</script>
                         <div id='grid' class='scrollArea'><table class='dbgrid'><tr>
-                        <th style='width: 2em' onclick="gridSort(this,'_it_')">序</th><th style='width: 10em' onclick="gridSort(this,'Name_')">车辆名称</th><th style='width: 10em' onclick="gridSort(this,'Type_')">类别</th><th style='width: 4em' onclick="gridSort(this,'_opera_')">操作</th></tr>
+                        <th style='width: 2em' onclick="gridSort(this,'_it_')"><div>序</div></th><th style='width: 10em' onclick="gridSort(this,'Name_')"><div>车辆名称</div></th><th style='width: 10em' onclick="gridSort(this,'Type_')"><div>类别</div></th><th style='width: 4em' onclick="gridSort(this,'_opera_')">
+                        <div>操作</div>
+                        </th></tr>
                         <tr>
                         <td align='center' role='_it_'>1</td><td align='right' role='Name_'>货车</td><td align='' role='Type_'>自有</td><td align='center' role='_opera_'><a href='FrmView?code=001'>内容</a></td></tr>
                         <tr>
@@ -113,7 +117,9 @@ public class SsrGridStyleDefaultTest {
                 """
                         <script>$(function() { initGrid() });</script>
                         <div id='grid' class='scrollArea'><table class='dbgrid'><tr>
-                        <th style='width: 2em' onclick="gridSort(this,'_it_')">序</th><th style='width: 10em' onclick="gridSort(this,'Name_')">部门名称</th><th style='width: 4em' onclick="gridSort(this,'Final_')">状态</th><th style='width: 10em' onclick="gridSort(this,'Type_')">类别</th><th style='width: 4em' onclick="gridSort(this,'_opera_')">操作</th></tr>
+                        <th style='width: 2em' onclick="gridSort(this,'_it_')"><div>序</div></th><th style='width: 10em' onclick="gridSort(this,'Name_')"><div>部门名称</div></th><th style='width: 4em' onclick="gridSort(this,'Final_')"><div>状态</div></th><th style='width: 10em' onclick="gridSort(this,'Type_')"><div>类别</div></th><th style='width: 4em' onclick="gridSort(this,'_opera_')">
+                        <div>操作</div>
+                        </th></tr>
                         <tr>
                         <td align='center' role='_it_'>1</td><td align='left' role='Name_'>研发部</td><td align='center' role='Final_'>
                         <span><input type='checkbox' name='Final_' value='1' /></span>
@@ -144,7 +150,7 @@ public class SsrGridStyleDefaultTest {
                 """
                         <script>$(function() { initGrid() });</script>
                         <div id='grid' class='scrollArea'><table class='dbgrid'><tr>
-                        <th style='width: 10em' onclick="gridSort(this,'Name_')">姓名</th><th style='width: 4em' onclick="gridSort(this,'Sex_')">性别</th></tr>
+                        <th style='width: 10em' onclick="gridSort(this,'Name_')"><div>姓名</div></th><th style='width: 4em' onclick="gridSort(this,'Sex_')"><div>性别</div></th></tr>
                         <tr>
                         <td align='left' role='Name_'>张三</td><td align='center' role='Sex_'>
                         <span>男</span>
@@ -179,7 +185,7 @@ public class SsrGridStyleDefaultTest {
         assertEquals("""
                 <script>$(function() { initGrid() });</script>
                 <div id='grid' class='scrollArea'><table class='dbgrid'><tr>
-                <th style='width: 10em'>姓名-性别</th></tr>
+                <th style='width: 10em'><div>姓名-性别</div></th></tr>
                 <tr>
                 <td align='' role='group1'><span>张三</span><br/><span>
                 <span>男</span>
@@ -207,7 +213,7 @@ public class SsrGridStyleDefaultTest {
                 """
                         <script>$(function() { initGrid() });</script>
                         <div id='grid' class='scrollArea'><table class='dbgrid'><tr>
-                        <th style='width: 10em' onclick="gridSort(this,'Num_')">数量</th><th style='width: 10em' onclick="gridSort(this,'total_')">合计</th></tr>
+                        <th style='width: 10em' onclick="gridSort(this,'Num_')"><div>数量</div></th><th style='width: 10em' onclick="gridSort(this,'total_')"><div>合计</div></th></tr>
                         <tr>
                         <td align='left' role='Num_'>10.7846574</td><td align='' role='total_'>10.7847</td></tr>
                         <tr>
@@ -215,7 +221,7 @@ public class SsrGridStyleDefaultTest {
                         </table></div>""",
                 grid.toString());
     }
-    
+
     @Test
     public void test6() {
         var ds = new DataSet();
@@ -232,14 +238,15 @@ public class SsrGridStyleDefaultTest {
                         <script>$(function() { initGrid() });</script>
                         <div id='grid' class='scrollArea'><table class='dbgrid'><tr>
                         <th style='display: none;'
-                        onclick="gridSort(this,'total_')">余额</th><th style='width: 10em' onclick="gridSort(this,'Name_')">姓名</th></tr>
+                        onclick="gridSort(this,'total_')"><div>余额</div></th><th style='width: 10em' onclick="gridSort(this,'Name_')"><div>姓名</div></th></tr>
                         <tr>
                         <td align='left' style="display: none;" role='total_'> <input type="text" name="total_" id="1_0" value="10"/> </td><td align='left' role='Name_'>张三</td></tr>
                         <tr>
                         <td align='left' style="display: none;" role='total_'> <input type="text" name="total_" id="2_0" value="124"/> </td><td align='left' role='Name_'>李四</td></tr>
-                        </table></div>""",grid.toString());
+                        </table></div>""",
+                grid.toString());
     }
-    
+
     @Test
     public void test7() {
         var ds = new DataSet();
@@ -256,12 +263,13 @@ public class SsrGridStyleDefaultTest {
                         <script>$(function() { initGrid() });</script>
                         <div id='grid' class='scrollArea'><table class='dbgrid'><tr>
                         <th style='display: none;'
-                        onclick="gridSort(this,'total_')">余额</th><th style='width: 10em' onclick="gridSort(this,'Name_')">姓名</th></tr>
+                        onclick="gridSort(this,'total_')"><div>余额</div></th><th style='width: 10em' onclick="gridSort(this,'Name_')"><div>姓名</div></th></tr>
                         <tr>
                         <td align='left' style="display: none;" role='total_'> 10 </td><td align='left' role='Name_'>张三</td></tr>
                         <tr>
                         <td align='left' style="display: none;" role='total_'> 124 </td><td align='left' role='Name_'>李四</td></tr>
-                        </table></div>""",grid.toString());
+                        </table></div>""",
+                grid.toString());
     }
 
 }

@@ -274,7 +274,7 @@ public class SsrFormStyleDefaultTest {
                         </li>""",
                 stringField.block().html());
     }
-    
+
     @Test
     public void test_13() {
         var row = new DataRow();
@@ -283,10 +283,11 @@ public class SsrFormStyleDefaultTest {
         form.dataRow(row);
         var style = form.defaultStyle();
         form.addBlock(style.getHiddenField("姓名", "name_"));
-        assertEquals("""
-                <script>$(function() { initForm('#form1') });</script>
-                <form method='post' action='' id='form1' role='search'><ul><input type=\"hidden\" name=\"name_\" id=\"name_\" value=\"a01\" /></ul></form>
-                """, form.toString());
+        assertEquals(
+                """
+                        <script>$(function() { initForm('#form1') });</script>
+                        <form method='post' action='' id='form1' role='search'><ul><input type=\"hidden\" name=\"name_\" id=\"name_\" value=\"a01\" /></ul></form>""",
+                form.toString());
     }
 
 }
