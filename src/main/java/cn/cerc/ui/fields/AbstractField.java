@@ -81,6 +81,9 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
     private Integer wordId;
     // 生成的div携带的样式
     private String contentClass = "";
+    // 是否使用表头全选
+    private boolean showCheckAll = false;
+    private String checkAllTarget = "";
 
     protected String getContentClass() {
         return contentClass;
@@ -88,6 +91,19 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
 
     protected void setContentClass(String contentClass) {
         this.contentClass = contentClass;
+    }
+    
+    public boolean getShowCheckAll() {
+        return showCheckAll;
+    }
+
+    public String getSheckAllTarget() {
+        return checkAllTarget;
+    }
+
+    protected void showCheckAll(boolean showCheckAll, String checkAllTarget) {
+        this.showCheckAll = showCheckAll;
+        this.checkAllTarget = checkAllTarget;
     }
 
     public AbstractField(UIComponent owner, String name, String field) {

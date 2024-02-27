@@ -241,6 +241,10 @@ public class DataGrid extends UIComponent implements DataSetSource, IGridStyle {
             html.print("<th");
             if (field.getWidth() == 0) {
                 html.print(" style=\"display:none\"");
+            } else if (field.getShowCheckAll()) {
+                String val = String.format(" width=\"%f%%\" title=\"%s\" role=\"checkAllTh\"",
+                        Utils.roundTo(field.getWidth() / sumFieldWidth * 100, -2), field.getName());
+                html.print(val);
             } else {
                 String val = String.format(" width=\"%f%%\" title=\"%s\"",
                         Utils.roundTo(field.getWidth() / sumFieldWidth * 100, -2), field.getName());
@@ -248,14 +252,18 @@ public class DataGrid extends UIComponent implements DataSetSource, IGridStyle {
                     val = String.format(" style=\"width: %sem\" data-fixed=\"%s\" title=\"%s\"", field.getWidth(),
                             field.getWidth(), field.getName());
                 html.print(val);
-
             }
             if (field.getStickyRow() != AbstractField.StickyRow.def) {
                 html.println(" role=\"%s\"", field.getStickyRow().toString());
             }
-            html.print("onclick=\"gridSort(this,'%s')\"", field.getField());
+            if (!field.getShowCheckAll())
+                html.print("onclick=\"gridSort(this,'%s')\"", field.getField());
             html.print(">");
-            html.print("<div>%s</div>", field.getName());
+            if (!field.getShowCheckAll()) {
+                html.print("<div>%s</div>", field.getName());
+            } else {
+                html.print("<div><input type=\"checkbox\" id=\"selectAll\" onchange=\"selectAllEvent(this, '%s')\" /></div>", field.getSheckAllTarget());
+            }
             html.println("</th>");
         }
         html.println("</tr>");

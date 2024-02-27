@@ -63,4 +63,9 @@ public class StringField extends AbstractField implements IFormatColumn, IOutput
         }
         return this;
     }
+    
+    public StringField setCheckAllTargetId(String targetId) {
+        this.showCheckAll(true, targetId);
+        return this;
+    }
 }
