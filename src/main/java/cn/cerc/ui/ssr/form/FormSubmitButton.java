@@ -37,7 +37,7 @@ public class FormSubmitButton extends VuiControl implements ISupplierBlock, ISup
         block = owner.addBlock(VuiForm.FormStart, String.format("""
                     <div class='searchHead' ${if _style}style='${_style}'${endif}>
                         ${if _searchButton}
-                        <span onclick="toggleSearch(this)">查询条件</span>
+                        <span>查询条件</span>
                         ${endif}
                         <div class="searchFormButtonDiv">
                             <button name="submit" value="${_field}">${_title}</button>
