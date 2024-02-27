@@ -43,21 +43,9 @@ public class GridOperaField extends VuiControl implements ISupportGrid {
         int fieldWidth = this.fieldWidth;
         var ssr = grid.addBlock(headTitle, String.format("""
                 <th style='width: ${_width}em' onclick="gridSort(this,'_opera_')">
-                <div>
-                ${if templateId}
-                    <a href="javascript:showSsrConfigDialog('${templateId}')">
-                        ${if templateConfigImg}
-                            <img src="${templateConfigImg}" style="width: 1rem;">
-                        ${else}
-                            %s
-                        ${endif}
-                    </a>
-                ${else}
-                %s
-                ${endif}
-                </div>
+                <div ${if templateId}role='ssrconfig' data-templateid='${templateId}'${endif}>%s</div>
                 </th>
-                """, title, title));
+                """, title));
         ssr.toMap("_width", "" + fieldWidth);
         ssr.option("templateId", "");
         ssr.option("templateConfigImg", "");
