@@ -36,7 +36,7 @@ public class EditorForm extends UIComponent {
         form.strict(false);
         form.addBlock(VuiForm.FormStart, """
                 <div>
-                    <span onclick="toggleSearch(this)">数据属性</span>
+                    <span>数据属性</span>
                     <div class="searchFormButtonDiv">
                         <button name="submit" type="submit" value="1">保存</button>
                     </div>

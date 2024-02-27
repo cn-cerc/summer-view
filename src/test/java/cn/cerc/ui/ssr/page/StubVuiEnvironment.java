@@ -523,7 +523,7 @@ public class StubVuiEnvironment extends VuiEnvironment {
         canvas.output(html);
         assertEquals(
                 """
-                        <form method='post' action='' id='form1' role='search'><div> <span onclick="toggleSearch(this)">查询条件</span> <div class="searchFormButtonDiv">
+                        <form method='post' action='' id='form1' role='search'><div> <span>查询条件</span> <div class="searchFormButtonDiv">
                         <button name="submit" value="submit">提交</button> </div>
                         </div><ul><li>
                         <label for="code_"><em>查询条件</em></label>
