@@ -301,7 +301,7 @@ public class VuiGrid extends VuiContainer<ISupportGrid>
     private Supplier<SsrBlock> getDefault_TableBegin() {
         return () -> new SsrBlock("""
                 <div id='grid' class='scrollArea'>
-                    <div role="tableExpand" style="--height: 16px;"><div class="trapezoidClass"></div></div>
+                    <div role="tableExpand" style="--height: 18px;"><div class="trapezoidClass"></div></div>
                     <table class='dbgrid'>
             """).template(template);
     }
