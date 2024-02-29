@@ -146,6 +146,7 @@ public class VuiGrid extends VuiContainer<ISupportGrid>
 
         getBlock(SsrTemplate.BeginFlag).ifPresent(template -> html.print(template.html()));
         html.println("<script>$(function() { initGrid() });</script>");
+        
         getTemplate(TableBegin, getDefault_TableBegin()).ifPresent(value -> html.print(value.html()));
 
         // 输出标题
@@ -298,7 +299,11 @@ public class VuiGrid extends VuiContainer<ISupportGrid>
      * @return 返回默认的表头样式
      */
     private Supplier<SsrBlock> getDefault_TableBegin() {
-        return () -> new SsrBlock("<div id='grid' class='scrollArea'><table class='dbgrid'>").template(template);
+        return () -> new SsrBlock("""
+                <div id='grid' class='scrollArea'>
+                    <div role="tableExpand" style="--height: 16px;"><div class="trapezoidClass"></div></div>
+                    <table class='dbgrid'>
+            """).template(template);
     }
 
     /**
