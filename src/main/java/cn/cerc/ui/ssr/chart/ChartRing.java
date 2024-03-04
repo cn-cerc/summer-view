@@ -29,7 +29,6 @@ public class ChartRing extends VuiAbstractChart {
 
     private void init() {
         block.option("_data", "");
-        block.option("_show_eye", "1");
         block.option("_data_title", "");
         block.option("_title", "");
         block.option("_templateId", "");
@@ -64,14 +63,10 @@ public class ChartRing extends VuiAbstractChart {
                 """
                         <div role='chart' data-title='${_data_title}' class='flex${_width}' data-height="${_height}">
                             <div class='chartTitle'>${_title}</div>
-                            ${if _show_eye}
-                                <div class='opera' title='隐藏此图表' onclick='hideChart("${_templateId}", "%s")'><img src='%s' /></div>
-                            ${endif}
                             <div class='content'></div>
                             <script>$(function(){buildRingChartByService(`${_service}`, '${_data_title}', ${_dataIn})})</script>
                         </div>
-                        """,
-                title, imageConfig.getCommonFile("images/icon/hide.png")));
+                        """));
         block.id(title).display(display_option.ordinal());
         block.option("_width", String.valueOf(width));
         block.option("_height", String.valueOf(height));

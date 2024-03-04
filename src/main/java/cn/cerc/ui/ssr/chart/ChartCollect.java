@@ -49,7 +49,6 @@ public class ChartCollect extends VuiAbstractChart {
 
     private void init() {
         block.option("_data", "");
-        block.option("_show_eye", "1");
         block.option("_data_title", "");
         block.option("_title", "");
         block.option("_msg", "");
@@ -90,8 +89,6 @@ public class ChartCollect extends VuiAbstractChart {
             break;
         case SsrMessage.RefreshProperties:
         case SsrMessage.InitProperties:
-            if (canvas().environment() instanceof VuiDataCardRuntime)
-                block.option("_show_eye", "0");
 
             Optional<VuiDataService> serviceOpt = this.binder.target();
             if (serviceOpt.isPresent()) {
@@ -132,9 +129,6 @@ public class ChartCollect extends VuiAbstractChart {
                 """
                         <div role='chart' data-title='${_data_title}' class='flex${_width}' data-height="${_height}">
                             <div class='chartTitle'>${_title}</div>
-                            ${if _show_eye}
-                                <div class='opera' title='隐藏此图表' onclick='hideChart("${_templateId}", "%s")'><img src='%s' /></div>
-                            ${endif}
                             <div class='content'>
                                 ${if not _data}
                                     <div role='noData'>
@@ -153,9 +147,7 @@ public class ChartCollect extends VuiAbstractChart {
                                 ${endif}
                             </div>
                         </div>
-                        """,
-                title, imageConfig.getCommonFile("images/icon/hide.png"),
-                imageConfig.getCommonFile("images/Frmshopping/notDataImg.png")));
+                        """, imageConfig.getCommonFile("images/Frmshopping/notDataImg.png")));
         block.id(title).display(display_option.ordinal());
         block.option("_width", String.valueOf(width));
         block.option("_height", String.valueOf(height));

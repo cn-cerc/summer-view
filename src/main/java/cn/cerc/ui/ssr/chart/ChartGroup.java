@@ -50,7 +50,6 @@ public class ChartGroup extends VuiAbstractChart {
         block.option("_data_title", "");
         block.option("_msg", "");
         block.option("_noData", "");
-        block.option("_show_eye", "1");
         block.option("_templateId", "");
         imageConfig = Application.getBean(ImageConfigImpl.class);
     }
@@ -81,9 +80,6 @@ public class ChartGroup extends VuiAbstractChart {
         block.text(String.format("""
                 <div role='chart' class='chartGroup flex${_width}' data-height="${_height}">
                 <div class='chartTitle'>${_title}</div>
-                ${if _show_eye}
-                    <div class='opera' title='隐藏此图表' onclick='hideChart("${_templateId}", "%s")'><img src='%s' /></div>
-                ${endif}
                 ${if _noData}
                 <div role='noData'>
                     <img src='%s' />
@@ -102,8 +98,7 @@ public class ChartGroup extends VuiAbstractChart {
                 </a>
                 ${endif}
                 </div>
-                """, title, imageConfig.getCommonFile("images/icon/hide.png"),
-                imageConfig.getCommonFile("images/Frmshopping/notDataImg.png"), titleField, valueField));
+                """, imageConfig.getCommonFile("images/Frmshopping/notDataImg.png"), titleField, valueField));
         block.id(title).display(display_option.ordinal());
         block.option("_width", String.valueOf(width));
         block.option("_height", String.valueOf(height));
@@ -133,8 +128,6 @@ public class ChartGroup extends VuiAbstractChart {
             break;
         case SsrMessage.RefreshProperties:
         case SsrMessage.InitProperties:
-            if (canvas().environment() instanceof VuiDataCardRuntime)
-                block.option("_show_eye", "0");
 
             Optional<VuiDataService> service = this.binder.target();
             if (service.isPresent()) {

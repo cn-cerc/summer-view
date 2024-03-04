@@ -59,7 +59,6 @@ public abstract class VuiAbstractChart extends VuiControl
         case SsrMessage.InitContent:
             IVuiEnvironment env = canvas().environment();
             if (env instanceof VuiDataCardRuntime runtime) {
-                block.option("_show_eye", "0");
                 block.option("_templateId", runtime.templateId());
             } else if (env instanceof VuiEnvironment environment) {
                 String templateId = environment.getPageCode() + "_panel";
