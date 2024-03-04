@@ -82,7 +82,6 @@ public class ChartGroup extends VuiAbstractChart {
                 <div class='chartTitle'>${_title}</div>
                 ${if _noData}
                 <div role='noData'>
-                    <img src='%s' />
                     <span>${_msg}</span>
                 </div>
                 ${else}
@@ -98,7 +97,7 @@ public class ChartGroup extends VuiAbstractChart {
                 </a>
                 ${endif}
                 </div>
-                """, imageConfig.getCommonFile("images/Frmshopping/notDataImg.png"), titleField, valueField));
+                """, titleField, valueField));
         block.id(title).display(display_option.ordinal());
         block.option("_width", String.valueOf(width));
         block.option("_height", String.valueOf(height));

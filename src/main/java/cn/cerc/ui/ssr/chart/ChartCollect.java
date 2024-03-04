@@ -132,7 +132,6 @@ public class ChartCollect extends VuiAbstractChart {
                             <div class='content'>
                                 ${if not _data}
                                     <div role='noData'>
-                                        <img src='%s' />
                                         <span>${_msg}</span>
                                     </div>
                                 ${else}
@@ -147,7 +146,7 @@ public class ChartCollect extends VuiAbstractChart {
                                 ${endif}
                             </div>
                         </div>
-                        """, imageConfig.getCommonFile("images/Frmshopping/notDataImg.png")));
+                        """));
         block.id(title).display(display_option.ordinal());
         block.option("_width", String.valueOf(width));
         block.option("_height", String.valueOf(height));
