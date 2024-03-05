@@ -27,10 +27,10 @@ public abstract class VuiAbstractChart extends VuiControl
     protected String title = "";
 
     @Column(name = "宽度占比")
-    protected int width = 1;
+    protected int width = 2;
 
     @Column(name = "高度占比")
-    protected int height = 1;
+    protected int height = 2;
 
     @Column(name = "用户自定义显示")
     protected ViewDisplay display_option = ViewDisplay.选择显示;
