@@ -7,6 +7,7 @@ import cn.cerc.ui.fields.AbstractField;
 public class CheckEditor {
     private AbstractField owner;
     private String onUpdate;
+    private String value = "true";
 
     public CheckEditor(AbstractField owner) {
         this.owner = owner;
@@ -16,8 +17,18 @@ public class CheckEditor {
         return onUpdate;
     }
 
-    public void setOnUpdate(String onUpdate) {
+    public CheckEditor setOnUpdate(String onUpdate) {
         this.onUpdate = onUpdate;
+        return this;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public CheckEditor setValue(String value) {
+        this.value = value;
+        return this;
     }
 
     public String format(DataRow ds) {
@@ -28,7 +39,7 @@ public class CheckEditor {
         html.print(" id='%s'", owner.getId());
         html.print(" type='checkbox'");
         html.print(" name='%s'", owner.getField());
-        html.print(" value='true'");
+        html.print(" value='%s'", getValue());
         html.print(" autocomplete='off'");
         html.print(" data-%s='[%s]'", owner.getField(), data);
         if (ds.getBoolean(owner.getField())) {

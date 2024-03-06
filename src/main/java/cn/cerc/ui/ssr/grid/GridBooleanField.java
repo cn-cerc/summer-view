@@ -35,6 +35,8 @@ public class GridBooleanField extends VuiControl implements ISupportGrid {
     private boolean readonly = true;
     @Column(name = "自定义value")
     String customVal = "";
+    @Column(name = "允许全选")
+    private boolean allowCheckedAll = false;
 
     public GridBooleanField() {
         super();
@@ -72,8 +74,13 @@ public class GridBooleanField extends VuiControl implements ISupportGrid {
         String headTitle = "head." + title;
         String bodyTitle = "body." + title;
         var ssr = grid.addBlock(headTitle,
-                String.format("<th style='width: ${_width}em' onclick=\"gridSort(this,'%s')\"><div>%s</div></th>", field, title));
+                String.format("""
+                        <th style='width: ${_width}em' onclick=\"gridSort(this,'%s')\"><div>${if not _allowCheckedAll}%s${else}
+                            <input type=\"checkbox\" data-field=\"%s\" onchange=\"handleGridSelectAll(this)\" />
+                            ${endif}</div></th>
+                """, field, title, field));
         ssr.toMap("_width", "" + fieldWidth);
+        ssr.option("_allowCheckedAll", !readonly() && allowCheckedAll() ? "1" : "");
         ssr.id(headTitle);
         ssr.display(1);
 
@@ -89,7 +96,7 @@ public class GridBooleanField extends VuiControl implements ISupportGrid {
                         """
                                 <td align='center' role='%s'>
                                     <span>${if _readonly}${if %s}%s${else}%s${endif}${else}
-                                    <input type='checkbox' name='${_name}' value='${if _callBackVal}${callback(callBackVal)}${else}${if _customVal}%s${else}1${endif}${endif}' ${if %s}checked ${endif}/>${endif}</span>
+                                    <input type='checkbox' name='${_name}' value='${if _callBackVal}${callback(callBackVal)}${else}${if _customVal}%s${else}1${endif}${endif}' ${if %s}checked ${endif} onchange=\"tableOnChanged(this)\"/>${endif}</span>
                                 </td>""",
                         field, field, trueText, falseText, customVal, field)));
         block.option("_readonly", readonly() ? "1" : "");
@@ -176,6 +183,15 @@ public class GridBooleanField extends VuiControl implements ISupportGrid {
 
     public GridBooleanField readonly(boolean readonly) {
         this.readonly = readonly;
+        return this;
+    }
+    
+    public boolean allowCheckedAll() {
+        return allowCheckedAll;
+    }
+
+    public GridBooleanField allowCheckedAll(boolean allowCheckedAll) {
+        this.allowCheckedAll = allowCheckedAll;
         return this;
     }
 

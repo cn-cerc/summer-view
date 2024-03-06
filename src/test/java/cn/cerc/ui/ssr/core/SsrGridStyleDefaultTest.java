@@ -46,11 +46,11 @@ public class SsrGridStyleDefaultTest {
                         </th></tr>
                         <tr>
                         <td align='center' role='_it_'>1</td><td align='left' role='Name_'>研发部</td><td align='center' role='Final_'>
-                        <span><input type='checkbox' name='Final_' value='1' /></span>
+                        <span><input type='checkbox' name='Final_' value='1' onchange="tableOnChanged(this)"/></span>
                         </td><td align='left' role='Type_'>张三</td><td align='center' role='_opera_'><a href='FrmView?code=001'>内容</a></td></tr>
                         <tr>
                         <td align='center' role='_it_'>2</td><td align='left' role='Name_'>生产部</td><td align='center' role='Final_'>
-                        <span><input type='checkbox' name='Final_' value='1' checked /></span>
+                        <span><input type='checkbox' name='Final_' value='1' checked onchange="tableOnChanged(this)"/></span>
                         </td><td align='left' role='Type_'></td><td align='center' role='_opera_'><a href='FrmView?code=002'>内容</a></td></tr>
                         </table></div>""",
                 grid.toString());
@@ -122,11 +122,11 @@ public class SsrGridStyleDefaultTest {
                         </th></tr>
                         <tr>
                         <td align='center' role='_it_'>1</td><td align='left' role='Name_'>研发部</td><td align='center' role='Final_'>
-                        <span><input type='checkbox' name='Final_' value='1' /></span>
+                        <span><input type='checkbox' name='Final_' value='1' onchange="tableOnChanged(this)"/></span>
                         </td><td align='left' role='Type_'>张三</td><td align='center' role='_opera_'><a href='FrmView?code=001'>内容</a></td></tr>
                         <tr>
                         <td align='center' role='_it_'>2</td><td align='left' role='Name_'>生产部</td><td align='center' role='Final_'>
-                        <span><input type='checkbox' name='Final_' value='1' checked /></span>
+                        <span><input type='checkbox' name='Final_' value='1' checked onchange="tableOnChanged(this)"/></span>
                         </td><td align='left' role='Type_'></td><td align='center' role='_opera_'><a href='FrmView?code=002'>内容</a></td></tr>
                         </table></div>""",
                 grid.toString());
@@ -272,4 +272,42 @@ public class SsrGridStyleDefaultTest {
                 grid.toString());
     }
 
+    @Test
+    public void test8() {
+        var ds = new DataSet();
+        ds.append().setValue("Name_", "张三").setValue("total_", "10").setValue("Final_", true).setValue("Open_", true).setValue("Check_", false);
+        ds.append().setValue("Name_", "李四").setValue("total_", "124").setValue("Final_", false).setValue("Open_", true).setValue("Check_", true);
+        var grid = new VuiGrid(null, "");
+        grid.dataSet(ds);
+        var style = grid.defaultStyle();
+        grid.addBlock(style.getString("姓名", "Name_", 10));
+        grid.addBlock(style.getBoolean("状态", "Final_", 4).readonly(false).allowCheckedAll(true));
+        grid.addBlock(style.getBoolean("是否开启", "Open_", 4).readonly(false));
+        grid.addBlock(style.getBoolean("选择", "Check_", 4));
+        grid.addBlock(style.getDouble("余额", "total_"));
+        grid.addColumn("状态", "是否开启", "选择", "姓名", "余额");
+        assertEquals(
+                """
+                        <script>$(function() { initGrid() });</script>
+                        <div id='grid' class='scrollArea'><table class='dbgrid'><tr>
+                        <th style='width: 4em' onclick="gridSort(this,'Final_')"><div><input type="checkbox" data-field="Final_" onchange="handleGridSelectAll(this)" /> </div></th><th style='width: 4em' onclick="gridSort(this,'Open_')"><div>是否开启</div></th><th style='width: 4em' onclick="gridSort(this,'Check_')"><div>选择</div></th><th style='width: 10em' onclick="gridSort(this,'Name_')"><div>姓名</div></th><th style='width: 4em' onclick="gridSort(this,'total_')"><div>余额</div></th></tr>
+                        <tr>
+                        <td align='center' role='Final_'>
+                        <span><input type='checkbox' name='Final_' value='1' checked onchange="tableOnChanged(this)"/></span>
+                        </td><td align='center' role='Open_'>
+                        <span><input type='checkbox' name='Open_' value='1' checked onchange="tableOnChanged(this)"/></span>
+                        </td><td align='center' role='Check_'>
+                        <span>否</span>
+                        </td><td align='left' role='Name_'>张三</td><td align='center' role='total_'>10</td></tr>
+                        <tr>
+                        <td align='center' role='Final_'>
+                        <span><input type='checkbox' name='Final_' value='1' onchange="tableOnChanged(this)"/></span>
+                        </td><td align='center' role='Open_'>
+                        <span><input type='checkbox' name='Open_' value='1' checked onchange="tableOnChanged(this)"/></span>
+                        </td><td align='center' role='Check_'>
+                        <span>是</span>
+                        </td><td align='left' role='Name_'>李四</td><td align='center' role='total_'>124</td></tr>
+                        </table></div>""",
+                grid.toString());
+    }
 }

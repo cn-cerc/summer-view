@@ -1,19 +1,27 @@
 package cn.cerc.ui.fields;
 
+import java.util.function.Supplier;
+
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.fields.editor.CheckEditor;
+import cn.cerc.ui.grid.IOutputOfGridHead;
 import cn.cerc.ui.grid.lines.AbstractGridLine.IOutputOfGridLine;
 import cn.cerc.ui.other.SearchItem;
 import cn.cerc.ui.vcl.UIInput;
 import cn.cerc.ui.vcl.UILabel;
 import cn.cerc.ui.vcl.UIText;
 
-public class BooleanField extends AbstractField implements SearchItem, IFormatColumn, IOutputOfGridLine {
+public class BooleanField extends AbstractField
+        implements SearchItem, IFormatColumn, IOutputOfGridLine, IOutputOfGridHead {
     private String trueText = "是";
     private String falseText = "否";
     private boolean search;
     private CheckEditor editor;
+    // 是否允许全选
+    private boolean allowCheckedAll = false;
+    // 非只读模式下自定义value
+    private Supplier<String> customValue;
 
     public BooleanField(UIComponent owner, String title, String field) {
         this(owner, title, field, 0);
@@ -94,6 +102,9 @@ public class BooleanField extends AbstractField implements SearchItem, IFormatCo
         if (this.readonly()) {
             html.print(getText());
         } else {
+            CheckEditor editor = getEditor();
+            if (this.customValue != null)
+                editor.setValue(getCustomValue().get());
             html.print(getEditor().format(current()));
         }
     }
@@ -128,6 +139,34 @@ public class BooleanField extends AbstractField implements SearchItem, IFormatCo
         if (!this.readonly()) {
             super.updateField();
         }
+    }
+
+    public boolean allowCheckedAll() {
+        return allowCheckedAll;
+    }
+
+    public BooleanField allowCheckedAll(boolean allowCheckedAll) {
+        this.allowCheckedAll = allowCheckedAll;
+        return this;
+    }
+
+    @Override
+    public void outputOfGridHead(HtmlWriter html) {
+        if (!this.readonly() && this.allowCheckedAll()) {
+            html.print("<div><input type='checkbox' data-field='%s' onchange='handleGridSelectAll(this)' /></div>",
+                    this.getField(), this.getField());
+        } else {
+            html.print("<div>%s</div>", this.getName());
+        }
+    }
+
+    public Supplier<String> getCustomValue() {
+        return customValue;
+    }
+
+    public BooleanField setCustomValue(Supplier<String> customValue) {
+        this.customValue = customValue;
+        return this;
     }
 
 }

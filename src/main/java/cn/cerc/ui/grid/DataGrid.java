@@ -215,7 +215,7 @@ public class DataGrid extends UIComponent implements DataSetSource, IGridStyle {
         if (Utils.isNotEmpty(this.gridTitle))
             html.println("<div role='aui-table-title'><b>%s</b></div>", this.gridTitle);
         html.print("<table class=\"%s\"", this.gridCssClass);
-        html.println(" role=\"%s\"", this.widthInNum ? "fixed" : "default");
+        html.print(" role=\"%s\"", this.widthInNum ? "fixed" : "default");
         if (this.gridCssStyle != null) {
             html.print(" style=\"%s\"", this.gridCssStyle);
         }
@@ -255,7 +255,11 @@ public class DataGrid extends UIComponent implements DataSetSource, IGridStyle {
             }
             html.print("onclick=\"gridSort(this,'%s')\"", field.getField());
             html.print(">");
-            html.print("<div>%s</div>", field.getName());
+            if (field instanceof IOutputOfGridHead) {
+                ((IOutputOfGridHead) field).outputOfGridHead(html);
+            } else {
+                html.print("<div>%s</div>", field.getName());
+            }
             html.println("</th>");
         }
         html.println("</tr>");
