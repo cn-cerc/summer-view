@@ -127,6 +127,8 @@ public class StartServices extends HttpServlet {
             else
                 JayunLogParser.error(clazz, throwable, message);
             log.info("{}", message, throwable);
+            if (dataOut == null)
+                dataOut = new DataSet();
             dataOut.setError().setMessage(throwable.getMessage());
         }
         // 数据过滤后返回
