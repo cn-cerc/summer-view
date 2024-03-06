@@ -19,6 +19,10 @@ public class SsrFormStyleDefault {
         return new FormSubmitButton();
     }
 
+    public FormSearchTextButton getSearchTextButton() {
+        return new FormSearchTextButton();
+    }
+
     public FormStringField getString(String title, String field) {
         return new FormStringField(title, field);
     }
@@ -73,7 +77,7 @@ public class SsrFormStyleDefault {
     public FormTextareaField getTextarea(String title, String field) {
         return new FormTextareaField(title, field);
     }
-    
+
     public FormHiddenField getHiddenField(String title, String field) {
         return new FormHiddenField(title, field);
     }

@@ -190,9 +190,11 @@ public class VuiForm extends VuiContainer<ISupportForm>
     protected Supplier<SsrBlock> getDefault_FormBegin() {
         var action = this.template().option("action").orElse("");
         return () -> {
-            var ssr = new SsrBlock(String.format("<form method='post' action='%s'%s role='${role}'>${callback(%s)}%s",
-                    action, !Utils.isEmpty(getId()) ? " id='" + getId() + "'" : "", VuiForm.FormStart,
-                    this.canvas() != null ? "" : "<ul>")).template(template);
+            var ssr = new SsrBlock(
+                    String.format("<form method='post' action='%s'%s role='${role}' class='vuiForm'>${callback(%s)}%s",
+                            action, !Utils.isEmpty(getId()) ? " id='" + getId() + "'" : "", VuiForm.FormStart,
+                            this.canvas() != null ? "" : "<ul>"))
+                    .template(template);
             ssr.onCallback(VuiForm.FormStart, () -> {
                 var formFirst = this.getBlock(VuiForm.FormStart);
                 formFirst.ifPresent(template -> {
@@ -238,11 +240,13 @@ public class VuiForm extends VuiContainer<ISupportForm>
         for (String column : columns)
             updateValue(column, request);
 
+        updateValue(VuiForm.FormStart, request);
+
         return submit;
     }
 
     private void updateValue(String column, HttpServletRequest request) {
-        if (!columns.contains(column))
+        if (!columns.contains(column) && !VuiForm.FormStart.equals(column))
             return;
 
         var block = template().get(column);

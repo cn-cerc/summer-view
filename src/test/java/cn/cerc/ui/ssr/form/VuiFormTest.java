@@ -20,8 +20,8 @@ public class VuiFormTest {
         form.addColumn("name_", "code_");
         assertEquals(
                 """
-                    <script>$(function() { initForm('#form1') });</script>
-                    <form method='post' action='' id='form1' role='search'><ul>name_: <input type=\"text\" name=\"name_\" value=\"a01\">code_: <input type=\"text\" name=\"code_\" value=\"001\"></ul></form>""",
+                        <script>$(function() { initForm('#form1') });</script>
+                        <form method='post' action='' id='form1' role='search' class='vuiForm'><ul>name_: <input type="text" name="name_" value="a01">code_: <input type="text" name="code_" value="001"></ul></form>""",
                 form.toString());
     }
 
@@ -43,6 +43,32 @@ public class VuiFormTest {
                                 """
                         .trim(),
                 root.toString());
+    }
+
+    @Test
+    public void test_searchButton() {
+        var row = new DataRow();
+        var form = new VuiForm(null, "");
+        form.dataRow(row);
+        SsrFormStyleDefault style = form.defaultStyle();
+        form.addBlock(style.getSearchTextButton().field("search_text_"));
+        assertEquals(
+                """
+                        <script>$(function() { initForm('#form1') });</script>
+                        <form method='post' action='' id='form1' role='search' class='vuiForm'><div class="searchHead searchTextButton" >
+                        <a role="configTemplate" class="hoverImageBox" type="button" onclick="showSsrConfigDialog('')">
+                        <img src="images/icon/templateConfig.png" />
+                        <img src="images/icon/templateConfig_hover.png" />
+                        </a>
+                        <li class="searchTextDiv">
+                        <input type="text" name="search_text_" id="search_text_" value="${search_text_}" autocomplete="off" placeholder="请输入查询条件">
+                        <span role="suffix-icon"></span>
+                        </li>
+                        <div class="searchFormButtonDiv">
+                        <button name="submit" value="search">查询</button>
+                        </div>
+                        </div><ul></ul></form>""",
+                form.toString());
     }
 
 }
