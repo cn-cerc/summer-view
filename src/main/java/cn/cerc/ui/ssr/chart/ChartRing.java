@@ -13,6 +13,7 @@ import cn.cerc.ui.fields.ImageConfigImpl;
 import cn.cerc.ui.ssr.core.SsrBlock;
 import cn.cerc.ui.ssr.core.VuiCommonComponent;
 import cn.cerc.ui.ssr.editor.ISsrBoard;
+import cn.cerc.ui.ssr.page.VuiEnvironment;
 import cn.cerc.ui.ssr.source.VuiDataService;
 
 @Component
@@ -61,13 +62,17 @@ public class ChartRing extends VuiAbstractChart {
     public SsrBlock request(ISsrBoard owner) {
         block.text(String.format(
                 """
-                        <div role='chart' data-title='${_data_title}' class='flex${_width}' data-height="${_height}">
+                        <div role='chart' data-title='${_data_title}' class='flex${_width}' data-height="${_height}" data-code='${_cardCode}'>
                             <div class='chartTitle'>${_title}</div>
                             <div class='content'></div>
                             <script>$(function(){buildRingChartByService(`${_service}`, '${_data_title}', ${_dataIn})})</script>
                         </div>
                         """));
         block.id(title).display(display_option.ordinal());
+        String cardCode = "";
+        if (canvas().environment() instanceof VuiEnvironment environment)
+            cardCode = environment.getPageCode().replace(".execute", "");
+        block.option("_cardCode", cardCode);
         block.option("_width", String.valueOf(width));
         block.option("_height", String.valueOf(height));
         return block;

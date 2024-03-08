@@ -138,7 +138,7 @@ public class ChartTable extends VuiAbstractChart {
     public SsrBlock request(ISsrBoard owner) {
         block.text(String.format(
                 """
-                        <div role='chart' data-title='${_data_title}' class='flex${_width}' data-height="${_height}">
+                        <div role='chart' data-title='${_data_title}' class='flex${_width}' data-height="${_height}" data-code='${_cardCode}'>
                             <div class='chartTitle'>${_title}</div>
                             <div class='content'>
                                 ${if not _data}
@@ -161,8 +161,13 @@ public class ChartTable extends VuiAbstractChart {
                                 ${endif}
                             </div>
                         </div>
-                        """, imageConfig.getCommonFile("images/Frmshopping/notDataImg.png")));
+                        """,
+                imageConfig.getCommonFile("images/Frmshopping/notDataImg.png")));
         block.id(title).display(display_option.ordinal());
+        String cardCode = "";
+        if (canvas().environment() instanceof VuiEnvironment environment)
+            cardCode = environment.getPageCode().replace(".execute", "");
+        block.option("_cardCode", cardCode);
         block.option("_width", String.valueOf(width));
         block.option("_height", String.valueOf(height));
         return block;

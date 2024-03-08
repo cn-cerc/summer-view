@@ -78,7 +78,7 @@ public class ChartGroup extends VuiAbstractChart {
     @Override
     public SsrBlock request(ISsrBoard owner) {
         block.text(String.format("""
-                <div role='chart' class='chartGroup flex${_width}' data-height="${_height}">
+                <div role='chart' class='chartGroup flex${_width}' data-height="${_height}" data-code='${_cardCode}'>
                 <div class='chartTitle'>${_title}</div>
                 ${if _noData}
                 <div role='noData'>
@@ -100,6 +100,10 @@ public class ChartGroup extends VuiAbstractChart {
                 </div>
                 """, imageConfig.getCommonFile("images/Frmshopping/notDataImg.png"), titleField, valueField));
         block.id(title).display(display_option.ordinal());
+        String cardCode = "";
+        if (canvas().environment() instanceof VuiEnvironment environment)
+            cardCode = environment.getPageCode().replace(".execute", "");
+        block.option("_cardCode", cardCode);
         block.option("_width", String.valueOf(width));
         block.option("_height", String.valueOf(height));
         return block;

@@ -125,30 +125,33 @@ public class ChartCollect extends VuiAbstractChart {
 
     @Override
     public SsrBlock request(ISsrBoard owner) {
-        block.text(String.format(
-                """
-                        <div role='chart' data-title='${_data_title}' class='flex${_width}' data-height="${_height}">
-                            <div class='chartTitle'>${_title}</div>
-                            <div class='content'>
-                                ${if not _data}
-                                    <div role='noData'>
-                                        <img src='%s' />
-                                        <span>${_msg}</span>
-                                    </div>
-                                ${else}
-                                    <div class='scroll'>
-                                        <ul class='tabBody'>
-                                        ${dataset.begin}
-                                            ${callback(value)}
-                                        ${dataset.end}
-                                        </ul>
-                                    </div>
-                                    <script>$(function(){initChartScroll('${_data_title}')})</script>
-                                ${endif}
+        block.text(String.format("""
+                <div role='chart' data-title='${_data_title}' class='flex${_width}' data-height="${_height}" data-code='${_cardCode}'>
+                    <div class='chartTitle'>${_title}</div>
+                    <div class='content'>
+                        ${if not _data}
+                            <div role='noData'>
+                                <img src='%s' />
+                                <span>${_msg}</span>
                             </div>
-                        </div>
-                        """, imageConfig.getCommonFile("images/Frmshopping/notDataImg.png")));
+                        ${else}
+                            <div class='scroll'>
+                                <ul class='tabBody'>
+                                ${dataset.begin}
+                                    ${callback(value)}
+                                ${dataset.end}
+                                </ul>
+                            </div>
+                            <script>$(function(){initChartScroll('${_data_title}')})</script>
+                        ${endif}
+                    </div>
+                </div>
+                """, imageConfig.getCommonFile("images/Frmshopping/notDataImg.png")));
         block.id(title).display(display_option.ordinal());
+        String cardCode = "";
+        if (canvas().environment() instanceof VuiEnvironment environment)
+            cardCode = environment.getPageCode().replace(".execute", "");
+        block.option("_cardCode", cardCode);
         block.option("_width", String.valueOf(width));
         block.option("_height", String.valueOf(height));
         return block;
