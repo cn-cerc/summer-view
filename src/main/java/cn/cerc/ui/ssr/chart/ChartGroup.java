@@ -97,6 +97,7 @@ public class ChartGroup extends VuiAbstractChart {
                     </ul>
                 </a>
                 ${endif}
+                <script>$(function(){ refreshChartGroupByService(`${_service}`, `${_cardCode}`) })</script>
                 </div>
                 """, imageConfig.getCommonFile("images/Frmshopping/notDataImg.png"), titleField, valueField));
         block.id(title).display(display_option.ordinal());
@@ -138,6 +139,7 @@ public class ChartGroup extends VuiAbstractChart {
                 if (sender == service.get()) {
                     DataSet dataSet = service.get().dataSet();
                     String title = this.binder.target().get().serviceDesc();
+                    block.option("_service", service.get().service());
                     block.option("_data_title", title + this.getClass().getSimpleName());
                     block.option("_title", title);
                     if (!dataSet.eof()) {

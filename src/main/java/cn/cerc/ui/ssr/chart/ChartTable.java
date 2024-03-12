@@ -82,6 +82,7 @@ public class ChartTable extends VuiAbstractChart {
             String title1 = this.binder.target().get().serviceDesc();
             block.option("_data_title", title1 + this.getClass().getSimpleName());
             block.option("_title", title1);
+            block.option("_service", this.binder.target().get().service());
             if (sender == this.binder.target().get()) {
                 String msg = (String) msgData;
                 block.option("_msg", Utils.isEmpty(msg) ? "统计服务异常" : msg);
@@ -99,7 +100,7 @@ public class ChartTable extends VuiAbstractChart {
                     String title = this.binder.target().get().serviceDesc();
                     block.option("_data_title", title + this.getClass().getSimpleName());
                     block.option("_title", title);
-
+                    block.option("_service", this.binder.target().get().service());
                     if (!dataSet.eof()) {
                         block.dataSet(dataSet);
                         block.option("_data", "1");
@@ -159,6 +160,7 @@ public class ChartTable extends VuiAbstractChart {
                                     </div>
                                     <script>$(function(){initChartScroll('${_data_title}')})</script>
                                 ${endif}
+                                <script>$(function(){ refreshChartTableByService('${_data_title}', '${_service}', '${_cardCode}') })</script>
                             </div>
                         </div>
                         """,
