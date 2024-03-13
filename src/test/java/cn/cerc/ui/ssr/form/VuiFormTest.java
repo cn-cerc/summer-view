@@ -71,4 +71,20 @@ public class VuiFormTest {
                 form.toString());
     }
 
+    @Test
+    public void test_formFirst() {
+        var row = new DataRow();
+        var form = new VuiForm(null, "");
+        form.dataRow(row);
+        SsrFormStyleDefault style = form.defaultStyle();
+        form.addBlock(style.getSubmitButton());
+        assertEquals(
+                """
+                        <script>$(function() { initForm('#form1') });</script>
+                        <form method='post' action='' id='form1' role='search' class='vuiForm'><div class='searchHead' > <span>查询条件</span> <div class="searchFormButtonDiv">
+                        <button name="submit" value="search">查询</button> </div>
+                        </div><ul></ul></form>""",
+                form.toString());
+    }
+
 }

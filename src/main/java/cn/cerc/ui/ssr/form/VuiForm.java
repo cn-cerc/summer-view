@@ -150,11 +150,8 @@ public class VuiForm extends VuiContainer<ISupportForm>
 
         writeContent(html);
 
-        var formFirst = this.getBlock(VuiForm.FormStart);
         getBlock(FormEnd,
-                () -> new SsrBlock(String.format("%s%s</form>", this.canvas() != null ? "" : "</ul>",
-                        formFirst.isPresent() && isPhone() && this.canvas() == null ? formFirst.get().html() : ""))
-                        .template(template))
+                () -> new SsrBlock(String.format("%s</form>", this.canvas() != null ? "" : "</ul>")).template(template))
                 .ifPresent(value -> html.print(value.html()));
         getBlock(SsrTemplate.EndFlag).ifPresent(template -> html.print(template.html()));
     }
@@ -201,7 +198,7 @@ public class VuiForm extends VuiContainer<ISupportForm>
                     if (this.template.id() != null)
                         template.option(ISsrOption.TemplateId, this.template.id());
                 });
-                return formFirst.isPresent() && !isPhone() && this.canvas() == null ? formFirst.get().html() : "";
+                return formFirst.isPresent() && this.canvas() == null ? formFirst.get().html() : "";
             });
             ssr.option("role", Utils.isEmpty(this.getRole()) ? "search" : this.getRole());
             return ssr;
