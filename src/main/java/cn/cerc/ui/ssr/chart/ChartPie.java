@@ -1,5 +1,7 @@
 package cn.cerc.ui.ssr.chart;
 
+import javax.persistence.Column;
+
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Description;
 import org.springframework.context.annotation.Scope;
@@ -22,6 +24,9 @@ import cn.cerc.ui.ssr.source.VuiDataService;
 @VuiCommonComponent
 public class ChartPie extends VuiAbstractChart {
     private SsrBlock block = new SsrBlock("");
+    
+    @Column(name = "饼图类型")
+    protected ChartPieType pieTyle = ChartPieType.环形饼图;
 
     @Override
     public void saveEditor(RequestReader reader) {
@@ -51,7 +56,7 @@ public class ChartPie extends VuiAbstractChart {
     public SsrBlock request(ISsrBoard owner) {
         block.text(String
                 .format("""
-                        <div role='chart' data-title='${_data_title}' class='flex${_width}' data-height="${_height}" data-code='${_cardCode}'>
+                        <div role='chart' data-title='${_data_title}' class='flex${_width}' data-height="${_height}" data-code='${_cardCode}' data-pietype='${_pieType}'>
                             <div class='chartTitle'>${_title}</div>
                             <div class='content'></div>
                             <script>$(function(){buildPieChartByService(`${_service}`, '${_data_title}', ${_dataIn})})</script>
@@ -64,6 +69,7 @@ public class ChartPie extends VuiAbstractChart {
         block.option("_cardCode", cardCode);
         block.option("_width", String.valueOf(width));
         block.option("_height", String.valueOf(height));
+        block.option("_pieType", String.valueOf(pieTyle.ordinal()));
         return block;
     }
 
@@ -88,4 +94,9 @@ public class ChartPie extends VuiAbstractChart {
         return block;
     }
 
+    public enum ChartPieType {
+        普通饼图,
+        环形饼图,
+        玫瑰饼图
+    }
 }
