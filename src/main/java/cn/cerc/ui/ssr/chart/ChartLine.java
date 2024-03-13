@@ -12,6 +12,7 @@ import cn.cerc.mis.core.Application;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.RequestReader;
 import cn.cerc.ui.fields.ImageConfigImpl;
+import cn.cerc.ui.ssr.chart.ChartBar.ChartBarDirection;
 import cn.cerc.ui.ssr.core.SsrBlock;
 import cn.cerc.ui.ssr.core.VuiCommonComponent;
 import cn.cerc.ui.ssr.editor.ISsrBoard;
@@ -27,6 +28,8 @@ public class ChartLine extends VuiAbstractChart {
 
     @Column(name = "是否以柱状图方式展示")
     boolean isBar = false;
+    @Column(name = "排列方向")
+    ChartBarDirection direction = ChartBarDirection.水平;
 
     public ChartLine() {
         super();
@@ -56,7 +59,7 @@ public class ChartLine extends VuiAbstractChart {
     public SsrBlock request(ISsrBoard owner) {
         block.text(String
                 .format("""
-                        <div role='chart' data-title='${_data_title}' class='flex${_width}' data-height="${_height}" data-code='${_cardCode}'>
+                        <div role='chart' data-title='${_data_title}' class='flex${_width}' data-height="${_height}" data-code='${_cardCode}' data-direction='${_direction}'>
                             <div class='chartTitle'>${_title}</div>
                             <div class='content'></div>
                             <script>$(function(){buildChartByService(`${_service}`, '${_type}', '${_data_title}', ${_dataIn})})</script>
@@ -69,6 +72,7 @@ public class ChartLine extends VuiAbstractChart {
         block.option("_cardCode", cardCode);
         block.option("_width", String.valueOf(width));
         block.option("_height", String.valueOf(height));
+        block.option("_direction", String.valueOf(direction.ordinal()));
         block.id(title).display(display_option.ordinal());
         return block;
     }

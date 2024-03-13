@@ -27,6 +27,9 @@ public class ChartBar extends VuiAbstractChart {
 
     @Column(name = "是否以折线图方式展示")
     boolean isLine = false;
+    @Column(name = "排列方向")
+    ChartBarDirection direction = ChartBarDirection.水平;
+    
 
     public ChartBar() {
         super();
@@ -67,7 +70,7 @@ public class ChartBar extends VuiAbstractChart {
     public SsrBlock request(ISsrBoard owner) {
         block.text(String
                 .format("""
-                        <div role='chart' data-title='${_data_title}' class='flex${_width}' data-height="${_height}" data-code='${_cardCode}'>
+                        <div role='chart' data-title='${_data_title}' class='flex${_width}' data-height="${_height}" data-code='${_cardCode}' data-direction='${_direction}'>
                             <div class='chartTitle'>${_title}</div>
                             <div class='content'></div>
                             <script>$(function(){buildChartByService(`${_service}`, '${_type}', '${_data_title}', ${_dataIn})})</script>
@@ -80,6 +83,7 @@ public class ChartBar extends VuiAbstractChart {
         block.option("_cardCode", cardCode);
         block.option("_width", String.valueOf(width));
         block.option("_height", String.valueOf(height));
+        block.option("_direction", String.valueOf(direction.ordinal()));
         block.id(title).display(display_option.ordinal());
         return block;
     }
@@ -94,4 +98,8 @@ public class ChartBar extends VuiAbstractChart {
         return block;
     }
 
+    public enum ChartBarDirection {
+        水平,
+        垂直
+    }
 }
