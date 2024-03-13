@@ -78,7 +78,8 @@ public class ChartGroup extends VuiAbstractChart {
     @Override
     public SsrBlock request(ISsrBoard owner) {
         block.text(String.format("""
-                <div role='chart' class='chartGroup flex${_width}' data-height="${_height}" data-code='${_cardCode}'>
+                <div role='chart' class='chartGroup flex${_width}' data-height="${_height}" data-code='${_cardCode}'
+                data-skin='${_skin}'>
                 <div class='chartTitle'>${_title}</div>
                 ${if _noData}
                 <div role='noData'>
@@ -107,6 +108,7 @@ public class ChartGroup extends VuiAbstractChart {
         block.option("_cardCode", cardCode);
         block.option("_width", String.valueOf(width));
         block.option("_height", String.valueOf(height));
+        block.option("_skin", String.valueOf(skin.ordinal()));
         return block;
     }
 

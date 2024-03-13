@@ -59,7 +59,8 @@ public class ChartLine extends VuiAbstractChart {
     public SsrBlock request(ISsrBoard owner) {
         block.text(String
                 .format("""
-                        <div role='chart' data-title='${_data_title}' class='flex${_width}' data-height="${_height}" data-code='${_cardCode}' data-direction='${_direction}'>
+                        <div role='chart' data-title='${_data_title}' class='flex${_width}' data-height="${_height}" data-code='${_cardCode}' data-direction='${_direction}'
+                        data-skin='${_skin}'>
                             <div class='chartTitle'>${_title}</div>
                             <div class='content'></div>
                             <script>$(function(){buildChartByService(`${_service}`, '${_type}', '${_data_title}', ${_dataIn})})</script>
@@ -73,6 +74,7 @@ public class ChartLine extends VuiAbstractChart {
         block.option("_width", String.valueOf(width));
         block.option("_height", String.valueOf(height));
         block.option("_direction", String.valueOf(direction.ordinal()));
+        block.option("_skin", String.valueOf(skin.ordinal()));
         block.id(title).display(display_option.ordinal());
         return block;
     }

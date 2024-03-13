@@ -38,6 +38,9 @@ public abstract class VuiAbstractChart extends VuiControl
     @Column
     protected Binder<VuiDataService> binder = new Binder<>(this, VuiDataService.class);
 
+    @Column(name = "皮肤")
+    protected SkinTypeEnum skin = SkinTypeEnum.通用;
+
     @Override
     public String title() {
         return title;
@@ -78,5 +81,10 @@ public abstract class VuiAbstractChart extends VuiControl
 
     protected SsrBlock block() {
         return null;
+    }
+
+    public enum SkinTypeEnum {
+        通用,
+        无边框;
     }
 }
