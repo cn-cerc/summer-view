@@ -1,5 +1,7 @@
 package cn.cerc.ui.ssr.chart;
 
+import javax.persistence.Column;
+
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Description;
 import org.springframework.context.annotation.Scope;
@@ -23,6 +25,9 @@ import cn.cerc.ui.ssr.source.VuiDataService;
 public class ChartRing extends VuiAbstractChart {
     private SsrBlock block = new SsrBlock("");
 
+    @Column(name = "表盘类型")
+    ChartRingType ringType = ChartRingType.环形表盘;
+    
     public ChartRing() {
         super();
         init();
@@ -63,7 +68,7 @@ public class ChartRing extends VuiAbstractChart {
         block.text(String
                 .format("""
                         <div role='chart' data-title='${_data_title}' class='flex${_width}' data-height="${_height}" data-code='${_cardCode}'
-                        data-skin='${_skin}'>
+                        data-skin='${_skin}' data-ringtype='${_ringType}'>
                             <div class='chartTitle'>${_title}</div>
                             <div class='content'></div>
                             <script>$(function(){buildRingChartByService(`${_service}`, '${_data_title}', ${_dataIn})})</script>
@@ -76,6 +81,7 @@ public class ChartRing extends VuiAbstractChart {
         block.option("_cardCode", cardCode);
         block.option("_width", String.valueOf(width));
         block.option("_height", String.valueOf(height));
+        block.option("_ringType", String.valueOf(ringType.ordinal()));
         block.option("_skin", String.valueOf(skin.ordinal()));
         return block;
     }
@@ -90,4 +96,8 @@ public class ChartRing extends VuiAbstractChart {
         return block;
     }
 
+    public enum ChartRingType {
+        环形表盘,
+        仪表盘
+    }
 }
