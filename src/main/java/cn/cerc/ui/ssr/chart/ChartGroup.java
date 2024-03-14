@@ -39,7 +39,7 @@ public class ChartGroup extends VuiAbstractChart {
 
     @Column(name = "取值字段")
     String valueField = "value_";
-
+    
     public ChartGroup() {
         super();
         init();
@@ -50,6 +50,7 @@ public class ChartGroup extends VuiAbstractChart {
         block.option("_data_title", "");
         block.option("_msg", "");
         block.option("_noData", "");
+        block.option("_hasIcon", "");
         block.option("_templateId", "");
         imageConfig = Application.getBean(ImageConfigImpl.class);
     }
@@ -91,6 +92,7 @@ public class ChartGroup extends VuiAbstractChart {
                     <ul>
                     ${dataset.begin}
                         <li>
+                            ${if _hasIcon}<img src="${dataset.icon_}"/>${endif}
                             <span>${dataset.%s}</span>
                             <span>${dataset.%s}</span>
                         </li>
@@ -145,6 +147,9 @@ public class ChartGroup extends VuiAbstractChart {
                     block.option("_data_title", title + this.getClass().getSimpleName());
                     block.option("_title", title);
                     if (!dataSet.eof()) {
+                        // 判断是否存在 icon
+                        if (dataSet.fields().exists("icon_"))
+                            block.option("_hasIcon", "1");
                         block.option("_url", dataSet.head().getString("url"));
                         block.dataSet(dataSet);
                     } else {
