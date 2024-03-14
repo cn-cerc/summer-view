@@ -30,6 +30,8 @@ public class ChartLine extends VuiAbstractChart {
     boolean isBar = false;
     @Column(name = "排列方向")
     ChartBarDirection direction = ChartBarDirection.水平;
+    @Column(name = "折线图类型")
+    ChartLineType lineType = ChartLineType.折线图;
 
     public ChartLine() {
         super();
@@ -60,7 +62,7 @@ public class ChartLine extends VuiAbstractChart {
         block.text(String
                 .format("""
                         <div role='chart' data-title='${_data_title}' class='flex${_width}' data-height="${_height}" data-code='${_cardCode}' data-direction='${_direction}'
-                        data-skin='${_skin}'>
+                        data-skin='${_skin}' data-linetype='${_lineType}'>
                             <div class='chartTitle'>${_title}</div>
                             <div class='content'></div>
                             <script>$(function(){buildChartByService(`${_service}`, '${_type}', '${_data_title}', ${_dataIn})})</script>
@@ -75,6 +77,7 @@ public class ChartLine extends VuiAbstractChart {
         block.option("_height", String.valueOf(height));
         block.option("_direction", String.valueOf(direction.ordinal()));
         block.option("_skin", String.valueOf(skin.ordinal()));
+        block.option("_lineType", String.valueOf(lineType.ordinal()));
         block.id(title).display(display_option.ordinal());
         return block;
     }
@@ -98,6 +101,11 @@ public class ChartLine extends VuiAbstractChart {
     @Override
     protected SsrBlock block() {
         return block;
+    }
+
+    public enum ChartLineType {
+        折线图,
+        曲线图;
     }
 
 }
