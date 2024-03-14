@@ -1,5 +1,8 @@
 package cn.cerc.ui.ssr.chart;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -104,16 +107,47 @@ public class ChartTable extends VuiAbstractChart {
                     if (!dataSet.eof()) {
                         block.dataSet(dataSet);
                         block.option("_data", "1");
-                        block.toList(dataSet.fields().getItems().stream().map(FieldMeta::name).toList());
+                        Boolean hasWidth = dataSet.head().fields().exists("width_");
+                        List<Integer> list = new ArrayList<Integer>();
+                        if (hasWidth) {
+                            String widthStr = dataSet.head().getString("width_");
+                            String[] widthArr = widthStr.split(",");
+                            for (String str : widthArr) {
+                                int width = Integer.parseInt(str);
+                                list.add(width);
+                            }
+                        }
+
+                        Boolean isCustomWidth = hasWidth && list.size() == dataSet.fields().size();
+
                         block.onCallback("spanContent", () -> {
                             StringBuilder builder = new StringBuilder();
                             dataSet.records().forEach((row) -> {
                                 builder.append("<li>");
-                                dataSet.fields().forEach((meta) -> {
-                                    builder.append(String.format("<span>%s</span>", row.getString(meta.code())));
-                                });
+                                int index = 0;
+                                for (FieldMeta meta : dataSet.fields()) {
+                                    if (!("width_".equals(meta.code()))) {
+                                        builder.append("<span");
+                                        if (isCustomWidth)
+                                            builder.append(String.format(" style='flex: %s;'", list.get(index)));
+                                        builder.append(String.format(">%s</span>", row.getString(meta.code())));
+                                    }
+                                    index++;
+                                }
                                 builder.append("</li>");
                             });
+                            return builder.toString();
+                        });
+                        block.onCallback("headContent", () -> {
+                            StringBuilder builder = new StringBuilder();
+                            int index = 0;
+                            for (FieldMeta meta : dataSet.fields()) {
+                                builder.append("<span");
+                                if (isCustomWidth)
+                                    builder.append(String.format(" style='flex: %s;'", list.get(index)));
+                                builder.append(String.format(">%s</span>", meta.name()));
+                                index++;
+                            }
                             return builder.toString();
                         });
                     } else
@@ -150,9 +184,7 @@ public class ChartTable extends VuiAbstractChart {
                                     </div>
                                 ${else}
                                     <div class='tabHead'>
-                                        ${list.begin}
-                                            <span>${list.value}</span>
-                                        ${list.end}
+                                        ${callback(headContent)}
                                     </div>
                                     <div class='scroll'>
                                         <ul class='tabBody'>
