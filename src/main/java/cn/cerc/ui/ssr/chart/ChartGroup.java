@@ -92,7 +92,7 @@ public class ChartGroup extends VuiAbstractChart {
                     <ul>
                     ${dataset.begin}
                         <li>
-                            ${if _hasIcon}<img src="${dataset.icon_}"/>${endif}
+                            ${if _hasIcon}<img src="%s/${dataset.icon_}"/>${endif}
                             <span>${dataset.%s}</span>
                             <span>${dataset.%s}</span>
                         </li>
@@ -102,7 +102,7 @@ public class ChartGroup extends VuiAbstractChart {
                 ${endif}
                 <script>$(function(){ refreshChartGroupByService(`${_service}`, `${_cardCode}`) })</script>
                 </div>
-                """, imageConfig.getCommonFile("images/Frmshopping/notDataImg.png"), titleField, valueField));
+                """, imageConfig.getCommonFile("images/Frmshopping/notDataImg.png"), imageConfig.getCommonFile("images/kanban"), titleField, valueField));
         block.id(title).display(display_option.ordinal());
         String cardCode = "";
         if (canvas().environment() instanceof VuiEnvironment environment)
