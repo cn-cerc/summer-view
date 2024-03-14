@@ -46,6 +46,9 @@ public abstract class VuiAbstractChart extends VuiControl
         return title;
     }
 
+    @Column(name = "刷新频率(毫秒)")
+    protected int refreshTime = 30000;
+
     @Override
     public void onMessage(Object sender, int msgType, Object msgData, String targetId) {
         SsrBlock block = Objects.requireNonNull(block());
