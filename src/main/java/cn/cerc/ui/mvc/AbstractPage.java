@@ -70,19 +70,19 @@ public abstract class AbstractPage extends UIComponent implements IPage, IUserLa
         return this;
     }
 
-    public final AbstractPage setErrorMessage(String message) {
+    public final AbstractPage showError(String message) {
         getForm().setParam("message", message);
         getForm().setParam("messageType", "error");
         return this;
     }
 
-    public final AbstractPage setWarnMessage(String message) {
+    public final AbstractPage showWarn(String message) {
         getForm().setParam("message", message);
         getForm().setParam("messageType", "warn");
         return this;
     }
 
-    public final AbstractPage setInfoMessage(String message) {
+    public final AbstractPage showInfo(String message) {
         getForm().setParam("message", message);
         getForm().setParam("messageType", "info");
         return this;
