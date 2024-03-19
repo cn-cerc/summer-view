@@ -102,6 +102,7 @@ public class CorpPlugins {
      * @param requiredType IPlugins 的实现类
      * @return 对象本身
      */
+    @SuppressWarnings("unchecked")
     public static <T> T getPluginsByCorp(Object owner, Class<T> requiredType) {
         ApplicationContext context = Application.getContext();
         if (context == null)
@@ -113,7 +114,7 @@ public class CorpPlugins {
         if (!context.containsBean(customName)) {
             return null;
         }
-        T result = context.getBean(customName, requiredType);
+        Object result = context.getBean(customName);
         if (result != null) {
             // 要求必须继承IPlugins
             if (result instanceof IPlugins) {
@@ -126,7 +127,7 @@ public class CorpPlugins {
                 ((IHandle) result).setSession(((IHandle) owner).getSession());
             }
         }
-        return result;
+        return (T)result;
     }
 
     private static String getCorpClassName(Object owner) {
