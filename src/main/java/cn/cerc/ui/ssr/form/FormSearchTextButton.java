@@ -29,6 +29,8 @@ public class FormSearchTextButton extends VuiControl implements ISupplierBlock, 
     String placeholder = "查询条件";
     @Column
     String field = "SearchText_";
+    @Column
+    boolean autofocus = false;
 
     @Override
     public SsrBlock request(ISsrBoard owner) {
@@ -40,7 +42,7 @@ public class FormSearchTextButton extends VuiControl implements ISupplierBlock, 
                                 <img src="%s" />
                             </a>
                             <li class="searchTextDiv">
-                                <input type="text" name="${_field}" id="${_field}" value="${%s}" autocomplete="off" placeholder="请输入${_placeholder}">
+                                <input type="text" name="${_field}" id="${_field}" value="${%s}" autocomplete="off" placeholder="请输入${_placeholder}" ${if _autofocus}autofocus ${endif}>
                                 <span role="suffix-icon"></span>
                             </li>
                             <div class="searchFormButtonDiv">
@@ -53,7 +55,8 @@ public class FormSearchTextButton extends VuiControl implements ISupplierBlock, 
         block.option("templateId", "")
                 .option("_placeholder", this.placeholder)
                 .option("_field", this.field)
-                .option("_style", this.properties("v_style").orElse(""));
+                .option("_style", this.properties("v_style").orElse(""))
+                .option("_autofocus", this.autofocus ? "1" : "");
         return block;
     }
 
@@ -98,4 +101,8 @@ public class FormSearchTextButton extends VuiControl implements ISupplierBlock, 
         return this;
     }
 
+    public FormSearchTextButton autofocus(boolean autofocus) {
+        this.autofocus = autofocus;
+        return this;
+    }
 }
