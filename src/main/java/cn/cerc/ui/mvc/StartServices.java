@@ -122,9 +122,7 @@ public class StartServices extends HttpServlet {
             String message = String.format("clientIP %s, token %s, service %s, corpNo %s, dataIn %s, message %s",
                     clientIP, token, function.key(), handle.getCorpNo(), dataIn.json(), throwable.getMessage());
 
-            if (e instanceof SecurityStopException)
-                JayunLogParser.warn(clazz, throwable, message);// 用户权限不足，记入警告类日志
-            else
+            if (!(e instanceof SecurityStopException)) // 权限不足类警告写入 info
                 JayunLogParser.error(clazz, throwable, message);
             log.info("{}", message, throwable);
             if (dataOut == null)
