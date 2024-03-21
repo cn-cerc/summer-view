@@ -68,6 +68,7 @@ public class StartForms implements Filter {
         paths.add("services-npl/");
         paths.add("services-csm/");
         paths.add("services-jt/");
+        paths.add("dpl/");
         paths.add("task/");
         paths.add("docs/");
     }
