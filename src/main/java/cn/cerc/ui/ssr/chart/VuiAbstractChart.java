@@ -4,6 +4,10 @@ import java.util.Objects;
 
 import javax.persistence.Column;
 
+import cn.cerc.db.core.Utils;
+import cn.cerc.mis.core.Application;
+import cn.cerc.mis.core.HtmlWriter;
+import cn.cerc.ui.core.RequestReader;
 import cn.cerc.ui.core.ViewDisplay;
 import cn.cerc.ui.fields.ImageConfigImpl;
 import cn.cerc.ui.ssr.base.ISupportPanel;
@@ -22,6 +26,8 @@ public abstract class VuiAbstractChart extends VuiControl
         implements ICommonSupportChart, ISupportPanel, ISupplierBlock {
 
     protected ImageConfigImpl imageConfig;
+    protected StringBuilder builder;
+    protected SsrBlock block = new SsrBlock();
 
     @Column
     protected String title = "";
@@ -41,13 +47,60 @@ public abstract class VuiAbstractChart extends VuiControl
     @Column(name = "皮肤")
     protected SkinTypeEnum skin = SkinTypeEnum.通用;
 
+    @Column(name = "刷新频率(毫秒)")
+    protected int refreshTime = 10000;
+
+    @Column(name = "是否对接BDAI")
+    protected boolean jointBDAI = false;
+
     @Override
-    public String title() {
-        return title;
+    public SsrBlock request(ISsrBoard owner) {
+        this.builder = new StringBuilder();
+        builder.append(
+                "<div role='chart' class='${_class}' data-height='${_height}' data-code='${_cardCode}' data-skin='${_skin}'>");
+        block.option("_class", "flex" + width);
+        block.option("_height", String.valueOf(height));
+        block.option("_skin", String.valueOf(skin.ordinal()));
+        String cardCode = "";
+        if (canvas().environment() instanceof VuiEnvironment environment)
+            cardCode = environment.getPageCode().replace(".execute", "");
+        block.option("_cardCode", cardCode);
+        block.option("_refreshTime", String.valueOf(refreshTime));
+        block.option("_templateId", "");
+
+        builder.append(String.format("""
+                <div class='chartTitle'>
+                    <span>${_title}</span>${if _jointBDAI}<div class='aiBox' onclick='playDataCardAIAnalysis(this);'>
+                        <img src='%s' />
+                        <img src='%s' />
+                    </div>${endif}
+                </div>
+                """, getImage("images/icon/ai.png"), getImage("images/icon/ai_kanban.png")));
+        block.option("_jointBDAI", jointBDAI ? "1" : "");
+
+        buildContent();
+
+        builder.append("</div>");
+        block.option("_title", title);
+
+        block.text(this.builder.toString());
+        block.display(display_option.ordinal());
+        return block();
     }
 
-    @Column(name = "刷新频率(毫秒)")
-    protected int refreshTime = 30000;
+    public void buildContent() {
+        builder.append("<div class='content'></div>");
+    };
+
+    @Override
+    public void saveEditor(RequestReader reader) {
+        super.saveEditor(reader);
+        if (Utils.isEmpty(title))
+            this.title = reader.getString("binder")
+                    .map(serviceId -> canvas().getMember(serviceId, binder.targetType()).orElse(null))
+                    .map(VuiDataService::serviceDesc)
+                    .orElse(reader.getString("title").orElse(""));
+    }
 
     @Override
     public void onMessage(Object sender, int msgType, Object msgData, String targetId) {
@@ -83,11 +136,33 @@ public abstract class VuiAbstractChart extends VuiControl
     }
 
     protected SsrBlock block() {
-        return null;
+        return block;
+    }
+
+    @Override
+    public String title() {
+        return title;
+    }
+
+    @Override
+    public VuiAbstractChart title(String title) {
+        this.title = title;
+        return this;
     }
 
     public enum SkinTypeEnum {
         通用,
         无边框;
+    }
+
+    @Override
+    public void output(HtmlWriter html) {
+        html.print(block.html());
+    }
+
+    public String getImage(String url) {
+        if (imageConfig == null)
+            imageConfig = Application.getBean(ImageConfigImpl.class);
+        return imageConfig.getCommonFile(url);
     }
 }
