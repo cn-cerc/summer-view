@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
+import cn.cerc.db.core.Utils;
 import cn.cerc.mis.core.Application;
 
 /**
@@ -127,6 +128,29 @@ public class ClientIPVerify {
             }
         }
         return true;
+    }
+
+    public String getCity(String ip) {
+        String city = "(未知)";
+        if (Utils.isEmpty(ip))
+            return city;
+        try (AWReader awReader = new AWReader(file)) {
+            InetAddress address = InetAddress.getByName(ip);
+            JsonNode record = awReader.get(address);
+            if (record == null)
+                return city;
+            String continent = record.get("continent").asText();
+            if ("保留IP".equals(continent))
+                return continent;
+            String value = record.get("province").asText();
+            if (Utils.isEmpty(value))
+                return city;
+            city = value;
+        } catch (IpTypeException | IOException e) {
+            log.error("IP {} 解析地址失败 => {}", ip, e.getMessage(), e);
+            return city;
+        }
+        return city;
     }
 
     public static void main(String[] args) {

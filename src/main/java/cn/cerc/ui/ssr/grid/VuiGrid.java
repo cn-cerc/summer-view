@@ -1,12 +1,10 @@
 package cn.cerc.ui.ssr.grid;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -24,10 +22,11 @@ import cn.cerc.db.core.DataSet;
 import cn.cerc.db.core.IHandle;
 import cn.cerc.db.core.Utils;
 import cn.cerc.mis.core.Application;
+import cn.cerc.mis.core.EntityServiceField;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.RequestReader;
-import cn.cerc.ui.core.TemplateConfigOptionEnum;
 import cn.cerc.ui.core.UIComponent;
+import cn.cerc.ui.core.ViewDisplay;
 import cn.cerc.ui.ssr.base.UISsrBlock;
 import cn.cerc.ui.ssr.core.AlignEnum;
 import cn.cerc.ui.ssr.core.ISsrOption;
@@ -37,11 +36,13 @@ import cn.cerc.ui.ssr.core.PropertiesReader;
 import cn.cerc.ui.ssr.core.SsrBlock;
 import cn.cerc.ui.ssr.core.SsrTemplate;
 import cn.cerc.ui.ssr.core.SummaryTypeEnum;
+import cn.cerc.ui.ssr.core.VuiCommonComponent;
 import cn.cerc.ui.ssr.core.VuiComponent;
 import cn.cerc.ui.ssr.core.VuiContainer;
 import cn.cerc.ui.ssr.editor.EditorGrid;
 import cn.cerc.ui.ssr.editor.ISsrBoard;
 import cn.cerc.ui.ssr.editor.SsrMessage;
+import cn.cerc.ui.ssr.form.ISupportCommonForm;
 import cn.cerc.ui.ssr.page.ISupportCanvas;
 import cn.cerc.ui.ssr.page.IVuiEnvironment;
 import cn.cerc.ui.ssr.page.VuiEnvironment;
@@ -59,7 +60,9 @@ import cn.cerc.ui.style.IGridStyle;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Description("数据表格")
-public class VuiGrid extends VuiContainer<ISupportGrid> implements ISsrBoard, IGridStyle, IBinders, ISupportCanvas {
+@VuiCommonComponent
+public class VuiGrid extends VuiContainer<ISupportGrid>
+        implements ISsrBoard, IGridStyle, IBinders, ISupportCanvas, ISupportCommonForm {
     private static final Logger log = LoggerFactory.getLogger(VuiGrid.class);
     private SsrTemplate template;
     private List<String> columns = new ArrayList<>();
@@ -142,6 +145,7 @@ public class VuiGrid extends VuiContainer<ISupportGrid> implements ISsrBoard, IG
         }
 
         getBlock(SsrTemplate.BeginFlag).ifPresent(template -> html.print(template.html()));
+        html.println("<script>$(function() { initGrid() });</script>");
         getTemplate(TableBegin, getDefault_TableBegin()).ifPresent(value -> html.print(value.html()));
 
         // 输出标题
@@ -223,9 +227,7 @@ public class VuiGrid extends VuiContainer<ISupportGrid> implements ISsrBoard, IG
 
     /**
      * 请改使用 onGetHeadHtml
-     * 
-     * @param field
-     * @param consumer
+     *
      */
     @Deprecated
     public void addGetHead(String field, Consumer<SsrBlock> consumer) {
@@ -238,9 +240,7 @@ public class VuiGrid extends VuiContainer<ISupportGrid> implements ISsrBoard, IG
 
     /**
      * 请改使用 onGetBody
-     * 
-     * @param field
-     * @param consumer
+     *
      */
     @Deprecated
     public void addGetBody(String field, Consumer<SsrBlock> consumer) {
@@ -262,8 +262,7 @@ public class VuiGrid extends VuiContainer<ISupportGrid> implements ISsrBoard, IG
 
     /**
      * 请改使用 columns
-     * 
-     * @return
+     *
      */
     @Deprecated
     public List<String> getFields() {
@@ -287,10 +286,7 @@ public class VuiGrid extends VuiContainer<ISupportGrid> implements ISsrBoard, IG
 
     /**
      * 请改使用 addTemplate
-     * 
-     * @param id
-     * @param templateText
-     * @return
+     *
      */
     @Deprecated
     public VuiGrid putDefine(String id, String templateText) {
@@ -299,7 +295,6 @@ public class VuiGrid extends VuiContainer<ISupportGrid> implements ISsrBoard, IG
     }
 
     /**
-     * 
      * @return 返回默认的表头样式
      */
     private Supplier<SsrBlock> getDefault_TableBegin() {
@@ -307,7 +302,6 @@ public class VuiGrid extends VuiContainer<ISupportGrid> implements ISsrBoard, IG
     }
 
     /**
-     * 
      * @return 返回表头行
      */
     private Supplier<SsrBlock> getDefault_HeadBegin() {
@@ -315,7 +309,6 @@ public class VuiGrid extends VuiContainer<ISupportGrid> implements ISsrBoard, IG
     }
 
     /**
-     * 
      * @return 返回表身行
      */
     private Supplier<SsrBlock> getDefault_BodyBegin() {
@@ -323,8 +316,6 @@ public class VuiGrid extends VuiContainer<ISupportGrid> implements ISsrBoard, IG
     }
 
     /**
-     * 
-     * @param field
      * @return 返回默认的表头单元格样式
      */
     private Supplier<SsrBlock> getDefault_HeadCell(String field) {
@@ -332,8 +323,6 @@ public class VuiGrid extends VuiContainer<ISupportGrid> implements ISsrBoard, IG
     }
 
     /**
-     * 
-     * @param field
      * @return 返回默认的表身单元格样式
      */
     private Supplier<SsrBlock> getDefault_BodyCell(String field) {
@@ -347,8 +336,6 @@ public class VuiGrid extends VuiContainer<ISupportGrid> implements ISsrBoard, IG
 
     /**
      * 请改使用 loadConfig
-     * 
-     * @return
      */
     public DataSet getDefaultOptions() {
         DataSet ds = new DataSet();
@@ -380,20 +367,18 @@ public class VuiGrid extends VuiContainer<ISupportGrid> implements ISsrBoard, IG
 
     /**
      * 请改使用 loadConfig
-     * 
-     * @param configs
      */
     @Deprecated
     public void setConfig(DataSet configs) {
         configs.forEach(item -> {
-            if (item.getEnum("option_", TemplateConfigOptionEnum.class) != TemplateConfigOptionEnum.不显示)
+            if (item.getEnum("option_", ViewDisplay.class) != ViewDisplay.默认隐藏)
                 addField(item.getString("column_name_"));
         });
     }
 
     public void loadDefaultConfig() {
         this.getDefaultOptions().forEach(item -> {
-            if (item.getEnum("option_", TemplateConfigOptionEnum.class) != TemplateConfigOptionEnum.不显示)
+            if (item.getEnum("option_", ViewDisplay.class) != ViewDisplay.默认隐藏)
                 addColumn(item.getString("column_name_"));
         });
     }
@@ -405,8 +390,6 @@ public class VuiGrid extends VuiContainer<ISupportGrid> implements ISsrBoard, IG
 
     /**
      * 请改使用 emptyText函数
-     * 
-     * @return
      */
     public String getEmptyText() {
         return emptyText();
@@ -418,8 +401,6 @@ public class VuiGrid extends VuiContainer<ISupportGrid> implements ISsrBoard, IG
 
     /**
      * 请改使用 emptyText 函数
-     * 
-     * @param emptyText
      */
     @Deprecated
     public void setEmptyText(String emptyText) {
@@ -432,8 +413,6 @@ public class VuiGrid extends VuiContainer<ISupportGrid> implements ISsrBoard, IG
 
     /**
      * 请改使用 defaultStyle()
-     * 
-     * @return
      */
     @Deprecated
     public SsrGridStyleDefault createDefaultStyle() {
@@ -448,9 +427,6 @@ public class VuiGrid extends VuiContainer<ISupportGrid> implements ISsrBoard, IG
 
     /**
      * 请使用 templateId 函数
-     * 
-     * @param id
-     * @return
      */
     @Deprecated
     public VuiGrid setTemplateId(String id) {
@@ -535,8 +511,8 @@ public class VuiGrid extends VuiContainer<ISupportGrid> implements ISsrBoard, IG
                 .setValue("width", 4)
                 .setValue("check", false);
         if (optSvr.isPresent()) {
-            Set<Field> fields = optSvr.get().fields(ISupplierFields.BodyOutFields);
-            for (Field field : fields) {
+            List<EntityServiceField> fields = optSvr.get().fields(ISupplierFields.BodyOutFields);
+            for (EntityServiceField field : fields) {
                 if (dataSet.locate("field", field.getName()))
                     continue;
                 String title = field.getName();

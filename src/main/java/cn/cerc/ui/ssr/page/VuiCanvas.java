@@ -63,7 +63,6 @@ public class VuiCanvas extends VuiContainer<ISupportCanvas> {
      * 返回所有的子级，包括子级的子级节点<br/>
      * 以id为key，若无id则不收录，若id重复则只收录第1个
      * 
-     * @return
      */
     public Map<String, VuiComponent> getMembers() {
         if (this.team == null) {
@@ -122,11 +121,11 @@ public class VuiCanvas extends VuiContainer<ISupportCanvas> {
                 this.page = page;
             break;
         case SsrMessage.FailOnService:
-            if (msgData instanceof String msg)
+            if (msgData instanceof String msg && page != null)
                 page.setMessage(msg);
             break;
         case SsrMessage.SuccessOnService:
-            if (msgData instanceof String msg)
+            if (msgData instanceof String msg && page != null)
                 page.setMessage(msg);
             break;
         }
@@ -136,7 +135,6 @@ public class VuiCanvas extends VuiContainer<ISupportCanvas> {
      * 返回在当前页面以prefix开头的编号
      * 
      * @param prefix 前缀
-     * @return
      */
     public String createUid(String prefix) {
         var it = 0;
@@ -157,7 +155,6 @@ public class VuiCanvas extends VuiContainer<ISupportCanvas> {
     /**
      * 从内存中取得属性，形成一个树状的json字符串
      * 
-     * @return
      */
     public String getProperties() {
         var writer = new PropertiesWriter();
@@ -180,10 +177,6 @@ public class VuiCanvas extends VuiContainer<ISupportCanvas> {
     /**
      * 取得相应的组件
      * 
-     * @param <T>
-     * @param memberId
-     * @param requiredType
-     * @return
      */
     @SuppressWarnings("unchecked")
     public <T> Optional<T> getMember(String memberId, Class<T> requiredType) {
@@ -208,7 +201,6 @@ public class VuiCanvas extends VuiContainer<ISupportCanvas> {
     /**
      * 在此可以插入自定义业务逻辑
      * 
-     * @param onMessage
      */
     public void onMessage(ISsrMessage onMessage) {
         this.onMessage = onMessage;

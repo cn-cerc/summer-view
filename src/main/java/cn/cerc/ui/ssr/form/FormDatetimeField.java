@@ -9,11 +9,13 @@ import org.springframework.stereotype.Component;
 
 import cn.cerc.db.core.ClassConfig;
 import cn.cerc.mis.core.Application;
+import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.SummerUI;
 import cn.cerc.ui.core.RequestReader;
 import cn.cerc.ui.fields.DateField;
 import cn.cerc.ui.fields.ImageConfigImpl;
 import cn.cerc.ui.ssr.core.SsrBlock;
+import cn.cerc.ui.ssr.core.VuiCommonComponent;
 import cn.cerc.ui.ssr.core.VuiControl;
 import cn.cerc.ui.ssr.editor.ISsrBoard;
 import cn.cerc.ui.ssr.editor.SsrMessage;
@@ -21,7 +23,8 @@ import cn.cerc.ui.ssr.editor.SsrMessage;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Description("日期时间组件")
-public class FormDatetimeField extends VuiControl implements ISupportForm {
+@VuiCommonComponent
+public class FormDatetimeField extends VuiControl implements ISupportField {
     private static final ClassConfig DateConfig = new ClassConfig(DateField.class, SummerUI.ID);
     private SsrBlock block = new SsrBlock();
     private String dateDialogIcon;
@@ -87,8 +90,8 @@ public class FormDatetimeField extends VuiControl implements ISupportForm {
                                 <li ${if _style}style='${_style}'${endif}>
                                     <label for="%s"><em>%s</em></label>
                                     <div>
-                                        <input type="text" name="%s" id="%s" value="${%s}" autocomplete="off"${if _readonly} readonly${endif}${if _autofocus} autofocus${endif}
-                                        ${if _placeholder} placeholder="${_placeholder}"${else} placeholder="请点击获取%s"${endif}${if _pattern} pattern="${_pattern}"${endif}${if _required} required${endif} />
+                                        <input type="text" name="%s" id="%s" value="${%s}" autocomplete="off" ${if _readonly}readonly ${endif}${if _autofocus}autofocus ${endif}
+                                        ${if _placeholder}placeholder="${_placeholder}" ${else}placeholder="请点击获取%s" ${endif}${if _pattern}pattern="${_pattern}" ${endif}${if _required}required ${endif}/>
                                         <span role="suffix-icon">
                                             <a href="javascript:%s('%s')">
                                                 <img src="%s" />
@@ -106,6 +109,14 @@ public class FormDatetimeField extends VuiControl implements ISupportForm {
         block().option("_style", this.properties("v_style").orElse(""));
         block.id(title).fields(this.field);
         return block;
+    }
+
+    @Override
+    public void output(HtmlWriter html) {
+        VuiForm form = this.findOwner(VuiForm.class);
+        if (form != null && !form.columns().contains(title))
+            return;
+        html.print(block.html());
     }
 
     public FormDatetimeField placeholder(String placeholder) {
@@ -139,7 +150,7 @@ public class FormDatetimeField extends VuiControl implements ISupportForm {
     }
 
     @Override
-    public ISupportForm title(String title) {
+    public FormDatetimeField title(String title) {
         this.title = title;
         return this;
     }
@@ -150,7 +161,7 @@ public class FormDatetimeField extends VuiControl implements ISupportForm {
     }
 
     @Override
-    public ISupportForm field(String field) {
+    public FormDatetimeField field(String field) {
         this.field = field;
         return this;
     }
@@ -180,4 +191,16 @@ public class FormDatetimeField extends VuiControl implements ISupportForm {
         return this;
     }
 
+    @Override
+    public void onMessage(Object sender, int msgType, Object msgData, String targetId) {
+        switch (msgType) {
+        case SsrMessage.InitBinder:
+            var form = this.findOwner(VuiForm.class);
+            if (form != null) {
+                this.request(form);
+                form.addColumn(title);
+            }
+            break;
+        }
+    }
 }

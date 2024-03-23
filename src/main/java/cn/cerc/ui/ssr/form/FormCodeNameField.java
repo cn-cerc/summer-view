@@ -9,11 +9,13 @@ import org.springframework.stereotype.Component;
 
 import cn.cerc.db.core.ClassConfig;
 import cn.cerc.mis.core.Application;
+import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.SummerUI;
 import cn.cerc.ui.core.RequestReader;
 import cn.cerc.ui.fields.AbstractField;
 import cn.cerc.ui.fields.ImageConfigImpl;
 import cn.cerc.ui.ssr.core.SsrBlock;
+import cn.cerc.ui.ssr.core.VuiCommonComponent;
 import cn.cerc.ui.ssr.core.VuiControl;
 import cn.cerc.ui.ssr.editor.ISsrBoard;
 import cn.cerc.ui.ssr.editor.SsrMessage;
@@ -21,16 +23,17 @@ import cn.cerc.ui.ssr.editor.SsrMessage;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Description("代码名称块组件")
-public class FormCodeNameField extends VuiControl implements ISupportForm {
+@VuiCommonComponent
+public class FormCodeNameField extends VuiControl implements ISupportField {
     private static final ClassConfig FieldConfig = new ClassConfig(AbstractField.class, SummerUI.ID);
     private SsrBlock block = new SsrBlock();
     private String fieldDialogIcon;
     @Column
-    String title;
+    String title = "";
     @Column
-    String codeField;
+    String codeField = "";
     @Column
-    String nameField;
+    String nameField = "";
     @Column
     String dialog = "";
     @Column
@@ -109,8 +112,8 @@ public class FormCodeNameField extends VuiControl implements ISupportForm {
                                 <li ${if _style}style='${_style}'${endif}>
                                     <label for="%s"><em>%s</em></label>
                                     <div>
-                                        <input type="hidden" name="%s" id="%s" value="${%s}">
-                                        <input type="text" name="%s" id="%s" value="${%s}" autocomplete="off" placeholder="请点击获取%s"${if _readonly} readonly${endif}>
+                                        <input type="hidden" name="%s" id="%s" value="${%s}"/>
+                                        <input type="text" name="%s" id="%s" value="${%s}" autocomplete="off" placeholder="请点击获取%s" ${if _readonly}readonly ${endif}/>
                                         <span role="suffix-icon">
                                             <a href="javascript:${_dialog}">
                                                 <img src="%s">
@@ -128,6 +131,14 @@ public class FormCodeNameField extends VuiControl implements ISupportForm {
         return block;
     }
 
+    @Override
+    public void output(HtmlWriter html) {
+        VuiForm form = this.findOwner(VuiForm.class);
+        if (form != null && !form.columns().contains(title))
+            return;
+        html.print(block.html());
+    }
+
     public FormCodeNameField readonly(boolean readonly) {
         this.readonly = readonly;
         return this;
@@ -139,7 +150,7 @@ public class FormCodeNameField extends VuiControl implements ISupportForm {
     }
 
     @Override
-    public ISupportForm title(String title) {
+    public FormCodeNameField title(String title) {
         this.title = title;
         return this;
     }
@@ -150,7 +161,7 @@ public class FormCodeNameField extends VuiControl implements ISupportForm {
     }
 
     @Override
-    public ISupportForm field(String fields) {
+    public FormCodeNameField field(String fields) {
         String[] fieldsArray = fields.split(",");
         if (fieldsArray.length == 2) {
             this.codeField = fieldsArray[0];
@@ -169,4 +180,16 @@ public class FormCodeNameField extends VuiControl implements ISupportForm {
         return this;
     }
 
+    @Override
+    public void onMessage(Object sender, int msgType, Object msgData, String targetId) {
+        switch (msgType) {
+        case SsrMessage.InitBinder:
+            var form = this.findOwner(VuiForm.class);
+            if (form != null) {
+                this.request(form);
+                form.addColumn(title);
+            }
+            break;
+        }
+    }
 }

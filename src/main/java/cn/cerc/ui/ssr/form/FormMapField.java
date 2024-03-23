@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import cn.cerc.ui.core.RequestReader;
 import cn.cerc.ui.ssr.core.SsrBlock;
+import cn.cerc.ui.ssr.core.VuiCommonComponent;
 import cn.cerc.ui.ssr.core.VuiControl;
 import cn.cerc.ui.ssr.editor.ISsrBoard;
 import cn.cerc.ui.ssr.editor.SsrMessage;
@@ -21,7 +22,8 @@ import cn.cerc.ui.ssr.source.ISupplierMap;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Description("下拉组件")
 @Deprecated
-public class FormMapField extends VuiControl implements ISupportForm {
+@VuiCommonComponent
+public class FormMapField extends VuiControl {
     private SsrBlock block = new SsrBlock();
     @Column
     String title = "";
@@ -47,12 +49,10 @@ public class FormMapField extends VuiControl implements ISupportForm {
         block.id(title).fields(field).display(1);
     }
 
-    @Override
     public SsrBlock block() {
         return block;
     }
 
-    @Override
     public SsrBlock request(ISsrBoard form) {
         String title = this.title;
         String field = this.field;
@@ -61,11 +61,11 @@ public class FormMapField extends VuiControl implements ISupportForm {
                 block.text(String.format(
                         """
                                 <li ${if _style}style='${_style}'${endif}>
-                                    <label for="%s"${if _mark} class='formMark'${endif}>${if _required}<font role="require">*</font>${endif}<em>%s</em></label>
+                                    <label for="%s" ${if _mark}class='formMark' ${endif}>${if _required}<font role="require">*</font>${endif}<em>%s</em></label>
                                     <div>
-                                        <select id="%s" name="%s"${if _readonly} disabled${endif}>
+                                        <select id="%s" name="%s" ${if _readonly}disabled ${endif}>
                                         ${map.begin}
-                                            <option value="${map.key}" ${if map.key==%s}selected${endif}>${map.value}</option>
+                                            <option value="${map.key}" ${if map.key==%s}selected ${endif}>${map.value}</option>
                                         ${map.end}
                                         </select>
                                     </div>
@@ -100,24 +100,20 @@ public class FormMapField extends VuiControl implements ISupportForm {
         return this;
     }
 
-    @Override
     public String title() {
         return this.title;
     }
 
-    @Override
-    public ISupportForm title(String title) {
+    public FormMapField title(String title) {
         this.title = title;
         return this;
     }
 
-    @Override
     public String fields() {
         return this.field;
     }
 
-    @Override
-    public ISupportForm field(String field) {
+    public FormMapField field(String field) {
         this.field = field;
         return this;
     }
@@ -157,6 +153,9 @@ public class FormMapField extends VuiControl implements ISupportForm {
         switch (msgType) {
         case SsrMessage.InitBinder:
             this.mapSource.init();
+            var form = this.findOwner(VuiForm.class);
+            if (form != null)
+                this.request(form);
             break;
         case SsrMessage.InitMapSourceDone:
             var obj = this.mapSource.target();

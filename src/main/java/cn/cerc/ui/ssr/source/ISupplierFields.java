@@ -1,7 +1,8 @@
 package cn.cerc.ui.ssr.source;
 
-import java.lang.reflect.Field;
-import java.util.Set;
+import java.util.List;
+
+import cn.cerc.mis.core.EntityServiceField;
 
 public interface ISupplierFields {
 
@@ -10,6 +11,6 @@ public interface ISupplierFields {
     public static final int HeadOutFields = 2;
     public static final int BodyOutFields = 3;
 
-    Set<Field> fields(int fieldsType);
+    List<EntityServiceField> fields(int fieldsType);
 
 }

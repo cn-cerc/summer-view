@@ -15,13 +15,20 @@ import cn.cerc.db.core.DataSet;
 import cn.cerc.db.core.IHandle;
 import cn.cerc.db.core.Utils;
 import cn.cerc.mis.client.ServiceSign;
+import cn.cerc.ui.ssr.chart.ISupportChart;
+import cn.cerc.ui.ssr.core.VuiCommonComponent;
 import cn.cerc.ui.ssr.core.VuiComponent;
 import cn.cerc.ui.ssr.editor.SsrMessage;
+import cn.cerc.ui.ssr.excel.ISupportXls;
+import cn.cerc.ui.ssr.page.ISupportCanvas;
+import cn.cerc.ui.ssr.report.ISupportRpt;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Description("Map数据服务")
-public class VuiMapService extends VuiComponent implements ICommonSupplierMap, IBinders {
+@VuiCommonComponent
+public class VuiMapService extends VuiComponent
+        implements ISupplierMap, ISupportCanvas, ISupportXls, ISupportChart, ISupportRpt, IBinders {
     private Map<String, String> items = new LinkedHashMap<>();
     private String selected = "";
     private IHandle handle;

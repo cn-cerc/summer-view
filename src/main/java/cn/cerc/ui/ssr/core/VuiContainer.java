@@ -1,7 +1,10 @@
 package cn.cerc.ui.ssr.core;
 
 import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -20,38 +23,46 @@ public abstract class VuiContainer<T> extends VuiControl {
 
     private Class<?> supportClass;
 
-    @SuppressWarnings("unchecked")
     public VuiContainer() {
         super();
-        if (getClass().getGenericSuperclass() instanceof ParameterizedType type) {
-            supportClass = (Class<T>) type.getActualTypeArguments()[0];
-        } else if (getClass().getSuperclass().getGenericSuperclass() instanceof ParameterizedType type) {
-            supportClass = (Class<T>) type.getActualTypeArguments()[0];
-        }
+        supportClass = findSupportClass(getClass());
+    }
+
+    public VuiContainer(UIComponent owner) {
+        super(owner);
+        supportClass = findSupportClass(getClass());
     }
 
     @SuppressWarnings("unchecked")
-    public VuiContainer(UIComponent owner) {
-        super(owner);
-        if (getClass().getGenericSuperclass() instanceof ParameterizedType type) {
-            supportClass = (Class<T>) type.getActualTypeArguments()[0];
-        } else if (getClass().getSuperclass().getGenericSuperclass() instanceof ParameterizedType type) {
-            supportClass = (Class<T>) type.getActualTypeArguments()[0];
+    private Class<T> findSupportClass(Class<?> clazz) {
+        if (clazz.getGenericSuperclass() instanceof ParameterizedType type) {
+            Type[] types = type.getActualTypeArguments();
+            if (types != null && types.length > 0 && types[0] instanceof Class<?> result) {
+                return (Class<T>) result;
+            }
         }
+        return findSupportClass(clazz.getSuperclass());
     }
 
     public Set<Class<? extends VuiComponent>> getChildren() {
+        return getChildren(this, supportClass);
+    }
+
+    public static Set<Class<? extends VuiComponent>> getChildren(VuiComponent vuiComponent, Class<?> supportClass) {
         Set<Class<? extends VuiComponent>> result;
-        IVuiEnvironment visualPage = this.canvas().environment();
+        IVuiEnvironment visualPage = vuiComponent.canvas().environment();
         if (visualPage != null)
-            result = visualPage.getAttachClass(this.getClass());
+            result = visualPage.getAttachClass(vuiComponent.getClass());
         else
             result = new LinkedHashSet<Class<? extends VuiComponent>>();
 
         var context = Application.getContext();
         context.getBeansOfType(supportClass).forEach((name, bean) -> {
-            if (bean instanceof VuiComponent ssr)
-                result.add(ssr.getClass());
+            if (bean instanceof VuiComponent ssr) {
+                Class<? extends VuiComponent> clazz = ssr.getClass();
+                if (clazz.getAnnotation(VuiCommonComponent.class) != null)
+                    result.add(clazz);
+            }
         });
         return result;
     }
@@ -65,6 +76,20 @@ public abstract class VuiContainer<T> extends VuiControl {
         return this;
     }
 
+    protected Class<?> getSupportClass() {
+        return this.supportClass;
+    }
+
+    @SuppressWarnings("unchecked")
+    protected <R> List<R> getCommponetsByClass(Class<R> clazz) {
+        List<R> list = new ArrayList<>();
+        for (UIComponent component : this) {
+            if (clazz.isInstance(component))
+                list.add((R) component);
+        }
+        return list;
+    }
+
     @Override
     public void output(HtmlWriter html) {
         var props = this.properties();
@@ -72,7 +97,7 @@ public abstract class VuiContainer<T> extends VuiControl {
             var cols = props.get("v_column_num").asInt();
             html.print("<div role='grid'>");
             int count = this.getComponentCount() / cols * cols;
-            if ((this.getComponentCount() / cols) % cols > 0) {
+            if (this.getComponentCount() % cols > 0) {
                 count += cols;
             }
             for (int i = 0; i < count; i++) {

@@ -36,7 +36,7 @@ public class EditorForm extends UIComponent {
         form.strict(false);
         form.addBlock(VuiForm.FormStart, """
                 <div>
-                    <span onclick="toggleSearch(this)">数据属性</span>
+                    <span>数据属性</span>
                     <div class="searchFormButtonDiv">
                         <button name="submit" type="submit" value="1">保存</button>
                     </div>
@@ -105,7 +105,9 @@ public class EditorForm extends UIComponent {
             var column = field.getAnnotation(Column.class);
             if (column != null && !Utils.isEmpty(column.name()))
                 title = column.name();
-            if (field.getType() == String.class || field.getType() == int.class) {
+            if (field.getType() == String.class || field.getType() == int.class || field.getType() == Integer.class
+                    || field.getType() == double.class || field.getType() == Double.class
+                    || field.getType() == float.class || field.getType() == Float.class) {
                 this.addItem(title, field.getName(), "" + field.get(properties));
             } else if (field.getType() == boolean.class || field.getType() == Boolean.class) {
                 var style = form.defaultStyle();
@@ -150,7 +152,7 @@ public class EditorForm extends UIComponent {
                 log.warn("暂不支持的属性 {} of {}", field.getName(), field.getType().getSimpleName());
             }
         } catch (IllegalArgumentException | IllegalAccessException e) {
-            e.printStackTrace();
+            log.error("error {}", e.getMessage(), e);
         }
     }
 

@@ -6,13 +6,26 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import cn.cerc.ui.ssr.core.VuiControl;
+import cn.cerc.ui.ssr.core.VuiCommonComponent;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class RptGridBoolean extends VuiControl implements ISupportRptGrid {
+@VuiCommonComponent
+public class RptGridBoolean extends AbstractRptGridControl {
     @Column
-    String title;
+    String title = "";
     @Column
-    String field;
+    String field = "";
+    @Column
+    String trueText = "是";
+    @Column
+    String falseText = "否";
+
+    @Override
+    protected String content() {
+        if (dataSet != null)
+            return dataSet.getBoolean(field) ? trueText : falseText;
+        return "";
+    }
+
 }

@@ -1,6 +1,8 @@
 package cn.cerc.ui.ssr.grid;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -17,9 +19,9 @@ import cn.cerc.db.core.Utils;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.ssr.core.AlginEnum;
 import cn.cerc.ui.ssr.core.ISsrOption;
-import cn.cerc.ui.ssr.core.ISupplierBlock;
 import cn.cerc.ui.ssr.core.SsrBlock;
 import cn.cerc.ui.ssr.core.SummaryTypeEnum;
+import cn.cerc.ui.ssr.core.VuiCommonComponent;
 import cn.cerc.ui.ssr.core.VuiControl;
 import cn.cerc.ui.ssr.editor.ISsrBoard;
 import cn.cerc.ui.ssr.editor.SsrMessage;
@@ -28,6 +30,7 @@ import cn.cerc.ui.ssr.source.ISupplierList;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+@VuiCommonComponent
 public class GridNumberField extends VuiControl implements ISupportGrid {
     private SsrBlock head = new SsrBlock();
     private SsrBlock body = new SsrBlock();
@@ -36,15 +39,21 @@ public class GridNumberField extends VuiControl implements ISupportGrid {
     @Column
     String field = "";
     @Column
-    public int fieldWidth = 10;
+    int fieldWidth = 10;
     @Column
-    public String align = "";
+    String align = "";
     @Column
     String format = "";
     @Column
     SummaryTypeEnum summaryType = SummaryTypeEnum.无;
     @Column
     Binder<ISupplierList> listSource = new Binder<>(this, ISupplierList.class);
+    @Column
+    String formatStyle = "0.####";
+    @Column
+    String target = "";
+
+    Supplier<String> url;
 
     public GridNumberField() {
         super();
@@ -54,8 +63,10 @@ public class GridNumberField extends VuiControl implements ISupportGrid {
     @Override
     public SsrBlock request(ISsrBoard grid) {
         String headTitle = "head." + this.title;
-        grid.addBlock(headTitle, head.text(
-                String.format("<th style='width: ${_width}em' onclick=\"gridSort(this,'%s')\">${_title}</th>", field)));
+        grid.addBlock(headTitle,
+                head.text(String.format(
+                        "<th style='width: ${_width}em' onclick=\"gridSort(this,'%s')\"><div>${_title}</div></th>",
+                        field)));
         head.toMap("_width", "" + this.fieldWidth);
         head.toMap("_title", this.title);
         head.id(headTitle);
@@ -64,16 +75,29 @@ public class GridNumberField extends VuiControl implements ISupportGrid {
         String bodyTitle = "body." + this.title;
         grid.addBlock(bodyTitle, body.text(String.format("""
                 <td align='${_align}' role='${_field}'>
-                ${if _enabled_url}<a href='${callback(url)}'>${endif}
+                ${if _enabled_url}<a href='${callback(url)} '${if _target}target='${_target}' ${endif}>${endif}
                 ${if _isTextField}
-                ${dataset.%s}
+                ${callback(_value)}
                 ${else}
                 ${list.begin}${if list.index==%s}${list.value}${endif}${list.end}
                 ${endif}
                 ${if _enabled_url}</a>${endif}
-                </td>""", this.field, this.field)));
+                </td>""", this.field)));
         body.option("_align", this.align);
         body.option("_field", this.field);
+        body.option("_enabled_url", url != null ? "1" : "");
+        body.option("_target", Utils.isEmpty(target) ? "" : "1");
+        if (url != null)
+            body.onCallback("url", url);
+        body.onCallback("_value", () -> {
+            Optional<String> val = body.getValue(field);
+            if (val.isEmpty() || Utils.isEmpty(val.get())) {
+                return "0";
+            } else {
+                DecimalFormat df = new DecimalFormat(formatStyle);
+                return df.format(new BigDecimal(val.get()));
+            }
+        });
         body.id(bodyTitle);
         body.display(1);
         body.strict(false);
@@ -98,8 +122,13 @@ public class GridNumberField extends VuiControl implements ISupportGrid {
     }
 
     public GridNumberField url(Supplier<String> url) {
-        body.option("_enabled_url", "1");
-        body.onCallback("url", url);
+        this.url = url;
+        return this;
+    }
+
+    public GridNumberField url(String target, Supplier<String> url) {
+        this.target = target;
+        this.url = url;
         return this;
     }
 
@@ -109,7 +138,7 @@ public class GridNumberField extends VuiControl implements ISupportGrid {
     }
 
     public GridNumberField align(AlginEnum align) {
-        body.option("_align", align.name());
+        this.align = align.name();
         return this;
     }
 
@@ -163,6 +192,10 @@ public class GridNumberField extends VuiControl implements ISupportGrid {
 
     @Override
     public void outputTotal(HtmlWriter html, DataSet dataSet) {
+        if (summaryType == SummaryTypeEnum.无) {
+            ISupportGrid.super.outputTotal(html, dataSet);
+            return;
+        }
         DoubleStream doubleStream = dataSet.records().stream().mapToDouble(row -> row.getDouble(field));
         double summary = switch (summaryType) {
         case 求和 -> doubleStream.sum();
@@ -198,10 +231,26 @@ public class GridNumberField extends VuiControl implements ISupportGrid {
         return this;
     }
 
-    public ISupplierBlock toList(List<String> targetList) {
+    public GridNumberField toList(List<String> targetList) {
         body.toList(targetList);
         body.option("_isTextField", "");
         return this;
+    }
+
+    public GridNumberField toList(Enum<?>[] enums) {
+        List<String> list = new ArrayList<>();
+        for (Enum<?> item : enums)
+            list.add(item.name());
+        return toList(list);
+    }
+
+    public GridNumberField formatStyle(String formatStyle) {
+        this.formatStyle = formatStyle;
+        return this;
+    }
+
+    public String formatStyle() {
+        return formatStyle;
     }
 
 }

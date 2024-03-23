@@ -198,7 +198,9 @@ public class RequestReader {
 
     private void addField(Object properties, Field field) {
         try {
-            if (field.getType() == String.class || field.getType() == Integer.class || field.getType() == int.class) {
+            if (field.getType() == String.class || field.getType() == Integer.class || field.getType() == int.class
+                    || field.getType() == double.class || field.getType() == Double.class
+                    || field.getType() == float.class || field.getType() == Float.class) {
                 var temp = this.request.getParameter(field.getName());
                 if (temp != null) {
                     JsonNode value = new TextNode(temp);
@@ -238,7 +240,7 @@ public class RequestReader {
                 log.warn("暂不支持的数据字段类型：{}({})", field.getClass().getSimpleName(), field.getName());
             }
         } catch (IllegalArgumentException | IllegalAccessException e) {
-            e.printStackTrace();
+            log.error("error {}", e.getMessage(), e);
         }
     }
 

@@ -70,6 +70,24 @@ public abstract class AbstractPage extends UIComponent implements IPage, IUserLa
         return this;
     }
 
+    public final AbstractPage showError(String message) {
+        getForm().setParam("message", message);
+        getForm().setParam("messageType", "error");
+        return this;
+    }
+
+    public final AbstractPage showWarn(String message) {
+        getForm().setParam("message", message);
+        getForm().setParam("messageType", "warn");
+        return this;
+    }
+
+    public final AbstractPage showInfo(String message) {
+        getForm().setParam("message", message);
+        getForm().setParam("messageType", "info");
+        return this;
+    }
+
     @Override
     public void output(HtmlWriter html) {
         for (UIComponent component : this.getComponents()) {

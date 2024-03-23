@@ -20,6 +20,7 @@ import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.core.UIDataViewImpl;
 import cn.cerc.ui.style.IGridStyle;
+import cn.cerc.ui.vcl.UIDiv;
 import cn.cerc.ui.vcl.UIForm.UIFormGatherImpl;
 import cn.cerc.ui.vcl.UITd;
 import cn.cerc.ui.vcl.UITh;
@@ -108,7 +109,6 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
     /**
      * 注册dataSet中的字段，若不存在则自动于dataSet中增加
      * 
-     * @param fieldCode
      * @return 返回 dataSet.fields(fieldCode)
      */
     public FieldStyleDefine addField(String fieldCode) {
@@ -145,6 +145,7 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
         if (!this.active())
             return;
         if (!this.init && this.dataSet != null) {
+            html.println("<script>$(function() { initGrid() });</script>");
             for (FieldMeta meta : fields) {
                 FieldStyleDefine styleDefine = this.items.get(meta.code());
                 if (styleDefine != null && styleDefine.name() != null)
@@ -177,15 +178,18 @@ public class UIGridView extends UIComponent implements UIDataViewImpl, IGridStyl
         if (dataStyle != null)
             dataStyle.setDefault(meta);
         String fieldName = meta.name() == null ? meta.code() : meta.name();
-        UITh th = new UITh(head).setText(fieldName);
+        UITh th = new UITh(head);
+        new UIDiv(th).setText(fieldName);
         UITd td = new UITd(body);
 
         FieldStyleDefine styleDefine = this.items.get(meta.code());
         if (styleDefine != null && styleDefine.name() != null) {
             int width = styleDefine.width() > 0 ? styleDefine.width() : styleDefine.name().length();
             th.setCssProperty("onclick", "gridViewSort(this)");
-            if (sumWidth > 0)
+            if (sumWidth > 0) {
                 th.setCssProperty("width", String.format("%f%%", Utils.roundTo((double) width / sumWidth * 100, -2)));
+                th.setCssProperty("title", fieldName);
+            }
             if (!Utils.isEmpty(styleDefine.align())) {
                 td.setCssProperty("align", styleDefine.align());
             }

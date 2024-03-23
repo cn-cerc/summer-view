@@ -14,13 +14,15 @@ import org.springframework.stereotype.Component;
 import cn.cerc.db.core.ClassConfig;
 import cn.cerc.db.core.Utils;
 import cn.cerc.mis.core.Application;
+import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.SummerUI;
 import cn.cerc.ui.core.RequestReader;
 import cn.cerc.ui.fields.AbstractField;
 import cn.cerc.ui.fields.ImageConfigImpl;
+import cn.cerc.ui.fields.StringField;
 import cn.cerc.ui.ssr.core.ISsrOption;
-import cn.cerc.ui.ssr.core.ISupplierBlock;
 import cn.cerc.ui.ssr.core.SsrBlock;
+import cn.cerc.ui.ssr.core.VuiCommonComponent;
 import cn.cerc.ui.ssr.core.VuiControl;
 import cn.cerc.ui.ssr.editor.ISsrBoard;
 import cn.cerc.ui.ssr.editor.SsrMessage;
@@ -30,10 +32,12 @@ import cn.cerc.ui.ssr.source.ISupplierMap;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Description("输入框组件")
-public class FormStringField extends VuiControl implements ISupportForm {
+@VuiCommonComponent
+public class FormStringField extends VuiControl implements ISupportField {
     private static final ClassConfig FieldConfig = new ClassConfig(AbstractField.class, SummerUI.ID);
     private SsrBlock block = new SsrBlock();
     private String fieldDialogIcon;
+    private String fieldExpandIcon;
     @Column
     String title = "";
     @Column
@@ -54,6 +58,8 @@ public class FormStringField extends VuiControl implements ISupportForm {
     boolean required = false;
     @Column
     boolean autofocus = false;
+    @Column
+    boolean expand = false;
 
     public FormStringField() {
         super();
@@ -75,8 +81,10 @@ public class FormStringField extends VuiControl implements ISupportForm {
             var impl = Application.getBean(ImageConfigImpl.class);
             if (impl != null) {
                 this.fieldDialogIcon = impl.getClassProperty(AbstractField.class, SummerUI.ID, "icon", "");
+                this.fieldExpandIcon = impl.getClassProperty(StringField.class, SummerUI.ID, "icon", "");
             } else {
                 this.fieldDialogIcon = FieldConfig.getClassProperty("icon", "");
+                this.fieldExpandIcon = FieldConfig.getClassProperty("icon", "");
             }
         }
     }
@@ -95,17 +103,17 @@ public class FormStringField extends VuiControl implements ISupportForm {
                 block.text(String.format(
                         """
                                 <li ${if _style}style='${_style}'${endif}>
-                                    <label for="${fields}"${if _mark} class='formMark'${endif}>${if _required}<font role="require">*</font>${endif}<em>${_title}</em></label>
+                                    <label for="${fields}" ${if _mark}class='formMark' ${endif}>${if _required}<font role="require">*</font>${endif}<em>${_title}</em></label>
                                     <div>
                                         ${if _isTextField}
-                                            <input type="text" name="${fields}" id="${fields}" value="%s" autocomplete="off"${if _readonly} readonly${endif}${if _autofocus} autofocus${endif}
-                                            ${if _placeholder} placeholder="${_placeholder}"${else} placeholder="请${if _dialog}点击获取${else}输入${endif}${_title}"${endif}${if _pattern} pattern="${_pattern}"${endif}${if _required} required${endif} />
+                                            <input type="text" name="${fields}" id="${fields}" value="%s" autocomplete="off" ${if _readonly}readonly ${endif}${if _autofocus}autofocus ${endif}
+                                            ${if _placeholder}placeholder="${_placeholder}" ${else}placeholder="请${if _dialog}点击获取${else}输入${endif}${_title}" ${endif}${if _pattern}pattern="${_pattern}" ${endif}${if _required}required ${endif}/>
                                         ${else}
-                                            <select id="${fields}" name="${fields}"${if _readonly} disabled${endif}>
-                                            ${map.begin}<option value="${map.key}" ${if map.key==%s}selected${endif}>${map.value}</option>${map.end}
+                                            <select id="${fields}" name="${fields}" ${if _readonly}disabled ${endif}>
+                                            ${map.begin}<option value="${map.key}" ${if map.key==%s}selected ${endif}>${map.value}</option>${map.end}
                                             </select>
                                         ${endif}
-                                        <span role="suffix-icon">${if _dialog}<a href="javascript:${_dialog}"><img src="%s" /></a>${endif}</span>
+                                        <span role="suffix-icon">${if _dialog}<a href="javascript:${_dialog}"><img src="%s" /></a>${else}${if _expand}<a href="javascript:initExpand('${fields}')"><img src="%s" /></a>${endif}${endif}</span>
                                     </div>
                                 </li>
                                 ${if _mark}
@@ -114,7 +122,7 @@ public class FormStringField extends VuiControl implements ISupportForm {
                                 </li>
                                 ${endif}
                                 """,
-                        fieldKey, selected, fieldDialogIcon)));
+                        fieldKey, selected, fieldDialogIcon, fieldExpandIcon)));
 
         block().option("_readonly", this.readonly ? "1" : "");
         block().option("_required", this.required ? "1" : "");
@@ -130,8 +138,17 @@ public class FormStringField extends VuiControl implements ISupportForm {
         block.option("_readonly", this.readonly ? "1" : "");
         block.option("_pattern", this.patten);
         block.option("_autofocus", this.autofocus ? "1" : "");
+        block.option("_expand", this.expand ? "1" : "");
         block.option("_style", this.properties("v_style").orElse(""));
         return block;
+    }
+
+    @Override
+    public void output(HtmlWriter html) {
+        VuiForm form = this.findOwner(VuiForm.class);
+        if (form != null && !form.columns().contains(title))
+            return;
+        html.print(block.html());
     }
 
     @Override
@@ -139,6 +156,11 @@ public class FormStringField extends VuiControl implements ISupportForm {
         switch (msgType) {
         case SsrMessage.InitBinder:
             this.mapSource.init();
+            var form = this.findOwner(VuiForm.class);
+            if (form != null) {
+                this.request(form);
+                form.addColumn(title);
+            }
             break;
         case SsrMessage.InitMapSourceDone:
             Optional<ISupplierMap> optMap = this.mapSource.target();
@@ -243,7 +265,7 @@ public class FormStringField extends VuiControl implements ISupportForm {
     }
 
     @Override
-    public ISupportForm field(String field) {
+    public FormStringField field(String field) {
         this.field = field;
         return this;
     }
@@ -254,10 +276,14 @@ public class FormStringField extends VuiControl implements ISupportForm {
         return this;
     }
 
-    public ISupplierBlock toMap(Map<String, String> targetMap) {
+    public FormStringField toMap(Map<String, String> targetMap) {
         block.toMap(targetMap);
         block.option("_isTextField", "");
         return this;
     }
 
+    public FormStringField expand(boolean expand) {
+        this.expand = expand;
+        return this;
+    }
 }

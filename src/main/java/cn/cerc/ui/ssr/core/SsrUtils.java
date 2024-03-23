@@ -7,6 +7,8 @@ import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.persistence.Column;
 
@@ -30,6 +32,21 @@ public class SsrUtils {
         if (text.length() == 0)
             return "";
         var value = text.trim();
+//        if (value.trim().startsWith("<")) {
+//            int startIndex = 0;
+//            while (startIndex < value.length() && Character.isWhitespace(value.charAt(startIndex))) {
+//                startIndex++;
+//            }
+//            value = value.substring(startIndex);
+//        }
+//        if (value.trim().endsWith(">")) {
+//            int endIndex = value.length() - 1;
+//            while (endIndex > 0 && Character.isWhitespace(value.charAt(endIndex))) {
+//                endIndex--;
+//            }
+//            value = value.substring(0, endIndex + 1);
+//        }
+
         if (value.length() == 0)
             return " ";
 
@@ -59,9 +76,7 @@ public class SsrUtils {
     }
 
     /**
-     * 
-     * @param templateText
-     * @return 根据模版创建 ssr 节点
+     * 根据模版创建 ssr 节点
      */
     public static ArrayList<ISsrNode> createNodes(String templateText) {
         var nodes = new ArrayList<ISsrNode>();
@@ -112,9 +127,6 @@ public class SsrUtils {
     }
 
     /**
-     * 
-     * @param class1
-     * @param id
      * @return 查找类所在目录下的同名文件，并返回相应的html文件内容
      */
     public static String getTempateFileText(Class<?> class1, String id) {
@@ -164,6 +176,10 @@ public class SsrUtils {
                     list.add(field);
                 else if (field.getType() == boolean.class || field.getType() == Boolean.class)
                     list.add(field);
+                else if (field.getType() == float.class || field.getType() == Float.class)
+                    list.add(field);
+                else if (field.getType() == double.class || field.getType() == Double.class)
+                    list.add(field);
                 else if (field.getType().isEnum())
                     list.add(field);
                 else if (field.getType() == Binder.class)
@@ -188,14 +204,21 @@ public class SsrUtils {
                 binder.targetId(value.asText());
             } else if (field.getType().isEnum()) {
                 Enum<?>[] enums = (Enum<?>[]) field.getType().getEnumConstants();
-                Enum<?> defaultValue = enums[0];
-                for (Enum<?> item : enums) {
-                    if (item.name().equals(value.asText())) {
-                        defaultValue = item;
-                        break;
+                if (Utils.isNumeric(value.asText())) {
+                    int index = value.asInt();
+                    if (enums.length <= index)
+                        index = 0;
+                    field.set(properties, enums[index]);
+                } else {
+                    Enum<?> defaultValue = enums[0];
+                    for (Enum<?> item : enums) {
+                        if (item.name().equals(value.asText())) {
+                            defaultValue = item;
+                            break;
+                        }
                     }
+                    field.set(properties, defaultValue);
                 }
-                field.set(properties, defaultValue);
             } else if (field.getType() == EntityServiceRecord.class) {
                 JsonNode temp = json.get(field.getName() + "_name");
                 String desc = value.asText();
@@ -212,15 +235,15 @@ public class SsrUtils {
     }
 
     public static void writeToObject(Object object, Field field, JsonNode node) throws IllegalAccessException {
-        if ("boolean".equals(field.getType().getName()))
+        if (field.getType() == boolean.class)
             field.setBoolean(object, node.asBoolean());
-        else if ("int".equals(field.getType().getName()))
+        else if (field.getType() == int.class)
             field.setInt(object, node.asInt());
-        else if ("long".equals(field.getType().getName()))
+        else if (field.getType() == long.class)
             field.setLong(object, node.asLong());
-        else if ("float".equals(field.getType().getName()))
-            field.setDouble(object, node.asDouble());
-        else if ("double".equals(field.getType().getName()))
+        else if (field.getType() == float.class)
+            field.setFloat(object, Float.parseFloat(node.asText()));
+        else if (field.getType() == double.class)
             field.setDouble(object, node.asDouble());
         else if (field.getType() == Boolean.class)
             field.set(object, Boolean.valueOf(node.asBoolean()));
@@ -229,7 +252,7 @@ public class SsrUtils {
         else if (field.getType() == Long.class)
             field.set(object, Long.valueOf(node.asLong()));
         else if (field.getType() == Float.class)
-            field.set(object, Float.valueOf(node.asLong()));
+            field.set(object, Float.valueOf(node.asText()));
         else if (field.getType() == Double.class)
             field.set(object, Double.valueOf(node.asDouble()));
         else if (field.getType() == Datetime.class)
@@ -256,6 +279,12 @@ public class SsrUtils {
             if (name.startsWith("v_"))
                 target.put(name, source.get(name).asText());
         }
+    }
+
+    public static String extractTagContent(String str, String tagName) {
+        Pattern pattern = Pattern.compile(String.format("<%s[^>]*>(.*?)</%s>", tagName, tagName), Pattern.DOTALL);
+        Matcher matcher = pattern.matcher(str);
+        return matcher.find() ? matcher.group(1) : str;
     }
 
 }

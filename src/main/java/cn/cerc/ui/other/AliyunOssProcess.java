@@ -2,8 +2,8 @@ package cn.cerc.ui.other;
 
 /**
  * 阿里云文档说明
- * 
- * https://help.aliyun.com/document_detail/44688.html?spm=a2c4g.11186623.6.739.792f58cdOR7634
+ * <p>
+ * <a href="https://help.aliyun.com/document_detail/44688.html?spm=a2c4g.11186623.6.739.792f58cdOR7634">api文档</a>
  */
 public final class AliyunOssProcess {
     private int height = 0;

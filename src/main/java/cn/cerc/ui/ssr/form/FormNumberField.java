@@ -15,13 +15,14 @@ import org.springframework.stereotype.Component;
 import cn.cerc.db.core.ClassConfig;
 import cn.cerc.db.core.Utils;
 import cn.cerc.mis.core.Application;
+import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.SummerUI;
 import cn.cerc.ui.core.RequestReader;
 import cn.cerc.ui.fields.AbstractField;
 import cn.cerc.ui.fields.ImageConfigImpl;
 import cn.cerc.ui.ssr.core.ISsrOption;
-import cn.cerc.ui.ssr.core.ISupplierBlock;
 import cn.cerc.ui.ssr.core.SsrBlock;
+import cn.cerc.ui.ssr.core.VuiCommonComponent;
 import cn.cerc.ui.ssr.core.VuiControl;
 import cn.cerc.ui.ssr.editor.ISsrBoard;
 import cn.cerc.ui.ssr.editor.SsrMessage;
@@ -31,7 +32,8 @@ import cn.cerc.ui.ssr.source.ISupplierList;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Description("输入框组件")
-public class FormNumberField extends VuiControl implements ISupportForm {
+@VuiCommonComponent
+public class FormNumberField extends VuiControl implements ISupportField {
     private static final ClassConfig FieldConfig = new ClassConfig(AbstractField.class, SummerUI.ID);
     private SsrBlock block = new SsrBlock();
     private String fieldDialogIcon;
@@ -48,7 +50,14 @@ public class FormNumberField extends VuiControl implements ISupportForm {
     @Column
     String dialog = "";
     @Column
-    String patten = "";
+    String pattern = "[\\d\\.]+";
+    /**
+     * <a href="https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/input/number#step">步进值</a>
+     * <br>
+     * 如果要输入任意个小数位，赋值为 any
+     */
+    @Column
+    String step = "any";
     @Column
     boolean readonly = false;
     @Column
@@ -96,15 +105,15 @@ public class FormNumberField extends VuiControl implements ISupportForm {
                 block.text(String.format(
                         """
                                 <li ${if _style}style='${_style}'${endif}>
-                                    <label for="${fields}"${if _mark} class='formMark'${endif}>${if _required}<font role="require">*</font>${endif}<em>${_title}</em></label>
+                                    <label for="${fields}" ${if _mark}class='formMark' ${endif}>${if _required}<font role="require">*</font>${endif}<em>${_title}</em></label>
                                     <div>
                                         ${if _isTextField}
-                                            <input type="text" name="${fields}" id="${fields}" value="%s" autocomplete="off"${if _readonly} readonly${endif}${if _autofocus} autofocus${endif}
-                                            ${if _placeholder} placeholder="${_placeholder}"${else} placeholder="请${if _dialog}点击获取${else}输入${endif}${_title}"${endif}${if _pattern} pattern="${_pattern}"${endif}${if _required} required${endif} />
+                                            <input type="number" step="${_step}" name="${fields}" id="${fields}" value="%s" autocomplete="off" ${if _readonly}readonly ${endif}${if _autofocus}autofocus ${endif}
+                                            ${if _placeholder}placeholder="${_placeholder}" ${else}placeholder="请${if _dialog}点击获取${else}输入${endif}${_title}" ${endif}${if _pattern}pattern="${_pattern}" ${endif}${if _required}required ${endif}/>
                                         ${else}
-                                            <select id="${fields}" name="${fields}"${if _readonly} disabled${endif}>
+                                            <select id="${fields}" name="${fields}" ${if _readonly}disabled ${endif}>
                                             ${if _addAll}<option value="">全部</option>${endif}
-                                            ${list.begin}<option value="${list.index}" ${if list.index==%s}selected${endif}>${list.value}</option>${list.end}
+                                            ${list.begin}<option value="${list.index}" ${if list.index==%s}selected ${endif}>${list.value}</option>${list.end}
                                             </select>
                                         ${endif}
                                         <span role="suffix-icon">${if _dialog}<a href="javascript:${_dialog}"><img src="%s" /></a>${endif}</span>
@@ -128,12 +137,21 @@ public class FormNumberField extends VuiControl implements ISupportForm {
         block.option("_required", this.required ? "1" : "");
         block.option("_dialog", this.dialog);
         block.option("_mark", this.mark);
-        block.option("_patten", this.patten);
+        block.option("_patten", this.pattern);
         block.option("_readonly", this.readonly ? "1" : "");
-        block.option("_pattern", this.patten);
+        block.option("_pattern", this.pattern);
         block.option("_autofocus", this.autofocus ? "1" : "");
         block.option("_style", this.properties("v_style").orElse(""));
+        block.option("_step", this.step());
         return block;
+    }
+
+    @Override
+    public void output(HtmlWriter html) {
+        VuiForm form = this.findOwner(VuiForm.class);
+        if (form != null && !form.columns().contains(title))
+            return;
+        html.print(block.html());
     }
 
     @Override
@@ -141,6 +159,11 @@ public class FormNumberField extends VuiControl implements ISupportForm {
         switch (msgType) {
         case SsrMessage.InitBinder:
             this.listSource.init();
+            var form = this.findOwner(VuiForm.class);
+            if (form != null) {
+                this.request(form);
+                form.addColumn(title);
+            }
             break;
         case SsrMessage.InitListSourceDone:
             Optional<ISupplierList> optList = this.listSource.target();
@@ -180,8 +203,8 @@ public class FormNumberField extends VuiControl implements ISupportForm {
         return this;
     }
 
-    public FormNumberField patten(String patten) {
-        this.patten = patten;
+    public FormNumberField pattern(String pattern) {
+        this.pattern = pattern;
         return this;
     }
 
@@ -246,22 +269,31 @@ public class FormNumberField extends VuiControl implements ISupportForm {
     }
 
     @Override
-    public ISupportForm field(String field) {
+    public FormNumberField field(String field) {
         this.field = field;
         return this;
     }
 
-    public ISupplierBlock toList(List<String> targetList) {
+    public FormNumberField toList(List<String> targetList) {
         block.toList(targetList);
         block.option("_isTextField", "");
         return this;
     }
 
-    public ISupplierBlock toList(Enum<?>[] enums) {
+    public FormNumberField toList(Enum<?>[] enums) {
         List<String> list = new ArrayList<>();
         for (Enum<?> item : enums)
             list.add(item.name());
         return toList(list);
+    }
+
+    public String step() {
+        return step;
+    }
+
+    public FormNumberField step(String step) {
+        this.step = step;
+        return this;
     }
 
 }

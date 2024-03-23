@@ -1,6 +1,8 @@
 package cn.cerc.ui.mvc;
 
 import java.io.IOException;
+import java.io.Serial;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
 
 import javax.servlet.http.HttpServlet;
@@ -11,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cn.cerc.db.core.ClassConfig;
+import cn.cerc.db.core.DataException;
 import cn.cerc.db.core.DataSet;
 import cn.cerc.db.core.Handle;
 import cn.cerc.db.core.IHandle;
@@ -19,14 +22,17 @@ import cn.cerc.db.core.ServiceException;
 import cn.cerc.db.core.Utils;
 import cn.cerc.db.core.Variant;
 import cn.cerc.db.other.RecordFilter;
+import cn.cerc.mis.core.AppClient;
 import cn.cerc.mis.core.Application;
-import cn.cerc.mis.core.DataValidateException;
 import cn.cerc.mis.core.IService;
 import cn.cerc.mis.core.ServiceState;
+import cn.cerc.mis.log.JayunLogParser;
+import cn.cerc.mis.security.Permission;
 import cn.cerc.mis.security.SecurityStopException;
 import cn.cerc.ui.SummerUI;
 
 public class StartServices extends HttpServlet {
+    @Serial
     private static final long serialVersionUID = 2699818753661287159L;
     private static final Logger log = LoggerFactory.getLogger(StartServices.class);
     private static final ClassConfig config = new ClassConfig(StartServices.class, SummerUI.ID);
@@ -40,36 +46,11 @@ public class StartServices extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         request.setCharacterEncoding(StandardCharsets.UTF_8.name());
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
-        String uri = request.getRequestURI();
-        log.debug(uri);
-        request.setCharacterEncoding("UTF-8");
 
         DataSet dataOut = new DataSet();
-//        Variant variant = new Variant();
-//        if (!AppClient.createCookie(request, response, variant)) {
-//            StringBuilder builder = new StringBuilder(variant.getString());
-//            builder.append(request.getRequestURI());
-//            request.getParameterMap().forEach((key, value) -> {
-//                builder.append(key);
-//                Stream.of(value).forEach(builder::append);
-//            });
-//            String md5 = MD5.get(builder.toString());
-//            String key = MemoryBuffer.buildKey(SystemBuffer.User.Frequency, md5);
-//            try (Jedis jedis = JedisFactory.getJedis()) {
-//                if (jedis.setnx(key, "1") == 1) {
-//                    jedis.expire(key, 1);
-//                } else {
-//                    log.error("key {}, origin {}", key, builder);
-//                    dataOut.setMessage(String.format("对不起您操作太快了，服务器忙不过来 %s", uri));
-//                    response.getWriter().write(dataOut.toString());
-//                    return;
-//                }
-//            }
-//        }
-
         String text = request.getParameter("dataIn");
         DataSet dataIn = new DataSet().setJson(text);
-        String service = request.getPathInfo().substring(1);
+        String key = request.getPathInfo().substring(1);
         response.setContentType("application/json;charset=utf-8");
         // 处理跨域问题
         String allow = config.getProperty("access-control-allow-origin");
@@ -77,61 +58,79 @@ public class StartServices extends HttpServlet {
             response.addHeader("access-control-allow-origin", allow);
         log.debug("dataIn {}", text);
 
-        if (Utils.isEmpty(service)) {
-            dataOut.setMessage("service is null.");
-            response.getWriter().write(dataOut.toString());
+        if (Utils.isEmpty(key)) {
+            dataOut.setMessage("远程服务不能为空");
+            response.getWriter().write(dataOut.json());
             return;
         }
 
-        // 执行指定函数
-        try {
-            ISession session = Application.getBean(ISession.class);
-            session.setProperty(ISession.REQUEST, request);
-            // 获取token
-            String token = request.getParameter(ISession.TOKEN);
-            if (Utils.isEmpty(token))
-                token = request.getParameter("token");
-            // 使用token登录，并获取用户资料与授权数据
-            session.loadToken(token);
-            // token失效则直接返回
-            if (token != null && session.getProperty(token) != null) {
-                int state = (int) session.getProperty(token);
-                if (state == ServiceState.TOKEN_INVALID) {
-                    dataOut.setState(ServiceState.TOKEN_INVALID)
-                            .setMessage(String.format("%s token is invalid, please login again.", token));
-                    response.getWriter().write(dataOut.toString());
-                    return;
-                }
-            }
+        // 获取token
+        String token = request.getParameter(ISession.TOKEN);// sid
+        if (Utils.isEmpty(token))
+            token = request.getParameter("token");// token
 
-            IHandle handle = new Handle(session);
-            Variant function = new Variant("execute").setKey(service);
-            IService bean = Application.getService(handle, service, function);
-            dataOut = bean._call(handle, dataIn, function);
-            if (dataOut == null)
-                dataOut = new DataSet().setMessage("service return empty");
-            response.getWriter().write(RecordFilter.execute(dataIn, dataOut).toString());
-        } catch (DataValidateException e) {
-            log.error("service {}, dataIn {}, error {}", service, text, e.getMessage(), e);
-            dataOut.setState(ServiceState.ERROR);
-            dataOut.setMessage(e.getMessage());
-            response.getWriter().write(dataOut.toString());
-        } catch (ClassNotFoundException e) {
-            log.error("service {}, dataIn {}, error {}", service, text, e.getMessage(), e);
-            dataOut.setState(ServiceState.NOT_FIND_SERVICE);
-            dataOut.setMessage(e.getMessage());
-            response.getWriter().write(dataOut.toString());
-        } catch (ServiceException e) {
-            Throwable err = e.getCause() != null ? e.getCause() : e;
-            log.error("service {}, dataIn {}, error {}", service, text, err.getMessage(), err);
-            dataOut.setState(ServiceState.ERROR).setMessage(err.getMessage());
-            response.getWriter().write(dataOut.toString());
-        } catch (SecurityStopException e) {
-            Throwable err = e.getCause() != null ? e.getCause() : e;
-            log.error("service {}, dataIn {}, error {}", service, text, err.getMessage(), err);
-            dataOut.setState(ServiceState.TOKEN_INVALID).setMessage(err.getMessage());
-            response.getWriter().write(dataOut.toString());
+        // 使用token登录，并获取用户资料与授权数据
+        ISession session = Application.getBean(ISession.class);
+        if (session == null) {
+            dataOut.setState(ServiceState.ERROR).setMessage("无效的访问请求，服务器 session 未配置");
+            response.getWriter().write(dataOut.json());
+            return;
         }
+
+        session.setProperty(ISession.REQUEST, request);
+        boolean loadToken = session.loadToken(token);
+
+        // 获取服务执行函数
+        IHandle handle = new Handle(session);
+        Variant function = new Variant("execute").setKey(key);
+        IService service;
+        try {
+            service = Application.getService(handle, key, function);
+        } catch (ClassNotFoundException e) {
+            String clientIP = AppClient.getClientIP(request);
+            log.warn("clientIP {}, token{} , service {}, dataIn {}, error {}", clientIP, token, key, text,
+                    e.getMessage(), e);
+            dataOut.setState(ServiceState.NOT_FIND_SERVICE).setMessage("无效的访问请求，远程服务不存在");
+            response.getWriter().write(dataOut.json());
+            return;
+        }
+
+        // 取出执行服务需要的权限
+        Class<? extends IService> clazz = service.getClass();
+        Permission permission = clazz.getAnnotation(Permission.class);
+        String value = Permission.USERS;
+        if (permission != null)
+            value = permission.value();
+
+        // 非访客权限且令牌失效
+        if (!Utils.isEmpty(token) && !Permission.GUEST.equals(value) && !loadToken) {
+            dataOut.setState(ServiceState.TOKEN_INVALID).setMessage("当前会话已失效，请重退出新登录");
+            response.getWriter().write(dataOut.json());
+            return;
+        }
+
+        try {
+            dataOut = service._call(handle, dataIn, function);
+            if (dataOut == null) {
+                dataOut = new DataSet();
+                dataOut.setError().setMessage("远程服务没有响应");
+            }
+        } catch (RuntimeException | IllegalAccessException | InvocationTargetException | ServiceException
+                | DataException e) {
+            Throwable throwable = e.getCause() != null ? e.getCause() : e;
+            String clientIP = AppClient.getClientIP(request);
+            String message = String.format("clientIP %s, token %s, service %s, corpNo %s, dataIn %s, message %s",
+                    clientIP, token, function.key(), handle.getCorpNo(), dataIn.json(), throwable.getMessage());
+
+            if (!(e instanceof SecurityStopException)) // 权限不足类警告写入 info
+                JayunLogParser.error(clazz, throwable, message);
+            log.info("{}", message, throwable);
+            if (dataOut == null)
+                dataOut = new DataSet();
+            dataOut.setError().setMessage(throwable.getMessage());
+        }
+        // 数据过滤后返回
+        response.getWriter().write(RecordFilter.execute(dataIn, dataOut).json());
     }
 
 }

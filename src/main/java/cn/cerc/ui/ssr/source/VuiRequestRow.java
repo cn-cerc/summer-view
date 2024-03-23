@@ -11,20 +11,29 @@ import cn.cerc.db.core.DataRow;
 import cn.cerc.db.core.Utils;
 import cn.cerc.ui.core.RequestReader;
 import cn.cerc.ui.core.UIComponent;
+import cn.cerc.ui.ssr.chart.ISupportChart;
 import cn.cerc.ui.ssr.core.PropertiesReader;
 import cn.cerc.ui.ssr.core.PropertiesWriter;
+import cn.cerc.ui.ssr.core.VuiCommonComponent;
 import cn.cerc.ui.ssr.core.VuiComponent;
 import cn.cerc.ui.ssr.editor.EditorForm;
 import cn.cerc.ui.ssr.editor.SsrMessage;
 import cn.cerc.ui.ssr.excel.ISupportXls;
+import cn.cerc.ui.ssr.form.ISupportField;
+import cn.cerc.ui.ssr.form.VuiForm;
+import cn.cerc.ui.ssr.page.ISupportCanvas;
+import cn.cerc.ui.ssr.report.ISupportRpt;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Description("请求数据行")
-public class VuiRequestRow extends VuiComponent implements ICommonSupplierDataRow, ISupportXls {
+@VuiCommonComponent
+public class VuiRequestRow extends VuiComponent
+        implements ISupplierDataRow, ISupportCanvas, ISupportChart, ISupportXls, ISupportRpt, IBinders {
     private DataRow config = new DataRow();
     private DataRow dataRow = new DataRow();
     private HttpServletRequest request;
+    private Binders binders = new Binders();
 
     @Override
     public void readProperties(PropertiesReader reader) {
@@ -89,12 +98,29 @@ public class VuiRequestRow extends VuiComponent implements ICommonSupplierDataRo
                     String key = config.getString(field.code());
                     if (Utils.isEmpty(key))
                         key = field.code();
-                    var value = request.getParameter(key);
-                    if (value != null)
-                        dataRow.setValue(field.code(), value);
+                    dataRow.setValue(field.code(), request.getParameter(key));
                 }
+                binders.sendMessage(this, SsrMessage.RefreshProperties, dataRow, null);
+            }
+            break;
+        case SsrMessage.appendComponent:
+            if (sender instanceof VuiForm form && msgData instanceof ISupportField block) {
+                String newField = block.fields();
+                if (!Utils.isEmpty(newField) && !config.fields().exists(newField))
+                    config.fields().add(newField);
+            }
+            break;
+        case SsrMessage.UpdateFieldCode:
+            if (sender instanceof VuiForm form && msgData instanceof String newField) {
+                if (!config.fields().exists(newField))
+                    config.fields().add(newField);
             }
             break;
         }
+    }
+
+    @Override
+    public Binders binders() {
+        return binders;
     }
 }

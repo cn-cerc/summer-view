@@ -12,11 +12,14 @@ public class JayunMessageTest {
     private JayunMessage api = new JayunMessage(null);
     private HttpServletRequest request;
 
-    @Test
-    @Ignore
+
     /**
+     * 发送验证码
+     *
      * @param mobile 要注册的用户手机号
      */
+    @Test
+    @Ignore
     public void requestRegister(String mobile) {
         JayunMessage api = new JayunMessage(request);
         boolean result = api.requestRegister(mobile);
@@ -35,12 +38,14 @@ public class JayunMessageTest {
         assertTrue("简讯发送失败", result);
     }
 
-    @Test
-    @Ignore
     /**
+     * 校验验证码
+     *
      * @param mobile     要注册的用户手机
      * @param verifyCode 用户收到的验证码
      */
+    @Test
+    @Ignore
     public void checkRegister(String mobile, String verifyCode) {
         JayunMessage api = new JayunMessage(request);
         boolean result = api.checkRegister(mobile, verifyCode);

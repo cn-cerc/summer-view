@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.ssr.core.ISupplierBlock;
 import cn.cerc.ui.ssr.core.SsrBlock;
+import cn.cerc.ui.ssr.core.VuiCommonComponent;
 
 /**
  * 手机端UISsrChunk列表的标题组件，三个插槽，一行三列，序号、标题和内容横向展示
@@ -18,6 +19,7 @@ import cn.cerc.ui.ssr.core.SsrBlock;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Description("手机表格行310101")
+@VuiCommonComponent
 public class VuiBlock310101 extends VuiBoard implements ISupportBoard {
 
     public VuiBlock310101() {

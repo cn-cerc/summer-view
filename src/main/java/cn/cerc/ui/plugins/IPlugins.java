@@ -10,8 +10,6 @@ public interface IPlugins {
 
     /**
      * 在非单例模式下时，可以使用函数
-     * 
-     * @param owner
      */
     default void setOwner(Object owner) {
 

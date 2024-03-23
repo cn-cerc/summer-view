@@ -11,13 +11,14 @@ import cn.cerc.db.core.ClassConfig;
 import cn.cerc.db.core.Datetime;
 import cn.cerc.db.core.Datetime.DateType;
 import cn.cerc.mis.core.Application;
+import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.SummerUI;
 import cn.cerc.ui.core.RequestReader;
-import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.fields.DateField;
 import cn.cerc.ui.fields.ImageConfigImpl;
 import cn.cerc.ui.ssr.core.DefaultDateRangeEnum;
 import cn.cerc.ui.ssr.core.SsrBlock;
+import cn.cerc.ui.ssr.core.VuiCommonComponent;
 import cn.cerc.ui.ssr.core.VuiControl;
 import cn.cerc.ui.ssr.editor.ISsrBoard;
 import cn.cerc.ui.ssr.editor.SsrMessage;
@@ -25,7 +26,8 @@ import cn.cerc.ui.ssr.editor.SsrMessage;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Description("日期块组件")
-public class FormDateRangeField extends VuiControl implements ISupportForm {
+@VuiCommonComponent
+public class FormDateRangeField extends VuiControl implements ISupportField {
     private static final ClassConfig DateConfig = new ClassConfig(DateField.class, SummerUI.ID);
     private SsrBlock block = new SsrBlock();
     private String dateDialogIcon;
@@ -86,12 +88,12 @@ public class FormDateRangeField extends VuiControl implements ISupportForm {
                     <label for="start_date_"><em>%s</em></label>
                     <div class="dateArea">
                         <input autocomplete="off" name="%s" id="%s" type="text" class="dateAreaInput" value="${%s}"
-                        ${if _pattern}pattern="${_pattern}"${endif} ${if _required}required${endif}
-                        ${if _placeholder}placeholder="${_placeholder}"${endif} />
+                        ${if _pattern}pattern="${_pattern}" ${endif}${if _required}required ${endif}
+                        ${if _placeholder}placeholder="${_placeholder}" ${endif}/>
                         <span>/</span>
                         <input autocomplete="off" name="%s" id="%s" type="text" class="dateAreaInput" value="${%s}"
-                        ${if _pattern}pattern="${_pattern}"${endif} ${if _required}required${endif}
-                        ${if _placeholder}placeholder="${_placeholder}"${endif} />
+                        ${if _pattern}pattern="${_pattern}" ${endif}${if _required}required ${endif}
+                        ${if _placeholder}placeholder="${_placeholder}" ${endif}/>
                         <span role="suffix-icon">
                             <a href="javascript:showDateAreaDialog('%s', '%s')">
                             <img src="%s" />
@@ -111,12 +113,28 @@ public class FormDateRangeField extends VuiControl implements ISupportForm {
     }
 
     @Override
+    public void output(HtmlWriter html) {
+        VuiForm form = this.findOwner(VuiForm.class);
+        if (form != null && !form.columns().contains(title))
+            return;
+        html.print(block.html());
+    }
+
+    @Override
     public void onMessage(Object sender, int msgType, Object msgData, String targetId) {
         switch (msgType) {
+        case SsrMessage.InitBinder: {
+            var form = this.findOwner(VuiForm.class);
+            if (form != null) {
+                this.request(form);
+                form.addColumn(title);
+            }
+            break;
+        }
         case SsrMessage.InitProperties:
             if (range != DefaultDateRangeEnum.无) {
-                UIComponent owner = getOwner();
-                if (owner instanceof VuiForm form) {
+                VuiForm form = findOwner(VuiForm.class);
+                if (form != null) {
                     Datetime now = new Datetime();
                     switch (range) {
                     case 最近一周:
@@ -170,7 +188,7 @@ public class FormDateRangeField extends VuiControl implements ISupportForm {
     }
 
     @Override
-    public ISupportForm title(String title) {
+    public FormDateRangeField title(String title) {
         this.title = title;
         return this;
     }
@@ -181,7 +199,7 @@ public class FormDateRangeField extends VuiControl implements ISupportForm {
     }
 
     @Override
-    public ISupportForm field(String fields) {
+    public FormDateRangeField field(String fields) {
         String[] fieldsArray = fields.split(",");
         if (fieldsArray.length == 2) {
             this.beginField = fieldsArray[0];

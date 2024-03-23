@@ -7,11 +7,13 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import cn.cerc.ui.ssr.core.SsrBlock;
+import cn.cerc.ui.ssr.core.VuiCommonComponent;
 import cn.cerc.ui.ssr.core.VuiControl;
 import cn.cerc.ui.ssr.editor.ISsrBoard;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+@VuiCommonComponent
 public class GridOperaField extends VuiControl implements ISupportGrid {
     private SsrBlock block = new SsrBlock();
     private String title = "操作";
@@ -41,6 +43,7 @@ public class GridOperaField extends VuiControl implements ISupportGrid {
         int fieldWidth = this.fieldWidth;
         var ssr = grid.addBlock(headTitle, String.format("""
                 <th style='width: ${_width}em' onclick="gridSort(this,'_opera_')">
+                <div>
                 ${if templateId}
                     <a href="javascript:showSsrConfigDialog('${templateId}')">
                         ${if templateConfigImg}
@@ -52,6 +55,7 @@ public class GridOperaField extends VuiControl implements ISupportGrid {
                 ${else}
                 %s
                 ${endif}
+                </div>
                 </th>
                 """, title, title));
         ssr.toMap("_width", "" + fieldWidth);

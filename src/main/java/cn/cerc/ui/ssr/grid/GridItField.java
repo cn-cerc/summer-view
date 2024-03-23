@@ -7,11 +7,13 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import cn.cerc.ui.ssr.core.SsrBlock;
+import cn.cerc.ui.ssr.core.VuiCommonComponent;
 import cn.cerc.ui.ssr.core.VuiControl;
 import cn.cerc.ui.ssr.editor.ISsrBoard;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+@VuiCommonComponent
 public class GridItField extends VuiControl implements ISupportGrid {
     private SsrBlock head = new SsrBlock();
     private SsrBlock body = new SsrBlock();
@@ -40,7 +42,8 @@ public class GridItField extends VuiControl implements ISupportGrid {
     @Override
     public SsrBlock request(ISsrBoard grid) {
         String headTitle = "head." + this.title;
-        grid.addBlock(headTitle, head.text("<th style='width: ${_width}em' onclick=\"gridSort(this,'_it_')\">序</th>"));
+        grid.addBlock(headTitle,
+                head.text("<th style='width: ${_width}em' onclick=\"gridSort(this,'_it_')\"><div>序</div></th>"));
         head.id(headTitle);
         head.display(1);
         head.toMap("_width", "" + this.fieldWidth);

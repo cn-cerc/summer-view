@@ -16,16 +16,23 @@ import org.springframework.stereotype.Component;
 
 import cn.cerc.db.core.Utils;
 import cn.cerc.ui.core.UIComponent;
+import cn.cerc.ui.ssr.chart.ISupportChart;
+import cn.cerc.ui.ssr.core.VuiCommonComponent;
 import cn.cerc.ui.ssr.core.VuiComponent;
 import cn.cerc.ui.ssr.editor.EditorForm;
 import cn.cerc.ui.ssr.editor.SsrMessage;
+import cn.cerc.ui.ssr.excel.ISupportXls;
 import cn.cerc.ui.ssr.form.VuiForm;
+import cn.cerc.ui.ssr.page.ISupportCanvas;
 import cn.cerc.ui.ssr.page.IVuiEnvironment;
+import cn.cerc.ui.ssr.report.ISupportRpt;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Description("Map附加数据")
-public class VuiMapSupplier extends VuiComponent implements ICommonSupplierMap, IBinders {
+@VuiCommonComponent
+public class VuiMapSupplier extends VuiComponent
+        implements ISupplierMap, ISupportCanvas, ISupportXls, ISupportChart, ISupportRpt, IBinders {
     private static final Logger log = LoggerFactory.getLogger(VuiMapSupplier.class);
     private Map<String, String> items = new LinkedHashMap<>();
     private Binders binders = new Binders();

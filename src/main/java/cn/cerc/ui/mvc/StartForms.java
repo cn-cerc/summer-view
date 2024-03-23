@@ -38,6 +38,7 @@ import cn.cerc.mis.core.IErrorPage;
 import cn.cerc.mis.core.SystemBuffer;
 import cn.cerc.mis.core.UserRequestException;
 import cn.cerc.mis.other.MemoryBuffer;
+import cn.cerc.mis.other.PageNotFoundException;
 
 public class StartForms implements Filter {
     private static final Logger log = LoggerFactory.getLogger(StartForms.class);
@@ -67,6 +68,7 @@ public class StartForms implements Filter {
         paths.add("services-npl/");
         paths.add("services-csm/");
         paths.add("services-jt/");
+        paths.add("dpl/");
         paths.add("task/");
         paths.add("docs/");
     }
@@ -148,7 +150,7 @@ public class StartForms implements Filter {
         String childCode = getRequestCode(req);
         if (childCode == null) {
             IErrorPage error = context.getBean(IErrorPage.class);
-            error.output(req, resp, new RuntimeException("无效的请求：" + req.getServletPath()));
+            error.output(req, resp, new PageNotFoundException("无效的请求：" + req.getServletPath()));
             return;
         }
 
@@ -173,7 +175,7 @@ public class StartForms implements Filter {
                     });
 
                     String md5 = MD5.get(builder.toString());
-                    String key = MemoryBuffer.buildKey(SystemBuffer.User.Frequency, md5);
+                    String key = MemoryBuffer.buildKey(SystemBuffer.User.frequency, md5);
                     try (Redis jedis = new Redis()) {
                         if (jedis.setnx(key, "1") == 1) {
                             jedis.expire(key, 1);
@@ -189,9 +191,14 @@ public class StartForms implements Filter {
             }
         }
 
-        FormSign sv = new FormSign(childCode);
-        String viewId = factory.getView(handle, req, resp, sv.getId(), sv.getValue());
-        factory.outputView(req, resp, viewId);
+        try {
+            FormSign sv = new FormSign(childCode);
+            String viewId = factory.getView(handle, req, resp, sv.getId(), sv.getValue());
+            factory.outputView(req, resp, viewId);
+        } catch (Exception e) {
+            // url 解析失败直接返回 404 页面
+            resp.sendError(HttpServletResponse.SC_NOT_FOUND);
+        }
     }
 
     public static String getRequestCode(HttpServletRequest req) {

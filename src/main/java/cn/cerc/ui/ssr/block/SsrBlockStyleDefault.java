@@ -96,6 +96,7 @@ public class SsrBlockStyleDefault {
     /**
      * 请改用getString2
      */
+    @Deprecated
     public SupplierString getString(String title, String field) {
         return new SupplierString(title, field);
     }
@@ -103,6 +104,7 @@ public class SsrBlockStyleDefault {
     /**
      * 请改用getRowString2
      */
+    @Deprecated
     public SupplierString getRowString(String title, String field) {
         return new SupplierString(title + "：", field);
     }
@@ -197,11 +199,11 @@ public class SsrBlockStyleDefault {
         };
     }
 
-    public ISupplierBlock getOpera(String field) {
+    public BlockOperaField getOpera(String field) {
         return new BlockOperaField(field);
     }
 
-    public ISupplierBlock getOpera(Supplier<String> url) {
+    public BlockOperaField getOpera(Supplier<String> url) {
         return new BlockOperaField(url);
     }
 

@@ -10,11 +10,13 @@ import org.springframework.stereotype.Component;
 
 import cn.cerc.db.core.Utils;
 import cn.cerc.ui.ssr.core.SsrBlock;
+import cn.cerc.ui.ssr.core.VuiCommonComponent;
 import cn.cerc.ui.ssr.core.VuiControl;
 import cn.cerc.ui.ssr.editor.ISsrBoard;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+@VuiCommonComponent
 public class BlockOperaField extends VuiControl implements ISupportBlock {
     private SsrBlock block = new SsrBlock();
     Supplier<String> callBackUrl;
@@ -24,6 +26,8 @@ public class BlockOperaField extends VuiControl implements ISupportBlock {
     String field = "";
     @Column
     String href = "";
+    @Column
+    String text = "内容";
 
     public BlockOperaField(String field) {
         super();
@@ -51,11 +55,12 @@ public class BlockOperaField extends VuiControl implements ISupportBlock {
         block.text(String.format(
                 """
                         <div role='opera'>
-                            <a ${if _href}href='%s'${else}${if _callBackUrl}href='${callback(callBackUrl)}'${else}href='${%s}'${endif}${endif}>内容</a>
+                            <a ${if _href}href='%s'${else}${if _callBackUrl}href='${callback(callBackUrl)}'${else}href='${%s}'${endif}${endif}>${_text}</a>
                         </div>
                         """,
                 href, field));
         block.option("_callBackUrl", callBackUrl != null ? "1" : "");
+        block.option("_text", text);
         if (callBackUrl != null)
             block.onCallback("callBackUrl", callBackUrl);
         block.option("_href", Utils.isEmpty(href) ? "" : "1");
@@ -78,7 +83,7 @@ public class BlockOperaField extends VuiControl implements ISupportBlock {
     }
 
     @Override
-    public ISupportBlock field(String field) {
+    public BlockOperaField field(String field) {
         this.field = field;
         return this;
     }
@@ -89,9 +94,27 @@ public class BlockOperaField extends VuiControl implements ISupportBlock {
     }
 
     @Override
-    public ISupportBlock title(String title) {
+    public BlockOperaField title(String title) {
         this.title = title;
         return this;
+    }
+
+    public BlockOperaField href(String href) {
+        this.href = href;
+        return this;
+    }
+
+    public String href() {
+        return href;
+    }
+
+    public BlockOperaField text(String text) {
+        this.text = text;
+        return this;
+    }
+
+    public String text() {
+        return text;
     }
 
 }

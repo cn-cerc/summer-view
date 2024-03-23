@@ -17,10 +17,10 @@ public class SsrDatasetNode extends SsrContainerNode {
         if (dataSet.size() == 0)
             return "";
 
+        dataSet.first();
         int save_recNo = dataSet.recNo();
         try {
             var sb = new StringBuffer();
-            dataSet.first();
             while (dataSet.fetch()) {
                 for (var item : this.getItems())
                     sb.append(item.getHtml(block));

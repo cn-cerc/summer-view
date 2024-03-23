@@ -56,17 +56,16 @@ public class SsrGridStyleDefault {
         return getMap(title, field, fieldWidth, map);
     }
 
+    public GridBooleanField getBoolean(String title, int fieldWidth) {
+        return new GridBooleanField(title, fieldWidth);
+    }
+
     public GridBooleanField getBoolean(String title, String field, int fieldWidth) {
         return new GridBooleanField(title, field, fieldWidth);
     }
 
     /**
      * 请改使用 getBoolean
-     * 
-     * @param title
-     * @param field
-     * @param fieldWidth
-     * @return
      */
     @Deprecated
     public GridCheckBoxField getCheckBox(String title, String field, int fieldWidth) {
@@ -101,6 +100,19 @@ public class SsrGridStyleDefault {
         column.field(field);
         column.fieldWidth = fieldWidth;
         return column;
+    }
+    
+    public GridHiddenField getHidden(String title, String field) {
+        var column = new GridHiddenField();
+        column.title(title);
+        column.field(field);
+        return column;
+    }
+
+    public GridGroup getGroup(String title, String field, int fieldWidth) {
+        var group = new GridGroup(title, field);
+        group.fieldWidth = fieldWidth;
+        return group;
     }
 
 }

@@ -17,6 +17,7 @@ public class VuiGridTest {
         grid.dataSet(ds);
         grid.addColumn("name_");
         assertEquals("""
+                <script>$(function() { initGrid() });</script>
                 <div id='grid' class='scrollArea'><table class='dbgrid'><tr>
                 <th>name_</th></tr>
                 <tr>
@@ -42,6 +43,7 @@ public class VuiGridTest {
 
         grid.dataSet(ds);
         assertEquals("""
+                <script>$(function() { initGrid() });</script>
                 <div><table class='a'><tr>
                 <th width=30>xxx</td><th>name_</th></tr>
                 <tr>
@@ -97,6 +99,7 @@ public class VuiGridTest {
         grid.onGetBodyHtml("name", ssr -> ssr.toMap("url", "http://127.0.0.1"));
 
         assertEquals("""
+                <script>$(function() { initGrid() });</script>
                 <table><tr class="head">
                 <th>姓名</th><th>代码</th></tr>
                 <tr>

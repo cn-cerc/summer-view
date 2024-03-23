@@ -10,11 +10,13 @@ import org.springframework.stereotype.Component;
 
 import cn.cerc.db.core.Utils;
 import cn.cerc.ui.ssr.core.SsrBlock;
+import cn.cerc.ui.ssr.core.VuiCommonComponent;
 import cn.cerc.ui.ssr.core.VuiControl;
 import cn.cerc.ui.ssr.editor.ISsrBoard;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+@VuiCommonComponent
 public class BlockCheckBoxField extends VuiControl implements ISupportBlock {
     private SsrBlock block = new SsrBlock();
     @Column
@@ -94,7 +96,7 @@ public class BlockCheckBoxField extends VuiControl implements ISupportBlock {
     }
 
     @Override
-    public ISupportBlock field(String field) {
+    public BlockCheckBoxField field(String field) {
         this.field = field;
         return this;
     }
@@ -105,7 +107,7 @@ public class BlockCheckBoxField extends VuiControl implements ISupportBlock {
     }
 
     @Override
-    public ISupportBlock title(String title) {
+    public BlockCheckBoxField title(String title) {
         this.title = title;
         return this;
     }

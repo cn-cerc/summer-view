@@ -6,4 +6,6 @@ public interface IFooter {
 
     UIBottom addButton();
 
+    void setCheckAllTargetId(String targetId);
+
 }

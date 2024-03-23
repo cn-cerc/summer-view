@@ -15,6 +15,8 @@ import org.slf4j.LoggerFactory;
 import cn.cerc.db.core.DataRow;
 import cn.cerc.db.core.DataSet;
 import cn.cerc.db.core.Utils;
+import cn.cerc.local.tool.JsonTool;
+import cn.cerc.mis.log.JayunLogParser;
 import cn.cerc.ui.ssr.editor.ISsrBoard;
 
 public class SsrBlock implements ISsrOption {
@@ -34,6 +36,7 @@ public class SsrBlock implements ISsrOption {
     private String id;
     private OnGetValueEvent onGetValue;
     private SsrTemplate template;
+    private Class<?> origin;
 
     public SsrBlock() {
     }
@@ -44,13 +47,11 @@ public class SsrBlock implements ISsrOption {
 
     public SsrBlock(Class<?> class1, String id) {
         this.text(SsrUtils.getTempateFileText(class1, id));
+        this.origin = class1;
     }
 
     /**
      * 请改使用 toMap
-     * 
-     * @param map
-     * @return
      */
     @Deprecated
     public SsrBlock setMap(Map<String, String> map) {
@@ -210,7 +211,7 @@ public class SsrBlock implements ISsrOption {
         return this;
     }
 
-    protected Optional<String> getValue(String field) {
+    public Optional<String> getValue(String field) {
         String result = null;
         var dataRow = this.dataRow();
         var dataSet = this.dataSet();
@@ -238,15 +239,15 @@ public class SsrBlock implements ISsrOption {
             result = this.getMapProxy().value();
         else if (map != null && map.containsKey(field)) {
             if (dataRow != null && dataRow.exists(field))
-                log.warn("map and dataRow exists field: {}", field);
+                fieldNotFindLog(field, false);
             if (dataSet != null && dataSet.exists(field))
-                log.warn("map and dataSet exists field: {}", field);
+                fieldNotFindLog(field, false);
             result = map.get(field);
         }
         // 再查找其它
         else if (dataRow != null && dataRow.exists(field)) {
             if (dataSet != null && dataSet.exists(field))
-                log.warn("dataRow and dataSet exists field: {}", field);
+                fieldNotFindLog(field, false);
             result = dataRow.getText(field);
         } else if (dataSet != null && dataSet.exists(field)) {
             var row = dataSet.currentRow();
@@ -256,11 +257,27 @@ public class SsrBlock implements ISsrOption {
         } else if (!strict()) {
             result = "";
         } else if (onGetValue == null) {
-            log.error("not find field {}", field, new RuntimeException());
+            fieldNotFindLog(field, true);
         }
         if (onGetValue != null)
             result = onGetValue.getValue(field, result);
         return Optional.ofNullable(result);
+    }
+
+    private void fieldNotFindLog(String field, boolean isError) {
+        String templateId = Optional.ofNullable(template).map(SsrTemplate::id).orElse("null");
+        String originName = Optional.ofNullable(origin).map(Class::getName).orElse("null");
+        String listValue = Optional.ofNullable(list).map(JsonTool::toJson).orElse("null");
+        String mapValue = Optional.ofNullable(map).map(JsonTool::toJson).orElse("null");
+        String optionValue = Optional.ofNullable(options).map(JsonTool::toJson).orElse("null");
+        String message = String.format(
+                "not find field %s, id %s, templateId %s, origin %s, dataRow %s, dataSet %s, list %s, map %s, option %s",
+                field, id, templateId, originName, dataRow, dataSet, listValue, mapValue, optionValue);
+        if (isError) {
+            JayunLogParser.error(SsrBlock.class, new RuntimeException(this.text), message);
+        } else {
+            JayunLogParser.warn(SsrBlock.class, new RuntimeException(this.text), message);
+        }
     }
 
     public SsrBlock onGetValue(OnGetValueEvent onGetValue) {
@@ -275,9 +292,6 @@ public class SsrBlock implements ISsrOption {
 
     /**
      * 固定当前查询字段（不会出现在配置列表中）
-     * 
-     * @param form
-     * @return
      */
     public SsrBlock fixed(ISsrBoard form) {
         this.option("option", null);
@@ -342,9 +356,6 @@ public class SsrBlock implements ISsrOption {
 
     /**
      * 请改使用 toList
-     * 
-     * @param enums
-     * @return
      */
     @Deprecated
     public SsrBlock toMap(Enum<?>[] enums) {

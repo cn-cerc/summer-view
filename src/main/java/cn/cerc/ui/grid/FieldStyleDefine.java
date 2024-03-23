@@ -62,7 +62,6 @@ public class FieldStyleDefine {
     /**
      * 设置 dataSet.fields(fieldCode).setName
      * 
-     * @param fieldName
      * @return 自身
      */
     public FieldStyleDefine setName(String fieldName) {
@@ -77,7 +76,6 @@ public class FieldStyleDefine {
     /**
      * 设置在修改模式下的input输入框宽度，此处单位为1个汉字，即若要显示4个汉字，请设置为4
      * 
-     * @param width
      * @return 自身
      */
     public FieldStyleDefine setWidth(int width) {
@@ -96,7 +94,6 @@ public class FieldStyleDefine {
     /**
      * 设置在修改模式下的input输入框提示
      * 
-     * @param placeholder
      * @return 自身
      */
     public FieldStyleDefine setPlaceholder(String placeholder) {

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import cn.cerc.db.core.Utils;
 import cn.cerc.ui.ssr.core.SsrBlock;
+import cn.cerc.ui.ssr.core.VuiCommonComponent;
 import cn.cerc.ui.ssr.core.VuiComponent;
 import cn.cerc.ui.ssr.editor.SsrMessage;
 import cn.cerc.ui.ssr.source.Binder;
@@ -20,6 +21,7 @@ import cn.cerc.ui.vcl.ext.UIBottom;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Description("页面底部按钮")
+@VuiCommonComponent
 public class VuiFooterButton extends VuiComponent implements ISupportCanvas {
     @Column
     String text = "button";
@@ -27,6 +29,8 @@ public class VuiFooterButton extends VuiComponent implements ISupportCanvas {
     String href = "";
     @Column
     String target = "";
+    @Column(name = "全选目标Id")
+    String checkAllTargetId = "";
     @Column
     Binder<ISupplierDataRow> dataRow = new Binder<>(this, ISupplierDataRow.class);
 
@@ -40,6 +44,8 @@ public class VuiFooterButton extends VuiComponent implements ISupportCanvas {
         switch (msgType) {
         case SsrMessage.InitFooter:
             if (msgData instanceof IFooter footer) {
+                if (!Utils.isEmpty(checkAllTargetId))
+                    footer.setCheckAllTargetId(checkAllTargetId);
                 UIBottom button = footer.addButton();
                 button.setCaption(text);
 

@@ -87,8 +87,6 @@ public class DataGrid extends UIComponent implements DataSetSource, IGridStyle {
 
     /**
      * 请改使用 getDataSet 函数
-     * 
-     * @return
      */
     @Deprecated
     public IRecord current() {
@@ -213,9 +211,11 @@ public class DataGrid extends UIComponent implements DataSetSource, IGridStyle {
     }
 
     private void outputWebGrid(HtmlWriter html) {
-        html.println("<div role='aui-table-title'><b>%s</b></div>", this.gridTitle);
+        html.println("<script>$(function() { initGrid() });</script>");
+        if (Utils.isNotEmpty(this.gridTitle))
+            html.println("<div role='aui-table-title'><b>%s</b></div>", this.gridTitle);
         html.print("<table class=\"%s\"", this.gridCssClass);
-        html.println(" role=\"%s\"", this.widthInNum ? "fixed" : "default");
+        html.print(" role=\"%s\"", this.widthInNum ? "fixed" : "default");
         if (this.gridCssStyle != null) {
             html.print(" style=\"%s\"", this.gridCssStyle);
         }
@@ -242,11 +242,11 @@ public class DataGrid extends UIComponent implements DataSetSource, IGridStyle {
             if (field.getWidth() == 0) {
                 html.print(" style=\"display:none\"");
             } else {
-                String val = String.format(" width=\"%f%%\"",
-                        Utils.roundTo(field.getWidth() / sumFieldWidth * 100, -2));
+                String val = String.format(" width=\"%f%%\" title=\"%s\"",
+                        Utils.roundTo(field.getWidth() / sumFieldWidth * 100, -2), field.getName());
                 if (this.widthInNum)
-                    val = String.format(" style=\"width: %sem\" data-fixed=\"%s\" title=\"\"", field.getWidth(),
-                            field.getWidth());
+                    val = String.format(" style=\"width: %sem\" data-fixed=\"%s\" title=\"%s\"", field.getWidth(),
+                            field.getWidth(), field.getName());
                 html.print(val);
 
             }
@@ -255,7 +255,11 @@ public class DataGrid extends UIComponent implements DataSetSource, IGridStyle {
             }
             html.print("onclick=\"gridSort(this,'%s')\"", field.getField());
             html.print(">");
-            html.print(field.getName());
+            if (field instanceof IOutputOfGridHead) {
+                ((IOutputOfGridHead) field).outputOfGridHead(html);
+            } else {
+                html.print("<div>%s</div>", field.getName());
+            }
             html.println("</th>");
         }
         html.println("</tr>");

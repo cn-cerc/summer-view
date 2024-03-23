@@ -13,18 +13,25 @@ import cn.cerc.db.core.DataRow;
 import cn.cerc.db.core.IHandle;
 import cn.cerc.db.core.Utils;
 import cn.cerc.mis.other.MemoryBuffer;
+import cn.cerc.ui.ssr.chart.ISupportChart;
 import cn.cerc.ui.ssr.core.SsrBlock;
 import cn.cerc.ui.ssr.core.VuiBufferType;
+import cn.cerc.ui.ssr.core.VuiCommonComponent;
 import cn.cerc.ui.ssr.core.VuiComponent;
 import cn.cerc.ui.ssr.editor.SsrMessage;
 import cn.cerc.ui.ssr.excel.ISupportXls;
+import cn.cerc.ui.ssr.page.ISupportCanvas;
+import cn.cerc.ui.ssr.report.ISupportRpt;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Description("缓存数据行")
-public class VuiBufferDataRow extends VuiComponent implements ICommonSupplierDataRow, ISupportXls {
+@VuiCommonComponent
+public class VuiBufferDataRow extends VuiComponent
+        implements ISupplierDataRow, ISupportCanvas, ISupportChart, ISupportXls, ISupportRpt, IBinders {
     private static final Logger log = LoggerFactory.getLogger(VuiBufferDataRow.class);
     private IHandle handle;
+    private Binders binders = new Binders();
 
     private MemoryBuffer buffer;
     @Column
@@ -59,9 +66,15 @@ public class VuiBufferDataRow extends VuiComponent implements ICommonSupplierDat
                 block.option("CorpNo", handle.getCorpNo());
                 block.option("UserCode", handle.getUserCode());
                 buffer = new MemoryBuffer(bufferType, block.html());
+                canvas().sendMessage(this, SsrMessage.RefreshProperties, buffer.getRecord(), null);
             }
             break;
         }
+    }
+
+    @Override
+    public Binders binders() {
+        return binders;
     }
 
 }

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.ssr.core.ISupplierBlock;
 import cn.cerc.ui.ssr.core.SsrBlock;
+import cn.cerc.ui.ssr.core.VuiCommonComponent;
 
 /**
  * 手机端UISsrChunk列表的内容组件，三个插槽，一行三列，标题和内容横向展示，默认每列宽度占比为1:1:1，支持ratio方法设置比例
@@ -18,6 +19,7 @@ import cn.cerc.ui.ssr.core.SsrBlock;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Description("手机表格行3101")
+@VuiCommonComponent
 public class VuiBlock3101 extends VuiBoard implements ISupportBoard {
 
     public VuiBlock3101() {

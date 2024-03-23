@@ -13,11 +13,13 @@ import cn.cerc.mis.math.FunctionIf;
 import cn.cerc.mis.math.FunctionManager;
 import cn.cerc.mis.math.FunctionMath;
 import cn.cerc.ui.ssr.core.SsrBlock;
+import cn.cerc.ui.ssr.core.VuiCommonComponent;
 import cn.cerc.ui.ssr.core.VuiControl;
 import cn.cerc.ui.ssr.editor.ISsrBoard;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+@VuiCommonComponent
 public class GridCalculateField extends VuiControl implements ISupportGrid {
 
     private SsrBlock head = new SsrBlock();
@@ -45,8 +47,10 @@ public class GridCalculateField extends VuiControl implements ISupportGrid {
     @Override
     public SsrBlock request(ISsrBoard grid) {
         String headTitle = "head." + this.title;
-        grid.addBlock(headTitle, head.text(
-                String.format("<th style='width: ${_width}em' onclick=\"gridSort(this,'%s')\">${_title}</th>", field)));
+        grid.addBlock(headTitle,
+                head.text(String.format(
+                        "<th style='width: ${_width}em' onclick=\"gridSort(this,'%s')\"><div>${_title}</div></th>",
+                        field)));
         head.toMap("_width", "" + this.width);
         head.toMap("_title", this.title);
         head.id(headTitle);

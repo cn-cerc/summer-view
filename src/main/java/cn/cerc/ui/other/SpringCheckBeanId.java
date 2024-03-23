@@ -40,7 +40,7 @@ public class SpringCheckBeanId {
             checkType(lines, object);
         } catch (Exception e) {
             log.error("create beanId: {}", beanId);
-            e.printStackTrace();
+            log.error("error {}", e.getMessage(), e);
         }
     }
 

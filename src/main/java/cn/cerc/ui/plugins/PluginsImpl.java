@@ -10,7 +10,6 @@ public interface PluginsImpl {
      * 设置其所需要配置的主类，若不通过则返回为假
      * 
      * @param owner 主类对象
-     * @return
      */
     default boolean setOwner(Object owner) {
         if (owner instanceof IHandle handle) {

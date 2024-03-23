@@ -51,7 +51,7 @@ public class OptionField extends AbstractField {
     @Override
     public String getString() {
         String result = super.getString();
-        if (result == null || "".equals(result)) {
+        if (result == null || result.isEmpty()) {
             return this.defaultValue;
         }
         return result;
