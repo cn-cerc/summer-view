@@ -26,37 +26,60 @@ public class FormSearchTextButton extends VuiControl implements ISupplierBlock, 
     private ImageConfigImpl imageConfig;
     private SsrBlock block;
     @Column
-    String placeholder = "查询条件";
+    String placeholder = "请输入查询条件";
     @Column
     String field = "SearchText_";
     @Column
     boolean autofocus = false;
+    @Column
+    String maxRecordField = "";
 
     @Override
     public SsrBlock request(ISsrBoard owner) {
-        block = owner.addBlock(VuiForm.FormStart, String.format(
-                """
-                        <div class="searchHead searchTextButton" ${if _style}style='${_style}'${endif}>
-                            <a role="configTemplate" class="hoverImageBox" type="button" onclick="showSsrConfigDialog('${templateId}')">
-                                <img src="%s" />
-                                <img src="%s" />
-                            </a>
-                            <li class="searchTextDiv">
-                                <input type="text" name="${_field}" id="${_field}" value="${%s}" autocomplete="off" placeholder="请输入${_placeholder}" ${if _autofocus}autofocus ${endif}>
-                                <span role="suffix-icon"></span>
-                            </li>
-                            <div class="searchFormButtonDiv">
-                                <button name="submit" value="search">查询</button>
-                            </div>
-                        </div>
-                               """,
-                getImage("images/icon/templateConfig.png"), getImage("images/icon/templateConfig_hover.png"), field));
-        block.id(VuiForm.FormStart).fields(this.field);
+        block = owner.addBlock(VuiForm.FormStart,
+                String.format(
+                        """
+                                <div class="searchHead searchTextButton" ${if _style}style='${_style}'${endif}>
+                                    <a role="configTemplate" class="hoverImageBox" type="button" onclick="showSsrConfigDialog('${templateId}')">
+                                        <img src="%s" />
+                                        <img src="%s" />
+                                    </a>
+                                    <li class="searchTextDiv">
+                                        <label>查询条件</label>
+                                        <div>
+                                            <input type="text" name="${_field}" id="${_field}" value="${%s}" autocomplete="off" placeholder="${_placeholder}" ${if _autofocus}autofocus ${endif}>
+                                            <span role="suffix-icon"></span>
+                                        </div>
+                                    </li>
+                                    ${if _maxRecordField is not empty}
+                                    <li class="searchTextDiv searchMaxRecord">
+                                        <label>载入笔数</label>
+                                        <div>
+                                            <input type="number" name="${_maxRecordField}" id="${_maxRecordField}" value="${%s}" autocomplete="off" placeholder="${if _isPhone}笔数${else}请输入载入笔数${endif}" onclick="this.select();">
+                                            <span role="suffix-icon"></span>
+                                        </div>
+                                    </li>
+                                    ${endif}
+                                    <div class="searchFormButtonDiv">
+                                        <button name="submit" value="search">查询</button>
+                                    </div>
+                                </div>
+                                       """,
+                        getImage("images/icon/templateConfig.png"), getImage("images/icon/templateConfig_hover.png"),
+                        field, this.maxRecordField));
+        block.id(VuiForm.FormStart).fields(this.field, this.maxRecordField);
+
+        boolean isPhone = false;
+        if (owner instanceof VuiForm form) {
+            isPhone = form.isPhone();
+        }
         block.option("templateId", "")
                 .option("_placeholder", this.placeholder)
                 .option("_field", this.field)
                 .option("_style", this.properties("v_style").orElse(""))
-                .option("_autofocus", this.autofocus ? "1" : "");
+                .option("_autofocus", this.autofocus ? "1" : "")
+                .option("_isPhone", isPhone ? "1" : "")
+                .option("_maxRecordField", this.maxRecordField);
         return block;
     }
 
@@ -103,6 +126,11 @@ public class FormSearchTextButton extends VuiControl implements ISupplierBlock, 
 
     public FormSearchTextButton autofocus(boolean autofocus) {
         this.autofocus = autofocus;
+        return this;
+    }
+
+    public FormSearchTextButton maxRecord(String maxRecordField) {
+        this.maxRecordField = maxRecordField;
         return this;
     }
 }
