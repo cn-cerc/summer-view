@@ -50,6 +50,9 @@ public abstract class VuiAbstractChart extends VuiControl
     @Column(name = "刷新频率(毫秒)")
     protected int refreshTime = 10000;
 
+    @Column(name = "是否对接BDAI")
+    protected boolean jointBDAI = false;
+
     @Override
     public SsrBlock request(ISsrBoard owner) {
         this.builder = new StringBuilder();
@@ -65,7 +68,15 @@ public abstract class VuiAbstractChart extends VuiControl
         block.option("_refreshTime", String.valueOf(refreshTime));
         block.option("_templateId", "");
 
-        builder.append("<div class='chartTitle'>${_title}</div>");
+        builder.append(String.format("""
+                <div class='chartTitle'>
+                    <span>${_title}</span>${if _jointBDAI}<div class='aiBox' onclick='playDataCardAIAnalysis(this);'>
+                        <img src='%s' />
+                        <img src='%s' />
+                    </div>${endif}
+                </div>
+                """, getImage("images/icon/ai.png"), getImage("images/icon/ai_kanban.png")));
+        block.option("_jointBDAI", jointBDAI ? "1" : "");
 
         buildContent();
 
