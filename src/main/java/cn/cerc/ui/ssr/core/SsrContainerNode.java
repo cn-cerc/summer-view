@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class SsrContainerNode extends SsrValueNode {
-    private List<ISsrNode> items = new ArrayList<ISsrNode>();
+    private final List<ISsrNode> items = new ArrayList<>();
 
     public SsrContainerNode(String text) {
         super(text);
@@ -20,12 +20,12 @@ public abstract class SsrContainerNode extends SsrValueNode {
 
     @Override
     public String getText() {
-        var sb = new StringBuffer();
-        sb.append("${").append(this.getField()).append("}");
+        StringBuilder builder = new StringBuilder();
+        builder.append("${").append(this.getField()).append("}");
         for (var item : this.getItems())
-            sb.append(item.getText());
-        sb.append("${").append(getEndFlag()).append("}");
-        return sb.toString();
+            builder.append(item.getText());
+        builder.append("${").append(getEndFlag()).append("}");
+        return builder.toString();
     }
 
     protected abstract String getEndFlag();

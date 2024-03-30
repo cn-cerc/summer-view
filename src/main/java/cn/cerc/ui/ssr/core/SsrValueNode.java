@@ -1,7 +1,7 @@
 package cn.cerc.ui.ssr.core;
 
 public class SsrValueNode implements ISsrNode {
-    private String text;
+    private final String text;
 
     public SsrValueNode(String text) {
         this.text = text;
@@ -19,7 +19,7 @@ public class SsrValueNode implements ISsrNode {
 
     @Override
     public String getHtml(SsrBlock block) {
-        var field = this.getField();
+        String field = this.getField();
         return block == null ? "block is null" : block.getValue(field).orElse(this.getText());
     }
 }
