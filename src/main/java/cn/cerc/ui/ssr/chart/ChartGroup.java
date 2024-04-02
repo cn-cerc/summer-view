@@ -50,16 +50,19 @@ public class ChartGroup extends VuiAbstractChart {
                                 <li>
                                     ${if _hasIcon}<img src="%s/${dataset.icon_}"/>${endif}
                                     <span>${dataset.%s}</span>
-                                    <span>${dataset.%s}</span>
+                                    <div id="${_cardCode}_${dataset.rec}">
+                                        <span>${dataset.%s}</span>
+                                    </div>
                                 </li>
                             ${dataset.end}
                             </ul>
                         </a>
                         ${endif}
-                        <script>$(function(){ refreshChartGroupByService(`${_service}`, `${_cardCode}`, ${_refreshTime}) })</script>""",
-                getImage("images/Frmshopping/notDataImg.png"), getImage("images/kanban"), titleField, valueField));
+                        <script>$(function(){ refreshChartGroupByService(`${_service}`, `${_cardCode}`, ${_refreshTime}, `${_data}`) })</script>""",
+                getImage("images/Frmshopping/notDataImg.png"), getImage("images/kanban"), titleField, valueField, valueField));
         block.option("_noData", "");
         block.option("_hasIcon", "");
+        block.option("_data", "");
         block.option("_class", "chartGroup flex" + width);
     }
 
@@ -90,6 +93,7 @@ public class ChartGroup extends VuiAbstractChart {
                         if (dataSet.fields().exists("icon_"))
                             block.option("_hasIcon", "1");
                         block.option("_url", dataSet.head().getString("url"));
+                        block.option("_data", dataSet.json());
                         block.dataSet(dataSet);
                     } else {
                         block.option("_noData", "1");
