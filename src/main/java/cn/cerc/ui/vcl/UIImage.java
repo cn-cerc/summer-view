@@ -1,7 +1,6 @@
 package cn.cerc.ui.vcl;
 
 import cn.cerc.db.core.Utils;
-import cn.cerc.mis.core.Application;
 import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.other.AliyunOssProcess;
@@ -11,7 +10,6 @@ import cn.cerc.ui.page.StaticFileType;
 public class UIImage extends UIComponent implements IHtml {
     private String src;
     private AliyunOssProcess process;
-    private String staticPath;
 
     public UIImage() {
         this(null);
@@ -20,7 +18,6 @@ public class UIImage extends UIComponent implements IHtml {
     public UIImage(UIComponent owner) {
         super(owner);
         this.setRootLabel("img");
-        this.staticPath = Application.getStaticPath();
     }
 
     @Override
@@ -36,7 +33,7 @@ public class UIImage extends UIComponent implements IHtml {
     }
 
     public UIImage setSrc(String src) {
-        if (this.staticPath != null && this.process != null && !Utils.isEmpty(process.getCommand()))
+        if (this.process != null && !Utils.isEmpty(process.getCommand()))
             src += String.format("?x-oss-process=image%s", process.getCommand());
         this.src = new StaticFile(StaticFileType.imageFile, src).toString();
         return this;
@@ -46,7 +43,7 @@ public class UIImage extends UIComponent implements IHtml {
      * 设置公司（产品）专用的资源
      */
     public UIImage setProductSrc(String src) {
-        if (this.staticPath != null && this.process != null && !Utils.isEmpty(process.getCommand()))
+        if (this.process != null && !Utils.isEmpty(process.getCommand()))
             src += String.format("?x-oss-process=image%s", process.getCommand());
         this.src = new StaticFile(StaticFileType.productImage, src).toProductString();
         return this;
@@ -56,7 +53,7 @@ public class UIImage extends UIComponent implements IHtml {
      * 设置产业别专用的资源
      */
     public UIImage setOriginalSrc(String src) {
-        if (this.staticPath != null && this.process != null && !Utils.isEmpty(process.getCommand()))
+        if (this.process != null && !Utils.isEmpty(process.getCommand()))
             src += String.format("?x-oss-process=image%s", process.getCommand());
         this.src = new StaticFile(StaticFileType.imageFile, src).toOriginalString();
         return this;
@@ -108,14 +105,6 @@ public class UIImage extends UIComponent implements IHtml {
     public UIImage setAlt(String alt) {
         this.setCssProperty("alt", alt);
         return this;
-    }
-
-    public String getStaticPath() {
-        return staticPath;
-    }
-
-    public void setStaticPath(String staticPath) {
-        this.staticPath = staticPath;
     }
 
     public AliyunOssProcess getProcess() {

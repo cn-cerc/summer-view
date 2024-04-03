@@ -56,7 +56,6 @@ public class ImageColumn extends AbstractColumn implements IDataColumn {
         String url = getRecord().getString(this.getCode());
         if (this.readonly) {
             UIImage img = new UIImage();
-            img.setStaticPath("");
             img.setSrc(url);
             img.setWidth(this.getWidth());
             img.setHeight(this.getHeight());
@@ -73,7 +72,6 @@ public class ImageColumn extends AbstractColumn implements IDataColumn {
         if (this.readonly) {
             html.print(getName() + "：");
             UIImage img = new UIImage();
-            img.setStaticPath("");
             img.setSrc(text);
             img.setWidth(this.getWidth());
             img.setHeight(this.getHeight());
@@ -104,7 +102,6 @@ public class ImageColumn extends AbstractColumn implements IDataColumn {
         input.setId(getId());
         input.setReadonly(readonly);
         UIImage img = new UIImage();
-        img.setStaticPath("");
         img.setSrc(text);
         img.setWidth(this.getWidth());
         img.setHeight(this.getHeight());

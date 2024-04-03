@@ -18,7 +18,7 @@ public class StaticFile {
         // 表示开启了 CDN 或者 静态仓库
         this.endpoint = Application.getStaticPath();
         if (endpoint.startsWith("http"))
-            this.bucket = "/common/";
+            this.bucket = "/static/common/";
         this.object = object;
     }
 
