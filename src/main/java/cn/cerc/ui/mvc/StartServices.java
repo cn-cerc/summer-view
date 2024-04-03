@@ -26,9 +26,7 @@ import cn.cerc.mis.core.AppClient;
 import cn.cerc.mis.core.Application;
 import cn.cerc.mis.core.IService;
 import cn.cerc.mis.core.ServiceState;
-import cn.cerc.mis.log.JayunLogParser;
 import cn.cerc.mis.security.Permission;
-import cn.cerc.mis.security.SecurityStopException;
 import cn.cerc.ui.SummerUI;
 
 public class StartServices extends HttpServlet {
@@ -121,10 +119,7 @@ public class StartServices extends HttpServlet {
             String clientIP = AppClient.getClientIP(request);
             String message = String.format("clientIP %s, token %s, service %s, corpNo %s, dataIn %s, message %s",
                     clientIP, token, function.key(), handle.getCorpNo(), dataIn.json(), throwable.getMessage());
-
-            if (!(e instanceof SecurityStopException)) // 权限不足类警告写入 info
-                JayunLogParser.error(clazz, throwable, message);
-            log.info("{}", message, throwable);
+            log.warn("{}", message, throwable);
             if (dataOut == null)
                 dataOut = new DataSet();
             dataOut.setError().setMessage(throwable.getMessage());

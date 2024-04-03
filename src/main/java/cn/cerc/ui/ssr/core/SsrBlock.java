@@ -16,7 +16,6 @@ import cn.cerc.db.core.DataRow;
 import cn.cerc.db.core.DataSet;
 import cn.cerc.db.core.Utils;
 import cn.cerc.local.tool.JsonTool;
-import cn.cerc.mis.log.JayunLogParser;
 import cn.cerc.ui.ssr.editor.ISsrBoard;
 
 public class SsrBlock implements ISsrOption {
@@ -239,15 +238,15 @@ public class SsrBlock implements ISsrOption {
             result = this.getMapProxy().value();
         else if (map != null && map.containsKey(field)) {
             if (dataRow != null && dataRow.exists(field))
-                fieldNotFindLog(field, false);
+                warn(field);
             if (dataSet != null && dataSet.exists(field))
-                fieldNotFindLog(field, false);
+                warn(field);
             result = map.get(field);
         }
         // 再查找其它
         else if (dataRow != null && dataRow.exists(field)) {
             if (dataSet != null && dataSet.exists(field))
-                fieldNotFindLog(field, false);
+                warn(field);
             result = dataRow.getText(field);
         } else if (dataSet != null && dataSet.exists(field)) {
             var row = dataSet.currentRow();
@@ -257,14 +256,14 @@ public class SsrBlock implements ISsrOption {
         } else if (!strict()) {
             result = "";
         } else if (onGetValue == null) {
-            fieldNotFindLog(field, true);
+            warn(field);
         }
         if (onGetValue != null)
             result = onGetValue.getValue(field, result);
         return Optional.ofNullable(result);
     }
 
-    private void fieldNotFindLog(String field, boolean isError) {
+    private void warn(String field) {
         String templateId = Optional.ofNullable(template).map(SsrTemplate::id).orElse("null");
         String originName = Optional.ofNullable(origin).map(Class::getName).orElse("null");
         String listValue = Optional.ofNullable(list).map(JsonTool::toJson).orElse("null");
@@ -273,11 +272,8 @@ public class SsrBlock implements ISsrOption {
         String message = String.format(
                 "not find field %s, id %s, templateId %s, origin %s, dataRow %s, dataSet %s, list %s, map %s, option %s",
                 field, id, templateId, originName, dataRow, dataSet, listValue, mapValue, optionValue);
-        if (isError) {
-            JayunLogParser.error(SsrBlock.class, new RuntimeException(this.text), message);
-        } else {
-            JayunLogParser.warn(SsrBlock.class, new RuntimeException(this.text), message);
-        }
+        RuntimeException e = new RuntimeException(this.text);
+        log.warn(message, e);
     }
 
     public SsrBlock onGetValue(OnGetValueEvent onGetValue) {
