@@ -17,11 +17,20 @@ import cn.cerc.ui.ssr.page.VuiEnvironment;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class VuiDataCardRuntime extends VuiEnvironment {
 
+    private IPage page;
+
     private String templateId;
 
     public VuiDataCardRuntime(AbstractForm form) {
         super();
         this.form(form);
+
+    }
+
+    public VuiDataCardRuntime(AbstractForm form, IPage page) {
+        super();
+        this.form(form);
+        this.page(page);
     }
 
     /**
@@ -32,6 +41,7 @@ public class VuiDataCardRuntime extends VuiEnvironment {
         VuiCanvas canvas = new VuiCanvas(this);
         canvas.sendMessage(canvas, SsrMessage.InitRequest, form.getRequest(), null);
         canvas.sendMessage(canvas, SsrMessage.InitHandle, form, null);
+        canvas.sendMessage(canvas, SsrMessage.InitPage, page, null);
         canvas.sendMessage(canvas, SsrMessage.InitBinder, null, null);
         canvas.ready();
         return canvas;
@@ -104,6 +114,14 @@ public class VuiDataCardRuntime extends VuiEnvironment {
         if (Utils.isEmpty(templateId))
             return getPageCode() + "_dataCard"; // 默认值：数据卡片代码_dataCard
         return this.templateId;
+    }
+
+    public IPage page() {
+        return page;
+    }
+
+    public void page(IPage page) {
+        this.page = page;
     }
 
 }
