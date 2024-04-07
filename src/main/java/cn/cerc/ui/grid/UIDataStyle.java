@@ -77,7 +77,7 @@ public class UIDataStyle implements UIDataStyleImpl {
 
     public OnGetText getDatetime() {
         return data -> {
-            String result = data.getDatetime().toString();
+            String result = data.getDatetime().format("yyyy-MM-dd HH:mm:ss");
             if (data.getDatetime().isEmpty())
                 result = "";
             var style = new UIStringDataStyle(this, data, this.inGrid);
@@ -163,6 +163,10 @@ public class UIDataStyle implements UIDataStyleImpl {
 
     public OnGetText getMap(Map<String, String> items) {
         return getMap(items, false);
+    }
+
+    public UITextAreaDataStyle getTextArea() {
+        return new UITextAreaDataStyle(this);
     }
 
     @Override
