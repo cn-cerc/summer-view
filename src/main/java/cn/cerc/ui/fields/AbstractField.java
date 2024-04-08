@@ -350,6 +350,8 @@ public abstract class AbstractField extends UIComponent implements INameOwner, S
             html.print("<div");
             if (!"".equals(this.getContentClass()))
                 html.print(" class=\"%s\"", this.getContentClass());
+            if (this.dialog != null && this.dialog.isOpen())
+                html.print(" data-dialog='true'");
             html.print(">");
         }
     }

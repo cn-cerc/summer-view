@@ -27,7 +27,7 @@ public class SsrFormStyleDefaultTest {
                         <script>$(function() { initForm('#form1') });</script>
                         <form method='post' action='' id='form1' role='search' class='vuiForm'><ul><li >
                         <label for="SearchText_" ><em>查询条件</em></label>
-                        <div> <input type="text" name="SearchText_" id="SearchText_" value="小" autocomplete="off"  placeholder="请输入查询条件" /> <span role="suffix-icon"></span>
+                        <div > <input type="text" name="SearchText_" id="SearchText_" value="小" autocomplete="off"  placeholder="请输入查询条件" /> <span role="suffix-icon"></span>
                         </div>
                         </li></ul></form>""",
                 form.toString());
@@ -46,7 +46,7 @@ public class SsrFormStyleDefaultTest {
                         <script>$(function() { initForm('#form1') });</script>
                         <form method='post' action='' id='form1' role='search' class='vuiForm'><ul><li >
                         <label for="SearchText_" ><em>查询条件</em></label>
-                        <div> <input type="text" name="SearchText_" id="SearchText_" value="小" autocomplete="off"  placeholder="请点击获取查询条件" /> <span role="suffix-icon"><a href="javascript:showDateDialog('SearchText_')"><img src="null" /></a></span>
+                        <div data-dialog='true'> <input type="text" name="SearchText_" id="SearchText_" value="小" autocomplete="off"  placeholder="请点击获取查询条件" /> <span role="suffix-icon"><a href="javascript:showDateDialog('SearchText_')"><img src="null" /></a></span>
                         </div>
                         </li></ul></form>""",
                 form.toString());
@@ -83,7 +83,7 @@ public class SsrFormStyleDefaultTest {
                         <script>$(function() { initForm('#form1') });</script>
                         <form method='post' action='' id='form1' role='search' class='vuiForm'><ul><li >
                         <label for="status_" ><em>单据状态</em></label>
-                        <div> <select id="status_" name="status_" >  <option value="0" >全部</option><option value="1" selected >待审核</option><option value="2" >已审核</option></select> <span role="suffix-icon"></span>
+                        <div > <select id="status_" name="status_" >  <option value="0" >全部</option><option value="1" selected >待审核</option><option value="2" >已审核</option></select> <span role="suffix-icon"></span>
                         </div>
                         </li></ul></form>""",
                 form.toString());
@@ -102,7 +102,7 @@ public class SsrFormStyleDefaultTest {
                         <script>$(function() { initForm('#form1') });</script>
                         <form method='post' action='' id='form1' role='search' class='vuiForm'><ul><li >
                         <label for="code__name"><em>制单人员</em></label>
-                        <div>
+                        <div data-dialog='true'>
                         <input type="hidden" name="code_" id="code_" value="CW001"/>
                         <input type="text" name="code__name" id="code__name" value="张三" autocomplete="off" placeholder="请点击获取制单人员" readonly />
                         <span role="suffix-icon">
@@ -231,11 +231,11 @@ public class SsrFormStyleDefaultTest {
                         <script>$(function() { initForm('#form1') });</script>
                         <form method='post' action='' id='form1' role='search' class='vuiForm'><ul><li >
                         <label for="type_" ><em>单据类型</em></label>
-                        <div> <select id="type_" name="type_" >  <option value="0" >草稿</option><option value="1" selected >生效</option><option value="2" >作废</option></select> <span role="suffix-icon"></span>
+                        <div > <select id="type_" name="type_" >  <option value="0" >草稿</option><option value="1" selected >生效</option><option value="2" >作废</option></select> <span role="suffix-icon"></span>
                         </div>
                         </li><li >
                         <label for="type2_" ><em>运单类型</em></label>
-                        <div> <select id="type2_" name="type2_" > <option value="1" >草稿</option><option value="2" >生效</option><option value="3" selected >作废</option></select> <span role="suffix-icon"></span>
+                        <div > <select id="type2_" name="type2_" > <option value="1" >草稿</option><option value="2" >生效</option><option value="3" selected >作废</option></select> <span role="suffix-icon"></span>
                         </div>
                         </li></ul></form>""",
                 form.toString());
@@ -252,7 +252,7 @@ public class SsrFormStyleDefaultTest {
                 """
                         <li >
                         <label for="name" ><em>姓名</em></label>
-                        <div> <input type="text" name="name" id="name" value="" autocomplete="off" readonly autofocus  placeholder="请输入姓名" /> <span role="suffix-icon"></span>
+                        <div > <input type="text" name="name" id="name" value="" autocomplete="off" readonly autofocus  placeholder="请输入姓名" /> <span role="suffix-icon"></span>
                         </div>
                         </li>""",
                 stringField.block().html());
@@ -269,7 +269,7 @@ public class SsrFormStyleDefaultTest {
                 """
                         <li >
                         <label for="name" ><em>姓名</em></label>
-                        <div> <input type="text" name="name" id="name" value="" autocomplete="off"  placeholder="请输入姓名" /> <span role="suffix-icon"><a href="javascript:initExpand('name')"><img src="null" /></a></span>
+                        <div > <input type="text" name="name" id="name" value="" autocomplete="off"  placeholder="请输入姓名" /> <span role="suffix-icon"><a href="javascript:initExpand('name')"><img src="null" /></a></span>
                         </div>
                         </li>""",
                 stringField.block().html());

@@ -52,7 +52,7 @@ public class CodeNameField extends AbstractField {
             html.println("<em>%s</em>", this.getName());
             html.println("</label>");
 
-            html.println("<div>");
+            html.println("<div data-dialog='true'>");
             html.print("<input");
             html.print(" type=\"hidden\"");
             html.print(" name=\"%s\"", this.getId());
