@@ -59,14 +59,13 @@ public class VuiFormTest {
                         <a role="configTemplate" class="hoverImageBox" type="button" onclick="showSsrConfigDialog('')">
                         <img src="images/icon/templateConfig.png" />
                         <img src="images/icon/templateConfig_hover.png" />
-                        </a>
-                        <li class="searchTextDiv">
+                        </a> <li class="searchTextDiv">
                         <label>查询条件</label>
                         <div>
                         <input type="text" name="search_text_" id="search_text_" value="${search_text_}" autocomplete="off" placeholder="请输入查询条件" >
                         <span role="suffix-icon"></span>
                         </div>
-                        </li> <div class="searchFormButtonDiv">
+                        </li>   <div class="searchFormButtonDiv">
                         <button name="submit" value="search">查询</button>
                         </div>
                         </div><ul></ul></form>""",
@@ -87,20 +86,19 @@ public class VuiFormTest {
                         <a role="configTemplate" class="hoverImageBox" type="button" onclick="showSsrConfigDialog('')">
                         <img src="images/icon/templateConfig.png" />
                         <img src="images/icon/templateConfig_hover.png" />
-                        </a>
-                        <li class="searchTextDiv">
+                        </a> <li class="searchTextDiv">
                         <label>查询条件</label>
                         <div>
                         <input type="text" name="search_text_" id="search_text_" value="${search_text_}" autocomplete="off" placeholder="请输入查询条件" >
                         <span role="suffix-icon"></span>
                         </div>
-                        </li> <li class="searchTextDiv searchMaxRecord">
+                        </li>  <li class="searchTextDiv searchMaxRecord">
                         <label>载入笔数</label>
                         <div>
                         <input type="number" name="max_record_" id="max_record_" value="${max_record_}" autocomplete="off" placeholder="请输入载入笔数" onclick="this.select();">
                         <span role="suffix-icon"></span>
                         </div>
-                        </li> <div class="searchFormButtonDiv">
+                        </li>  <div class="searchFormButtonDiv">
                         <button name="submit" value="search">查询</button>
                         </div>
                         </div><ul></ul></form>""",

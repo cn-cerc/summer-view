@@ -44,6 +44,17 @@ public class FormSearchTextButton extends VuiControl implements ISupplierBlock, 
                                         <img src="%s" />
                                         <img src="%s" />
                                     </a>
+                                    ${if _isPhone}
+                                        ${if _maxRecordField is not empty}
+                                        <li class="searchTextDiv searchMaxRecord">
+                                            <label>载入笔数</label>
+                                            <div>
+                                                <input type="number" name="${_maxRecordField}" id="${_maxRecordField}" value="${%s}" autocomplete="off" placeholder="${if _isPhone}笔数${else}请输入载入笔数${endif}" onclick="this.select();">
+                                                <span role="suffix-icon"></span>
+                                            </div>
+                                        </li>
+                                        ${endif}
+                                    ${endif}
                                     <li class="searchTextDiv">
                                         <label>查询条件</label>
                                         <div>
@@ -51,14 +62,16 @@ public class FormSearchTextButton extends VuiControl implements ISupplierBlock, 
                                             <span role="suffix-icon"></span>
                                         </div>
                                     </li>
-                                    ${if _maxRecordField is not empty}
-                                    <li class="searchTextDiv searchMaxRecord">
-                                        <label>载入笔数</label>
-                                        <div>
-                                            <input type="number" name="${_maxRecordField}" id="${_maxRecordField}" value="${%s}" autocomplete="off" placeholder="${if _isPhone}笔数${else}请输入载入笔数${endif}" onclick="this.select();">
-                                            <span role="suffix-icon"></span>
-                                        </div>
-                                    </li>
+                                    ${if not _isPhone}
+                                        ${if _maxRecordField is not empty}
+                                        <li class="searchTextDiv searchMaxRecord">
+                                            <label>载入笔数</label>
+                                            <div>
+                                                <input type="number" name="${_maxRecordField}" id="${_maxRecordField}" value="${%s}" autocomplete="off" placeholder="${if _isPhone}笔数${else}请输入载入笔数${endif}" onclick="this.select();">
+                                                <span role="suffix-icon"></span>
+                                            </div>
+                                        </li>
+                                        ${endif}
                                     ${endif}
                                     <div class="searchFormButtonDiv">
                                         <button name="submit" value="search">查询</button>
@@ -66,7 +79,7 @@ public class FormSearchTextButton extends VuiControl implements ISupplierBlock, 
                                 </div>
                                        """,
                         getImage("images/icon/templateConfig.png"), getImage("images/icon/templateConfig_hover.png"),
-                        field, this.maxRecordField));
+                        this.maxRecordField, field, this.maxRecordField));
         block.id(VuiForm.FormStart).fields(this.field, this.maxRecordField);
 
         boolean isPhone = false;
