@@ -54,7 +54,6 @@ public class StartServices extends HttpServlet {
         String allow = config.getProperty("access-control-allow-origin");
         if (!Utils.isEmpty(allow))
             response.addHeader("access-control-allow-origin", allow);
-        log.debug("dataIn {}", text);
 
         if (Utils.isEmpty(key)) {
             dataOut.setMessage("远程服务不能为空");
