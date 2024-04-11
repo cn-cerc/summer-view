@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 
 import cn.cerc.db.core.Utils;
 import cn.cerc.ui.ssr.core.VuiComponent;
+import cn.cerc.ui.ssr.page.IVuiEnvironment;
+import cn.cerc.ui.ssr.page.VuiEnvironment;
 
 public class Binder<T> {
     private static final Logger log = LoggerFactory.getLogger(Binder.class);
@@ -52,7 +54,11 @@ public class Binder<T> {
                 if (target instanceof IBinders impl)
                     impl.binders().add(this);
             } else {
-                log.warn("{} 绑定的对象 {} 找不到", this.owner.getId(), this.targetId);
+                IVuiEnvironment environment = owner.canvas().environment();
+                if (environment instanceof VuiEnvironment vuiEnvironment)
+                    log.warn("{} {} 绑定的对象 {} 找不到", vuiEnvironment.getPageCode(), this.owner.getId(), this.targetId);
+                else
+                    log.warn("{} 绑定的对象 {} 找不到", this.owner.getId(), this.targetId);
             }
         }
     }
