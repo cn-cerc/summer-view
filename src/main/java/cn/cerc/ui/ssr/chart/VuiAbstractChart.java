@@ -165,4 +165,16 @@ public abstract class VuiAbstractChart extends VuiControl
             imageConfig = Application.getBean(ImageConfigImpl.class);
         return imageConfig.getCommonFile(url);
     }
+    
+    public int width() {
+        return width;
+    }
+    
+    public int height() {
+        return height;
+    }
+    
+    public boolean jointBDAI() {
+        return jointBDAI;
+    }
 }
