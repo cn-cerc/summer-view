@@ -1,6 +1,7 @@
 package cn.cerc.ui.ssr.chart;
 
 import java.util.Objects;
+import java.util.Optional;
 
 import javax.persistence.Column;
 
@@ -129,7 +130,9 @@ public abstract class VuiAbstractChart extends VuiControl
                 block.option("_dataIn", item.dataIn().json());
                 String title = item.serviceDesc();
                 block.option("_data_title", title + this.getClass().getSimpleName());
-                block.option("_title", title);
+                Optional<String> optTitle = block.option("_title");
+                if (optTitle.isEmpty() || Utils.isEmpty(optTitle.get()))
+                    block.option("_title", title);
             });
             break;
         }
@@ -165,15 +168,15 @@ public abstract class VuiAbstractChart extends VuiControl
             imageConfig = Application.getBean(ImageConfigImpl.class);
         return imageConfig.getCommonFile(url);
     }
-    
+
     public int width() {
         return width;
     }
-    
+
     public int height() {
         return height;
     }
-    
+
     public boolean jointBDAI() {
         return jointBDAI;
     }
