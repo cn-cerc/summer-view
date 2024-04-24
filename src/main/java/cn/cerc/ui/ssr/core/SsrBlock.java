@@ -263,30 +263,25 @@ public class SsrBlock implements ISsrOption {
         return Optional.ofNullable(result);
     }
 
-    protected void warn(String field) {
+    private String getLogMessage(String field) {
         String templateId = Optional.ofNullable(template).map(SsrTemplate::id).orElse("null");
         String originName = Optional.ofNullable(origin).map(Class::getName).orElse("null");
         String listValue = Optional.ofNullable(list).map(JsonTool::toJson).orElse("null");
         String mapValue = Optional.ofNullable(map).map(JsonTool::toJson).orElse("null");
         String optionValue = Optional.ofNullable(options).map(JsonTool::toJson).orElse("null");
-        String message = String.format(
+        return String.format(
                 "not find field %s, id %s, templateId %s, origin %s, dataRow %s, dataSet %s, list %s, map %s, option %s",
                 field, id, templateId, originName, dataRow, dataSet, listValue, mapValue, optionValue);
+    }
+
+    protected void warn(String field) {
         RuntimeException e = new RuntimeException(this.text);
-        log.warn(message, e);
+        log.warn(getLogMessage(field), e);
     }
 
     protected void error(String field) {
-        String templateId = Optional.ofNullable(template).map(SsrTemplate::id).orElse("null");
-        String originName = Optional.ofNullable(origin).map(Class::getName).orElse("null");
-        String listValue = Optional.ofNullable(list).map(JsonTool::toJson).orElse("null");
-        String mapValue = Optional.ofNullable(map).map(JsonTool::toJson).orElse("null");
-        String optionValue = Optional.ofNullable(options).map(JsonTool::toJson).orElse("null");
-        String message = String.format(
-                "not find field %s, id %s, templateId %s, origin %s, dataRow %s, dataSet %s, list %s, map %s, option %s",
-                field, id, templateId, originName, dataRow, dataSet, listValue, mapValue, optionValue);
         RuntimeException e = new RuntimeException(this.text);
-        log.error(message, e);
+        log.error(getLogMessage(field), e);
     }
 
     public SsrBlock onGetValue(OnGetValueEvent onGetValue) {
