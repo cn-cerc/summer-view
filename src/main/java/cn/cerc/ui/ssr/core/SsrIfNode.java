@@ -41,7 +41,7 @@ public class SsrIfNode extends SsrContainerNode {
             Optional<String> value = block.getValue(field);
             if (value.isEmpty()) {
                 if (block.strict()) {
-                    block.warn(field);
+                    block.error(field);
                     return this.getText();
                 } else
                     return getChildren(block, false);
@@ -63,7 +63,7 @@ public class SsrIfNode extends SsrContainerNode {
             String field = arr[0].trim();
             Optional<String> value = block.getValue(field);
             if (value.isEmpty()) {
-                block.warn(field);
+                block.error(field);
                 status.setValue(-1);
             } else
                 status.setValue(lrEquals.apply(value.get(), "") ? 1 : 0);
@@ -72,7 +72,7 @@ public class SsrIfNode extends SsrContainerNode {
             String leftField = arr[0];
             Optional<String> leftValue = block.getValue(leftField);
             if (leftValue.isEmpty()) {
-                block.warn(leftField);
+                block.error(leftField);
                 status.setValue(-1);
                 return false;
             }
@@ -86,7 +86,7 @@ public class SsrIfNode extends SsrContainerNode {
             else {
                 rightValue = block.getValue(value);
                 if (rightValue.isEmpty()) {
-                    block.warn(value);
+                    block.error(value);
                     status.setValue(-1);
                     return false;
                 }

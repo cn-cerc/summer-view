@@ -276,6 +276,19 @@ public class SsrBlock implements ISsrOption {
         log.warn(message, e);
     }
 
+    protected void error(String field) {
+        String templateId = Optional.ofNullable(template).map(SsrTemplate::id).orElse("null");
+        String originName = Optional.ofNullable(origin).map(Class::getName).orElse("null");
+        String listValue = Optional.ofNullable(list).map(JsonTool::toJson).orElse("null");
+        String mapValue = Optional.ofNullable(map).map(JsonTool::toJson).orElse("null");
+        String optionValue = Optional.ofNullable(options).map(JsonTool::toJson).orElse("null");
+        String message = String.format(
+                "not find field %s, id %s, templateId %s, origin %s, dataRow %s, dataSet %s, list %s, map %s, option %s",
+                field, id, templateId, originName, dataRow, dataSet, listValue, mapValue, optionValue);
+        RuntimeException e = new RuntimeException(this.text);
+        log.error(message, e);
+    }
+
     public SsrBlock onGetValue(OnGetValueEvent onGetValue) {
         this.onGetValue = onGetValue;
         return this;
