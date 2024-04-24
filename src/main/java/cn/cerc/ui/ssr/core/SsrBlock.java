@@ -263,7 +263,7 @@ public class SsrBlock implements ISsrOption {
         return Optional.ofNullable(result);
     }
 
-    private void warn(String field) {
+    protected void warn(String field) {
         String templateId = Optional.ofNullable(template).map(SsrTemplate::id).orElse("null");
         String originName = Optional.ofNullable(origin).map(Class::getName).orElse("null");
         String listValue = Optional.ofNullable(list).map(JsonTool::toJson).orElse("null");

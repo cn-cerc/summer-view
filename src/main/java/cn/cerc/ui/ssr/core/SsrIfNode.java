@@ -45,9 +45,7 @@ public class SsrIfNode extends SsrContainerNode {
             Optional<String> value = block.getValue(field);
             if (value.isEmpty()) {
                 if (block.strict()) {
-                    RuntimeException e = new RuntimeException(
-                            String.format("%s not find field: %s", this.getField(), field));
-                    log.error(e.getMessage(), e);
+                    block.warn(field);
                     return this.getText();
                 } else
                     return getChildren(block, false);
@@ -61,7 +59,7 @@ public class SsrIfNode extends SsrContainerNode {
     }
 
     private boolean check(SsrBlock block, Variant status, String text, String flag,
-                          BiFunction<String, String, Boolean> lrEquals) {
+            BiFunction<String, String, Boolean> lrEquals) {
         if (block == null)
             return false;
         String[] arr = text.split(flag);
