@@ -196,6 +196,7 @@ public class StartForms implements Filter {
             String viewId = factory.getView(handle, req, resp, sv.getId(), sv.getValue());
             factory.outputView(req, resp, viewId);
         } catch (Exception e) {
+            log.error("formId {}, error {}", childCode, e.getMessage(), e);
             // url 解析失败直接返回 404 页面
             resp.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
