@@ -4,15 +4,11 @@ import java.util.ArrayList;
 import java.util.Optional;
 import java.util.function.BiFunction;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import cn.cerc.db.core.Utils;
 import cn.cerc.db.core.Variant;
 import cn.cerc.mis.math.FunctionIf;
 
 public class SsrIfNode extends SsrContainerNode {
-    private static final Logger log = LoggerFactory.getLogger(SsrIfNode.class);
     public static final SsrContainerSignRecord Sign = new SsrContainerSignRecord("if ", "endif", SsrIfNode::new);
 
     public SsrIfNode(String text) {
@@ -67,7 +63,7 @@ public class SsrIfNode extends SsrContainerNode {
             String field = arr[0].trim();
             Optional<String> value = block.getValue(field);
             if (value.isEmpty()) {
-                log.error("not find field: {}", field);
+                block.warn(field);
                 status.setValue(-1);
             } else
                 status.setValue(lrEquals.apply(value.get(), "") ? 1 : 0);
@@ -76,7 +72,7 @@ public class SsrIfNode extends SsrContainerNode {
             String leftField = arr[0];
             Optional<String> leftValue = block.getValue(leftField);
             if (leftValue.isEmpty()) {
-                log.error("not find field: {}", leftField);
+                block.warn(leftField);
                 status.setValue(-1);
                 return false;
             }
@@ -90,7 +86,7 @@ public class SsrIfNode extends SsrContainerNode {
             else {
                 rightValue = block.getValue(value);
                 if (rightValue.isEmpty()) {
-                    log.error("not find field: {}", value);
+                    block.warn(value);
                     status.setValue(-1);
                     return false;
                 }
