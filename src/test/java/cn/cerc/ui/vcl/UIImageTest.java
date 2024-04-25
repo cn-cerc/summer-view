@@ -6,6 +6,8 @@ import org.junit.Test;
 
 import cn.cerc.db.core.ServerConfig;
 import cn.cerc.mis.core.Application;
+import cn.cerc.ui.page.StaticFile;
+import cn.cerc.ui.page.StaticFileType;
 
 public class UIImageTest {
     private String staticPath = Application.getStaticPath();
@@ -22,14 +24,14 @@ public class UIImageTest {
     @Test
     public void test2() {
         UIImage image = new UIImage(null);
-        image.setProductSrc("images/icon/a/png");
+        image.setSrc(new StaticFile(StaticFileType.imageFile, "images/icon/a/png").toProductString());
         assertEquals(String.format("<img src='%s/%s/images/icon/a/png'/>", staticPath, product), image.toString());
     }
 
     @Test
     public void test3() {
         UIImage image = new UIImage(null);
-        image.setOriginalSrc("images/icon/a/png");
+        image.setSrc(new StaticFile(StaticFileType.imageFile, "images/icon/a/png").toOriginalString());
         assertEquals(String.format("<img src='%s/%s/images/icon/a/png'/>", staticPath, original), image.toString());
     }
 }

@@ -40,26 +40,6 @@ public class UIImage extends UIComponent implements IHtml {
     }
 
     /**
-     * 设置公司（产品）专用的资源
-     */
-    public UIImage setProductSrc(String src) {
-        if (this.process != null && !Utils.isEmpty(process.getCommand()))
-            src += String.format("?x-oss-process=image%s", process.getCommand());
-        this.src = new StaticFile(StaticFileType.productImage, src).toProductString();
-        return this;
-    }
-
-    /**
-     * 设置产业别专用的资源
-     */
-    public UIImage setOriginalSrc(String src) {
-        if (this.process != null && !Utils.isEmpty(process.getCommand()))
-            src += String.format("?x-oss-process=image%s", process.getCommand());
-        this.src = new StaticFile(StaticFileType.imageFile, src).toOriginalString();
-        return this;
-    }
-
-    /**
      * 阿里云OSS图片压缩
      * 
      * @param width 阿里云格式化后的图片宽度，宽高比按照原图自动调整
