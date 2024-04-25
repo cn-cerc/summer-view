@@ -16,4 +16,9 @@ public class StubForm extends AbstractForm {
         return null;
     }
 
+    @Override
+    public String _call(String funcId) throws Exception {
+        return super.callDefault(funcId);
+    }
+
 }
