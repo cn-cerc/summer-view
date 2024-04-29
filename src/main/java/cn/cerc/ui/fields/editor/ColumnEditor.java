@@ -87,7 +87,7 @@ public class ColumnEditor {
             inputStyle = "width:80%;";
         }
         inputStyle += "border: 1px solid #dcdcdc;";
-        html.print(" type='text'");
+        html.print(" type='%s'", owner.getHtmType());
         html.print(" name='%s'", owner.getField());
         html.print(" value='%s'", data);
         html.print(" autocomplete='off'");
