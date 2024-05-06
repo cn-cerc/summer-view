@@ -104,14 +104,14 @@ public class VuiRequestRow extends VuiComponent
             }
             break;
         case SsrMessage.appendComponent:
-            if (sender instanceof VuiForm form && msgData instanceof ISupportField block) {
+            if (sender instanceof VuiForm && msgData instanceof ISupportField block) {
                 String newField = block.fields();
                 if (!Utils.isEmpty(newField) && !config.fields().exists(newField))
                     config.fields().add(newField);
             }
             break;
         case SsrMessage.UpdateFieldCode:
-            if (sender instanceof VuiForm form && msgData instanceof String newField) {
+            if (sender instanceof VuiForm && msgData instanceof String newField) {
                 if (!config.fields().exists(newField))
                     config.fields().add(newField);
             }

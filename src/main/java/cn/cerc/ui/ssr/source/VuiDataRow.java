@@ -88,14 +88,14 @@ public class VuiDataRow extends VuiComponent
     public void onMessage(Object sender, int msgType, Object msgData, String targetId) {
         switch (msgType) {
         case SsrMessage.appendComponent:
-            if (sender instanceof VuiForm form && msgData instanceof ISupportField block) {
+            if (sender instanceof VuiForm && msgData instanceof ISupportField block) {
                 String newField = block.fields();
                 if (!Utils.isEmpty(newField) && !dataRow.fields().exists(newField))
                     dataRow.fields().add(newField);
             }
             break;
         case SsrMessage.UpdateFieldCode:
-            if (sender instanceof VuiForm form && msgData instanceof String newField) {
+            if (sender instanceof VuiForm && msgData instanceof String newField) {
                 if (!Utils.isEmpty(newField) && !dataRow.fields().exists(newField))
                     dataRow.fields().add(newField);
             }
