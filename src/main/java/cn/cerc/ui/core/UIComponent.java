@@ -128,7 +128,7 @@ public class UIComponent implements IComponent, HtmlContent, Iterable<UIComponen
     @Override
     public Iterator<UIComponent> iterator() {
         // 警告：此处不可直接返回 components.iterator
-        return new ArrayList<UIComponent>(components).iterator();
+        return new ArrayList<>(components).iterator();
     }
 
     public final String getId() {
@@ -227,7 +227,8 @@ public class UIComponent implements IComponent, HtmlContent, Iterable<UIComponen
     @Override
     public void output(HtmlWriter html) {
         this.beginOutput(html);
-        for (var item : this.components)
+        // 使用自身重写的 iterator 方法进行迭代
+        for (UIComponent item : this)
             item.output(html);
         this.endOutput(html);
     }
