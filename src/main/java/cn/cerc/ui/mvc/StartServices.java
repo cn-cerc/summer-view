@@ -106,7 +106,12 @@ public class StartServices extends HttpServlet {
             return;
         }
 
+        String recordFilter = "";
         try {
+            if (dataIn.head().exists("_RecordFilter_")) {
+                recordFilter = dataIn.head().getString("_RecordFilter_");
+                dataIn.head().fields().remove("_RecordFilter_");
+            }
             dataOut = service._call(handle, dataIn, function);
             if (dataOut == null) {
                 dataOut = new DataSet();
@@ -123,8 +128,12 @@ public class StartServices extends HttpServlet {
                 dataOut = new DataSet();
             dataOut.setError().setMessage(throwable.getMessage());
         }
+
         // 数据过滤后返回
-        response.getWriter().write(RecordFilter.execute(dataIn, dataOut).json());
+        if (Utils.isNotEmpty(recordFilter)) {
+            dataIn.head().setValue("_RecordFilter_", recordFilter);
+            response.getWriter().write(RecordFilter.execute(dataIn, dataOut).json());
+        }
     }
 
 }
