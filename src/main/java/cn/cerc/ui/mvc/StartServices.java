@@ -134,7 +134,7 @@ public class StartServices extends HttpServlet {
             dataIn.head().setValue("_RecordFilter_", recordFilter);
         }
         // 数据过滤后返回
-        response.getWriter().write(RecordFilter.execute(dataIn, dataOut).json());
+        response.getWriter().write(RecordFilter.execute(dataIn, dataOut, recordFilter).json());
     }
 
 }
