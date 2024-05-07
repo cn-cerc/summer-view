@@ -129,11 +129,12 @@ public class StartServices extends HttpServlet {
             dataOut.setError().setMessage(throwable.getMessage());
         }
 
-        // 数据过滤后返回
+        // 还原数据过滤命令
         if (Utils.isNotEmpty(recordFilter)) {
             dataIn.head().setValue("_RecordFilter_", recordFilter);
-            response.getWriter().write(RecordFilter.execute(dataIn, dataOut).json());
         }
+        // 数据过滤后返回
+        response.getWriter().write(RecordFilter.execute(dataIn, dataOut).json());
     }
 
 }
