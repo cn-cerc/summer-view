@@ -56,15 +56,16 @@ public class Binder<T> {
             } else {
                 IVuiEnvironment environment = owner.canvas().environment();
                 if (environment instanceof VuiEnvironment vuiEnvironment)
-                    log.warn("{} {} 绑定的对象 {} 找不到", vuiEnvironment.getPageCode(), this.owner.getId(), this.targetId);
+                    log.warn("{} {} 绑定的对象 {} 找不到", vuiEnvironment.getPageCode(), this.owner.getId(), this.targetId,
+                            new RuntimeException());
                 else
-                    log.warn("{} 绑定的对象 {} 找不到", this.owner.getId(), this.targetId);
+                    log.warn("{} 绑定的对象 {} 找不到", this.owner.getId(), this.targetId, new RuntimeException());
             }
         }
     }
 
     public void sendMessage(int msgType, Object msgData) {
-        if (target() != null)
+        if (target().isPresent())
             owner.canvas().sendMessage(owner, msgType, msgData, targetId);
     }
 
