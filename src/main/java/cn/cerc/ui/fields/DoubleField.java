@@ -7,6 +7,7 @@ import cn.cerc.mis.core.HtmlWriter;
 import cn.cerc.ui.core.UIComponent;
 import cn.cerc.ui.fields.editor.ColumnEditor;
 import cn.cerc.ui.grid.lines.AbstractGridLine.IOutputOfGridLine;
+import cn.cerc.ui.vcl.UIInput;
 import cn.cerc.ui.vcl.UIUrl;
 
 public class DoubleField extends AbstractField implements IFormatColumn, IOutputOfGridLine {
@@ -62,7 +63,7 @@ public class DoubleField extends AbstractField implements IFormatColumn, IOutput
                 html.print(getText());
             }
         } else {
-            html.print(getEditor().format(current()));
+            html.print(getEditor().setType(getHtmType()).format(current()));
         }
     }
 
@@ -85,5 +86,10 @@ public class DoubleField extends AbstractField implements IFormatColumn, IOutput
     @Override
     public UIComponent setCssProperty(String key, Object value) {
         return this.getContent().setCssProperty(key, value);
+    }
+
+    @Override
+    public String getHtmType() {
+        return UIInput.TYPE_NUMBER;
     }
 }

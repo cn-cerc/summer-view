@@ -15,6 +15,7 @@ import cn.cerc.ui.fields.AbstractField;
 import cn.cerc.ui.fields.IFormatColumn;
 import cn.cerc.ui.grid.lines.AbstractGridLine;
 import cn.cerc.ui.grid.lines.MasterGridLine;
+import cn.cerc.ui.vcl.UIInput;
 
 public class ColumnEditor {
     private static final ClassResource res = new ClassResource(ColumnEditor.class, SummerUI.ID);
@@ -26,6 +27,7 @@ public class ColumnEditor {
     private String onUpdate;
     private List<String> dataField = new ArrayList<>(); // 设置的字段列表
     private AbstractGridLine gridLine;
+    private String type = UIInput.TYPE_TEXT;
 
     public ColumnEditor(AbstractField owner) {
         this.owner = owner;
@@ -87,7 +89,7 @@ public class ColumnEditor {
             inputStyle = "width:80%;";
         }
         inputStyle += "border: 1px solid #dcdcdc;";
-        html.print(" type='text'");
+        html.print(" type='%s'", getType());
         html.print(" name='%s'", owner.getField());
         html.print(" value='%s'", data);
         html.print(" autocomplete='off'");
@@ -154,5 +156,14 @@ public class ColumnEditor {
      */
     public List<String> getDataField() {
         return dataField;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public ColumnEditor setType(String type) {
+        this.type = type;
+        return this;
     }
 }
