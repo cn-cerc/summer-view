@@ -27,6 +27,7 @@ import cn.cerc.mis.core.Application;
 import cn.cerc.mis.core.IService;
 import cn.cerc.mis.core.ServiceState;
 import cn.cerc.mis.security.Permission;
+import cn.cerc.mis.security.SecurityStopException;
 import cn.cerc.ui.SummerUI;
 
 public class StartServices extends HttpServlet {
@@ -117,13 +118,32 @@ public class StartServices extends HttpServlet {
                 dataOut = new DataSet();
                 dataOut.setError().setMessage("远程服务没有响应");
             }
-        } catch (RuntimeException | IllegalAccessException | InvocationTargetException | ServiceException
-                | DataException e) {
+        } catch (Exception e) {
             Throwable throwable = e.getCause() != null ? e.getCause() : e;
             String clientIP = AppClient.getClientIP(request);
-            String message = String.format("clientIP %s, token %s, service %s, corpNo %s, dataIn %s, message %s",
-                    clientIP, token, function.key(), handle.getCorpNo(), dataIn.json(), throwable.getMessage());
-            log.error("{}", message, throwable);
+
+            if (throwable instanceof IllegalArgumentException)
+                log.error("参数异常, clientIP {}, token {}, service {}, corpNo {}, dataIn {}, message {}", clientIP, token,
+                        function.key(), handle.getCorpNo(), dataIn.json(), throwable.getMessage(), throwable);
+            else if (throwable instanceof InvocationTargetException)
+                log.error("反射异常, clientIP {}, token {}, service {}, corpNo {}, dataIn {}, message {}", clientIP, token,
+                        function.key(), handle.getCorpNo(), dataIn.json(), throwable.getMessage(), throwable);
+            else if (throwable instanceof ServiceException)
+                log.error("服务异常, clientIP {}, token {}, service {}, corpNo {}, dataIn {}, message {}", clientIP, token,
+                        function.key(), handle.getCorpNo(), dataIn.json(), throwable.getMessage(), throwable);
+            else if (throwable instanceof DataException)
+                log.info("数据异常, clientIP {}, token {}, service {}, corpNo {}, dataIn {}, message {}", clientIP, token,
+                        function.key(), handle.getCorpNo(), dataIn.json(), throwable.getMessage(), throwable);
+            else if (throwable instanceof SecurityStopException)
+                log.warn("权限异常, clientIP {}, token {}, service {}, corpNo {}, dataIn {}, message {}", clientIP, token,
+                        function.key(), handle.getCorpNo(), dataIn.json(), throwable.getMessage(), throwable);
+            else if (throwable instanceof RuntimeException)
+                log.error("运行异常, clientIP {}, token {}, service {}, corpNo {}, dataIn {}, message {}", clientIP, token,
+                        function.key(), handle.getCorpNo(), dataIn.json(), throwable.getMessage(), throwable);
+            else
+                log.error("其他异常, clientIP {}, token {}, service {}, corpNo {}, dataIn {}, message {}", clientIP, token,
+                        function.key(), handle.getCorpNo(), dataIn.json(), throwable.getMessage(), throwable);
+
             if (dataOut == null)
                 dataOut = new DataSet();
             dataOut.setError().setMessage(throwable.getMessage());
