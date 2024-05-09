@@ -48,15 +48,19 @@ public class UIDataStyle implements UIDataStyleImpl {
         };
     }
 
-    private OnGetText getInteger() {
+    public OnGetText getInteger() {
         return data -> {
-            return new UIStringDataStyle(this, data, this.inGrid).getText(data.getString());
+            var style = new UIStringDataStyle(this, data, this.inGrid);
+            style.setInputType(UIInput.TYPE_NUMBER);
+            return style.getText(data.getString());
         };
     }
 
-    private OnGetText getDouble() {
+    public OnGetText getDouble() {
         return data -> {
-            return new UIStringDataStyle(this, data, this.inGrid).getText(data.getString());
+            var style = new UIStringDataStyle(this, data, this.inGrid);
+            style.setInputType(UIInput.TYPE_NUMBER);
+            return style.getText(data.getString());
         };
     }
 
