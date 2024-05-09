@@ -24,7 +24,8 @@ public class UIDataStyleTest {
                 """
                         <script>$(function() { initGrid() });</script>
                         <table class='dbgrid gridView'><tr><th onclick='gridViewSort(this)'><div>序</div></th><th><div>price_</div></th></tr><tr><td align='center'>1</td><td><input autocomplete='off' name='price_' id='price_' type='number' value='100'></input></td></tr>
-                        </table>""");
+                        </table>"""
+                        .replaceAll("\n", System.lineSeparator()));
     }
 
     @Test
@@ -43,6 +44,7 @@ public class UIDataStyleTest {
         assertEquals(form.toString(),
                 """
                         <form method='post'><div data-line='0'><span data-field='price_'>价格:<input autocomplete='off' name='price_' id='price_' type='number' value='100'></input></span></div><button id='submit' name="submit">查询</button>
-                        </form>""");
+                        </form>"""
+                        .replaceAll("\n", System.lineSeparator()));
     }
 }
