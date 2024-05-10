@@ -64,7 +64,7 @@ public class DoubleField extends AbstractField implements IFormatColumn, IOutput
                 html.print(getText());
             }
         } else {
-            html.print(getEditor().setType(getHtmType()).setCssProperty("step", step).format(current()));
+            html.print(getEditor().format(current()));
         }
     }
 
