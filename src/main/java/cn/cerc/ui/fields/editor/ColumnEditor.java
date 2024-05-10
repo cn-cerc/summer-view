@@ -3,7 +3,9 @@ package cn.cerc.ui.fields.editor;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import cn.cerc.db.core.ClassResource;
 import cn.cerc.db.core.DataRow;
@@ -28,6 +30,7 @@ public class ColumnEditor {
     private List<String> dataField = new ArrayList<>(); // 设置的字段列表
     private AbstractGridLine gridLine;
     private String type = UIInput.TYPE_TEXT;
+    private Map<String, Object> propertys = new HashMap<>();
 
     public ColumnEditor(AbstractField owner) {
         this.owner = owner;
@@ -89,6 +92,16 @@ public class ColumnEditor {
             inputStyle = "width:80%;";
         }
         inputStyle += "border: 1px solid #dcdcdc;";
+        propertys.forEach((key, value) -> {
+            if (key == null) {
+                html.print(" %s", value);
+            } else if (value != null && !"".equals(value)) {
+                if (value instanceof Integer)
+                    html.print(" %s=%s", key, value);
+                else
+                    html.print(" %s='%s'", key, value);
+            }
+        });
         html.print(" type='%s'", getType());
         html.print(" name='%s'", owner.getField());
         html.print(" value='%s'", data);
@@ -164,6 +177,11 @@ public class ColumnEditor {
 
     public ColumnEditor setType(String type) {
         this.type = type;
+        return this;
+    }
+
+    public ColumnEditor setCssProperty(String key, Object value) {
+        propertys.put(key, value);
         return this;
     }
 }

@@ -23,7 +23,7 @@ public class UIDataStyleTest {
         assertEquals(grid.toString(),
                 """
                         <script>$(function() { initGrid() });</script>
-                        <table class='dbgrid gridView'><tr><th onclick='gridViewSort(this)'><div>序</div></th><th><div>price_</div></th></tr><tr><td align='center'>1</td><td><input autocomplete='off' name='price_' id='price_' type='number' value='100'></input></td></tr>
+                        <table class='dbgrid gridView'><tr><th onclick='gridViewSort(this)'><div>序</div></th><th><div>price_</div></th></tr><tr><td align='center'>1</td><td><input autocomplete='off' name='price_' step='any' id='price_' type='number' value='100'></input></td></tr>
                         </table>"""
                         .replaceAll("\n", System.lineSeparator()));
     }
@@ -43,7 +43,7 @@ public class UIDataStyleTest {
         new UIButton(form).setText("查询").setId("submit");
         assertEquals(form.toString(),
                 """
-                        <form method='post'><div data-line='0'><span data-field='price_'>价格:<input autocomplete='off' name='price_' id='price_' type='number' value='100'></input></span></div><button id='submit' name="submit">查询</button>
+                        <form method='post'><div data-line='0'><span data-field='price_'>价格:<input autocomplete='off' name='price_' step='any' id='price_' type='number' value='100'></input></span></div><button id='submit' name="submit">查询</button>
                         </form>"""
                         .replaceAll("\n", System.lineSeparator()));
     }

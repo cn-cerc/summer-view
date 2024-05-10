@@ -13,6 +13,7 @@ import cn.cerc.ui.vcl.UIUrl;
 public class DoubleField extends AbstractField implements IFormatColumn, IOutputOfGridLine {
     private ColumnEditor editor;
     private String format = "0.####";
+    private String step = "any";
 
     public DoubleField(UIComponent owner, String title, String field) {
         super(owner, title, field, 4);
@@ -63,7 +64,7 @@ public class DoubleField extends AbstractField implements IFormatColumn, IOutput
                 html.print(getText());
             }
         } else {
-            html.print(getEditor().setType(getHtmType()).format(current()));
+            html.print(getEditor().setType(getHtmType()).setCssProperty("step", step).format(current()));
         }
     }
 
@@ -91,5 +92,20 @@ public class DoubleField extends AbstractField implements IFormatColumn, IOutput
     @Override
     public String getHtmType() {
         return UIInput.TYPE_NUMBER;
+    }
+
+    public String getStep() {
+        return step;
+    }
+
+    public DoubleField setStep(String step) {
+        this.step = step;
+        return this;
+    }
+
+    @Override
+    public void output(HtmlWriter html) {
+        getContent().setCssProperty("step", step);
+        super.output(html);
     }
 }
