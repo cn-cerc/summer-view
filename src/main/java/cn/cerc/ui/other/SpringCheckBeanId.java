@@ -39,13 +39,12 @@ public class SpringCheckBeanId {
             object = context.getBean(beanId);
             checkType(lines, object);
         } catch (Exception e) {
-            log.error("create beanId: {}", beanId);
-            log.error("error {}", e.getMessage(), e);
+            log.error("{} create beanId error: {}", beanId, e.getMessage(), e);
         }
     }
 
     private void checkType(Set<String> lines, Object classType) {
-        String items[] = context.getBeanNamesForType(classType.getClass());
+        String[] items = context.getBeanNamesForType(classType.getClass());
         if (items.length == 0) {
             log.error("未实现类：{}", classType.getClass().getName());
             return;
@@ -88,7 +87,7 @@ public class SpringCheckBeanId {
     private void appendBeanId(String className, String beanId) {
         if (items.containsKey(className)) {
             String value = items.get(className);
-            if (value.indexOf(beanId) == -1)
+            if (!value.contains(beanId))
                 value += "," + beanId;
             items.put(className, value);
         } else {

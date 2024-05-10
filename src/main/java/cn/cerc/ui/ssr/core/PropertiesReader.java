@@ -22,7 +22,7 @@ public class PropertiesReader {
         try {
             this.json = new ObjectMapper().readTree(json);
         } catch (JsonProcessingException e) {
-            log.error("error {}", e.getMessage(), e);
+            log.error(e.getMessage(), e);
         }
     }
 

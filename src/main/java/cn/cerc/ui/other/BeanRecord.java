@@ -70,7 +70,7 @@ public class BeanRecord<T> implements AutoCloseable, BuildRecord {
             // log.info(gets.size());
             // log.info(sets.size());
         } catch (Exception e) {
-            log.error("error {}", e.getMessage(), e);
+            log.error(e.getMessage(), e);
         } finally {
             items0.clear();
             items1.clear();
@@ -87,7 +87,7 @@ public class BeanRecord<T> implements AutoCloseable, BuildRecord {
                 record.setValue(field, value);
             }
         } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-            log.error("error {}", e.getMessage(), e);
+            log.error(e.getMessage(), e);
         }
     }
 

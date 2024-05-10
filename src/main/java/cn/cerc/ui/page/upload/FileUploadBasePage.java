@@ -188,7 +188,7 @@ public abstract class FileUploadBasePage extends AbstractForm {
             conn.connect();
             return conn.getInputStream();
         } catch (IOException e) {
-            log.error("error {}", e.getMessage(), e);
+            log.error(e.getMessage(), e);
         }
         return null;
     }

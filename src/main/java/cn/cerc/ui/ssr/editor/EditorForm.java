@@ -152,7 +152,7 @@ public class EditorForm extends UIComponent {
                 log.warn("暂不支持的属性 {} of {}", field.getName(), field.getType().getSimpleName());
             }
         } catch (IllegalArgumentException | IllegalAccessException e) {
-            log.error("error {}", e.getMessage(), e);
+            log.error(e.getMessage(), e);
         }
     }
 
