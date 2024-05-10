@@ -132,7 +132,7 @@ public class StartServices extends HttpServlet {
                 log.error("服务异常, clientIP {}, token {}, service {}, corpNo {}, dataIn {}, message {}", clientIP, token,
                         function.key(), handle.getCorpNo(), dataIn.json(), throwable.getMessage(), throwable);
             else if (throwable instanceof DataException)
-                log.info("数据异常, clientIP {}, token {}, service {}, corpNo {}, dataIn {}, message {}", clientIP, token,
+                log.warn("数据异常, clientIP {}, token {}, service {}, corpNo {}, dataIn {}, message {}", clientIP, token,
                         function.key(), handle.getCorpNo(), dataIn.json(), throwable.getMessage(), throwable);
             else if (throwable instanceof SecurityStopException)
                 log.warn("权限异常, clientIP {}, token {}, service {}, corpNo {}, dataIn {}, message {}", clientIP, token,
