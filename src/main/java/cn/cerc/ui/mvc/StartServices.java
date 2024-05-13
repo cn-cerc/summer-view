@@ -139,7 +139,8 @@ public class StartServices extends HttpServlet {
                 log.warn("权限异常, clientIP {}, token {}, service {}, corpNo {}, dataIn {}, message {}", clientIP, token,
                         function.key(), handle.getCorpNo(), dataIn.json(), throwable.getMessage(), throwable);
             else if (throwable instanceof RuntimeException)
-                log.error(throwable.getMessage(), KnowallLog.of("clientIP:" + clientIP,
+                log.error(throwable.getMessage(), throwable,
+                        KnowallLog.of("clientIP:" + clientIP,
                         "token:" + token,
                         "service: " + function.key(),
                         "corpNo:" + handle.getCorpNo(),
