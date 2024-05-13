@@ -21,6 +21,7 @@ import cn.cerc.db.core.ISession;
 import cn.cerc.db.core.ServiceException;
 import cn.cerc.db.core.Utils;
 import cn.cerc.db.core.Variant;
+import cn.cerc.db.log.KnowallLog;
 import cn.cerc.db.other.RecordFilter;
 import cn.cerc.mis.core.AppClient;
 import cn.cerc.mis.core.Application;
@@ -138,8 +139,13 @@ public class StartServices extends HttpServlet {
                 log.warn("权限异常, clientIP {}, token {}, service {}, corpNo {}, dataIn {}, message {}", clientIP, token,
                         function.key(), handle.getCorpNo(), dataIn.json(), throwable.getMessage(), throwable);
             else if (throwable instanceof RuntimeException)
-                log.error("运行异常, clientIP {}, token {}, service {}, corpNo {}, dataIn {}, message {}", clientIP, token,
-                        function.key(), handle.getCorpNo(), dataIn.json(), throwable.getMessage(), throwable);
+                log.error(throwable.getMessage(), throwable,
+                        KnowallLog.of("clientIP:" + clientIP,
+                        "token:" + token,
+                        "service: " + function.key(),
+                        "corpNo:" + handle.getCorpNo(),
+                        "dataIn: " + dataIn.json()
+                        ));
             else
                 log.error("其他异常, clientIP {}, token {}, service {}, corpNo {}, dataIn {}, message {}", clientIP, token,
                         function.key(), handle.getCorpNo(), dataIn.json(), throwable.getMessage(), throwable);
