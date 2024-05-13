@@ -140,7 +140,7 @@ public class StartServices extends HttpServlet {
                 log.warn("权限异常, clientIP {}, token {}, service {}, corpNo {}, dataIn {}, message {}", clientIP, token,
                         function.key(), handle.getCorpNo(), dataIn.json(), throwable.getMessage(), throwable);
             else if (throwable instanceof RuntimeException)
-                if (e instanceof ServiceMethodExecuteException || throwable instanceof ServiceMethodExecuteException) {
+                if (e instanceof ServiceMethodExecuteException) {
                     log.error("service {} message {}", function.key(), e.getMessage(),
                             new ServiceMethodExecuteException(clientIP, token, handle.getCorpNo(), dataIn.json(),
                                     throwable));
