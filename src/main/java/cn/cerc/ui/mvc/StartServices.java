@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import cn.cerc.mis.exceptions.ServiceMethodExecuteException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -139,13 +140,19 @@ public class StartServices extends HttpServlet {
                 log.warn("权限异常, clientIP {}, token {}, service {}, corpNo {}, dataIn {}, message {}", clientIP, token,
                         function.key(), handle.getCorpNo(), dataIn.json(), throwable.getMessage(), throwable);
             else if (throwable instanceof RuntimeException)
-                log.error(throwable.getMessage(), throwable,
+                if (e instanceof ServiceMethodExecuteException || throwable instanceof ServiceMethodExecuteException) {
+                    log.error("service {} message {}", function.key(), e.getMessage(),
+                            new ServiceMethodExecuteException(clientIP, token, handle.getCorpNo(), dataIn.json(),
+                                    throwable));
+                } else {
+                    log.error(throwable.getMessage(), throwable,
                         KnowallLog.of("clientIP:" + clientIP,
                         "token:" + token,
                         "service: " + function.key(),
                         "corpNo:" + handle.getCorpNo(),
                         "dataIn: " + dataIn.json()
                         ));
+                }        
             else
                 log.error("其他异常, clientIP {}, token {}, service {}, corpNo {}, dataIn {}, message {}", clientIP, token,
                         function.key(), handle.getCorpNo(), dataIn.json(), throwable.getMessage(), throwable);
